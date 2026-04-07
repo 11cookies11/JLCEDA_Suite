@@ -7,6 +7,12 @@ export interface BridgeCommandDescriptor {
   summary: string;
 }
 
+export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
+  'system.get_bridge_status',
+  'project.get_document_summary',
+  'project.get_selection_snapshot',
+];
+
 export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
   {
     name: 'system.ping',
@@ -72,4 +78,12 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
 
 export function getSupportedCommandNames(): Array<BridgeCommandName> {
   return SUPPORTED_COMMANDS.map(command => command.name);
+}
+
+export function getCommandDescriptor(name: BridgeCommandName): BridgeCommandDescriptor | undefined {
+  return SUPPORTED_COMMANDS.find(command => command.name === name);
+}
+
+export function isCommandImplemented(name: BridgeCommandName): boolean {
+  return IMPLEMENTED_COMMANDS.includes(name);
 }

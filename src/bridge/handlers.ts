@@ -1,5 +1,6 @@
 import type {
   BridgeCommandName,
+  BridgeConfirmation,
   BridgeError,
   BridgeRequest,
   BridgeResponse,
@@ -11,6 +12,7 @@ import {
   getSelectionSnapshotResult,
 } from '../adapters/read-only';
 import { BRIDGE_PROTOCOL_VERSION } from './protocol';
+import { getCommandDescriptor, isCommandImplemented } from './registry';
 
 function createBaseResponse(id: string): Pick<BridgeResponse, 'id' | 'type' | 'protocolVersion'> {
   return {
@@ -36,13 +38,130 @@ function createErrorResponse(id: string, error: BridgeError): BridgeResponse {
   };
 }
 
+function createConfirmationResponse(id: string, confirmation: BridgeConfirmation): BridgeResponse {
+  return {
+    ...createBaseResponse(id),
+    status: 'confirmation_required',
+    confirmation,
+  };
+}
+
 function getCommandKey(request: BridgeRequest): BridgeCommandName | undefined {
   const commandKey = `${request.command.domain}.${request.command.action}`;
   return commandKey as BridgeCommandName;
 }
 
+function validateRequest(request: BridgeRequest, commandKey?: BridgeCommandName): BridgeError | undefined {
+  if (request.type !== 'command.request') {
+    return {
+      code: 'INVALID_REQUEST',
+      message: `Unsupported request type: ${request.type}`,
+      retryable: false,
+    };
+  }
+
+  if (request.protocolVersion !== BRIDGE_PROTOCOL_VERSION) {
+    return {
+      code: 'INVALID_REQUEST',
+      message: `Unsupported protocol version: ${request.protocolVersion}`,
+      retryable: false,
+      details: {
+        expected: BRIDGE_PROTOCOL_VERSION,
+      },
+    };
+  }
+
+  if (!commandKey) {
+    return {
+      code: 'UNSUPPORTED_ACTION',
+      message: 'Unable to resolve command from request domain and action.',
+      retryable: false,
+    };
+  }
+
+  const descriptor = getCommandDescriptor(commandKey);
+
+  if (!descriptor) {
+    return {
+      code: 'UNSUPPORTED_ACTION',
+      message: `Unsupported bridge command: ${commandKey}`,
+      retryable: false,
+      details: {
+        command: commandKey,
+      },
+    };
+  }
+
+  if (descriptor.domain !== request.command.domain) {
+    return {
+      code: 'INVALID_REQUEST',
+      message: `Command domain mismatch for ${commandKey}`,
+      retryable: false,
+      details: {
+        expectedDomain: descriptor.domain,
+        receivedDomain: request.command.domain,
+      },
+    };
+  }
+
+  if (request.command.payload === undefined || request.command.payload === null) {
+    return {
+      code: 'INVALID_PAYLOAD',
+      message: `Missing payload for ${commandKey}`,
+      retryable: false,
+    };
+  }
+
+  return undefined;
+}
+
+function getConfirmationResponseIfNeeded(
+  request: BridgeRequest,
+  commandKey: BridgeCommandName,
+): BridgeResponse | undefined {
+  const descriptor = getCommandDescriptor(commandKey);
+
+  if (!descriptor) {
+    return undefined;
+  }
+
+  const requiresConfirmation = request.command.requiresConfirmation ?? descriptor.requiresConfirmationByDefault;
+
+  if (!requiresConfirmation) {
+    return undefined;
+  }
+
+  return createConfirmationResponse(request.id, {
+    reason: `${commandKey} modifies editor state and requires explicit confirmation.`,
+    riskLevel: descriptor.domain === 'system' || descriptor.domain === 'project' ? 'medium' : 'high',
+    token: `confirm_${request.id}`,
+  });
+}
+
 export async function executeBridgeRequest(request: BridgeRequest): Promise<BridgeResponse> {
   const commandKey = getCommandKey(request);
+  const validationError = validateRequest(request, commandKey);
+
+  if (validationError) {
+    return createErrorResponse(request.id, validationError);
+  }
+
+  const confirmationResponse = getConfirmationResponseIfNeeded(request, commandKey);
+
+  if (confirmationResponse) {
+    return confirmationResponse;
+  }
+
+  if (!isCommandImplemented(commandKey)) {
+    return createErrorResponse(request.id, {
+      code: 'UNSUPPORTED_ACTION',
+      message: `Command is registered but not implemented yet: ${commandKey}`,
+      retryable: false,
+      details: {
+        command: commandKey,
+      },
+    });
+  }
 
   try {
     switch (commandKey) {
@@ -55,7 +174,7 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
       default:
         return createErrorResponse(request.id, {
           code: 'UNSUPPORTED_ACTION',
-          message: `Unsupported bridge command: ${commandKey ?? 'unknown'}`,
+          message: `No execution branch is available for ${commandKey}`,
           retryable: false,
           details: {
             command: commandKey,
