@@ -274,6 +274,13 @@
       color: var(--warning);
     }
 
+    .result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
     .footer {
       display: flex;
       align-items: center;
@@ -315,6 +322,12 @@
     .button.ghost {
       background: transparent;
       border-color: rgba(192, 199, 211, 0.28);
+    }
+
+    .button.soft {
+      background: rgba(42, 121, 199, 0.08);
+      color: var(--primary);
+      border-color: rgba(42, 121, 199, 0.16);
     }
 
     .pill-row {
@@ -420,14 +433,23 @@
 
           <section class="section">
             <div class="section-head">
-              <h2 class="section-title">结果面板</h2>
+              <h2 class="section-title">快捷动作</h2>
             </div>
             <div class="section-body">
+              <div class="result-actions">
+                <button class="button soft" type="button" data-action="status">桥接状态</button>
+                <button class="button soft" type="button" data-action="document">当前文档</button>
+                <button class="button soft" type="button" data-action="self-check">桥接自检</button>
+                <button class="button soft" type="button" data-action="configure">配置远程服务</button>
+                <button class="button soft" type="button" data-action="connect">连接远程服务</button>
+                <button class="button soft" type="button" data-action="remote-status">远程状态</button>
+              </div>
+
               <div id="resultBox" class="result-box">已成功打开 IFrame 自定义窗口。
 
 这说明当前问题不在插件构建链，而在之前的高级组件化弹窗运行时兼容性。
 
-下一步我会继续把“配置远程服务 / 读取文档 / 诊断状态”等实际动作接入这个窗口。</div>
+下一步我会继续把这些快捷动作真正接进插件能力，而不是再弹系统选择框。</div>
             </div>
           </section>
         </main>
@@ -446,6 +468,58 @@
   <script>
     const resultBox = document.getElementById('resultBox');
     const statusChip = document.getElementById('remote-status-chip');
+    const actionMap = {
+      status: [
+        '桥接状态',
+        '',
+        '下一步会接入：',
+        '- 当前协议与运行环境',
+        '- 已支持命令数',
+        '- 远程桥接基础状态',
+      ].join('\n'),
+      document: [
+        '当前文档',
+        '',
+        '下一步会接入：',
+        '- 当前文档类型',
+        '- 工程名称与文档 ID',
+        '- 当前选区摘要',
+      ].join('\n'),
+      'self-check': [
+        '桥接自检',
+        '',
+        '下一步会接入：',
+        '- ping 检查',
+        '- 桥接状态检查',
+        '- 文档摘要检查',
+        '- 选区摘要检查',
+      ].join('\n'),
+      configure: [
+        '配置远程服务',
+        '',
+        '下一步会接入：',
+        '- 保存服务地址',
+        '- 保存访问令牌',
+        '- 保存客户端 ID',
+      ].join('\n'),
+      connect: [
+        '连接远程服务',
+        '',
+        '下一步会接入：',
+        '- 启动插件侧 WebSocket 客户端',
+        '- 发送注册消息',
+        '- 更新连接状态展示',
+      ].join('\n'),
+      'remote-status': [
+        '远程状态',
+        '',
+        '下一步会接入：',
+        '- 当前连接状态',
+        '- 最近心跳',
+        '- 最近错误',
+        '- 重连次数',
+      ].join('\n'),
+    };
 
     document.getElementById('refreshBtn').addEventListener('click', () => {
       resultBox.textContent = [
@@ -469,6 +543,13 @@
         '- 当前文档读取',
         '- 桥接自检结果',
       ].join('\n');
+    });
+
+    document.querySelectorAll('[data-action]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const key = button.getAttribute('data-action');
+        resultBox.textContent = actionMap[key] || '该动作尚未定义。';
+      });
     });
   </script>
 </body>
