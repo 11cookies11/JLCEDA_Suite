@@ -1,7 +1,7 @@
 import * as extensionConfig from '../extension.json';
 import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
-import { getSupportedCommandNames } from './bridge/registry';
+import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
 
 function getStatusLines(): Array<string> {
   return [
@@ -9,8 +9,9 @@ function getStatusLines(): Array<string> {
     `Version: ${extensionConfig.version}`,
     `Protocol: ${BRIDGE_PROTOCOL_VERSION}`,
     `Supported commands: ${getSupportedCommandNames().length}`,
-    'Bridge: protocol draft ready',
-    'Next step: implement read-only project inspection commands',
+    `Implemented commands: ${IMPLEMENTED_COMMANDS.length}`,
+    'Bridge: first workflow ready',
+    'Next step: finish runtime validation and release guidance',
   ];
 }
 
@@ -45,4 +46,19 @@ export async function inspectCurrentDocument(): Promise<void> {
     : JSON.stringify(response.error, null, 2);
 
   eda.sys_Dialog.showInformationMessage(payload, 'Current Document Summary');
+}
+
+export async function runBridgeSelfCheck(): Promise<void> {
+  const checks = await Promise.all([
+    executeBridgeCommand('system.get_bridge_status'),
+    executeBridgeCommand('project.get_document_summary'),
+    executeBridgeCommand('project.get_selection_snapshot'),
+  ]);
+
+  const summaryLines = checks.map((response, index) => {
+    const label = ['bridge_status', 'document_summary', 'selection_snapshot'][index];
+    return `${label}: ${response.status}`;
+  });
+
+  eda.sys_Dialog.showInformationMessage(summaryLines.join('\n'), 'Bridge Self Check');
 }
