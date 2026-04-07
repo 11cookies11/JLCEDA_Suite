@@ -368,20 +368,20 @@
         <aside class="nav">
           <div class="nav-label">Bridge Console</div>
           <div class="nav-list">
-            <button class="nav-item active" type="button">概览</button>
-            <button class="nav-item" type="button">连接</button>
-            <button class="nav-item" type="button">文档</button>
-            <button class="nav-item" type="button">诊断</button>
+            <button class="nav-item active" type="button" data-tab="overview">概览</button>
+            <button class="nav-item" type="button" data-tab="connection">连接</button>
+            <button class="nav-item" type="button" data-tab="document">文档</button>
+            <button class="nav-item" type="button" data-tab="diagnostics">诊断</button>
           </div>
         </aside>
 
         <main class="main">
-          <section class="section">
+          <section class="section" data-panel="connection">
             <div class="section-head">
               <h2 class="section-title">远程服务</h2>
             </div>
             <div class="section-body">
-              <p class="hint">这版先切换到官方 IFrame 方案，把窗口样式和布局先稳定下来。下一步会把配置、连接和诊断动作逐步接入这个窗口。</p>
+              <p class="hint">在这个窗口里直接配置远程服务，不再依赖系统输入框。</p>
 
               <div class="grid">
                 <div class="field">
@@ -400,10 +400,16 @@
                   </div>
                 </div>
               </div>
+
+              <div class="result-actions" style="margin-top: 16px;">
+                <button class="button ghost" type="button" id="saveSettingsBtn">保存配置</button>
+                <button class="button primary" type="button" id="saveAndConnectBtn">保存并连接</button>
+                <button class="button ghost" type="button" id="disconnectBtn">断开连接</button>
+              </div>
             </div>
           </section>
 
-          <section class="section">
+          <section class="section" data-panel="overview">
             <div class="section-head">
               <h2 class="section-title">桥接概览</h2>
             </div>
@@ -431,7 +437,7 @@
             </div>
           </section>
 
-          <section class="section">
+          <section class="section" data-panel="diagnostics">
             <div class="section-head">
               <h2 class="section-title">快捷动作</h2>
             </div>
@@ -452,6 +458,19 @@
 下一步我会继续把这些快捷动作真正接进插件能力，而不是再弹系统选择框。</div>
             </div>
           </section>
+
+          <section class="section" data-panel="document">
+            <div class="section-head">
+              <h2 class="section-title">当前文档</h2>
+            </div>
+            <div class="section-body">
+              <p class="hint">用于确认当前工程上下文、文档类型和选区摘要是否符合预期。</p>
+              <div class="result-actions">
+                <button class="button primary" type="button" id="documentBtn">读取当前文档</button>
+                <button class="button ghost" type="button" id="bridgeStatusBtn">查看桥接状态</button>
+              </div>
+            </div>
+          </section>
         </main>
       </div>
 
@@ -466,91 +485,193 @@
   </div>
 
   <script>
+    const RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
     const resultBox = document.getElementById('resultBox');
     const statusChip = document.getElementById('remote-status-chip');
-    const actionMap = {
-      status: [
-        '桥接状态',
-        '',
-        '下一步会接入：',
-        '- 当前协议与运行环境',
-        '- 已支持命令数',
-        '- 远程桥接基础状态',
-      ].join('\n'),
-      document: [
-        '当前文档',
-        '',
-        '下一步会接入：',
-        '- 当前文档类型',
-        '- 工程名称与文档 ID',
-        '- 当前选区摘要',
-      ].join('\n'),
-      'self-check': [
-        '桥接自检',
-        '',
-        '下一步会接入：',
-        '- ping 检查',
-        '- 桥接状态检查',
-        '- 文档摘要检查',
-        '- 选区摘要检查',
-      ].join('\n'),
-      configure: [
-        '配置远程服务',
-        '',
-        '下一步会接入：',
-        '- 保存服务地址',
-        '- 保存访问令牌',
-        '- 保存客户端 ID',
-      ].join('\n'),
-      connect: [
-        '连接远程服务',
-        '',
-        '下一步会接入：',
-        '- 启动插件侧 WebSocket 客户端',
-        '- 发送注册消息',
-        '- 更新连接状态展示',
-      ].join('\n'),
-      'remote-status': [
-        '远程状态',
-        '',
-        '下一步会接入：',
-        '- 当前连接状态',
-        '- 最近心跳',
-        '- 最近错误',
-        '- 重连次数',
-      ].join('\n'),
-    };
+    const panels = Array.from(document.querySelectorAll('[data-panel]'));
+    const navItems = Array.from(document.querySelectorAll('[data-tab]'));
+    const serverUrlInput = document.getElementById('serverUrl');
+    const tokenInput = document.getElementById('token');
+    const clientIdInput = document.getElementById('clientId');
+
+    function setResult(lines, warn = false) {
+      resultBox.textContent = Array.isArray(lines) ? lines.join('\n') : String(lines);
+      resultBox.classList.toggle('warn', Boolean(warn));
+    }
+
+    function updateRemoteStatusChip(remoteStatus) {
+      if (!remoteStatus) {
+        statusChip.textContent = '等待接入插件能力';
+        return;
+      }
+
+      if (remoteStatus.connected) {
+        statusChip.textContent = '远程服务已连接';
+        return;
+      }
+
+      if (remoteStatus.connecting) {
+        statusChip.textContent = '远程服务连接中';
+        return;
+      }
+
+      if (remoteStatus.configured) {
+        statusChip.textContent = '远程服务待连接';
+        return;
+      }
+
+      statusChip.textContent = '远程服务未配置';
+    }
+
+    function applyRemoteSettings(settings) {
+      serverUrlInput.value = settings?.serverUrl || '';
+      tokenInput.value = settings?.authToken || '';
+      clientIdInput.value = settings?.clientId || '';
+    }
+
+    async function callPlugin(message) {
+      if (!window.eda || !window.eda.sys_MessageBus) {
+        setResult([
+          '当前 IFrame 环境中未发现 eda.sys_MessageBus。',
+          '这说明窗口与插件能力通信尚不可用。',
+        ], true);
+        return null;
+      }
+
+      try {
+        return await window.eda.sys_MessageBus.rpcCallPublic(RPC_TOPIC, message, 15000);
+      }
+      catch (error) {
+        setResult([
+          '窗口与插件通信失败。',
+          '',
+          error instanceof Error ? error.message : String(error),
+        ], true);
+        return null;
+      }
+    }
+
+    async function renderFromPlugin(message) {
+      const response = await callPlugin(message);
+
+      if (!response) {
+        return;
+      }
+
+      if (response.remoteSettings) {
+        applyRemoteSettings(response.remoteSettings);
+      }
+
+      if (response.remoteStatus) {
+        updateRemoteStatusChip(response.remoteStatus);
+      }
+
+      setResult(response.lines || ['暂无结果'], response.ok === false);
+    }
+
+    function switchTab(tab) {
+      navItems.forEach((item) => {
+        item.classList.toggle('active', item.getAttribute('data-tab') === tab);
+      });
+
+      panels.forEach((panel) => {
+        panel.style.display = panel.getAttribute('data-panel') === tab || panel.getAttribute('data-panel') === 'diagnostics'
+          ? ''
+          : 'none';
+      });
+    }
 
     document.getElementById('refreshBtn').addEventListener('click', () => {
-      resultBox.textContent = [
-        '这版窗口已经来自官方 IFrame 方案。',
-        '',
-        '当前优先目标：',
-        '1. 保证窗口稳定打开',
-        '2. 再把插件里的配置和状态接进来',
-        '3. 最后把连接、诊断等动作放进这个窗口',
-      ].join('\n');
+      void renderFromPlugin({ type: 'getInitialState' });
     });
 
     document.getElementById('primaryBtn').addEventListener('click', () => {
-      statusChip.textContent = '准备接入动作通信';
-      resultBox.textContent = [
-        '窗口外观方向已经切换成功。',
-        '',
-        '下一版我会继续把真实插件能力接进这个窗口，包括：',
-        '- 远程配置读写',
-        '- 连接 / 断开',
-        '- 当前文档读取',
-        '- 桥接自检结果',
-      ].join('\n');
+      void renderFromPlugin({
+        type: 'saveRemoteSettings',
+        payload: {
+          serverUrl: serverUrlInput.value,
+          authToken: tokenInput.value,
+          clientId: clientIdInput.value,
+          autoConnect: true,
+        },
+      }).then(() => renderFromPlugin({ type: 'connectRemoteBridge' }));
     });
 
     document.querySelectorAll('[data-action]').forEach((button) => {
       button.addEventListener('click', () => {
         const key = button.getAttribute('data-action');
-        resultBox.textContent = actionMap[key] || '该动作尚未定义。';
+        if (key === 'status') {
+          void renderFromPlugin({ type: 'showBridgeStatus' });
+        } else if (key === 'document') {
+          void renderFromPlugin({ type: 'inspectCurrentDocument' });
+        } else if (key === 'self-check') {
+          void renderFromPlugin({ type: 'runSelfCheck' });
+        } else if (key === 'configure') {
+          switchTab('connection');
+          setResult([
+            '请在上方连接区域填写服务地址、令牌和客户端 ID。',
+            '填写完成后点击“保存并连接”或“保存配置”。',
+          ]);
+        } else if (key === 'connect') {
+          void renderFromPlugin({
+            type: 'saveRemoteSettings',
+            payload: {
+              serverUrl: serverUrlInput.value,
+              authToken: tokenInput.value,
+              clientId: clientIdInput.value,
+              autoConnect: true,
+            },
+          }).then(() => renderFromPlugin({ type: 'connectRemoteBridge' }));
+        } else if (key === 'remote-status') {
+          void renderFromPlugin({ type: 'showRemoteBridgeStatus' });
+        }
       });
     });
+
+    navItems.forEach((item) => {
+      item.addEventListener('click', () => {
+        switchTab(item.getAttribute('data-tab'));
+      });
+    });
+
+    document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+      void renderFromPlugin({
+        type: 'saveRemoteSettings',
+        payload: {
+          serverUrl: serverUrlInput.value,
+          authToken: tokenInput.value,
+          clientId: clientIdInput.value,
+          autoConnect: true,
+        },
+      });
+    });
+
+    document.getElementById('saveAndConnectBtn').addEventListener('click', () => {
+      void renderFromPlugin({
+        type: 'saveRemoteSettings',
+        payload: {
+          serverUrl: serverUrlInput.value,
+          authToken: tokenInput.value,
+          clientId: clientIdInput.value,
+          autoConnect: true,
+        },
+      }).then(() => renderFromPlugin({ type: 'connectRemoteBridge' }));
+    });
+
+    document.getElementById('disconnectBtn').addEventListener('click', () => {
+      void renderFromPlugin({ type: 'disconnectRemoteBridge' });
+    });
+
+    document.getElementById('documentBtn').addEventListener('click', () => {
+      void renderFromPlugin({ type: 'inspectCurrentDocument' });
+    });
+
+    document.getElementById('bridgeStatusBtn').addEventListener('click', () => {
+      void renderFromPlugin({ type: 'showBridgeStatus' });
+    });
+
+    switchTab('overview');
+    void renderFromPlugin({ type: 'getInitialState' });
   </script>
 </body>
 </html>

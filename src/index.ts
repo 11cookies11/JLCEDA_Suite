@@ -4,6 +4,8 @@ import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
 import { remoteBridgeClient } from './remote/client';
 
+const BRIDGE_UI_RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
+
 function getStatusLines(): Array<string> {
   const remoteStatus = remoteBridgeClient.getStatus();
 
@@ -29,9 +31,249 @@ function formatValue(value: unknown, fallback = '暂无'): string {
   return String(value);
 }
 
+function summarizeBridgeStatus(): Array<string> {
+  return getStatusLines();
+}
+
+function summarizeRemoteStatus(): Array<string> {
+  const remoteStatus = remoteBridgeClient.getStatus();
+
+  return [
+    `服务地址：${remoteStatus.serverUrl ?? '未设置'}`,
+    `客户端 ID：${remoteStatus.clientId ?? '未设置'}`,
+    `当前状态：${remoteStatus.connected ? '已连接' : remoteStatus.connecting ? '连接中' : '未连接'}`,
+    `重连次数：${remoteStatus.reconnectAttempts}`,
+    `等待重连：${remoteStatus.reconnectScheduled ? '是' : '否'}`,
+    `最近注册：${remoteStatus.lastRegisteredAt ?? '暂无'}`,
+    `最近心跳：${remoteStatus.lastHeartbeatAt ?? '暂无'}`,
+    `最近错误：${remoteStatus.lastError ?? '无'}`,
+  ];
+}
+
+function summarizeDocumentData(data: unknown): Array<string> {
+  const resultData = (data ?? {}) as {
+    document?: {
+      kind?: string;
+      uuid?: string;
+      tabId?: string;
+    };
+    workspace?: {
+      name?: string;
+    };
+    project?: {
+      name?: string;
+      uuid?: string;
+      dataCount?: number;
+    };
+    schematic?: {
+      name?: string;
+      pageCount?: number;
+    };
+    board?: {
+      name?: string;
+    };
+    selection?: {
+      count?: number;
+    };
+  };
+
+  return [
+    `文档类型：${formatValue(resultData.document?.kind)}`,
+    `文档 ID：${formatValue(resultData.document?.uuid)}`,
+    `标签页：${formatValue(resultData.document?.tabId)}`,
+    `工作区：${formatValue(resultData.workspace?.name)}`,
+    `工程名称：${formatValue(resultData.project?.name)}`,
+    `工程 ID：${formatValue(resultData.project?.uuid)}`,
+    `工程文档数：${formatValue(resultData.project?.dataCount, '0')}`,
+    `原理图：${formatValue(resultData.schematic?.name)}`,
+    `原理图页数：${formatValue(resultData.schematic?.pageCount, '0')}`,
+    `PCB：${formatValue(resultData.board?.name)}`,
+    `当前选区：${formatValue(resultData.selection?.count, '0')} 项`,
+  ];
+}
+
+async function handleBridgeUiRpc(message: any): Promise<any> {
+  switch (message?.type) {
+    case 'getInitialState': {
+      return {
+        ok: true,
+        title: '桥接概览',
+        lines: [
+          ...summarizeBridgeStatus(),
+          '',
+          ...summarizeRemoteStatus(),
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+        remoteSettings: remoteBridgeClient.getSettings(),
+      };
+    }
+
+    case 'showBridgeStatus': {
+      const response = await executeBridgeCommand('system.get_bridge_status');
+
+      if (response.status !== 'success') {
+        return {
+          ok: false,
+          title: '桥接状态',
+          lines: [
+            `错误代码：${response.error.code}`,
+            `错误信息：${response.error.message}`,
+          ],
+          remoteStatus: remoteBridgeClient.getStatus(),
+        };
+      }
+
+      const resultData = (response.result.data ?? {}) as {
+        runtime?: {
+          isClient?: boolean;
+          isWeb?: boolean;
+          language?: string;
+          theme?: string;
+          frontendUnit?: string;
+        };
+      };
+
+      return {
+        ok: true,
+        title: '桥接状态',
+        lines: [
+          ...summarizeBridgeStatus(),
+          '',
+          `客户端环境：${resultData.runtime?.isClient ? '是' : '否'}`,
+          `网页环境：${resultData.runtime?.isWeb ? '是' : '否'}`,
+          `语言：${formatValue(resultData.runtime?.language)}`,
+          `主题：${formatValue(resultData.runtime?.theme)}`,
+          `单位：${formatValue(resultData.runtime?.frontendUnit)}`,
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+      };
+    }
+
+    case 'inspectCurrentDocument': {
+      const response = await executeBridgeCommand('project.get_document_summary');
+
+      if (response.status !== 'success') {
+        return {
+          ok: false,
+          title: '当前文档',
+          lines: [
+            `错误代码：${response.error.code}`,
+            `错误信息：${response.error.message}`,
+          ],
+          remoteStatus: remoteBridgeClient.getStatus(),
+        };
+      }
+
+      return {
+        ok: true,
+        title: '当前文档',
+        lines: summarizeDocumentData(response.result.data),
+        remoteStatus: remoteBridgeClient.getStatus(),
+      };
+    }
+
+    case 'runSelfCheck': {
+      const checks = await Promise.all([
+        executeBridgeCommand('system.ping', { echo: 'iframe-self-check' }),
+        executeBridgeCommand('system.get_bridge_status'),
+        executeBridgeCommand('project.get_document_summary'),
+        executeBridgeCommand('project.get_selection_snapshot'),
+      ]);
+
+      const lines = checks.map((response, index) => {
+        const label = ['连通性', '桥接状态', '文档摘要', '选区摘要'][index];
+        const statusText = response.status === 'success'
+          ? '正常'
+          : response.status === 'confirmation_required'
+            ? '待确认'
+            : '异常';
+        return `${label}：${statusText}`;
+      });
+
+      return {
+        ok: true,
+        title: '桥接自检',
+        lines,
+        remoteStatus: remoteBridgeClient.getStatus(),
+      };
+    }
+
+    case 'saveRemoteSettings': {
+      await remoteBridgeClient.saveSettings({
+        serverUrl: typeof message?.payload?.serverUrl === 'string' ? message.payload.serverUrl : '',
+        authToken: typeof message?.payload?.authToken === 'string' ? message.payload.authToken : '',
+        clientId: typeof message?.payload?.clientId === 'string' ? message.payload.clientId : '',
+        autoConnect: message?.payload?.autoConnect !== false,
+      });
+
+      return {
+        ok: true,
+        title: '远程服务',
+        lines: [
+          '配置已保存',
+          '',
+          ...summarizeRemoteStatus(),
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+        remoteSettings: remoteBridgeClient.getSettings(),
+      };
+    }
+
+    case 'connectRemoteBridge': {
+      await remoteBridgeClient.connect();
+
+      return {
+        ok: true,
+        title: '远程服务',
+        lines: [
+          '已开始连接远程服务',
+          '',
+          ...summarizeRemoteStatus(),
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+      };
+    }
+
+    case 'disconnectRemoteBridge': {
+      remoteBridgeClient.disconnect();
+
+      return {
+        ok: true,
+        title: '远程服务',
+        lines: [
+          '远程服务已断开',
+          '',
+          ...summarizeRemoteStatus(),
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+      };
+    }
+
+    case 'showRemoteBridgeStatus': {
+      return {
+        ok: true,
+        title: '远程状态',
+        lines: summarizeRemoteStatus(),
+        remoteStatus: remoteBridgeClient.getStatus(),
+      };
+    }
+
+    default:
+      return {
+        ok: false,
+        title: 'AI桥接',
+        lines: [
+          '未识别的窗口动作。',
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+      };
+  }
+}
+
 export function activate(status?: 'onStartupFinished', arg?: string): void {
   void status;
   void arg;
+  eda.sys_MessageBus.rpcServicePublic(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
   void remoteBridgeClient.autoConnectIfEnabled();
 }
 
@@ -359,14 +601,16 @@ async function openBridgeMenuInternal(): Promise<void> {
       }
     }
     else {
-      const opened = await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, iframeId, {
+      await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, iframeId, {
         title: 'AI桥接',
         maximizeButton: true,
         minimizeButton: true,
         grayscaleMask: true,
       });
 
-      if (!opened) {
+      const created = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
+
+      if (!created) {
         throw new Error('IFrame 窗口未成功打开。');
       }
     }
