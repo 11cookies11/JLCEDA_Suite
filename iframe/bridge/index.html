@@ -360,7 +360,7 @@
         </div>
         <div class="status-chip">
           <span class="status-dot"></span>
-          <span id="remote-status-chip">等待接入插件能力</span>
+          <span id="remote-status-chip">窗口已打开</span>
         </div>
       </header>
 
@@ -473,10 +473,10 @@
       </div>
 
       <footer class="footer">
-        <div class="footer-note">JLCEDA AI桥接 v0.1.2 · 官方 IFrame 自定义窗口</div>
+        <div class="footer-note">JLCEDA AI桥接 v0.1.3 · 官方 IFrame 自定义窗口</div>
         <div class="actions">
           <button class="button ghost" type="button" id="refreshBtn">刷新说明</button>
-          <button class="button primary" type="button" id="primaryBtn">下一步接线</button>
+          <button class="button primary" type="button" id="primaryBtn">保存并连接</button>
         </div>
       </footer>
     </div>
@@ -491,6 +491,12 @@
     const serverUrlInput = document.getElementById('serverUrl');
     const tokenInput = document.getElementById('token');
     const clientIdInput = document.getElementById('clientId');
+    let pluginReady = false;
+
+    function setBusy(message) {
+      setResult([message || '正在处理中，请稍候...']);
+      statusChip.textContent = '处理中';
+    }
 
     function setResult(lines, warn = false) {
       resultBox.textContent = Array.isArray(lines) ? lines.join('\n') : String(lines);
@@ -498,8 +504,13 @@
     }
 
     function updateRemoteStatusChip(remoteStatus) {
+      if (pluginReady && !remoteStatus) {
+        statusChip.textContent = '插件已就绪';
+        return;
+      }
+
       if (!remoteStatus) {
-        statusChip.textContent = '等待接入插件能力';
+        statusChip.textContent = '窗口已打开';
         return;
       }
 
@@ -572,6 +583,8 @@
           '当前 IFrame 环境中没有发现可用的 MessageBus。',
           '这通常说明窗口上下文还没有接入插件主线程能力。',
         ], true);
+        pluginReady = false;
+        statusChip.textContent = '插件通信不可用';
         return null;
       }
 
@@ -589,7 +602,9 @@
           }
 
           try {
-            return await method.call(candidate.bus, RPC_TOPIC, message, 15000);
+            const response = await method.call(candidate.bus, RPC_TOPIC, message, 15000);
+            pluginReady = true;
+            return response;
           }
           catch (error) {
             const detail = error instanceof Error
@@ -608,6 +623,8 @@
         '',
         ...failures,
       ], true);
+      pluginReady = false;
+      statusChip.textContent = '插件通信失败';
       return null;
     }
 
@@ -617,6 +634,8 @@
       if (!response) {
         return;
       }
+
+      pluginReady = true;
 
       if (response.remoteSettings) {
         applyRemoteSettings(response.remoteSettings);
@@ -642,10 +661,12 @@
     }
 
     document.getElementById('refreshBtn').addEventListener('click', () => {
+      setBusy('正在刷新桥接状态...');
       void renderFromPlugin({ type: 'getInitialState' });
     });
 
     document.getElementById('primaryBtn').addEventListener('click', () => {
+      setBusy('正在保存配置并发起连接...');
       void renderFromPlugin({
         type: 'saveRemoteSettings',
         payload: {
@@ -661,10 +682,13 @@
       button.addEventListener('click', () => {
         const key = button.getAttribute('data-action');
         if (key === 'status') {
+          setBusy('正在读取桥接状态...');
           void renderFromPlugin({ type: 'showBridgeStatus' });
         } else if (key === 'document') {
+          setBusy('正在读取当前文档...');
           void renderFromPlugin({ type: 'inspectCurrentDocument' });
         } else if (key === 'self-check') {
+          setBusy('正在执行桥接自检...');
           void renderFromPlugin({ type: 'runSelfCheck' });
         } else if (key === 'configure') {
           switchTab('connection');
@@ -673,6 +697,7 @@
             '填写完成后点击“保存并连接”或“保存配置”。',
           ]);
         } else if (key === 'connect') {
+          setBusy('正在保存配置并连接远程服务...');
           void renderFromPlugin({
             type: 'saveRemoteSettings',
             payload: {
@@ -683,6 +708,7 @@
             },
           }).then(() => renderFromPlugin({ type: 'connectRemoteBridge' }));
         } else if (key === 'remote-status') {
+          setBusy('正在读取远程状态...');
           void renderFromPlugin({ type: 'showRemoteBridgeStatus' });
         }
       });
@@ -695,6 +721,7 @@
     });
 
     document.getElementById('saveSettingsBtn').addEventListener('click', () => {
+      setBusy('正在保存远程配置...');
       void renderFromPlugin({
         type: 'saveRemoteSettings',
         payload: {
@@ -707,6 +734,7 @@
     });
 
     document.getElementById('saveAndConnectBtn').addEventListener('click', () => {
+      setBusy('正在保存配置并发起连接...');
       void renderFromPlugin({
         type: 'saveRemoteSettings',
         payload: {
@@ -719,14 +747,17 @@
     });
 
     document.getElementById('disconnectBtn').addEventListener('click', () => {
+      setBusy('正在断开远程连接...');
       void renderFromPlugin({ type: 'disconnectRemoteBridge' });
     });
 
     document.getElementById('documentBtn').addEventListener('click', () => {
+      setBusy('正在读取当前文档...');
       void renderFromPlugin({ type: 'inspectCurrentDocument' });
     });
 
     document.getElementById('bridgeStatusBtn').addEventListener('click', () => {
+      setBusy('正在读取桥接状态...');
       void renderFromPlugin({ type: 'showBridgeStatus' });
     });
 

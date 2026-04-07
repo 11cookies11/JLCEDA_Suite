@@ -537,7 +537,7 @@ export function showRemoteBridgeStatus(): void {
   eda.sys_Dialog.showInformationMessage(message, '远程状态');
 }
 
-async function openBridgeMenuFallback(): Promise<void> {
+async function _openBridgeMenuFallback(): Promise<void> {
   const remoteStatus = remoteBridgeClient.getStatus();
   const action = await showSelectDialog(
     [
@@ -590,42 +590,48 @@ async function openBridgeMenuFallback(): Promise<void> {
 }
 
 async function openBridgeMenuInternal(): Promise<void> {
+  const iframeId = 'ai-bridge-window';
+  const openOptions = {
+    title: 'AI桥接',
+    maximizeButton: true,
+    minimizeButton: true,
+    grayscaleMask: true,
+  } as const;
+
   try {
-    const iframeId = 'ai-bridge-window';
     const alreadyExists = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
 
     if (alreadyExists) {
       const shown = await eda.sys_IFrame.showIFrame(iframeId);
 
-      if (!shown) {
-        throw new Error('IFrame 窗口已存在，但未能显示。');
+      if (shown) {
+        return;
       }
+
+      // Some runtime builds report an existing window but refuse to foreground it.
+      // Recreate the window instead of forcing users into the simplified fallback.
+      await eda.sys_IFrame.closeIFrame(iframeId);
     }
-    else {
-      await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, iframeId, {
-        title: 'AI桥接',
-        maximizeButton: true,
-        minimizeButton: true,
-        grayscaleMask: true,
-      });
 
-      const created = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
+    await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, iframeId, openOptions);
 
-      if (!created) {
-        throw new Error('IFrame 窗口未成功打开。');
-      }
+    const created = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
+
+    if (!created) {
+      throw new Error('IFrame 窗口未成功打开。');
     }
   }
   catch (error) {
     eda.sys_Dialog.showInformationMessage(
       [
-        'AI桥接窗口当前未能正常打开，已切换到简化模式。',
+        'AI桥接窗口未能正常打开。',
         '',
         error instanceof Error ? error.message : '未知错误',
+        '',
+        '已保留 IFrame 方案，请重试一次；若仍失败，再考虑兼容模式。',
       ].join('\n'),
       'AI桥接',
     );
-    await openBridgeMenuFallback();
   }
 }
 
