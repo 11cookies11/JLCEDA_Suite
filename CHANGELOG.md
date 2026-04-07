@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Runnable JLCEDA extension skeleton with packaged `.eext` output
 - First-pass Codex bridge protocol, guarded command routing, ping handshake, and confirmation gates
+- A minimal bridge server with WebSocket session registration, heartbeats, and request routing
 - Read-only project inspection commands for bridge status, document summary, and selection snapshot
 - Schematic write-command scaffolding for component placement and wire creation
 - BOM export flow, smoke-test coverage, troubleshooting notes, release checklist, and versioning guide
