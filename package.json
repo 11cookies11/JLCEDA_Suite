@@ -1,0 +1,30 @@
+{
+  "name": "jlceda-aiagent",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Bridge Codex with JLCEDA through a controlled extension layer.",
+  "author": "JLCEDA AIAgent contributors",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20.17.0"
+  },
+  "scripts": {
+    "compile": "rimraf ./dist/ && ts-node ./config/esbuild.prod.ts",
+    "lint": "eslint build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts eslint.config.mjs",
+    "fix": "eslint --fix build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts eslint.config.mjs",
+    "build": "npm run compile && ts-node ./build/packaged.ts"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^5.4.1",
+    "@jlceda/pro-api-types": "^0.2.25",
+    "@types/fs-extra": "^11.0.4",
+    "esbuild": "^0.24.2",
+    "eslint": "^9.37.0",
+    "fs-extra": "^11.3.0",
+    "ignore": "^7.0.3",
+    "jszip": "^3.10.1",
+    "rimraf": "^6.0.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}

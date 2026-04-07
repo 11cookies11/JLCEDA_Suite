@@ -1,0 +1,79 @@
+{
+  "name": "jlceda-aiagent",
+  "uuid": "f8a40a7a08f94ffcbb0925f6ce0c7202",
+  "displayName": "JLCEDA AIAgent",
+  "description": "Bridge Codex with JLCEDA through a controlled extension layer.",
+  "version": "0.1.0",
+  "publisher": "JLCEDA-AIAgent",
+  "engines": {
+    "eda": "^3.0.0"
+  },
+  "license": "MIT",
+  "categories": "Other",
+  "keywords": [
+    "Codex",
+    "AI",
+    "Hardware"
+  ],
+  "homepage": "",
+  "bugs": "",
+  "activationEvents": {},
+  "entry": "./dist/index",
+  "dependentExtensions": {},
+  "headerMenus": {
+    "home": [
+      {
+        "id": "JLCEDA AIAgent",
+        "title": "JLCEDA AIAgent",
+        "menuItems": [
+          {
+            "id": "About",
+            "title": "About",
+            "registerFn": "about"
+          },
+          {
+            "id": "Bridge Status",
+            "title": "Bridge Status",
+            "registerFn": "showBridgeStatus"
+          }
+        ]
+      }
+    ],
+    "sch": [
+      {
+        "id": "JLCEDA AIAgent",
+        "title": "JLCEDA AIAgent",
+        "menuItems": [
+          {
+            "id": "About",
+            "title": "About",
+            "registerFn": "about"
+          },
+          {
+            "id": "Bridge Status",
+            "title": "Bridge Status",
+            "registerFn": "showBridgeStatus"
+          }
+        ]
+      }
+    ],
+    "pcb": [
+      {
+        "id": "JLCEDA AIAgent",
+        "title": "JLCEDA AIAgent",
+        "menuItems": [
+          {
+            "id": "About",
+            "title": "About",
+            "registerFn": "about"
+          },
+          {
+            "id": "Bridge Status",
+            "title": "Bridge Status",
+            "registerFn": "showBridgeStatus"
+          }
+        ]
+      }
+    ]
+  }
+}
