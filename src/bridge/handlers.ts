@@ -11,6 +11,10 @@ import {
   getDocumentSummaryResult,
   getSelectionSnapshotResult,
 } from '../adapters/read-only';
+import {
+  createSchematicWire,
+  placeSchematicComponent,
+} from '../adapters/schematic-write';
 import { BRIDGE_PROTOCOL_VERSION } from './protocol';
 import { getCommandDescriptor, isCommandImplemented } from './registry';
 
@@ -171,6 +175,16 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(request.id, await getDocumentSummaryResult());
       case 'project.get_selection_snapshot':
         return createSuccessResponse(request.id, await getSelectionSnapshotResult());
+      case 'schematic.place_component':
+        return createSuccessResponse(
+          request.id,
+          await placeSchematicComponent(request.command.payload),
+        );
+      case 'schematic.create_wire':
+        return createSuccessResponse(
+          request.id,
+          await createSchematicWire(request.command.payload),
+        );
       default:
         return createErrorResponse(request.id, {
           code: 'UNSUPPORTED_ACTION',

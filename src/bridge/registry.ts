@@ -11,6 +11,8 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'system.get_bridge_status',
   'project.get_document_summary',
   'project.get_selection_snapshot',
+  'schematic.place_component',
+  'schematic.create_wire',
 ];
 
 export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [

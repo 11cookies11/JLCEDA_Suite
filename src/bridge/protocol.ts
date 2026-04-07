@@ -35,9 +35,14 @@ export interface BridgeCommandPayloadMap {
     format?: 'json' | 'csv';
   };
   'schematic.place_component': {
-    libraryId: string;
+    libraryUuid: string;
+    uuid: string;
     position: BridgePoint;
+    subPartName?: string;
     rotation?: number;
+    mirror?: boolean;
+    addIntoBom?: boolean;
+    addIntoPcb?: boolean;
   };
   'schematic.create_wire': {
     points: Array<BridgePoint>;
