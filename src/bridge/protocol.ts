@@ -33,6 +33,8 @@ export interface BridgeCommandPayloadMap {
   };
   'project.export_bom': {
     format?: 'json' | 'csv';
+    fileName?: string;
+    saveToLocal?: boolean;
   };
   'schematic.place_component': {
     libraryUuid: string;

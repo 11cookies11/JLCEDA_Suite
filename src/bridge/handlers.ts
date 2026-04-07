@@ -7,6 +7,9 @@ import type {
   BridgeResult,
 } from './protocol';
 import {
+  exportProjectBom,
+} from '../adapters/export';
+import {
   getBridgeStatusResult,
   getDocumentSummaryResult,
   getSelectionSnapshotResult,
@@ -175,6 +178,8 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(request.id, await getDocumentSummaryResult());
       case 'project.get_selection_snapshot':
         return createSuccessResponse(request.id, await getSelectionSnapshotResult());
+      case 'project.export_bom':
+        return createSuccessResponse(request.id, await exportProjectBom(request.command.payload));
       case 'schematic.place_component':
         return createSuccessResponse(
           request.id,

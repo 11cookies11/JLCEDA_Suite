@@ -10,8 +10,8 @@
   },
   "scripts": {
     "compile": "rimraf ./dist/ && ts-node ./config/esbuild.prod.ts",
-    "lint": "eslint build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
-    "fix": "eslint --fix build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
+    "lint": "eslint build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts src/adapters/export.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
+    "fix": "eslint --fix build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts src/adapters/export.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
     "build": "npm run compile && ts-node ./build/packaged.ts"
   },
   "devDependencies": {
