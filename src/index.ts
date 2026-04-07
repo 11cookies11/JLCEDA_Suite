@@ -3,6 +3,7 @@ import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
 import { remoteBridgeClient } from './remote/client';
+import { openBridgeDialog } from './ui/bridge-dialog';
 
 function getStatusLines(): Array<string> {
   const remoteStatus = remoteBridgeClient.getStatus();
@@ -27,24 +28,6 @@ function formatValue(value: unknown, fallback = '暂无'): string {
   }
 
   return String(value);
-}
-
-function getRemoteStatusText(): string {
-  const remoteStatus = remoteBridgeClient.getStatus();
-
-  if (remoteStatus.connected) {
-    return '已连接';
-  }
-
-  if (remoteStatus.connecting) {
-    return '连接中';
-  }
-
-  if (remoteStatus.configured) {
-    return '待连接';
-  }
-
-  return '未配置';
 }
 
 export function activate(status?: 'onStartupFinished', arg?: string): void {
@@ -182,26 +165,6 @@ export async function runBridgeSelfCheck(): Promise<void> {
   eda.sys_Dialog.showInformationMessage(summaryLines.join('\n'), '桥接自检');
 }
 
-function showSelectDialog(
-  options: Array<{ value: string; displayContent: string }>,
-  beforeContent: string,
-  title: string,
-): Promise<string | undefined> {
-  return new Promise((resolve) => {
-    eda.sys_Dialog.showSelectDialog(
-      options,
-      beforeContent,
-      '',
-      title,
-      options[0]?.value,
-      false,
-      (value) => {
-        resolve(typeof value === 'string' ? value : undefined);
-      },
-    );
-  });
-}
-
 function showInputDialog(
   beforeContent: string,
   title: string,
@@ -313,61 +276,5 @@ export function showRemoteBridgeStatus(): void {
 }
 
 export async function openBridgeMenu(): Promise<void> {
-  const remoteStatus = remoteBridgeClient.getStatus();
-  const action = await showSelectDialog(
-    [
-      { value: 'status', displayContent: '桥接状态  查看当前桥接与运行环境' },
-      { value: 'document', displayContent: '当前文档  查看当前工程与选区摘要' },
-      { value: 'self-check', displayContent: '桥接自检  快速检查桥接链路' },
-      { value: 'configure', displayContent: '配置远程服务  设置地址、令牌与客户端 ID' },
-      {
-        value: remoteStatus.connected ? 'disconnect' : 'connect',
-        displayContent: remoteStatus.connected ? '断开远程服务  结束当前连接' : '连接远程服务  启动远程桥接',
-      },
-      { value: 'remote-status', displayContent: '远程状态  查看连接细节与最近错误' },
-      { value: 'about', displayContent: '关于插件  查看插件简介与版本' },
-    ],
-    [
-      '选择一个操作',
-      '',
-      `远程状态：${getRemoteStatusText()}`,
-      `插件版本：${extensionConfig.version}`,
-    ].join('\n'),
-    'AI桥接',
-  );
-
-  await handleBridgeMenuAction(action);
-}
-
-async function handleBridgeMenuAction(action: string | undefined): Promise<void> {
-  if (!action) {
-    return;
-  }
-
-  switch (action) {
-    case 'status':
-      await showBridgeStatus();
-      break;
-    case 'document':
-      await inspectCurrentDocument();
-      break;
-    case 'self-check':
-      await runBridgeSelfCheck();
-      break;
-    case 'configure':
-      await configureRemoteBridge();
-      break;
-    case 'connect':
-      await connectRemoteBridge();
-      break;
-    case 'disconnect':
-      disconnectRemoteBridge();
-      break;
-    case 'remote-status':
-      showRemoteBridgeStatus();
-      break;
-    case 'about':
-      about();
-      break;
-  }
+  await openBridgeDialog();
 }
