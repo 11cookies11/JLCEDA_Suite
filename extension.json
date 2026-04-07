@@ -1,7 +1,7 @@
 {
   "name": "jlceda-aiagent",
   "uuid": "f8a40a7a08f94ffcbb0925f6ce0c7202",
-  "displayName": "JLCEDA AIAgent",
+  "displayName": "JLCEDA AI桥接",
   "description": "Bridge Codex with JLCEDA through a controlled extension layer.",
   "version": "0.1.0",
   "publisher": "JLCEDA-AIAgent",
@@ -23,47 +23,22 @@
   "headerMenus": {
     "home": [
       {
-        "id": "JLCEDA AIAgent",
-        "title": "JLCEDA AIAgent",
+        "id": "JLCEDA AI桥接",
+        "title": "AI桥接",
         "menuItems": [
           {
-            "id": "About",
-            "title": "About",
-            "registerFn": "about"
+            "id": "快捷操作",
+            "title": "快捷操作",
+            "registerFn": "openBridgeMenu"
           },
           {
-            "id": "Bridge Status",
-            "title": "Bridge Status",
+            "id": "桥接状态",
+            "title": "桥接状态",
             "registerFn": "showBridgeStatus"
           },
           {
-            "id": "Inspect Current Document",
-            "title": "Inspect Current Document",
-            "registerFn": "inspectCurrentDocument"
-          },
-          {
-            "id": "Bridge Self Check",
-            "title": "Bridge Self Check",
-            "registerFn": "runBridgeSelfCheck"
-          },
-          {
-            "id": "Configure Remote Bridge",
-            "title": "Configure Remote Bridge",
-            "registerFn": "configureRemoteBridge"
-          },
-          {
-            "id": "Connect Remote Bridge",
-            "title": "Connect Remote Bridge",
-            "registerFn": "connectRemoteBridge"
-          },
-          {
-            "id": "Disconnect Remote Bridge",
-            "title": "Disconnect Remote Bridge",
-            "registerFn": "disconnectRemoteBridge"
-          },
-          {
-            "id": "Remote Bridge Status",
-            "title": "Remote Bridge Status",
+            "id": "远程状态",
+            "title": "远程状态",
             "registerFn": "showRemoteBridgeStatus"
           }
         ]
@@ -71,47 +46,22 @@
     ],
     "sch": [
       {
-        "id": "JLCEDA AIAgent",
-        "title": "JLCEDA AIAgent",
+        "id": "JLCEDA AI桥接",
+        "title": "AI桥接",
         "menuItems": [
           {
-            "id": "About",
-            "title": "About",
-            "registerFn": "about"
+            "id": "快捷操作",
+            "title": "快捷操作",
+            "registerFn": "openBridgeMenu"
           },
           {
-            "id": "Bridge Status",
-            "title": "Bridge Status",
+            "id": "桥接状态",
+            "title": "桥接状态",
             "registerFn": "showBridgeStatus"
           },
           {
-            "id": "Inspect Current Document",
-            "title": "Inspect Current Document",
-            "registerFn": "inspectCurrentDocument"
-          },
-          {
-            "id": "Bridge Self Check",
-            "title": "Bridge Self Check",
-            "registerFn": "runBridgeSelfCheck"
-          },
-          {
-            "id": "Configure Remote Bridge",
-            "title": "Configure Remote Bridge",
-            "registerFn": "configureRemoteBridge"
-          },
-          {
-            "id": "Connect Remote Bridge",
-            "title": "Connect Remote Bridge",
-            "registerFn": "connectRemoteBridge"
-          },
-          {
-            "id": "Disconnect Remote Bridge",
-            "title": "Disconnect Remote Bridge",
-            "registerFn": "disconnectRemoteBridge"
-          },
-          {
-            "id": "Remote Bridge Status",
-            "title": "Remote Bridge Status",
+            "id": "远程状态",
+            "title": "远程状态",
             "registerFn": "showRemoteBridgeStatus"
           }
         ]
@@ -119,47 +69,22 @@
     ],
     "pcb": [
       {
-        "id": "JLCEDA AIAgent",
-        "title": "JLCEDA AIAgent",
+        "id": "JLCEDA AI桥接",
+        "title": "AI桥接",
         "menuItems": [
           {
-            "id": "About",
-            "title": "About",
-            "registerFn": "about"
+            "id": "快捷操作",
+            "title": "快捷操作",
+            "registerFn": "openBridgeMenu"
           },
           {
-            "id": "Bridge Status",
-            "title": "Bridge Status",
+            "id": "桥接状态",
+            "title": "桥接状态",
             "registerFn": "showBridgeStatus"
           },
           {
-            "id": "Inspect Current Document",
-            "title": "Inspect Current Document",
-            "registerFn": "inspectCurrentDocument"
-          },
-          {
-            "id": "Bridge Self Check",
-            "title": "Bridge Self Check",
-            "registerFn": "runBridgeSelfCheck"
-          },
-          {
-            "id": "Configure Remote Bridge",
-            "title": "Configure Remote Bridge",
-            "registerFn": "configureRemoteBridge"
-          },
-          {
-            "id": "Connect Remote Bridge",
-            "title": "Connect Remote Bridge",
-            "registerFn": "connectRemoteBridge"
-          },
-          {
-            "id": "Disconnect Remote Bridge",
-            "title": "Disconnect Remote Bridge",
-            "registerFn": "disconnectRemoteBridge"
-          },
-          {
-            "id": "Remote Bridge Status",
-            "title": "Remote Bridge Status",
+            "id": "远程状态",
+            "title": "远程状态",
             "registerFn": "showRemoteBridgeStatus"
           }
         ]
