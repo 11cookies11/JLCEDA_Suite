@@ -5,6 +5,11 @@ import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registr
 import { remoteBridgeClient } from './remote/client';
 
 const BRIDGE_UI_RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
+const BRIDGE_IFRAME_ID = 'ai-bridge-window';
+
+function delay(ms: number): Promise<void> {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 function getStatusLines(): Array<string> {
   const remoteStatus = remoteBridgeClient.getStatus();
@@ -590,7 +595,6 @@ async function _openBridgeMenuFallback(): Promise<void> {
 }
 
 async function openBridgeMenuInternal(): Promise<void> {
-  const iframeId = 'ai-bridge-window';
   const openOptions = {
     title: 'AI桥接',
     maximizeButton: true,
@@ -599,10 +603,10 @@ async function openBridgeMenuInternal(): Promise<void> {
   } as const;
 
   try {
-    const alreadyExists = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
+    const alreadyExists = await eda.sys_IFrame.isIFrameAlreadyExist(BRIDGE_IFRAME_ID);
 
     if (alreadyExists) {
-      const shown = await eda.sys_IFrame.showIFrame(iframeId);
+      const shown = await eda.sys_IFrame.showIFrame(BRIDGE_IFRAME_ID);
 
       if (shown) {
         return;
@@ -610,16 +614,38 @@ async function openBridgeMenuInternal(): Promise<void> {
 
       // Some runtime builds report an existing window but refuse to foreground it.
       // Recreate the window instead of forcing users into the simplified fallback.
-      await eda.sys_IFrame.closeIFrame(iframeId);
+      await eda.sys_IFrame.closeIFrame(BRIDGE_IFRAME_ID);
     }
 
-    await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, iframeId, openOptions);
+    await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, BRIDGE_IFRAME_ID, openOptions);
 
-    const created = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
+    for (let attempt = 0; attempt < 4; attempt += 1) {
+      await delay(120 * (attempt + 1));
 
-    if (!created) {
-      throw new Error('IFrame 窗口未成功打开。');
+      const created = await eda.sys_IFrame.isIFrameAlreadyExist(BRIDGE_IFRAME_ID);
+      if (!created) {
+        continue;
+      }
+
+      const shown = await eda.sys_IFrame.showIFrame(BRIDGE_IFRAME_ID);
+      if (shown) {
+        return;
+      }
     }
+
+    // Last recovery path: some runtime builds may create the iframe only after a second open.
+    await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, BRIDGE_IFRAME_ID, openOptions);
+    await delay(240);
+
+    const createdAfterRetry = await eda.sys_IFrame.isIFrameAlreadyExist(BRIDGE_IFRAME_ID);
+    if (createdAfterRetry) {
+      const shownAfterRetry = await eda.sys_IFrame.showIFrame(BRIDGE_IFRAME_ID);
+      if (shownAfterRetry) {
+        return;
+      }
+    }
+
+    throw new Error('IFrame 窗口未成功打开。');
   }
   catch (error) {
     eda.sys_Dialog.showInformationMessage(
