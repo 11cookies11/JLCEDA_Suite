@@ -347,9 +347,16 @@ async function openBridgeMenuFallback(): Promise<void> {
   }
 }
 
-export async function openBridgeMenu(): Promise<void> {
+async function openBridgeMenuInternal(): Promise<void> {
   try {
-    await openBridgeDialog();
+    await Promise.race([
+      openBridgeDialog(),
+      new Promise<never>((_, reject) => {
+        setTimeout(() => {
+          reject(new Error('高级弹窗加载超时。'));
+        }, 1500);
+      }),
+    ]);
   }
   catch (error) {
     eda.sys_Dialog.showInformationMessage(
@@ -362,4 +369,8 @@ export async function openBridgeMenu(): Promise<void> {
     );
     await openBridgeMenuFallback();
   }
+}
+
+export function openBridgeMenu(): void {
+  void openBridgeMenuInternal();
 }
