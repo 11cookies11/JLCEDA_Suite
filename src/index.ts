@@ -348,15 +348,27 @@ async function openBridgeMenuFallback(): Promise<void> {
 
 async function openBridgeMenuInternal(): Promise<void> {
   try {
-    const opened = await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, 'ai-bridge-window', {
-      title: 'AI桥接',
-      maximizeButton: true,
-      minimizeButton: true,
-      grayscaleMask: true,
-    });
+    const iframeId = 'ai-bridge-window';
+    const alreadyExists = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
 
-    if (!opened) {
-      throw new Error('IFrame 窗口未成功打开。');
+    if (alreadyExists) {
+      const shown = await eda.sys_IFrame.showIFrame(iframeId);
+
+      if (!shown) {
+        throw new Error('IFrame 窗口已存在，但未能显示。');
+      }
+    }
+    else {
+      const opened = await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, iframeId, {
+        title: 'AI桥接',
+        maximizeButton: true,
+        minimizeButton: true,
+        grayscaleMask: true,
+      });
+
+      if (!opened) {
+        throw new Error('IFrame 窗口未成功打开。');
+      }
     }
   }
   catch (error) {
