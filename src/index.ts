@@ -1,4 +1,5 @@
 import * as extensionConfig from '../extension.json';
+import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames } from './bridge/registry';
 
@@ -28,6 +29,20 @@ export function about(): void {
   eda.sys_Dialog.showInformationMessage(message, 'About');
 }
 
-export function showBridgeStatus(): void {
-  eda.sys_Dialog.showInformationMessage(getStatusLines().join('\n'), 'Bridge Status');
+export async function showBridgeStatus(): Promise<void> {
+  const response = await executeBridgeCommand('system.get_bridge_status');
+  const payload = response.status === 'success'
+    ? JSON.stringify(response.result.data, null, 2)
+    : JSON.stringify(response.error, null, 2);
+
+  eda.sys_Dialog.showInformationMessage(`${getStatusLines().join('\n')}\n\n${payload}`, 'Bridge Status');
+}
+
+export async function inspectCurrentDocument(): Promise<void> {
+  const response = await executeBridgeCommand('project.get_document_summary');
+  const payload = response.status === 'success'
+    ? JSON.stringify(response.result.data, null, 2)
+    : JSON.stringify(response.error, null, 2);
+
+  eda.sys_Dialog.showInformationMessage(payload, 'Current Document Summary');
 }
