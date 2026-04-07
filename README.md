@@ -8,13 +8,13 @@ Language: English | [简体中文](README.zh-CN.md)
 
 `JLCEDA AIAgent` is intended to turn the official JLCEDA extension capabilities into a hardware-development capability layer that Codex can call.
 
-This repository is not just a generic EDA plugin template. It is a bridge between two sides:
+This repository is not just a generic EDA plugin template. It is becoming a bridge between two sides:
 
-- `Codex`, which understands higher-level tasks and generates execution plans
-- `JLCEDA`, which performs the actual schematic, PCB, and project operations
-- A plugin layer in the middle, which translates protocol messages, wraps capabilities, controls execution, and returns results
+- `Codex` running on a server, which understands higher-level tasks and generates execution plans
+- `JLCEDA` running on a local client, which performs the actual schematic, PCB, and project operations
+- A middle layer made of a public bridge service plus a JLCEDA plugin, which translates protocol messages, wraps capabilities, controls execution, and returns results
 
-The end goal is to let Codex participate in hardware-development workflows within controlled boundaries, such as reading project state, assisting with component placement, executing selected editor actions, and exporting structured results.
+The end goal is to let server-side Codex participate in hardware-development workflows within controlled boundaries, such as reading project state, assisting with component placement, executing selected editor actions, and exporting structured results.
 
 ## Current Status
 
@@ -27,7 +27,7 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - BOM export support
 - Smoke-test, troubleshooting, and release-check documentation
 
-The main gap that remains is real JLCEDA runtime verification through local import and manual execution.
+The main gaps that remain are the server-side transport layer and real JLCEDA runtime verification through local import and manual execution.
 
 ## Implemented Commands
 
@@ -65,6 +65,7 @@ The roadmap currently focuses on these capability areas:
 - Project inspection: read the current document, selection, components, and connectivity
 - Safe execution: perform placement, wiring, annotation, and similar actions under explicit constraints
 - Result reporting: return structured state, execution results, and error details back to Codex
+- Remote transport: let the plugin connect outward to a public bridge service and receive remote commands
 - Workflow packaging: provide reusable tasks such as "inspect project", "place component", and "export BOM"
 
 ## Suggested Architecture
@@ -87,10 +88,10 @@ The working plan is tracked inside the repository:
 
 Current next steps:
 
-1. Import the packaged extension into JLCEDA and complete real runtime validation
-2. Confirm the bridge behavior for document inspection, write gating, and BOM export
-3. Decide the next protocol expansion area, likely PCB operations or external transport
-4. Record runtime findings and tighten the command contract where needed
+1. Design the communication and security model between the plugin and the public bridge service
+2. Implement the server-side bridge service and the plugin-side transport layer
+3. Complete an end-to-end flow from server-side Codex to a running JLCEDA client
+4. Follow up with real runtime validation and tighten the command contract where needed
 
 ## Reference
 
