@@ -3,7 +3,7 @@
   "uuid": "f8a40a7a08f94ffcbb0925f6ce0c7202",
   "displayName": "JLCEDA AI桥接",
   "description": "Bridge Codex with JLCEDA through a controlled extension layer.",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "publisher": "JLCEDA-AIAgent",
   "engines": {
     "eda": "^3.0.0"
@@ -23,11 +23,11 @@
   "headerMenus": {
     "home": [
       {
-        "id": "JLCEDA AI桥接",
+        "id": "jlceda-ai-bridge-home-v2",
         "title": "AI桥接",
         "menuItems": [
           {
-            "id": "打开AI桥接",
+            "id": "open-ai-bridge-window-home-v2",
             "title": "打开AI桥接",
             "registerFn": "openBridgeMenu"
           }
@@ -36,11 +36,11 @@
     ],
     "sch": [
       {
-        "id": "JLCEDA AI桥接",
+        "id": "jlceda-ai-bridge-sch-v2",
         "title": "AI桥接",
         "menuItems": [
           {
-            "id": "打开AI桥接",
+            "id": "open-ai-bridge-window-sch-v2",
             "title": "打开AI桥接",
             "registerFn": "openBridgeMenu"
           }
@@ -49,11 +49,11 @@
     ],
     "pcb": [
       {
-        "id": "JLCEDA AI桥接",
+        "id": "jlceda-ai-bridge-pcb-v2",
         "title": "AI桥接",
         "menuItems": [
           {
-            "id": "打开AI桥接",
+            "id": "open-ai-bridge-window-pcb-v2",
             "title": "打开AI桥接",
             "registerFn": "openBridgeMenu"
           }
