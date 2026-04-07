@@ -273,6 +273,7 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
 export function activate(status?: 'onStartupFinished', arg?: string): void {
   void status;
   void arg;
+  eda.sys_MessageBus.rpcService(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
   eda.sys_MessageBus.rpcServicePublic(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
   void remoteBridgeClient.autoConnectIfEnabled();
 }

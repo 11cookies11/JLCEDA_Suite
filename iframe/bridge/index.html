@@ -529,26 +529,76 @@
       clientIdInput.value = settings?.clientId || '';
     }
 
+    function getMessageBusCandidates() {
+      const candidates = [];
+      const seen = new Set();
+
+      [window, window.parent, window.top].forEach((scope, index) => {
+        if (!scope || seen.has(scope)) {
+          return;
+        }
+
+        seen.add(scope);
+
+        const bus = scope.eda && scope.eda.sys_MessageBus;
+        if (!bus) {
+          return;
+        }
+
+        candidates.push({
+          label: index === 0 ? 'iframe' : index === 1 ? 'parent' : 'top',
+          bus,
+        });
+      });
+
+      return candidates;
+    }
+
     async function callPlugin(message) {
-      if (!window.eda || !window.eda.sys_MessageBus) {
+      const candidates = getMessageBusCandidates();
+
+      if (!candidates.length) {
         setResult([
-          '当前 IFrame 环境中未发现 eda.sys_MessageBus。',
-          '这说明窗口与插件能力通信尚不可用。',
+          '当前 IFrame 环境中没有发现可用的 MessageBus。',
+          '这通常说明窗口上下文还没有接入插件主线程能力。',
         ], true);
         return null;
       }
 
-      try {
-        return await window.eda.sys_MessageBus.rpcCallPublic(RPC_TOPIC, message, 15000);
+      const failures = [];
+
+      for (const candidate of candidates) {
+        const methods = [
+          ['rpcCall', candidate.bus.rpcCall],
+          ['rpcCallPublic', candidate.bus.rpcCallPublic],
+        ];
+
+        for (const [methodName, method] of methods) {
+          if (typeof method !== 'function') {
+            continue;
+          }
+
+          try {
+            return await method.call(candidate.bus, RPC_TOPIC, message, 15000);
+          }
+          catch (error) {
+            const detail = error instanceof Error
+              ? error.message
+              : error === undefined
+                ? '宿主返回 undefined'
+                : String(error);
+
+            failures.push(`${candidate.label}.${methodName}: ${detail}`);
+          }
+        }
       }
-      catch (error) {
-        setResult([
-          '窗口与插件通信失败。',
-          '',
-          error instanceof Error ? error.message : String(error),
-        ], true);
-        return null;
-      }
+
+      setResult([
+        '窗口与插件通信失败。',
+        '',
+        ...failures,
+      ], true);
+      return null;
     }
 
     async function renderFromPlugin(message) {
