@@ -7,10 +7,6 @@ import { remoteBridgeClient } from './remote/client';
 const BRIDGE_UI_RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
 const BRIDGE_IFRAME_ID = 'ai-bridge-window';
 
-function delay(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
 function getStatusLines(): Array<string> {
   const remoteStatus = remoteBridgeClient.getStatus();
 
@@ -618,34 +614,8 @@ async function openBridgeMenuInternal(): Promise<void> {
     }
 
     await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, BRIDGE_IFRAME_ID, openOptions);
-
-    for (let attempt = 0; attempt < 4; attempt += 1) {
-      await delay(120 * (attempt + 1));
-
-      const created = await eda.sys_IFrame.isIFrameAlreadyExist(BRIDGE_IFRAME_ID);
-      if (!created) {
-        continue;
-      }
-
-      const shown = await eda.sys_IFrame.showIFrame(BRIDGE_IFRAME_ID);
-      if (shown) {
-        return;
-      }
-    }
-
-    // Last recovery path: some runtime builds may create the iframe only after a second open.
-    await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, BRIDGE_IFRAME_ID, openOptions);
-    await delay(240);
-
-    const createdAfterRetry = await eda.sys_IFrame.isIFrameAlreadyExist(BRIDGE_IFRAME_ID);
-    if (createdAfterRetry) {
-      const shownAfterRetry = await eda.sys_IFrame.showIFrame(BRIDGE_IFRAME_ID);
-      if (shownAfterRetry) {
-        return;
-      }
-    }
-
-    throw new Error('IFrame 窗口未成功打开。');
+    // Treat a resolved openIFrame call as success. Some runtime builds open the
+    // window correctly but report stale results for follow-up existence checks.
   }
   catch (error) {
     eda.sys_Dialog.showInformationMessage(
