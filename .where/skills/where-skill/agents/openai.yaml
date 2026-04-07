@@ -1,0 +1,5 @@
+﻿version: 1
+interface:
+  display_name: Where Skill
+  short_description: Manage `.where-agent-progress.md` plan updates with strict hierarchy and status rules.
+  default_prompt: Update the workspace plan file following Where rules. Keep nested tasks nested because indentation controls the Where tree layout, preserve where:id comments, and validate with scripts/validate_where_plan.ps1.

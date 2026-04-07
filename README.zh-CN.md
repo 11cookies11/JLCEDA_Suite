@@ -1,32 +1,67 @@
-# <PROJECT_NAME>
+# JLCEDA AIAgent
 
-<SHORT_DESCRIPTION>
+让 Codex 通过插件连接并控制嘉立创 EDA 的桥接项目。
 
 语言：简体中文 | [English](README.md)
 
-## 这是什么
+## 项目简介
 
-这是一个“无技术栈绑定”的 GitHub 模板仓库，用来快速开始任何类型的项目（库 / 服务 / 脚本 / 文档 / 学习记录等）。
+`JLCEDA AIAgent` 的目标，是把嘉立创 EDA 的官方扩展能力封装成一个可被 Codex 调用的硬件开发能力层。
 
-首次使用时，通常需要替换以下占位符：
+这个仓库不只是一个普通的 EDA 插件模板，而是一个连接两端的桥梁：
 
-- `<PROJECT_NAME>`：项目名称
-- `<SHORT_DESCRIPTION>`：一句话简介
-- `LICENSE`：选择合适的许可证
-- `.github/ISSUE_TEMPLATE/*`：按需调整 Issue 模板
+- 一端是 `Codex`，负责理解高层任务与生成执行方案
+- 一端是 `嘉立创 EDA`，负责实际的原理图、PCB 与工程操作
+- 中间的插件负责协议转换、能力封装、执行控制与结果回传
 
-## 如何使用（作为模板）
+最终效果是让 Codex 能够在受控范围内参与硬件开发流程，例如读取工程状态、辅助放置器件、执行部分编辑操作、导出结构化结果等。
 
-1. 在 GitHub 上点击 **Use this template** 创建新仓库
-2. 修改 `README.md` 与基础信息文件（如 `LICENSE`、`CONTRIBUTING.md`）
-3. 添加你的代码 / 文档
+## 当前定位
 
-## 仓库约定（建议）
+当前仓库仍处于模板整理和架构定义阶段，重点是先完成以下基础工作：
 
-- 变更记录：`CHANGELOG.md`（Keep a Changelog 风格）
-- 提交信息与 PR 标题：Conventional Commits（例如 `feat:`、`fix:`、`chore:`）
-- 社区文档：`CONTRIBUTING.md`、`SECURITY.md`、`CODE_OF_CONDUCT.md`
-- Issue / PR 模板：`.github/`
+- 将模板仓库替换为项目专用说明和元信息
+- 搭建最小可运行的 JLCEDA 扩展骨架
+- 设计 Codex 与插件之间的命令协议
+- 逐步封装 JLCEDA 官方 API，形成稳定的内部能力层
+
+## 计划中的能力方向
+
+项目后续计划围绕以下几类能力推进：
+
+- 工程读取：读取当前文档、选区、器件与连接关系
+- 安全执行：在明确约束下执行放置、连线、标注等操作
+- 结果回传：向 Codex 返回结构化状态、执行结果与错误信息
+- 工作流封装：沉淀“查看工程”“放置器件”“导出 BOM”等可复用任务
+
+## 建议架构
+
+当前建议采用四层结构：
+
+1. JLCEDA 扩展宿主层
+2. EDA 能力适配层
+3. Codex 桥接协议层
+4. 硬件工作流层
+
+这样可以把嘉立创 EDA 的底层接口细节隔离在下层，同时让上层对 Codex 暴露更稳定、更安全的能力边界。
+
+## 开发计划
+
+项目里已经整理了一个初版开发计划：
+
+- Where 看板：`.where-agent-progress.md`
+- 计划说明：`.where/development-plan.md`
+
+当前建议优先推进：
+
+1. 完善 README 与仓库元信息
+2. 补齐最小可运行扩展骨架
+3. 起草第一版命令协议
+4. 选定首个端到端演示工作流
+
+## 参考资料
+
+- 嘉立创 EDA 官方扩展开发指南：https://prodocs.lceda.cn/cn/api/guide/how-to-start.html
 
 ## 许可证
 
