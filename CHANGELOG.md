@@ -9,4 +9,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-- Initial template.
+### Added
+
+- Runnable JLCEDA extension skeleton with packaged `.eext` output
+- First-pass Codex bridge protocol, guarded command routing, and confirmation gates
+- Read-only project inspection commands for bridge status, document summary, and selection snapshot
+- Schematic write-command scaffolding for component placement and wire creation
+- BOM export flow, smoke-test coverage, troubleshooting notes, release checklist, and versioning guide
+
+### Changed
+
+- Repository documentation now describes the project as a Codex-to-JLCEDA bridge instead of a generic template

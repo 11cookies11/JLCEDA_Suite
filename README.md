@@ -18,12 +18,44 @@ The end goal is to let Codex participate in hardware-development workflows withi
 
 ## Current Status
 
-The repository is still in the template-cleanup and architecture-definition stage. The current focus is to finish the following foundation work:
+The repository has moved beyond the initial template-cleanup stage. It now includes:
 
-- Replace template repository content with project-specific documentation and metadata
-- Build the minimum runnable JLCEDA extension skeleton
-- Design the command protocol between Codex and the plugin
-- Wrap the official JLCEDA APIs behind a stable internal capability layer
+- A runnable JLCEDA extension skeleton with packaged `.eext` output
+- A first-pass Codex bridge protocol and guarded command dispatcher
+- Read-only project inspection commands
+- Basic schematic write-command scaffolding
+- BOM export support
+- Smoke-test, troubleshooting, and release-check documentation
+
+The main gap that remains is real JLCEDA runtime verification through local import and manual execution.
+
+## Implemented Commands
+
+The current bridge implementation supports these commands:
+
+- `system.get_bridge_status`
+- `project.get_document_summary`
+- `project.get_selection_snapshot`
+- `schematic.place_component`
+- `schematic.create_wire`
+- `project.export_bom`
+
+Unsupported but registered commands are rejected explicitly, and high-risk write operations are gated by confirmation rules.
+
+## Validation
+
+The repository already includes a repeatable local validation path:
+
+1. `npm run lint`
+2. `npm run build`
+3. `npm run smoke-test`
+4. `npm run release:check`
+
+For runtime verification inside JLCEDA, see:
+
+- `docs/example-scenarios.md`
+- `docs/troubleshooting.md`
+- `docs/release-checklist.md`
 
 ## Planned Capability Areas
 
@@ -47,17 +79,17 @@ This keeps official JLCEDA API details isolated in lower layers while giving Cod
 
 ## Development Plan
 
-An initial development plan is already tracked inside the repository:
+The working plan is tracked inside the repository:
 
 - Where board: `.where-agent-progress.md`
 - Plan notes: `.where/development-plan.md`
 
-Recommended immediate next steps:
+Current next steps:
 
-1. Finish replacing template repository metadata and documentation
-2. Add the minimum runnable JLCEDA extension skeleton
-3. Draft the first version of the Codex command protocol
-4. Pick the first end-to-end demo workflow
+1. Import the packaged extension into JLCEDA and complete real runtime validation
+2. Confirm the bridge behavior for document inspection, write gating, and BOM export
+3. Decide the next protocol expansion area, likely PCB operations or external transport
+4. Record runtime findings and tighten the command contract where needed
 
 ## Reference
 
