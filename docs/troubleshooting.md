@@ -15,6 +15,7 @@
 
 目前桥接层已经登记并实现的命令：
 
+- `system.ping`
 - `system.get_bridge_status`
 - `project.get_document_summary`
 - `project.get_selection_snapshot`
@@ -42,9 +43,10 @@
 建议排查：
 
 1. 确认使用的是最新文件：`build/dist/jlceda-aiagent_v0.1.0.eext`
-2. 打开扩展菜单，先点击 `Bridge Status`
-3. 再点击 `Inspect Current Document`
-4. 如果无弹窗，检查菜单注册函数名称与 `src/index.ts` 导出是否一致
+2. 打开扩展菜单，先点击 `Bridge Self Check`
+3. 再点击 `Bridge Status`
+4. 再点击 `Inspect Current Document`
+5. 如果无弹窗，检查菜单注册函数名称与 `src/index.ts` 导出是否一致
 
 ### 2. 写操作命令返回 `confirmation_required`
 
@@ -131,13 +133,18 @@
 
 在 JLCEDA 里建议按下面顺序验证：
 
-1. `Bridge Status`
-2. `Inspect Current Document`
-3. `project.export_bom`
-4. `schematic.place_component`
-5. `schematic.create_wire`
+1. `Bridge Self Check`
+2. `Bridge Status`
+3. `Inspect Current Document`
+4. `project.export_bom`
+5. `schematic.place_component`
+6. `schematic.create_wire`
 
 这样可以先确认只读路径和环境状态，再验证写操作。
+
+建议把每次实机验证结果记录到：
+
+- `docs/runtime-validation-report.md`
 
 ## 当前已知限制
 

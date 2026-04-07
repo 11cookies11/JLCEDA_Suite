@@ -12,11 +12,13 @@
 
 1. 菜单 `JLCEDA AIAgent` 可以显示
 2. `About` 可以正常弹窗
-3. `Bridge Status` 可以正常弹窗
-4. `Inspect Current Document` 可以正常返回当前文档摘要
-5. `project.export_bom` 可以生成导出结果
-6. `schematic.place_component` 在关闭确认门禁时可以执行
-7. `schematic.create_wire` 在关闭确认门禁时可以执行
+3. `Bridge Self Check` 可以返回 `ping`、`bridge_status`、`document_summary`、`selection_snapshot`
+4. `Bridge Status` 可以正常弹窗
+5. `Inspect Current Document` 可以正常返回当前文档摘要
+6. `project.export_bom` 可以生成导出结果
+7. `schematic.place_component` 在关闭确认门禁时可以执行
+8. `schematic.create_wire` 在关闭确认门禁时可以执行
+9. 将结果记录到 `docs/runtime-validation-report.md`
 
 ## 文档检查
 
@@ -24,8 +26,9 @@
 2. `docs/bridge-protocol.md` 与当前实现一致
 3. `docs/example-scenarios.md` 已更新
 4. `docs/troubleshooting.md` 已更新
-5. `docs/versioning.md` 已更新
-6. `.where-agent-progress.md` 状态已同步
+5. `docs/runtime-validation-report.md` 已更新
+6. `docs/versioning.md` 已更新
+7. `.where-agent-progress.md` 状态已同步
 
 ## 发布产物
 

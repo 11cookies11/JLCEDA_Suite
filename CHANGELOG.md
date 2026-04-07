@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Read-only project inspection commands for bridge status, document summary, and selection snapshot
 - Schematic write-command scaffolding for component placement and wire creation
 - BOM export flow, smoke-test coverage, troubleshooting notes, release checklist, and versioning guide
+- A runtime validation report template for recording JLCEDA import and execution results
 
 ### Changed
 
