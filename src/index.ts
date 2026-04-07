@@ -50,13 +50,14 @@ export async function inspectCurrentDocument(): Promise<void> {
 
 export async function runBridgeSelfCheck(): Promise<void> {
   const checks = await Promise.all([
+    executeBridgeCommand('system.ping', { echo: 'self-check' }),
     executeBridgeCommand('system.get_bridge_status'),
     executeBridgeCommand('project.get_document_summary'),
     executeBridgeCommand('project.get_selection_snapshot'),
   ]);
 
   const summaryLines = checks.map((response, index) => {
-    const label = ['bridge_status', 'document_summary', 'selection_snapshot'][index];
+    const label = ['ping', 'bridge_status', 'document_summary', 'selection_snapshot'][index];
     return `${label}: ${response.status}`;
   });
 

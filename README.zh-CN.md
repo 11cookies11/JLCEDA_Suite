@@ -33,6 +33,7 @@
 
 当前桥接层已经支持以下命令：
 
+- `system.ping`
 - `system.get_bridge_status`
 - `project.get_document_summary`
 - `project.get_selection_snapshot`

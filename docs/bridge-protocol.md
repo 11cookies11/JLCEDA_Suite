@@ -235,8 +235,9 @@ Codex 在收到后，不应自动假定确认已通过，而应等待显式确�
 
 首个建议落地命令：
 
-1. `system.get_bridge_status`
-2. `project.get_document_summary`
-3. `project.get_selection_snapshot`
+1. `system.ping`
+2. `system.get_bridge_status`
+3. `project.get_document_summary`
+4. `project.get_selection_snapshot`
 
-这样可以先把只读链路打通，再逐步引入写操作。
+这样可以先把桥接探活和只读链路打通，再逐步引入写操作。

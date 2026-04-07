@@ -14,6 +14,7 @@ import {
   getBridgeStatusResult,
   getDocumentSummaryResult,
   getSelectionSnapshotResult,
+  pingBridgeResult,
 } from '../adapters/read-only';
 import {
   createSchematicWire,
@@ -175,6 +176,11 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
 
   try {
     switch (resolvedCommandKey) {
+      case 'system.ping':
+        return createSuccessResponse(
+          request.id,
+          await pingBridgeResult(request.command.payload as BridgeCommandPayloadMap['system.ping']),
+        );
       case 'system.get_bridge_status':
         return createSuccessResponse(request.id, await getBridgeStatusResult());
       case 'project.get_document_summary':

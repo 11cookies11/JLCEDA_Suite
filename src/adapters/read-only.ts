@@ -1,4 +1,4 @@
-import type { BridgeResult } from '../bridge/protocol';
+import type { BridgeCommandPayloadMap, BridgeResult } from '../bridge/protocol';
 import { BRIDGE_PROTOCOL_VERSION } from '../bridge/protocol';
 import { SUPPORTED_COMMANDS } from '../bridge/registry';
 
@@ -113,6 +113,27 @@ export async function getBridgeStatusResult(): Promise<BridgeResult> {
         frontendUnit,
       },
       supportedCommands: SUPPORTED_COMMANDS,
+    },
+  };
+}
+
+export async function pingBridgeResult(
+  payload: BridgeCommandPayloadMap['system.ping'],
+): Promise<BridgeResult> {
+  const language = await eda.sys_I18n.getCurrentLanguage();
+
+  return {
+    summary: 'bridge ping acknowledged',
+    data: {
+      ok: true,
+      protocolVersion: BRIDGE_PROTOCOL_VERSION,
+      echo: payload.echo ?? null,
+      runtime: {
+        isClient: eda.sys_Environment.isClient(),
+        isWeb: eda.sys_Environment.isWeb(),
+        language,
+      },
+      timestamp: new Date().toISOString(),
     },
   };
 }

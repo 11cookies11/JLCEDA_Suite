@@ -33,6 +33,7 @@ The main gap that remains is real JLCEDA runtime verification through local impo
 
 The current bridge implementation supports these commands:
 
+- `system.ping`
 - `system.get_bridge_status`
 - `project.get_document_summary`
 - `project.get_selection_snapshot`

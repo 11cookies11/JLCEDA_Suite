@@ -8,6 +8,7 @@ export interface BridgeCommandDescriptor {
 }
 
 export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
+  'system.ping',
   'system.get_bridge_status',
   'project.get_document_summary',
   'project.get_selection_snapshot',

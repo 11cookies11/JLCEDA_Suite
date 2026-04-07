@@ -145,6 +145,30 @@ async function run(): Promise<void> {
     verify: (response: Awaited<ReturnType<typeof executeBridgeRequest>>) => void;
   }> = [
     {
+      name: 'ping bridge',
+      request: {
+        id: 'smoke-000',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'ping',
+          payload: {
+            echo: 'smoke-test',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'ping should succeed');
+        if (response.status === 'success') {
+          const resultData = response.result.data as { ok?: boolean; echo?: string | null };
+          assert(resultData.ok === true, 'ping should report ok');
+          assert(resultData.echo === 'smoke-test', 'ping should echo payload');
+        }
+      },
+    },
+    {
       name: 'get bridge status',
       request: {
         id: 'smoke-001',
