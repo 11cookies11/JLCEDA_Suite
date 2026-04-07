@@ -11,6 +11,7 @@ const CONFIG_KEY_AUTH_TOKEN = 'remoteBridge.authToken';
 const CONFIG_KEY_CLIENT_ID = 'remoteBridge.clientId';
 const CONFIG_KEY_AUTO_CONNECT = 'remoteBridge.autoConnect';
 const DEFAULT_HEARTBEAT_INTERVAL_MS = 20_000;
+const DEFAULT_RECONNECT_DELAY_MS = 5_000;
 
 export interface RemoteBridgeSettings {
   serverUrl: string;
@@ -27,6 +28,8 @@ export interface RemoteBridgeStatus {
   serverUrl?: string;
   lastRegisteredAt?: string;
   lastHeartbeatAt?: string;
+  reconnectAttempts: number;
+  reconnectScheduled: boolean;
   lastError?: string;
 }
 
@@ -77,10 +80,13 @@ function createDefaultDependencies(): RemoteBridgeClientDependencies {
 export class RemoteBridgeClient {
   private readonly dependencies: RemoteBridgeClientDependencies;
   private heartbeatTimer: ReturnType<typeof setInterval> | undefined;
+  private reconnectTimer: ReturnType<typeof setTimeout> | undefined;
   private status: RemoteBridgeStatus = {
     configured: false,
     connected: false,
     connecting: false,
+    reconnectAttempts: 0,
+    reconnectScheduled: false,
   };
 
   constructor(dependencies?: Partial<RemoteBridgeClientDependencies>) {
@@ -155,6 +161,7 @@ export class RemoteBridgeClient {
 
   async connect(): Promise<void> {
     const settings = this.getSettings();
+    this.clearReconnectSchedule();
 
     if (!settings.serverUrl) {
       this.status = {
@@ -175,31 +182,46 @@ export class RemoteBridgeClient {
       lastError: undefined,
     };
 
-    this.dependencies.registerSocket(
-      REMOTE_BRIDGE_SOCKET_ID,
-      settings.serverUrl,
-      event => this.handleServerMessage(event.data),
-      async () => {
-        await this.sendRegister();
-        this.startHeartbeat();
-        this.status = {
-          ...this.status,
-          connecting: false,
-          connected: true,
-          lastRegisteredAt: new Date().toISOString(),
-          lastError: undefined,
-        };
-      },
-    );
+    try {
+      this.dependencies.registerSocket(
+        REMOTE_BRIDGE_SOCKET_ID,
+        settings.serverUrl,
+        event => this.handleServerMessage(event.data),
+        async () => {
+          await this.sendRegister();
+          this.startHeartbeat();
+          this.status = {
+            ...this.status,
+            connecting: false,
+            connected: true,
+            reconnectScheduled: false,
+            lastRegisteredAt: new Date().toISOString(),
+            lastError: undefined,
+          };
+        },
+      );
+    }
+    catch (error) {
+      this.status = {
+        ...this.status,
+        connecting: false,
+        connected: false,
+        lastError: error instanceof Error ? error.message : 'Failed to register remote bridge socket.',
+      };
+      this.scheduleReconnect();
+      throw error;
+    }
   }
 
   disconnect(): void {
+    this.clearReconnectSchedule();
     this.stopHeartbeat();
     this.dependencies.closeSocket(REMOTE_BRIDGE_SOCKET_ID, 1000, 'manual disconnect');
     this.status = {
       ...this.status,
       connecting: false,
       connected: false,
+      reconnectScheduled: false,
     };
   }
 
@@ -253,6 +275,38 @@ export class RemoteBridgeClient {
     this.heartbeatTimer = undefined;
   }
 
+  private scheduleReconnect(): void {
+    const settings = this.getSettings();
+
+    if (!settings.autoConnect || this.reconnectTimer) {
+      return;
+    }
+
+    this.status = {
+      ...this.status,
+      reconnectScheduled: true,
+      reconnectAttempts: this.status.reconnectAttempts + 1,
+    };
+
+    this.reconnectTimer = setTimeout(() => {
+      this.reconnectTimer = undefined;
+      void this.connect().catch(() => undefined);
+    }, DEFAULT_RECONNECT_DELAY_MS);
+  }
+
+  private clearReconnectSchedule(): void {
+    if (!this.reconnectTimer) {
+      return;
+    }
+
+    clearTimeout(this.reconnectTimer);
+    this.reconnectTimer = undefined;
+    this.status = {
+      ...this.status,
+      reconnectScheduled: false,
+    };
+  }
+
   private async handleServerMessage(rawMessage: string): Promise<void> {
     let message: ServerToClientMessage;
 
@@ -273,6 +327,8 @@ export class RemoteBridgeClient {
           ...this.status,
           connected: true,
           connecting: false,
+          reconnectAttempts: 0,
+          reconnectScheduled: false,
           clientId: message.clientId,
           lastRegisteredAt: message.session.connectedAt,
           lastHeartbeatAt: message.session.lastSeenAt,
@@ -292,8 +348,13 @@ export class RemoteBridgeClient {
       case 'server.error':
         this.status = {
           ...this.status,
+          connected: false,
+          connecting: false,
           lastError: `${message.code}: ${message.message}`,
         };
+        if (message.code !== 'AUTH_FAILED') {
+          this.scheduleReconnect();
+        }
         break;
     }
   }
