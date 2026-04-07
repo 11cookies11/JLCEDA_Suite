@@ -98,8 +98,13 @@ async function getSelectionSnapshot(): Promise<SelectionSnapshot> {
 
 export async function getBridgeStatusResult(): Promise<BridgeResult> {
   const language = await eda.sys_I18n.getCurrentLanguage();
-  const theme = await eda.sys_Environment.getCurrentTheme();
   const frontendUnit = await eda.sys_Unit.getFrontendDataUnit();
+  const getCurrentTheme = (eda.sys_Environment as {
+    getCurrentTheme?: () => Promise<unknown>;
+  }).getCurrentTheme;
+  const theme = typeof getCurrentTheme === 'function'
+    ? await getCurrentTheme.call(eda.sys_Environment)
+    : 'unknown';
 
   return {
     summary: 'bridge status collected',

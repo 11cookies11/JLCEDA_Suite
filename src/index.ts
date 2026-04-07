@@ -13,7 +13,7 @@ function getStatusLines(): Array<string> {
     `插件：${extensionConfig.displayName}`,
     `版本：${extensionConfig.version}`,
     `协议：${BRIDGE_PROTOCOL_VERSION}`,
-    `命令支持：${getSupportedCommandNames().length} / ${IMPLEMENTED_COMMANDS.length}`,
+    `命令支持：${IMPLEMENTED_COMMANDS.length} / ${getSupportedCommandNames().length}`,
     `远程配置：${remoteStatus.configured ? '已完成' : '未配置'}`,
     `连接状态：${remoteStatus.connected ? '已连接' : remoteStatus.connecting ? '连接中' : '未连接'}`,
   ];
