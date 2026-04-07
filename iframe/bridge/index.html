@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI桥接</title>
+  <style>
+    :root {
+      --surface: #f8f9fa;
+      --surface-low: #f3f4f5;
+      --surface-card: #ffffff;
+      --surface-header: #e9ecef;
+      --text: #191c1d;
+      --muted: #5f6872;
+      --line: rgba(112, 120, 131, 0.18);
+      --primary: #0060a8;
+      --primary-strong: #2a79c7;
+      --warning: #944a00;
+      --shadow: 0 10px 30px rgba(25, 28, 29, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        linear-gradient(180deg, rgba(248, 249, 250, 0.96), rgba(248, 249, 250, 0.9)),
+        radial-gradient(circle at top right, rgba(42, 121, 199, 0.08), transparent 36%);
+    }
+
+    .shell {
+      min-height: 100vh;
+      padding: 18px;
+    }
+
+    .window {
+      height: calc(100vh - 36px);
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.88);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      display: grid;
+      grid-template-rows: 76px 1fr 70px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      background: linear-gradient(180deg, #eef1f4, #e5e8eb);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-main {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .header-accent {
+      width: 4px;
+      height: 34px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, var(--primary), var(--primary-strong));
+    }
+
+    .header-title {
+      margin: 0;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .header-subtitle {
+      margin-top: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .status-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(42, 121, 199, 0.08);
+      color: var(--primary);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+      background: var(--primary-strong);
+    }
+
+    .content {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: 0;
+    }
+
+    .nav {
+      padding: 18px 14px;
+      background: var(--surface-low);
+      border-right: 1px solid var(--line);
+    }
+
+    .nav-label {
+      margin-bottom: 16px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-item {
+      padding: 12px 14px;
+      border-radius: 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      font-size: 14px;
+      font-weight: 600;
+      color: #33495b;
+      text-align: left;
+    }
+
+    .nav-item.active {
+      background: rgba(42, 121, 199, 0.08);
+      border-color: rgba(42, 121, 199, 0.18);
+      color: var(--primary);
+    }
+
+    .main {
+      padding: 22px;
+      overflow: auto;
+      background: var(--surface-card);
+    }
+
+    .section {
+      margin-bottom: 18px;
+      border: 1px solid rgba(192, 199, 211, 0.2);
+      border-radius: 10px;
+      overflow: hidden;
+      background: var(--surface-card);
+    }
+
+    .section-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      background: var(--surface-header);
+      border-bottom: 1px solid rgba(192, 199, 211, 0.18);
+    }
+
+    .section-title {
+      margin: 0;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .section-body {
+      padding: 16px;
+    }
+
+    .hint {
+      margin: 0 0 16px;
+      font-size: 13px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      gap: 14px;
+    }
+
+    .grid.two {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field textarea {
+      width: 100%;
+      padding: 11px 12px;
+      border: 1px solid transparent;
+      border-bottom: 1px solid rgba(112, 120, 131, 0.38);
+      border-radius: 6px 6px 4px 4px;
+      background: var(--surface-low);
+      font: inherit;
+      color: var(--text);
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      outline: none;
+      border-color: rgba(0, 96, 168, 0.35);
+      box-shadow: 0 0 0 2px rgba(0, 96, 168, 0.08);
+      background: #fff;
+    }
+
+    .meta-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .meta-item {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 10px 0;
+      border-bottom: 1px solid rgba(192, 199, 211, 0.18);
+    }
+
+    .meta-item:last-child {
+      border-bottom: 0;
+    }
+
+    .meta-key {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .meta-value {
+      font-size: 13px;
+      text-align: right;
+    }
+
+    .result-box {
+      min-height: 160px;
+      padding: 14px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, rgba(248, 249, 250, 0.96), rgba(243, 244, 245, 0.96));
+      border: 1px solid rgba(192, 199, 211, 0.18);
+      white-space: pre-wrap;
+      font-size: 13px;
+      line-height: 1.75;
+      color: #33495b;
+    }
+
+    .result-box.warn {
+      color: var(--warning);
+    }
+
+    .footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 0 22px;
+      background: rgba(231, 232, 233, 0.58);
+      border-top: 1px solid rgba(192, 199, 211, 0.18);
+    }
+
+    .footer-note {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .button {
+      padding: 10px 16px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      background: var(--surface-low);
+      color: #33495b;
+      font: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .button.primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+      box-shadow: 0 8px 20px rgba(0, 96, 168, 0.14);
+    }
+
+    .button.ghost {
+      background: transparent;
+      border-color: rgba(192, 199, 211, 0.28);
+    }
+
+    .pill-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .pill {
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(75, 97, 116, 0.08);
+      color: #33495b;
+      font-size: 12px;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <div class="window">
+      <header class="header">
+        <div class="header-main">
+          <div class="header-accent"></div>
+          <div>
+            <h1 class="header-title">AI桥接</h1>
+            <div class="header-subtitle">Instrumented Workspace</div>
+          </div>
+        </div>
+        <div class="status-chip">
+          <span class="status-dot"></span>
+          <span id="remote-status-chip">等待接入插件能力</span>
+        </div>
+      </header>
+
+      <div class="content">
+        <aside class="nav">
+          <div class="nav-label">Bridge Console</div>
+          <div class="nav-list">
+            <button class="nav-item active" type="button">概览</button>
+            <button class="nav-item" type="button">连接</button>
+            <button class="nav-item" type="button">文档</button>
+            <button class="nav-item" type="button">诊断</button>
+          </div>
+        </aside>
+
+        <main class="main">
+          <section class="section">
+            <div class="section-head">
+              <h2 class="section-title">远程服务</h2>
+            </div>
+            <div class="section-body">
+              <p class="hint">这版先切换到官方 IFrame 方案，把窗口样式和布局先稳定下来。下一步会把配置、连接和诊断动作逐步接入这个窗口。</p>
+
+              <div class="grid">
+                <div class="field">
+                  <label for="serverUrl">服务地址</label>
+                  <input id="serverUrl" type="text" placeholder="wss://your-server.example/ws">
+                </div>
+
+                <div class="grid two">
+                  <div class="field">
+                    <label for="token">访问令牌</label>
+                    <input id="token" type="password" placeholder="请输入访问令牌">
+                  </div>
+                  <div class="field">
+                    <label for="clientId">客户端 ID</label>
+                    <input id="clientId" type="text" placeholder="当前设备标识">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head">
+              <h2 class="section-title">桥接概览</h2>
+            </div>
+            <div class="section-body">
+              <div class="pill-row">
+                <div class="pill">JLCEDA 插件入口已可用</div>
+                <div class="pill">IFrame 窗口已切换成功</div>
+                <div class="pill">下一步接入插件能力通信</div>
+              </div>
+
+              <div class="meta-list">
+                <div class="meta-item">
+                  <div class="meta-key">当前阶段</div>
+                  <div class="meta-value">自定义窗口已切换到官方 IFrame 方案</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-key">窗口风格</div>
+                  <div class="meta-value">参考 Engineering Precision &amp; Tonal Depth</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-key">交互状态</div>
+                  <div class="meta-value">UI 已进窗口，动作接线中</div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <section class="section">
+            <div class="section-head">
+              <h2 class="section-title">结果面板</h2>
+            </div>
+            <div class="section-body">
+              <div id="resultBox" class="result-box">已成功打开 IFrame 自定义窗口。
+
+这说明当前问题不在插件构建链，而在之前的高级组件化弹窗运行时兼容性。
+
+下一步我会继续把“配置远程服务 / 读取文档 / 诊断状态”等实际动作接入这个窗口。</div>
+            </div>
+          </section>
+        </main>
+      </div>
+
+      <footer class="footer">
+        <div class="footer-note">JLCEDA AI桥接 · 官方 IFrame 自定义窗口</div>
+        <div class="actions">
+          <button class="button ghost" type="button" id="refreshBtn">刷新说明</button>
+          <button class="button primary" type="button" id="primaryBtn">下一步接线</button>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    const resultBox = document.getElementById('resultBox');
+    const statusChip = document.getElementById('remote-status-chip');
+
+    document.getElementById('refreshBtn').addEventListener('click', () => {
+      resultBox.textContent = [
+        '这版窗口已经来自官方 IFrame 方案。',
+        '',
+        '当前优先目标：',
+        '1. 保证窗口稳定打开',
+        '2. 再把插件里的配置和状态接进来',
+        '3. 最后把连接、诊断等动作放进这个窗口',
+      ].join('\n');
+    });
+
+    document.getElementById('primaryBtn').addEventListener('click', () => {
+      statusChip.textContent = '准备接入动作通信';
+      resultBox.textContent = [
+        '窗口外观方向已经切换成功。',
+        '',
+        '下一版我会继续把真实插件能力接进这个窗口，包括：',
+        '- 远程配置读写',
+        '- 连接 / 断开',
+        '- 当前文档读取',
+        '- 桥接自检结果',
+      ].join('\n');
+    });
+  </script>
+</body>
+</html>

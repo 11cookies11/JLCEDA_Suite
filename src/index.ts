@@ -3,7 +3,6 @@ import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
 import { remoteBridgeClient } from './remote/client';
-import { openBridgeDialog } from './ui/bridge-dialog';
 
 function getStatusLines(): Array<string> {
   const remoteStatus = remoteBridgeClient.getStatus();
@@ -349,19 +348,21 @@ async function openBridgeMenuFallback(): Promise<void> {
 
 async function openBridgeMenuInternal(): Promise<void> {
   try {
-    await Promise.race([
-      openBridgeDialog(),
-      new Promise<never>((_, reject) => {
-        setTimeout(() => {
-          reject(new Error('高级弹窗加载超时。'));
-        }, 1500);
-      }),
-    ]);
+    const opened = await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, 'ai-bridge-window', {
+      title: 'AI桥接',
+      maximizeButton: true,
+      minimizeButton: true,
+      grayscaleMask: true,
+    });
+
+    if (!opened) {
+      throw new Error('IFrame 窗口未成功打开。');
+    }
   }
   catch (error) {
     eda.sys_Dialog.showInformationMessage(
       [
-        '高级弹窗当前未能正常打开，已切换到简化模式。',
+        'AI桥接窗口当前未能正常打开，已切换到简化模式。',
         '',
         error instanceof Error ? error.message : '未知错误',
       ].join('\n'),
