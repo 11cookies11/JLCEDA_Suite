@@ -1,6 +1,6 @@
 import type { BridgePoint, BridgeResult } from '../bridge/protocol';
 
-interface PlaceComponentPayload {
+export interface PlaceComponentPayload {
   libraryUuid: string;
   uuid: string;
   position: BridgePoint;
@@ -11,7 +11,7 @@ interface PlaceComponentPayload {
   addIntoPcb?: boolean;
 }
 
-interface CreateWirePayload {
+export interface CreateWirePayload {
   points: Array<BridgePoint>;
   netName?: string;
 }

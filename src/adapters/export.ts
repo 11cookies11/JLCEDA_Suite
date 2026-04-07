@@ -1,6 +1,6 @@
 import type { BridgeResult } from '../bridge/protocol';
 
-interface ExportBomPayload {
+export interface ExportBomPayload {
   format?: 'json' | 'csv';
   fileName?: string;
   saveToLocal?: boolean;

@@ -1,5 +1,6 @@
 import type {
   BridgeCommandName,
+  BridgeCommandPayloadMap,
   BridgeConfirmation,
   BridgeError,
   BridgeRequest,
@@ -153,25 +154,27 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
     return createErrorResponse(request.id, validationError);
   }
 
-  const confirmationResponse = getConfirmationResponseIfNeeded(request, commandKey);
+  const resolvedCommandKey = commandKey as BridgeCommandName;
+
+  const confirmationResponse = getConfirmationResponseIfNeeded(request, resolvedCommandKey);
 
   if (confirmationResponse) {
     return confirmationResponse;
   }
 
-  if (!isCommandImplemented(commandKey)) {
+  if (!isCommandImplemented(resolvedCommandKey)) {
     return createErrorResponse(request.id, {
       code: 'UNSUPPORTED_ACTION',
-      message: `Command is registered but not implemented yet: ${commandKey}`,
+      message: `Command is registered but not implemented yet: ${resolvedCommandKey}`,
       retryable: false,
       details: {
-        command: commandKey,
+        command: resolvedCommandKey,
       },
     });
   }
 
   try {
-    switch (commandKey) {
+    switch (resolvedCommandKey) {
       case 'system.get_bridge_status':
         return createSuccessResponse(request.id, await getBridgeStatusResult());
       case 'project.get_document_summary':
@@ -179,24 +182,29 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
       case 'project.get_selection_snapshot':
         return createSuccessResponse(request.id, await getSelectionSnapshotResult());
       case 'project.export_bom':
-        return createSuccessResponse(request.id, await exportProjectBom(request.command.payload));
+        return createSuccessResponse(
+          request.id,
+          await exportProjectBom(request.command.payload as BridgeCommandPayloadMap['project.export_bom']),
+        );
       case 'schematic.place_component':
         return createSuccessResponse(
           request.id,
-          await placeSchematicComponent(request.command.payload),
+          await placeSchematicComponent(
+            request.command.payload as BridgeCommandPayloadMap['schematic.place_component'],
+          ),
         );
       case 'schematic.create_wire':
         return createSuccessResponse(
           request.id,
-          await createSchematicWire(request.command.payload),
+          await createSchematicWire(request.command.payload as BridgeCommandPayloadMap['schematic.create_wire']),
         );
       default:
         return createErrorResponse(request.id, {
           code: 'UNSUPPORTED_ACTION',
-          message: `No execution branch is available for ${commandKey}`,
+          message: `No execution branch is available for ${resolvedCommandKey}`,
           retryable: false,
           details: {
-            command: commandKey,
+            command: resolvedCommandKey,
           },
         });
     }
@@ -207,14 +215,20 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
       message: error instanceof Error ? error.message : 'Unknown bridge execution failure',
       retryable: true,
       details: {
-        command: commandKey,
+        command: resolvedCommandKey,
       },
     });
   }
 }
 
-export async function executeBridgeCommand(command: BridgeCommandName): Promise<BridgeResponse> {
-  const [domain, action] = command.split('.', 2) as [BridgeRequest['command']['domain'], string];
+export async function executeBridgeCommand<K extends BridgeCommandName>(
+  command: K,
+  payload?: BridgeCommandPayloadMap[K],
+): Promise<BridgeResponse> {
+  const [domain, action] = command.split('.', 2) as [
+    BridgeRequest<K>['command']['domain'],
+    BridgeRequest<K>['command']['action'],
+  ];
 
   return executeBridgeRequest({
     id: `local_${command}`,
@@ -224,7 +238,7 @@ export async function executeBridgeCommand(command: BridgeCommandName): Promise<
     command: {
       domain,
       action,
-      payload: {},
+      payload: (payload ?? {}) as BridgeCommandPayloadMap[K],
     },
   });
 }

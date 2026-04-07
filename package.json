@@ -10,9 +10,10 @@
   },
   "scripts": {
     "compile": "rimraf ./dist/ && ts-node ./config/esbuild.prod.ts",
-    "lint": "eslint build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts src/adapters/export.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
-    "fix": "eslint --fix build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts src/index.ts src/adapters/export.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
-    "build": "npm run compile && ts-node ./build/packaged.ts"
+    "lint": "eslint build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts scripts/smoke-test.ts src/index.ts src/adapters/export.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
+    "fix": "eslint --fix build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts scripts/smoke-test.ts src/index.ts src/adapters/export.ts src/adapters/read-only.ts src/adapters/schematic-write.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts eslint.config.mjs",
+    "build": "npm run compile && ts-node ./build/packaged.ts",
+    "smoke-test": "ts-node --files ./scripts/smoke-test.ts"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.4.1",
