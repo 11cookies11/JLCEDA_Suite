@@ -3,11 +3,10 @@
 ## 发布前检查
 
 1. 确认当前分支为预期发布分支
-2. 执行 `npm run lint`
-3. 执行 `npm run build`
-4. 执行 `npm run smoke-test`
-5. 确认 `build/dist/jlceda-aiagent_v0.1.0.eext` 已生成
-6. 在 JLCEDA 中导入最新 `.eext` 包进行实机验证
+2. 执行 `npm run release:check`
+3. 确认 `package.json` 与 `extension.json` 的版本号一致
+4. 确认 `build/dist/jlceda-aiagent_v0.1.0.eext` 已生成
+5. 在 JLCEDA 中导入最新 `.eext` 包进行实机验证
 
 ## 实机验证清单
 
@@ -25,7 +24,8 @@
 2. `docs/bridge-protocol.md` 与当前实现一致
 3. `docs/example-scenarios.md` 已更新
 4. `docs/troubleshooting.md` 已更新
-5. `.where-agent-progress.md` 状态已同步
+5. `docs/versioning.md` 已更新
+6. `.where-agent-progress.md` 状态已同步
 
 ## 发布产物
 
@@ -34,6 +34,7 @@
 - `.eext` 扩展包
 - 开发计划与协议文档
 - 示例场景与排障文档
+- 版本管理与发布清单
 
 ## 发布后建议
 
