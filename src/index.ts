@@ -1,11 +1,15 @@
 import * as extensionConfig from '../extension.json';
+import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
+import { getSupportedCommandNames } from './bridge/registry';
 
 function getStatusLines(): Array<string> {
   return [
     `Extension: ${extensionConfig.displayName}`,
     `Version: ${extensionConfig.version}`,
-    'Bridge: scaffold ready',
-    'Next step: implement Codex command protocol',
+    `Protocol: ${BRIDGE_PROTOCOL_VERSION}`,
+    `Supported commands: ${getSupportedCommandNames().length}`,
+    'Bridge: protocol draft ready',
+    'Next step: implement read-only project inspection commands',
   ];
 }
 
