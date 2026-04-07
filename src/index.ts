@@ -2,22 +2,28 @@ import * as extensionConfig from '../extension.json';
 import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
+import { remoteBridgeClient } from './remote/client';
 
 function getStatusLines(): Array<string> {
+  const remoteStatus = remoteBridgeClient.getStatus();
+
   return [
     `Extension: ${extensionConfig.displayName}`,
     `Version: ${extensionConfig.version}`,
     `Protocol: ${BRIDGE_PROTOCOL_VERSION}`,
     `Supported commands: ${getSupportedCommandNames().length}`,
     `Implemented commands: ${IMPLEMENTED_COMMANDS.length}`,
+    `Remote bridge configured: ${remoteStatus.configured ? 'yes' : 'no'}`,
+    `Remote bridge connected: ${remoteStatus.connected ? 'yes' : 'no'}`,
     'Bridge: first workflow ready',
-    'Next step: finish runtime validation and release guidance',
+    'Next step: finish plugin-side remote transport validation',
   ];
 }
 
 export function activate(status?: 'onStartupFinished', arg?: string): void {
   void status;
   void arg;
+  void remoteBridgeClient.autoConnectIfEnabled();
 }
 
 export function about(): void {
@@ -62,4 +68,95 @@ export async function runBridgeSelfCheck(): Promise<void> {
   });
 
   eda.sys_Dialog.showInformationMessage(summaryLines.join('\n'), 'Bridge Self Check');
+}
+
+function showInputDialog(
+  beforeContent: string,
+  title: string,
+  type: 'password' | 'text' | 'url',
+  value = '',
+): Promise<string | undefined> {
+  return new Promise((resolve) => {
+    eda.sys_Dialog.showInputDialog(
+      beforeContent,
+      '',
+      title,
+      type,
+      value,
+      {
+        placeholder: value || undefined,
+      },
+      (inputValue) => {
+        resolve(typeof inputValue === 'string' ? inputValue : undefined);
+      },
+    );
+  });
+}
+
+export async function configureRemoteBridge(): Promise<void> {
+  const currentSettings = remoteBridgeClient.getSettings();
+  const serverUrl = await showInputDialog(
+    'Input the remote bridge WebSocket URL',
+    'Remote Bridge URL',
+    'url',
+    currentSettings.serverUrl,
+  );
+
+  if (serverUrl === undefined) {
+    return;
+  }
+
+  const authToken = await showInputDialog(
+    'Input the remote bridge auth token',
+    'Remote Bridge Token',
+    'password',
+    currentSettings.authToken,
+  );
+
+  if (authToken === undefined) {
+    return;
+  }
+
+  const clientId = await showInputDialog(
+    'Input the remote bridge client ID',
+    'Remote Bridge Client ID',
+    'text',
+    currentSettings.clientId,
+  );
+
+  if (clientId === undefined) {
+    return;
+  }
+
+  await remoteBridgeClient.saveSettings({
+    serverUrl,
+    authToken,
+    clientId,
+    autoConnect: true,
+  });
+
+  eda.sys_Dialog.showInformationMessage('Remote bridge settings saved.', 'Remote Bridge');
+}
+
+export async function connectRemoteBridge(): Promise<void> {
+  try {
+    await remoteBridgeClient.connect();
+    eda.sys_Dialog.showInformationMessage('Remote bridge connection started.', 'Remote Bridge');
+  }
+  catch (error) {
+    eda.sys_Dialog.showInformationMessage(
+      error instanceof Error ? error.message : 'Failed to start remote bridge connection.',
+      'Remote Bridge',
+    );
+  }
+}
+
+export function disconnectRemoteBridge(): void {
+  remoteBridgeClient.disconnect();
+  eda.sys_Dialog.showInformationMessage('Remote bridge disconnected.', 'Remote Bridge');
+}
+
+export function showRemoteBridgeStatus(): void {
+  const remoteStatus = remoteBridgeClient.getStatus();
+  eda.sys_Dialog.showInformationMessage(JSON.stringify(remoteStatus, null, 2), 'Remote Bridge Status');
 }

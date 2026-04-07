@@ -23,12 +23,13 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - A runnable JLCEDA extension skeleton with packaged `.eext` output
 - A first-pass Codex bridge protocol and guarded command dispatcher
 - A minimal bridge server with session registration, heartbeats, and request routing
+- A plugin-side remote transport client built on `eda.sys_WebSocket`
 - Read-only project inspection commands
 - Basic schematic write-command scaffolding
 - BOM export support
 - Plugin and server smoke tests, troubleshooting, and release-check documentation
 
-The main gaps that remain are the plugin-side remote transport layer and real JLCEDA runtime verification through local import and manual execution.
+The main gaps that remain are connection hardening, end-to-end public-network validation, and real JLCEDA runtime verification through local import and manual execution.
 
 ## Implemented Commands
 
@@ -52,7 +53,8 @@ The repository already includes a repeatable local validation path:
 2. `npm run build`
 3. `npm run smoke-test`
 4. `npm run server:smoke-test`
-5. `npm run release:check`
+5. `npm run remote-client:smoke-test`
+6. `npm run release:check`
 
 For runtime verification inside JLCEDA, see:
 

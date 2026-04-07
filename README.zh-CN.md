@@ -23,12 +23,13 @@
 - 可构建并打包为 `.eext` 的 JLCEDA 扩展骨架
 - 第一版 Codex 桥接协议与受控命令分发
 - 最小可用的桥接服务端骨架，支持注册、心跳和请求路由
+- 基于 `eda.sys_WebSocket` 的插件侧远程传输客户端
 - 工程只读查看能力
 - 基础原理图写操作骨架
 - BOM 导出能力
 - 插件侧与服务端冒烟测试、排障说明和发布检查文档
 
-当前最主要的缺口，是还没有补齐插件侧远程传输层，也还没有完成 `JLCEDA` 客户端内的实机导入与运行验证。
+当前最主要的缺口，是还没有补齐连接加固与公网联调，也还没有完成 `JLCEDA` 客户端内的实机导入与运行验证。
 
 ## 已实现命令
 
@@ -52,7 +53,8 @@
 2. `npm run build`
 3. `npm run smoke-test`
 4. `npm run server:smoke-test`
-5. `npm run release:check`
+5. `npm run remote-client:smoke-test`
+6. `npm run release:check`
 
 如果要继续做 `JLCEDA` 内的实机验证，可以参考：
 
