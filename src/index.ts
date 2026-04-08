@@ -1,4 +1,5 @@
 import * as extensionConfig from '../extension.json';
+import { getUpdateStatusLines, getUpdateStatusSnapshot, refreshUpdateStatus } from './adapters/update-control';
 import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
@@ -103,6 +104,10 @@ function summarizeRemoteStatus(): Array<string> {
   ];
 }
 
+function summarizeUpdateStatus(): Array<string> {
+  return getUpdateStatusLines();
+}
+
 function summarizeDocumentData(data: unknown): Array<string> {
   const resultData = (data ?? {}) as {
     document?: {
@@ -155,9 +160,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           ...summarizeBridgeStatus(),
           '',
           ...summarizeRemoteStatus(),
+          '',
+          ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
         remoteSettings: remoteBridgeClient.getSettings(),
+        updateStatus: getUpdateStatusSnapshot(),
       };
     }
 
@@ -171,8 +179,11 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           lines: [
             `错误代码：${response.error.code}`,
             `错误信息：${response.error.message}`,
+            '',
+            ...summarizeUpdateStatus(),
           ],
           remoteStatus: remoteBridgeClient.getStatus(),
+          updateStatus: getUpdateStatusSnapshot(),
         };
       }
 
@@ -197,8 +208,11 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           `语言：${formatValue(resultData.runtime?.language)}`,
           `主题：${formatValue(resultData.runtime?.theme)}`,
           `单位：${formatValue(resultData.runtime?.frontendUnit)}`,
+          '',
+          ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus: getUpdateStatusSnapshot(),
       };
     }
 
@@ -212,16 +226,24 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           lines: [
             `错误代码：${response.error.code}`,
             `错误信息：${response.error.message}`,
+            '',
+            ...summarizeUpdateStatus(),
           ],
           remoteStatus: remoteBridgeClient.getStatus(),
+          updateStatus: getUpdateStatusSnapshot(),
         };
       }
 
       return {
         ok: true,
         title: '当前文档',
-        lines: summarizeDocumentData(response.result.data),
+        lines: [
+          ...summarizeDocumentData(response.result.data),
+          '',
+          ...summarizeUpdateStatus(),
+        ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus: getUpdateStatusSnapshot(),
       };
     }
 
@@ -243,11 +265,51 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
         return `${label}：${statusText}`;
       });
 
+      const updateStatus = await refreshUpdateStatus(false);
+
       return {
         ok: true,
         title: '桥接自检',
-        lines,
+        lines: [
+          ...lines,
+          '',
+          ...summarizeUpdateStatus(),
+        ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus,
+      };
+    }
+
+    case 'checkForUpdates': {
+      const updateStatus = await refreshUpdateStatus(true);
+
+      return {
+        ok: true,
+        title: '版本更新',
+        lines: summarizeUpdateStatus(),
+        remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus,
+      };
+    }
+
+    case 'openLatestReleasePage': {
+      const updateStatus = await refreshUpdateStatus(true);
+      const targetUrl = updateStatus.latestDownloadUrl
+        ?? updateStatus.latestReleaseUrl
+        ?? 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/latest';
+
+      eda.sys_Window.open(targetUrl, '_blank');
+
+      return {
+        ok: true,
+        title: '版本更新',
+        lines: [
+          `已打开：${targetUrl}`,
+          '',
+          ...summarizeUpdateStatus(),
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus,
       };
     }
 
@@ -266,9 +328,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           '配置已保存',
           '',
           ...summarizeRemoteStatus(),
+          '',
+          ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
         remoteSettings: remoteBridgeClient.getSettings(),
+        updateStatus: getUpdateStatusSnapshot(),
       };
     }
 
@@ -282,8 +347,11 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           '已开始连接远程服务',
           '',
           ...summarizeRemoteStatus(),
+          '',
+          ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus: getUpdateStatusSnapshot(),
       };
     }
 
@@ -297,8 +365,11 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           '远程服务已断开',
           '',
           ...summarizeRemoteStatus(),
+          '',
+          ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus: getUpdateStatusSnapshot(),
       };
     }
 
@@ -306,8 +377,13 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
       return {
         ok: true,
         title: '远程状态',
-        lines: summarizeRemoteStatus(),
+        lines: [
+          ...summarizeRemoteStatus(),
+          '',
+          ...summarizeUpdateStatus(),
+        ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateStatus: getUpdateStatusSnapshot(),
       };
     }
 
@@ -329,6 +405,7 @@ export function activate(status?: 'onStartupFinished', arg?: string): void {
   ensureBridgeUiRpcRegistered();
   ensureBridgeUiRequestBridgeRegistered();
   void remoteBridgeClient.autoConnectIfEnabled();
+  void refreshUpdateStatus().catch(() => undefined);
 }
 
 export function about(): void {
@@ -376,6 +453,8 @@ export async function showBridgeStatus(): Promise<void> {
       `主题：${formatValue(resultData.runtime?.theme)}`,
       `单位：${formatValue(resultData.runtime?.frontendUnit)}`,
     ]),
+    '',
+    formatSection('更新状态', summarizeUpdateStatus()),
   ].join('\n');
 
   eda.sys_Dialog.showInformationMessage(summary, '桥接状态');
@@ -385,7 +464,14 @@ export async function inspectCurrentDocument(): Promise<void> {
   const response = await executeBridgeCommand('project.get_document_summary');
   if (response.status !== 'success') {
     eda.sys_Dialog.showInformationMessage(
-      `读取当前文档失败\n\n错误代码：${response.error.code}\n错误信息：${response.error.message}`,
+      [
+        '读取当前文档失败',
+        '',
+        `错误代码：${response.error.code}`,
+        `错误信息：${response.error.message}`,
+        '',
+        ...summarizeUpdateStatus(),
+      ].join('\n'),
       '当前文档',
     );
     return;
@@ -438,6 +524,8 @@ export async function inspectCurrentDocument(): Promise<void> {
       `PCB：${formatValue(resultData.board?.name)}`,
       `当前选区：${formatValue(resultData.selection?.count, '0')} 项`,
     ]),
+    '',
+    formatSection('更新状态', summarizeUpdateStatus()),
   ].join('\n');
 
   eda.sys_Dialog.showInformationMessage(message, '当前文档');
@@ -457,7 +545,11 @@ export async function runBridgeSelfCheck(): Promise<void> {
     return `${label}：${statusText}`;
   });
 
-  eda.sys_Dialog.showInformationMessage(summaryLines.join('\n'), '桥接自检');
+  eda.sys_Dialog.showInformationMessage([
+    summaryLines.join('\n'),
+    '',
+    ...summarizeUpdateStatus(),
+  ].join('\n'), '桥接自检');
 }
 
 function showInputDialog(
@@ -585,6 +677,8 @@ export function showRemoteBridgeStatus(): void {
       `最近心跳：${formatValue(remoteStatus.lastHeartbeatAt)}`,
       `最近错误：${formatValue(remoteStatus.lastError, '无')}`,
     ]),
+    '',
+    formatSection('更新状态', summarizeUpdateStatus()),
   ].join('\n');
 
   eda.sys_Dialog.showInformationMessage(message, '远程状态');
@@ -597,6 +691,8 @@ async function _openBridgeMenuFallback(): Promise<void> {
       { value: 'status', displayContent: '桥接状态  查看当前桥接与运行环境' },
       { value: 'document', displayContent: '当前文档  查看当前工程与选区摘要' },
       { value: 'self-check', displayContent: '桥接自检  快速检查桥接链路' },
+      { value: 'check-update', displayContent: '检查更新  查询最新插件版本' },
+      { value: 'open-update-page', displayContent: '打开更新页  前往最新插件下载页' },
       { value: 'configure', displayContent: '配置远程服务  设置地址、令牌与客户端 ID' },
       {
         value: remoteStatus.connected ? 'disconnect' : 'connect',
@@ -610,6 +706,7 @@ async function _openBridgeMenuFallback(): Promise<void> {
       '',
       `远程状态：${remoteStatus.connected ? '已连接' : remoteStatus.connecting ? '连接中' : remoteStatus.configured ? '待连接' : '未配置'}`,
       `插件版本：${extensionConfig.version}`,
+      `更新状态：${getUpdateStatusSnapshot().updateAvailable ? '可更新' : '已是最新'}`,
     ].join('\n'),
     'AI桥接',
   );
@@ -624,6 +721,26 @@ async function _openBridgeMenuFallback(): Promise<void> {
     case 'self-check':
       await runBridgeSelfCheck();
       break;
+    case 'check-update':
+      await refreshUpdateStatus(true);
+      eda.sys_Dialog.showInformationMessage(
+        [
+          '更新检查已完成。',
+          '',
+          ...summarizeUpdateStatus(),
+        ].join('\n'),
+        '版本更新',
+      );
+      break;
+    case 'open-update-page': {
+      const updateStatus = await refreshUpdateStatus(true);
+      const targetUrl = updateStatus.latestDownloadUrl
+        ?? updateStatus.latestReleaseUrl
+        ?? 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/latest';
+
+      eda.sys_Window.open(targetUrl, '_blank');
+      break;
+    }
     case 'configure':
       await configureRemoteBridge();
       break;

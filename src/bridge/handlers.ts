@@ -136,6 +136,10 @@ import {
   toggleRightPanelLockResult,
 } from '../adapters/system-control';
 import {
+  checkForUpdatesResult,
+  getUpdateStatusResult,
+} from '../adapters/update-control';
+import {
   clearExtensionAllUserConfigsResult,
   convertAltiumDesignerLibrariesToEasyEDAMultiFilesResult,
   convertAltiumDesignerLibrariesToEasyEDASingleFileResult,
@@ -337,6 +341,13 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(request.id, await getBridgeStatusResult());
       case 'system.get_environment':
         return createSuccessResponse(request.id, await getSystemEnvironmentResult());
+      case 'system.get_update_status':
+        return createSuccessResponse(request.id, await getUpdateStatusResult());
+      case 'system.check_for_updates':
+        return createSuccessResponse(
+          request.id,
+          await checkForUpdatesResult((request.command.payload as BridgeCommandPayloadMap['system.check_for_updates']).force === true),
+        );
       case 'system.api_invoke':
         return createSuccessResponse(
           request.id,

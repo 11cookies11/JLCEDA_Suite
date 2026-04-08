@@ -11,6 +11,8 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'system.ping',
   'system.get_bridge_status',
   'system.get_environment',
+  'system.get_update_status',
+  'system.check_for_updates',
   'system.api_invoke',
   'system.log_add',
   'system.log_clear',
@@ -180,6 +182,18 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     domain: 'system',
     requiresConfirmationByDefault: false,
     summary: 'Return runtime, version, and user environment details.',
+  },
+  {
+    name: 'system.get_update_status',
+    domain: 'system',
+    requiresConfirmationByDefault: false,
+    summary: 'Return cached plugin update status.',
+  },
+  {
+    name: 'system.check_for_updates',
+    domain: 'system',
+    requiresConfirmationByDefault: false,
+    summary: 'Check GitHub releases for a newer plugin version.',
   },
   {
     name: 'system.api_invoke',

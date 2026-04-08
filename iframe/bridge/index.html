@@ -433,6 +433,10 @@
                   <div class="meta-key">交互状态</div>
                   <div class="meta-value">UI 已进窗口，动作接线中</div>
                 </div>
+                <div class="meta-item">
+                  <div class="meta-key">插件更新</div>
+                  <div class="meta-value" id="updateStateValue">检查中</div>
+                </div>
               </div>
             </div>
           </section>
@@ -446,6 +450,8 @@
                 <button class="button soft" type="button" data-action="status">桥接状态</button>
                 <button class="button soft" type="button" data-action="document">当前文档</button>
                 <button class="button soft" type="button" data-action="self-check">桥接自检</button>
+                <button class="button soft" type="button" data-action="check-update">检查更新</button>
+                <button class="button soft" type="button" data-action="open-update-page">打开更新页</button>
                 <button class="button soft" type="button" data-action="configure">配置远程服务</button>
                 <button class="button soft" type="button" data-action="connect">连接远程服务</button>
                 <button class="button soft" type="button" data-action="remote-status">远程状态</button>
@@ -473,7 +479,7 @@
       </div>
 
       <footer class="footer">
-        <div class="footer-note">JLCEDA AI桥接 v0.1.5 · 官方 IFrame 自定义窗口</div>
+        <div class="footer-note">JLCEDA AI桥接 · 官方 IFrame 自定义窗口</div>
         <div class="actions">
           <button class="button ghost" type="button" id="refreshBtn">刷新说明</button>
           <button class="button primary" type="button" id="primaryBtn">保存并连接</button>
@@ -488,6 +494,7 @@
     const RESPONSE_TOPIC_PREFIX = `${RPC_TOPIC}.response.`;
     const resultBox = document.getElementById('resultBox');
     const statusChip = document.getElementById('remote-status-chip');
+    const updateStateValue = document.getElementById('updateStateValue');
     const panels = Array.from(document.querySelectorAll('[data-panel]'));
     const navItems = Array.from(document.querySelectorAll('[data-tab]'));
     const serverUrlInput = document.getElementById('serverUrl');
@@ -538,6 +545,31 @@
       serverUrlInput.value = settings?.serverUrl || '';
       tokenInput.value = settings?.authToken || '';
       clientIdInput.value = settings?.clientId || '';
+    }
+
+    function applyUpdateStatus(updateStatus) {
+      if (!updateStateValue) {
+        return;
+      }
+
+      if (!updateStatus) {
+        updateStateValue.textContent = '检查中';
+        return;
+      }
+
+      if (updateStatus.lastError) {
+        updateStateValue.textContent = `检查失败：${updateStatus.lastError}`;
+        return;
+      }
+
+      if (updateStatus.updateAvailable) {
+        updateStateValue.textContent = `可更新到 ${updateStatus.latestVersion || '新版本'}`;
+        return;
+      }
+
+      updateStateValue.textContent = updateStatus.latestVersion
+        ? `已是最新 ${updateStatus.latestVersion}`
+        : '已是最新';
     }
 
     function getMessageBusCandidates() {
@@ -703,6 +735,10 @@
         updateRemoteStatusChip(response.remoteStatus);
       }
 
+      if (response.updateStatus) {
+        applyUpdateStatus(response.updateStatus);
+      }
+
       setResult(response.lines || ['暂无结果'], response.ok === false);
     }
 
@@ -748,6 +784,12 @@
         } else if (key === 'self-check') {
           setBusy('正在执行桥接自检...');
           void renderFromPlugin({ type: 'runSelfCheck' });
+        } else if (key === 'check-update') {
+          setBusy('正在检查插件更新...');
+          void renderFromPlugin({ type: 'checkForUpdates' });
+        } else if (key === 'open-update-page') {
+          setBusy('正在打开最新发布页...');
+          void renderFromPlugin({ type: 'openLatestReleasePage' });
         } else if (key === 'configure') {
           switchTab('connection');
           setResult([

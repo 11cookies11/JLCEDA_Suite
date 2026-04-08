@@ -670,6 +670,22 @@ function installMockEda(): void {
   };
 
   (globalThis as { eda?: unknown }).eda = edaMock;
+  (globalThis as { fetch?: typeof fetch }).fetch = async () =>
+    new Response(JSON.stringify({
+      tag_name: 'v0.1.17',
+      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.17',
+      assets: [
+        {
+          name: 'jlceda-aiagent_v0.1.17.eext',
+          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.17/jlceda-aiagent_v0.1.17.eext',
+        },
+      ],
+    }), {
+      status: 200,
+      headers: {
+        'content-type': 'application/json',
+      },
+    });
 }
 
 async function run(): Promise<void> {
@@ -774,6 +790,60 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'environment should succeed');
+      },
+    },
+    {
+      name: 'system update check',
+      request: {
+        id: 'smoke-002b1a',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'check_for_updates',
+          payload: {
+            force: true,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'update check should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as {
+            updateAvailable?: boolean;
+            latestVersion?: string;
+            latestDownloadUrl?: string;
+          };
+          assert(data.updateAvailable === true, 'update check should report a newer release');
+          assert(data.latestVersion === 'v0.1.17', 'update check should surface the mocked latest version');
+          assert(data.latestDownloadUrl?.includes('v0.1.17'), 'update check should surface the mocked download url');
+        }
+      },
+    },
+    {
+      name: 'system update status',
+      request: {
+        id: 'smoke-002b1b',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'get_update_status',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'update status should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as {
+            updateAvailable?: boolean;
+            latestVersion?: string;
+          };
+          assert(data.updateAvailable === true, 'update status should persist the update check result');
+          assert(data.latestVersion === 'v0.1.17', 'update status should expose the mocked latest version');
+        }
       },
     },
     {
