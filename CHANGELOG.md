@@ -24,3 +24,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Repository documentation now describes the project as a Codex-to-JLCEDA bridge instead of a generic template
+- Bridge UI RPC registration now happens before the iframe opens to avoid startup communication failures
