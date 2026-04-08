@@ -8,6 +8,27 @@ import type {
   BridgeResult,
 } from './protocol';
 import {
+  createBoardResult,
+  createPcbResult,
+  createProjectResult,
+  createSchematicPageResult,
+  createSchematicResult,
+  getBoardSummaryResult,
+  getCurrentPcbInfoResult,
+  getCurrentSchematicInfoResult,
+  getProjectInfoResult,
+  getProjectInventoryResult,
+  getSystemEnvironmentResult,
+  listBoardsResult,
+  listPcbsResult,
+  listProjectsResult,
+  listSchematicPagesResult,
+  listSchematicsResult,
+  listTeamsResult,
+  listWorkspacesResult,
+  openProjectResult,
+} from '../adapters/document-tree';
+import {
   exportProjectBom,
 } from '../adapters/export';
 import {
@@ -17,7 +38,12 @@ import {
   pingBridgeResult,
 } from '../adapters/read-only';
 import {
+  annotateSchematicNet,
+  createSchematicNetFlag,
+  createSchematicNetPort,
+  createSchematicShortCircuitFlag,
   createSchematicWire,
+  placePcbFootprint,
   placeSchematicComponent,
 } from '../adapters/schematic-write';
 import { BRIDGE_PROTOCOL_VERSION } from './protocol';
@@ -183,14 +209,84 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         );
       case 'system.get_bridge_status':
         return createSuccessResponse(request.id, await getBridgeStatusResult());
+      case 'system.get_environment':
+        return createSuccessResponse(request.id, await getSystemEnvironmentResult());
+      case 'project.get_inventory':
+        return createSuccessResponse(request.id, await getProjectInventoryResult());
       case 'project.get_document_summary':
         return createSuccessResponse(request.id, await getDocumentSummaryResult());
       case 'project.get_selection_snapshot':
         return createSuccessResponse(request.id, await getSelectionSnapshotResult());
+      case 'project.list_workspaces':
+        return createSuccessResponse(request.id, await listWorkspacesResult());
+      case 'project.list_teams':
+        return createSuccessResponse(request.id, await listTeamsResult(false));
+      case 'project.list_involved_teams':
+        return createSuccessResponse(request.id, await listTeamsResult(true));
+      case 'project.list_projects':
+        return createSuccessResponse(
+          request.id,
+          await listProjectsResult(request.command.payload as BridgeCommandPayloadMap['project.list_projects']),
+        );
+      case 'project.get_project_info':
+        return createSuccessResponse(
+          request.id,
+          await getProjectInfoResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.get_project_info']).projectUuid,
+          ),
+        );
+      case 'project.open_project':
+        return createSuccessResponse(
+          request.id,
+          await openProjectResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.open_project']).projectUuid,
+          ),
+        );
+      case 'project.create_project':
+        return createSuccessResponse(
+          request.id,
+          await createProjectResult(request.command.payload as BridgeCommandPayloadMap['project.create_project']),
+        );
+      case 'project.list_schematics':
+        return createSuccessResponse(request.id, await listSchematicsResult());
+      case 'project.list_schematic_pages':
+        return createSuccessResponse(
+          request.id,
+          await listSchematicPagesResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.list_schematic_pages']).schematicUuid,
+          ),
+        );
+      case 'project.list_boards':
+        return createSuccessResponse(request.id, await listBoardsResult());
+      case 'project.list_pcbs':
+        return createSuccessResponse(request.id, await listPcbsResult());
+      case 'project.get_board_summary':
+        return createSuccessResponse(request.id, await getBoardSummaryResult());
+      case 'project.create_board':
+        return createSuccessResponse(
+          request.id,
+          await createBoardResult(request.command.payload as BridgeCommandPayloadMap['project.create_board']),
+        );
       case 'project.export_bom':
         return createSuccessResponse(
           request.id,
           await exportProjectBom(request.command.payload as BridgeCommandPayloadMap['project.export_bom']),
+        );
+      case 'schematic.get_current_schematic_info':
+        return createSuccessResponse(request.id, await getCurrentSchematicInfoResult());
+      case 'schematic.create_schematic':
+        return createSuccessResponse(
+          request.id,
+          await createSchematicResult(
+            (request.command.payload as BridgeCommandPayloadMap['schematic.create_schematic']).boardName,
+          ),
+        );
+      case 'schematic.create_schematic_page':
+        return createSuccessResponse(
+          request.id,
+          await createSchematicPageResult(
+            (request.command.payload as BridgeCommandPayloadMap['schematic.create_schematic_page']).schematicUuid,
+          ),
         );
       case 'schematic.place_component':
         return createSuccessResponse(
@@ -203,6 +299,46 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(
           request.id,
           await createSchematicWire(request.command.payload as BridgeCommandPayloadMap['schematic.create_wire']),
+        );
+      case 'schematic.annotate_net':
+        return createSuccessResponse(
+          request.id,
+          await annotateSchematicNet(request.command.payload as BridgeCommandPayloadMap['schematic.annotate_net']),
+        );
+      case 'schematic.create_net_flag':
+        return createSuccessResponse(
+          request.id,
+          await createSchematicNetFlag(request.command.payload as BridgeCommandPayloadMap['schematic.create_net_flag']),
+        );
+      case 'schematic.create_net_port':
+        return createSuccessResponse(
+          request.id,
+          await createSchematicNetPort(request.command.payload as BridgeCommandPayloadMap['schematic.create_net_port']),
+        );
+      case 'schematic.create_short_circuit_flag':
+        return createSuccessResponse(
+          request.id,
+          await createSchematicShortCircuitFlag(
+            request.command.payload as BridgeCommandPayloadMap['schematic.create_short_circuit_flag'],
+          ),
+        );
+      case 'pcb.get_board_summary':
+        return createSuccessResponse(request.id, await getBoardSummaryResult());
+      case 'pcb.get_current_pcb_info':
+        return createSuccessResponse(request.id, await getCurrentPcbInfoResult());
+      case 'pcb.list_pcbs':
+        return createSuccessResponse(request.id, await listPcbsResult());
+      case 'pcb.create_pcb':
+        return createSuccessResponse(
+          request.id,
+          await createPcbResult(
+            (request.command.payload as BridgeCommandPayloadMap['pcb.create_pcb']).boardName,
+          ),
+        );
+      case 'pcb.place_footprint':
+        return createSuccessResponse(
+          request.id,
+          await placePcbFootprint(request.command.payload as BridgeCommandPayloadMap['pcb.place_footprint']),
         );
       default:
         return createErrorResponse(request.id, {

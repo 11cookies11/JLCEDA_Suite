@@ -26,15 +26,56 @@ export interface BridgePoint {
 }
 
 export interface BridgeCommandPayloadMap {
+  'project.get_inventory': Record<string, never>;
   'project.get_document_summary': Record<string, never>;
   'project.get_selection_snapshot': {
     includeComponents?: boolean;
     includeNets?: boolean;
   };
+  'project.list_workspaces': Record<string, never>;
+  'project.list_teams': Record<string, never>;
+  'project.list_involved_teams': Record<string, never>;
+  'project.list_projects': {
+    teamUuid?: string;
+    folderUuid?: string;
+    workspaceUuid?: string;
+  };
+  'project.get_project_info': {
+    projectUuid: string;
+  };
+  'project.open_project': {
+    projectUuid: string;
+  };
+  'project.create_project': {
+    projectFriendlyName: string;
+    projectName?: string;
+    teamUuid?: string;
+    folderUuid?: string;
+    description?: string;
+    collaborationMode?: string;
+  };
+  'project.list_schematics': Record<string, never>;
+  'project.list_schematic_pages': {
+    schematicUuid?: string;
+  };
+  'project.list_boards': Record<string, never>;
+  'project.list_pcbs': Record<string, never>;
+  'project.get_board_summary': Record<string, never>;
+  'project.create_board': {
+    schematicUuid?: string;
+    pcbUuid?: string;
+  };
   'project.export_bom': {
     format?: 'json' | 'csv';
     fileName?: string;
     saveToLocal?: boolean;
+  };
+  'schematic.get_current_schematic_info': Record<string, never>;
+  'schematic.create_schematic': {
+    boardName?: string;
+  };
+  'schematic.create_schematic_page': {
+    schematicUuid: string;
   };
   'schematic.place_component': {
     libraryUuid: string;
@@ -54,17 +95,44 @@ export interface BridgeCommandPayloadMap {
     netName: string;
     position: BridgePoint;
   };
+  'schematic.create_net_flag': {
+    identification: 'Power' | 'Ground' | 'AnalogGround' | 'ProtectGround';
+    net: string;
+    position: BridgePoint;
+    rotation?: number;
+    mirror?: boolean;
+  };
+  'schematic.create_net_port': {
+    direction: 'IN' | 'OUT' | 'BI';
+    net: string;
+    position: BridgePoint;
+    rotation?: number;
+    mirror?: boolean;
+  };
+  'schematic.create_short_circuit_flag': {
+    position: BridgePoint;
+    rotation?: number;
+    mirror?: boolean;
+  };
   'pcb.get_board_summary': Record<string, never>;
+  'pcb.get_current_pcb_info': Record<string, never>;
+  'pcb.list_pcbs': Record<string, never>;
+  'pcb.create_pcb': {
+    boardName?: string;
+  };
   'pcb.place_footprint': {
-    footprintId: string;
+    libraryUuid: string;
+    uuid: string;
     position: BridgePoint;
     rotation?: number;
     layer?: 'top' | 'bottom';
+    primitiveLock?: boolean;
   };
   'system.ping': {
     echo?: string;
   };
   'system.get_bridge_status': Record<string, never>;
+  'system.get_environment': Record<string, never>;
 }
 
 export type BridgeCommandName = keyof BridgeCommandPayloadMap;

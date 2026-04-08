@@ -163,3 +163,65 @@
 - 返回 `error`
 - `error.code` 为 `UNSUPPORTED_ACTION`
 - 错误信息明确说明命令已登记但尚未实现
+
+## 场景 6：查看项目库存
+
+目标：
+
+- 获取当前工作区、团队、工程、原理图、PCB 和板子的聚合清单
+
+对应命令：
+
+```json
+{
+  "id": "demo_inventory_001",
+  "type": "command.request",
+  "protocolVersion": "0.1.0",
+  "sessionId": "demo_session",
+  "command": {
+    "domain": "project",
+    "action": "get_inventory",
+    "payload": {}
+  }
+}
+```
+
+预期结果：
+
+- 返回 `success`
+- `result.data.current.project` 至少包含当前工程的 UUID 与友好名称
+- `result.data.projectSections` 包含按团队整理的工程列表
+
+## 场景 7：在 PCB 上放置封装
+
+目标：
+
+- 在 PCB 画布中明确放置一个封装图元
+
+对应命令：
+
+```json
+{
+  "id": "demo_pcb_001",
+  "type": "command.request",
+  "protocolVersion": "0.1.0",
+  "sessionId": "demo_session",
+  "command": {
+    "domain": "pcb",
+    "action": "place_footprint",
+    "requiresConfirmation": false,
+    "payload": {
+      "libraryUuid": "footprint-library-uuid",
+      "uuid": "footprint-uuid",
+      "position": { "x": 1000, "y": 1000 },
+      "rotation": 0,
+      "layer": "top"
+    }
+  }
+}
+```
+
+预期结果：
+
+- 返回 `success`
+- `result.data.primitiveId` 和位置信息可用于后续定位
