@@ -16,6 +16,7 @@
     "smoke-test": "ts-node --files ./scripts/smoke-test.ts",
     "server:start": "ts-node --files ./src/server/cli.ts",
     "server:project-flow": "ts-node --files ./scripts/server-project-flow.ts",
+    "release:bundle": "python3 ./scripts/package-release-bundle.py",
     "server:smoke-test": "ts-node --files ./scripts/server-smoke-test.ts",
     "remote-client:smoke-test": "ts-node --files ./scripts/remote-client-smoke-test.ts",
     "bridge:e2e-smoke-test": "ts-node --files ./scripts/bridge-e2e-smoke-test.ts",
