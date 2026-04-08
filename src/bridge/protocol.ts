@@ -408,6 +408,38 @@ export interface BridgeCommandPayloadMap {
   'system.shortcut_get_shortcuts': {
     includeSystem?: boolean;
   };
+  'system.shortcut_register': {
+    shortcutKey: Array<string>;
+    title: string;
+    documentType?: Array<number>;
+    scene?: Array<number>;
+  };
+  'system.shortcut_unregister': {
+    shortcutKey: Array<string>;
+  };
+  'system.shortcut_list_registered': {
+    includeSystem?: boolean;
+  };
+  'system.timer_set_interval': {
+    id: string;
+    timeout: number;
+  };
+  'system.timer_clear_interval': {
+    id: string;
+  };
+  'system.timer_set_timeout': {
+    id: string;
+    timeout: number;
+  };
+  'system.timer_clear_timeout': {
+    id: string;
+  };
+  'system.right_click_change_menu': {
+    menuId: string;
+    menuItems: Array<Record<string, unknown> | null>;
+  };
+  'system.callback_events_list': Record<string, never>;
+  'system.callback_events_drain': Record<string, never>;
   'system.file_system_get_extension_file': {
     uri: string;
   };

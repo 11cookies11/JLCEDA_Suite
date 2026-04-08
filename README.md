@@ -30,6 +30,7 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - Controlled project creation/opening commands
 - Editor split-screen and document navigation commands
 - Schematic and PCB document operations, including save/import/navigate/zoom/DRC flows
+- Shortcut, timer, and right-click callback registration commands with event queue inspection
 - Basic schematic and PCB write-command scaffolding
 - BOM export support
 - Plugin and server smoke tests, troubleshooting, and release-check documentation
@@ -71,6 +72,16 @@ The current bridge implementation supports these commands:
 - `system.show_information_message`
 - `system.show_confirmation_message`
 - `system.shortcut_get_shortcuts`
+- `system.shortcut_register`
+- `system.shortcut_unregister`
+- `system.shortcut_list_registered`
+- `system.timer_set_interval`
+- `system.timer_clear_interval`
+- `system.timer_set_timeout`
+- `system.timer_clear_timeout`
+- `system.right_click_change_menu`
+- `system.callback_events_list`
+- `system.callback_events_drain`
 - `system.file_system_get_extension_file`
 - `system.file_system_save_file`
 - `system.file_system_save_file_to_file_system`

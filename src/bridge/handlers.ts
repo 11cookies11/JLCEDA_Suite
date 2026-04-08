@@ -8,6 +8,18 @@ import type {
   BridgeResult,
 } from './protocol';
 import {
+  changeRightClickMenuResult,
+  clearIntervalTimerResult,
+  clearTimeoutTimerResult,
+  drainCallbackEventsResult,
+  listCallbackEventsResult,
+  listShortcutKeysResult,
+  registerShortcutKeyResult,
+  setIntervalTimerResult,
+  setTimeoutTimerResult,
+  unregisterShortcutKeyResult,
+} from '../adapters/callback-control';
+import {
   activateDocumentResult,
   activateSplitScreenResult,
   autoLayoutSchematicResult,
@@ -455,6 +467,58 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
             request.command.payload as BridgeCommandPayloadMap['system.shortcut_get_shortcuts'],
           ),
         );
+      case 'system.shortcut_register':
+        return createSuccessResponse(
+          request.id,
+          await registerShortcutKeyResult(
+            request.command.payload as never,
+          ),
+        );
+      case 'system.shortcut_unregister':
+        return createSuccessResponse(
+          request.id,
+          await unregisterShortcutKeyResult(
+            request.command.payload as never,
+          ),
+        );
+      case 'system.shortcut_list_registered':
+        return createSuccessResponse(
+          request.id,
+          await listShortcutKeysResult(
+            request.command.payload as BridgeCommandPayloadMap['system.shortcut_list_registered'],
+          ),
+        );
+      case 'system.timer_set_interval':
+        return createSuccessResponse(
+          request.id,
+          await setIntervalTimerResult(request.command.payload as BridgeCommandPayloadMap['system.timer_set_interval']),
+        );
+      case 'system.timer_clear_interval':
+        return createSuccessResponse(
+          request.id,
+          await clearIntervalTimerResult(request.command.payload as BridgeCommandPayloadMap['system.timer_clear_interval']),
+        );
+      case 'system.timer_set_timeout':
+        return createSuccessResponse(
+          request.id,
+          await setTimeoutTimerResult(request.command.payload as BridgeCommandPayloadMap['system.timer_set_timeout']),
+        );
+      case 'system.timer_clear_timeout':
+        return createSuccessResponse(
+          request.id,
+          await clearTimeoutTimerResult(request.command.payload as BridgeCommandPayloadMap['system.timer_clear_timeout']),
+        );
+      case 'system.right_click_change_menu':
+        return createSuccessResponse(
+          request.id,
+          await changeRightClickMenuResult(
+            request.command.payload as BridgeCommandPayloadMap['system.right_click_change_menu'],
+          ),
+        );
+      case 'system.callback_events_list':
+        return createSuccessResponse(request.id, await listCallbackEventsResult());
+      case 'system.callback_events_drain':
+        return createSuccessResponse(request.id, await drainCallbackEventsResult());
       case 'system.file_system_get_extension_file':
         return createSuccessResponse(
           request.id,

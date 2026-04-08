@@ -28,6 +28,7 @@
 - 工程只读查看能力
 - 编辑器分屏与文档导航能力
 - 原理图与 PCB 的文档级读写、定位、缩放与 DRC 能力
+- 快捷键、定时器和右键菜单回调注册能力，以及回调事件队列查看能力
 - 文件系统、存储、对比工具和菜单工具能力
 - 基础原理图写操作骨架
 - BOM 导出能力
@@ -69,6 +70,16 @@
 - `system.show_information_message`
 - `system.show_confirmation_message`
 - `system.shortcut_get_shortcuts`
+- `system.shortcut_register`
+- `system.shortcut_unregister`
+- `system.shortcut_list_registered`
+- `system.timer_set_interval`
+- `system.timer_clear_interval`
+- `system.timer_set_timeout`
+- `system.timer_clear_timeout`
+- `system.right_click_change_menu`
+- `system.callback_events_list`
+- `system.callback_events_drain`
 - `system.file_system_get_extension_file`
 - `system.file_system_save_file`
 - `system.file_system_save_file_to_file_system`

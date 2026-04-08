@@ -115,6 +115,17 @@ function installMockEda(): void {
       getUrlAnchor: () => 'anchor-demo',
     },
     sys_ShortcutKey: {
+      registerShortcutKey: async (
+        shortcutKey: Array<string>,
+        _title: string,
+        callback: (shortcutKey: Array<string>) => Promise<void> | void,
+        _documentType?: Array<number>,
+        _scene?: Array<number>,
+      ) => {
+        await callback(shortcutKey);
+        return true;
+      },
+      unregisterShortcutKey: async () => true,
       getShortcutKeys: async () => [
         {
           shortcutKey: ['CONTROL', 'S'],
@@ -123,6 +134,21 @@ function installMockEda(): void {
           scene: [1],
         },
       ],
+    },
+    sys_Timer: {
+      setIntervalTimer: (id: string, timeout: number, callback: () => Promise<void> | void) => {
+        void callback();
+        return true;
+      },
+      clearIntervalTimer: () => true,
+      setTimeoutTimer: (id: string, timeout: number, callback: () => Promise<void> | void) => {
+        void callback();
+        return true;
+      },
+      clearTimeoutTimer: () => true,
+    },
+    sys_RightClickMenu: {
+      changeMenu: async () => undefined,
     },
     sys_FileSystem: {
       saveFile: async () => undefined,
@@ -976,6 +1002,230 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'toast message should succeed');
+      },
+    },
+    {
+      name: 'system shortcut register callback',
+      request: {
+        id: 'smoke-002b6',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'shortcut_register',
+          requiresConfirmation: false,
+          payload: {
+            shortcutKey: ['CONTROL', 'SHIFT', 'S'],
+            title: 'Smoke Save Callback',
+            documentType: [2],
+            scene: [1],
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'shortcut register should succeed');
+      },
+    },
+    {
+      name: 'system shortcut list registered',
+      request: {
+        id: 'smoke-002b7',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'shortcut_list_registered',
+          payload: {
+            includeSystem: false,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'shortcut list should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { shortcuts?: Array<{ title?: string }>; count?: number };
+          assert((data.count ?? 0) >= 1, 'shortcut list should include entries');
+        }
+      },
+    },
+    {
+      name: 'system timer set interval',
+      request: {
+        id: 'smoke-002b8',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'timer_set_interval',
+          requiresConfirmation: false,
+          payload: {
+            id: 'interval-smoke',
+            timeout: 250,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'timer interval should succeed');
+      },
+    },
+    {
+      name: 'system timer clear interval',
+      request: {
+        id: 'smoke-002b9',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'timer_clear_interval',
+          requiresConfirmation: false,
+          payload: {
+            id: 'interval-smoke',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'timer clear interval should succeed');
+      },
+    },
+    {
+      name: 'system timer set timeout',
+      request: {
+        id: 'smoke-002ba',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'timer_set_timeout',
+          requiresConfirmation: false,
+          payload: {
+            id: 'timeout-smoke',
+            timeout: 500,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'timer timeout should succeed');
+      },
+    },
+    {
+      name: 'system timer clear timeout',
+      request: {
+        id: 'smoke-002bb',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'timer_clear_timeout',
+          requiresConfirmation: false,
+          payload: {
+            id: 'timeout-smoke',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'timer clear timeout should succeed');
+      },
+    },
+    {
+      name: 'system right click menu change',
+      request: {
+        id: 'smoke-002bc',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'right_click_change_menu',
+          requiresConfirmation: false,
+          payload: {
+            menuId: 'smoke-menu',
+            menuItems: [
+              {
+                id: 'smoke-menu-item',
+                title: 'Smoke Action',
+              },
+            ],
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'right click menu should succeed');
+      },
+    },
+    {
+      name: 'callback events list',
+      request: {
+        id: 'smoke-002bd',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'callback_events_list',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'callback events list should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as {
+            events?: Array<{ kind?: string; name?: string }>;
+            count?: number;
+          };
+          assert((data.count ?? 0) >= 3, 'callback events should include shortcut and timer callbacks');
+          const eventNames = new Set((data.events ?? []).map(event => event.name));
+          assert(eventNames.has('shortcut.registered'), 'callback events should include shortcut registration');
+          assert(eventNames.has('timer.interval'), 'callback events should include interval timer');
+          assert(eventNames.has('timer.timeout'), 'callback events should include timeout timer');
+        }
+      },
+    },
+    {
+      name: 'callback events drain',
+      request: {
+        id: 'smoke-002be',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'callback_events_drain',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'callback drain should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { count?: number };
+          assert((data.count ?? 0) >= 3, 'callback drain should return recorded events');
+        }
+      },
+    },
+    {
+      name: 'callback events list empty',
+      request: {
+        id: 'smoke-002bf',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'callback_events_list',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'callback events list after drain should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { count?: number };
+          assert((data.count ?? 0) === 0, 'callback queue should be empty after drain');
+        }
       },
     },
     {
