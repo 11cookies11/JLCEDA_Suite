@@ -29,6 +29,7 @@ def main() -> int:
     parser.add_argument('--repo-root', default=None, help='Repository root directory.')
     parser.add_argument('--skill-dir', default='skills/jlceda-bridge-flow', help='Skill directory relative to repo root.')
     parser.add_argument('--plugin-eext', default=None, help='Path to the plugin .eext file.')
+    parser.add_argument('--skill-output', default=None, help='Output skill zip file path.')
     parser.add_argument('--output', default=None, help='Output zip file path.')
     args = parser.parse_args()
 
@@ -36,6 +37,7 @@ def main() -> int:
     skill_dir = (repo_root / args.skill_dir).resolve()
     build_dist = repo_root / 'build' / 'dist'
     plugin_eext = pathlib.Path(args.plugin_eext).resolve() if args.plugin_eext else find_latest_eext(build_dist)
+    skill_output = pathlib.Path(args.skill_output).resolve() if args.skill_output else build_dist / 'jlceda-bridge-flow_skill.zip'
     output = pathlib.Path(args.output).resolve() if args.output else build_dist / 'jlceda-bridge-flow-release.zip'
 
     if not skill_dir.is_dir():
@@ -44,6 +46,10 @@ def main() -> int:
         raise FileNotFoundError(f'Plugin package not found: {plugin_eext}')
 
     output.parent.mkdir(parents=True, exist_ok=True)
+    skill_output.parent.mkdir(parents=True, exist_ok=True)
+
+    with zipfile.ZipFile(skill_output, 'w', compression=zipfile.ZIP_DEFLATED) as zip_file:
+        add_directory(zip_file, skill_dir, skill_dir.name)
 
     manifest = {
         'createdAt': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),

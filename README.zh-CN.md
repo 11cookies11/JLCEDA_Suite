@@ -26,6 +26,7 @@
 - 基于 `eda.sys_WebSocket` 的插件侧远程传输客户端
 - 覆盖服务端到插件请求路由的本地端到端联调验证
 - 本地控制平面与服务器端项目流脚本，可驱动已连接的桥接会话
+- 通用服务器侧命令运行器，可对已连接会话执行任意多步桥接序列
 - 工程只读查看能力
 - 编辑器分屏与文档导航能力
 - 原理图与 PCB 的文档级读写、定位、缩放与 DRC 能力
@@ -180,6 +181,8 @@
 5. `npm run remote-client:smoke-test`
 6. `npm run bridge:e2e-smoke-test`
 7. `npm run release:check`
+8. 启动带控制入口的桥接服务后，运行 `npm run server:project-flow`
+9. 如果要执行任意控制平面序列，运行 `npm run server:command-runner`
 
 如果要继续做 `JLCEDA` 内的实机验证，可以参考：
 
