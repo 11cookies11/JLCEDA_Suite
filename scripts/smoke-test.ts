@@ -777,6 +777,27 @@ async function run(): Promise<void> {
       },
     },
     {
+      name: 'system generic api invoke',
+      request: {
+        id: 'smoke-002b00',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'api_invoke',
+          requiresConfirmation: false,
+          payload: {
+            path: 'dmt_Project.getCurrentProjectInfo',
+            args: [],
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'generic api invoke should succeed');
+      },
+    },
+    {
       name: 'system file system path',
       request: {
         id: 'smoke-002b0',

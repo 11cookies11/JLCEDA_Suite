@@ -17,6 +17,7 @@
 
 - `system.ping`
 - `system.get_bridge_status`
+- `system.api_invoke`
 - `project.get_document_summary`
 - `project.get_selection_snapshot`
 - `project.export_bom`
@@ -48,7 +49,24 @@
 4. 再点击 `Inspect Current Document`
 5. 如果无弹窗，检查菜单注册函数名称与 `src/index.ts` 导出是否一致
 
-### 2. 写操作命令返回 `confirmation_required`
+### 2. 想调用官方参考里的更多 API
+
+可以优先尝试 `system.api_invoke`：
+
+```json
+{
+  "domain": "system",
+  "action": "api_invoke",
+  "payload": {
+    "path": "dmt_Project.getCurrentProjectInfo",
+    "args": []
+  }
+}
+```
+
+这会直接调用 JLCEDA 原生对象上的方法。对于大部分 `DMT_`、`SCH_`、`PCB_`、`SYS_`、`LIB_` 方法，比逐个补桥接命令更快。
+
+### 3. 写操作命令返回 `confirmation_required`
 
 这是当前设计的一部分，不是错误。
 
@@ -72,7 +90,7 @@
 - 这只适合测试环境或明确受控环境
 - 在真实用户环境里，默认仍建议保留确认门禁
 
-### 3. 返回 `UNSUPPORTED_ACTION`
+### 4. 返回 `UNSUPPORTED_ACTION`
 
 说明：
 
@@ -84,7 +102,7 @@
 - 注册表：`src/bridge/registry.ts`
 - 分发逻辑：`src/bridge/handlers.ts`
 
-### 4. `smoke-test` 失败，但 `build` 正常
+### 5. `smoke-test` 失败，但 `build` 正常
 
 说明：
 
@@ -104,7 +122,7 @@
 - `src/eda-runtime.d.ts`
 - `scripts/smoke-test.ts`
 
-### 5. 导出 BOM 失败
+### 6. 导出 BOM 失败
 
 可能原因：
 

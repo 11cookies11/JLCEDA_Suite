@@ -11,6 +11,7 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'system.ping',
   'system.get_bridge_status',
   'system.get_environment',
+  'system.api_invoke',
   'system.log_add',
   'system.log_clear',
   'system.log_export',
@@ -179,6 +180,12 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     domain: 'system',
     requiresConfirmationByDefault: false,
     summary: 'Return runtime, version, and user environment details.',
+  },
+  {
+    name: 'system.api_invoke',
+    domain: 'system',
+    requiresConfirmationByDefault: true,
+    summary: 'Invoke an arbitrary JLCEDA API path with explicit arguments.',
   },
   {
     name: 'system.log_add',

@@ -318,6 +318,10 @@ export interface BridgeCommandPayloadMap {
   };
   'system.get_bridge_status': Record<string, never>;
   'system.get_environment': Record<string, never>;
+  'system.api_invoke': {
+    path: string;
+    args?: Array<unknown>;
+  };
   'system.log_add': {
     message: string;
     type?: 'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject';

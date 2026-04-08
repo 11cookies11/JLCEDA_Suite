@@ -7,6 +7,7 @@ import type {
   BridgeResponse,
   BridgeResult,
 } from './protocol';
+import { invokeEdaApiResult } from '../adapters/api-control';
 import {
   changeRightClickMenuResult,
   clearIntervalTimerResult,
@@ -336,6 +337,11 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(request.id, await getBridgeStatusResult());
       case 'system.get_environment':
         return createSuccessResponse(request.id, await getSystemEnvironmentResult());
+      case 'system.api_invoke':
+        return createSuccessResponse(
+          request.id,
+          await invokeEdaApiResult(request.command.payload as BridgeCommandPayloadMap['system.api_invoke']),
+        );
       case 'system.log_add':
         return createSuccessResponse(
           request.id,
