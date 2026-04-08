@@ -484,6 +484,8 @@
 
   <script>
     const RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
+    const REQUEST_TOPIC = `${RPC_TOPIC}.request`;
+    const RESPONSE_TOPIC_PREFIX = `${RPC_TOPIC}.response.`;
     const resultBox = document.getElementById('resultBox');
     const statusChip = document.getElementById('remote-status-chip');
     const panels = Array.from(document.querySelectorAll('[data-panel]'));
@@ -575,6 +577,44 @@
       return candidates;
     }
 
+    function createRequestId() {
+      return `bridge-ui-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+    }
+
+    async function callPluginViaPubSub(candidate, message) {
+      const publish = candidate.bus.publishPublic;
+      const subscribeOnce = candidate.bus.subscribeOncePublic;
+
+      if (typeof publish !== 'function' || typeof subscribeOnce !== 'function') {
+        return null;
+      }
+
+      const requestId = createRequestId();
+      const responseTopic = `${RESPONSE_TOPIC_PREFIX}${requestId}`;
+
+      return await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          reject(new Error('公共消息总线请求超时。'));
+        }, 15000);
+
+        subscribeOnce.call(candidate.bus, responseTopic, (response) => {
+          clearTimeout(timeout);
+          resolve(response);
+        });
+
+        try {
+          publish.call(candidate.bus, REQUEST_TOPIC, {
+            requestId,
+            message,
+          });
+        }
+        catch (error) {
+          clearTimeout(timeout);
+          reject(error);
+        }
+      });
+    }
+
     async function callPlugin(message) {
       const candidates = getMessageBusCandidates();
 
@@ -591,6 +631,24 @@
       const failures = [];
 
       for (const candidate of candidates) {
+        try {
+          const response = await callPluginViaPubSub(candidate, message);
+
+          if (response !== null && response !== undefined) {
+            pluginReady = true;
+            return response;
+          }
+        }
+        catch (error) {
+          const detail = error instanceof Error
+            ? error.message
+            : error === undefined
+              ? '宿主返回 undefined'
+              : String(error);
+
+          failures.push(`${candidate.label}.publishPublic: ${detail}`);
+        }
+
         const methods = [
           ['rpcCall', candidate.bus.rpcCall],
           ['rpcCallPublic', candidate.bus.rpcCallPublic],

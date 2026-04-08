@@ -5,8 +5,11 @@ import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registr
 import { remoteBridgeClient } from './remote/client';
 
 const BRIDGE_UI_RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
+const BRIDGE_UI_REQUEST_TOPIC = `${BRIDGE_UI_RPC_TOPIC}.request`;
+const BRIDGE_UI_RESPONSE_TOPIC_PREFIX = `${BRIDGE_UI_RPC_TOPIC}.response.`;
 const BRIDGE_IFRAME_ID = 'ai-bridge-window';
 let bridgeUiRpcRegistered = false;
+let bridgeUiRequestBridgeRegistered = false;
 
 function ensureBridgeUiRpcRegistered(): void {
   if (bridgeUiRpcRegistered) {
@@ -16,6 +19,44 @@ function ensureBridgeUiRpcRegistered(): void {
   eda.sys_MessageBus.rpcService(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
   eda.sys_MessageBus.rpcServicePublic(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
   bridgeUiRpcRegistered = true;
+}
+
+function ensureBridgeUiRequestBridgeRegistered(): void {
+  if (bridgeUiRequestBridgeRegistered) {
+    return;
+  }
+
+  eda.sys_MessageBus.subscribePublic(BRIDGE_UI_REQUEST_TOPIC, (payload) => {
+    void (async () => {
+      const requestId = typeof payload?.requestId === 'string' ? payload.requestId : '';
+      const message = payload?.message;
+      let response: any;
+
+      if (!requestId) {
+        return;
+      }
+
+      try {
+        response = await handleBridgeUiRpc(message);
+      }
+      catch (error) {
+        response = {
+          ok: false,
+          title: 'AI桥接',
+          lines: [
+            '窗口与插件通信失败。',
+            '',
+            error instanceof Error ? error.message : '未知错误',
+          ],
+          remoteStatus: remoteBridgeClient.getStatus(),
+        };
+      }
+
+      eda.sys_MessageBus.publishPublic(`${BRIDGE_UI_RESPONSE_TOPIC_PREFIX}${requestId}`, response);
+    })();
+  });
+
+  bridgeUiRequestBridgeRegistered = true;
 }
 
 function getStatusLines(): Array<string> {
@@ -286,6 +327,7 @@ export function activate(status?: 'onStartupFinished', arg?: string): void {
   void status;
   void arg;
   ensureBridgeUiRpcRegistered();
+  ensureBridgeUiRequestBridgeRegistered();
   void remoteBridgeClient.autoConnectIfEnabled();
 }
 
@@ -602,6 +644,7 @@ async function _openBridgeMenuFallback(): Promise<void> {
 
 async function openBridgeMenuInternal(): Promise<void> {
   ensureBridgeUiRpcRegistered();
+  ensureBridgeUiRequestBridgeRegistered();
 
   const openOptions = {
     title: 'AI桥接',
