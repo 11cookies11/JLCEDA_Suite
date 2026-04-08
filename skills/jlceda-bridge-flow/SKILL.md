@@ -56,6 +56,7 @@ The bridge supports two layers:
 2. `system.api_invoke` for direct access to the underlying JLCEDA API surface.
 
 Read [references/api-surface.md](references/api-surface.md) for the family-by-family API map and the recommended call order.
+Read [references/task-sequences.md](references/task-sequences.md) for the shortest call sequences for common tasks.
 
 ## Call strategy
 
