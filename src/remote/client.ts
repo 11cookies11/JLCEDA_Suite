@@ -210,16 +210,6 @@ export class RemoteBridgeClient {
         async () => {
           try {
             await this.sendRegister();
-            this.clearConnectTimeout();
-            this.startHeartbeat();
-            this.status = {
-              ...this.status,
-              connecting: false,
-              connected: true,
-              reconnectScheduled: false,
-              lastRegisteredAt: new Date().toISOString(),
-              lastError: undefined,
-            };
           }
           catch (error) {
             this.clearConnectTimeout();
@@ -367,6 +357,8 @@ export class RemoteBridgeClient {
 
     switch (message.type) {
       case 'server.registered':
+        this.clearConnectTimeout();
+        this.startHeartbeat();
         this.status = {
           ...this.status,
           connected: true,
