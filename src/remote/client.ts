@@ -10,6 +10,7 @@ const CONFIG_KEY_SERVER_URL = 'remoteBridge.serverUrl';
 const CONFIG_KEY_AUTH_TOKEN = 'remoteBridge.authToken';
 const CONFIG_KEY_CLIENT_ID = 'remoteBridge.clientId';
 const CONFIG_KEY_AUTO_CONNECT = 'remoteBridge.autoConnect';
+const DEFAULT_CONNECT_TIMEOUT_MS = 15_000;
 const DEFAULT_HEARTBEAT_INTERVAL_MS = 20_000;
 const DEFAULT_RECONNECT_DELAY_MS = 5_000;
 
@@ -79,6 +80,7 @@ function createDefaultDependencies(): RemoteBridgeClientDependencies {
 
 export class RemoteBridgeClient {
   private readonly dependencies: RemoteBridgeClientDependencies;
+  private connectTimer: ReturnType<typeof setTimeout> | undefined;
   private heartbeatTimer: ReturnType<typeof setInterval> | undefined;
   private reconnectTimer: ReturnType<typeof setTimeout> | undefined;
   private status: RemoteBridgeStatus = {
@@ -162,6 +164,7 @@ export class RemoteBridgeClient {
   async connect(): Promise<void> {
     const settings = this.getSettings();
     this.clearReconnectSchedule();
+    this.clearConnectTimeout();
 
     if (!settings.serverUrl) {
       this.status = {
@@ -182,6 +185,23 @@ export class RemoteBridgeClient {
       lastError: undefined,
     };
 
+    this.connectTimer = setTimeout(() => {
+      this.connectTimer = undefined;
+
+      if (this.status.connected) {
+        return;
+      }
+
+      this.stopHeartbeat();
+      this.status = {
+        ...this.status,
+        connecting: false,
+        connected: false,
+        lastError: 'Timed out waiting for remote bridge registration.',
+      };
+      this.scheduleReconnect();
+    }, DEFAULT_CONNECT_TIMEOUT_MS);
+
     try {
       this.dependencies.registerSocket(
         REMOTE_BRIDGE_SOCKET_ID,
@@ -190,6 +210,7 @@ export class RemoteBridgeClient {
         async () => {
           try {
             await this.sendRegister();
+            this.clearConnectTimeout();
             this.startHeartbeat();
             this.status = {
               ...this.status,
@@ -201,6 +222,7 @@ export class RemoteBridgeClient {
             };
           }
           catch (error) {
+            this.clearConnectTimeout();
             this.stopHeartbeat();
             this.status = {
               ...this.status,
@@ -227,6 +249,7 @@ export class RemoteBridgeClient {
 
   disconnect(): void {
     this.clearReconnectSchedule();
+    this.clearConnectTimeout();
     this.stopHeartbeat();
     this.dependencies.closeSocket(REMOTE_BRIDGE_SOCKET_ID, 1000, 'manual disconnect');
     this.status = {
@@ -317,6 +340,15 @@ export class RemoteBridgeClient {
       ...this.status,
       reconnectScheduled: false,
     };
+  }
+
+  private clearConnectTimeout(): void {
+    if (!this.connectTimer) {
+      return;
+    }
+
+    clearTimeout(this.connectTimer);
+    this.connectTimer = undefined;
   }
 
   private async handleServerMessage(rawMessage: string): Promise<void> {
