@@ -25,6 +25,7 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - A minimal bridge server with session registration, heartbeats, and request routing
 - A plugin-side remote transport client built on `eda.sys_WebSocket`
 - Local end-to-end bridge validation that exercises server-to-plugin request routing
+- A local control plane and server-side project-flow runner for driving a connected bridge session
 - Project, schematic, PCB, and board inventory commands
 - Read-only project inspection commands
 - Controlled project creation/opening commands
@@ -206,6 +207,7 @@ The repository already includes a repeatable local validation path:
 5. `npm run remote-client:smoke-test`
 6. `npm run bridge:e2e-smoke-test`
 7. `npm run release:check`
+8. Start the bridge server with `BRIDGE_SERVER_CONTROL_PORT` and run `npm run server:project-flow`
 
 For runtime verification inside JLCEDA, see:
 
