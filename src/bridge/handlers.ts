@@ -8,6 +8,52 @@ import type {
   BridgeResult,
 } from './protocol';
 import {
+  activateDocumentResult,
+  activateSplitScreenResult,
+  autoLayoutSchematicResult,
+  autoRouteSchematicResult,
+  checkSchematicDrcResult,
+  clearPcbRoutingResult,
+  closeDocumentResult,
+  convertCanvasOriginToDataOriginResult,
+  convertDataOriginToCanvasOriginResult,
+  createSplitScreenResult,
+  getCurrentRenderedAreaImageResult,
+  getEditorSplitScreenIdByTabIdResult,
+  getEditorSplitScreenTreeResult,
+  getEditorTabsBySplitScreenIdResult,
+  getPcbCalculatingRatlineStatusResult,
+  getPcbCanvasOriginResult,
+  getPcbFilterConfigurationResult,
+  getPcbPrimitiveAtPointResult,
+  getPcbPrimitivesInRegionResult,
+  getSchematicFilterConfigurationResult,
+  getSchematicPrimitiveAtPointResult,
+  getSchematicPrimitivesInRegionResult,
+  importPcbChangesResult,
+  importSchematicChangesResult,
+  mergeAllDocumentsFromSplitScreenResult,
+  moveDocumentToSplitScreenResult,
+  navigatePcbToCoordinatesResult,
+  navigatePcbToRegionResult,
+  navigateSchematicToCoordinatesResult,
+  navigateSchematicToRegionResult,
+  openDocumentResult,
+  openLibraryDocumentResult,
+  savePanelResult,
+  savePcbResult,
+  saveSchematicResult,
+  setPcbCanvasOriginResult,
+  startPcbCalculatingRatlineResult,
+  stopPcbCalculatingRatlineResult,
+  tileAllDocumentsToSplitScreenResult,
+  zoomPcbToBoardOutlineResult,
+  zoomToAllPrimitivesResult,
+  zoomToRegionResult,
+  zoomToResult,
+  zoomToSelectedPrimitivesResult,
+} from '../adapters/document-control';
+import {
   createBoardResult,
   createPcbResult,
   createProjectResult,
@@ -46,6 +92,36 @@ import {
   placePcbFootprint,
   placeSchematicComponent,
 } from '../adapters/schematic-write';
+import {
+  addSystemLogResult,
+  clearSystemLogResult,
+  closeBottomPanelResult,
+  closeLeftPanelResult,
+  closeRightPanelResult,
+  exportSystemLogResult,
+  findSystemLogResult,
+  getCurrentThemeResult,
+  getShortcutKeysResult,
+  getUrlAnchorResult,
+  getUrlParamResult,
+  isBottomPanelLockedResult,
+  isLeftPanelLockedResult,
+  isRightPanelLockedResult,
+  openBottomPanelResult,
+  openLeftPanelResult,
+  openRightPanelResult,
+  openUiWindowResult,
+  openWindowResult,
+  removeFollowMouseTipResult,
+  showConfirmationMessageResult,
+  showFollowMouseTipResult,
+  showInformationMessageResult,
+  showToastMessageResult,
+  sortSystemLogResult,
+  toggleBottomPanelLockResult,
+  toggleLeftPanelLockResult,
+  toggleRightPanelLockResult,
+} from '../adapters/system-control';
 import { BRIDGE_PROTOCOL_VERSION } from './protocol';
 import { getCommandDescriptor, isCommandImplemented } from './registry';
 
@@ -211,6 +287,137 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(request.id, await getBridgeStatusResult());
       case 'system.get_environment':
         return createSuccessResponse(request.id, await getSystemEnvironmentResult());
+      case 'system.log_add':
+        return createSuccessResponse(
+          request.id,
+          await addSystemLogResult(request.command.payload as BridgeCommandPayloadMap['system.log_add']),
+        );
+      case 'system.log_clear':
+        return createSuccessResponse(request.id, await clearSystemLogResult());
+      case 'system.log_export':
+        return createSuccessResponse(
+          request.id,
+          await exportSystemLogResult(request.command.payload as BridgeCommandPayloadMap['system.log_export']),
+        );
+      case 'system.log_sort':
+        return createSuccessResponse(
+          request.id,
+          await sortSystemLogResult(request.command.payload as BridgeCommandPayloadMap['system.log_sort']),
+        );
+      case 'system.log_find':
+        return createSuccessResponse(
+          request.id,
+          await findSystemLogResult(request.command.payload as BridgeCommandPayloadMap['system.log_find']),
+        );
+      case 'system.panel_open_left':
+        return createSuccessResponse(
+          request.id,
+          await openLeftPanelResult(request.command.payload as BridgeCommandPayloadMap['system.panel_open_left']),
+        );
+      case 'system.panel_close_left':
+        return createSuccessResponse(request.id, await closeLeftPanelResult());
+      case 'system.panel_toggle_left_lock':
+        return createSuccessResponse(
+          request.id,
+          await toggleLeftPanelLockResult(
+            request.command.payload as BridgeCommandPayloadMap['system.panel_toggle_left_lock'],
+          ),
+        );
+      case 'system.panel_is_left_locked':
+        return createSuccessResponse(request.id, await isLeftPanelLockedResult());
+      case 'system.panel_open_right':
+        return createSuccessResponse(
+          request.id,
+          await openRightPanelResult(request.command.payload as BridgeCommandPayloadMap['system.panel_open_right']),
+        );
+      case 'system.panel_close_right':
+        return createSuccessResponse(request.id, await closeRightPanelResult());
+      case 'system.panel_toggle_right_lock':
+        return createSuccessResponse(
+          request.id,
+          await toggleRightPanelLockResult(
+            request.command.payload as BridgeCommandPayloadMap['system.panel_toggle_right_lock'],
+          ),
+        );
+      case 'system.panel_is_right_locked':
+        return createSuccessResponse(request.id, await isRightPanelLockedResult());
+      case 'system.panel_open_bottom':
+        return createSuccessResponse(
+          request.id,
+          await openBottomPanelResult(request.command.payload as BridgeCommandPayloadMap['system.panel_open_bottom']),
+        );
+      case 'system.panel_close_bottom':
+        return createSuccessResponse(request.id, await closeBottomPanelResult());
+      case 'system.panel_toggle_bottom_lock':
+        return createSuccessResponse(
+          request.id,
+          await toggleBottomPanelLockResult(
+            request.command.payload as BridgeCommandPayloadMap['system.panel_toggle_bottom_lock'],
+          ),
+        );
+      case 'system.panel_is_bottom_locked':
+        return createSuccessResponse(request.id, await isBottomPanelLockedResult());
+      case 'system.window_open':
+        return createSuccessResponse(
+          request.id,
+          await openWindowResult(request.command.payload as BridgeCommandPayloadMap['system.window_open']),
+        );
+      case 'system.window_open_ui':
+        return createSuccessResponse(
+          request.id,
+          await openUiWindowResult(request.command.payload as BridgeCommandPayloadMap['system.window_open_ui']),
+        );
+      case 'system.window_get_current_theme':
+        return createSuccessResponse(request.id, await getCurrentThemeResult());
+      case 'system.window_get_url_param':
+        return createSuccessResponse(
+          request.id,
+          await getUrlParamResult(
+            (request.command.payload as BridgeCommandPayloadMap['system.window_get_url_param']).key,
+          ),
+        );
+      case 'system.window_get_url_anchor':
+        return createSuccessResponse(request.id, await getUrlAnchorResult());
+      case 'system.show_toast_message':
+        return createSuccessResponse(
+          request.id,
+          await showToastMessageResult(request.command.payload as BridgeCommandPayloadMap['system.show_toast_message']),
+        );
+      case 'system.show_follow_mouse_tip':
+        return createSuccessResponse(
+          request.id,
+          await showFollowMouseTipResult(
+            request.command.payload as BridgeCommandPayloadMap['system.show_follow_mouse_tip'],
+          ),
+        );
+      case 'system.remove_follow_mouse_tip':
+        return createSuccessResponse(
+          request.id,
+          await removeFollowMouseTipResult(
+            request.command.payload as BridgeCommandPayloadMap['system.remove_follow_mouse_tip'],
+          ),
+        );
+      case 'system.show_information_message':
+        return createSuccessResponse(
+          request.id,
+          await showInformationMessageResult(
+            request.command.payload as BridgeCommandPayloadMap['system.show_information_message'],
+          ),
+        );
+      case 'system.show_confirmation_message':
+        return createSuccessResponse(
+          request.id,
+          await showConfirmationMessageResult(
+            request.command.payload as BridgeCommandPayloadMap['system.show_confirmation_message'],
+          ),
+        );
+      case 'system.shortcut_get_shortcuts':
+        return createSuccessResponse(
+          request.id,
+          await getShortcutKeysResult(
+            request.command.payload as BridgeCommandPayloadMap['system.shortcut_get_shortcuts'],
+          ),
+        );
       case 'project.get_inventory':
         return createSuccessResponse(request.id, await getProjectInventoryResult());
       case 'project.get_document_summary':
@@ -267,6 +474,99 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
           request.id,
           await createBoardResult(request.command.payload as BridgeCommandPayloadMap['project.create_board']),
         );
+      case 'project.open_document':
+        return createSuccessResponse(
+          request.id,
+          await openDocumentResult(request.command.payload as BridgeCommandPayloadMap['project.open_document']),
+        );
+      case 'project.open_library_document':
+        return createSuccessResponse(
+          request.id,
+          await openLibraryDocumentResult(
+            request.command.payload as BridgeCommandPayloadMap['project.open_library_document'],
+          ),
+        );
+      case 'project.close_document':
+        return createSuccessResponse(
+          request.id,
+          await closeDocumentResult((request.command.payload as BridgeCommandPayloadMap['project.close_document']).tabId),
+        );
+      case 'project.get_split_screen_tree':
+        return createSuccessResponse(request.id, await getEditorSplitScreenTreeResult());
+      case 'project.get_split_screen_id_by_tab_id':
+        return createSuccessResponse(
+          request.id,
+          await getEditorSplitScreenIdByTabIdResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.get_split_screen_id_by_tab_id']).tabId,
+          ),
+        );
+      case 'project.get_tabs_by_split_screen_id':
+        return createSuccessResponse(
+          request.id,
+          await getEditorTabsBySplitScreenIdResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.get_tabs_by_split_screen_id']).splitScreenId,
+          ),
+        );
+      case 'project.create_split_screen':
+        return createSuccessResponse(
+          request.id,
+          await createSplitScreenResult(
+            request.command.payload as BridgeCommandPayloadMap['project.create_split_screen'],
+          ),
+        );
+      case 'project.move_document_to_split_screen':
+        return createSuccessResponse(
+          request.id,
+          await moveDocumentToSplitScreenResult(
+            request.command.payload as BridgeCommandPayloadMap['project.move_document_to_split_screen'],
+          ),
+        );
+      case 'project.activate_document':
+        return createSuccessResponse(
+          request.id,
+          await activateDocumentResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.activate_document']).tabId,
+          ),
+        );
+      case 'project.activate_split_screen':
+        return createSuccessResponse(
+          request.id,
+          await activateSplitScreenResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.activate_split_screen']).splitScreenId,
+          ),
+        );
+      case 'project.tile_all_documents_to_split_screen':
+        return createSuccessResponse(request.id, await tileAllDocumentsToSplitScreenResult());
+      case 'project.merge_all_documents_from_split_screen':
+        return createSuccessResponse(request.id, await mergeAllDocumentsFromSplitScreenResult());
+      case 'project.get_current_rendered_area_image':
+        return createSuccessResponse(
+          request.id,
+          await getCurrentRenderedAreaImageResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.get_current_rendered_area_image']).tabId,
+          ),
+        );
+      case 'project.zoom_to_region':
+        return createSuccessResponse(
+          request.id,
+          await zoomToRegionResult(request.command.payload as BridgeCommandPayloadMap['project.zoom_to_region']),
+        );
+      case 'project.zoom_to':
+        return createSuccessResponse(request.id, await zoomToResult(request.command.payload as BridgeCommandPayloadMap['project.zoom_to']));
+      case 'project.zoom_to_all_primitives':
+        return createSuccessResponse(
+          request.id,
+          await zoomToAllPrimitivesResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.zoom_to_all_primitives']).tabId,
+          ),
+        );
+      case 'project.zoom_to_selected_primitives':
+        return createSuccessResponse(
+          request.id,
+          await zoomToSelectedPrimitivesResult(
+            (request.command.payload as BridgeCommandPayloadMap['project.zoom_to_selected_primitives']).tabId,
+          ),
+        );
       case 'project.export_bom':
         return createSuccessResponse(
           request.id,
@@ -322,6 +622,55 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
             request.command.payload as BridgeCommandPayloadMap['schematic.create_short_circuit_flag'],
           ),
         );
+      case 'schematic.import_changes':
+        return createSuccessResponse(request.id, await importSchematicChangesResult());
+      case 'schematic.save':
+        return createSuccessResponse(request.id, await saveSchematicResult());
+      case 'schematic.navigate_to_coordinates':
+        return createSuccessResponse(
+          request.id,
+          await navigateSchematicToCoordinatesResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.navigate_to_coordinates'],
+          ),
+        );
+      case 'schematic.navigate_to_region':
+        return createSuccessResponse(
+          request.id,
+          await navigateSchematicToRegionResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.navigate_to_region'],
+          ),
+        );
+      case 'schematic.get_primitive_at_point':
+        return createSuccessResponse(
+          request.id,
+          await getSchematicPrimitiveAtPointResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.get_primitive_at_point'],
+          ),
+        );
+      case 'schematic.get_primitives_in_region':
+        return createSuccessResponse(
+          request.id,
+          await getSchematicPrimitivesInRegionResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.get_primitives_in_region'],
+          ),
+        );
+      case 'schematic.get_current_filter_configuration':
+        return createSuccessResponse(request.id, await getSchematicFilterConfigurationResult());
+      case 'schematic.auto_routing':
+        return createSuccessResponse(
+          request.id,
+          await autoRouteSchematicResult(request.command.payload as BridgeCommandPayloadMap['schematic.auto_routing']),
+        );
+      case 'schematic.auto_layout':
+        return createSuccessResponse(
+          request.id,
+          await autoLayoutSchematicResult(request.command.payload as BridgeCommandPayloadMap['schematic.auto_layout']),
+        );
+      case 'schematic.check_drc':
+        return createSuccessResponse(
+          request.id,
+          await checkSchematicDrcResult(request.command.payload as BridgeCommandPayloadMap['schematic.check_drc']),
+        );
       case 'pcb.get_board_summary':
         return createSuccessResponse(request.id, await getBoardSummaryResult());
       case 'pcb.get_current_pcb_info':
@@ -340,6 +689,84 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
           request.id,
           await placePcbFootprint(request.command.payload as BridgeCommandPayloadMap['pcb.place_footprint']),
         );
+      case 'pcb.import_changes':
+        return createSuccessResponse(
+          request.id,
+          await importPcbChangesResult(request.command.payload as BridgeCommandPayloadMap['pcb.import_changes']),
+        );
+      case 'pcb.save':
+        return createSuccessResponse(
+          request.id,
+          await savePcbResult(request.command.payload as BridgeCommandPayloadMap['pcb.save']),
+        );
+      case 'pcb.get_calculating_ratline_status':
+        return createSuccessResponse(request.id, await getPcbCalculatingRatlineStatusResult());
+      case 'pcb.start_calculating_ratline':
+        return createSuccessResponse(request.id, await startPcbCalculatingRatlineResult());
+      case 'pcb.stop_calculating_ratline':
+        return createSuccessResponse(request.id, await stopPcbCalculatingRatlineResult());
+      case 'pcb.convert_canvas_origin_to_data_origin':
+        return createSuccessResponse(
+          request.id,
+          await convertCanvasOriginToDataOriginResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.convert_canvas_origin_to_data_origin'],
+          ),
+        );
+      case 'pcb.convert_data_origin_to_canvas_origin':
+        return createSuccessResponse(
+          request.id,
+          await convertDataOriginToCanvasOriginResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.convert_data_origin_to_canvas_origin'],
+          ),
+        );
+      case 'pcb.get_canvas_origin':
+        return createSuccessResponse(request.id, await getPcbCanvasOriginResult());
+      case 'pcb.set_canvas_origin':
+        return createSuccessResponse(
+          request.id,
+          await setPcbCanvasOriginResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.set_canvas_origin'],
+          ),
+        );
+      case 'pcb.navigate_to_coordinates':
+        return createSuccessResponse(
+          request.id,
+          await navigatePcbToCoordinatesResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.navigate_to_coordinates'],
+          ),
+        );
+      case 'pcb.navigate_to_region':
+        return createSuccessResponse(
+          request.id,
+          await navigatePcbToRegionResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.navigate_to_region'],
+          ),
+        );
+      case 'pcb.get_primitive_at_point':
+        return createSuccessResponse(
+          request.id,
+          await getPcbPrimitiveAtPointResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.get_primitive_at_point'],
+          ),
+        );
+      case 'pcb.get_primitives_in_region':
+        return createSuccessResponse(
+          request.id,
+          await getPcbPrimitivesInRegionResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.get_primitives_in_region'],
+          ),
+        );
+      case 'pcb.zoom_to_board_outline':
+        return createSuccessResponse(request.id, await zoomPcbToBoardOutlineResult());
+      case 'pcb.get_current_filter_configuration':
+        return createSuccessResponse(request.id, await getPcbFilterConfigurationResult());
+      case 'pcb.clear_routing':
+        return createSuccessResponse(
+          request.id,
+          await clearPcbRoutingResult(request.command.payload as BridgeCommandPayloadMap['pcb.clear_routing']),
+        );
+      case 'project.save_panel':
+        return createSuccessResponse(request.id, await savePanelResult());
       default:
         return createErrorResponse(request.id, {
           code: 'UNSUPPORTED_ACTION',

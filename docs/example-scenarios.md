@@ -225,3 +225,66 @@
 
 - 返回 `success`
 - `result.data.primitiveId` 和位置信息可用于后续定位
+
+## 场景 8：打开文档并切换分屏
+
+目标：
+
+- 通过编辑器控制命令打开一个文档，并把它放到指定分屏中
+
+对应命令：
+
+```json
+{
+  "id": "demo_editor_001",
+  "type": "command.request",
+  "protocolVersion": "0.1.0",
+  "sessionId": "demo_session",
+  "command": {
+    "domain": "project",
+    "action": "open_document",
+    "payload": {
+      "documentUuid": "schematic-001"
+    }
+  }
+}
+```
+
+预期结果：
+
+- 返回 `success`
+- `result.data.tabId` 是新打开的标签页 ID
+- 可继续调用 `project.create_split_screen`、`project.move_document_to_split_screen`、`project.activate_document`
+
+## 场景 9：执行文档级保存与 DRC
+
+目标：
+
+- 对原理图或 PCB 文档执行保存、定位和 DRC 检查
+
+对应命令：
+
+```json
+{
+  "id": "demo_doc_001",
+  "type": "command.request",
+  "protocolVersion": "0.1.0",
+  "sessionId": "demo_session",
+  "command": {
+    "domain": "schematic",
+    "action": "check_drc",
+    "requiresConfirmation": true,
+    "payload": {
+      "strict": true,
+      "userInterface": false,
+      "includeVerboseError": true
+    }
+  }
+}
+```
+
+预期结果：
+
+- 首次调用返回 `confirmation_required`
+- 确认通过后返回 DRC 结果数组或布尔值
+- 同类操作还包括 `schematic.save`、`schematic.navigate_to_coordinates`、`pcb.save`、`pcb.zoom_to_board_outline`

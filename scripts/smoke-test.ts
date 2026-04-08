@@ -62,6 +62,65 @@ function installMockEda(): void {
     sys_Unit: {
       getFrontendDataUnit: async () => 'mil',
     },
+    sys_Log: {
+      add: () => undefined,
+      clear: () => undefined,
+      export: () => undefined,
+      sort: async () => [
+        {
+          timestamp: 1,
+          type: 'info',
+          message: 'log line',
+        },
+      ],
+      find: async () => [
+        {
+          timestamp: 2,
+          type: 'warn',
+          message: 'found line',
+        },
+      ],
+    },
+    sys_PanelControl: {
+      openLeftPanel: () => undefined,
+      closeLeftPanel: () => undefined,
+      toggleLeftPanelLockState: () => undefined,
+      isLeftPanelLocked: async () => false,
+      openRightPanel: () => undefined,
+      closeRightPanel: () => undefined,
+      toggleRightPanelLockState: () => undefined,
+      isRightPanelLocked: async () => false,
+      openBottomPanel: () => undefined,
+      closeBottomPanel: () => undefined,
+      toggleBottomPanelLockState: () => undefined,
+      isBottomPanelLocked: async () => true,
+    },
+    sys_Message: {
+      showToastMessage: () => undefined,
+      showFollowMouseTip: async () => undefined,
+      removeFollowMouseTip: async () => undefined,
+    },
+    sys_Dialog: {
+      showInformationMessage: () => undefined,
+      showConfirmationMessage: () => undefined,
+    },
+    sys_Window: {
+      open: () => undefined,
+      openUI: async () => undefined,
+      getCurrentTheme: async () => 'light',
+      getUrlParam: (key: string) => (key === 'mode' ? 'demo' : null),
+      getUrlAnchor: () => 'anchor-demo',
+    },
+    sys_ShortcutKey: {
+      getShortcutKeys: async () => [
+        {
+          shortcutKey: ['CONTROL', 'S'],
+          title: 'Save',
+          documentType: [2],
+          scene: [1],
+        },
+      ],
+    },
     sys_FileSystem: {
       saveFile: async () => undefined,
     },
@@ -290,6 +349,104 @@ function installMockEda(): void {
           parentBoardName: 'Main Board',
         },
       }),
+    },
+    dmt_EditorControl: {
+      openDocument: async (documentUuid: string) => `tab-${documentUuid}`,
+      openLibraryDocument: async (_libraryUuid: string, _libraryType: string, uuid: string) => `tab-${uuid}`,
+      closeDocument: async () => true,
+      getSplitScreenTree: async () => ({
+        id: 'split-root',
+        direction: 'horizontal',
+        children: [],
+      }),
+      getSplitScreenIdByTabId: async (tabId: string) => `split-${tabId}`,
+      getTabsBySplitScreenId: async (splitScreenId: string) => [
+        {
+          tabId: `${splitScreenId}-tab`,
+          title: 'Demo Tab',
+          draggable: true,
+          isAbleDelete: true,
+        },
+      ],
+      createSplitScreen: async (splitScreenType: string, tabId: string) => ({
+        sourceSplitScreenId: `source-${splitScreenType}`,
+        newSplitScreenId: `new-${tabId}`,
+      }),
+      moveDocumentToSplitScreen: async () => true,
+      activateDocument: async () => true,
+      activateSplitScreen: async () => true,
+      tileAllDocumentToSplitScreen: async () => true,
+      mergeAllDocumentFromSplitScreen: async () => true,
+      getCurrentRenderedAreaImage: async () => new Blob(['fake-image'], { type: 'image/png' }),
+      zoomToRegion: async () => ({ left: 0, right: 100, top: 100, bottom: 0 }),
+      zoomTo: async () => ({ left: 0, right: 100, top: 100, bottom: 0 }),
+      zoomToAllPrimitives: async () => ({ left: 0, right: 100, top: 100, bottom: 0 }),
+      zoomToSelectedPrimitives: async () => ({ left: 10, right: 20, top: 20, bottom: 10 }),
+    },
+    sch_Document: {
+      importChanges: async () => true,
+      save: async () => true,
+      navigateToCoordinates: async () => true,
+      navigateToRegion: async () => true,
+      getPrimitiveAtPoint: async (x: number, y: number) => createPrimitiveState({
+        primitiveId: 'sch-point-001',
+        primitiveType: 'part',
+        name: 'point-hit',
+        x,
+        y,
+      }),
+      getPrimitivesInRegion: () => [
+        createPrimitiveState({
+          primitiveId: 'sch-region-001',
+          primitiveType: 'wire',
+          name: 'region-wire',
+          line: [0, 0, 10, 10],
+        }),
+      ],
+      getCurrentFilterConfiguration: async () => ({ parts: true, wires: true }),
+      autoRouting: async () => ({ routed: true }),
+      autoLayout: async () => ({ laidOut: true }),
+    },
+    sch_Drc: {
+      check: async (_strict: boolean, _userInterface: boolean, includeVerboseError: boolean) =>
+        (includeVerboseError ? [{ message: 'ok' }] : true),
+    },
+    pcb_Document: {
+      importChanges: async () => true,
+      save: async (_uuid: string) => true,
+      getCalculatingRatlineStatus: async () => 'idle',
+      startCalculatingRatline: async () => true,
+      stopCalculatingRatline: async () => true,
+      convertCanvasOriginToDataOrigin: async (x: number, y: number) => ({ x: x + 10, y: y + 20 }),
+      convertDataOriginToCanvasOrigin: async (x: number, y: number) => ({ x: x - 10, y: y - 20 }),
+      getCanvasOrigin: async () => ({ offsetX: 0, offsetY: 0 }),
+      setCanvasOrigin: async () => true,
+      navigateToCoordinates: async () => true,
+      navigateToRegion: async () => true,
+      getPrimitiveAtPoint: async (x: number, y: number) => createPrimitiveState({
+        primitiveId: 'pcb-point-001',
+        primitiveType: 'component',
+        name: 'pcb-hit',
+        x,
+        y,
+      }),
+      getPrimitivesInRegion: async () => [
+        createPrimitiveState({
+          primitiveId: 'pcb-region-001',
+          primitiveType: 'component',
+          name: 'pcb-region',
+        }),
+      ],
+      zoomToBoardOutline: async () => true,
+      getCurrentFilterConfiguration: async () => ({ components: true, tracks: true }),
+      clearRouting: async () => true,
+    },
+    pcb_Drc: {
+      check: async (_strict: boolean, _userInterface: boolean, includeVerboseError: boolean) =>
+        (includeVerboseError ? [{ message: 'pcb-ok' }] : true),
+    },
+    pnl_Document: {
+      save: async () => true,
     },
     sch_SelectControl: {
       getAllSelectedPrimitives: async () => [
@@ -520,6 +677,99 @@ async function run(): Promise<void> {
       },
     },
     {
+      name: 'system log add',
+      request: {
+        id: 'smoke-002b1',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'log_add',
+          payload: {
+            message: 'smoke-log-line',
+            type: 'info',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'log add should succeed');
+      },
+    },
+    {
+      name: 'system panel state',
+      request: {
+        id: 'smoke-002b2',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'panel_is_left_locked',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'panel state should succeed');
+      },
+    },
+    {
+      name: 'system window theme',
+      request: {
+        id: 'smoke-002b3',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'window_get_current_theme',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'window theme should succeed');
+      },
+    },
+    {
+      name: 'system shortcuts',
+      request: {
+        id: 'smoke-002b4',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'shortcut_get_shortcuts',
+          payload: {
+            includeSystem: false,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'shortcuts should succeed');
+      },
+    },
+    {
+      name: 'system toast message',
+      request: {
+        id: 'smoke-002b5',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'show_toast_message',
+          payload: {
+            message: 'hello from smoke test',
+            messageType: 'info',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'toast message should succeed');
+      },
+    },
+    {
       name: 'list projects',
       request: {
         id: 'smoke-002c',
@@ -536,6 +786,287 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'project list should succeed');
+      },
+    },
+    {
+      name: 'open document tab',
+      request: {
+        id: 'smoke-002d',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'project',
+          action: 'open_document',
+          payload: {
+            documentUuid: 'schematic-001',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'open document should succeed');
+      },
+    },
+    {
+      name: 'split screen tree',
+      request: {
+        id: 'smoke-002e',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'project',
+          action: 'get_split_screen_tree',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'split screen tree should succeed');
+      },
+    },
+    {
+      name: 'editor zoom to',
+      request: {
+        id: 'smoke-002f',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'project',
+          action: 'zoom_to',
+          payload: {
+            x: 10,
+            y: 20,
+            scaleRatio: 200,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'editor zoom should succeed');
+      },
+    },
+    {
+      name: 'schematic import changes',
+      request: {
+        id: 'smoke-002g',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'import_changes',
+          requiresConfirmation: false,
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic import should succeed');
+      },
+    },
+    {
+      name: 'schematic save',
+      request: {
+        id: 'smoke-002h',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'save',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic save should succeed');
+      },
+    },
+    {
+      name: 'schematic primitive lookup',
+      request: {
+        id: 'smoke-002i',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'get_primitive_at_point',
+          payload: {
+            x: 5,
+            y: 6,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic primitive lookup should succeed');
+      },
+    },
+    {
+      name: 'schematic region lookup',
+      request: {
+        id: 'smoke-002j',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'get_primitives_in_region',
+          payload: {
+            left: 0,
+            right: 10,
+            top: 10,
+            bottom: 0,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic region lookup should succeed');
+      },
+    },
+    {
+      name: 'schematic DRC',
+      request: {
+        id: 'smoke-002k',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'check_drc',
+          requiresConfirmation: false,
+          payload: {
+            strict: true,
+            userInterface: false,
+            includeVerboseError: true,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic DRC should succeed');
+      },
+    },
+    {
+      name: 'pcb import changes',
+      request: {
+        id: 'smoke-002l',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'import_changes',
+          requiresConfirmation: false,
+          payload: {
+            schematicUuid: 'schematic-001',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb import should succeed');
+      },
+    },
+    {
+      name: 'pcb save',
+      request: {
+        id: 'smoke-002m',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'save',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb save should succeed');
+      },
+    },
+    {
+      name: 'pcb ratline status',
+      request: {
+        id: 'smoke-002n',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'get_calculating_ratline_status',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb ratline status should succeed');
+      },
+    },
+    {
+      name: 'pcb coordinate conversion',
+      request: {
+        id: 'smoke-002o',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'convert_canvas_origin_to_data_origin',
+          payload: {
+            x: 10,
+            y: 20,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb coordinate conversion should succeed');
+      },
+    },
+    {
+      name: 'pcb canvas origin',
+      request: {
+        id: 'smoke-002p',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'get_canvas_origin',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb canvas origin should succeed');
+      },
+    },
+    {
+      name: 'pcb zoom to outline',
+      request: {
+        id: 'smoke-002q',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'zoom_to_board_outline',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb zoom to outline should succeed');
+      },
+    },
+    {
+      name: 'panel save',
+      request: {
+        id: 'smoke-002r',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'project',
+          action: 'save_panel',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'panel save should succeed');
       },
     },
     {

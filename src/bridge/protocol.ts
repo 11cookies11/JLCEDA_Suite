@@ -65,6 +65,64 @@ export interface BridgeCommandPayloadMap {
     schematicUuid?: string;
     pcbUuid?: string;
   };
+  'project.open_document': {
+    documentUuid: string;
+    splitScreenId?: string;
+  };
+  'project.open_library_document': {
+    libraryUuid: string;
+    libraryType: 'symbol' | 'footprint';
+    uuid: string;
+    splitScreenId?: string;
+  };
+  'project.close_document': {
+    tabId: string;
+  };
+  'project.get_split_screen_tree': Record<string, never>;
+  'project.get_split_screen_id_by_tab_id': {
+    tabId: string;
+  };
+  'project.get_tabs_by_split_screen_id': {
+    splitScreenId: string;
+  };
+  'project.create_split_screen': {
+    splitScreenType: 'horizontal' | 'vertical';
+    tabId: string;
+  };
+  'project.move_document_to_split_screen': {
+    tabId: string;
+    splitScreenId: string;
+  };
+  'project.activate_document': {
+    tabId: string;
+  };
+  'project.activate_split_screen': {
+    splitScreenId: string;
+  };
+  'project.tile_all_documents_to_split_screen': Record<string, never>;
+  'project.merge_all_documents_from_split_screen': Record<string, never>;
+  'project.get_current_rendered_area_image': {
+    tabId?: string;
+  };
+  'project.zoom_to_region': {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+    tabId?: string;
+  };
+  'project.zoom_to': {
+    x?: number;
+    y?: number;
+    scaleRatio?: number;
+    tabId?: string;
+  };
+  'project.zoom_to_all_primitives': {
+    tabId?: string;
+  };
+  'project.zoom_to_selected_primitives': {
+    tabId?: string;
+  };
   'project.export_bom': {
     format?: 'json' | 'csv';
     fileName?: string;
@@ -114,6 +172,78 @@ export interface BridgeCommandPayloadMap {
     rotation?: number;
     mirror?: boolean;
   };
+  'schematic.import_changes': Record<string, never>;
+  'schematic.save': Record<string, never>;
+  'schematic.navigate_to_coordinates': {
+    x: number;
+    y: number;
+  };
+  'schematic.navigate_to_region': {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
+  'schematic.get_primitive_at_point': {
+    x: number;
+    y: number;
+  };
+  'schematic.get_primitives_in_region': {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
+  'schematic.get_current_filter_configuration': Record<string, never>;
+  'schematic.auto_routing': {
+    uuids?: Array<string>;
+    netlist?: {
+      component: {
+        [uniqueId: string]: {
+          pinInfoMap: {
+            [key: string]: {
+              name: string;
+              number: string;
+              net: string;
+              props: {
+                'Pin Number': string;
+              };
+            };
+          };
+        };
+      };
+    };
+    designatorDeviceTypeMap?: {
+      [designator: string]: 'resistor' | 'capacitor' | 'inductive' | 'diode' | 'triode' | 'oscillator' | 'chip' | 'otherDevice';
+    };
+  };
+  'schematic.auto_layout': {
+    uuids?: Array<string>;
+    netlist?: {
+      component: {
+        [uniqueId: string]: {
+          pinInfoMap: {
+            [key: string]: {
+              name: string;
+              number: string;
+              net: string;
+              props: {
+                'Pin Number': string;
+              };
+            };
+          };
+        };
+      };
+    };
+    designatorDeviceTypeMap?: {
+      [designator: string]: 'resistor' | 'capacitor' | 'inductive' | 'diode' | 'triode' | 'oscillator' | 'chip' | 'otherDevice';
+    };
+  };
+  'schematic.check_drc': {
+    strict?: boolean;
+    userInterface?: boolean;
+    includeVerboseError?: boolean;
+  };
   'pcb.get_board_summary': Record<string, never>;
   'pcb.get_current_pcb_info': Record<string, never>;
   'pcb.list_pcbs': Record<string, never>;
@@ -128,11 +258,149 @@ export interface BridgeCommandPayloadMap {
     layer?: 'top' | 'bottom';
     primitiveLock?: boolean;
   };
+  'pcb.import_changes': {
+    schematicUuid?: string;
+  };
+  'pcb.save': {
+    pcbUuid?: string;
+  };
+  'pcb.get_calculating_ratline_status': Record<string, never>;
+  'pcb.start_calculating_ratline': Record<string, never>;
+  'pcb.stop_calculating_ratline': Record<string, never>;
+  'pcb.convert_canvas_origin_to_data_origin': {
+    x: number;
+    y: number;
+  };
+  'pcb.convert_data_origin_to_canvas_origin': {
+    x: number;
+    y: number;
+  };
+  'pcb.get_canvas_origin': Record<string, never>;
+  'pcb.set_canvas_origin': {
+    offsetX: number;
+    offsetY: number;
+  };
+  'pcb.navigate_to_coordinates': {
+    x: number;
+    y: number;
+  };
+  'pcb.navigate_to_region': {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
+  'pcb.get_primitive_at_point': {
+    x: number;
+    y: number;
+  };
+  'pcb.get_primitives_in_region': {
+    left: number;
+    right: number;
+    top: number;
+    bottom: number;
+  };
+  'pcb.zoom_to_board_outline': Record<string, never>;
+  'pcb.get_current_filter_configuration': Record<string, never>;
+  'pcb.clear_routing': {
+    type?: 'all' | 'net' | 'connection';
+  };
+  'project.save_panel': Record<string, never>;
   'system.ping': {
     echo?: string;
   };
   'system.get_bridge_status': Record<string, never>;
   'system.get_environment': Record<string, never>;
+  'system.log_add': {
+    message: string;
+    type?: 'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject';
+  };
+  'system.log_clear': Record<string, never>;
+  'system.log_export': {
+    types?: Array<'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject'> | 'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject';
+  };
+  'system.log_sort': {
+    types?: Array<'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject'> | 'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject';
+  };
+  'system.log_find': {
+    message: string | Array<string | {
+      text: string;
+      attr?: {
+        id?: string;
+        path?: string;
+        sheet?: string;
+        pcbid?: string;
+        type?: string;
+      };
+    }>;
+    types?: Array<'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject'> | 'info' | 'warn' | 'error' | 'fatalError' | 'find' | 'replace' | 'openProject';
+  };
+  'system.panel_open_left': {
+    tab?: string;
+  };
+  'system.panel_close_left': Record<string, never>;
+  'system.panel_toggle_left_lock': {
+    state?: boolean;
+  };
+  'system.panel_is_left_locked': Record<string, never>;
+  'system.panel_open_right': {
+    tab?: string;
+  };
+  'system.panel_close_right': Record<string, never>;
+  'system.panel_toggle_right_lock': {
+    state?: boolean;
+  };
+  'system.panel_is_right_locked': Record<string, never>;
+  'system.panel_open_bottom': {
+    tab?: string;
+  };
+  'system.panel_close_bottom': Record<string, never>;
+  'system.panel_toggle_bottom_lock': {
+    state?: boolean;
+  };
+  'system.panel_is_bottom_locked': Record<string, never>;
+  'system.window_open': {
+    url: string;
+    target?: '_blank' | '_self';
+  };
+  'system.window_open_ui': {
+    uiName: string;
+    args?: Record<string, unknown>;
+  };
+  'system.window_get_current_theme': Record<string, never>;
+  'system.window_get_url_param': {
+    key: string;
+  };
+  'system.window_get_url_anchor': Record<string, never>;
+  'system.show_toast_message': {
+    message: string;
+    messageType?: 'error' | 'warn' | 'info' | 'success' | 'question';
+    timer?: number;
+    bottomPanel?: string;
+    buttonTitle?: string;
+    buttonCallbackFn?: string;
+  };
+  'system.show_follow_mouse_tip': {
+    tip: string;
+    msTimeout?: number;
+  };
+  'system.remove_follow_mouse_tip': {
+    tip?: string;
+  };
+  'system.show_information_message': {
+    content: string;
+    title?: string;
+    buttonTitle?: string;
+  };
+  'system.show_confirmation_message': {
+    content: string;
+    title?: string;
+    mainButtonTitle?: string;
+    buttonTitle?: string;
+  };
+  'system.shortcut_get_shortcuts': {
+    includeSystem?: boolean;
+  };
 }
 
 export type BridgeCommandName = keyof BridgeCommandPayloadMap;

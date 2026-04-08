@@ -26,6 +26,8 @@
 - 基于 `eda.sys_WebSocket` 的插件侧远程传输客户端
 - 覆盖服务端到插件请求路由的本地端到端联调验证
 - 工程只读查看能力
+- 编辑器分屏与文档导航能力
+- 原理图与 PCB 的文档级读写、定位、缩放与 DRC 能力
 - 基础原理图写操作骨架
 - BOM 导出能力
 - 插件侧与服务端冒烟测试、排障说明和发布检查文档
@@ -40,9 +42,53 @@
 - `system.get_bridge_status`
 - `project.get_document_summary`
 - `project.get_selection_snapshot`
+- `project.open_document`
+- `project.open_library_document`
+- `project.close_document`
+- `project.get_split_screen_tree`
+- `project.get_split_screen_id_by_tab_id`
+- `project.get_tabs_by_split_screen_id`
+- `project.create_split_screen`
+- `project.move_document_to_split_screen`
+- `project.activate_document`
+- `project.activate_split_screen`
+- `project.tile_all_documents_to_split_screen`
+- `project.merge_all_documents_from_split_screen`
+- `project.get_current_rendered_area_image`
+- `project.zoom_to_region`
+- `project.zoom_to`
+- `project.zoom_to_all_primitives`
+- `project.zoom_to_selected_primitives`
 - `schematic.place_component`
 - `schematic.create_wire`
 - `project.export_bom`
+- `schematic.import_changes`
+- `schematic.save`
+- `schematic.navigate_to_coordinates`
+- `schematic.navigate_to_region`
+- `schematic.get_primitive_at_point`
+- `schematic.get_primitives_in_region`
+- `schematic.get_current_filter_configuration`
+- `schematic.auto_routing`
+- `schematic.auto_layout`
+- `schematic.check_drc`
+- `pcb.import_changes`
+- `pcb.save`
+- `pcb.get_calculating_ratline_status`
+- `pcb.start_calculating_ratline`
+- `pcb.stop_calculating_ratline`
+- `pcb.convert_canvas_origin_to_data_origin`
+- `pcb.convert_data_origin_to_canvas_origin`
+- `pcb.get_canvas_origin`
+- `pcb.set_canvas_origin`
+- `pcb.navigate_to_coordinates`
+- `pcb.navigate_to_region`
+- `pcb.get_primitive_at_point`
+- `pcb.get_primitives_in_region`
+- `pcb.zoom_to_board_outline`
+- `pcb.get_current_filter_configuration`
+- `pcb.clear_routing`
+- `project.save_panel`
 
 对于已登记但未实现的命令，桥接层会明确拒绝；对于高风险写操作，会先经过确认门禁。
 

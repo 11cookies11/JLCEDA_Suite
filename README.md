@@ -28,6 +28,8 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - Project, schematic, PCB, and board inventory commands
 - Read-only project inspection commands
 - Controlled project creation/opening commands
+- Editor split-screen and document navigation commands
+- Schematic and PCB document operations, including save/import/navigate/zoom/DRC flows
 - Basic schematic and PCB write-command scaffolding
 - BOM export support
 - Plugin and server smoke tests, troubleshooting, and release-check documentation
@@ -57,6 +59,23 @@ The current bridge implementation supports these commands:
 - `project.list_pcbs`
 - `project.get_board_summary`
 - `project.create_board`
+- `project.open_document`
+- `project.open_library_document`
+- `project.close_document`
+- `project.get_split_screen_tree`
+- `project.get_split_screen_id_by_tab_id`
+- `project.get_tabs_by_split_screen_id`
+- `project.create_split_screen`
+- `project.move_document_to_split_screen`
+- `project.activate_document`
+- `project.activate_split_screen`
+- `project.tile_all_documents_to_split_screen`
+- `project.merge_all_documents_from_split_screen`
+- `project.get_current_rendered_area_image`
+- `project.zoom_to_region`
+- `project.zoom_to`
+- `project.zoom_to_all_primitives`
+- `project.zoom_to_selected_primitives`
 - `schematic.place_component`
 - `schematic.create_wire`
 - `schematic.annotate_net`
@@ -66,11 +85,38 @@ The current bridge implementation supports these commands:
 - `schematic.create_net_flag`
 - `schematic.create_net_port`
 - `schematic.create_short_circuit_flag`
+- `schematic.import_changes`
+- `schematic.save`
+- `schematic.navigate_to_coordinates`
+- `schematic.navigate_to_region`
+- `schematic.get_primitive_at_point`
+- `schematic.get_primitives_in_region`
+- `schematic.get_current_filter_configuration`
+- `schematic.auto_routing`
+- `schematic.auto_layout`
+- `schematic.check_drc`
 - `pcb.get_board_summary`
 - `pcb.get_current_pcb_info`
 - `pcb.list_pcbs`
 - `pcb.create_pcb`
 - `pcb.place_footprint`
+- `pcb.import_changes`
+- `pcb.save`
+- `pcb.get_calculating_ratline_status`
+- `pcb.start_calculating_ratline`
+- `pcb.stop_calculating_ratline`
+- `pcb.convert_canvas_origin_to_data_origin`
+- `pcb.convert_data_origin_to_canvas_origin`
+- `pcb.get_canvas_origin`
+- `pcb.set_canvas_origin`
+- `pcb.navigate_to_coordinates`
+- `pcb.navigate_to_region`
+- `pcb.get_primitive_at_point`
+- `pcb.get_primitives_in_region`
+- `pcb.zoom_to_board_outline`
+- `pcb.get_current_filter_configuration`
+- `pcb.clear_routing`
+- `project.save_panel`
 - `project.export_bom`
 
 Unsupported but registered commands are rejected explicitly, and high-risk write operations are gated by confirmation rules.
