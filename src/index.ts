@@ -6,6 +6,17 @@ import { remoteBridgeClient } from './remote/client';
 
 const BRIDGE_UI_RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
 const BRIDGE_IFRAME_ID = 'ai-bridge-window';
+let bridgeUiRpcRegistered = false;
+
+function ensureBridgeUiRpcRegistered(): void {
+  if (bridgeUiRpcRegistered) {
+    return;
+  }
+
+  eda.sys_MessageBus.rpcService(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
+  eda.sys_MessageBus.rpcServicePublic(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
+  bridgeUiRpcRegistered = true;
+}
 
 function getStatusLines(): Array<string> {
   const remoteStatus = remoteBridgeClient.getStatus();
@@ -274,8 +285,7 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
 export function activate(status?: 'onStartupFinished', arg?: string): void {
   void status;
   void arg;
-  eda.sys_MessageBus.rpcService(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
-  eda.sys_MessageBus.rpcServicePublic(BRIDGE_UI_RPC_TOPIC, handleBridgeUiRpc);
+  ensureBridgeUiRpcRegistered();
   void remoteBridgeClient.autoConnectIfEnabled();
 }
 
@@ -591,6 +601,8 @@ async function _openBridgeMenuFallback(): Promise<void> {
 }
 
 async function openBridgeMenuInternal(): Promise<void> {
+  ensureBridgeUiRpcRegistered();
+
   const openOptions = {
     title: 'AI桥接',
     maximizeButton: true,
