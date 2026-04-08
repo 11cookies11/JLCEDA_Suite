@@ -188,16 +188,28 @@ export class RemoteBridgeClient {
         settings.serverUrl,
         event => this.handleServerMessage(event.data),
         async () => {
-          await this.sendRegister();
-          this.startHeartbeat();
-          this.status = {
-            ...this.status,
-            connecting: false,
-            connected: true,
-            reconnectScheduled: false,
-            lastRegisteredAt: new Date().toISOString(),
-            lastError: undefined,
-          };
+          try {
+            await this.sendRegister();
+            this.startHeartbeat();
+            this.status = {
+              ...this.status,
+              connecting: false,
+              connected: true,
+              reconnectScheduled: false,
+              lastRegisteredAt: new Date().toISOString(),
+              lastError: undefined,
+            };
+          }
+          catch (error) {
+            this.stopHeartbeat();
+            this.status = {
+              ...this.status,
+              connecting: false,
+              connected: false,
+              lastError: error instanceof Error ? error.message : 'Failed to finish remote bridge registration.',
+            };
+            this.scheduleReconnect();
+          }
         },
       );
     }
