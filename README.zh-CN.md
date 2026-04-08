@@ -33,6 +33,7 @@
 - 文件系统、存储、对比工具和菜单工具能力
 - 基础原理图写操作骨架
 - BOM 导出能力
+- 一个可直接调用大部分官方 JLCEDA API 的 `system.api_invoke` 通用入口
 - 插件侧与服务端冒烟测试、排障说明和发布检查文档
 
 当前最主要的缺口，是还没有完成公网环境联调、服务器端 Codex 接入，以及 `JLCEDA` 客户端内的实机导入与运行验证。
@@ -183,6 +184,7 @@
 如果要继续做 `JLCEDA` 内的实机验证，可以参考：
 
 - `docs/example-scenarios.md`
+- `docs/api-invoke-cheatsheet.md`
 - `docs/troubleshooting.md`
 - `docs/release-checklist.md`
 

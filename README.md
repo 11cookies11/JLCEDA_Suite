@@ -34,6 +34,7 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - Shortcut, timer, and right-click callback registration commands with event queue inspection
 - Basic schematic and PCB write-command scaffolding
 - BOM export support
+- A generic `system.api_invoke` bridge entry for calling most official JLCEDA API methods directly
 - Plugin and server smoke tests, troubleshooting, and release-check documentation
 
 The main gaps that remain are public-network validation, server-side Codex integration, and real JLCEDA runtime verification through local import and manual execution.
@@ -212,6 +213,7 @@ The repository already includes a repeatable local validation path:
 For runtime verification inside JLCEDA, see:
 
 - `docs/example-scenarios.md`
+- `docs/api-invoke-cheatsheet.md`
 - `docs/troubleshooting.md`
 - `docs/release-checklist.md`
 
