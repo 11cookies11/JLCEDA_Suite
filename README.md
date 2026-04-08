@@ -40,6 +40,33 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 
 The main gaps that remain are public-network validation, server-side Codex integration, and real JLCEDA runtime verification through local import and manual execution.
 
+## Auto Update
+
+On startup, the plugin checks the latest release of the configured GitHub repository. By default, it targets this repository, but you can point it at your own public or private repo.
+
+In the plugin's update settings, fill in:
+
+- Repository owner: `owner`
+- Repository name: `repo`
+- GitHub token: a token with `repo` read access for private repositories; leave blank for public repositories
+
+If you leave the GitHub token blank, the plugin keeps the previously saved token. If you leave the repository fields blank, it falls back to the default repository `11cookies11/JLCEDA_AIAgent`.
+
+Example:
+
+```text
+Repository owner: my-org
+Repository name: my-private-plugin
+GitHub token: ghp_xxxxxxxxxxxxxxxxxxxx
+```
+
+After saving the settings, you can use:
+
+- `Check Updates`
+- `Open Release Page`
+
+The plugin will then read the latest release from the GitHub repo you configured and prompt you when a newer `.eext` package is available.
+
 ## Implemented Commands
 
 The current bridge implementation supports these commands:

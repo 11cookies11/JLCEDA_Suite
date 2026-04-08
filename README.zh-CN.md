@@ -39,6 +39,33 @@
 
 当前最主要的缺口，是还没有完成公网环境联调、服务器端 Codex 接入，以及 `JLCEDA` 客户端内的实机导入与运行验证。
 
+## 自动更新
+
+插件启动时会自动检查对应 GitHub 仓库的最新 release。默认目标仓库是本仓库，但你也可以改成自己的公开或私有仓库。
+
+在插件的“更新配置”里填写：
+
+- 仓库所有者：`owner`
+- 仓库名：`repo`
+- GitHub Token：私有仓库时填写有 `repo` 读取权限的 token，公开仓库可以留空
+
+如果 GitHub Token 留空，插件会保留你之前保存的 token；如果仓库地址留空，则继续使用默认仓库 `11cookies11/JLCEDA_AIAgent`。
+
+示例：
+
+```text
+仓库所有者：my-org
+仓库名：my-private-plugin
+GitHub Token：ghp_xxxxxxxxxxxxxxxxxxxx
+```
+
+配置保存后，你可以在插件里点击：
+
+- `检查更新`
+- `打开更新页`
+
+这样插件就会从你指定的 GitHub Release 里读取最新版本，并在必要时提示你下载新的 `.eext` 包。
+
 ## 已实现命令
 
 当前桥接层已经支持以下命令：
