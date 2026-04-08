@@ -122,6 +122,43 @@ import {
   toggleLeftPanelLockResult,
   toggleRightPanelLockResult,
 } from '../adapters/system-control';
+import {
+  clearExtensionAllUserConfigsResult,
+  convertAltiumDesignerLibrariesToEasyEDAMultiFilesResult,
+  convertAltiumDesignerLibrariesToEasyEDASingleFileResult,
+  convertDisaLibrariesToEasyEDAMultiFilesResult,
+  convertDisaLibrariesToEasyEDASingleFileResult,
+  deleteExtensionUserConfigResult,
+  deleteFileInFileSystemResult,
+  getDeviceFileByDeviceUuidResult,
+  getDocumentFileResult,
+  getDocumentFootprintSourcesResult,
+  getDocumentSourceResult,
+  getDocumentsPathResult,
+  getEdaPathResult,
+  getExtensionAllUserConfigsResult,
+  getExtensionFileResult,
+  getExtensionUserConfigResult,
+  getLibrariesPathsResult,
+  getProjectFileByProjectUuidResult,
+  getProjectFileResult,
+  getProjectsPathsResult,
+  getSymbolFileBySymbolUuidResult,
+  insertHeaderMenusResult,
+  insertSystemHeaderMenuItemResult,
+  listFilesOfFileSystemResult,
+  netlistComparisonResult,
+  pcbComparisonResult,
+  removeHeaderMenusResult,
+  removeSystemHeaderMenuItemResult,
+  replaceHeaderMenusResult,
+  saveFileResult,
+  saveFileToFileSystemResult,
+  schematicComparisonResult,
+  setDocumentSourceResult,
+  setExtensionAllUserConfigsResult,
+  setExtensionUserConfigResult,
+} from '../adapters/utility-control';
 import { BRIDGE_PROTOCOL_VERSION } from './protocol';
 import { getCommandDescriptor, isCommandImplemented } from './registry';
 
@@ -416,6 +453,196 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
           request.id,
           await getShortcutKeysResult(
             request.command.payload as BridgeCommandPayloadMap['system.shortcut_get_shortcuts'],
+          ),
+        );
+      case 'system.file_system_get_extension_file':
+        return createSuccessResponse(
+          request.id,
+          await getExtensionFileResult(
+            (request.command.payload as BridgeCommandPayloadMap['system.file_system_get_extension_file']).uri,
+          ),
+        );
+      case 'system.file_system_save_file':
+        return createSuccessResponse(
+          request.id,
+          await saveFileResult(request.command.payload as BridgeCommandPayloadMap['system.file_system_save_file']),
+        );
+      case 'system.file_system_save_file_to_file_system':
+        return createSuccessResponse(
+          request.id,
+          await saveFileToFileSystemResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_system_save_file_to_file_system'],
+          ),
+        );
+      case 'system.file_system_list_files':
+        return createSuccessResponse(
+          request.id,
+          await listFilesOfFileSystemResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_system_list_files'],
+          ),
+        );
+      case 'system.file_system_delete_file':
+        return createSuccessResponse(
+          request.id,
+          await deleteFileInFileSystemResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_system_delete_file'],
+          ),
+        );
+      case 'system.file_system_get_eda_path':
+        return createSuccessResponse(request.id, await getEdaPathResult());
+      case 'system.file_system_get_documents_path':
+        return createSuccessResponse(request.id, await getDocumentsPathResult());
+      case 'system.file_system_get_libraries_paths':
+        return createSuccessResponse(request.id, await getLibrariesPathsResult());
+      case 'system.file_system_get_projects_paths':
+        return createSuccessResponse(request.id, await getProjectsPathsResult());
+      case 'system.file_manager_get_project_file':
+        return createSuccessResponse(
+          request.id,
+          await getProjectFileResult(request.command.payload as BridgeCommandPayloadMap['system.file_manager_get_project_file']),
+        );
+      case 'system.file_manager_get_document_file':
+        return createSuccessResponse(
+          request.id,
+          await getDocumentFileResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_manager_get_document_file'],
+          ),
+        );
+      case 'system.file_manager_get_document_source':
+        return createSuccessResponse(request.id, await getDocumentSourceResult());
+      case 'system.file_manager_get_document_footprint_sources':
+        return createSuccessResponse(request.id, await getDocumentFootprintSourcesResult());
+      case 'system.file_manager_set_document_source':
+        return createSuccessResponse(
+          request.id,
+          await setDocumentSourceResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_manager_set_document_source'],
+          ),
+        );
+      case 'system.file_manager_get_project_file_by_project_uuid':
+        return createSuccessResponse(
+          request.id,
+          await getProjectFileByProjectUuidResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_manager_get_project_file_by_project_uuid'],
+          ),
+        );
+      case 'system.file_manager_get_device_file_by_device_uuid':
+        return createSuccessResponse(
+          request.id,
+          await getDeviceFileByDeviceUuidResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_manager_get_device_file_by_device_uuid'],
+          ),
+        );
+      case 'system.file_manager_get_symbol_file_by_symbol_uuid':
+        return createSuccessResponse(
+          request.id,
+          await getSymbolFileBySymbolUuidResult(
+            request.command.payload as BridgeCommandPayloadMap['system.file_manager_get_symbol_file_by_symbol_uuid'],
+          ),
+        );
+      case 'system.storage_get_all_user_configs':
+        return createSuccessResponse(request.id, await getExtensionAllUserConfigsResult());
+      case 'system.storage_set_all_user_configs':
+        return createSuccessResponse(
+          request.id,
+          await setExtensionAllUserConfigsResult(
+            request.command.payload as BridgeCommandPayloadMap['system.storage_set_all_user_configs'],
+          ),
+        );
+      case 'system.storage_clear_all_user_configs':
+        return createSuccessResponse(request.id, await clearExtensionAllUserConfigsResult());
+      case 'system.storage_get_user_config':
+        return createSuccessResponse(
+          request.id,
+          await getExtensionUserConfigResult(
+            request.command.payload as BridgeCommandPayloadMap['system.storage_get_user_config'],
+          ),
+        );
+      case 'system.storage_set_user_config':
+        return createSuccessResponse(
+          request.id,
+          await setExtensionUserConfigResult(
+            request.command.payload as BridgeCommandPayloadMap['system.storage_set_user_config'],
+          ),
+        );
+      case 'system.storage_delete_user_config':
+        return createSuccessResponse(
+          request.id,
+          await deleteExtensionUserConfigResult(
+            request.command.payload as BridgeCommandPayloadMap['system.storage_delete_user_config'],
+          ),
+        );
+      case 'system.tool_netlist_comparison':
+        return createSuccessResponse(
+          request.id,
+          await netlistComparisonResult(
+            request.command.payload as BridgeCommandPayloadMap['system.tool_netlist_comparison'],
+          ),
+        );
+      case 'system.tool_schematic_comparison':
+        return createSuccessResponse(
+          request.id,
+          await schematicComparisonResult(
+            request.command.payload as BridgeCommandPayloadMap['system.tool_schematic_comparison'],
+          ),
+        );
+      case 'system.tool_pcb_comparison':
+        return createSuccessResponse(
+          request.id,
+          await pcbComparisonResult(request.command.payload as BridgeCommandPayloadMap['system.tool_pcb_comparison']),
+        );
+      case 'system.header_menu_replace':
+        return createSuccessResponse(
+          request.id,
+          await replaceHeaderMenusResult(request.command.payload as BridgeCommandPayloadMap['system.header_menu_replace']),
+        );
+      case 'system.header_menu_insert':
+        return createSuccessResponse(
+          request.id,
+          await insertHeaderMenusResult(request.command.payload as BridgeCommandPayloadMap['system.header_menu_insert']),
+        );
+      case 'system.header_menu_remove':
+        return createSuccessResponse(request.id, await removeHeaderMenusResult());
+      case 'system.header_menu_insert_system_item':
+        return createSuccessResponse(
+          request.id,
+          await insertSystemHeaderMenuItemResult(
+            request.command.payload as BridgeCommandPayloadMap['system.header_menu_insert_system_item'],
+          ),
+        );
+      case 'system.header_menu_remove_system_item':
+        return createSuccessResponse(
+          request.id,
+          await removeSystemHeaderMenuItemResult(
+            request.command.payload as BridgeCommandPayloadMap['system.header_menu_remove_system_item'],
+          ),
+        );
+      case 'system.format_conversion_ad_single':
+        return createSuccessResponse(
+          request.id,
+          await convertAltiumDesignerLibrariesToEasyEDASingleFileResult(
+            request.command.payload as BridgeCommandPayloadMap['system.format_conversion_ad_single'],
+          ),
+        );
+      case 'system.format_conversion_ad_multi':
+        return createSuccessResponse(
+          request.id,
+          await convertAltiumDesignerLibrariesToEasyEDAMultiFilesResult(
+            request.command.payload as BridgeCommandPayloadMap['system.format_conversion_ad_multi'],
+          ),
+        );
+      case 'system.format_conversion_disa_single':
+        return createSuccessResponse(
+          request.id,
+          await convertDisaLibrariesToEasyEDASingleFileResult(
+            request.command.payload as BridgeCommandPayloadMap['system.format_conversion_disa_single'],
+          ),
+        );
+      case 'system.format_conversion_disa_multi':
+        return createSuccessResponse(
+          request.id,
+          await convertDisaLibrariesToEasyEDAMultiFilesResult(
+            request.command.payload as BridgeCommandPayloadMap['system.format_conversion_disa_multi'],
           ),
         );
       case 'project.get_inventory':

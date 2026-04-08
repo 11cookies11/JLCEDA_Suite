@@ -10,10 +10,13 @@ function assert(condition: unknown, message: string): asserts condition {
 }
 
 function createMockFile(name: string, type: string, size: number): File {
+  const bytes = new Uint8Array(size).map((_, index) => index % 256);
+
   return {
     name,
     type,
     size,
+    arrayBuffer: async () => bytes.buffer.slice(0),
   } as File;
 }
 
@@ -123,6 +126,77 @@ function installMockEda(): void {
     },
     sys_FileSystem: {
       saveFile: async () => undefined,
+      getExtensionFile: async () => createMockFile('extension.bin', 'application/octet-stream', 16),
+      saveFileToFileSystem: async () => true,
+      listFilesOfFileSystem: async () => [
+        {
+          fileName: 'demo.txt',
+          isDirectory: false,
+          fullPath: '/tmp/demo.txt',
+        },
+      ],
+      deleteFileInFileSystem: async () => true,
+      getEdaPath: async () => '/opt/eda',
+      getDocumentsPath: async () => '/home/user/Documents/JLCEDA',
+      getLibrariesPaths: async () => ['/home/user/Libraries'],
+      getProjectsPaths: async () => ['/home/user/Projects'],
+    },
+    sys_FileManager: {
+      getProjectFile: async () => createMockFile('project.epro', 'application/octet-stream', 32),
+      getDocumentFile: async () => createMockFile('document.epro', 'application/octet-stream', 24),
+      getDocumentSource: async () => 'document source',
+      getDocumentFootprintSources: async () => [
+        {
+          footprintUuid: 'footprint-001',
+          documentSource: 'footprint source',
+        },
+      ],
+      setDocumentSource: async () => true,
+      getProjectFileByProjectUuid: async () => createMockFile('project-by-uuid.epro', 'application/octet-stream', 32),
+      getDeviceFileByDeviceUuid: async () => createMockFile('device.elibz', 'application/octet-stream', 32),
+      getSymbolFileBySymbolUuid: async () => createMockFile('symbol.elibz', 'application/octet-stream', 32),
+    },
+    sys_Storage: {
+      getExtensionAllUserConfigs: () => ({
+        sample: true,
+      }),
+      setExtensionAllUserConfigs: async () => true,
+      clearExtensionAllUserConfigs: async () => true,
+      getExtensionUserConfig: (key: string) => (key === 'sample' ? 'value' : undefined),
+      setExtensionUserConfig: async () => true,
+      deleteExtensionUserConfig: async () => true,
+    },
+    sys_Tool: {
+      netlistComparison: async () => [
+        {
+          type: 'Net',
+          object: 'VCC',
+          netlist1Name: ['A'],
+          netlist2Name: ['B'],
+        },
+      ],
+      schematicComparison: async () => ({ result: 'schematic-compare' }),
+      pcbComparison: async () => ({ result: 'pcb-compare' }),
+    },
+    sys_HeaderMenu: {
+      insertHeaderMenus: async () => undefined,
+      removeHeaderMenus: () => undefined,
+      replaceHeaderMenus: async () => undefined,
+      insertSystemHeaderMenuItem: async () => ['system', 'help'],
+      removeSystemHeaderMenuItem: async () => true,
+    },
+    sys_FormatConversion: {
+      convertAltiumDesignerLibrariesToEasyEDASingleFile: async () =>
+        createMockFile('converted.elibz', 'application/octet-stream', 40),
+      convertAltiumDesignerLibrariesToEasyEDAMultiFiles: async () => [
+        createMockFile('converted-1.elibz', 'application/octet-stream', 20),
+        createMockFile('converted-2.elibz', 'application/octet-stream', 20),
+      ],
+      convertDisaLibrariesToEasyEDASingleFile: async () =>
+        createMockFile('converted-disa.elibz', 'application/octet-stream', 40),
+      convertDisaLibrariesToEasyEDAMultiFiles: async () => [
+        createMockFile('converted-disa-1.elibz', 'application/octet-stream', 20),
+      ],
     },
     dmt_SelectControl: {
       getCurrentDocumentInfo: async () => ({
@@ -677,6 +751,23 @@ async function run(): Promise<void> {
       },
     },
     {
+      name: 'system file system path',
+      request: {
+        id: 'smoke-002b0',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'file_system_get_eda_path',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'eda path should succeed');
+      },
+    },
+    {
       name: 'system log add',
       request: {
         id: 'smoke-002b1',
@@ -694,6 +785,124 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'log add should succeed');
+      },
+    },
+    {
+      name: 'system extension file',
+      request: {
+        id: 'smoke-002b1a',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'file_system_get_extension_file',
+          payload: {
+            uri: 'demo.bin',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'extension file should succeed');
+      },
+    },
+    {
+      name: 'system file manager source',
+      request: {
+        id: 'smoke-002b1b',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'file_manager_get_document_source',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'document source should succeed');
+      },
+    },
+    {
+      name: 'system storage configs',
+      request: {
+        id: 'smoke-002b1c',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'storage_get_all_user_configs',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'storage should succeed');
+      },
+    },
+    {
+      name: 'system tool netlist compare',
+      request: {
+        id: 'smoke-002b1d',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'tool_netlist_comparison',
+          payload: {
+            left: 'project-001',
+            right: 'project-002',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'tool comparison should succeed');
+      },
+    },
+    {
+      name: 'system header menu insert',
+      request: {
+        id: 'smoke-002b1e',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'header_menu_insert_system_item',
+          payload: {
+            env: 'home',
+            id: ['home', 'demo'],
+            props: {
+              title: 'Demo Menu',
+            },
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'header menu insertion should succeed');
+      },
+    },
+    {
+      name: 'system format conversion',
+      request: {
+        id: 'smoke-002b1f',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'format_conversion_ad_single',
+          payload: {
+            files: {
+              fileName: 'library.lib',
+              contentText: 'demo',
+            },
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'format conversion should succeed');
       },
     },
     {

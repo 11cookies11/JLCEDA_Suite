@@ -25,6 +25,13 @@ export interface BridgePoint {
   y: number;
 }
 
+export interface BridgeBinaryFilePayload {
+  fileName?: string;
+  mimeType?: string;
+  contentBase64?: string;
+  contentText?: string;
+}
+
 export interface BridgeCommandPayloadMap {
   'project.get_inventory': Record<string, never>;
   'project.get_document_summary': Record<string, never>;
@@ -400,6 +407,141 @@ export interface BridgeCommandPayloadMap {
   };
   'system.shortcut_get_shortcuts': {
     includeSystem?: boolean;
+  };
+  'system.file_system_get_extension_file': {
+    uri: string;
+  };
+  'system.file_system_save_file': BridgeBinaryFilePayload;
+  'system.file_system_save_file_to_file_system': BridgeBinaryFilePayload & {
+    uri: string;
+    force?: boolean;
+  };
+  'system.file_system_list_files': {
+    folderPath: string;
+    recursive?: boolean;
+  };
+  'system.file_system_delete_file': {
+    uri: string;
+    force?: boolean;
+  };
+  'system.file_system_get_eda_path': Record<string, never>;
+  'system.file_system_get_documents_path': Record<string, never>;
+  'system.file_system_get_libraries_paths': Record<string, never>;
+  'system.file_system_get_projects_paths': Record<string, never>;
+  'system.file_manager_get_project_file': {
+    fileName?: string;
+    password?: string;
+    fileType?: 'epro' | 'epro2';
+  };
+  'system.file_manager_get_document_file': {
+    fileName?: string;
+    password?: string;
+    fileType?: 'epro' | 'epro2';
+  };
+  'system.file_manager_get_document_source': Record<string, never>;
+  'system.file_manager_get_document_footprint_sources': Record<string, never>;
+  'system.file_manager_set_document_source': {
+    source: string;
+  };
+  'system.file_manager_get_project_file_by_project_uuid': {
+    projectUuid: string;
+    fileName?: string;
+    password?: string;
+    fileType?: 'epro' | 'epro2';
+  };
+  'system.file_manager_get_device_file_by_device_uuid': {
+    deviceUuid: string | Array<string>;
+    libraryUuid?: string;
+    fileType?: 'elibz' | 'elibz2';
+  };
+  'system.file_manager_get_symbol_file_by_symbol_uuid': {
+    symbolUuid: string | Array<string>;
+    libraryUuid?: string;
+    fileType?: 'elibz' | 'elibz2';
+  };
+  'system.storage_get_all_user_configs': Record<string, never>;
+  'system.storage_set_all_user_configs': {
+    configs: Record<string, unknown>;
+  };
+  'system.storage_clear_all_user_configs': Record<string, never>;
+  'system.storage_get_user_config': {
+    key: string;
+  };
+  'system.storage_set_user_config': {
+    key: string;
+    value: unknown;
+  };
+  'system.storage_delete_user_config': {
+    key: string;
+  };
+  'system.tool_netlist_comparison': {
+    left: string | {
+      projectUuid: string;
+      documentUuid?: string;
+      schematicUuid?: string;
+      pcbUuid?: string;
+    };
+    right: string | {
+      projectUuid: string;
+      documentUuid?: string;
+      schematicUuid?: string;
+      pcbUuid?: string;
+    };
+  };
+  'system.tool_schematic_comparison': {
+    left: string | {
+      projectUuid: string;
+      documentUuid?: string;
+      schematicUuid?: string;
+    };
+    right: string | {
+      projectUuid: string;
+      documentUuid?: string;
+      schematicUuid?: string;
+    };
+  };
+  'system.tool_pcb_comparison': {
+    left: string | {
+      projectUuid: string;
+      documentUuid?: string;
+      pcbUuid?: string;
+    };
+    right: string | {
+      projectUuid: string;
+      documentUuid?: string;
+      pcbUuid?: string;
+    };
+  };
+  'system.header_menu_replace': {
+    headerMenus: Record<string, unknown>;
+  };
+  'system.header_menu_insert': {
+    headerMenus: Record<string, unknown>;
+  };
+  'system.header_menu_remove': Record<string, never>;
+  'system.header_menu_insert_system_item': {
+    env: 'home' | 'blank' | 'sch' | 'symbol' | 'pcb' | 'footprint' | 'pcbView' | 'panel' | 'panelView';
+    id: Array<string>;
+    props: Record<string, unknown>;
+  };
+  'system.header_menu_remove_system_item': {
+    id: Array<string>;
+    props?: {
+      removeTheBeforeDivider?: boolean;
+      removeTheAfterDivider?: boolean;
+    };
+  };
+  'system.format_conversion_ad_single': {
+    files: Array<BridgeBinaryFilePayload> | BridgeBinaryFilePayload;
+  };
+  'system.format_conversion_ad_multi': {
+    files: Array<BridgeBinaryFilePayload> | BridgeBinaryFilePayload;
+  };
+  'system.format_conversion_disa_single': {
+    files: Array<BridgeBinaryFilePayload> | BridgeBinaryFilePayload;
+  };
+  'system.format_conversion_disa_multi': {
+    files: Array<BridgeBinaryFilePayload> | BridgeBinaryFilePayload;
   };
 }
 
