@@ -318,9 +318,15 @@ export interface BridgeCommandPayloadMap {
   };
   'system.get_bridge_status': Record<string, never>;
   'system.get_environment': Record<string, never>;
+  'system.get_update_config': Record<string, never>;
   'system.get_update_status': Record<string, never>;
   'system.check_for_updates': {
     force?: boolean;
+  };
+  'system.save_update_config': {
+    repoOwner?: string;
+    repoName?: string;
+    githubToken?: string;
   };
   'system.api_invoke': {
     path: string;

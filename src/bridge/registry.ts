@@ -11,8 +11,10 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'system.ping',
   'system.get_bridge_status',
   'system.get_environment',
+  'system.get_update_config',
   'system.get_update_status',
   'system.check_for_updates',
+  'system.save_update_config',
   'system.api_invoke',
   'system.log_add',
   'system.log_clear',
@@ -184,6 +186,12 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     summary: 'Return runtime, version, and user environment details.',
   },
   {
+    name: 'system.get_update_config',
+    domain: 'system',
+    requiresConfirmationByDefault: false,
+    summary: 'Return the configured update repository and token state.',
+  },
+  {
     name: 'system.get_update_status',
     domain: 'system',
     requiresConfirmationByDefault: false,
@@ -194,6 +202,12 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     domain: 'system',
     requiresConfirmationByDefault: false,
     summary: 'Check GitHub releases for a newer plugin version.',
+  },
+  {
+    name: 'system.save_update_config',
+    domain: 'system',
+    requiresConfirmationByDefault: false,
+    summary: 'Save the update repository and optional GitHub token.',
   },
   {
     name: 'system.api_invoke',

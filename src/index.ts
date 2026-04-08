@@ -1,5 +1,10 @@
 import * as extensionConfig from '../extension.json';
-import { getUpdateStatusLines, getUpdateStatusSnapshot, refreshUpdateStatus } from './adapters/update-control';
+import {
+  getUpdateConfigSnapshot,
+  getUpdateStatusLines,
+  getUpdateStatusSnapshot,
+  refreshUpdateStatus,
+} from './adapters/update-control';
 import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
@@ -108,6 +113,15 @@ function summarizeUpdateStatus(): Array<string> {
   return getUpdateStatusLines();
 }
 
+function summarizeUpdateConfig(): Array<string> {
+  const updateConfig = getUpdateConfigSnapshot();
+
+  return [
+    `更新仓库：${updateConfig.repoOwner}/${updateConfig.repoName}`,
+    `GitHub Token：${updateConfig.githubTokenConfigured ? '已配置' : '未配置'}`,
+  ];
+}
+
 function summarizeDocumentData(data: unknown): Array<string> {
   const resultData = (data ?? {}) as {
     document?: {
@@ -161,10 +175,13 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           '',
           ...summarizeRemoteStatus(),
           '',
+          ...summarizeUpdateConfig(),
+          '',
           ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
         remoteSettings: remoteBridgeClient.getSettings(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus: getUpdateStatusSnapshot(),
       };
     }
@@ -180,9 +197,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
             `错误代码：${response.error.code}`,
             `错误信息：${response.error.message}`,
             '',
+            ...summarizeUpdateConfig(),
+            '',
             ...summarizeUpdateStatus(),
           ],
           remoteStatus: remoteBridgeClient.getStatus(),
+          updateConfig: getUpdateConfigSnapshot(),
           updateStatus: getUpdateStatusSnapshot(),
         };
       }
@@ -209,9 +229,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           `主题：${formatValue(resultData.runtime?.theme)}`,
           `单位：${formatValue(resultData.runtime?.frontendUnit)}`,
           '',
+          ...summarizeUpdateConfig(),
+          '',
           ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus: getUpdateStatusSnapshot(),
       };
     }
@@ -280,14 +303,62 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
       };
     }
 
+    case 'saveUpdateConfig': {
+      const response = await executeBridgeCommand('system.save_update_config', {
+        repoOwner: typeof message?.payload?.repoOwner === 'string' ? message.payload.repoOwner : '',
+        repoName: typeof message?.payload?.repoName === 'string' ? message.payload.repoName : '',
+        githubToken: typeof message?.payload?.githubToken === 'string' ? message.payload.githubToken : undefined,
+      });
+
+      if (response.status !== 'success') {
+        return {
+          ok: false,
+          title: '版本更新',
+          lines: [
+            '更新仓库配置保存失败。',
+            '',
+            `错误代码：${response.error.code}`,
+            `错误信息：${response.error.message}`,
+            '',
+            ...summarizeUpdateConfig(),
+            '',
+            ...summarizeUpdateStatus(),
+          ],
+          remoteStatus: remoteBridgeClient.getStatus(),
+          updateConfig: getUpdateConfigSnapshot(),
+          updateStatus: getUpdateStatusSnapshot(),
+        };
+      }
+
+      return {
+        ok: true,
+        title: '版本更新',
+        lines: [
+          '更新仓库配置已保存。',
+          '',
+          ...summarizeUpdateConfig(),
+          '',
+          ...summarizeUpdateStatus(),
+        ],
+        remoteStatus: remoteBridgeClient.getStatus(),
+        updateConfig: getUpdateConfigSnapshot(),
+        updateStatus: getUpdateStatusSnapshot(),
+      };
+    }
+
     case 'checkForUpdates': {
       const updateStatus = await refreshUpdateStatus(true);
 
       return {
         ok: true,
         title: '版本更新',
-        lines: summarizeUpdateStatus(),
+        lines: [
+          ...summarizeUpdateConfig(),
+          '',
+          ...summarizeUpdateStatus(),
+        ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus,
       };
     }
@@ -306,9 +377,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
         lines: [
           `已打开：${targetUrl}`,
           '',
+          ...summarizeUpdateConfig(),
+          '',
           ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus,
       };
     }
@@ -329,10 +403,13 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           '',
           ...summarizeRemoteStatus(),
           '',
+          ...summarizeUpdateConfig(),
+          '',
           ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
         remoteSettings: remoteBridgeClient.getSettings(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus: getUpdateStatusSnapshot(),
       };
     }
@@ -348,9 +425,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           '',
           ...summarizeRemoteStatus(),
           '',
+          ...summarizeUpdateConfig(),
+          '',
           ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus: getUpdateStatusSnapshot(),
       };
     }
@@ -366,9 +446,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
           '',
           ...summarizeRemoteStatus(),
           '',
+          ...summarizeUpdateConfig(),
+          '',
           ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus: getUpdateStatusSnapshot(),
       };
     }
@@ -380,9 +463,12 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
         lines: [
           ...summarizeRemoteStatus(),
           '',
+          ...summarizeUpdateConfig(),
+          '',
           ...summarizeUpdateStatus(),
         ],
         remoteStatus: remoteBridgeClient.getStatus(),
+        updateConfig: getUpdateConfigSnapshot(),
         updateStatus: getUpdateStatusSnapshot(),
       };
     }
@@ -453,6 +539,8 @@ export async function showBridgeStatus(): Promise<void> {
       `主题：${formatValue(resultData.runtime?.theme)}`,
       `单位：${formatValue(resultData.runtime?.frontendUnit)}`,
     ]),
+    '',
+    formatSection('更新配置', summarizeUpdateConfig()),
     '',
     formatSection('更新状态', summarizeUpdateStatus()),
   ].join('\n');
@@ -525,6 +613,8 @@ export async function inspectCurrentDocument(): Promise<void> {
       `当前选区：${formatValue(resultData.selection?.count, '0')} 项`,
     ]),
     '',
+    formatSection('更新配置', summarizeUpdateConfig()),
+    '',
     formatSection('更新状态', summarizeUpdateStatus()),
   ].join('\n');
 
@@ -547,6 +637,8 @@ export async function runBridgeSelfCheck(): Promise<void> {
 
   eda.sys_Dialog.showInformationMessage([
     summaryLines.join('\n'),
+    '',
+    formatSection('更新配置', summarizeUpdateConfig()),
     '',
     ...summarizeUpdateStatus(),
   ].join('\n'), '桥接自检');
@@ -677,6 +769,8 @@ export function showRemoteBridgeStatus(): void {
       `最近心跳：${formatValue(remoteStatus.lastHeartbeatAt)}`,
       `最近错误：${formatValue(remoteStatus.lastError, '无')}`,
     ]),
+    '',
+    formatSection('更新配置', summarizeUpdateConfig()),
     '',
     formatSection('更新状态', summarizeUpdateStatus()),
   ].join('\n');

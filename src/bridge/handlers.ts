@@ -137,7 +137,9 @@ import {
 } from '../adapters/system-control';
 import {
   checkForUpdatesResult,
+  getUpdateConfigResult,
   getUpdateStatusResult,
+  saveUpdateConfigResult,
 } from '../adapters/update-control';
 import {
   clearExtensionAllUserConfigsResult,
@@ -341,12 +343,19 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(request.id, await getBridgeStatusResult());
       case 'system.get_environment':
         return createSuccessResponse(request.id, await getSystemEnvironmentResult());
+      case 'system.get_update_config':
+        return createSuccessResponse(request.id, await getUpdateConfigResult());
       case 'system.get_update_status':
         return createSuccessResponse(request.id, await getUpdateStatusResult());
       case 'system.check_for_updates':
         return createSuccessResponse(
           request.id,
           await checkForUpdatesResult((request.command.payload as BridgeCommandPayloadMap['system.check_for_updates']).force === true),
+        );
+      case 'system.save_update_config':
+        return createSuccessResponse(
+          request.id,
+          await saveUpdateConfigResult(request.command.payload as BridgeCommandPayloadMap['system.save_update_config']),
         );
       case 'system.api_invoke':
         return createSuccessResponse(

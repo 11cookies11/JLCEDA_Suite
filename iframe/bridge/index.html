@@ -401,10 +401,32 @@
                 </div>
               </div>
 
+              <div style="height: 16px;"></div>
+              <p class="hint" style="margin-bottom: 12px;">更新检查可以指向私有仓库。GitHub Token 留空会保持现有值不变。</p>
+
+              <div class="grid">
+                <div class="grid two">
+                  <div class="field">
+                    <label for="updateRepoOwner">更新仓库 Owner</label>
+                    <input id="updateRepoOwner" type="text" placeholder="GitHub 组织或用户名">
+                  </div>
+                  <div class="field">
+                    <label for="updateRepoName">更新仓库 Name</label>
+                    <input id="updateRepoName" type="text" placeholder="仓库名">
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label for="updateGithubToken">GitHub Token</label>
+                  <input id="updateGithubToken" type="password" placeholder="私有仓库需要读权限 token">
+                </div>
+              </div>
+
               <div class="result-actions" style="margin-top: 16px;">
                 <button class="button ghost" type="button" id="saveSettingsBtn">保存配置</button>
                 <button class="button primary" type="button" id="saveAndConnectBtn">保存并连接</button>
                 <button class="button ghost" type="button" id="disconnectBtn">断开连接</button>
+                <button class="button ghost" type="button" id="saveUpdateConfigBtn">保存更新配置</button>
               </div>
             </div>
           </section>
@@ -436,6 +458,10 @@
                 <div class="meta-item">
                   <div class="meta-key">插件更新</div>
                   <div class="meta-value" id="updateStateValue">检查中</div>
+                </div>
+                <div class="meta-item">
+                  <div class="meta-key">更新仓库</div>
+                  <div class="meta-value" id="updateRepoValue">未配置</div>
                 </div>
               </div>
             </div>
@@ -495,11 +521,15 @@
     const resultBox = document.getElementById('resultBox');
     const statusChip = document.getElementById('remote-status-chip');
     const updateStateValue = document.getElementById('updateStateValue');
+    const updateRepoValue = document.getElementById('updateRepoValue');
     const panels = Array.from(document.querySelectorAll('[data-panel]'));
     const navItems = Array.from(document.querySelectorAll('[data-tab]'));
     const serverUrlInput = document.getElementById('serverUrl');
     const tokenInput = document.getElementById('token');
     const clientIdInput = document.getElementById('clientId');
+    const updateRepoOwnerInput = document.getElementById('updateRepoOwner');
+    const updateRepoNameInput = document.getElementById('updateRepoName');
+    const updateGithubTokenInput = document.getElementById('updateGithubToken');
     let pluginReady = false;
 
     function setBusy(message) {
@@ -545,6 +575,18 @@
       serverUrlInput.value = settings?.serverUrl || '';
       tokenInput.value = settings?.authToken || '';
       clientIdInput.value = settings?.clientId || '';
+    }
+
+    function applyUpdateConfig(updateConfig) {
+      updateRepoOwnerInput.value = updateConfig?.repoOwner || '';
+      updateRepoNameInput.value = updateConfig?.repoName || '';
+      updateGithubTokenInput.value = '';
+
+      if (updateRepoValue) {
+        updateRepoValue.textContent = updateConfig?.repoOwner && updateConfig?.repoName
+          ? `${updateConfig.repoOwner}/${updateConfig.repoName}`
+          : '未配置';
+      }
     }
 
     function applyUpdateStatus(updateStatus) {
@@ -731,6 +773,10 @@
         applyRemoteSettings(response.remoteSettings);
       }
 
+      if (response.updateConfig) {
+        applyUpdateConfig(response.updateConfig);
+      }
+
       if (response.remoteStatus) {
         updateRemoteStatusChip(response.remoteStatus);
       }
@@ -829,6 +875,18 @@
           authToken: tokenInput.value,
           clientId: clientIdInput.value,
           autoConnect: true,
+        },
+      });
+    });
+
+    document.getElementById('saveUpdateConfigBtn').addEventListener('click', () => {
+      setBusy('正在保存更新配置...');
+      void renderFromPlugin({
+        type: 'saveUpdateConfig',
+        payload: {
+          repoOwner: updateRepoOwnerInput.value,
+          repoName: updateRepoNameInput.value,
+          githubToken: updateGithubTokenInput.value.trim() || undefined,
         },
       });
     });

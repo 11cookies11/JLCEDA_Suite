@@ -40,6 +40,15 @@ function createPrimitiveState(state: Record<string, unknown>): Record<string, ()
 }
 
 function installMockEda(): void {
+  const extensionUserConfigs = new Map<string, unknown>([
+    ['updateCheck.repoOwner', '11cookies11'],
+    ['updateCheck.repoName', 'JLCEDA_AIAgent'],
+  ]);
+  let lastFetchRequest: {
+    url: string;
+    authorization?: string;
+  } | undefined;
+
   const edaMock = {
     sys_I18n: {
       getCurrentLanguage: async () => 'zh-CN',
@@ -188,9 +197,15 @@ function installMockEda(): void {
       }),
       setExtensionAllUserConfigs: async () => true,
       clearExtensionAllUserConfigs: async () => true,
-      getExtensionUserConfig: (key: string) => (key === 'sample' ? 'value' : undefined),
-      setExtensionUserConfig: async () => true,
-      deleteExtensionUserConfig: async () => true,
+      getExtensionUserConfig: (key: string) => extensionUserConfigs.get(key),
+      setExtensionUserConfig: async (key: string, value: unknown) => {
+        extensionUserConfigs.set(key, value);
+        return true;
+      },
+      deleteExtensionUserConfig: async (key: string) => {
+        extensionUserConfigs.delete(key);
+        return true;
+      },
     },
     sys_Tool: {
       netlistComparison: async () => [
@@ -670,14 +685,31 @@ function installMockEda(): void {
   };
 
   (globalThis as { eda?: unknown }).eda = edaMock;
-  (globalThis as { fetch?: typeof fetch }).fetch = async () =>
-    new Response(JSON.stringify({
-      tag_name: 'v0.1.17',
-      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.17',
+  (globalThis as { fetch?: typeof fetch; __lastUpdateFetchRequest?: typeof lastFetchRequest }).fetch = async (input, init) => {
+    const requestUrl = typeof input === 'string'
+      ? input
+      : input instanceof Request
+        ? input.url
+        : input && typeof input === 'object' && 'url' in input
+          ? String((input as { url: string }).url)
+          : String(input);
+
+    const headers = new Headers(input instanceof Request ? input.headers : init?.headers);
+
+    lastFetchRequest = {
+      url: requestUrl,
+      authorization: headers.get('authorization') ?? undefined,
+    };
+
+    (globalThis as { __lastUpdateFetchRequest?: typeof lastFetchRequest }).__lastUpdateFetchRequest = lastFetchRequest;
+
+    return new Response(JSON.stringify({
+      tag_name: 'v0.1.18',
+      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.18',
       assets: [
         {
-          name: 'jlceda-aiagent_v0.1.17.eext',
-          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.17/jlceda-aiagent_v0.1.17.eext',
+          name: 'jlceda-aiagent_v0.1.18.eext',
+          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.18/jlceda-aiagent_v0.1.18.eext',
         },
       ],
     }), {
@@ -686,6 +718,7 @@ function installMockEda(): void {
         'content-type': 'application/json',
       },
     });
+  };
 }
 
 async function run(): Promise<void> {
@@ -816,8 +849,8 @@ async function run(): Promise<void> {
             latestDownloadUrl?: string;
           };
           assert(data.updateAvailable === true, 'update check should report a newer release');
-          assert(data.latestVersion === 'v0.1.17', 'update check should surface the mocked latest version');
-          assert(data.latestDownloadUrl?.includes('v0.1.17'), 'update check should surface the mocked download url');
+          assert(data.latestVersion === 'v0.1.18', 'update check should surface the mocked latest version');
+          assert(data.latestDownloadUrl?.includes('v0.1.18'), 'update check should surface the mocked download url');
         }
       },
     },
@@ -842,7 +875,85 @@ async function run(): Promise<void> {
             latestVersion?: string;
           };
           assert(data.updateAvailable === true, 'update status should persist the update check result');
-          assert(data.latestVersion === 'v0.1.17', 'update status should expose the mocked latest version');
+          assert(data.latestVersion === 'v0.1.18', 'update status should expose the mocked latest version');
+        }
+      },
+    },
+    {
+      name: 'save update config',
+      request: {
+        id: 'smoke-002b1c',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'save_update_config',
+          payload: {
+            repoOwner: 'private-owner',
+            repoName: 'private-repo',
+            githubToken: 'ghp_private_token',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'save update config should succeed');
+      },
+    },
+    {
+      name: 'get update config',
+      request: {
+        id: 'smoke-002b1d',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'get_update_config',
+          payload: {},
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'get update config should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as {
+            repoOwner?: string;
+            repoName?: string;
+            githubTokenConfigured?: boolean;
+          };
+          assert(data.repoOwner === 'private-owner', 'update config should store repo owner');
+          assert(data.repoName === 'private-repo', 'update config should store repo name');
+          assert(data.githubTokenConfigured === true, 'update config should store token state');
+        }
+      },
+    },
+    {
+      name: 'system private update check',
+      request: {
+        id: 'smoke-002b1e',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'system',
+          action: 'check_for_updates',
+          payload: {
+            force: true,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'private update check should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as {
+            updateAvailable?: boolean;
+            latestVersion?: string;
+          };
+          const fetchRequest = (globalThis as { __lastUpdateFetchRequest?: { url: string; authorization?: string } }).__lastUpdateFetchRequest;
+          assert(fetchRequest?.url.includes('/repos/private-owner/private-repo/releases/latest'), 'private update check should target configured repo');
+          assert(fetchRequest?.authorization === 'Bearer ghp_private_token', 'private update check should send GitHub auth token');
+          assert(data.updateAvailable === true, 'private update check should report a newer release');
+          assert(data.latestVersion === 'v0.1.18', 'private update check should surface the mocked latest version');
         }
       },
     },
