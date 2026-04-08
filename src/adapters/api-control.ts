@@ -11,6 +11,14 @@ interface ResolvedApiTarget {
   value: unknown;
 }
 
+function getEdaRoot(): unknown {
+  if (typeof eda !== 'undefined') {
+    return eda;
+  }
+
+  return (globalThis as { eda?: unknown }).eda;
+}
+
 function resolvePath(path: string): ResolvedApiTarget {
   const segments = path
     .split('.')
@@ -25,7 +33,7 @@ function resolvePath(path: string): ResolvedApiTarget {
     segments.shift();
   }
 
-  const root = (globalThis as { eda?: unknown }).eda;
+  const root = getEdaRoot();
 
   if (!root || typeof root !== 'object') {
     throw new Error('EDA runtime is not available.');

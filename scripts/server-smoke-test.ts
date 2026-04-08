@@ -36,16 +36,19 @@ function waitForMessage<TMessage>(
 }
 
 async function run(): Promise<void> {
+  const port = Number(process.env.BRIDGE_SERVER_SMOKE_PORT ?? '8788');
+  const host = process.env.BRIDGE_SERVER_SMOKE_HOST ?? '127.0.0.1';
+  const authToken = process.env.BRIDGE_SERVER_SMOKE_TOKEN ?? 'smoke-token';
   const server = new BridgeServer({
-    port: 8788,
-    host: '127.0.0.1',
-    authToken: 'smoke-token',
+    port,
+    host,
+    authToken,
     requestTimeoutMs: 5_000,
   });
 
   await server.start();
 
-  const socket = new WebSocket('ws://127.0.0.1:8788');
+  const socket = new WebSocket(`ws://${host}:${port}`);
   await new Promise<void>((resolve, reject) => {
     socket.once('open', resolve);
     socket.once('error', reject);
@@ -53,7 +56,7 @@ async function run(): Promise<void> {
 
   const registerMessage: ClientToServerMessage = {
     type: 'agent.register',
-    token: 'smoke-token',
+    token: authToken,
     client: {
       clientId: 'client-smoke-001',
       pluginVersion: '0.1.0',
