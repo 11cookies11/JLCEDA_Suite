@@ -21,6 +21,16 @@ export interface RuleProfileSnapshot {
     labelClearance: number;
     wireLabelClearance: number;
     powerSpacing: number;
+    powerColumnCount: number;
+    powerRowSpacingFactor: number;
+    powerRoleOffsets: {
+      connector: { x: number; y: number };
+      inputCapacitor: { x: number; y: number };
+      regulator: { x: number; y: number };
+      outputCapacitor: { x: number; y: number };
+      indicator: { x: number; y: number };
+      supportingPart: { x: number; y: number };
+    };
   };
   pcb: {
     componentClearance: number;
@@ -53,6 +63,16 @@ const DEFAULT_PROFILE: RuleProfileSnapshot = {
     labelClearance: 110,
     wireLabelClearance: 72,
     powerSpacing: 160,
+    powerColumnCount: 3,
+    powerRowSpacingFactor: 0.7,
+    powerRoleOffsets: {
+      connector: { x: -320, y: 0 },
+      inputCapacitor: { x: -160, y: -160 },
+      regulator: { x: 0, y: 0 },
+      outputCapacitor: { x: 160, y: -160 },
+      indicator: { x: 160, y: 160 },
+      supportingPart: { x: 0, y: 160 },
+    },
   },
   pcb: {
     componentClearance: 120,

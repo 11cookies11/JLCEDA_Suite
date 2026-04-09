@@ -125,6 +125,20 @@ class RuleProfile:
     schematic_label_clearance: int
     schematic_wire_label_clearance: int
     schematic_power_spacing: int
+    schematic_power_column_count: int
+    schematic_power_row_spacing_factor: float
+    schematic_power_connector_offset_x: int
+    schematic_power_connector_offset_y: int
+    schematic_power_input_capacitor_offset_x: int
+    schematic_power_input_capacitor_offset_y: int
+    schematic_power_regulator_offset_x: int
+    schematic_power_regulator_offset_y: int
+    schematic_power_output_capacitor_offset_x: int
+    schematic_power_output_capacitor_offset_y: int
+    schematic_power_indicator_offset_x: int
+    schematic_power_indicator_offset_y: int
+    schematic_power_supporting_part_offset_x: int
+    schematic_power_supporting_part_offset_y: int
     pcb_component_clearance: int
     pcb_track_clearance: int
     pcb_label_clearance: int
@@ -149,6 +163,34 @@ class RuleProfile:
                 'labelClearance': self.schematic_label_clearance,
                 'wireLabelClearance': self.schematic_wire_label_clearance,
                 'powerSpacing': self.schematic_power_spacing,
+                'powerColumnCount': self.schematic_power_column_count,
+                'powerRowSpacingFactor': self.schematic_power_row_spacing_factor,
+                'powerRoleOffsets': {
+                    'connector': {
+                        'x': self.schematic_power_connector_offset_x,
+                        'y': self.schematic_power_connector_offset_y,
+                    },
+                    'inputCapacitor': {
+                        'x': self.schematic_power_input_capacitor_offset_x,
+                        'y': self.schematic_power_input_capacitor_offset_y,
+                    },
+                    'regulator': {
+                        'x': self.schematic_power_regulator_offset_x,
+                        'y': self.schematic_power_regulator_offset_y,
+                    },
+                    'outputCapacitor': {
+                        'x': self.schematic_power_output_capacitor_offset_x,
+                        'y': self.schematic_power_output_capacitor_offset_y,
+                    },
+                    'indicator': {
+                        'x': self.schematic_power_indicator_offset_x,
+                        'y': self.schematic_power_indicator_offset_y,
+                    },
+                    'supportingPart': {
+                        'x': self.schematic_power_supporting_part_offset_x,
+                        'y': self.schematic_power_supporting_part_offset_y,
+                    },
+                },
             },
             'pcb': {
                 'componentClearance': self.pcb_component_clearance,
@@ -178,6 +220,20 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_label_clearance=110,
             schematic_wire_label_clearance=72,
             schematic_power_spacing=160,
+            schematic_power_column_count=3,
+            schematic_power_row_spacing_factor=0.7,
+            schematic_power_connector_offset_x=-320,
+            schematic_power_connector_offset_y=0,
+            schematic_power_input_capacitor_offset_x=-160,
+            schematic_power_input_capacitor_offset_y=-160,
+            schematic_power_regulator_offset_x=0,
+            schematic_power_regulator_offset_y=0,
+            schematic_power_output_capacitor_offset_x=160,
+            schematic_power_output_capacitor_offset_y=-160,
+            schematic_power_indicator_offset_x=160,
+            schematic_power_indicator_offset_y=160,
+            schematic_power_supporting_part_offset_x=0,
+            schematic_power_supporting_part_offset_y=160,
             pcb_component_clearance=120,
             pcb_track_clearance=70,
             pcb_label_horizontal_offset_base=28,
@@ -200,6 +256,20 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_label_clearance=96,
             schematic_wire_label_clearance=64,
             schematic_power_spacing=128,
+            schematic_power_column_count=3,
+            schematic_power_row_spacing_factor=0.6,
+            schematic_power_connector_offset_x=-256,
+            schematic_power_connector_offset_y=0,
+            schematic_power_input_capacitor_offset_x=-128,
+            schematic_power_input_capacitor_offset_y=-128,
+            schematic_power_regulator_offset_x=0,
+            schematic_power_regulator_offset_y=0,
+            schematic_power_output_capacitor_offset_x=128,
+            schematic_power_output_capacitor_offset_y=-128,
+            schematic_power_indicator_offset_x=128,
+            schematic_power_indicator_offset_y=128,
+            schematic_power_supporting_part_offset_x=0,
+            schematic_power_supporting_part_offset_y=128,
             pcb_component_clearance=96,
             pcb_track_clearance=56,
             pcb_label_horizontal_offset_base=24,
@@ -222,6 +292,20 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_label_clearance=128,
             schematic_wire_label_clearance=80,
             schematic_power_spacing=192,
+            schematic_power_column_count=3,
+            schematic_power_row_spacing_factor=0.8,
+            schematic_power_connector_offset_x=-384,
+            schematic_power_connector_offset_y=0,
+            schematic_power_input_capacitor_offset_x=-192,
+            schematic_power_input_capacitor_offset_y=-192,
+            schematic_power_regulator_offset_x=0,
+            schematic_power_regulator_offset_y=0,
+            schematic_power_output_capacitor_offset_x=192,
+            schematic_power_output_capacitor_offset_y=-192,
+            schematic_power_indicator_offset_x=192,
+            schematic_power_indicator_offset_y=192,
+            schematic_power_supporting_part_offset_x=0,
+            schematic_power_supporting_part_offset_y=192,
             pcb_component_clearance=144,
             pcb_track_clearance=80,
             pcb_label_horizontal_offset_base=32,
@@ -288,6 +372,20 @@ def load_rule_profiles(profile_file: Optional[str]) -> tuple[dict[str, RuleProfi
                 schematic_label_clearance=coerce_int(schematic.get('labelClearance'), 110),
                 schematic_wire_label_clearance=coerce_int(schematic.get('wireLabelClearance'), 72),
                 schematic_power_spacing=coerce_int(schematic.get('powerSpacing'), 160),
+                schematic_power_column_count=coerce_int(schematic.get('powerColumnCount'), 3),
+                schematic_power_row_spacing_factor=float(schematic.get('powerRowSpacingFactor', 0.7) if isinstance(schematic.get('powerRowSpacingFactor', 0.7), (int, float)) else 0.7),
+                schematic_power_connector_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('connector', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('connector'), dict) else None, -320),
+                schematic_power_connector_offset_y=coerce_int((schematic.get('powerRoleOffsets') or {}).get('connector', {}).get('y') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('connector'), dict) else None, 0),
+                schematic_power_input_capacitor_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('inputCapacitor', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('inputCapacitor'), dict) else None, -160),
+                schematic_power_input_capacitor_offset_y=coerce_int((schematic.get('powerRoleOffsets') or {}).get('inputCapacitor', {}).get('y') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('inputCapacitor'), dict) else None, -160),
+                schematic_power_regulator_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('regulator', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('regulator'), dict) else None, 0),
+                schematic_power_regulator_offset_y=coerce_int((schematic.get('powerRoleOffsets') or {}).get('regulator', {}).get('y') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('regulator'), dict) else None, 0),
+                schematic_power_output_capacitor_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('outputCapacitor', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('outputCapacitor'), dict) else None, 160),
+                schematic_power_output_capacitor_offset_y=coerce_int((schematic.get('powerRoleOffsets') or {}).get('outputCapacitor', {}).get('y') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('outputCapacitor'), dict) else None, -160),
+                schematic_power_indicator_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('indicator', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('indicator'), dict) else None, 160),
+                schematic_power_indicator_offset_y=coerce_int((schematic.get('powerRoleOffsets') or {}).get('indicator', {}).get('y') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('indicator'), dict) else None, 160),
+                schematic_power_supporting_part_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('supportingPart', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('supportingPart'), dict) else None, 0),
+                schematic_power_supporting_part_offset_y=coerce_int((schematic.get('powerRoleOffsets') or {}).get('supportingPart', {}).get('y') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('supportingPart'), dict) else None, 160),
                 pcb_component_clearance=coerce_int(pcb.get('componentClearance'), 120),
                 pcb_track_clearance=coerce_int(pcb.get('trackClearance'), 70),
                 pcb_label_horizontal_offset_base=coerce_int(pcb.get('labelHorizontalOffsetBase'), 28),

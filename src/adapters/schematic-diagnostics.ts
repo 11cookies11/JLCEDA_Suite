@@ -398,20 +398,29 @@ function classifyPowerBlockRole(component: SchematicComponentSource): PowerBlock
   return 'supporting_part';
 }
 
-function roleOffset(role: PowerBlockComponentSuggestion['role'], spacing: number): Point {
+function roleOffset(
+  role: PowerBlockComponentSuggestion['role'],
+  spacing: number,
+  profile: Awaited<ReturnType<typeof getRuleProfileSnapshot>>,
+): Point {
+  const offsets = profile.schematic.powerRoleOffsets;
+
   switch (role) {
     case 'connector':
-      return { x: -spacing * 2, y: 0 };
+      return { x: offsets.connector.x, y: offsets.connector.y };
     case 'input_capacitor':
-      return { x: -spacing, y: -spacing };
+      return { x: offsets.inputCapacitor.x, y: offsets.inputCapacitor.y };
     case 'regulator':
-      return { x: 0, y: 0 };
+      return { x: offsets.regulator.x, y: offsets.regulator.y };
     case 'output_capacitor':
-      return { x: spacing, y: -spacing };
+      return { x: offsets.outputCapacitor.x, y: offsets.outputCapacitor.y };
     case 'indicator':
-      return { x: spacing, y: spacing };
+      return { x: offsets.indicator.x, y: offsets.indicator.y };
     default:
-      return { x: 0, y: spacing };
+      return {
+        x: offsets.supportingPart.x,
+        y: offsets.supportingPart.y + spacing * 0.1,
+      };
   }
 }
 
@@ -1254,8 +1263,8 @@ export async function suggestPowerBlockLayoutResult(
 
   const suggestions = prioritized.slice(0, maxSuggestions).map((component, index) => {
     const role = classifyPowerBlockRole(component);
-    const offset = roleOffset(role, spacing);
-    const rowOffset = Math.floor(index / 3) * spacing * 0.7;
+    const offset = roleOffset(role, spacing, profile);
+    const rowOffset = Math.floor(index / Math.max(1, profile.schematic.powerColumnCount)) * spacing * profile.schematic.powerRowSpacingFactor;
     const sequenceIndex = index + 1;
 
     return {

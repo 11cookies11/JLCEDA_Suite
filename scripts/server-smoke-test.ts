@@ -126,6 +126,12 @@ async function run(): Promise<void> {
           labelPlacementStepFloor?: number;
           labelGapMin?: number;
           labelGapMax?: number;
+          powerColumnCount?: number;
+          powerRowSpacingFactor?: number;
+          powerRoleOffsets?: {
+            connector?: { x?: number; y?: number };
+            regulator?: { x?: number; y?: number };
+          };
         };
         pcb?: {
           labelHorizontalOffsetBase?: number;
@@ -142,6 +148,10 @@ async function run(): Promise<void> {
     assert(profilePayload.profile?.schematic?.labelPlacementStepFloor === 64, 'default profile should expose label placement floor');
     assert(profilePayload.profile?.schematic?.labelGapMin === 24, 'default profile should expose label gap minimum');
     assert(profilePayload.profile?.schematic?.labelGapMax === 56, 'default profile should expose label gap maximum');
+    assert(profilePayload.profile?.schematic?.powerColumnCount === 3, 'default profile should expose power column count');
+    assert(profilePayload.profile?.schematic?.powerRowSpacingFactor === 0.7, 'default profile should expose power row spacing factor');
+    assert(profilePayload.profile?.schematic?.powerRoleOffsets?.connector?.x === -320, 'default profile should expose connector offset');
+    assert(profilePayload.profile?.schematic?.powerRoleOffsets?.regulator?.x === 0, 'default profile should expose regulator offset');
     assert(profilePayload.profile?.pcb?.labelHorizontalOffsetBase === 28, 'default profile should expose pcb label horizontal base');
     assert(profilePayload.profile?.pcb?.labelHorizontalOffsetMax === 64, 'default profile should expose pcb label horizontal max');
     assert(profilePayload.profile?.pcb?.labelVerticalOffsetBase === 20, 'default profile should expose pcb label vertical base');

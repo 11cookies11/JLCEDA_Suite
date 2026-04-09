@@ -13,7 +13,17 @@
         "labelGapMax": 56,
         "labelClearance": 110,
         "wireLabelClearance": 72,
-        "powerSpacing": 160
+        "powerSpacing": 160,
+        "powerColumnCount": 3,
+        "powerRowSpacingFactor": 0.7,
+        "powerRoleOffsets": {
+          "connector": { "x": -320, "y": 0 },
+          "inputCapacitor": { "x": -160, "y": -160 },
+          "regulator": { "x": 0, "y": 0 },
+          "outputCapacitor": { "x": 160, "y": -160 },
+          "indicator": { "x": 160, "y": 160 },
+          "supportingPart": { "x": 0, "y": 160 }
+        }
       },
       "pcb": {
         "componentClearance": 120,
@@ -38,7 +48,17 @@
         "labelGapMax": 48,
         "labelClearance": 96,
         "wireLabelClearance": 64,
-        "powerSpacing": 128
+        "powerSpacing": 128,
+        "powerColumnCount": 3,
+        "powerRowSpacingFactor": 0.6,
+        "powerRoleOffsets": {
+          "connector": { "x": -256, "y": 0 },
+          "inputCapacitor": { "x": -128, "y": -128 },
+          "regulator": { "x": 0, "y": 0 },
+          "outputCapacitor": { "x": 128, "y": -128 },
+          "indicator": { "x": 128, "y": 128 },
+          "supportingPart": { "x": 0, "y": 128 }
+        }
       },
       "pcb": {
         "componentClearance": 96,
@@ -63,7 +83,17 @@
         "labelGapMax": 64,
         "labelClearance": 128,
         "wireLabelClearance": 80,
-        "powerSpacing": 192
+        "powerSpacing": 192,
+        "powerColumnCount": 3,
+        "powerRowSpacingFactor": 0.8,
+        "powerRoleOffsets": {
+          "connector": { "x": -384, "y": 0 },
+          "inputCapacitor": { "x": -192, "y": -192 },
+          "regulator": { "x": 0, "y": 0 },
+          "outputCapacitor": { "x": 192, "y": -192 },
+          "indicator": { "x": 192, "y": 192 },
+          "supportingPart": { "x": 0, "y": 192 }
+        }
       },
       "pcb": {
         "componentClearance": 144,
