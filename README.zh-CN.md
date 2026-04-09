@@ -195,9 +195,12 @@ GitHub Token：ghp_xxxxxxxxxxxxxxxxxxxx
 - `schematic.auto_routing`
 - `schematic.auto_layout`
 - `schematic.inspect_layout_hygiene`
+- `schematic.inspect_label_hygiene`
+- `schematic.suggest_power_block_layout`
 - `schematic.check_drc`
 - `pcb.import_changes`
 - `pcb.save`
+- `pcb.inspect_layout_hygiene`
 - `pcb.get_calculating_ratline_status`
 - `pcb.start_calculating_ratline`
 - `pcb.stop_calculating_ratline`

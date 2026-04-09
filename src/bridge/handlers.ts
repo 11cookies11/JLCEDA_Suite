@@ -90,6 +90,7 @@ import {
 import {
   exportProjectBom,
 } from '../adapters/export';
+import { inspectPcbLayoutHygieneResult } from '../adapters/pcb-diagnostics';
 import {
   getBridgeStatusResult,
   getDocumentSummaryResult,
@@ -98,7 +99,9 @@ import {
 } from '../adapters/read-only';
 import {
   inspectSchematicConnectivityResult,
+  inspectSchematicLabelHygieneResult,
   inspectSchematicLayoutHygieneResult,
+  suggestPowerBlockLayoutResult,
 } from '../adapters/schematic-diagnostics';
 import {
   annotateSchematicNet,
@@ -1001,6 +1004,20 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
             request.command.payload as BridgeCommandPayloadMap['schematic.inspect_layout_hygiene'],
           ),
         );
+      case 'schematic.inspect_label_hygiene':
+        return createSuccessResponse(
+          request.id,
+          await inspectSchematicLabelHygieneResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.inspect_label_hygiene'],
+          ),
+        );
+      case 'schematic.suggest_power_block_layout':
+        return createSuccessResponse(
+          request.id,
+          await suggestPowerBlockLayoutResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.suggest_power_block_layout'],
+          ),
+        );
       case 'schematic.check_drc':
         return createSuccessResponse(
           request.id,
@@ -1075,6 +1092,13 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
           request.id,
           await navigatePcbToRegionResult(
             request.command.payload as BridgeCommandPayloadMap['pcb.navigate_to_region'],
+          ),
+        );
+      case 'pcb.inspect_layout_hygiene':
+        return createSuccessResponse(
+          request.id,
+          await inspectPcbLayoutHygieneResult(
+            request.command.payload as BridgeCommandPayloadMap['pcb.inspect_layout_hygiene'],
           ),
         );
       case 'pcb.get_primitive_at_point':

@@ -80,6 +80,8 @@
 - `sch_Drc.check(strict, userInterface, includeVerboseError)`
 - `schematic.inspect_connectivity(allSchematicPages?, tolerance?, maxIssues?)`
 - `schematic.inspect_layout_hygiene(allSchematicPages?, componentClearance?, wireClearance?, maxIssues?)`
+- `schematic.inspect_label_hygiene(allSchematicPages?, labelClearance?, wireLabelClearance?, maxIssues?)`
+- `schematic.suggest_power_block_layout(allSchematicPages?, anchor?, spacing?, maxSuggestions?)`
 
 ### PCB
 
@@ -104,6 +106,7 @@
 - `pcb_Document.getCurrentFilterConfiguration()`
 - `pcb_Document.clearRouting(type?)`
 - `pcb_Drc.check(strict, userInterface, includeVerboseError)`
+- `pcb.inspect_layout_hygiene(allPcbPages?, componentClearance?, trackClearance?, maxIssues?)`
 
 ### 文件与导出
 

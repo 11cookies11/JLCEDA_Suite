@@ -1,0 +1,293 @@
+import type { BridgeResult } from '../bridge/protocol';
+
+interface Point {
+  x: number;
+  y: number;
+}
+
+interface PcbComponentSource {
+  primitiveId: string;
+  x: number;
+  y: number;
+  designator?: string;
+  name?: string;
+}
+
+interface PcbTrackSegment {
+  trackId: string;
+  net?: string;
+  start: Point;
+  end: Point;
+}
+
+interface PcbLayoutIssue {
+  type: 'component_component_proximity' | 'component_track_proximity';
+  severity: 'warning' | 'info';
+  message: string;
+  componentId?: string;
+  designator?: string;
+  relatedComponentId?: string;
+  relatedDesignator?: string;
+  trackId?: string;
+  trackNet?: string;
+  distance?: number;
+}
+
+interface InspectPcbLayoutHygienePayload {
+  allPcbPages?: boolean;
+  componentClearance?: number;
+  trackClearance?: number;
+  maxIssues?: number;
+}
+
+function parseSourceRecord(line: string): { header: Record<string, unknown>; body: Record<string, unknown> } | undefined {
+  const separatorIndex = line.indexOf('||');
+  if (separatorIndex < 0) {
+    return undefined;
+  }
+
+  const headerText = line.slice(0, separatorIndex);
+  const bodyText = line.slice(separatorIndex + 2).replace(/\|$/, '');
+
+  try {
+    return {
+      header: JSON.parse(headerText) as Record<string, unknown>,
+      body: JSON.parse(bodyText) as Record<string, unknown>,
+    };
+  }
+  catch {
+    return undefined;
+  }
+}
+
+function normalizeNumber(value: unknown): number | undefined {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string' && value.trim().length > 0) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+
+  return undefined;
+}
+
+function distanceSquaredBetweenPoints(left: Point, right: Point): number {
+  const dx = left.x - right.x;
+  const dy = left.y - right.y;
+  return dx * dx + dy * dy;
+}
+
+function distanceSquaredPointToSegment(point: Point, start: Point, end: Point): number {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const lengthSquared = dx * dx + dy * dy;
+
+  if (lengthSquared === 0) {
+    return distanceSquaredBetweenPoints(point, start);
+  }
+
+  const rawT = ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared;
+  const t = Math.min(1, Math.max(0, rawT));
+  const projected = {
+    x: start.x + dx * t,
+    y: start.y + dy * t,
+  };
+
+  return distanceSquaredBetweenPoints(point, projected);
+}
+
+function parsePcbComponents(source: string): Array<PcbComponentSource> {
+  const components: Array<PcbComponentSource> = [];
+
+  for (const line of source.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      continue;
+    }
+
+    const record = parseSourceRecord(trimmed);
+    if (!record || String(record.header.type ?? '') !== 'COMPONENT') {
+      continue;
+    }
+
+    const body = record.body;
+    const x = normalizeNumber(body.x);
+    const y = normalizeNumber(body.y);
+
+    if (x === undefined || y === undefined) {
+      continue;
+    }
+
+    components.push({
+      primitiveId: String(record.header.id ?? ''),
+      x,
+      y,
+      designator: typeof body.designator === 'string' ? body.designator : undefined,
+      name: typeof body.name === 'string' ? body.name : undefined,
+    });
+  }
+
+  return components;
+}
+
+function parsePcbTracks(source: string): Array<PcbTrackSegment> {
+  const groups = new Map<string, { trackId: string; net?: string; segments: Array<PcbTrackSegment> }>();
+
+  for (const line of source.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      continue;
+    }
+
+    const record = parseSourceRecord(trimmed);
+    if (!record) {
+      continue;
+    }
+
+    const headerType = String(record.header.type ?? '');
+    const recordId = String(record.header.id ?? '');
+    const body = record.body;
+
+    if (headerType === 'LINE' || headerType === 'TRACK') {
+      const trackGroup = String(body.trackGroup ?? body.lineGroup ?? recordId);
+      const startX = normalizeNumber(body.startX ?? body.x1);
+      const startY = normalizeNumber(body.startY ?? body.y1);
+      const endX = normalizeNumber(body.endX ?? body.x2);
+      const endY = normalizeNumber(body.endY ?? body.y2);
+
+      if (!trackGroup || startX === undefined || startY === undefined || endX === undefined || endY === undefined) {
+        continue;
+      }
+
+      const group = groups.get(trackGroup) ?? {
+        trackId: trackGroup,
+        segments: [],
+      };
+      group.segments.push({
+        trackId: trackGroup,
+        start: { x: startX, y: startY },
+        end: { x: endX, y: endY },
+      });
+      groups.set(trackGroup, group);
+      continue;
+    }
+
+    if (headerType === 'ATTR' && String(body.key ?? '') === 'NET') {
+      const parentId = String(body.parentId ?? '');
+      if (!parentId) {
+        continue;
+      }
+
+      const group = groups.get(parentId) ?? {
+        trackId: parentId,
+        segments: [],
+      };
+      group.net = typeof body.value === 'string' ? body.value : undefined;
+      groups.set(parentId, group);
+    }
+  }
+
+  const segments: Array<PcbTrackSegment> = [];
+  for (const group of groups.values()) {
+    for (const segment of group.segments) {
+      segments.push({
+        trackId: group.trackId,
+        net: group.net,
+        start: segment.start,
+        end: segment.end,
+      });
+    }
+  }
+
+  return segments;
+}
+
+export async function inspectPcbLayoutHygieneResult(
+  payload?: InspectPcbLayoutHygienePayload,
+): Promise<BridgeResult> {
+  const componentClearance = payload?.componentClearance ?? 120;
+  const trackClearance = payload?.trackClearance ?? 70;
+  const maxIssues = payload?.maxIssues ?? 100;
+  const source = await eda.sys_FileManager.getDocumentSource();
+
+  if (!source) {
+    throw new Error('Unable to read the current PCB source.');
+  }
+
+  const components = parsePcbComponents(source);
+  const tracks = parsePcbTracks(source);
+  const issues: Array<PcbLayoutIssue> = [];
+
+  for (let i = 0; i < components.length; i += 1) {
+    const component = components[i];
+    const componentPoint = { x: component.x, y: component.y };
+
+    for (let j = i + 1; j < components.length; j += 1) {
+      const other = components[j];
+      const distance = Math.sqrt(distanceSquaredBetweenPoints(componentPoint, { x: other.x, y: other.y }));
+
+      if (distance > componentClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'component_component_proximity',
+        severity: 'warning',
+        message: `PCB component ${component.designator ?? component.primitiveId ?? 'unknown'} is too close to ${other.designator ?? other.primitiveId ?? 'another component'} (${distance.toFixed(1)} < ${componentClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        relatedComponentId: other.primitiveId,
+        relatedDesignator: other.designator,
+        distance,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+
+    for (const track of tracks) {
+      const distance = Math.sqrt(distanceSquaredPointToSegment(componentPoint, track.start, track.end));
+      if (distance > trackClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'component_track_proximity',
+        severity: 'warning',
+        message: `PCB component ${component.designator ?? component.primitiveId ?? 'unknown'} is too close to track ${track.trackId}${track.net ? ` (${track.net})` : ''} (${distance.toFixed(1)} < ${trackClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        trackId: track.trackId,
+        trackNet: track.net,
+        distance,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+  }
+
+  return {
+    summary: 'PCB layout hygiene inspected',
+    data: {
+      componentCount: components.length,
+      trackCount: tracks.length,
+      componentClearance,
+      trackClearance,
+      issueCount: issues.length,
+      issues,
+    },
+  };
+}

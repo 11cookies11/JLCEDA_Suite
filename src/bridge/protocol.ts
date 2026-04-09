@@ -257,6 +257,18 @@ export interface BridgeCommandPayloadMap {
     wireClearance?: number;
     maxIssues?: number;
   };
+  'schematic.inspect_label_hygiene': {
+    allSchematicPages?: boolean;
+    labelClearance?: number;
+    wireLabelClearance?: number;
+    maxIssues?: number;
+  };
+  'schematic.suggest_power_block_layout': {
+    allSchematicPages?: boolean;
+    anchor?: BridgePoint;
+    spacing?: number;
+    maxSuggestions?: number;
+  };
   'schematic.check_drc': {
     strict?: boolean;
     userInterface?: boolean;
@@ -307,6 +319,12 @@ export interface BridgeCommandPayloadMap {
     right: number;
     top: number;
     bottom: number;
+  };
+  'pcb.inspect_layout_hygiene': {
+    allPcbPages?: boolean;
+    componentClearance?: number;
+    trackClearance?: number;
+    maxIssues?: number;
   };
   'pcb.get_primitive_at_point': {
     x: number;

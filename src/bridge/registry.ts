@@ -143,6 +143,8 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'schematic.auto_layout',
   'schematic.inspect_connectivity',
   'schematic.inspect_layout_hygiene',
+  'schematic.inspect_label_hygiene',
+  'schematic.suggest_power_block_layout',
   'schematic.check_drc',
   'pcb.get_board_summary',
   'pcb.get_current_pcb_info',
@@ -160,6 +162,7 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'pcb.set_canvas_origin',
   'pcb.navigate_to_coordinates',
   'pcb.navigate_to_region',
+  'pcb.inspect_layout_hygiene',
   'pcb.get_primitive_at_point',
   'pcb.get_primitives_in_region',
   'pcb.zoom_to_board_outline',
@@ -980,6 +983,18 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     summary: 'Inspect schematic placement hygiene for crowded components and wire collisions.',
   },
   {
+    name: 'schematic.inspect_label_hygiene',
+    domain: 'schematic',
+    requiresConfirmationByDefault: false,
+    summary: 'Inspect schematic label hygiene for crowded component names and wire collisions.',
+  },
+  {
+    name: 'schematic.suggest_power_block_layout',
+    domain: 'schematic',
+    requiresConfirmationByDefault: false,
+    summary: 'Suggest a clean placement order for power-related schematic components.',
+  },
+  {
     name: 'schematic.check_drc',
     domain: 'schematic',
     requiresConfirmationByDefault: true,
@@ -1014,6 +1029,12 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     domain: 'pcb',
     requiresConfirmationByDefault: true,
     summary: 'Place a footprint on the PCB at a specific coordinate.',
+  },
+  {
+    name: 'pcb.inspect_layout_hygiene',
+    domain: 'pcb',
+    requiresConfirmationByDefault: false,
+    summary: 'Inspect PCB placement hygiene for crowded components and track collisions.',
   },
   {
     name: 'pcb.import_changes',

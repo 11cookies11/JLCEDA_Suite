@@ -67,11 +67,17 @@ function installMockEda(): void {
     '{"type":"DOCHEAD"}||{"docType":"PCB","client":"smoke-board","uuid":"pcb-001","updateTime":1,"version":"1"}|',
     '{"type":"CANVAS","ticket":1,"id":"CANVAS"}||{"originX":0,"originY":0,"unit":"mm","gridXSize":5,"gridYSize":5,"snapXSize":5,"snapYSize":5,"altSnapXSize":0.0254,"altSnapYSize":0.0254,"gridType":"OUTLETS","multiGridType":"NONE","multiGridRatio":5,"highlightValue":0.5}|',
     '{"type":"ACTIVE_LAYER","ticket":2,"id":"ACTIVE_LAYER"}||{"layerId":1}|',
+    '{"type":"COMPONENT","ticket":3,"id":"pcb-cmp-001"}||{"x":200,"y":200,"rotation":0,"isMirror":false,"designator":"U1","name":"Power Regulator","componentType":"part"}|',
+    '{"type":"LINE","ticket":4,"id":"pcb-line-001"}||{"startX":210,"startY":200,"endX":260,"endY":200,"lineGroup":"pcb-track-001"}|',
+    '{"type":"ATTR","ticket":5,"id":"pcb-net-001"}||{"parentId":"pcb-track-001","key":"NET","value":"VOUT"}|',
   ].join('\n');
   const schematicSource = [
     '{"type":"DOCHEAD"}||{"docType":"SCH_PAGE","client":"smoke-schematic","uuid":"schematic-001","updateTime":1,"version":"1"}|',
     '{"type":"CANVAS","ticket":1,"id":"CANVAS"}||{"originX":0,"originY":0}|',
-    '{"type":"COMPONENT","ticket":2,"id":"cmp-001"}||{"partId":"smoke-part","x":100,"y":100,"rotation":0,"isMirror":false,"attrs":{},"componentType":"part","designator":"R1","name":"Demo Part","uniqueId":"u-001"}|',
+    '{"type":"COMPONENT","ticket":2,"id":"cmp-001"}||{"partId":"smoke-part","x":100,"y":100,"rotation":0,"isMirror":false,"attrs":{},"componentType":"part","designator":"R1","name":"Demo Part","uniqueId":"u-001","symbol":{"libraryUuid":"lib-001","uuid":"sym-001"}}|',
+    '{"type":"COMPONENT","ticket":2.1,"id":"cmp-002"}||{"partId":"smoke-cap","x":420,"y":120,"rotation":0,"isMirror":false,"attrs":{},"componentType":"part","designator":"C1","name":"Input Capacitor","uniqueId":"u-002"}|',
+    '{"type":"COMPONENT","ticket":2.2,"id":"cmp-003"}||{"partId":"smoke-reg","x":560,"y":120,"rotation":0,"isMirror":false,"attrs":{},"componentType":"part","designator":"U1","name":"AMS1117-3.3","uniqueId":"u-003"}|',
+    '{"type":"COMPONENT","ticket":2.3,"id":"cmp-004"}||{"partId":"smoke-cap-out","x":700,"y":120,"rotation":0,"isMirror":false,"attrs":{},"componentType":"part","designator":"C2","name":"Output Capacitor","uniqueId":"u-004"}|',
     '{"type":"WIRE","ticket":3,"id":"wire-001"}||{"zIndex":1}|',
     '{"type":"LINE","ticket":4,"id":"line-001"}||{"startX":100,"startY":100,"endX":110,"endY":100,"lineGroup":"wire-001"}|',
     '{"type":"ATTR","ticket":5,"id":"net-001"}||{"parentId":"wire-001","key":"NET","value":"NET_A"}|',
@@ -1783,6 +1789,64 @@ async function run(): Promise<void> {
       },
     },
     {
+      name: 'schematic label hygiene inspection',
+      request: {
+        id: 'smoke-002kc',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'inspect_label_hygiene',
+          requiresConfirmation: false,
+          payload: {
+            allSchematicPages: true,
+            labelClearance: 150,
+            wireLabelClearance: 80,
+            maxIssues: 10,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic label hygiene inspection should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { issueCount?: number };
+          assert((data.issueCount ?? 0) > 0, 'label hygiene inspection should report at least one issue');
+        }
+      },
+    },
+    {
+      name: 'power block layout suggestions',
+      request: {
+        id: 'smoke-002kd',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'suggest_power_block_layout',
+          requiresConfirmation: false,
+          payload: {
+            allSchematicPages: true,
+            anchor: {
+              x: 500,
+              y: 120,
+            },
+            spacing: 140,
+            maxSuggestions: 5,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'power block layout suggestion should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { suggestionCount?: number; suggestions?: Array<{ role?: string }> };
+          assert((data.suggestionCount ?? 0) >= 2, 'power block layout should find at least two power components');
+          assert((data.suggestions ?? []).some(item => item.role === 'regulator'), 'power block layout should include a regulator suggestion');
+        }
+      },
+    },
+    {
       name: 'pcb import changes',
       request: {
         id: 'smoke-002l',
@@ -1817,6 +1881,33 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'pcb save should succeed');
+      },
+    },
+    {
+      name: 'pcb layout hygiene inspection',
+      request: {
+        id: 'smoke-002m1',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'inspect_layout_hygiene',
+          requiresConfirmation: false,
+          payload: {
+            componentClearance: 120,
+            trackClearance: 70,
+            maxIssues: 10,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb layout hygiene inspection should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { issueCount?: number; issues?: Array<{ type?: string }> };
+          assert((data.issueCount ?? 0) > 0, 'pcb layout hygiene should report at least one issue');
+          assert((data.issues ?? []).some(issue => issue.type === 'component_track_proximity'), 'pcb layout hygiene should flag track crowding');
+        }
       },
     },
     {

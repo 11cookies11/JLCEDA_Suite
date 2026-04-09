@@ -1,5 +1,5 @@
-import JSZip from 'jszip';
 import type { BridgeResult } from '../bridge/protocol';
+import JSZip from 'jszip';
 
 interface SourceRecord {
   header: Record<string, unknown>;
@@ -88,6 +88,19 @@ interface LayoutHygieneIssue {
   distance?: number;
 }
 
+interface LabelHygieneIssue {
+  type: 'label_component_proximity' | 'label_wire_proximity';
+  severity: 'warning' | 'info';
+  message: string;
+  componentId?: string;
+  designator?: string;
+  relatedComponentId?: string;
+  relatedDesignator?: string;
+  wireId?: string;
+  wireNet?: string;
+  distance?: number;
+}
+
 interface InspectConnectivityPayload {
   allSchematicPages?: boolean;
   tolerance?: number;
@@ -99,6 +112,29 @@ interface InspectLayoutHygienePayload {
   componentClearance?: number;
   wireClearance?: number;
   maxIssues?: number;
+}
+
+interface InspectLabelHygienePayload {
+  allSchematicPages?: boolean;
+  labelClearance?: number;
+  wireLabelClearance?: number;
+  maxIssues?: number;
+}
+
+interface SuggestPowerBlockLayoutPayload {
+  allSchematicPages?: boolean;
+  anchor?: Point;
+  spacing?: number;
+  maxSuggestions?: number;
+}
+
+interface PowerBlockComponentSuggestion {
+  primitiveId: string;
+  designator?: string;
+  name?: string;
+  role: 'input_capacitor' | 'regulator' | 'output_capacitor' | 'indicator' | 'connector' | 'supporting_part';
+  suggestedPosition: Point;
+  rationale: string;
 }
 
 interface PythonConnectivityComponentSource {
@@ -128,8 +164,8 @@ interface PythonConnectivityInput {
 }
 
 function loadNodeBuiltin(moduleName: string): any {
-  const requireFunction = Function('return require') as () => (id: string) => any;
-  const nodeRequire = requireFunction();
+  // eslint-disable-next-line no-new-func, unicorn/new-for-builtins
+  const nodeRequire = Function('return require')() as (id: string) => any;
   return nodeRequire(moduleName);
 }
 
@@ -287,6 +323,77 @@ function distanceSquaredPointToSegment(point: Point, start: Point, end: Point): 
   return distanceSquaredBetweenPoints(point, projected);
 }
 
+function isPowerKeyword(value: string | undefined): boolean {
+  if (!value) {
+    return false;
+  }
+
+  const normalized = value.toLowerCase();
+  return [
+    'vin',
+    'vout',
+    'vcc',
+    'vdd',
+    '3v3',
+    '5v',
+    'gnd',
+    'reg',
+    'ldo',
+    'buck',
+    'boost',
+    'power',
+    'pwr',
+    'dc',
+    'usb',
+  ].some(keyword => normalized.includes(keyword));
+}
+
+function classifyPowerBlockRole(component: SchematicComponentSource): PowerBlockComponentSuggestion['role'] {
+  const tokens = [component.designator, component.name, component.componentType].filter(Boolean) as Array<string>;
+  const joined = tokens.join(' ').toLowerCase();
+
+  if (joined.includes('cap') || (joined.includes('c') && /^c\d+/i.test(component.designator ?? '')) || joined.includes('decoupl')) {
+    return 'input_capacitor';
+  }
+  if (
+    joined.includes('reg')
+    || joined.includes('ldo')
+    || joined.includes('buck')
+    || joined.includes('boost')
+    || joined.includes('ams1117')
+    || joined.includes('1117')
+  ) {
+    return 'regulator';
+  }
+  if (joined.includes('led') || joined.includes('indicator')) {
+    return 'indicator';
+  }
+  if (joined.includes('conn') || joined.includes('usb') || joined.includes('jack') || joined.includes('header')) {
+    return 'connector';
+  }
+  if (joined.includes('cap') || /^c\d+/i.test(component.designator ?? '') || joined.includes('bypass')) {
+    return 'output_capacitor';
+  }
+  return 'supporting_part';
+}
+
+function roleOffset(role: PowerBlockComponentSuggestion['role'], spacing: number): Point {
+  switch (role) {
+    case 'connector':
+      return { x: -spacing * 2, y: 0 };
+    case 'input_capacitor':
+      return { x: -spacing, y: -spacing };
+    case 'regulator':
+      return { x: 0, y: 0 };
+    case 'output_capacitor':
+      return { x: spacing, y: -spacing };
+    case 'indicator':
+      return { x: spacing, y: spacing };
+    default:
+      return { x: 0, y: spacing };
+  }
+}
+
 function getRecordNumber(record: Record<string, unknown>, keys: string[]): number | undefined {
   for (const key of keys) {
     const value = normalizeNumber(record[key]);
@@ -428,7 +535,7 @@ async function extractSymbolSourceText(symbolFile: File | Blob): Promise<string 
       continue;
     }
 
-    const pinCount = text.split('\n').filter(line => {
+    const pinCount = text.split('\n').filter((line) => {
       const record = parseSourceRecord(line.trim());
       if (!record) {
         return false;
@@ -918,6 +1025,168 @@ export async function inspectSchematicLayoutHygieneResult(
       wireClearance,
       issueCount: issues.length,
       issues,
+    },
+  };
+}
+
+export async function inspectSchematicLabelHygieneResult(
+  payload?: InspectLabelHygienePayload,
+): Promise<BridgeResult> {
+  const labelClearance = payload?.labelClearance ?? 110;
+  const wireLabelClearance = payload?.wireLabelClearance ?? 72;
+  const maxIssues = payload?.maxIssues ?? 100;
+  const source = await eda.sys_FileManager.getDocumentSource();
+
+  if (!source) {
+    throw new Error('Unable to read the current schematic source.');
+  }
+
+  const components = parseSchematicComponents(source);
+  const sourceWires = parseSourceWires(source);
+  const segments = flattenWireSegments(sourceWires);
+  const issues: Array<LabelHygieneIssue> = [];
+
+  const labeledComponents = components.filter(component => Boolean(component.designator || component.name));
+
+  for (const component of labeledComponents) {
+    const componentPoint = { x: component.x, y: component.y };
+
+    for (const other of components) {
+      if (other.primitiveId === component.primitiveId) {
+        continue;
+      }
+
+      const distance = Math.sqrt(distanceSquaredBetweenPoints(componentPoint, { x: other.x, y: other.y }));
+      if (distance > labelClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'label_component_proximity',
+        severity: 'warning',
+        message: `Label on ${component.designator ?? component.primitiveId ?? 'unknown'} is crowded by ${other.designator ?? other.primitiveId ?? 'another component'} (${distance.toFixed(1)} < ${labelClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        relatedComponentId: other.primitiveId,
+        relatedDesignator: other.designator,
+        distance,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+
+    for (const segment of segments) {
+      const distance = Math.sqrt(distanceSquaredPointToSegment(componentPoint, segment.start, segment.end));
+      if (distance > wireLabelClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'label_wire_proximity',
+        severity: 'warning',
+        message: `Label on ${component.designator ?? component.primitiveId ?? 'unknown'} is crowded by wire ${segment.wireId}${segment.net ? ` (${segment.net})` : ''} (${distance.toFixed(1)} < ${wireLabelClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        wireId: segment.wireId,
+        wireNet: segment.net,
+        distance,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+  }
+
+  return {
+    summary: 'schematic label hygiene inspected',
+    data: {
+      componentCount: components.length,
+      labeledComponentCount: labeledComponents.length,
+      wireCount: sourceWires.length,
+      segmentCount: segments.length,
+      labelClearance,
+      wireLabelClearance,
+      issueCount: issues.length,
+      issues,
+    },
+  };
+}
+
+export async function suggestPowerBlockLayoutResult(
+  payload?: SuggestPowerBlockLayoutPayload,
+): Promise<BridgeResult> {
+  const spacing = payload?.spacing ?? 160;
+  const maxSuggestions = payload?.maxSuggestions ?? 8;
+  const anchor = payload?.anchor ?? { x: 0, y: 0 };
+  const source = await eda.sys_FileManager.getDocumentSource();
+
+  if (!source) {
+    throw new Error('Unable to read the current schematic source.');
+  }
+
+  const components = parseSchematicComponents(source);
+  const powerComponents = components.filter((component) => {
+    const role = classifyPowerBlockRole(component);
+    return role !== 'supporting_part'
+      || isPowerKeyword(component.designator)
+      || isPowerKeyword(component.name)
+      || isPowerKeyword(component.componentType);
+  });
+
+  const prioritized = [...powerComponents].sort((left, right) => {
+    const leftRole = classifyPowerBlockRole(left);
+    const rightRole = classifyPowerBlockRole(right);
+    return leftRole.localeCompare(rightRole) || (left.designator ?? '').localeCompare(right.designator ?? '');
+  });
+
+  const suggestions = prioritized.slice(0, maxSuggestions).map((component, index) => {
+    const role = classifyPowerBlockRole(component);
+    const offset = roleOffset(role, spacing);
+    const rowOffset = Math.floor(index / 3) * spacing * 0.7;
+
+    return {
+      primitiveId: component.primitiveId,
+      designator: component.designator,
+      name: component.name,
+      role,
+      suggestedPosition: {
+        x: anchor.x + offset.x + rowOffset,
+        y: anchor.y + offset.y + rowOffset,
+      },
+      rationale: role === 'regulator'
+        ? 'Place the regulator centrally so input, output, and ground routing stay short.'
+        : role === 'input_capacitor'
+          ? 'Keep the input capacitor close to the regulator input and supply entry.'
+          : role === 'output_capacitor'
+            ? 'Keep the output capacitor close to the regulator output and load.'
+            : role === 'connector'
+              ? 'Keep the connector at the block edge for cleaner cable routing.'
+              : role === 'indicator'
+                ? 'Keep the indicator away from the main power loop.'
+                : 'Group supporting parts around the power core without crowding it.',
+    } satisfies PowerBlockComponentSuggestion;
+  });
+
+  return {
+    summary: 'power block layout suggestions generated',
+    data: {
+      anchor,
+      spacing,
+      componentCount: components.length,
+      powerComponentCount: powerComponents.length,
+      suggestionCount: suggestions.length,
+      suggestions,
     },
   };
 }
