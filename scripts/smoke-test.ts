@@ -1755,6 +1755,34 @@ async function run(): Promise<void> {
       },
     },
     {
+      name: 'schematic layout hygiene inspection',
+      request: {
+        id: 'smoke-002kb',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'inspect_layout_hygiene',
+          requiresConfirmation: false,
+          payload: {
+            allSchematicPages: true,
+            componentClearance: 90,
+            wireClearance: 60,
+            maxIssues: 10,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic layout hygiene inspection should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { issueCount?: number; issues?: Array<{ type?: string }> };
+          assert((data.issueCount ?? 0) > 0, 'layout hygiene inspection should report at least one issue');
+          assert((data.issues ?? []).some(issue => issue.type === 'component_wire_proximity'), 'layout hygiene should flag the crowded wire');
+        }
+      },
+    },
+    {
       name: 'pcb import changes',
       request: {
         id: 'smoke-002l',

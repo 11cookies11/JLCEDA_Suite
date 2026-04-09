@@ -194,6 +194,7 @@ GitHub Token：ghp_xxxxxxxxxxxxxxxxxxxx
 - `schematic.get_current_filter_configuration`
 - `schematic.auto_routing`
 - `schematic.auto_layout`
+- `schematic.inspect_layout_hygiene`
 - `schematic.check_drc`
 - `pcb.import_changes`
 - `pcb.save`

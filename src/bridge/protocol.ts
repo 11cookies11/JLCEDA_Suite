@@ -251,6 +251,12 @@ export interface BridgeCommandPayloadMap {
     tolerance?: number;
     maxIssues?: number;
   };
+  'schematic.inspect_layout_hygiene': {
+    allSchematicPages?: boolean;
+    componentClearance?: number;
+    wireClearance?: number;
+    maxIssues?: number;
+  };
   'schematic.check_drc': {
     strict?: boolean;
     userInterface?: boolean;

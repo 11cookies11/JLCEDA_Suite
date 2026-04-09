@@ -216,6 +216,7 @@ The current bridge implementation supports these commands:
 - `schematic.get_current_filter_configuration`
 - `schematic.auto_routing`
 - `schematic.auto_layout`
+- `schematic.inspect_layout_hygiene`
 - `schematic.check_drc`
 - `pcb.get_board_summary`
 - `pcb.get_current_pcb_info`

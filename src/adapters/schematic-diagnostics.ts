@@ -75,9 +75,29 @@ interface ConnectivityIssue {
   pinName?: string;
 }
 
+interface LayoutHygieneIssue {
+  type: 'component_component_proximity' | 'component_wire_proximity';
+  severity: 'warning' | 'info';
+  message: string;
+  componentId?: string;
+  designator?: string;
+  relatedComponentId?: string;
+  relatedDesignator?: string;
+  wireId?: string;
+  wireNet?: string;
+  distance?: number;
+}
+
 interface InspectConnectivityPayload {
   allSchematicPages?: boolean;
   tolerance?: number;
+  maxIssues?: number;
+}
+
+interface InspectLayoutHygienePayload {
+  allSchematicPages?: boolean;
+  componentClearance?: number;
+  wireClearance?: number;
   maxIssues?: number;
 }
 
@@ -240,6 +260,31 @@ function pointOnSegment(point: Point, start: Point, end: Point, tolerance: numbe
   }
 
   return true;
+}
+
+function distanceSquaredBetweenPoints(left: Point, right: Point): number {
+  const dx = left.x - right.x;
+  const dy = left.y - right.y;
+  return dx * dx + dy * dy;
+}
+
+function distanceSquaredPointToSegment(point: Point, start: Point, end: Point): number {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const lengthSquared = dx * dx + dy * dy;
+
+  if (lengthSquared === 0) {
+    return distanceSquaredBetweenPoints(point, start);
+  }
+
+  const rawT = ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared;
+  const t = Math.min(1, Math.max(0, rawT));
+  const projected = {
+    x: start.x + dx * t,
+    y: start.y + dy * t,
+  };
+
+  return distanceSquaredBetweenPoints(point, projected);
 }
 
 function getRecordNumber(record: Record<string, unknown>, keys: string[]): number | undefined {
@@ -785,6 +830,96 @@ export async function inspectSchematicConnectivityResult(
   catch {
     return inspectSchematicConnectivityResultLocal(payload);
   }
+}
+
+export async function inspectSchematicLayoutHygieneResult(
+  payload?: InspectLayoutHygienePayload,
+): Promise<BridgeResult> {
+  const componentClearance = payload?.componentClearance ?? 80;
+  const wireClearance = payload?.wireClearance ?? 48;
+  const maxIssues = payload?.maxIssues ?? 100;
+  const source = await eda.sys_FileManager.getDocumentSource();
+
+  if (!source) {
+    throw new Error('Unable to read the current schematic source.');
+  }
+
+  const components = parseSchematicComponents(source);
+  const sourceWires = parseSourceWires(source);
+  const segments = flattenWireSegments(sourceWires);
+  const issues: Array<LayoutHygieneIssue> = [];
+
+  for (let i = 0; i < components.length; i += 1) {
+    const component = components[i];
+    const componentPoint = { x: component.x, y: component.y };
+
+    for (let j = i + 1; j < components.length; j += 1) {
+      const other = components[j];
+      const distance = Math.sqrt(distanceSquaredBetweenPoints(componentPoint, { x: other.x, y: other.y }));
+
+      if (distance > componentClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'component_component_proximity',
+        severity: 'warning',
+        message: `Component ${component.designator ?? component.primitiveId ?? 'unknown'} is too close to ${other.designator ?? other.primitiveId ?? 'another component'} (${distance.toFixed(1)} < ${componentClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        relatedComponentId: other.primitiveId,
+        relatedDesignator: other.designator,
+        distance,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+
+    for (const segment of segments) {
+      const distance = Math.sqrt(distanceSquaredPointToSegment(componentPoint, segment.start, segment.end));
+      if (distance > wireClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'component_wire_proximity',
+        severity: 'warning',
+        message: `Component ${component.designator ?? component.primitiveId ?? 'unknown'} is too close to wire ${segment.wireId}${segment.net ? ` (${segment.net})` : ''} (${distance.toFixed(1)} < ${wireClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        wireId: segment.wireId,
+        wireNet: segment.net,
+        distance,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+  }
+
+  return {
+    summary: 'schematic layout hygiene inspected',
+    data: {
+      componentCount: components.length,
+      wireCount: sourceWires.length,
+      segmentCount: segments.length,
+      componentClearance,
+      wireClearance,
+      issueCount: issues.length,
+      issues,
+    },
+  };
 }
 
 async function inspectSchematicConnectivityResultLocal(

@@ -98,6 +98,7 @@ import {
 } from '../adapters/read-only';
 import {
   inspectSchematicConnectivityResult,
+  inspectSchematicLayoutHygieneResult,
 } from '../adapters/schematic-diagnostics';
 import {
   annotateSchematicNet,
@@ -991,6 +992,13 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
           request.id,
           await inspectSchematicConnectivityResult(
             request.command.payload as BridgeCommandPayloadMap['schematic.inspect_connectivity'],
+          ),
+        );
+      case 'schematic.inspect_layout_hygiene':
+        return createSuccessResponse(
+          request.id,
+          await inspectSchematicLayoutHygieneResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.inspect_layout_hygiene'],
           ),
         );
       case 'schematic.check_drc':
