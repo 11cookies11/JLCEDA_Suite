@@ -128,6 +128,14 @@ async function run(): Promise<void> {
           labelGapMax?: number;
           powerColumnCount?: number;
           powerRowSpacingFactor?: number;
+          labelGapRatio?: number;
+          placementStep?: number;
+          placementMaxRing?: number;
+          powerKeywords?: Array<string>;
+          powerRoleKeywords?: {
+            inputCapacitor?: Array<string>;
+            regulator?: Array<string>;
+          };
           powerRoleOffsets?: {
             connector?: { x?: number; y?: number };
             regulator?: { x?: number; y?: number };
@@ -150,6 +158,11 @@ async function run(): Promise<void> {
     assert(profilePayload.profile?.schematic?.labelGapMax === 56, 'default profile should expose label gap maximum');
     assert(profilePayload.profile?.schematic?.powerColumnCount === 3, 'default profile should expose power column count');
     assert(profilePayload.profile?.schematic?.powerRowSpacingFactor === 0.7, 'default profile should expose power row spacing factor');
+    assert(profilePayload.profile?.schematic?.labelGapRatio === 0.35, 'default profile should expose label gap ratio');
+    assert(profilePayload.profile?.schematic?.placementStep === 40, 'default profile should expose placement step');
+    assert(profilePayload.profile?.schematic?.placementMaxRing === 8, 'default profile should expose placement max ring');
+    assert((profilePayload.profile?.schematic?.powerKeywords ?? []).includes('vin'), 'default profile should expose power keywords');
+    assert((profilePayload.profile?.schematic?.powerRoleKeywords?.regulator ?? []).includes('ldo'), 'default profile should expose power role keywords');
     assert(profilePayload.profile?.schematic?.powerRoleOffsets?.connector?.x === -320, 'default profile should expose connector offset');
     assert(profilePayload.profile?.schematic?.powerRoleOffsets?.regulator?.x === 0, 'default profile should expose regulator offset');
     assert(profilePayload.profile?.pcb?.labelHorizontalOffsetBase === 28, 'default profile should expose pcb label horizontal base');

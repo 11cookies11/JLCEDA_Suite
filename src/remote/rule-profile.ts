@@ -23,6 +23,18 @@ export interface RuleProfileSnapshot {
     powerSpacing: number;
     powerColumnCount: number;
     powerRowSpacingFactor: number;
+    labelGapRatio: number;
+    placementStep: number;
+    placementMaxRing: number;
+    powerKeywords: Array<string>;
+    powerRoleKeywords: {
+      inputCapacitor: Array<string>;
+      regulator: Array<string>;
+      indicator: Array<string>;
+      connector: Array<string>;
+      outputCapacitor: Array<string>;
+      supportingPart: Array<string>;
+    };
     powerRoleOffsets: {
       connector: { x: number; y: number };
       inputCapacitor: { x: number; y: number };
@@ -65,6 +77,18 @@ const DEFAULT_PROFILE: RuleProfileSnapshot = {
     powerSpacing: 160,
     powerColumnCount: 3,
     powerRowSpacingFactor: 0.7,
+    labelGapRatio: 0.35,
+    placementStep: 40,
+    placementMaxRing: 8,
+    powerKeywords: ['vin', 'vout', 'vcc', 'vdd', '3v3', '5v', 'gnd', 'reg', 'ldo', 'buck', 'boost', 'power', 'pwr', 'dc', 'usb'],
+    powerRoleKeywords: {
+      inputCapacitor: ['cap', 'decoupl'],
+      regulator: ['reg', 'ldo', 'buck', 'boost', 'ams1117', '1117'],
+      indicator: ['led', 'indicator'],
+      connector: ['conn', 'usb', 'jack', 'header'],
+      outputCapacitor: ['cap', 'bypass'],
+      supportingPart: ['support', 'aux', 'filter'],
+    },
     powerRoleOffsets: {
       connector: { x: -320, y: 0 },
       inputCapacitor: { x: -160, y: -160 },

@@ -303,8 +303,8 @@ async function resolveSchematicComponentPlacement(
 
   const profile = await getRuleProfileSnapshot();
   const defaultProfile = getDefaultRuleProfileSnapshot();
-  const step = 40;
-  const maxRing = 8;
+  const step = profile.schematic.placementStep ?? defaultProfile.schematic.placementStep;
+  const maxRing = profile.schematic.placementMaxRing ?? defaultProfile.schematic.placementMaxRing;
   const componentClearance = profile.schematic.placementComponentClearance
     ?? defaultProfile.schematic.placementComponentClearance;
   const wireClearance = profile.schematic.placementWireClearance

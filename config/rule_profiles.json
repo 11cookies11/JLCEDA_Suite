@@ -16,6 +16,18 @@
         "powerSpacing": 160,
         "powerColumnCount": 3,
         "powerRowSpacingFactor": 0.7,
+        "labelGapRatio": 0.35,
+        "placementStep": 40,
+        "placementMaxRing": 8,
+        "powerKeywords": ["vin", "vout", "vcc", "vdd", "3v3", "5v", "gnd", "reg", "ldo", "buck", "boost", "power", "pwr", "dc", "usb"],
+        "powerRoleKeywords": {
+          "inputCapacitor": ["cap", "decoupl"],
+          "regulator": ["reg", "ldo", "buck", "boost", "ams1117", "1117"],
+          "indicator": ["led", "indicator"],
+          "connector": ["conn", "usb", "jack", "header"],
+          "outputCapacitor": ["cap", "bypass"],
+          "supportingPart": ["support", "aux", "filter"]
+        },
         "powerRoleOffsets": {
           "connector": { "x": -320, "y": 0 },
           "inputCapacitor": { "x": -160, "y": -160 },
@@ -51,6 +63,18 @@
         "powerSpacing": 128,
         "powerColumnCount": 3,
         "powerRowSpacingFactor": 0.6,
+        "labelGapRatio": 0.32,
+        "placementStep": 32,
+        "placementMaxRing": 8,
+        "powerKeywords": ["vin", "vout", "vcc", "vdd", "3v3", "5v", "gnd", "reg", "ldo", "buck", "boost", "power", "pwr", "dc", "usb"],
+        "powerRoleKeywords": {
+          "inputCapacitor": ["cap", "decoupl"],
+          "regulator": ["reg", "ldo", "buck", "boost", "ams1117", "1117"],
+          "indicator": ["led", "indicator"],
+          "connector": ["conn", "usb", "jack", "header"],
+          "outputCapacitor": ["cap", "bypass"],
+          "supportingPart": ["support", "aux", "filter"]
+        },
         "powerRoleOffsets": {
           "connector": { "x": -256, "y": 0 },
           "inputCapacitor": { "x": -128, "y": -128 },
@@ -86,6 +110,18 @@
         "powerSpacing": 192,
         "powerColumnCount": 3,
         "powerRowSpacingFactor": 0.8,
+        "labelGapRatio": 0.38,
+        "placementStep": 48,
+        "placementMaxRing": 10,
+        "powerKeywords": ["vin", "vout", "vcc", "vdd", "3v3", "5v", "gnd", "reg", "ldo", "buck", "boost", "power", "pwr", "dc", "usb"],
+        "powerRoleKeywords": {
+          "inputCapacitor": ["cap", "decoupl"],
+          "regulator": ["reg", "ldo", "buck", "boost", "ams1117", "1117"],
+          "indicator": ["led", "indicator"],
+          "connector": ["conn", "usb", "jack", "header"],
+          "outputCapacitor": ["cap", "bypass"],
+          "supportingPart": ["support", "aux", "filter"]
+        },
         "powerRoleOffsets": {
           "connector": { "x": -384, "y": 0 },
           "inputCapacitor": { "x": -192, "y": -192 },

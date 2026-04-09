@@ -327,29 +327,13 @@ function distanceSquaredPointToSegment(point: Point, start: Point, end: Point): 
   return distanceSquaredBetweenPoints(point, projected);
 }
 
-function isPowerKeyword(value: string | undefined): boolean {
+function isPowerKeyword(value: string | undefined, keywords: Array<string>): boolean {
   if (!value) {
     return false;
   }
 
   const normalized = value.toLowerCase();
-  return [
-    'vin',
-    'vout',
-    'vcc',
-    'vdd',
-    '3v3',
-    '5v',
-    'gnd',
-    'reg',
-    'ldo',
-    'buck',
-    'boost',
-    'power',
-    'pwr',
-    'dc',
-    'usb',
-  ].some(keyword => normalized.includes(keyword));
+  return keywords.some(keyword => normalized.includes(keyword));
 }
 
 function getPowerRoleOrder(role: PowerBlockComponentSuggestion['role']): number {
@@ -369,30 +353,36 @@ function getPowerRoleOrder(role: PowerBlockComponentSuggestion['role']): number 
   }
 }
 
-function classifyPowerBlockRole(component: SchematicComponentSource): PowerBlockComponentSuggestion['role'] {
+function matchesAnyKeyword(text: string, keywords: Array<string>): boolean {
+  return keywords.some(keyword => text.includes(keyword));
+}
+
+function classifyPowerBlockRole(
+  component: SchematicComponentSource,
+  profile: Awaited<ReturnType<typeof getRuleProfileSnapshot>>,
+): PowerBlockComponentSuggestion['role'] {
   const tokens = [component.designator, component.name, component.componentType].filter(Boolean) as Array<string>;
   const joined = tokens.join(' ').toLowerCase();
+  const roleKeywords = profile.schematic.powerRoleKeywords;
 
-  if (joined.includes('cap') || (joined.includes('c') && /^c\d+/i.test(component.designator ?? '')) || joined.includes('decoupl')) {
+  if (
+    matchesAnyKeyword(joined, roleKeywords.inputCapacitor)
+    || (joined.includes('c') && /^c\d+/i.test(component.designator ?? ''))
+  ) {
     return 'input_capacitor';
   }
   if (
-    joined.includes('reg')
-    || joined.includes('ldo')
-    || joined.includes('buck')
-    || joined.includes('boost')
-    || joined.includes('ams1117')
-    || joined.includes('1117')
+    matchesAnyKeyword(joined, roleKeywords.regulator)
   ) {
     return 'regulator';
   }
-  if (joined.includes('led') || joined.includes('indicator')) {
+  if (matchesAnyKeyword(joined, roleKeywords.indicator)) {
     return 'indicator';
   }
-  if (joined.includes('conn') || joined.includes('usb') || joined.includes('jack') || joined.includes('header')) {
+  if (matchesAnyKeyword(joined, roleKeywords.connector)) {
     return 'connector';
   }
-  if (joined.includes('cap') || /^c\d+/i.test(component.designator ?? '') || joined.includes('bypass')) {
+  if (matchesAnyKeyword(joined, roleKeywords.outputCapacitor) || /^c\d+/i.test(component.designator ?? '')) {
     return 'output_capacitor';
   }
   return 'supporting_part';
@@ -432,7 +422,7 @@ function getLabelPlacementCandidates(
   const step = Math.max(spacing, profile.schematic.labelPlacementStepFloor);
   const labelGap = Math.min(
     profile.schematic.labelGapMax,
-    Math.max(profile.schematic.labelGapMin, Math.round(step * 0.35)),
+    Math.max(profile.schematic.labelGapMin, Math.round(step * profile.schematic.labelGapRatio)),
   );
 
   return [
@@ -1247,22 +1237,22 @@ export async function suggestPowerBlockLayoutResult(
 
   const components = parseSchematicComponents(source);
   const powerComponents = components.filter((component) => {
-    const role = classifyPowerBlockRole(component);
+    const role = classifyPowerBlockRole(component, profile);
     return role !== 'supporting_part'
-      || isPowerKeyword(component.designator)
-      || isPowerKeyword(component.name)
-      || isPowerKeyword(component.componentType);
+      || isPowerKeyword(component.designator, profile.schematic.powerKeywords)
+      || isPowerKeyword(component.name, profile.schematic.powerKeywords)
+      || isPowerKeyword(component.componentType, profile.schematic.powerKeywords);
   });
 
   const prioritized = [...powerComponents].sort((left, right) => {
-    const leftRole = classifyPowerBlockRole(left);
-    const rightRole = classifyPowerBlockRole(right);
+    const leftRole = classifyPowerBlockRole(left, profile);
+    const rightRole = classifyPowerBlockRole(right, profile);
     return getPowerRoleOrder(leftRole) - getPowerRoleOrder(rightRole)
       || (left.designator ?? '').localeCompare(right.designator ?? '');
   });
 
   const suggestions = prioritized.slice(0, maxSuggestions).map((component, index) => {
-    const role = classifyPowerBlockRole(component);
+    const role = classifyPowerBlockRole(component, profile);
     const offset = roleOffset(role, spacing, profile);
     const rowOffset = Math.floor(index / Math.max(1, profile.schematic.powerColumnCount)) * spacing * profile.schematic.powerRowSpacingFactor;
     const sequenceIndex = index + 1;

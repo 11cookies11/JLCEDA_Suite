@@ -127,6 +127,11 @@ class RuleProfile:
     schematic_power_spacing: int
     schematic_power_column_count: int
     schematic_power_row_spacing_factor: float
+    schematic_label_gap_ratio: float
+    schematic_placement_step: int
+    schematic_placement_max_ring: int
+    schematic_power_keywords: list[str]
+    schematic_power_role_keywords: dict[str, list[str]]
     schematic_power_connector_offset_x: int
     schematic_power_connector_offset_y: int
     schematic_power_input_capacitor_offset_x: int
@@ -165,6 +170,11 @@ class RuleProfile:
                 'powerSpacing': self.schematic_power_spacing,
                 'powerColumnCount': self.schematic_power_column_count,
                 'powerRowSpacingFactor': self.schematic_power_row_spacing_factor,
+                'labelGapRatio': self.schematic_label_gap_ratio,
+                'placementStep': self.schematic_placement_step,
+                'placementMaxRing': self.schematic_placement_max_ring,
+                'powerKeywords': self.schematic_power_keywords,
+                'powerRoleKeywords': self.schematic_power_role_keywords,
                 'powerRoleOffsets': {
                     'connector': {
                         'x': self.schematic_power_connector_offset_x,
@@ -222,6 +232,18 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_power_spacing=160,
             schematic_power_column_count=3,
             schematic_power_row_spacing_factor=0.7,
+            schematic_label_gap_ratio=0.35,
+            schematic_placement_step=40,
+            schematic_placement_max_ring=8,
+            schematic_power_keywords=['vin', 'vout', 'vcc', 'vdd', '3v3', '5v', 'gnd', 'reg', 'ldo', 'buck', 'boost', 'power', 'pwr', 'dc', 'usb'],
+            schematic_power_role_keywords={
+                'inputCapacitor': ['cap', 'decoupl'],
+                'regulator': ['reg', 'ldo', 'buck', 'boost', 'ams1117', '1117'],
+                'indicator': ['led', 'indicator'],
+                'connector': ['conn', 'usb', 'jack', 'header'],
+                'outputCapacitor': ['cap', 'bypass'],
+                'supportingPart': ['support', 'aux', 'filter'],
+            },
             schematic_power_connector_offset_x=-320,
             schematic_power_connector_offset_y=0,
             schematic_power_input_capacitor_offset_x=-160,
@@ -258,6 +280,18 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_power_spacing=128,
             schematic_power_column_count=3,
             schematic_power_row_spacing_factor=0.6,
+            schematic_label_gap_ratio=0.32,
+            schematic_placement_step=32,
+            schematic_placement_max_ring=8,
+            schematic_power_keywords=['vin', 'vout', 'vcc', 'vdd', '3v3', '5v', 'gnd', 'reg', 'ldo', 'buck', 'boost', 'power', 'pwr', 'dc', 'usb'],
+            schematic_power_role_keywords={
+                'inputCapacitor': ['cap', 'decoupl'],
+                'regulator': ['reg', 'ldo', 'buck', 'boost', 'ams1117', '1117'],
+                'indicator': ['led', 'indicator'],
+                'connector': ['conn', 'usb', 'jack', 'header'],
+                'outputCapacitor': ['cap', 'bypass'],
+                'supportingPart': ['support', 'aux', 'filter'],
+            },
             schematic_power_connector_offset_x=-256,
             schematic_power_connector_offset_y=0,
             schematic_power_input_capacitor_offset_x=-128,
@@ -294,6 +328,18 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_power_spacing=192,
             schematic_power_column_count=3,
             schematic_power_row_spacing_factor=0.8,
+            schematic_label_gap_ratio=0.38,
+            schematic_placement_step=48,
+            schematic_placement_max_ring=10,
+            schematic_power_keywords=['vin', 'vout', 'vcc', 'vdd', '3v3', '5v', 'gnd', 'reg', 'ldo', 'buck', 'boost', 'power', 'pwr', 'dc', 'usb'],
+            schematic_power_role_keywords={
+                'inputCapacitor': ['cap', 'decoupl'],
+                'regulator': ['reg', 'ldo', 'buck', 'boost', 'ams1117', '1117'],
+                'indicator': ['led', 'indicator'],
+                'connector': ['conn', 'usb', 'jack', 'header'],
+                'outputCapacitor': ['cap', 'bypass'],
+                'supportingPart': ['support', 'aux', 'filter'],
+            },
             schematic_power_connector_offset_x=-384,
             schematic_power_connector_offset_y=0,
             schematic_power_input_capacitor_offset_x=-192,
@@ -374,6 +420,18 @@ def load_rule_profiles(profile_file: Optional[str]) -> tuple[dict[str, RuleProfi
                 schematic_power_spacing=coerce_int(schematic.get('powerSpacing'), 160),
                 schematic_power_column_count=coerce_int(schematic.get('powerColumnCount'), 3),
                 schematic_power_row_spacing_factor=float(schematic.get('powerRowSpacingFactor', 0.7) if isinstance(schematic.get('powerRowSpacingFactor', 0.7), (int, float)) else 0.7),
+                schematic_label_gap_ratio=float(schematic.get('labelGapRatio', 0.35) if isinstance(schematic.get('labelGapRatio', 0.35), (int, float)) else 0.35),
+                schematic_placement_step=coerce_int(schematic.get('placementStep'), 40),
+                schematic_placement_max_ring=coerce_int(schematic.get('placementMaxRing'), 8),
+                schematic_power_keywords=[str(value).strip().lower() for value in schematic.get('powerKeywords', ['vin', 'vout', 'vcc', 'vdd', '3v3', '5v', 'gnd', 'reg', 'ldo', 'buck', 'boost', 'power', 'pwr', 'dc', 'usb']) if str(value).strip()],
+                schematic_power_role_keywords={
+                    'inputCapacitor': [str(value).strip().lower() for value in (((schematic.get('powerRoleKeywords') or {}).get('inputCapacitor')) if isinstance(schematic.get('powerRoleKeywords'), dict) else ['cap', 'decoupl']) if str(value).strip()],
+                    'regulator': [str(value).strip().lower() for value in (((schematic.get('powerRoleKeywords') or {}).get('regulator')) if isinstance(schematic.get('powerRoleKeywords'), dict) else ['reg', 'ldo', 'buck', 'boost', 'ams1117', '1117']) if str(value).strip()],
+                    'indicator': [str(value).strip().lower() for value in (((schematic.get('powerRoleKeywords') or {}).get('indicator')) if isinstance(schematic.get('powerRoleKeywords'), dict) else ['led', 'indicator']) if str(value).strip()],
+                    'connector': [str(value).strip().lower() for value in (((schematic.get('powerRoleKeywords') or {}).get('connector')) if isinstance(schematic.get('powerRoleKeywords'), dict) else ['conn', 'usb', 'jack', 'header']) if str(value).strip()],
+                    'outputCapacitor': [str(value).strip().lower() for value in (((schematic.get('powerRoleKeywords') or {}).get('outputCapacitor')) if isinstance(schematic.get('powerRoleKeywords'), dict) else ['cap', 'bypass']) if str(value).strip()],
+                    'supportingPart': [str(value).strip().lower() for value in (((schematic.get('powerRoleKeywords') or {}).get('supportingPart')) if isinstance(schematic.get('powerRoleKeywords'), dict) else ['support', 'aux', 'filter']) if str(value).strip()],
+                },
                 schematic_power_connector_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('connector', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('connector'), dict) else None, -320),
                 schematic_power_connector_offset_y=coerce_int((schematic.get('powerRoleOffsets') or {}).get('connector', {}).get('y') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('connector'), dict) else None, 0),
                 schematic_power_input_capacitor_offset_x=coerce_int((schematic.get('powerRoleOffsets') or {}).get('inputCapacitor', {}).get('x') if isinstance(schematic.get('powerRoleOffsets'), dict) and isinstance((schematic.get('powerRoleOffsets') or {}).get('inputCapacitor'), dict) else None, -160),
