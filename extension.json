@@ -4,7 +4,7 @@
   "displayName": "JLCEDA Suite",
   "description": "Plugin, server, and skill package for AI-assisted hardware development with JLCEDA.",
   "icon": "./assets/ai-bridge-icon.svg",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "publisher": "JLCEDA-Suite",
   "engines": {
     "eda": "^3.0.0"
@@ -16,8 +16,8 @@
     "AI",
     "Hardware"
   ],
-  "homepage": "",
-  "bugs": "",
+  "homepage": "https://github.com/11cookies11/JLCEDA_Suite",
+  "bugs": "https://github.com/11cookies11/JLCEDA_Suite/issues",
   "activationEvents": {},
   "entry": "./dist/index",
   "dependentExtensions": {},
@@ -29,12 +29,12 @@
         "menuItems": [
           {
             "id": "open-ai-bridge-intro-home-v1",
-            "title": "插件介绍",
+            "title": "????",
             "registerFn": "openIntroPage"
           },
           {
             "id": "open-ai-bridge-window-home-v2",
-            "title": "打开控制台",
+            "title": "?????",
             "registerFn": "openBridgeMenu"
           }
         ]
@@ -47,12 +47,12 @@
         "menuItems": [
           {
             "id": "open-ai-bridge-intro-sch-v1",
-            "title": "插件介绍",
+            "title": "????",
             "registerFn": "openIntroPage"
           },
           {
             "id": "open-ai-bridge-window-sch-v2",
-            "title": "打开控制台",
+            "title": "?????",
             "registerFn": "openBridgeMenu"
           }
         ]
@@ -65,12 +65,12 @@
         "menuItems": [
           {
             "id": "open-ai-bridge-intro-pcb-v1",
-            "title": "插件介绍",
+            "title": "????",
             "registerFn": "openIntroPage"
           },
           {
             "id": "open-ai-bridge-window-pcb-v2",
-            "title": "打开控制台",
+            "title": "?????",
             "registerFn": "openBridgeMenu"
           }
         ]

@@ -1,12 +1,18 @@
 # Changelog
 
-Language: English | [简体中文](CHANGELOG.zh-CN.md)
+Language: English | [绠€浣撲腑鏂嘳(CHANGELOG.zh-CN.md)
 
 All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.23] - 2026-04-09
+
+### Fixed
+
+- Included `README.md` and `README.zh-CN.md` in packaged extension bundles so extension managers can render plugin details pages
+- Added suite homepage and issue tracker links to the extension manifest metadata
 ## [0.1.22] - 2026-04-09
 
 ### Added
