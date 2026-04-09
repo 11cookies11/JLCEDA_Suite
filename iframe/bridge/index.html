@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI桥接</title>
+  <title>JLCEDA Suite</title>
   <style>
     :root {
       --surface: #f8f9fa;
@@ -62,6 +62,15 @@
       display: flex;
       align-items: center;
       gap: 14px;
+    }
+
+    .header-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      padding: 6px;
+      background: rgba(42, 121, 199, 0.12);
+      box-shadow: inset 0 0 0 1px rgba(42, 121, 199, 0.14);
     }
 
     .header-accent {
@@ -352,9 +361,10 @@
     <div class="window">
       <header class="header">
         <div class="header-main">
+          <img class="header-icon" src="/assets/ai-bridge-icon.svg" alt="JLCEDA Suite 图标">
           <div class="header-accent"></div>
           <div>
-            <h1 class="header-title">AI桥接</h1>
+            <h1 class="header-title">JLCEDA Suite</h1>
             <div class="header-subtitle">Instrumented Workspace</div>
           </div>
         </div>
@@ -505,7 +515,7 @@
       </div>
 
       <footer class="footer">
-        <div class="footer-note">JLCEDA AI桥接 · 官方 IFrame 自定义窗口</div>
+        <div class="footer-note">JLCEDA Suite · 官方 IFrame 自定义窗口</div>
         <div class="actions">
           <button class="button ghost" type="button" id="refreshBtn">刷新说明</button>
           <button class="button primary" type="button" id="primaryBtn">保存并连接</button>
@@ -515,7 +525,7 @@
   </div>
 
   <script>
-    const RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
+    const RPC_TOPIC = 'jlceda-suite.bridge-ui';
     const REQUEST_TOPIC = `${RPC_TOPIC}.request`;
     const RESPONSE_TOPIC_PREFIX = `${RPC_TOPIC}.response.`;
     const resultBox = document.getElementById('resultBox');

@@ -5,13 +5,13 @@
 1. 确认当前分支为预期发布分支
 2. 执行 `npm run release:check`
 3. 确认 `package.json` 与 `extension.json` 的版本号一致
-4. 确认 `build/dist/jlceda-aiagent_v*.eext` 已生成
+4. 确认 `build/dist/jlceda-suite_v*.eext` 已生成
 5. 在 JLCEDA 中导入最新 `.eext` 包进行实机验证
 6. 确认 `npm run server:command-runner:smoke-test` 已通过
 
 ## 实机验证清单
 
-1. 菜单 `JLCEDA AIAgent` 可以显示
+1. 菜单 `JLCEDA Suite` 可以显示
 2. `About` 可以正常弹窗
 3. `Bridge Self Check` 可以返回 `ping`、`bridge_status`、`document_summary`、`selection_snapshot`
 4. `Bridge Status` 可以正常弹窗

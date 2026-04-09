@@ -12,9 +12,9 @@
 
 ## 导入结果
 
-- `.eext` 文件路径：`build/dist/jlceda-aiagent_v0.1.20.eext`
+- `.eext` 文件路径：`build/dist/jlceda-suite_v0.1.20.eext`
 - 是否成功导入：待实机验证
-- 是否能在菜单中看到 `JLCEDA AIAgent`：待实机验证
+- 是否能在菜单中看到 `JLCEDA Suite`：待实机验证
 - 导入或加载时报错：待实机验证
 
 ## 菜单与只读命令验证

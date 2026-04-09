@@ -1,4 +1,4 @@
-# JLCEDA AIAgent
+# JLCEDA Suite
 
 让 Codex 通过插件连接并控制嘉立创 EDA 的桥接项目。
 
@@ -6,7 +6,7 @@
 
 ## 项目简介
 
-`JLCEDA AIAgent` 的目标，是把嘉立创 EDA 的官方扩展能力封装成一个可被 Codex 调用的硬件开发能力层。
+`JLCEDA Suite` 将 JLCEDA 插件、bridge server 和 agent skill 包装成一套用于 AI 辅助硬件开发的工具集。
 
 这个仓库不只是一个普通的 EDA 插件模板，而是一个连接两端的桥梁：
 
@@ -47,7 +47,7 @@
 python3 -m pip install -r requirements-server.txt
 ```
 
-如果你不想装到系统环境里，服务启动时也会在 `~/.cache/jlceda-aiagent-python-server` 下自动创建缓存虚拟环境并安装依赖。
+如果你不想装到系统环境里，服务启动时也会在 `~/.cache/jlceda-suite-python-server` 下自动创建缓存虚拟环境并安装依赖。
 
 如果你要在公网机器上部署桥接服务，建议直接用控制平面一起启动：
 
@@ -77,7 +77,7 @@ npm run server:public
 - 仓库名：`repo`
 - GitHub Token：私有仓库时填写有 `repo` 读取权限的 token，公开仓库可以留空
 
-如果 GitHub Token 留空，插件会保留你之前保存的 token；如果仓库地址留空，则继续使用默认仓库 `11cookies11/JLCEDA_AIAgent`。
+如果 GitHub Token 留空，插件会保留你之前保存的 token；如果仓库地址留空，则继续使用默认仓库 `11cookies11/JLCEDA_Suite`。
 
 示例：
 

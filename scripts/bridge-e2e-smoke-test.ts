@@ -51,7 +51,7 @@ async function run(): Promise<void> {
 
     const client = new RemoteBridgeClient({
       registerSocket: (id, serviceUri, receiveMessageCallFn, onConnected) => {
-        assert(id === 'jlceda-aiagent-remote-bridge', 'client should use the fixed remote bridge socket id');
+        assert(id === 'jlceda-suite-remote-bridge', 'client should use the fixed remote bridge socket id');
         socket = new WebSocket(serviceUri);
         socket.once('open', () => {
           void onConnected?.();

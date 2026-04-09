@@ -61,7 +61,7 @@ function createPrimitiveState(state: Record<string, unknown>): Record<string, ()
 function installMockEda(): void {
   const extensionUserConfigs = new Map<string, unknown>([
     ['updateCheck.repoOwner', '11cookies11'],
-    ['updateCheck.repoName', 'JLCEDA_AIAgent'],
+    ['updateCheck.repoName', 'JLCEDA_Suite'],
   ]);
   const boardSource = [
     '{"type":"DOCHEAD"}||{"docType":"PCB","client":"smoke-board","uuid":"pcb-001","updateTime":1,"version":"1"}|',
@@ -840,11 +840,11 @@ function installMockEda(): void {
 
     return new Response(JSON.stringify({
       tag_name: 'v0.1.22',
-      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.22',
+      html_url: 'https://github.com/11cookies11/JLCEDA_Suite/releases/tag/v0.1.22',
       assets: [
         {
-          name: 'jlceda-aiagent_v0.1.22.eext',
-          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.22/jlceda-aiagent_v0.1.22.eext',
+          name: 'jlceda-suite_v0.1.22.eext',
+          browser_download_url: 'https://github.com/11cookies11/JLCEDA_Suite/releases/download/v0.1.22/jlceda-suite_v0.1.22.eext',
         },
       ],
     }), {

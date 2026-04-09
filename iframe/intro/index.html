@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JLCEDA Suite - 插件介绍</title>
+  <style>
+    :root {
+      --bg: #f3f6f9;
+      --panel: rgba(255, 255, 255, 0.92);
+      --panel-strong: #ffffff;
+      --text: #112031;
+      --muted: #556779;
+      --line: rgba(17, 32, 49, 0.12);
+      --primary: #0f67ad;
+      --primary-deep: #0a4571;
+      --accent: #ffc857;
+      --shadow: 0 18px 50px rgba(17, 32, 49, 0.12);
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(15, 103, 173, 0.14), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(255, 200, 87, 0.18), transparent 30%),
+        linear-gradient(180deg, #f8fbfd, var(--bg));
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 28px;
+    }
+
+    .shell {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: grid;
+      gap: 18px;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 22px;
+      align-items: center;
+      padding: 26px 28px;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(14, 47, 77, 0.94), rgba(15, 103, 173, 0.92));
+      box-shadow: var(--shadow);
+      color: #fff;
+    }
+
+    .hero img {
+      width: 112px;
+      height: 112px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.08);
+      padding: 12px;
+    }
+
+    .eyebrow {
+      margin: 0 0 10px;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.72);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.1;
+    }
+
+    .hero p {
+      margin: 14px 0 0;
+      max-width: 760px;
+      font-size: 15px;
+      line-height: 1.8;
+      color: rgba(255, 255, 255, 0.86);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--panel);
+      box-shadow: 0 12px 30px rgba(17, 32, 49, 0.08);
+      overflow: hidden;
+    }
+
+    .card-head {
+      padding: 18px 20px 12px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15, 103, 173, 0.06), transparent);
+    }
+
+    .card-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .card-body {
+      padding: 18px 20px 20px;
+    }
+
+    .lead {
+      margin: 0 0 16px;
+      color: var(--muted);
+      line-height: 1.75;
+      font-size: 14px;
+    }
+
+    .list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .item {
+      display: grid;
+      grid-template-columns: 28px 1fr;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .badge {
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 999px;
+      background: rgba(15, 103, 173, 0.12);
+      color: var(--primary);
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .item strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .item span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    .steps {
+      display: grid;
+      gap: 14px;
+    }
+
+    .step {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(15, 103, 173, 0.12);
+    }
+
+    .step strong {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .step p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.7;
+    }
+
+    .highlight {
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 200, 87, 0.45);
+      background: linear-gradient(180deg, rgba(255, 200, 87, 0.18), rgba(255, 255, 255, 0.92));
+    }
+
+    .highlight strong {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--primary-deep);
+    }
+
+    .highlight p {
+      margin: 0;
+      line-height: 1.75;
+      color: #4f5f6f;
+      font-size: 13px;
+    }
+
+    .footer {
+      padding: 16px 20px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.78);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.75;
+    }
+
+    code {
+      padding: 2px 6px;
+      border-radius: 6px;
+      background: rgba(15, 103, 173, 0.08);
+      color: var(--primary-deep);
+      font-family: Consolas, "SFMono-Regular", monospace;
+      font-size: 12px;
+    }
+
+    @media (max-width: 920px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="shell">
+      <section class="hero">
+        <img src="/assets/ai-bridge-icon.svg" alt="JLCEDA Suite 图标">
+        <div>
+          <p class="eyebrow">JLCEDA AI Bridge</p>
+          <h1>把 Codex 的能力接进 JLCEDA，而不是停留在聊天框里</h1>
+          <p>
+            这个插件提供一个受控桥接层，让服务端 Codex 能连接到本地运行的 JLCEDA，
+            读取项目状态、查看原理图与 PCB、执行受限命令，并把结果结构化返回。
+          </p>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">它能做什么</h2>
+          </div>
+          <div class="card-body">
+            <p class="lead">插件不是通用聊天面板，而是给硬件设计工作流准备的能力入口。</p>
+            <div class="list">
+              <div class="item">
+                <div class="badge">1</div>
+                <div>
+                  <strong>读取当前项目和文档</strong>
+                  <span>查看当前 schematic、PCB、标签页、选区和项目结构，先理解现场再行动。</span>
+                </div>
+              </div>
+              <div class="item">
+                <div class="badge">2</div>
+                <div>
+                  <strong>做诊断和辅助分析</strong>
+                  <span>支持连通性、布局卫生、标签冲突、板边距离等检查，适合先做问题定位。</span>
+                </div>
+              </div>
+              <div class="item">
+                <div class="badge">3</div>
+                <div>
+                  <strong>执行受控编辑动作</strong>
+                  <span>在明确边界下放置器件、导入变更、保存文档、导出 BOM 或触发部分编辑器动作。</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">怎么开始</h2>
+          </div>
+          <div class="card-body">
+            <div class="steps">
+              <div class="step">
+                <strong>1. 启动 bridge server</strong>
+                <p>本地默认地址通常是 <code>ws://127.0.0.1:8787</code>，控制面是 <code>http://127.0.0.1:8788</code>。</p>
+              </div>
+              <div class="step">
+                <strong>2. 打开 “JLCEDA Suite” 控制台</strong>
+                <p>在插件菜单里进入桥接窗口，填写服务地址、客户端 ID，保存后发起连接。</p>
+              </div>
+              <div class="step">
+                <strong>3. 先做只读检查，再做写操作</strong>
+                <p>建议先读取当前文档、执行自检、确认连接和项目上下文都正确，再开始修改设计。</p>
+              </div>
+            </div>
+
+            <div class="highlight">
+              <strong>推荐使用方式</strong>
+              <p>先让 Codex 看清当前项目，再让它给建议或执行小步操作，这样比直接大范围改图更稳。</p>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-head">
+            <h2 class="card-title">为什么要这个插件</h2>
+          </div>
+          <div class="card-body">
+            <p class="lead">它解决的是“AI知道要做什么，但触达不到 EDA 现场”的问题。</p>
+            <div class="list">
+              <div class="item">
+                <div class="badge">A</div>
+                <div>
+                  <strong>把 JLCEDA 变成可调用环境</strong>
+                  <span>让 AI 不只会给建议，还能在受控范围内读取状态和驱动工具。</span>
+                </div>
+              </div>
+              <div class="item">
+                <div class="badge">B</div>
+                <div>
+                  <strong>保留安全边界</strong>
+                  <span>高风险写操作需要经过命令约束或确认，不把编辑器完全裸露给远端。</span>
+                </div>
+              </div>
+              <div class="item">
+                <div class="badge">C</div>
+                <div>
+                  <strong>适合迭代式联调</strong>
+                  <span>开发桥接命令、验证运行时、复现问题、调规则配置，都能在同一条链路上完成。</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <div class="footer">
+        当前插件版本用于连接本地 JLCEDA 与远程 AI 工作流。进入菜单中的 “JLCEDA Suite” 即可打开控制台；
+        进入“插件介绍”则适合第一次接触插件时快速了解用途和连接方法。
+      </div>
+    </div>
+  </div>
+</body>
+</html>

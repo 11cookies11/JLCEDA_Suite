@@ -19,7 +19,7 @@ async function run(): Promise<void> {
 
   const client = new RemoteBridgeClient({
     registerSocket: (id, serviceUri, receiveMessageCallFn, onConnected) => {
-      assert(id === 'jlceda-aiagent-remote-bridge', 'socket id should match the fixed bridge socket id');
+      assert(id === 'jlceda-suite-remote-bridge', 'socket id should match the fixed bridge socket id');
       assert(serviceUri === 'ws://127.0.0.1:8787', 'server URL should come from saved settings');
       registeredMessageHandler = receiveMessageCallFn;
       connectedHandler = onConnected;
@@ -98,7 +98,7 @@ async function run(): Promise<void> {
   console.log('PASS remote client request handling');
 
   client.disconnect();
-  assert(closedSocketId === 'jlceda-aiagent-remote-bridge', 'disconnect should close the bridge socket');
+  assert(closedSocketId === 'jlceda-suite-remote-bridge', 'disconnect should close the bridge socket');
   console.log('PASS remote client disconnect');
 }
 

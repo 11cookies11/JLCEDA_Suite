@@ -35,7 +35,7 @@ interface UpdateCheckSettings {
 }
 
 const DEFAULT_REPO_OWNER = '11cookies11';
-const DEFAULT_REPO_NAME = 'JLCEDA_AIAgent';
+const DEFAULT_REPO_NAME = 'JLCEDA_Suite';
 const UPDATE_CHECK_REPO_OWNER_KEY = 'updateCheck.repoOwner';
 const UPDATE_CHECK_REPO_NAME_KEY = 'updateCheck.repoName';
 const UPDATE_CHECK_GITHUB_TOKEN_KEY = 'updateCheck.githubToken';
@@ -141,7 +141,7 @@ async function fetchLatestRelease(settings: UpdateCheckSettings): Promise<GitHub
   const response = await fetch(buildLatestReleaseUrl(settings), {
     headers: {
       'accept': 'application/vnd.github+json',
-      'user-agent': 'JLCEDA-AIAgent',
+      'user-agent': 'JLCEDA-Suite',
       ...(settings.githubToken ? { authorization: `Bearer ${settings.githubToken}` } : {}),
       'x-github-api-version': '2022-11-28',
     },

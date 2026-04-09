@@ -1,4 +1,4 @@
-# JLCEDA AIAgent
+# JLCEDA Suite
 
 A bridge project that lets Codex connect to and control JLCEDA through a plugin.
 
@@ -6,7 +6,7 @@ Language: English | [简体中文](README.zh-CN.md)
 
 ## Overview
 
-`JLCEDA AIAgent` is intended to turn the official JLCEDA extension capabilities into a hardware-development capability layer that Codex can call.
+`JLCEDA Suite` packages the JLCEDA plugin, bridge server, and agent skill flow into one toolkit for AI-assisted hardware development.
 
 This repository is not just a generic EDA plugin template. It is becoming a bridge between two sides:
 
@@ -48,7 +48,7 @@ Before starting the Python server, install its runtime dependency:
 python3 -m pip install -r requirements-server.txt
 ```
 
-If you prefer not to install it system-wide, the server also bootstraps a cached virtual environment under `~/.cache/jlceda-aiagent-python-server` on first launch.
+If you prefer not to install it system-wide, the server also bootstraps a cached virtual environment under `~/.cache/jlceda-suite-python-server` on first launch.
 
 If you are hosting the bridge on a public machine, start it with the control plane enabled:
 
@@ -78,7 +78,7 @@ In the plugin's update settings, fill in:
 - Repository name: `repo`
 - GitHub token: a token with `repo` read access for private repositories; leave blank for public repositories
 
-If you leave the GitHub token blank, the plugin keeps the previously saved token. If you leave the repository fields blank, it falls back to the default repository `11cookies11/JLCEDA_AIAgent`.
+If you leave the GitHub token blank, the plugin keeps the previously saved token. If you leave the repository fields blank, it falls back to the default repository `11cookies11/JLCEDA_Suite`.
 
 Example:
 

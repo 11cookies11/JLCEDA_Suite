@@ -11,10 +11,11 @@ import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registr
 import { deriveControlUrl } from './remote/bridge-config';
 import { remoteBridgeClient } from './remote/client';
 
-const BRIDGE_UI_RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
+const BRIDGE_UI_RPC_TOPIC = 'jlceda-suite.bridge-ui';
 const BRIDGE_UI_REQUEST_TOPIC = `${BRIDGE_UI_RPC_TOPIC}.request`;
 const BRIDGE_UI_RESPONSE_TOPIC_PREFIX = `${BRIDGE_UI_RPC_TOPIC}.response.`;
 const BRIDGE_IFRAME_ID = 'ai-bridge-window';
+const INTRO_IFRAME_ID = 'ai-bridge-intro-window';
 let bridgeUiRpcRegistered = false;
 let bridgeUiRequestBridgeRegistered = false;
 
@@ -49,7 +50,7 @@ function ensureBridgeUiRequestBridgeRegistered(): void {
       catch (error) {
         response = {
           ok: false,
-          title: 'AI桥接',
+          title: 'JLCEDA Suite',
           lines: [
             '窗口与插件通信失败。',
             '',
@@ -369,7 +370,7 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
       const updateStatus = await refreshUpdateStatus(true);
       const targetUrl = updateStatus.latestDownloadUrl
         ?? updateStatus.latestReleaseUrl
-        ?? 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/latest';
+        ?? 'https://github.com/11cookies11/JLCEDA_Suite/releases/latest';
 
       eda.sys_Window.open(targetUrl, '_blank');
 
@@ -478,7 +479,7 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
     default:
       return {
         ok: false,
-        title: 'AI桥接',
+        title: 'JLCEDA Suite',
         lines: [
           '未识别的窗口动作。',
         ],
@@ -498,8 +499,9 @@ export function activate(status?: 'onStartupFinished', arg?: string): void {
 
 export function about(): void {
   const message = [
-    'JLCEDA AI桥接',
-    '让 Codex 通过受控桥接连接嘉立创 EDA。',
+    'JLCEDA Suite',
+    '让 Codex 通过受控桥接连接 JLCEDA，在本地编辑器里完成读取、诊断和受控操作。',
+    '首次使用建议先打开“插件介绍”，再进入 “JLCEDA Suite” 控制台完成连接配置。',
     `版本：${extensionConfig.version}`,
   ].join('\n');
 
@@ -829,7 +831,7 @@ async function _openBridgeMenuFallback(): Promise<void> {
       `插件版本：${extensionConfig.version}`,
       `更新状态：${getUpdateStatusSnapshot().updateAvailable ? '可更新' : '已是最新'}`,
     ].join('\n'),
-    'AI桥接',
+    'JLCEDA Suite',
   );
 
   switch (action) {
@@ -857,7 +859,7 @@ async function _openBridgeMenuFallback(): Promise<void> {
       const updateStatus = await refreshUpdateStatus(true);
       const targetUrl = updateStatus.latestDownloadUrl
         ?? updateStatus.latestReleaseUrl
-        ?? 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/latest';
+        ?? 'https://github.com/11cookies11/JLCEDA_Suite/releases/latest';
 
       eda.sys_Window.open(targetUrl, '_blank');
       break;
@@ -883,47 +885,71 @@ async function _openBridgeMenuFallback(): Promise<void> {
 async function openBridgeMenuInternal(): Promise<void> {
   ensureBridgeUiRpcRegistered();
   ensureBridgeUiRequestBridgeRegistered();
+  await openManagedIFrame(
+    '/iframe/bridge/index.html',
+    980,
+    720,
+    BRIDGE_IFRAME_ID,
+    'JLCEDA Suite',
+    'JLCEDA Suite 窗口未能正常打开。',
+  );
+}
 
+export function openBridgeMenu(): void {
+  void openBridgeMenuInternal();
+}
+
+async function openManagedIFrame(
+  path: string,
+  width: number,
+  height: number,
+  iframeId: string,
+  title: string,
+  errorHeading: string,
+): Promise<void> {
   const openOptions = {
-    title: 'AI桥接',
+    title,
     maximizeButton: true,
     minimizeButton: true,
     grayscaleMask: true,
   } as const;
 
   try {
-    const alreadyExists = await eda.sys_IFrame.isIFrameAlreadyExist(BRIDGE_IFRAME_ID);
+    const alreadyExists = await eda.sys_IFrame.isIFrameAlreadyExist(iframeId);
 
     if (alreadyExists) {
-      const shown = await eda.sys_IFrame.showIFrame(BRIDGE_IFRAME_ID);
+      const shown = await eda.sys_IFrame.showIFrame(iframeId);
 
       if (shown) {
         return;
       }
 
-      // Some runtime builds report an existing window but refuse to foreground it.
-      // Recreate the window instead of forcing users into the simplified fallback.
-      await eda.sys_IFrame.closeIFrame(BRIDGE_IFRAME_ID);
+      await eda.sys_IFrame.closeIFrame(iframeId);
     }
 
-    await eda.sys_IFrame.openIFrame('/iframe/bridge/index.html', 980, 720, BRIDGE_IFRAME_ID, openOptions);
-    // Treat a resolved openIFrame call as success. Some runtime builds open the
-    // window correctly but report stale results for follow-up existence checks.
+    await eda.sys_IFrame.openIFrame(path, width, height, iframeId, openOptions);
   }
   catch (error) {
     eda.sys_Dialog.showInformationMessage(
       [
-        'AI桥接窗口未能正常打开。',
+        errorHeading,
         '',
         error instanceof Error ? error.message : '未知错误',
         '',
         '已保留 IFrame 方案，请重试一次；若仍失败，再考虑兼容模式。',
       ].join('\n'),
-      'AI桥接',
+      title,
     );
   }
 }
 
-export function openBridgeMenu(): void {
-  void openBridgeMenuInternal();
+export function openIntroPage(): void {
+  void openManagedIFrame(
+    '/iframe/intro/index.html',
+    920,
+    680,
+    INTRO_IFRAME_ID,
+    '插件介绍',
+    '插件介绍页未能正常打开。',
+  );
 }

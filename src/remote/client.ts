@@ -15,7 +15,7 @@ import {
   readStringConfig,
 } from './bridge-config';
 
-const REMOTE_BRIDGE_SOCKET_ID = 'jlceda-aiagent-remote-bridge';
+const REMOTE_BRIDGE_SOCKET_ID = 'jlceda-suite-remote-bridge';
 const DEFAULT_CONNECT_TIMEOUT_MS = 15_000;
 const DEFAULT_HEARTBEAT_INTERVAL_MS = 20_000;
 const DEFAULT_RECONNECT_DELAY_MS = 5_000;

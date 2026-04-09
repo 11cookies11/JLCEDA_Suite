@@ -12,7 +12,7 @@ function normalizeBomFileType(format?: 'json' | 'csv'): 'xlsx' | 'csv' {
 
 export async function exportProjectBom(payload: ExportBomPayload): Promise<BridgeResult> {
   const fileType = normalizeBomFileType(payload.format);
-  const defaultName = payload.fileName ?? `JLCEDA_AIAgent_BOM.${fileType}`;
+  const defaultName = payload.fileName ?? `JLCEDA_Suite_BOM.${fileType}`;
   const bomFile = await eda.sch_ManufactureData.getBomFile(defaultName, fileType);
 
   if (!bomFile) {

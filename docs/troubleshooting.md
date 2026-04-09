@@ -44,7 +44,7 @@
 
 建议排查：
 
-1. 确认使用的是最新文件：`build/dist/jlceda-aiagent_v0.1.0.eext`
+1. 确认使用的是最新文件：`build/dist/jlceda-suite_v0.1.0.eext`
 2. 打开扩展菜单，先点击 `Bridge Self Check`
 3. 再点击 `Bridge Status`
 4. 再点击 `Inspect Current Document`

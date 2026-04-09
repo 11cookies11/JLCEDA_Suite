@@ -31,7 +31,7 @@ def get_repo_root() -> Path:
 
 
 def get_cache_venv_dir() -> Path:
-    return Path.home() / '.cache' / 'jlceda-aiagent-python-server'
+    return Path.home() / '.cache' / 'jlceda-suite-python-server'
 
 
 def get_venv_python_path(venv_dir: Path) -> Path:
