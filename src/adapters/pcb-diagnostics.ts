@@ -263,10 +263,19 @@ function parsePcbBoardBounds(source: string): Array<PcbBoardBounds> {
   return boards;
 }
 
-function estimateLabelAnchor(component: PcbComponentSource): Point {
+function estimateLabelAnchor(
+  component: PcbComponentSource,
+  profile: Awaited<ReturnType<typeof getRuleProfileSnapshot>>,
+): Point {
   const nameLength = (component.designator ?? component.name ?? '').length;
-  const horizontalOffset = Math.min(64, 28 + nameLength * 2);
-  const verticalOffset = Math.min(48, 20 + Math.ceil(nameLength / 6) * 4);
+  const horizontalOffset = Math.min(
+    profile.pcb.labelHorizontalOffsetMax,
+    profile.pcb.labelHorizontalOffsetBase + nameLength * 2,
+  );
+  const verticalOffset = Math.min(
+    profile.pcb.labelVerticalOffsetMax,
+    profile.pcb.labelVerticalOffsetBase + Math.ceil(nameLength / 6) * 4,
+  );
 
   return {
     x: component.x + horizontalOffset,
@@ -327,7 +336,7 @@ export async function inspectPcbLayoutHygieneResult(
       break;
     }
 
-    const labelAnchor = estimateLabelAnchor(component);
+    const labelAnchor = estimateLabelAnchor(component, profile);
 
     for (const other of components) {
       if (other.primitiveId === component.primitiveId) {

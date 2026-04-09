@@ -15,6 +15,9 @@ export interface RuleProfileSnapshot {
     wireClearance: number;
     placementComponentClearance: number;
     placementWireClearance: number;
+    labelPlacementStepFloor: number;
+    labelGapMin: number;
+    labelGapMax: number;
     labelClearance: number;
     wireLabelClearance: number;
     powerSpacing: number;
@@ -22,6 +25,10 @@ export interface RuleProfileSnapshot {
   pcb: {
     componentClearance: number;
     trackClearance: number;
+    labelHorizontalOffsetBase: number;
+    labelHorizontalOffsetMax: number;
+    labelVerticalOffsetBase: number;
+    labelVerticalOffsetMax: number;
     labelClearance: number;
     boardEdgeClearance: number;
   };
@@ -40,6 +47,9 @@ const DEFAULT_PROFILE: RuleProfileSnapshot = {
     wireClearance: 48,
     placementComponentClearance: 48,
     placementWireClearance: 40,
+    labelPlacementStepFloor: 64,
+    labelGapMin: 24,
+    labelGapMax: 56,
     labelClearance: 110,
     wireLabelClearance: 72,
     powerSpacing: 160,
@@ -47,6 +57,10 @@ const DEFAULT_PROFILE: RuleProfileSnapshot = {
   pcb: {
     componentClearance: 120,
     trackClearance: 70,
+    labelHorizontalOffsetBase: 28,
+    labelHorizontalOffsetMax: 64,
+    labelVerticalOffsetBase: 20,
+    labelVerticalOffsetMax: 48,
     labelClearance: 90,
     boardEdgeClearance: 60,
   },

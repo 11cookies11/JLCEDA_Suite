@@ -415,9 +415,16 @@ function roleOffset(role: PowerBlockComponentSuggestion['role'], spacing: number
   }
 }
 
-function getLabelPlacementCandidates(component: SchematicComponentSource, spacing: number): Array<Point> {
-  const step = Math.max(spacing, 64);
-  const labelGap = Math.min(56, Math.max(24, Math.round(step * 0.35)));
+function getLabelPlacementCandidates(
+  component: SchematicComponentSource,
+  spacing: number,
+  profile: Awaited<ReturnType<typeof getRuleProfileSnapshot>>,
+): Array<Point> {
+  const step = Math.max(spacing, profile.schematic.labelPlacementStepFloor);
+  const labelGap = Math.min(
+    profile.schematic.labelGapMax,
+    Math.max(profile.schematic.labelGapMin, Math.round(step * 0.35)),
+  );
 
   return [
     { x: component.x + labelGap, y: component.y - step },
@@ -457,8 +464,9 @@ function suggestLabelPosition(
   components: Array<SchematicComponentSource>,
   segments: Array<ConnectivitySegment>,
   spacing: number,
+  profile: Awaited<ReturnType<typeof getRuleProfileSnapshot>>,
 ): Point {
-  const candidates = getLabelPlacementCandidates(component, spacing);
+  const candidates = getLabelPlacementCandidates(component, spacing, profile);
   let bestCandidate = candidates[0] ?? { x: component.x, y: component.y };
   let bestScore = Number.NEGATIVE_INFINITY;
 
@@ -1131,7 +1139,13 @@ export async function inspectSchematicLabelHygieneResult(
 
   for (const component of labeledComponents) {
     const componentPoint = { x: component.x, y: component.y };
-    const suggestedPosition = suggestLabelPosition(component, components, segments, Math.max(labelClearance, wireLabelClearance));
+    const suggestedPosition = suggestLabelPosition(
+      component,
+      components,
+      segments,
+      Math.max(labelClearance, wireLabelClearance),
+      profile,
+    );
 
     for (const other of components) {
       if (other.primitiveId === component.primitiveId) {

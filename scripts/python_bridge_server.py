@@ -119,6 +119,9 @@ class RuleProfile:
     schematic_wire_clearance: int
     schematic_placement_component_clearance: int
     schematic_placement_wire_clearance: int
+    schematic_label_placement_step_floor: int
+    schematic_label_gap_min: int
+    schematic_label_gap_max: int
     schematic_label_clearance: int
     schematic_wire_label_clearance: int
     schematic_power_spacing: int
@@ -126,6 +129,10 @@ class RuleProfile:
     pcb_track_clearance: int
     pcb_label_clearance: int
     pcb_board_edge_clearance: int
+    pcb_label_horizontal_offset_base: int
+    pcb_label_horizontal_offset_max: int
+    pcb_label_vertical_offset_base: int
+    pcb_label_vertical_offset_max: int
 
     def to_dict(self) -> dict[str, Any]:
         return {
@@ -136,6 +143,9 @@ class RuleProfile:
                 'wireClearance': self.schematic_wire_clearance,
                 'placementComponentClearance': self.schematic_placement_component_clearance,
                 'placementWireClearance': self.schematic_placement_wire_clearance,
+                'labelPlacementStepFloor': self.schematic_label_placement_step_floor,
+                'labelGapMin': self.schematic_label_gap_min,
+                'labelGapMax': self.schematic_label_gap_max,
                 'labelClearance': self.schematic_label_clearance,
                 'wireLabelClearance': self.schematic_wire_label_clearance,
                 'powerSpacing': self.schematic_power_spacing,
@@ -143,6 +153,10 @@ class RuleProfile:
             'pcb': {
                 'componentClearance': self.pcb_component_clearance,
                 'trackClearance': self.pcb_track_clearance,
+                'labelHorizontalOffsetBase': self.pcb_label_horizontal_offset_base,
+                'labelHorizontalOffsetMax': self.pcb_label_horizontal_offset_max,
+                'labelVerticalOffsetBase': self.pcb_label_vertical_offset_base,
+                'labelVerticalOffsetMax': self.pcb_label_vertical_offset_max,
                 'labelClearance': self.pcb_label_clearance,
                 'boardEdgeClearance': self.pcb_board_edge_clearance,
             },
@@ -158,11 +172,18 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_wire_clearance=48,
             schematic_placement_component_clearance=48,
             schematic_placement_wire_clearance=40,
+            schematic_label_placement_step_floor=64,
+            schematic_label_gap_min=24,
+            schematic_label_gap_max=56,
             schematic_label_clearance=110,
             schematic_wire_label_clearance=72,
             schematic_power_spacing=160,
             pcb_component_clearance=120,
             pcb_track_clearance=70,
+            pcb_label_horizontal_offset_base=28,
+            pcb_label_horizontal_offset_max=64,
+            pcb_label_vertical_offset_base=20,
+            pcb_label_vertical_offset_max=48,
             pcb_label_clearance=90,
             pcb_board_edge_clearance=60,
         ),
@@ -173,11 +194,18 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_wire_clearance=40,
             schematic_placement_component_clearance=40,
             schematic_placement_wire_clearance=32,
+            schematic_label_placement_step_floor=56,
+            schematic_label_gap_min=20,
+            schematic_label_gap_max=48,
             schematic_label_clearance=96,
             schematic_wire_label_clearance=64,
             schematic_power_spacing=128,
             pcb_component_clearance=96,
             pcb_track_clearance=56,
+            pcb_label_horizontal_offset_base=24,
+            pcb_label_horizontal_offset_max=56,
+            pcb_label_vertical_offset_base=18,
+            pcb_label_vertical_offset_max=40,
             pcb_label_clearance=72,
             pcb_board_edge_clearance=48,
         ),
@@ -188,11 +216,18 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             schematic_wire_clearance=56,
             schematic_placement_component_clearance=56,
             schematic_placement_wire_clearance=48,
+            schematic_label_placement_step_floor=72,
+            schematic_label_gap_min=28,
+            schematic_label_gap_max=64,
             schematic_label_clearance=128,
             schematic_wire_label_clearance=80,
             schematic_power_spacing=192,
             pcb_component_clearance=144,
             pcb_track_clearance=80,
+            pcb_label_horizontal_offset_base=32,
+            pcb_label_horizontal_offset_max=72,
+            pcb_label_vertical_offset_base=24,
+            pcb_label_vertical_offset_max=56,
             pcb_label_clearance=104,
             pcb_board_edge_clearance=72,
         ),
@@ -247,11 +282,18 @@ def load_rule_profiles(profile_file: Optional[str]) -> tuple[dict[str, RuleProfi
                     schematic.get('placementWireClearance'),
                     coerce_int(schematic.get('wireClearance'), 40),
                 ),
+                schematic_label_placement_step_floor=coerce_int(schematic.get('labelPlacementStepFloor'), 64),
+                schematic_label_gap_min=coerce_int(schematic.get('labelGapMin'), 24),
+                schematic_label_gap_max=coerce_int(schematic.get('labelGapMax'), 56),
                 schematic_label_clearance=coerce_int(schematic.get('labelClearance'), 110),
                 schematic_wire_label_clearance=coerce_int(schematic.get('wireLabelClearance'), 72),
                 schematic_power_spacing=coerce_int(schematic.get('powerSpacing'), 160),
                 pcb_component_clearance=coerce_int(pcb.get('componentClearance'), 120),
                 pcb_track_clearance=coerce_int(pcb.get('trackClearance'), 70),
+                pcb_label_horizontal_offset_base=coerce_int(pcb.get('labelHorizontalOffsetBase'), 28),
+                pcb_label_horizontal_offset_max=coerce_int(pcb.get('labelHorizontalOffsetMax'), 64),
+                pcb_label_vertical_offset_base=coerce_int(pcb.get('labelVerticalOffsetBase'), 20),
+                pcb_label_vertical_offset_max=coerce_int(pcb.get('labelVerticalOffsetMax'), 48),
                 pcb_label_clearance=coerce_int(pcb.get('labelClearance'), 90),
                 pcb_board_edge_clearance=coerce_int(pcb.get('boardEdgeClearance'), 60),
             )

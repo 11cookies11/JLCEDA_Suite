@@ -123,6 +123,15 @@ async function run(): Promise<void> {
           componentClearance?: number;
           placementComponentClearance?: number;
           placementWireClearance?: number;
+          labelPlacementStepFloor?: number;
+          labelGapMin?: number;
+          labelGapMax?: number;
+        };
+        pcb?: {
+          labelHorizontalOffsetBase?: number;
+          labelHorizontalOffsetMax?: number;
+          labelVerticalOffsetBase?: number;
+          labelVerticalOffsetMax?: number;
         };
       };
     };
@@ -130,6 +139,13 @@ async function run(): Promise<void> {
     assert(profilePayload.profile?.schematic?.componentClearance === 80, 'default profile should use balanced schematic clearance');
     assert(profilePayload.profile?.schematic?.placementComponentClearance === 48, 'default profile should expose placement component clearance');
     assert(profilePayload.profile?.schematic?.placementWireClearance === 40, 'default profile should expose placement wire clearance');
+    assert(profilePayload.profile?.schematic?.labelPlacementStepFloor === 64, 'default profile should expose label placement floor');
+    assert(profilePayload.profile?.schematic?.labelGapMin === 24, 'default profile should expose label gap minimum');
+    assert(profilePayload.profile?.schematic?.labelGapMax === 56, 'default profile should expose label gap maximum');
+    assert(profilePayload.profile?.pcb?.labelHorizontalOffsetBase === 28, 'default profile should expose pcb label horizontal base');
+    assert(profilePayload.profile?.pcb?.labelHorizontalOffsetMax === 64, 'default profile should expose pcb label horizontal max');
+    assert(profilePayload.profile?.pcb?.labelVerticalOffsetBase === 20, 'default profile should expose pcb label vertical base');
+    assert(profilePayload.profile?.pcb?.labelVerticalOffsetMax === 48, 'default profile should expose pcb label vertical max');
     console.log('PASS profile read');
 
     const profileUpdateResponse = await fetch(`http://${host}:${controlPort}/profile`, {
