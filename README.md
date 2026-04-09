@@ -42,6 +42,14 @@ The main gaps that remain are public-network validation, server-side Codex integ
 
 ## Public Server Mode
 
+Before starting the Python server, install its runtime dependency:
+
+```bash
+python3 -m pip install -r requirements-server.txt
+```
+
+If you prefer not to install it system-wide, the server also bootstraps a cached virtual environment under `~/.cache/jlceda-aiagent-python-server` on first launch.
+
 If you are hosting the bridge on a public machine, start it with the control plane enabled:
 
 ```bash

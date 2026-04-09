@@ -41,6 +41,14 @@
 
 ## 公网服务模式
 
+在启动 Python 服务端之前，先安装运行时依赖：
+
+```bash
+python3 -m pip install -r requirements-server.txt
+```
+
+如果你不想装到系统环境里，服务启动时也会在 `~/.cache/jlceda-aiagent-python-server` 下自动创建缓存虚拟环境并安装依赖。
+
 如果你要在公网机器上部署桥接服务，建议直接用控制平面一起启动：
 
 ```bash
