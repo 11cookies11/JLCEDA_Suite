@@ -1923,6 +1923,40 @@ async function run(): Promise<void> {
       },
     },
     {
+      name: 'place component with overlap avoidance',
+      request: {
+        id: 'smoke-004a',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'place_component',
+          requiresConfirmation: false,
+          payload: {
+            libraryUuid: 'lib-001',
+            uuid: 'cmp-001',
+            position: { x: 100, y: 100 },
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'place component overlap avoidance should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as {
+            placementAdjusted?: boolean;
+            placementMode?: string;
+            position?: { x?: number; y?: number };
+            requestedPosition?: { x?: number; y?: number };
+          };
+          assert(data.placementAdjusted === true, 'component placement should be adjusted away from nearby wiring');
+          assert(data.placementMode === 'avoid_overlap', 'component placement should report avoid_overlap mode');
+          assert(data.position?.x === 140 && data.position?.y === 140, 'component should move to the first safe slot');
+          assert(data.requestedPosition?.x === 100 && data.requestedPosition?.y === 100, 'requested position should be preserved');
+        }
+      },
+    },
+    {
       name: 'create wire without confirmation',
       request: {
         id: 'smoke-005',

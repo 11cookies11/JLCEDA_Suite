@@ -27,6 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Schematic write-command scaffolding for component placement and wire creation
 - BOM export flow, smoke-test coverage, troubleshooting notes, release checklist, and versioning guide
 - A runtime validation report template for recording JLCEDA import and execution results
+- A schematic component placement fallback that nudges new parts away from nearby wires and existing components
 
 ### Changed
 

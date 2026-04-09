@@ -67,6 +67,19 @@ interface SerializedSourceRecord {
   body: Record<string, unknown>;
 }
 
+interface SchematicPlacementPoint {
+  x: number;
+  y: number;
+}
+
+interface SchematicPlacementGeometry {
+  components: Array<SchematicPlacementPoint>;
+  segments: Array<{
+    start: SchematicPlacementPoint;
+    end: SchematicPlacementPoint;
+  }>;
+}
+
 function parseSourceRecord(line: string): SerializedSourceRecord | undefined {
   const separatorIndex = line.indexOf('||');
 
@@ -90,6 +103,240 @@ function parseSourceRecord(line: string): SerializedSourceRecord | undefined {
 
 function stringifySourceRecord(record: SerializedSourceRecord): string {
   return `${JSON.stringify(record.header)}||${JSON.stringify(record.body)}|`;
+}
+
+function normalizePlacementNumber(value: unknown): number | undefined {
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value;
+  }
+
+  if (typeof value === 'string' && value.trim().length > 0) {
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : undefined;
+  }
+
+  return undefined;
+}
+
+function parseCurrentSchematicPlacementGeometry(source: string): SchematicPlacementGeometry {
+  const components: Array<SchematicPlacementPoint> = [];
+  const segments: Array<{
+    start: SchematicPlacementPoint;
+    end: SchematicPlacementPoint;
+  }> = [];
+
+  const wireSegments = new Map<string, {
+    start?: SchematicPlacementPoint;
+    end?: SchematicPlacementPoint;
+  }>();
+
+  for (const line of source.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      continue;
+    }
+
+    const record = parseSourceRecord(trimmed);
+    if (!record) {
+      continue;
+    }
+
+    const type = String(record.header.type ?? '');
+
+    if (type === 'COMPONENT') {
+      const x = normalizePlacementNumber(record.body.x);
+      const y = normalizePlacementNumber(record.body.y);
+      if (x !== undefined && y !== undefined) {
+        components.push({ x, y });
+      }
+      continue;
+    }
+
+    if (type === 'LINE') {
+      const lineGroup = String(record.body.lineGroup ?? '');
+      const startX = normalizePlacementNumber(record.body.startX);
+      const startY = normalizePlacementNumber(record.body.startY);
+      const endX = normalizePlacementNumber(record.body.endX);
+      const endY = normalizePlacementNumber(record.body.endY);
+
+      if (!lineGroup || startX === undefined || startY === undefined || endX === undefined || endY === undefined) {
+        continue;
+      }
+
+      const entry = wireSegments.get(lineGroup) ?? {};
+      entry.start = entry.start ?? { x: startX, y: startY };
+      entry.end = { x: endX, y: endY };
+      wireSegments.set(lineGroup, entry);
+    }
+  }
+
+  for (const segment of wireSegments.values()) {
+    if (segment.start && segment.end) {
+      segments.push({
+        start: segment.start,
+        end: segment.end,
+      });
+    }
+  }
+
+  return {
+    components,
+    segments,
+  };
+}
+
+function distanceSquaredBetweenPoints(left: SchematicPlacementPoint, right: SchematicPlacementPoint): number {
+  const dx = left.x - right.x;
+  const dy = left.y - right.y;
+  return dx * dx + dy * dy;
+}
+
+function distanceSquaredPointToSegment(
+  point: SchematicPlacementPoint,
+  start: SchematicPlacementPoint,
+  end: SchematicPlacementPoint,
+): number {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const lengthSquared = dx * dx + dy * dy;
+
+  if (lengthSquared === 0) {
+    return distanceSquaredBetweenPoints(point, start);
+  }
+
+  const rawT = ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared;
+  const t = Math.min(1, Math.max(0, rawT));
+  const projected = {
+    x: start.x + dx * t,
+    y: start.y + dy * t,
+  };
+
+  return distanceSquaredBetweenPoints(point, projected);
+}
+
+function generatePlacementOffsets(step: number, maxRing: number): Array<SchematicPlacementPoint> {
+  const offsets: Array<SchematicPlacementPoint> = [{ x: 0, y: 0 }];
+
+  for (let ring = 1; ring <= maxRing; ring += 1) {
+    const distance = ring * step;
+    const coordinates = [
+      [distance, 0],
+      [-distance, 0],
+      [0, distance],
+      [0, -distance],
+      [distance, distance],
+      [distance, -distance],
+      [-distance, distance],
+      [-distance, -distance],
+    ] as const;
+
+    for (const [x, y] of coordinates) {
+      offsets.push({ x, y });
+    }
+  }
+
+  return offsets;
+}
+
+function isPlacementClear(
+  candidate: SchematicPlacementPoint,
+  geometry: SchematicPlacementGeometry,
+  componentClearance: number,
+  wireClearance: number,
+): boolean {
+  const componentClearanceSquared = componentClearance * componentClearance;
+  const wireClearanceSquared = wireClearance * wireClearance;
+
+  for (const component of geometry.components) {
+    if (distanceSquaredBetweenPoints(candidate, component) < componentClearanceSquared) {
+      return false;
+    }
+  }
+
+  for (const segment of geometry.segments) {
+    if (distanceSquaredPointToSegment(candidate, segment.start, segment.end) < wireClearanceSquared) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+async function resolveSchematicComponentPlacement(
+  requestedPosition: BridgePoint,
+): Promise<{
+  adjusted: boolean;
+  position: BridgePoint;
+  originalPosition: BridgePoint;
+}> {
+  const source = await eda.sys_FileManager.getDocumentSource();
+
+  if (!source) {
+    return {
+      adjusted: false,
+      position: {
+        x: requestedPosition.x,
+        y: requestedPosition.y,
+      },
+      originalPosition: {
+        x: requestedPosition.x,
+        y: requestedPosition.y,
+      },
+    };
+  }
+
+  const geometry = parseCurrentSchematicPlacementGeometry(source);
+  if (!geometry.components.length && !geometry.segments.length) {
+    return {
+      adjusted: false,
+      position: {
+        x: requestedPosition.x,
+        y: requestedPosition.y,
+      },
+      originalPosition: {
+        x: requestedPosition.x,
+        y: requestedPosition.y,
+      },
+    };
+  }
+
+  const step = 40;
+  const maxRing = 8;
+  const componentClearance = 48;
+  const wireClearance = 40;
+  const offsets = generatePlacementOffsets(step, maxRing);
+
+  for (const offset of offsets) {
+    const candidate = {
+      x: requestedPosition.x + offset.x,
+      y: requestedPosition.y + offset.y,
+    };
+
+    if (!isPlacementClear(candidate, geometry, componentClearance, wireClearance)) {
+      continue;
+    }
+
+    return {
+      adjusted: offset.x !== 0 || offset.y !== 0,
+      position: candidate,
+      originalPosition: {
+        x: requestedPosition.x,
+        y: requestedPosition.y,
+      },
+    };
+  }
+
+  return {
+    adjusted: false,
+    position: {
+      x: requestedPosition.x,
+      y: requestedPosition.y,
+    },
+    originalPosition: {
+      x: requestedPosition.x,
+      y: requestedPosition.y,
+    },
+  };
 }
 
 function transformLayerId(layerId: unknown, placement: PcbFootprintPlacementTransform): unknown {
@@ -303,13 +550,14 @@ function summarizePcbPrimitive(created: unknown): Record<string, unknown> {
 }
 
 export async function placeSchematicComponent(payload: PlaceComponentPayload): Promise<BridgeResult> {
+  const placement = await resolveSchematicComponentPlacement(payload.position);
   const created = await eda.sch_PrimitiveComponent.create(
     {
       libraryUuid: payload.libraryUuid,
       uuid: payload.uuid,
     },
-    payload.position.x,
-    payload.position.y,
+    placement.position.x,
+    placement.position.y,
     payload.subPartName,
     payload.rotation,
     payload.mirror,
@@ -330,6 +578,9 @@ export async function placeSchematicComponent(payload: PlaceComponentPayload): P
         uuid: payload.uuid,
         subPartName: payload.subPartName,
       },
+      requestedPosition: placement.originalPosition,
+      placementAdjusted: placement.adjusted,
+      placementMode: placement.adjusted ? 'avoid_overlap' : 'direct',
     },
   };
 }
