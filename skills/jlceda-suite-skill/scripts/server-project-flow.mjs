@@ -18,7 +18,7 @@ function buildRequest(id, domain, action, payload) {
     id,
     type: 'command.request',
     protocolVersion: BRIDGE_PROTOCOL_VERSION,
-    sessionId: 'jlceda-bridge-flow',
+    sessionId: 'jlceda-suite-skill',
     command: {
       domain,
       action,
@@ -87,7 +87,7 @@ async function run() {
     buildRequest('skill-flow-001', 'project', 'create_project', {
       projectFriendlyName,
       projectName,
-      description: 'Created by jlceda-bridge-flow',
+      description: 'Created by jlceda-suite-skill',
     }),
     controlToken,
   );
@@ -173,7 +173,7 @@ async function run() {
 }
 
 run().catch((error) => {
-  console.error('JLCEDA bridge flow failed.');
+  console.error('JLCEDA Suite skill flow failed.');
   console.error(error);
   process.exitCode = 1;
 });

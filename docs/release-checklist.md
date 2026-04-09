@@ -36,7 +36,7 @@
 当前最重要的发布产物：
 
 - `.eext` 扩展包
-- `build/dist/jlceda-bridge-flow-release.zip` skill + plugin release bundle
+- `build/dist/jlceda-suite-release.zip` skill + plugin release bundle
 - 开发计划与协议文档
 - 示例场景与排障文档
 - 版本管理与发布清单

@@ -8,6 +8,12 @@
 
 `JLCEDA Suite` 将 JLCEDA 插件、bridge server 和 agent skill 包装成一套用于 AI 辅助硬件开发的工具集。
 
+这套系统主要由三部分组成：
+
+- `JLCEDA Suite Plugin`：JLCEDA 扩展与编辑器内控制台
+- `JLCEDA Suite Server`：负责会话连接、控制平面与请求路由的 bridge server
+- `JLCEDA Suite Skill`：供 AI agent 复用的服务端工作流 skill 包
+
 这个仓库不只是一个普通的 EDA 插件模板，而是一个连接两端的桥梁：
 
 - 一端是部署在服务器上的 `Codex`，负责理解高层任务与生成执行方案

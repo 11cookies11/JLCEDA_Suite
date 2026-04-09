@@ -1,6 +1,6 @@
 # JLCEDA Bridge API Surface
 
-This reference describes the API surface that the `jlceda-bridge-flow` skill can use.
+This reference describes the API surface that the `jlceda-suite-skill` package can use.
 
 Use it when you need to decide whether to call a dedicated bridge command or fall back to `system.api_invoke`.
 

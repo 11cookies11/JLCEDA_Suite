@@ -1,13 +1,13 @@
 ---
-name: jlceda-bridge-flow
-description: Drive a connected JLCEDA bridge session through the server control plane, operate supported project/schematic/PCB/system APIs, and use system.api_invoke for the official JLCEDA API surface when the user wants Codex to operate JLCEDA through the bridge.
+name: jlceda-suite-skill
+description: Drive a connected JLCEDA Suite session through the suite server control plane, operate supported project/schematic/PCB/system APIs, and use system.api_invoke for the official JLCEDA API surface when the user wants an AI agent to operate JLCEDA through the suite.
 ---
 
-# JLCEDA Bridge Flow
+# JLCEDA Suite Skill
 
 ## When to use
 
-Use this skill when the user wants Codex to drive a live JLCEDA session through the bridge server instead of manually clicking the GUI.
+Use this skill when the user wants an AI agent to drive a live JLCEDA session through the JLCEDA Suite Server instead of manually clicking the GUI.
 
 Typical requests:
 

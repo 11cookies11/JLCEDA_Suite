@@ -8,6 +8,12 @@ Language: English | [简体中文](README.zh-CN.md)
 
 `JLCEDA Suite` packages the JLCEDA plugin, bridge server, and agent skill flow into one toolkit for AI-assisted hardware development.
 
+The suite is organized into three main parts:
+
+- `JLCEDA Suite Plugin`: the JLCEDA extension and in-editor control console
+- `JLCEDA Suite Server`: the bridge server and control plane for connected sessions
+- `JLCEDA Suite Skill`: the reusable agent skill package for driving the server-side workflow
+
 This repository is not just a generic EDA plugin template. It is becoming a bridge between two sides:
 
 - `Codex` running on a server, which understands higher-level tasks and generates execution plans

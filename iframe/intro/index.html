@@ -244,8 +244,9 @@
           <p class="eyebrow">JLCEDA AI Bridge</p>
           <h1>把 Codex 的能力接进 JLCEDA，而不是停留在聊天框里</h1>
           <p>
-            这个插件提供一个受控桥接层，让服务端 Codex 能连接到本地运行的 JLCEDA，
-            读取项目状态、查看原理图与 PCB、执行受限命令，并把结果结构化返回。
+            这是 JLCEDA Suite 的插件入口。整套系统由 Plugin、Server 和 Skill 组成，
+            让远程 AI workflow 能连接本地运行的 JLCEDA，读取项目状态、查看原理图与 PCB、
+            执行受限命令，并把结果结构化返回。
           </p>
         </div>
       </section>
@@ -256,7 +257,7 @@
             <h2 class="card-title">它能做什么</h2>
           </div>
           <div class="card-body">
-            <p class="lead">插件不是通用聊天面板，而是给硬件设计工作流准备的能力入口。</p>
+            <p class="lead">Plugin 不是通用聊天面板，而是 JLCEDA Suite 在编辑器里的能力入口。</p>
             <div class="list">
               <div class="item">
                 <div class="badge">1</div>
@@ -290,7 +291,7 @@
           <div class="card-body">
             <div class="steps">
               <div class="step">
-                <strong>1. 启动 bridge server</strong>
+              <strong>1. 启动 JLCEDA Suite Server</strong>
                 <p>本地默认地址通常是 <code>ws://127.0.0.1:8787</code>，控制面是 <code>http://127.0.0.1:8788</code>。</p>
               </div>
               <div class="step">
@@ -344,7 +345,8 @@
       </section>
 
       <div class="footer">
-        当前插件版本用于连接本地 JLCEDA 与远程 AI 工作流。进入菜单中的 “JLCEDA Suite” 即可打开控制台；
+        当前页面展示的是 JLCEDA Suite Plugin。整套系统还包括 JLCEDA Suite Server 和 JLCEDA Suite Skill；
+        进入菜单中的 “JLCEDA Suite” 即可打开控制台并连接工作流。
         进入“插件介绍”则适合第一次接触插件时快速了解用途和连接方法。
       </div>
     </div>
