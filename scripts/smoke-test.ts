@@ -839,12 +839,12 @@ function installMockEda(): void {
     (globalThis as { __lastUpdateFetchRequest?: typeof lastFetchRequest }).__lastUpdateFetchRequest = lastFetchRequest;
 
     return new Response(JSON.stringify({
-      tag_name: 'v0.1.21',
-      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.21',
+      tag_name: 'v0.1.22',
+      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.22',
       assets: [
         {
-          name: 'jlceda-aiagent_v0.1.21.eext',
-          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.21/jlceda-aiagent_v0.1.21.eext',
+          name: 'jlceda-aiagent_v0.1.22.eext',
+          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.22/jlceda-aiagent_v0.1.22.eext',
         },
       ],
     }), {
@@ -984,8 +984,8 @@ async function run(): Promise<void> {
             latestDownloadUrl?: string;
           };
           assert(data.updateAvailable === true, 'update check should report a newer release');
-          assert(data.latestVersion === 'v0.1.21', 'update check should surface the mocked latest version');
-          assert(data.latestDownloadUrl?.includes('v0.1.21'), 'update check should surface the mocked download url');
+          assert(data.latestVersion === 'v0.1.22', 'update check should surface the mocked latest version');
+          assert(data.latestDownloadUrl?.includes('v0.1.22'), 'update check should surface the mocked download url');
         }
       },
     },
@@ -1010,7 +1010,7 @@ async function run(): Promise<void> {
             latestVersion?: string;
           };
           assert(data.updateAvailable === true, 'update status should persist the update check result');
-          assert(data.latestVersion === 'v0.1.21', 'update status should expose the mocked latest version');
+          assert(data.latestVersion === 'v0.1.22', 'update status should expose the mocked latest version');
         }
       },
     },
@@ -1088,7 +1088,7 @@ async function run(): Promise<void> {
           assert(fetchRequest?.url.includes('/repos/private-owner/private-repo/releases/latest'), 'private update check should target configured repo');
           assert(fetchRequest?.authorization === 'Bearer ghp_private_token', 'private update check should send GitHub auth token');
           assert(data.updateAvailable === true, 'private update check should report a newer release');
-          assert(data.latestVersion === 'v0.1.21', 'private update check should surface the mocked latest version');
+          assert(data.latestVersion === 'v0.1.22', 'private update check should surface the mocked latest version');
         }
       },
     },
