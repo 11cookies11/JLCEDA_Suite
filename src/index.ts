@@ -8,6 +8,7 @@ import {
 import { executeBridgeCommand } from './bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from './bridge/protocol';
 import { getSupportedCommandNames, IMPLEMENTED_COMMANDS } from './bridge/registry';
+import { deriveControlUrl } from './remote/bridge-config';
 import { remoteBridgeClient } from './remote/client';
 
 const BRIDGE_UI_RPC_TOPIC = 'jlceda-aiagent.bridge-ui';
@@ -99,6 +100,7 @@ function summarizeRemoteStatus(): Array<string> {
 
   return [
     `服务地址：${remoteStatus.serverUrl ?? '未设置'}`,
+    `控制地址：${remoteStatus.controlUrl ?? '未设置'}`,
     `客户端 ID：${remoteStatus.clientId ?? '未设置'}`,
     `当前状态：${remoteStatus.connected ? '已连接' : remoteStatus.connecting ? '连接中' : '未连接'}`,
     `重连次数：${remoteStatus.reconnectAttempts}`,
@@ -711,6 +713,28 @@ export async function configureRemoteBridge(): Promise<void> {
     return;
   }
 
+  const controlUrl = await showInputDialog(
+    '请输入远程控制平面地址（可留空自动推导）',
+    '控制平面地址',
+    'url',
+    currentSettings.controlUrl || deriveControlUrl(serverUrl),
+  );
+
+  if (controlUrl === undefined) {
+    return;
+  }
+
+  const controlToken = await showInputDialog(
+    '请输入远程控制平面令牌（可留空沿用远程服务令牌）',
+    '控制平面令牌',
+    'password',
+    currentSettings.controlToken || authToken,
+  );
+
+  if (controlToken === undefined) {
+    return;
+  }
+
   const clientId = await showInputDialog(
     '请输入当前设备的客户端 ID',
     '客户端 ID',
@@ -724,7 +748,9 @@ export async function configureRemoteBridge(): Promise<void> {
 
   await remoteBridgeClient.saveSettings({
     serverUrl,
+    controlUrl,
     authToken,
+    controlToken,
     clientId,
     autoConnect: true,
   });
@@ -756,6 +782,7 @@ export function showRemoteBridgeStatus(): void {
     formatSection('连接概览', [
       `当前状态：${remoteStatus.connected ? '已连接' : remoteStatus.connecting ? '连接中' : '未连接'}`,
       `服务地址：${formatValue(remoteStatus.serverUrl, '未设置')}`,
+      `控制地址：${formatValue(remoteStatus.controlUrl, '未设置')}`,
       `客户端 ID：${formatValue(remoteStatus.clientId, '未设置')}`,
     ]),
     '',

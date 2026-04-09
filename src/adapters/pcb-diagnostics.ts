@@ -1,4 +1,5 @@
 import type { BridgeResult } from '../bridge/protocol';
+import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
 
 interface Point {
   x: number;
@@ -276,10 +277,12 @@ function estimateLabelAnchor(component: PcbComponentSource): Point {
 export async function inspectPcbLayoutHygieneResult(
   payload?: InspectPcbLayoutHygienePayload,
 ): Promise<BridgeResult> {
-  const componentClearance = payload?.componentClearance ?? 120;
-  const trackClearance = payload?.trackClearance ?? 70;
-  const labelClearance = payload?.labelClearance ?? 90;
-  const boardEdgeClearance = payload?.boardEdgeClearance ?? 60;
+  const profile = await getRuleProfileSnapshot();
+  const defaultProfile = getDefaultRuleProfileSnapshot();
+  const componentClearance = payload?.componentClearance ?? profile.pcb.componentClearance ?? defaultProfile.pcb.componentClearance;
+  const trackClearance = payload?.trackClearance ?? profile.pcb.trackClearance ?? defaultProfile.pcb.trackClearance;
+  const labelClearance = payload?.labelClearance ?? profile.pcb.labelClearance ?? defaultProfile.pcb.labelClearance;
+  const boardEdgeClearance = payload?.boardEdgeClearance ?? profile.pcb.boardEdgeClearance ?? defaultProfile.pcb.boardEdgeClearance;
   const maxIssues = payload?.maxIssues ?? 100;
   const source = await eda.sys_FileManager.getDocumentSource();
 

@@ -1,5 +1,6 @@
 import type { BridgeResult } from '../bridge/protocol';
 import JSZip from 'jszip';
+import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
 
 interface SourceRecord {
   header: Record<string, unknown>;
@@ -1020,8 +1021,9 @@ export async function inspectSchematicConnectivityResult(
 export async function inspectSchematicLayoutHygieneResult(
   payload?: InspectLayoutHygienePayload,
 ): Promise<BridgeResult> {
-  const componentClearance = payload?.componentClearance ?? 80;
-  const wireClearance = payload?.wireClearance ?? 48;
+  const profile = await getRuleProfileSnapshot();
+  const componentClearance = payload?.componentClearance ?? profile.schematic.componentClearance ?? getDefaultRuleProfileSnapshot().schematic.componentClearance;
+  const wireClearance = payload?.wireClearance ?? profile.schematic.wireClearance ?? getDefaultRuleProfileSnapshot().schematic.wireClearance;
   const maxIssues = payload?.maxIssues ?? 100;
   const source = await eda.sys_FileManager.getDocumentSource();
 
@@ -1110,8 +1112,9 @@ export async function inspectSchematicLayoutHygieneResult(
 export async function inspectSchematicLabelHygieneResult(
   payload?: InspectLabelHygienePayload,
 ): Promise<BridgeResult> {
-  const labelClearance = payload?.labelClearance ?? 110;
-  const wireLabelClearance = payload?.wireLabelClearance ?? 72;
+  const profile = await getRuleProfileSnapshot();
+  const labelClearance = payload?.labelClearance ?? profile.schematic.labelClearance ?? getDefaultRuleProfileSnapshot().schematic.labelClearance;
+  const wireLabelClearance = payload?.wireLabelClearance ?? profile.schematic.wireLabelClearance ?? getDefaultRuleProfileSnapshot().schematic.wireLabelClearance;
   const maxIssues = payload?.maxIssues ?? 100;
   const source = await eda.sys_FileManager.getDocumentSource();
 
@@ -1209,7 +1212,8 @@ export async function inspectSchematicLabelHygieneResult(
 export async function suggestPowerBlockLayoutResult(
   payload?: SuggestPowerBlockLayoutPayload,
 ): Promise<BridgeResult> {
-  const spacing = payload?.spacing ?? 160;
+  const profile = await getRuleProfileSnapshot();
+  const spacing = payload?.spacing ?? profile.schematic.powerSpacing ?? getDefaultRuleProfileSnapshot().schematic.powerSpacing;
   const maxSuggestions = payload?.maxSuggestions ?? 8;
   const anchor = payload?.anchor ?? { x: 0, y: 0 };
   const source = await eda.sys_FileManager.getDocumentSource();

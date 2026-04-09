@@ -4,19 +4,27 @@ import * as extensionConfig from '../../extension.json';
 import { executeBridgeRequest } from '../bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from '../bridge/protocol';
 import { getSupportedCommandNames } from '../bridge/registry';
+import {
+  CONFIG_KEY_AUTH_TOKEN,
+  CONFIG_KEY_AUTO_CONNECT,
+  CONFIG_KEY_CLIENT_ID,
+  CONFIG_KEY_CONTROL_TOKEN,
+  CONFIG_KEY_CONTROL_URL,
+  CONFIG_KEY_SERVER_URL,
+  deriveControlUrl,
+  readStringConfig,
+} from './bridge-config';
 
 const REMOTE_BRIDGE_SOCKET_ID = 'jlceda-aiagent-remote-bridge';
-const CONFIG_KEY_SERVER_URL = 'remoteBridge.serverUrl';
-const CONFIG_KEY_AUTH_TOKEN = 'remoteBridge.authToken';
-const CONFIG_KEY_CLIENT_ID = 'remoteBridge.clientId';
-const CONFIG_KEY_AUTO_CONNECT = 'remoteBridge.autoConnect';
 const DEFAULT_CONNECT_TIMEOUT_MS = 15_000;
 const DEFAULT_HEARTBEAT_INTERVAL_MS = 20_000;
 const DEFAULT_RECONNECT_DELAY_MS = 5_000;
 
 export interface RemoteBridgeSettings {
   serverUrl: string;
+  controlUrl: string;
   authToken: string;
+  controlToken: string;
   clientId: string;
   autoConnect: boolean;
 }
@@ -27,6 +35,7 @@ export interface RemoteBridgeStatus {
   connecting: boolean;
   clientId?: string;
   serverUrl?: string;
+  controlUrl?: string;
   lastRegisteredAt?: string;
   lastHeartbeatAt?: string;
   reconnectAttempts: number;
@@ -51,10 +60,6 @@ interface RemoteBridgeClientDependencies {
 function createDefaultClientId(): string {
   const suffix = Math.random().toString(36).slice(2, 10);
   return `jlceda-client-${suffix}`;
-}
-
-function readStringConfig(value: unknown): string {
-  return typeof value === 'string' ? value : '';
 }
 
 function readBooleanConfig(value: unknown): boolean {
@@ -104,7 +109,9 @@ export class RemoteBridgeClient {
 
   getSettings(): RemoteBridgeSettings {
     const serverUrl = readStringConfig(this.dependencies.getConfig(CONFIG_KEY_SERVER_URL));
+    const controlUrl = readStringConfig(this.dependencies.getConfig(CONFIG_KEY_CONTROL_URL)) || deriveControlUrl(serverUrl);
     const authToken = readStringConfig(this.dependencies.getConfig(CONFIG_KEY_AUTH_TOKEN));
+    const controlToken = readStringConfig(this.dependencies.getConfig(CONFIG_KEY_CONTROL_TOKEN)) || authToken;
     const storedClientId = readStringConfig(this.dependencies.getConfig(CONFIG_KEY_CLIENT_ID));
     const autoConnect = readBooleanConfig(this.dependencies.getConfig(CONFIG_KEY_AUTO_CONNECT));
     const clientId = storedClientId || createDefaultClientId();
@@ -114,11 +121,14 @@ export class RemoteBridgeClient {
       configured: Boolean(serverUrl),
       clientId,
       serverUrl: serverUrl || undefined,
+      controlUrl: controlUrl || undefined,
     };
 
     return {
       serverUrl,
+      controlUrl,
       authToken,
+      controlToken,
       clientId,
       autoConnect,
     };
@@ -129,10 +139,14 @@ export class RemoteBridgeClient {
     const nextSettings: RemoteBridgeSettings = {
       ...current,
       ...settings,
+      controlUrl: settings.controlUrl ?? current.controlUrl,
+      controlToken: settings.controlToken ?? current.controlToken,
     };
 
     await this.dependencies.setConfig(CONFIG_KEY_SERVER_URL, nextSettings.serverUrl);
+    await this.dependencies.setConfig(CONFIG_KEY_CONTROL_URL, nextSettings.controlUrl);
     await this.dependencies.setConfig(CONFIG_KEY_AUTH_TOKEN, nextSettings.authToken);
+    await this.dependencies.setConfig(CONFIG_KEY_CONTROL_TOKEN, nextSettings.controlToken);
     await this.dependencies.setConfig(CONFIG_KEY_CLIENT_ID, nextSettings.clientId);
     await this.dependencies.setConfig(CONFIG_KEY_AUTO_CONNECT, nextSettings.autoConnect);
 
@@ -141,6 +155,7 @@ export class RemoteBridgeClient {
       configured: Boolean(nextSettings.serverUrl),
       clientId: nextSettings.clientId,
       serverUrl: nextSettings.serverUrl || undefined,
+      controlUrl: nextSettings.controlUrl || undefined,
     };
   }
 
