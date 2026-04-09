@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.25] - 2026-04-09
+
+### Fixed
+
+- Added an `XMLHttpRequest` fallback for GitHub release checks so plugin auto-update works in JLCEDA runtimes where `fetch` is unavailable
+- Kept the 0.1.24 shell-menu label fix and suite release asset layout
+
 ## [0.1.24] - 2026-04-09
 
 ### Fixed

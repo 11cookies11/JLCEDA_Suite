@@ -133,18 +133,18 @@ function buildLatestReleaseUrl(settings: UpdateCheckSettings): string {
   return `https://api.github.com/repos/${encodeURIComponent(settings.repoOwner)}/${encodeURIComponent(settings.repoName)}/releases/latest`;
 }
 
-async function fetchLatestRelease(settings: UpdateCheckSettings): Promise<GitHubRelease> {
-  if (typeof fetch !== 'function') {
-    throw new TypeError('Fetch API is not available.');
-  }
+function getGitHubRequestHeaders(settings: UpdateCheckSettings): Record<string, string> {
+  return {
+    accept: 'application/vnd.github+json',
+    'user-agent': 'JLCEDA-Suite',
+    ...(settings.githubToken ? { authorization: `Bearer ${settings.githubToken}` } : {}),
+    'x-github-api-version': '2022-11-28',
+  };
+}
 
+async function fetchLatestReleaseViaFetch(settings: UpdateCheckSettings): Promise<GitHubRelease> {
   const response = await fetch(buildLatestReleaseUrl(settings), {
-    headers: {
-      'accept': 'application/vnd.github+json',
-      'user-agent': 'JLCEDA-Suite',
-      ...(settings.githubToken ? { authorization: `Bearer ${settings.githubToken}` } : {}),
-      'x-github-api-version': '2022-11-28',
-    },
+    headers: getGitHubRequestHeaders(settings),
   });
 
   if (!response.ok) {
@@ -154,7 +154,70 @@ async function fetchLatestRelease(settings: UpdateCheckSettings): Promise<GitHub
   return await response.json() as GitHubRelease;
 }
 
+async function fetchLatestReleaseViaXmlHttpRequest(settings: UpdateCheckSettings): Promise<GitHubRelease> {
+  const XmlHttpRequestCtor = (globalThis as {
+    XMLHttpRequest?: new () => {
+      open: (method: string, url: string, async?: boolean) => void;
+      setRequestHeader: (name: string, value: string) => void;
+      send: () => void;
+      readyState: number;
+      status: number;
+      statusText: string;
+      responseText: string;
+      onreadystatechange: (() => void) | null;
+      onerror: (() => void) | null;
+    };
+  }).XMLHttpRequest;
+
+  if (typeof XmlHttpRequestCtor !== 'function') {
+    throw new TypeError('Neither fetch nor XMLHttpRequest is available.');
+  }
+
+  return await new Promise<GitHubRelease>((resolve, reject) => {
+    const request = new XmlHttpRequestCtor();
+
+    request.open('GET', buildLatestReleaseUrl(settings), true);
+
+    for (const [key, value] of Object.entries(getGitHubRequestHeaders(settings))) {
+      request.setRequestHeader(key, value);
+    }
+
+    request.onreadystatechange = () => {
+      if (request.readyState !== 4) {
+        return;
+      }
+
+      if (request.status < 200 || request.status >= 300) {
+        reject(new Error(`GitHub release lookup failed: ${request.status} ${request.statusText || 'request failed'}`));
+        return;
+      }
+
+      try {
+        resolve(JSON.parse(request.responseText) as GitHubRelease);
+      }
+      catch {
+        reject(new Error('GitHub release lookup returned invalid JSON.'));
+      }
+    };
+
+    request.onerror = () => {
+      reject(new Error('GitHub release lookup failed: network error.'));
+    };
+
+    request.send();
+  });
+}
+
+async function fetchLatestRelease(settings: UpdateCheckSettings): Promise<GitHubRelease> {
+  if (typeof fetch === 'function') {
+    return await fetchLatestReleaseViaFetch(settings);
+  }
+
+  return await fetchLatestReleaseViaXmlHttpRequest(settings);
+}
+
 async function loadUpdateSettingsFromStorage(): Promise<UpdateCheckSettings> {
+
   if (updateSettingsLoaded) {
     return updateSettings;
   }
