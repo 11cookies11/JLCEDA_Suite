@@ -1,4 +1,5 @@
 import type { BridgePoint, BridgeResult } from '../bridge/protocol';
+import { collectCurrentSchematicPinLocations, snapPointsToNearbyPins } from './schematic-diagnostics';
 
 export interface PlaceComponentPayload {
   libraryUuid: string;
@@ -338,7 +339,17 @@ export async function createSchematicWire(payload: CreateWirePayload): Promise<B
     throw new Error('At least two points are required to create a schematic wire.');
   }
 
-  const created = await eda.sch_PrimitiveWire.create(normalizeWirePoints(payload.points), payload.netName);
+  let wirePoints = payload.points;
+
+  try {
+    const pins = await collectCurrentSchematicPinLocations();
+    wirePoints = snapPointsToNearbyPins(payload.points, pins);
+  }
+  catch {
+    wirePoints = payload.points;
+  }
+
+  const created = await eda.sch_PrimitiveWire.create(normalizeWirePoints(wirePoints), payload.netName);
 
   if (!created) {
     throw new Error('JLCEDA did not create the schematic wire.');
@@ -348,7 +359,7 @@ export async function createSchematicWire(payload: CreateWirePayload): Promise<B
     summary: 'schematic wire created',
     data: {
       ...summarizeSchematicPrimitive(created),
-      points: payload.points,
+      points: wirePoints,
     },
   };
 }

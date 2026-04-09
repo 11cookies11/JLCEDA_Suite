@@ -453,6 +453,106 @@ async function buildPinLocationsFromSource(
   return pins;
 }
 
+async function collectSchematicPinLocations(
+  allSchematicPages: boolean,
+): Promise<{
+  absolutePins: Array<ConnectivityPointRef>;
+  componentCount: number;
+}> {
+  const [source, runtimeComponents] = await Promise.all([
+    eda.sys_FileManager.getDocumentSource(),
+    eda.sch_PrimitiveComponent.getAll(undefined, allSchematicPages),
+  ]);
+
+  if (!source) {
+    throw new Error('Unable to read the current schematic source.');
+  }
+
+  const components = parseSchematicComponents(source);
+  const sourceComponentMap = new Map(components.map(component => [component.primitiveId, component] as const));
+
+  const allPinsByComponentId = new Map<string, Array<SymbolPinSource>>();
+  for (const runtimeComponent of runtimeComponents) {
+    const primitiveId = typeof runtimeComponent.getState_PrimitiveId === 'function'
+      ? runtimeComponent.getState_PrimitiveId()
+      : undefined;
+    const symbol = typeof runtimeComponent.getState_Symbol === 'function'
+      ? runtimeComponent.getState_Symbol()
+      : undefined;
+
+    if (!primitiveId || !symbol?.uuid || !symbol?.libraryUuid) {
+      continue;
+    }
+
+    try {
+      const symbolFile = await eda.sys_FileManager.getSymbolFileBySymbolUuid(symbol.uuid, symbol.libraryUuid);
+      const symbolPins = await parseSymbolPins(symbolFile);
+      allPinsByComponentId.set(primitiveId, symbolPins);
+    }
+    catch {
+      allPinsByComponentId.set(primitiveId, []);
+    }
+  }
+
+  const absolutePins = await buildPinLocationsFromSource(
+    components.filter(component => sourceComponentMap.has(component.primitiveId)),
+    allPinsByComponentId,
+  );
+
+  return {
+    absolutePins,
+    componentCount: components.length,
+  };
+}
+
+export async function collectCurrentSchematicPinLocations(
+  allSchematicPages = true,
+): Promise<Array<ConnectivityPointRef>> {
+  const { absolutePins } = await collectSchematicPinLocations(allSchematicPages);
+  return absolutePins;
+}
+
+export function snapPointsToNearbyPins(
+  points: Array<Point>,
+  pins: Array<ConnectivityPointRef>,
+  tolerance = 1.5,
+): Array<Point> {
+  if (!points.length || !pins.length) {
+    return points.map(point => ({ ...point }));
+  }
+
+  const toleranceSquared = tolerance * tolerance;
+
+  return points.map((point, index) => {
+    if (index !== 0 && index !== points.length - 1) {
+      return { ...point };
+    }
+
+    let bestPin: ConnectivityPointRef | undefined;
+    let bestDistance = Number.POSITIVE_INFINITY;
+
+    for (const pin of pins) {
+      const dx = pin.x - point.x;
+      const dy = pin.y - point.y;
+      const distance = dx * dx + dy * dy;
+
+      if (distance <= toleranceSquared && distance < bestDistance) {
+        bestPin = pin;
+        bestDistance = distance;
+      }
+    }
+
+    if (!bestPin) {
+      return { ...point };
+    }
+
+    return {
+      x: bestPin.x,
+      y: bestPin.y,
+    };
+  });
+}
+
 function flattenWireSegments(
   wires: Array<{ wireId: string; net?: string; segments: Array<ConnectivitySegment> }>,
 ): Array<ConnectivitySegment> {
@@ -529,47 +629,15 @@ export async function inspectSchematicConnectivityResult(
   const tolerance = payload?.tolerance ?? 0.75;
   const maxIssues = payload?.maxIssues ?? 100;
   const allSchematicPages = payload?.allSchematicPages ?? true;
-
-  const [source, runtimeComponents] = await Promise.all([
-    eda.sys_FileManager.getDocumentSource(),
-    eda.sch_PrimitiveComponent.getAll(undefined, allSchematicPages),
-  ]);
+  const { absolutePins, componentCount } = await collectSchematicPinLocations(allSchematicPages);
+  const source = await eda.sys_FileManager.getDocumentSource();
 
   if (!source) {
     throw new Error('Unable to read the current schematic source.');
   }
 
   const components = parseSchematicComponents(source);
-  const sourceComponentMap = new Map(components.map(component => [component.primitiveId, component] as const));
   const sourceWires = parseSourceWires(source);
-
-  const allPinsByComponentId = new Map<string, Array<SymbolPinSource>>();
-  for (const runtimeComponent of runtimeComponents) {
-    const primitiveId = typeof runtimeComponent.getState_PrimitiveId === 'function'
-      ? runtimeComponent.getState_PrimitiveId()
-      : undefined;
-    const symbol = typeof runtimeComponent.getState_Symbol === 'function'
-      ? runtimeComponent.getState_Symbol()
-      : undefined;
-
-    if (!primitiveId || !symbol?.uuid || !symbol?.libraryUuid) {
-      continue;
-    }
-
-    try {
-      const symbolFile = await eda.sys_FileManager.getSymbolFileBySymbolUuid(symbol.uuid, symbol.libraryUuid);
-      const symbolPins = await parseSymbolPins(symbolFile);
-      allPinsByComponentId.set(primitiveId, symbolPins);
-    }
-    catch {
-      allPinsByComponentId.set(primitiveId, []);
-    }
-  }
-
-  const absolutePins = await buildPinLocationsFromSource(
-    components.filter(component => sourceComponentMap.has(component.primitiveId)),
-    allPinsByComponentId,
-  );
 
   const segments = flattenWireSegments(sourceWires);
 
@@ -653,7 +721,7 @@ export async function inspectSchematicConnectivityResult(
     data: {
       tolerance,
       allSchematicPages,
-      componentCount: components.length,
+      componentCount,
       pinCount: absolutePins.length,
       wireCount: sourceWires.length,
       segmentCount: segments.length,

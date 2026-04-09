@@ -1935,8 +1935,8 @@ async function run(): Promise<void> {
           requiresConfirmation: false,
           payload: {
             points: [
-              { x: 100, y: 200 },
-              { x: 200, y: 200 },
+              { x: 100.4, y: 99.7 },
+              { x: 109.8, y: 100.3 },
             ],
             netName: 'VCC',
           },
@@ -1944,6 +1944,14 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'create wire should succeed when confirmation is disabled');
+        if (response.status === 'success') {
+          const resultData = response.result.data as {
+            points?: Array<{ x?: number; y?: number }>;
+          } | undefined;
+          const points = resultData?.points;
+          assert(points?.[0]?.x === 100 && points?.[0]?.y === 100, 'wire start should snap to the nearest pin');
+          assert(points?.[1]?.x === 110 && points?.[1]?.y === 100, 'wire end should snap to the nearest pin');
+        }
       },
     },
     {
