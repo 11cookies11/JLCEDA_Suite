@@ -1,4 +1,5 @@
 import type { BridgePoint, BridgeResult } from '../bridge/protocol';
+import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
 import { collectCurrentSchematicPinLocations, snapPointsToNearbyPins } from './schematic-diagnostics';
 
 export interface PlaceComponentPayload {
@@ -300,10 +301,14 @@ async function resolveSchematicComponentPlacement(
     };
   }
 
+  const profile = await getRuleProfileSnapshot();
+  const defaultProfile = getDefaultRuleProfileSnapshot();
   const step = 40;
   const maxRing = 8;
-  const componentClearance = 48;
-  const wireClearance = 40;
+  const componentClearance = profile.schematic.placementComponentClearance
+    ?? defaultProfile.schematic.placementComponentClearance;
+  const wireClearance = profile.schematic.placementWireClearance
+    ?? defaultProfile.schematic.placementWireClearance;
   const offsets = generatePlacementOffsets(step, maxRing);
 
   for (const offset of offsets) {

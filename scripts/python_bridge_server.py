@@ -117,6 +117,8 @@ class RuleProfile:
     description: str
     schematic_component_clearance: int
     schematic_wire_clearance: int
+    schematic_placement_component_clearance: int
+    schematic_placement_wire_clearance: int
     schematic_label_clearance: int
     schematic_wire_label_clearance: int
     schematic_power_spacing: int
@@ -132,6 +134,8 @@ class RuleProfile:
             'schematic': {
                 'componentClearance': self.schematic_component_clearance,
                 'wireClearance': self.schematic_wire_clearance,
+                'placementComponentClearance': self.schematic_placement_component_clearance,
+                'placementWireClearance': self.schematic_placement_wire_clearance,
                 'labelClearance': self.schematic_label_clearance,
                 'wireLabelClearance': self.schematic_wire_label_clearance,
                 'powerSpacing': self.schematic_power_spacing,
@@ -152,6 +156,8 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             description='Balanced defaults for general schematic-first development.',
             schematic_component_clearance=80,
             schematic_wire_clearance=48,
+            schematic_placement_component_clearance=48,
+            schematic_placement_wire_clearance=40,
             schematic_label_clearance=110,
             schematic_wire_label_clearance=72,
             schematic_power_spacing=160,
@@ -165,6 +171,8 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             description='Tighter placement for dense schematic layouts.',
             schematic_component_clearance=64,
             schematic_wire_clearance=40,
+            schematic_placement_component_clearance=40,
+            schematic_placement_wire_clearance=32,
             schematic_label_clearance=96,
             schematic_wire_label_clearance=64,
             schematic_power_spacing=128,
@@ -178,6 +186,8 @@ def build_default_rule_profiles() -> dict[str, RuleProfile]:
             description='More conservative spacing around power blocks and PCB edges.',
             schematic_component_clearance=96,
             schematic_wire_clearance=56,
+            schematic_placement_component_clearance=56,
+            schematic_placement_wire_clearance=48,
             schematic_label_clearance=128,
             schematic_wire_label_clearance=80,
             schematic_power_spacing=192,
@@ -229,6 +239,14 @@ def load_rule_profiles(profile_file: Optional[str]) -> tuple[dict[str, RuleProfi
                 description=str(profile_data.get('description', 'Custom rule profile.')),
                 schematic_component_clearance=coerce_int(schematic.get('componentClearance'), 80),
                 schematic_wire_clearance=coerce_int(schematic.get('wireClearance'), 48),
+                schematic_placement_component_clearance=coerce_int(
+                    schematic.get('placementComponentClearance'),
+                    coerce_int(schematic.get('componentClearance'), 48),
+                ),
+                schematic_placement_wire_clearance=coerce_int(
+                    schematic.get('placementWireClearance'),
+                    coerce_int(schematic.get('wireClearance'), 40),
+                ),
                 schematic_label_clearance=coerce_int(schematic.get('labelClearance'), 110),
                 schematic_wire_label_clearance=coerce_int(schematic.get('wireLabelClearance'), 72),
                 schematic_power_spacing=coerce_int(schematic.get('powerSpacing'), 160),

@@ -13,6 +13,8 @@ export interface RuleProfileSnapshot {
   schematic: {
     componentClearance: number;
     wireClearance: number;
+    placementComponentClearance: number;
+    placementWireClearance: number;
     labelClearance: number;
     wireLabelClearance: number;
     powerSpacing: number;
@@ -36,6 +38,8 @@ const DEFAULT_PROFILE: RuleProfileSnapshot = {
   schematic: {
     componentClearance: 80,
     wireClearance: 48,
+    placementComponentClearance: 48,
+    placementWireClearance: 40,
     labelClearance: 110,
     wireLabelClearance: 72,
     powerSpacing: 160,

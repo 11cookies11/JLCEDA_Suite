@@ -117,10 +117,19 @@ async function run(): Promise<void> {
     assert(profileResponse.ok, 'profile endpoint should be available');
     const profilePayload = await profileResponse.json() as {
       activeProfile?: string;
-      profile?: { name?: string; schematic?: { componentClearance?: number } };
+      profile?: {
+        name?: string;
+        schematic?: {
+          componentClearance?: number;
+          placementComponentClearance?: number;
+          placementWireClearance?: number;
+        };
+      };
     };
     assert(profilePayload.activeProfile === 'default', 'profile endpoint should report default');
     assert(profilePayload.profile?.schematic?.componentClearance === 80, 'default profile should use balanced schematic clearance');
+    assert(profilePayload.profile?.schematic?.placementComponentClearance === 48, 'default profile should expose placement component clearance');
+    assert(profilePayload.profile?.schematic?.placementWireClearance === 40, 'default profile should expose placement wire clearance');
     console.log('PASS profile read');
 
     const profileUpdateResponse = await fetch(`http://${host}:${controlPort}/profile`, {
