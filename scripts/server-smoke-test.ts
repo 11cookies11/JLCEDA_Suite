@@ -1,8 +1,14 @@
 import type { ClientToServerMessage, ServerToClientMessage } from '../src/server/protocol';
-import { spawn } from 'node:child_process';
 import process from 'node:process';
 import WebSocket from 'ws';
 import { BRIDGE_PROTOCOL_VERSION } from '../src/bridge/protocol';
+import {
+  flushPythonBridgeServerOutput,
+  postJson,
+  spawnPythonBridgeServer,
+  stopPythonBridgeServer,
+  waitForHealth,
+} from './python-server-test-utils';
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) {
@@ -35,84 +41,16 @@ function waitForMessage<TMessage>(
   });
 }
 
-function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-async function waitForHealth(url: string, token: string): Promise<void> {
-  const deadline = Date.now() + 60_000;
-  while (Date.now() < deadline) {
-    try {
-      const response = await fetch(url, {
-        headers: {
-          ...(token ? { 'x-bridge-control-token': token } : {}),
-        },
-      });
-      if (response.ok) {
-        return;
-      }
-    }
-    catch {
-      // Retry until the server is ready.
-    }
-    await sleep(250);
-  }
-
-  throw new Error(`Timed out waiting for server health at ${url}.`);
-}
-
-async function postJson<TResponse>(url: string, body: unknown, token: string): Promise<TResponse> {
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'content-type': 'application/json',
-      ...(token ? { 'x-bridge-control-token': token } : {}),
-    },
-    body: JSON.stringify(body),
-  });
-
-  if (!response.ok) {
-    throw new Error(`Control request failed: ${response.status} ${response.statusText}`);
-  }
-
-  return (await response.json()) as TResponse;
-}
-
 async function run(): Promise<void> {
   const bridgePort = Number(process.env.BRIDGE_SERVER_SMOKE_PORT ?? '8792');
   const controlPort = Number(process.env.BRIDGE_SERVER_SMOKE_CONTROL_PORT ?? '8793');
   const host = process.env.BRIDGE_SERVER_SMOKE_HOST ?? '127.0.0.1';
   const token = process.env.BRIDGE_SERVER_SMOKE_TOKEN ?? 'smoke-token';
-
-  const serverProcess = spawn('python3', ['./scripts/python_bridge_server.py'], {
-    cwd: process.cwd(),
-    env: {
-      ...process.env,
-      BRIDGE_SERVER_HOST: host,
-      BRIDGE_SERVER_PORT: String(bridgePort),
-      BRIDGE_SERVER_CONTROL_HOST: host,
-      BRIDGE_SERVER_CONTROL_PORT: String(controlPort),
-      BRIDGE_SERVER_TOKEN: token,
-      BRIDGE_SERVER_CONTROL_TOKEN: token,
-    },
-    stdio: ['ignore', 'pipe', 'pipe'],
-  });
-
-  const stdoutChunks: string[] = [];
-  const stderrChunks: string[] = [];
-  serverProcess.stdout?.on('data', chunk => stdoutChunks.push(String(chunk)));
-  serverProcess.stderr?.on('data', chunk => stderrChunks.push(String(chunk)));
-
-  const serverExitPromise = new Promise<number>((resolve, reject) => {
-    serverProcess.once('exit', (code) => {
-      if (code === null) {
-        reject(new Error('Python server exited unexpectedly.'));
-        return;
-      }
-
-      resolve(code);
-    });
-    serverProcess.once('error', reject);
+  const server = spawnPythonBridgeServer({
+    bridgePort,
+    controlPort,
+    host,
+    token,
   });
 
   try {
@@ -226,15 +164,8 @@ async function run(): Promise<void> {
     socket.close();
   }
   finally {
-    serverProcess.kill('SIGTERM');
-    await serverExitPromise.catch(() => undefined);
-
-    if (stdoutChunks.length) {
-      process.stdout.write(stdoutChunks.join(''));
-    }
-    if (stderrChunks.length) {
-      process.stderr.write(stderrChunks.join(''));
-    }
+    await stopPythonBridgeServer(server);
+    flushPythonBridgeServerOutput(server);
   }
 }
 
