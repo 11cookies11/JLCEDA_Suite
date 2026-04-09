@@ -111,6 +111,143 @@ class PendingBridgeRequest:
     timeout_handle: asyncio.TimerHandle
 
 
+@dataclass(frozen=True)
+class RuleProfile:
+    name: str
+    description: str
+    schematic_component_clearance: int
+    schematic_wire_clearance: int
+    schematic_label_clearance: int
+    schematic_wire_label_clearance: int
+    schematic_power_spacing: int
+    pcb_component_clearance: int
+    pcb_track_clearance: int
+    pcb_label_clearance: int
+    pcb_board_edge_clearance: int
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            'name': self.name,
+            'description': self.description,
+            'schematic': {
+                'componentClearance': self.schematic_component_clearance,
+                'wireClearance': self.schematic_wire_clearance,
+                'labelClearance': self.schematic_label_clearance,
+                'wireLabelClearance': self.schematic_wire_label_clearance,
+                'powerSpacing': self.schematic_power_spacing,
+            },
+            'pcb': {
+                'componentClearance': self.pcb_component_clearance,
+                'trackClearance': self.pcb_track_clearance,
+                'labelClearance': self.pcb_label_clearance,
+                'boardEdgeClearance': self.pcb_board_edge_clearance,
+            },
+        }
+
+
+def build_default_rule_profiles() -> dict[str, RuleProfile]:
+    return {
+        'default': RuleProfile(
+            name='default',
+            description='Balanced defaults for general schematic-first development.',
+            schematic_component_clearance=80,
+            schematic_wire_clearance=48,
+            schematic_label_clearance=110,
+            schematic_wire_label_clearance=72,
+            schematic_power_spacing=160,
+            pcb_component_clearance=120,
+            pcb_track_clearance=70,
+            pcb_label_clearance=90,
+            pcb_board_edge_clearance=60,
+        ),
+        'compact': RuleProfile(
+            name='compact',
+            description='Tighter placement for dense schematic layouts.',
+            schematic_component_clearance=64,
+            schematic_wire_clearance=40,
+            schematic_label_clearance=96,
+            schematic_wire_label_clearance=64,
+            schematic_power_spacing=128,
+            pcb_component_clearance=96,
+            pcb_track_clearance=56,
+            pcb_label_clearance=72,
+            pcb_board_edge_clearance=48,
+        ),
+        'power_safe': RuleProfile(
+            name='power_safe',
+            description='More conservative spacing around power blocks and PCB edges.',
+            schematic_component_clearance=96,
+            schematic_wire_clearance=56,
+            schematic_label_clearance=128,
+            schematic_wire_label_clearance=80,
+            schematic_power_spacing=192,
+            pcb_component_clearance=144,
+            pcb_track_clearance=80,
+            pcb_label_clearance=104,
+            pcb_board_edge_clearance=72,
+        ),
+    }
+
+
+def coerce_int(value: Any, fallback: int) -> int:
+    try:
+        if value is None:
+            return fallback
+        return int(value)
+    except Exception:
+        return fallback
+
+
+def load_rule_profiles(profile_file: Optional[str]) -> tuple[dict[str, RuleProfile], str]:
+    default_profiles = build_default_rule_profiles()
+    active_profile_name = 'default'
+
+    candidate_path = Path(profile_file) if profile_file else get_repo_root() / 'config' / 'rule_profiles.json'
+    if not candidate_path.exists():
+        return default_profiles, active_profile_name
+
+    try:
+        with candidate_path.open('r', encoding='utf-8') as handle:
+            raw_data = json.load(handle)
+    except Exception:
+        return default_profiles, active_profile_name
+
+    if not isinstance(raw_data, dict):
+        return default_profiles, active_profile_name
+
+    loaded_profiles: dict[str, RuleProfile] = {}
+    raw_profiles = raw_data.get('profiles')
+    if isinstance(raw_profiles, dict):
+        for profile_name, profile_data in raw_profiles.items():
+            if not isinstance(profile_name, str) or not isinstance(profile_data, dict):
+                continue
+
+            schematic = profile_data.get('schematic') if isinstance(profile_data.get('schematic'), dict) else {}
+            pcb = profile_data.get('pcb') if isinstance(profile_data.get('pcb'), dict) else {}
+            loaded_profiles[profile_name] = RuleProfile(
+                name=profile_name,
+                description=str(profile_data.get('description', 'Custom rule profile.')),
+                schematic_component_clearance=coerce_int(schematic.get('componentClearance'), 80),
+                schematic_wire_clearance=coerce_int(schematic.get('wireClearance'), 48),
+                schematic_label_clearance=coerce_int(schematic.get('labelClearance'), 110),
+                schematic_wire_label_clearance=coerce_int(schematic.get('wireLabelClearance'), 72),
+                schematic_power_spacing=coerce_int(schematic.get('powerSpacing'), 160),
+                pcb_component_clearance=coerce_int(pcb.get('componentClearance'), 120),
+                pcb_track_clearance=coerce_int(pcb.get('trackClearance'), 70),
+                pcb_label_clearance=coerce_int(pcb.get('labelClearance'), 90),
+                pcb_board_edge_clearance=coerce_int(pcb.get('boardEdgeClearance'), 60),
+            )
+
+    if loaded_profiles:
+        default_profiles = loaded_profiles
+
+    requested_profile = str(raw_data.get('activeProfile', 'default'))
+    if requested_profile in default_profiles:
+        active_profile_name = requested_profile
+
+    return default_profiles, active_profile_name
+
+
 class BridgeServer:
     def __init__(
         self,
@@ -121,6 +258,8 @@ class BridgeServer:
         control_host: str = '127.0.0.1',
         control_port: Optional[int] = None,
         control_token: str = '',
+        rule_profiles: Optional[dict[str, RuleProfile]] = None,
+        active_rule_profile_name: str = 'default',
     ) -> None:
         self.bridge_host = bridge_host
         self.bridge_port = bridge_port
@@ -129,6 +268,8 @@ class BridgeServer:
         self.control_host = control_host
         self.control_port = control_port
         self.control_token = control_token
+        self.rule_profiles = rule_profiles or build_default_rule_profiles()
+        self.active_rule_profile_name = active_rule_profile_name if active_rule_profile_name in self.rule_profiles else 'default'
 
         self.sessions: dict[str, BridgeSession] = {}
         self.socket_clients: dict[int, str] = {}
@@ -150,6 +291,9 @@ class BridgeServer:
             control_app = web.Application()
             control_app.router.add_get('/health', self._handle_control_health)
             control_app.router.add_get('/sessions', self._handle_control_sessions)
+            control_app.router.add_get('/profiles', self._handle_control_profiles)
+            control_app.router.add_get('/profile', self._handle_control_profile)
+            control_app.router.add_post('/profile', self._handle_control_profile_update)
             control_app.router.add_post('/request', self._handle_control_request)
             self._control_runner = web.AppRunner(control_app)
             await self._control_runner.setup()
@@ -188,6 +332,29 @@ class BridgeServer:
                 'lastSeenAt': session.last_seen_at.isoformat(),
             })
         return sessions
+
+    def list_rule_profiles(self) -> list[dict[str, Any]]:
+        return [
+            {
+                **profile.to_dict(),
+                'active': profile.name == self.active_rule_profile_name,
+            }
+            for profile in self.rule_profiles.values()
+        ]
+
+    def get_active_rule_profile(self) -> dict[str, Any]:
+        profile = self.rule_profiles[self.active_rule_profile_name]
+        return {
+            **profile.to_dict(),
+            'active': True,
+        }
+
+    def set_active_rule_profile(self, profile_name: str) -> dict[str, Any]:
+        if profile_name not in self.rule_profiles:
+            raise RuntimeError(f'Unknown rule profile: {profile_name}')
+
+        self.active_rule_profile_name = profile_name
+        return self.get_active_rule_profile()
 
     async def send_bridge_request(self, client_id: str, request: dict[str, Any]) -> dict[str, Any]:
         session = self.sessions.get(client_id)
@@ -385,12 +552,63 @@ class BridgeServer:
     async def _handle_control_health(self, request: web.Request) -> web.Response:
         if not self._is_authorized(request):
             return write_json(401, {'error': 'unauthorized'})
-        return write_json(200, {'ok': True})
+        return write_json(200, {
+            'ok': True,
+            'activeProfile': self.active_rule_profile_name,
+        })
 
     async def _handle_control_sessions(self, request: web.Request) -> web.Response:
         if not self._is_authorized(request):
             return write_json(401, {'error': 'unauthorized'})
         return write_json(200, {'sessions': self.list_sessions()})
+
+    async def _handle_control_profiles(self, request: web.Request) -> web.Response:
+        if not self._is_authorized(request):
+            return write_json(401, {'error': 'unauthorized'})
+        return write_json(200, {
+            'activeProfile': self.active_rule_profile_name,
+            'profiles': self.list_rule_profiles(),
+        })
+
+    async def _handle_control_profile(self, request: web.Request) -> web.Response:
+        if not self._is_authorized(request):
+            return write_json(401, {'error': 'unauthorized'})
+        return write_json(200, {
+            'activeProfile': self.active_rule_profile_name,
+            'profile': self.get_active_rule_profile(),
+        })
+
+    async def _handle_control_profile_update(self, request: web.Request) -> web.Response:
+        if not self._is_authorized(request):
+            return write_json(401, {'error': 'unauthorized'})
+
+        try:
+            body = await request.json()
+        except Exception:
+            body = {}
+
+        profile_name = ''
+        if isinstance(body, dict):
+            profile_name = str(body.get('profileName') or body.get('profile') or '')
+
+        if not profile_name:
+            return write_json(400, {
+                'error': 'invalid_request',
+                'message': 'profileName is required.',
+            })
+
+        try:
+            profile = self.set_active_rule_profile(profile_name)
+        except RuntimeError as error:
+            return write_json(404, {
+                'error': 'not_found',
+                'message': str(error),
+            })
+
+        return write_json(200, {
+            'activeProfile': self.active_rule_profile_name,
+            'profile': profile,
+        })
 
     async def _handle_control_request(self, request: web.Request) -> web.Response:
         if not self._is_authorized(request):
@@ -428,6 +646,11 @@ async def main() -> None:
     control_port = int(control_port_raw) if control_port_raw else None
     control_host = os.environ.get('BRIDGE_SERVER_CONTROL_HOST', '127.0.0.1')
     control_token = os.environ.get('BRIDGE_SERVER_CONTROL_TOKEN', '')
+    rule_profile_file = os.environ.get('BRIDGE_RULE_PROFILE_FILE')
+    rule_profiles, active_rule_profile_name = load_rule_profiles(rule_profile_file)
+    requested_profile = os.environ.get('BRIDGE_RULE_PROFILE', active_rule_profile_name)
+    if requested_profile not in rule_profiles:
+        requested_profile = active_rule_profile_name
 
     server = BridgeServer(
         bridge_host=bridge_host,
@@ -437,11 +660,14 @@ async def main() -> None:
         control_host=control_host,
         control_port=control_port,
         control_token=control_token,
+        rule_profiles=rule_profiles,
+        active_rule_profile_name=requested_profile,
     )
     await server.start()
 
     print(f'Bridge server listening on ws://{bridge_host}:{bridge_port}')
     print(f'Auth token enabled: {"yes" if auth_token else "no"}')
+    print(f'Rule profile active: {server.active_rule_profile_name}')
     if control_port is not None:
         print(f'Control server listening on http://{control_host}:{control_port}')
         print(f'Control token enabled: {"yes" if control_token else "no"}')

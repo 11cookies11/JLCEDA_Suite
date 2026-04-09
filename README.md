@@ -58,6 +58,14 @@ npm run server:public
 
 That starts the bridge on `ws://0.0.0.0:8787` and the control plane on `http://0.0.0.0:8788`. A plugin can then connect to `ws://<server-ip>:8787`, and server-side project flows can target `http://<server-ip>:8788`.
 
+The control plane also exposes rule profiles for schematic-first workflows:
+
+- `GET /profiles` lists the available profiles
+- `GET /profile` returns the active profile
+- `POST /profile` switches the active profile by name
+
+You can override the active profile with `BRIDGE_RULE_PROFILE`, or point the server at a custom profile file with `BRIDGE_RULE_PROFILE_FILE`.
+
 ## Auto Update
 
 On startup, the plugin checks the latest release of the configured GitHub repository. By default, it targets this repository, but you can point it at your own public or private repo.

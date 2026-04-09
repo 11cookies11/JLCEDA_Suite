@@ -1,0 +1,53 @@
+{
+  "activeProfile": "default",
+  "profiles": {
+    "default": {
+      "description": "Balanced defaults for general schematic-first development.",
+      "schematic": {
+        "componentClearance": 80,
+        "wireClearance": 48,
+        "labelClearance": 110,
+        "wireLabelClearance": 72,
+        "powerSpacing": 160
+      },
+      "pcb": {
+        "componentClearance": 120,
+        "trackClearance": 70,
+        "labelClearance": 90,
+        "boardEdgeClearance": 60
+      }
+    },
+    "compact": {
+      "description": "Tighter placement for dense schematic layouts.",
+      "schematic": {
+        "componentClearance": 64,
+        "wireClearance": 40,
+        "labelClearance": 96,
+        "wireLabelClearance": 64,
+        "powerSpacing": 128
+      },
+      "pcb": {
+        "componentClearance": 96,
+        "trackClearance": 56,
+        "labelClearance": 72,
+        "boardEdgeClearance": 48
+      }
+    },
+    "power_safe": {
+      "description": "More conservative spacing around power blocks and PCB edges.",
+      "schematic": {
+        "componentClearance": 96,
+        "wireClearance": 56,
+        "labelClearance": 128,
+        "wireLabelClearance": 80,
+        "powerSpacing": 192
+      },
+      "pcb": {
+        "componentClearance": 144,
+        "trackClearance": 80,
+        "labelClearance": 104,
+        "boardEdgeClearance": 72
+      }
+    }
+  }
+}

@@ -95,6 +95,66 @@ async function run(): Promise<void> {
     assert(sessionsPayload.sessions[0]?.clientId === 'client-smoke-001', 'server should store the expected client id');
     console.log('PASS session tracking');
 
+    const profilesResponse = await fetch(`http://${host}:${controlPort}/profiles`, {
+      headers: {
+        'x-bridge-control-token': token,
+      },
+    });
+    assert(profilesResponse.ok, 'profiles endpoint should be available');
+    const profilesPayload = await profilesResponse.json() as {
+      activeProfile?: string;
+      profiles?: Array<{ name?: string; active?: boolean }>;
+    };
+    assert(profilesPayload.activeProfile === 'default', 'server should default to the default profile');
+    assert((profilesPayload.profiles ?? []).some(profile => profile.name === 'default'), 'profiles should include default');
+    console.log('PASS profile list');
+
+    const profileResponse = await fetch(`http://${host}:${controlPort}/profile`, {
+      headers: {
+        'x-bridge-control-token': token,
+      },
+    });
+    assert(profileResponse.ok, 'profile endpoint should be available');
+    const profilePayload = await profileResponse.json() as {
+      activeProfile?: string;
+      profile?: { name?: string; schematic?: { componentClearance?: number } };
+    };
+    assert(profilePayload.activeProfile === 'default', 'profile endpoint should report default');
+    assert(profilePayload.profile?.schematic?.componentClearance === 80, 'default profile should use balanced schematic clearance');
+    console.log('PASS profile read');
+
+    const profileUpdateResponse = await fetch(`http://${host}:${controlPort}/profile`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-bridge-control-token': token,
+      },
+      body: JSON.stringify({
+        profileName: 'compact',
+      }),
+    });
+    assert(profileUpdateResponse.ok, 'profile update should succeed');
+    const profileUpdatePayload = await profileUpdateResponse.json() as {
+      activeProfile?: string;
+      profile?: { name?: string };
+    };
+    assert(profileUpdatePayload.activeProfile === 'compact', 'server should switch to the compact profile');
+    assert(profileUpdatePayload.profile?.name === 'compact', 'profile update response should return the compact profile');
+    console.log('PASS profile update');
+
+    const profileRestoreResponse = await fetch(`http://${host}:${controlPort}/profile`, {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'x-bridge-control-token': token,
+      },
+      body: JSON.stringify({
+        profileName: 'default',
+      }),
+    });
+    assert(profileRestoreResponse.ok, 'profile restore should succeed');
+    console.log('PASS profile restore');
+
     const heartbeatMessage: ClientToServerMessage = {
       type: 'agent.heartbeat',
       clientId: 'client-smoke-001',

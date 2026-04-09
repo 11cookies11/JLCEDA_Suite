@@ -57,6 +57,14 @@ npm run server:public
 
 这样会把桥接服务监听在 `ws://0.0.0.0:8787`，控制平面监听在 `http://0.0.0.0:8788`。插件可以连接到 `ws://<server-ip>:8787`，服务器侧项目流则可以直接打到 `http://<server-ip>:8788`。
 
+控制平面还提供了原理图优先工作流使用的规则 profile：
+
+- `GET /profiles`：列出可用 profile
+- `GET /profile`：读取当前 active profile
+- `POST /profile`：按名称切换 active profile
+
+你可以通过 `BRIDGE_RULE_PROFILE` 覆盖当前 active profile，也可以用 `BRIDGE_RULE_PROFILE_FILE` 指向自定义 profile 配置文件。
+
 ## 自动更新
 
 插件启动时会自动检查对应 GitHub 仓库的最新 release。默认目标仓库是本仓库，但你也可以改成自己的公开或私有仓库。
