@@ -81,6 +81,56 @@ interface InspectConnectivityPayload {
   maxIssues?: number;
 }
 
+interface PythonConnectivityComponentSource {
+  primitiveId: string;
+  x: number;
+  y: number;
+  rotation: number;
+  mirror: boolean;
+  componentType?: string;
+  designator?: string;
+  name?: string;
+  uniqueId?: string;
+  symbol?: {
+    libraryUuid: string;
+    uuid: string;
+  };
+}
+
+interface PythonConnectivityInput {
+  action: 'collect_pins' | 'inspect_connectivity';
+  sourceText: string;
+  allSchematicPages: boolean;
+  tolerance: number;
+  maxIssues: number;
+  components: Array<PythonConnectivityComponentSource>;
+  symbolFiles: Record<string, string>;
+}
+
+function loadNodeBuiltin(moduleName: string): any {
+  const requireFunction = Function('return require') as () => (id: string) => any;
+  const nodeRequire = requireFunction();
+  return nodeRequire(moduleName);
+}
+
+function getConnectivityDiagnosticsScriptPath(): string {
+  const pathModule = loadNodeBuiltin('path');
+  return pathModule.resolve(__dirname, '../../scripts/schematic_connectivity_diagnostics.py');
+}
+
+function bytesToBase64(bytes: Uint8Array): string {
+  const bufferModule = loadNodeBuiltin('buffer');
+  return bufferModule.Buffer.from(bytes).toString('base64');
+}
+
+function spawnNodePython(scriptPath: string, input: string): { stdout: string; stderr: string; status: number | null; error?: Error } {
+  const childProcess = loadNodeBuiltin('child_process');
+  return childProcess.spawnSync('python3', [scriptPath], {
+    encoding: 'utf8',
+    input,
+    maxBuffer: 10 * 1024 * 1024,
+  }) as { stdout: string; stderr: string; status: number | null; error?: Error };
+}
 function parseSourceRecord(line: string): SourceRecord | undefined {
   const separatorIndex = line.indexOf('||');
 
@@ -453,6 +503,92 @@ async function buildPinLocationsFromSource(
   return pins;
 }
 
+async function fileToBase64(file: File | Blob): Promise<string> {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  return bytesToBase64(bytes);
+}
+
+function summarizeConnectivityComponent(
+  component: SchematicComponentSource,
+): PythonConnectivityComponentSource {
+  return {
+    primitiveId: component.primitiveId,
+    x: component.x,
+    y: component.y,
+    rotation: component.rotation,
+    mirror: component.mirror,
+    componentType: component.componentType,
+    designator: component.designator,
+    name: component.name,
+    uniqueId: component.uniqueId,
+    symbol: component.symbol,
+  };
+}
+
+async function buildConnectivityDiagnosticsInput(
+  payload: InspectConnectivityPayload,
+  action: PythonConnectivityInput['action'],
+): Promise<PythonConnectivityInput> {
+  const tolerance = payload.tolerance ?? 0.75;
+  const maxIssues = payload.maxIssues ?? 100;
+  const allSchematicPages = payload.allSchematicPages ?? true;
+  const source = await eda.sys_FileManager.getDocumentSource();
+
+  if (!source) {
+    throw new Error('Unable to read the current schematic source.');
+  }
+
+  const components = parseSchematicComponents(source);
+  const symbolFiles: Record<string, string> = {};
+
+  for (const component of components) {
+    if (!component.symbol?.uuid || !component.symbol?.libraryUuid) {
+      continue;
+    }
+
+    try {
+      const symbolFile = await eda.sys_FileManager.getSymbolFileBySymbolUuid(component.symbol.uuid, component.symbol.libraryUuid);
+      symbolFiles[component.primitiveId] = await fileToBase64(symbolFile);
+    }
+    catch {
+      symbolFiles[component.primitiveId] = '';
+    }
+  }
+
+  return {
+    action,
+    sourceText: source,
+    allSchematicPages,
+    tolerance,
+    maxIssues,
+    components: components.map(summarizeConnectivityComponent),
+    symbolFiles,
+  };
+}
+
+function runConnectivityDiagnosticsInPython<TResult>(
+  input: PythonConnectivityInput,
+): TResult {
+  const scriptPath = getConnectivityDiagnosticsScriptPath();
+  const result = spawnNodePython(scriptPath, JSON.stringify(input));
+
+  if (result.error) {
+    throw result.error;
+  }
+
+  if (result.status !== 0) {
+    const stderr = typeof result.stderr === 'string' ? result.stderr.trim() : '';
+    throw new Error(stderr || `Python connectivity diagnostics exited with code ${result.status}.`);
+  }
+
+  const stdout = typeof result.stdout === 'string' ? result.stdout.trim() : '';
+  if (!stdout) {
+    throw new Error('Python connectivity diagnostics returned no output.');
+  }
+
+  return JSON.parse(stdout) as TResult;
+}
+
 async function collectSchematicPinLocations(
   allSchematicPages: boolean,
 ): Promise<{
@@ -508,8 +644,20 @@ async function collectSchematicPinLocations(
 export async function collectCurrentSchematicPinLocations(
   allSchematicPages = true,
 ): Promise<Array<ConnectivityPointRef>> {
-  const { absolutePins } = await collectSchematicPinLocations(allSchematicPages);
-  return absolutePins;
+  try {
+    const input = await buildConnectivityDiagnosticsInput(
+      {
+        allSchematicPages,
+      },
+      'collect_pins',
+    );
+    const result = runConnectivityDiagnosticsInPython<{ pins: Array<ConnectivityPointRef> }>(input);
+    return result.pins ?? [];
+  }
+  catch {
+    const { absolutePins } = await collectSchematicPinLocations(allSchematicPages);
+    return absolutePins;
+  }
 }
 
 export function snapPointsToNearbyPins(
@@ -624,6 +772,22 @@ function summarizeComponent(component: SchematicComponentSource): Record<string,
 }
 
 export async function inspectSchematicConnectivityResult(
+  payload?: InspectConnectivityPayload,
+): Promise<BridgeResult> {
+  try {
+    const input = await buildConnectivityDiagnosticsInput(payload ?? {}, 'inspect_connectivity');
+    const result = runConnectivityDiagnosticsInPython<BridgeResult>(input);
+    if (result && typeof result === 'object' && 'summary' in result && 'data' in result) {
+      return result;
+    }
+    throw new Error('Python connectivity diagnostics returned an invalid result.');
+  }
+  catch {
+    return inspectSchematicConnectivityResultLocal(payload);
+  }
+}
+
+async function inspectSchematicConnectivityResultLocal(
   payload?: InspectConnectivityPayload,
 ): Promise<BridgeResult> {
   const tolerance = payload?.tolerance ?? 0.75;
