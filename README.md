@@ -40,6 +40,16 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 
 The main gaps that remain are public-network validation, server-side Codex integration, and real JLCEDA runtime verification through local import and manual execution.
 
+## Public Server Mode
+
+If you are hosting the bridge on a public machine, start it with the control plane enabled:
+
+```bash
+npm run server:public
+```
+
+That starts the bridge on `ws://0.0.0.0:8787` and the control plane on `http://0.0.0.0:8788`. A plugin can then connect to `ws://<server-ip>:8787`, and server-side project flows can target `http://<server-ip>:8788`.
+
 ## Auto Update
 
 On startup, the plugin checks the latest release of the configured GitHub repository. By default, it targets this repository, but you can point it at your own public or private repo.
@@ -236,7 +246,7 @@ The repository already includes a repeatable local validation path:
 5. `npm run remote-client:smoke-test`
 6. `npm run bridge:e2e-smoke-test`
 7. `npm run release:check`
-8. Start the bridge server with `BRIDGE_SERVER_CONTROL_PORT` and run `npm run server:project-flow`
+8. Start the bridge server with `npm run server:public` and run `npm run server:project-flow`
 9. For arbitrary control-plane sequences, run `npm run server:command-runner`
 
 For runtime verification inside JLCEDA, see:

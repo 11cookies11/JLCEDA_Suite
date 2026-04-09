@@ -1,6 +1,6 @@
 {
   "name": "jlceda-aiagent",
-  "version": "0.1.19",
+  "version": "0.1.20",
   "private": true,
   "description": "Bridge Codex with JLCEDA through a controlled extension layer.",
   "author": "JLCEDA AIAgent contributors",
@@ -15,6 +15,7 @@
     "build": "npm run compile && ts-node ./build/packaged.ts",
     "smoke-test": "ts-node --files ./scripts/smoke-test.ts",
     "server:start": "ts-node --files ./src/server/cli.ts",
+    "server:public": "BRIDGE_SERVER_CONTROL_HOST=0.0.0.0 BRIDGE_SERVER_CONTROL_PORT=8788 ts-node --files ./src/server/cli.ts",
     "server:project-flow": "ts-node --files ./scripts/server-project-flow.ts",
     "server:command-runner": "ts-node --files ./scripts/server-command-runner.ts",
     "release:bundle": "python3 ./scripts/package-release-bundle.py",

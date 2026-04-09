@@ -39,6 +39,16 @@
 
 当前最主要的缺口，是还没有完成公网环境联调、服务器端 Codex 接入，以及 `JLCEDA` 客户端内的实机导入与运行验证。
 
+## 公网服务模式
+
+如果你要在公网机器上部署桥接服务，建议直接用控制平面一起启动：
+
+```bash
+npm run server:public
+```
+
+这样会把桥接服务监听在 `ws://0.0.0.0:8787`，控制平面监听在 `http://0.0.0.0:8788`。插件可以连接到 `ws://<server-ip>:8787`，服务器侧项目流则可以直接打到 `http://<server-ip>:8788`。
+
 ## 自动更新
 
 插件启动时会自动检查对应 GitHub 仓库的最新 release。默认目标仓库是本仓库，但你也可以改成自己的公开或私有仓库。
@@ -208,7 +218,7 @@ GitHub Token：ghp_xxxxxxxxxxxxxxxxxxxx
 5. `npm run remote-client:smoke-test`
 6. `npm run bridge:e2e-smoke-test`
 7. `npm run release:check`
-8. 启动带控制入口的桥接服务后，运行 `npm run server:project-flow`
+8. 启动 `npm run server:public` 后，运行 `npm run server:project-flow`
 9. 如果要执行任意控制平面序列，运行 `npm run server:command-runner`
 
 如果要继续做 `JLCEDA` 内的实机验证，可以参考：

@@ -44,6 +44,19 @@ function installMockEda(): void {
     ['updateCheck.repoOwner', '11cookies11'],
     ['updateCheck.repoName', 'JLCEDA_AIAgent'],
   ]);
+  const boardSource = [
+    '{"type":"DOCHEAD"}||{"docType":"PCB","client":"smoke-board","uuid":"pcb-001","updateTime":1,"version":"1"}|',
+    '{"type":"CANVAS","ticket":1,"id":"CANVAS"}||{"originX":0,"originY":0,"unit":"mm","gridXSize":5,"gridYSize":5,"snapXSize":5,"snapYSize":5,"altSnapXSize":0.0254,"altSnapYSize":0.0254,"gridType":"OUTLETS","multiGridType":"NONE","multiGridRatio":5,"highlightValue":0.5}|',
+    '{"type":"ACTIVE_LAYER","ticket":2,"id":"ACTIVE_LAYER"}||{"layerId":1}|',
+  ].join('\n');
+  const footprintSource = [
+    '{"type":"DOCHEAD"}||{"docType":"PCB","client":"smoke-footprint","uuid":"fp-001","updateTime":1,"version":"1"}|',
+    '{"type":"CANVAS","ticket":1,"id":"CANVAS"}||{"originX":0,"originY":0,"unit":"mm","gridXSize":5,"gridYSize":5,"snapXSize":5,"snapYSize":5,"altSnapXSize":0.0254,"altSnapYSize":0.0254,"gridType":"OUTLETS","multiGridType":"NONE","multiGridRatio":5,"highlightValue":0.5}|',
+    '{"type":"PAD","ticket":2,"id":"p1"}||{"groupId":0,"netName":"","layerId":1,"num":"1","centerX":1,"centerY":-1,"padAngle":0,"hole":null,"defaultPad":{"padType":"RECT","width":1,"height":2,"radius":0},"specialPad":[],"padOffsetX":0,"padOffsetY":0,"relativeAngle":null,"plated":true,"padType":"NORMAL","topSolderExpansion":null,"bottomSolderExpansion":null,"topPasteExpansion":null,"bottomPasteExpansion":null,"locked":false,"zIndex":8,"connectMode":null,"spokeSpace":null,"spokeWidth":null,"spokeAngle":null,"unusedInnerLayers":[],"padLen":0,"attrsMap":{}}|',
+    '{"type":"POLY","ticket":3,"id":"poly1"}||{"groupId":0,"netName":"","layerId":13,"width":1,"path":[["CIRCLE",0,0,1]],"locked":false,"zIndex":3,"polyType":"NORMAL"}|',
+    '{"type":"ATTR","ticket":4,"id":"attr1"}||{"groupID":0,"parentId":"","layerId":3,"x":0,"y":0,"key":"Footprint","value":"FP-DEMO","keyVisible":false,"valueVisible":false,"fontFamily":"default","fontSize":10,"strokeWidth":1,"bold":0,"italic":0,"origin":"LEFT_BOTTOM","angle":0,"reverse":false,"expansion":0,"mirror":false,"locked":false,"zIndex":20,"specialColor":null}|',
+  ].join('\n');
+  let currentDocumentSource = boardSource;
   let lastFetchRequest: {
     url: string;
     authorization?: string;
@@ -179,14 +192,17 @@ function installMockEda(): void {
     sys_FileManager: {
       getProjectFile: async () => createMockFile('project.epro', 'application/octet-stream', 32),
       getDocumentFile: async () => createMockFile('document.epro', 'application/octet-stream', 24),
-      getDocumentSource: async () => 'document source',
+      getDocumentSource: async () => currentDocumentSource,
       getDocumentFootprintSources: async () => [
         {
           footprintUuid: 'footprint-001',
-          documentSource: 'footprint source',
+          documentSource: footprintSource,
         },
       ],
-      setDocumentSource: async () => true,
+      setDocumentSource: async (source: string) => {
+        currentDocumentSource = source;
+        return true;
+      },
       getProjectFileByProjectUuid: async () => createMockFile('project-by-uuid.epro', 'application/octet-stream', 32),
       getDeviceFileByDeviceUuid: async () => createMockFile('device.elibz', 'application/octet-stream', 32),
       getSymbolFileBySymbolUuid: async () => createMockFile('symbol.elibz', 'application/octet-stream', 32),
@@ -465,9 +481,29 @@ function installMockEda(): void {
         },
       }),
     },
+    lib_Footprint: {
+      get: async (footprintUuid: string, libraryUuid?: string) => ({
+        libraryType: '4',
+        uuid: footprintUuid,
+        libraryUuid: libraryUuid ?? 'footprint-library-uuid',
+        name: 'R0603',
+        classification: ['RES-SMD'],
+        description: 'Smoke test footprint',
+      }),
+      search: async () => [],
+    },
     dmt_EditorControl: {
-      openDocument: async (documentUuid: string) => `tab-${documentUuid}`,
-      openLibraryDocument: async (_libraryUuid: string, _libraryType: string, uuid: string) => `tab-${uuid}`,
+      openDocument: async (documentUuid: string) => {
+        if (documentUuid === 'pcb-001' || documentUuid === '9d915095c87b8761') {
+          currentDocumentSource = boardSource;
+        }
+
+        return `tab-${documentUuid}`;
+      },
+      openLibraryDocument: async (_libraryUuid: string, _libraryType: string, uuid: string) => {
+        currentDocumentSource = footprintSource;
+        return `tab-${uuid}`;
+      },
       closeDocument: async () => true,
       getSplitScreenTree: async () => ({
         id: 'split-root',
@@ -665,18 +701,24 @@ function installMockEda(): void {
         y: number,
         rotation?: number,
         primitiveLock?: boolean,
-      ) => createPrimitiveState({
-        primitiveId: 'pcb-cmp-001',
-        primitiveType: 'component',
-        name: `${component.libraryUuid}:${component.uuid}`,
-        layer,
-        x,
-        y,
-        rotation,
-        addIntoBom: true,
-        addIntoPcb: true,
-        primitiveLock,
-      }),
+      ) => {
+        if (component.uuid === 'fp-fallback-001') {
+          throw new Error('Cannot convert undefined or null to object');
+        }
+
+        return createPrimitiveState({
+          primitiveId: 'pcb-cmp-001',
+          primitiveType: 'component',
+          name: `${component.libraryUuid}:${component.uuid}`,
+          layer,
+          x,
+          y,
+          rotation,
+          addIntoBom: true,
+          addIntoPcb: true,
+          primitiveLock,
+        });
+      },
     },
     sch_ManufactureData: {
       getBomFile: async (fileName?: string, fileType?: 'xlsx' | 'csv') =>
@@ -1883,6 +1925,33 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'pcb footprint placement should succeed');
+      },
+    },
+    {
+      name: 'pcb footprint placement fallback',
+      request: {
+        id: 'smoke-009a',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'pcb',
+          action: 'place_footprint',
+          requiresConfirmation: false,
+          payload: {
+            libraryUuid: 'footprint-lib',
+            uuid: 'fp-fallback-001',
+            position: { x: 30, y: 30 },
+            layer: 'top',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'pcb footprint fallback should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { placementMode?: string };
+          assert(data.placementMode === 'source_fallback', 'pcb footprint fallback should use source fallback');
+        }
       },
     },
     {

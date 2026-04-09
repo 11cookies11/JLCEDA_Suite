@@ -7,6 +7,13 @@
 格式参考 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，并遵循
 [语义化版本](https://semver.org/spec/v2.0.0.html)。
 
+## [0.1.20] - 2026-04-09
+
+### 修复
+
+- `pcb.place_footprint` 增加源级兜底路径，避免 `pcb_PrimitiveComponent.create` 在当前 JLCEDA 运行时触发对象转换错误
+- 增加覆盖直连和兜底两条路径的 smoke test，确保 PCB 落板链路可回归验证
+
 ## [Unreleased]
 
 ### 新增

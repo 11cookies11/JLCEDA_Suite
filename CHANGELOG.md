@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.20] - 2026-04-09
+
+### Fixed
+
+- Added a source-level fallback path for `pcb.place_footprint` to avoid the current JLCEDA runtime object-conversion failure in `pcb_PrimitiveComponent.create`
+- Added smoke-test coverage for both the direct PCB placement path and the fallback path
+
 ## [Unreleased]
 
 ### Added
