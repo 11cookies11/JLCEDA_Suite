@@ -1,5 +1,6 @@
 import type { BridgeRequest } from '../src/bridge/protocol';
 import process from 'node:process';
+import JSZip from 'jszip';
 import { executeBridgeRequest } from '../src/bridge/handlers';
 import { BRIDGE_PROTOCOL_VERSION } from '../src/bridge/protocol';
 
@@ -20,6 +21,23 @@ function createMockFile(name: string, type: string, size: number): File {
   } as File;
 }
 
+async function createMockZipFile(entries: Record<string, string>): Promise<File | Blob> {
+  const zip = new JSZip();
+
+  for (const [name, content] of Object.entries(entries)) {
+    zip.file(name, content);
+  }
+
+  const bytes = await zip.generateAsync({ type: 'uint8array', compression: 'DEFLATE' });
+  const buffer = bytes.buffer.slice(0) as ArrayBuffer;
+
+  if (typeof File !== 'undefined') {
+    return new File([buffer], 'symbol.zip', { type: 'zip' });
+  }
+
+  return new Blob([buffer], { type: 'zip' });
+}
+
 function createPrimitiveState(state: Record<string, unknown>): Record<string, () => unknown> {
   return {
     getState_PrimitiveId: () => state.primitiveId,
@@ -36,6 +54,7 @@ function createPrimitiveState(state: Record<string, unknown>): Record<string, ()
     getState_AddIntoBom: () => state.addIntoBom,
     getState_AddIntoPcb: () => state.addIntoPcb,
     getState_Layer: () => state.layer,
+    getState_Symbol: () => state.symbol,
   };
 }
 
@@ -48,6 +67,14 @@ function installMockEda(): void {
     '{"type":"DOCHEAD"}||{"docType":"PCB","client":"smoke-board","uuid":"pcb-001","updateTime":1,"version":"1"}|',
     '{"type":"CANVAS","ticket":1,"id":"CANVAS"}||{"originX":0,"originY":0,"unit":"mm","gridXSize":5,"gridYSize":5,"snapXSize":5,"snapYSize":5,"altSnapXSize":0.0254,"altSnapYSize":0.0254,"gridType":"OUTLETS","multiGridType":"NONE","multiGridRatio":5,"highlightValue":0.5}|',
     '{"type":"ACTIVE_LAYER","ticket":2,"id":"ACTIVE_LAYER"}||{"layerId":1}|',
+  ].join('\n');
+  const schematicSource = [
+    '{"type":"DOCHEAD"}||{"docType":"SCH_PAGE","client":"smoke-schematic","uuid":"schematic-001","updateTime":1,"version":"1"}|',
+    '{"type":"CANVAS","ticket":1,"id":"CANVAS"}||{"originX":0,"originY":0}|',
+    '{"type":"COMPONENT","ticket":2,"id":"cmp-001"}||{"partId":"smoke-part","x":100,"y":100,"rotation":0,"isMirror":false,"attrs":{},"componentType":"part","designator":"R1","name":"Demo Part","uniqueId":"u-001"}|',
+    '{"type":"WIRE","ticket":3,"id":"wire-001"}||{"zIndex":1}|',
+    '{"type":"LINE","ticket":4,"id":"line-001"}||{"startX":100,"startY":100,"endX":110,"endY":100,"lineGroup":"wire-001"}|',
+    '{"type":"ATTR","ticket":5,"id":"net-001"}||{"parentId":"wire-001","key":"NET","value":"NET_A"}|',
   ].join('\n');
   const footprintSource = [
     '{"type":"DOCHEAD"}||{"docType":"PCB","client":"smoke-footprint","uuid":"fp-001","updateTime":1,"version":"1"}|',
@@ -203,9 +230,15 @@ function installMockEda(): void {
         currentDocumentSource = source;
         return true;
       },
+      getSymbolFileBySymbolUuid: async () => createMockZipFile({
+        'symbol-source.txt': [
+          '{"type":"DOCHEAD"}||{"docType":"SCH_SYMBOL","client":"smoke-symbol","uuid":"sym-001","updateTime":1,"version":"1"}|',
+          '{"type":"PIN","ticket":1,"id":"p1"}||{"x":0,"y":0,"pinNumber":"1","pinName":"A","rotation":0,"pinLength":10}|',
+          '{"type":"PIN","ticket":2,"id":"p2"}||{"x":10,"y":0,"pinNumber":"2","pinName":"B","rotation":0,"pinLength":10}|',
+        ].join('\n'),
+      }),
       getProjectFileByProjectUuid: async () => createMockFile('project-by-uuid.epro', 'application/octet-stream', 32),
       getDeviceFileByDeviceUuid: async () => createMockFile('device.elibz', 'application/octet-stream', 32),
-      getSymbolFileBySymbolUuid: async () => createMockFile('symbol.elibz', 'application/octet-stream', 32),
     },
     sys_Storage: {
       getExtensionAllUserConfigs: () => ({
@@ -494,6 +527,10 @@ function installMockEda(): void {
     },
     dmt_EditorControl: {
       openDocument: async (documentUuid: string) => {
+        if (documentUuid === 'schematic-001' || documentUuid === '4c6b94fa004d00f4') {
+          currentDocumentSource = schematicSource;
+        }
+
         if (documentUuid === 'pcb-001' || documentUuid === '9d915095c87b8761') {
           currentDocumentSource = boardSource;
         }
@@ -623,6 +660,43 @@ function installMockEda(): void {
       }),
     },
     sch_PrimitiveComponent: {
+      getAll: async () => [
+        createPrimitiveState({
+          primitiveId: 'cmp-001',
+          primitiveType: 'Component',
+          componentType: 'part',
+          designator: 'R1',
+          name: 'Demo Part',
+          x: 100,
+          y: 100,
+          rotation: 0,
+          mirror: false,
+          symbol: {
+            libraryUuid: 'lib-001',
+            uuid: 'sym-001',
+          },
+        }),
+      ],
+      getAllPinsByPrimitiveId: async () => [
+        createPrimitiveState({
+          primitiveId: 'cmp-001-p1',
+          primitiveType: 'ComponentPin',
+          x: 100,
+          y: 100,
+          pinNumber: '1',
+          pinName: 'A',
+          noConnected: false,
+        }),
+        createPrimitiveState({
+          primitiveId: 'cmp-001-p2',
+          primitiveType: 'ComponentPin',
+          x: 110,
+          y: 100,
+          pinNumber: '2',
+          pinName: 'B',
+          noConnected: false,
+        }),
+      ],
       create: async (
         component: { libraryUuid: string; uuid: string },
         x: number,
@@ -674,6 +748,14 @@ function installMockEda(): void {
       }),
     },
     sch_PrimitiveWire: {
+      getAll: async () => [
+        createPrimitiveState({
+          primitiveId: 'wire-001',
+          primitiveType: 'Wire',
+          net: 'NET_A',
+          line: [100, 100, 110, 100],
+        }),
+      ],
       create: async (line: Array<number> | Array<Array<number>>, net?: string) =>
         createPrimitiveState({
           primitiveId: 'wire-001',
@@ -746,12 +828,12 @@ function installMockEda(): void {
     (globalThis as { __lastUpdateFetchRequest?: typeof lastFetchRequest }).__lastUpdateFetchRequest = lastFetchRequest;
 
     return new Response(JSON.stringify({
-      tag_name: 'v0.1.20',
-      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.20',
+      tag_name: 'v0.1.21',
+      html_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/tag/v0.1.21',
       assets: [
         {
-          name: 'jlceda-aiagent_v0.1.20.eext',
-          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.20/jlceda-aiagent_v0.1.20.eext',
+          name: 'jlceda-aiagent_v0.1.21.eext',
+          browser_download_url: 'https://github.com/11cookies11/JLCEDA_AIAgent/releases/download/v0.1.21/jlceda-aiagent_v0.1.21.eext',
         },
       ],
     }), {
@@ -891,8 +973,8 @@ async function run(): Promise<void> {
             latestDownloadUrl?: string;
           };
           assert(data.updateAvailable === true, 'update check should report a newer release');
-          assert(data.latestVersion === 'v0.1.20', 'update check should surface the mocked latest version');
-          assert(data.latestDownloadUrl?.includes('v0.1.20'), 'update check should surface the mocked download url');
+          assert(data.latestVersion === 'v0.1.21', 'update check should surface the mocked latest version');
+          assert(data.latestDownloadUrl?.includes('v0.1.21'), 'update check should surface the mocked download url');
         }
       },
     },
@@ -917,7 +999,7 @@ async function run(): Promise<void> {
             latestVersion?: string;
           };
           assert(data.updateAvailable === true, 'update status should persist the update check result');
-          assert(data.latestVersion === 'v0.1.20', 'update status should expose the mocked latest version');
+          assert(data.latestVersion === 'v0.1.21', 'update status should expose the mocked latest version');
         }
       },
     },
@@ -995,7 +1077,7 @@ async function run(): Promise<void> {
           assert(fetchRequest?.url.includes('/repos/private-owner/private-repo/releases/latest'), 'private update check should target configured repo');
           assert(fetchRequest?.authorization === 'Bearer ghp_private_token', 'private update check should send GitHub auth token');
           assert(data.updateAvailable === true, 'private update check should report a newer release');
-          assert(data.latestVersion === 'v0.1.20', 'private update check should surface the mocked latest version');
+          assert(data.latestVersion === 'v0.1.21', 'private update check should surface the mocked latest version');
         }
       },
     },
@@ -1645,6 +1727,31 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'schematic DRC should succeed');
+      },
+    },
+    {
+      name: 'schematic connectivity inspection',
+      request: {
+        id: 'smoke-002ka',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'schematic',
+          action: 'inspect_connectivity',
+          requiresConfirmation: false,
+          payload: {
+            tolerance: 0.75,
+            maxIssues: 10,
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'schematic connectivity inspection should succeed');
+        if (response.status === 'success') {
+          const data = response.result.data as { issueCount?: number };
+          assert(data.issueCount === 0, 'connectivity inspection should report no issues in the smoke fixture');
+        }
       },
     },
     {

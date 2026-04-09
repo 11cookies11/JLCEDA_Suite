@@ -96,6 +96,7 @@
 - `place_component`
 - `create_wire`
 - `annotate_net`
+- `inspect_connectivity`
 
 #### `pcb`
 

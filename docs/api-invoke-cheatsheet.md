@@ -78,6 +78,7 @@
 - `sch_Document.autoRouting(props?)`
 - `sch_Document.autoLayout(props?)`
 - `sch_Drc.check(strict, userInterface, includeVerboseError)`
+- `schematic.inspect_connectivity(allSchematicPages?, tolerance?, maxIssues?)`
 
 ### PCB
 

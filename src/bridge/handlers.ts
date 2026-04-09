@@ -97,6 +97,9 @@ import {
   pingBridgeResult,
 } from '../adapters/read-only';
 import {
+  inspectSchematicConnectivityResult,
+} from '../adapters/schematic-diagnostics';
+import {
   annotateSchematicNet,
   createSchematicNetFlag,
   createSchematicNetPort,
@@ -982,6 +985,13 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
         return createSuccessResponse(
           request.id,
           await autoLayoutSchematicResult(request.command.payload as BridgeCommandPayloadMap['schematic.auto_layout']),
+        );
+      case 'schematic.inspect_connectivity':
+        return createSuccessResponse(
+          request.id,
+          await inspectSchematicConnectivityResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.inspect_connectivity'],
+          ),
         );
       case 'schematic.check_drc':
         return createSuccessResponse(

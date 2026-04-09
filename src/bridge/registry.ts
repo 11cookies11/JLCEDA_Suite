@@ -141,6 +141,7 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'schematic.get_current_filter_configuration',
   'schematic.auto_routing',
   'schematic.auto_layout',
+  'schematic.inspect_connectivity',
   'schematic.check_drc',
   'pcb.get_board_summary',
   'pcb.get_current_pcb_info',
@@ -964,6 +965,12 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     domain: 'schematic',
     requiresConfirmationByDefault: true,
     summary: 'Run schematic auto-layout.',
+  },
+  {
+    name: 'schematic.inspect_connectivity',
+    domain: 'schematic',
+    requiresConfirmationByDefault: false,
+    summary: 'Inspect schematic wire and pin connectivity.',
   },
   {
     name: 'schematic.check_drc',

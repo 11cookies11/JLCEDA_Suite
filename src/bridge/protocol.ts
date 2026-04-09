@@ -246,6 +246,11 @@ export interface BridgeCommandPayloadMap {
       [designator: string]: 'resistor' | 'capacitor' | 'inductive' | 'diode' | 'triode' | 'oscillator' | 'chip' | 'otherDevice';
     };
   };
+  'schematic.inspect_connectivity': {
+    allSchematicPages?: boolean;
+    tolerance?: number;
+    maxIssues?: number;
+  };
   'schematic.check_drc': {
     strict?: boolean;
     userInterface?: boolean;

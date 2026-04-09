@@ -23,6 +23,7 @@
 - `project.export_bom`
 - `schematic.place_component`
 - `schematic.create_wire`
+- `schematic.inspect_connectivity`
 
 当前已登记但未实现的命令会返回：
 
@@ -66,7 +67,11 @@
 
 这会直接调用 JLCEDA 原生对象上的方法。对于大部分 `DMT_`、`SCH_`、`PCB_`、`SYS_`、`LIB_` 方法，比逐个补桥接命令更快。
 
-### 2.1 私有仓库更新检查失败
+### 2.1 strict DRC 只返回布尔值
+
+如果 `schematic.check_drc(includeVerboseError: true)` 仍然只返回 `false`，可以改用 `schematic.inspect_connectivity` 先定位原理图里哪些线端点或引脚没有接上。这个命令是我们自己的静态诊断层，不依赖 JLCEDA 运行时的 verbose DRC 输出。
+
+### 2.2 私有仓库更新检查失败
 
 如果自动更新一直报错、但你使用的是私有 GitHub 仓库，优先检查：
 
