@@ -1,33 +1,37 @@
-# 更新日志
+# 鏇存柊鏃ュ織
 
-语言：简体中文 | [English](CHANGELOG.md)
+璇█锛氱畝浣撲腑鏂?| [English](CHANGELOG.md)
 
-本项目的所有重要变更都会记录在此文件中。
+鏈」鐩殑鎵€鏈夐噸瑕佸彉鏇撮兘浼氳褰曞湪姝ゆ枃浠朵腑銆?
+鏍煎紡鍙傝€?[Keep a Changelog](https://keepachangelog.com/en/1.1.0/)锛屽苟閬靛惊
+[璇箟鍖栫増鏈琞(https://semver.org/spec/v2.0.0.html)銆?
+## [0.1.22] - 2026-04-09
 
-格式参考 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，并遵循
-[语义化版本](https://semver.org/spec/v2.0.0.html)。
+### 鏂板
 
+- 澧炲姞鐙珛鐨勬彃浠朵粙缁嶉〉涓庡浠跺浘鏍囷紝鏂逛究棣栨浣跨敤鑰呭湪杩涘叆鎺у埗鍙板墠鐞嗚В鏁翠綋鍔熻兘
+
+### 鍙樻洿
+
+- 灏嗛」鐩搧鐗屼粠 JLCEDA AIAgent 缁熶竴鏇存柊涓?JLCEDA Suite锛屽苟鍚屾鍒版彃浠躲€乻erver 榛樿鍊笺€佹洿鏂伴厤缃笌鍙戝竷浜х墿
+- 灏嗗浠剁殑瀵瑰鍛藉悕鎷嗗垎涓?`JLCEDA Suite Plugin`銆?`JLCEDA Suite Server` 涓?`JLCEDA Suite Skill`
+- 灏?skill 鍖呭拰 release bundle 杈撳嚭鍛藉悕缁熶竴鍒?`jlceda-suite-*` 鏂规
 ## [0.1.21] - 2026-04-09
 
-### 新增
+### 鏂板
 
-- 为原理图和 PCB 的启发式规则新增 server 侧 profile，并提供查看与切换的控制接口
-- 插件侧开始按 server profile 读取放件避让、标签卫生、PCB 卫生和 power block 建议的可调参数
-- 明确插件作为稳定执行层的基线定位，后续调优优先放在 server profile 层
+- 涓哄師鐞嗗浘鍜?PCB 鐨勫惎鍙戝紡瑙勫垯鏂板 server 渚?profile锛屽苟鎻愪緵鏌ョ湅涓庡垏鎹㈢殑鎺у埗鎺ュ彛
+- 鎻掍欢渚у紑濮嬫寜 server profile 璇诲彇鏀句欢閬胯銆佹爣绛惧崼鐢熴€丳CB 鍗敓鍜?power block 寤鸿鐨勫彲璋冨弬鏁?- 鏄庣‘鎻掍欢浣滀负绋冲畾鎵ц灞傜殑鍩虹嚎瀹氫綅锛屽悗缁皟浼樹紭鍏堟斁鍦?server profile 灞?
+### 鍙樻洿
 
-### 变更
+- 杩滅▼妗ユ帴閰嶇疆鏂板鐙珛鎺у埗骞抽潰鍦板潃鍜屼护鐗岋紝骞跺湪鍙敤鏃惰嚜鍔ㄤ粠鏈嶅姟鍦板潃鎺ㄥ
 
-- 远程桥接配置新增独立控制平面地址和令牌，并在可用时自动从服务地址推导
+### 淇
 
-### 修复
-
-- 原理图放件、标签和 power block 的可调参数不再硬编码，而是从当前 server profile 中读取
-
+- 鍘熺悊鍥炬斁浠躲€佹爣绛惧拰 power block 鐨勫彲璋冨弬鏁颁笉鍐嶇‖缂栫爜锛岃€屾槸浠庡綋鍓?server profile 涓鍙?
 ## [0.1.20] - 2026-04-09
 
-### 修复
+### 淇
 
-- `pcb.place_footprint` 增加源级兜底路径，避免 `pcb_PrimitiveComponent.create` 在当前 JLCEDA 运行时触发对象转换错误
-- 增加覆盖直连和兜底两条路径的 smoke test，确保 PCB 落板链路可回归验证
-
+- `pcb.place_footprint` 澧炲姞婧愮骇鍏滃簳璺緞锛岄伩鍏?`pcb_PrimitiveComponent.create` 鍦ㄥ綋鍓?JLCEDA 杩愯鏃惰Е鍙戝璞¤浆鎹㈤敊璇?- 澧炲姞瑕嗙洊鐩磋繛鍜屽厹搴曚袱鏉¤矾寰勭殑 smoke test锛岀‘淇?PCB 钀芥澘閾捐矾鍙洖褰掗獙璇?
 ## [Unreleased]
