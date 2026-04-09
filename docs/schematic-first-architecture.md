@@ -180,6 +180,18 @@ Add feedback loops:
 - adjust defaults
 - learn project-specific preferences
 
+## Plugin Freeze Policy
+
+The plugin should be treated as a stable execution layer once a baseline release is working.
+
+Default policy:
+
+- prefer changing server profiles, rules, and orchestration first
+- avoid touching the plugin unless JLCEDA runtime behavior changes or a plugin bug blocks execution
+- keep plugin releases infrequent and capability-driven
+
+This lets the team iterate on behavior without forcing constant plugin reinstallation.
+
 ## Recommended Initial Scope
 
 Focus on:
@@ -205,4 +217,3 @@ This architecture is a controlled, schematic-first, schema-driven workflow:
 - Plugin executes in JLCEDA
 - Native JLCEDA features are reused first
 - Custom rules are configurable, not permanently hardcoded
-

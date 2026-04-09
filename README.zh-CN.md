@@ -65,6 +65,8 @@ npm run server:public
 
 你可以通过 `BRIDGE_RULE_PROFILE` 覆盖当前 active profile，也可以用 `BRIDGE_RULE_PROFILE_FILE` 指向自定义 profile 配置文件。
 
+插件在形成可用基线后应尽量保持稳定，后续优先通过 server 侧的 profile 和编排调整策略，减少频繁更新插件的次数。
+
 ## 自动更新
 
 插件启动时会自动检查对应 GitHub 仓库的最新 release。默认目标仓库是本仓库，但你也可以改成自己的公开或私有仓库。

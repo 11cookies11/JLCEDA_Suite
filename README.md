@@ -66,6 +66,8 @@ The control plane also exposes rule profiles for schematic-first workflows:
 
 You can override the active profile with `BRIDGE_RULE_PROFILE`, or point the server at a custom profile file with `BRIDGE_RULE_PROFILE_FILE`.
 
+The plugin is intended to stay relatively stable once a working baseline is established; prefer iterating on server-side profiles and orchestration before releasing plugin updates.
+
 ## Auto Update
 
 On startup, the plugin checks the latest release of the configured GitHub repository. By default, it targets this repository, but you can point it at your own public or private repo.
