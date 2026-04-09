@@ -67,7 +67,9 @@ function installMockEda(): void {
     '{"type":"DOCHEAD"}||{"docType":"PCB","client":"smoke-board","uuid":"pcb-001","updateTime":1,"version":"1"}|',
     '{"type":"CANVAS","ticket":1,"id":"CANVAS"}||{"originX":0,"originY":0,"unit":"mm","gridXSize":5,"gridYSize":5,"snapXSize":5,"snapYSize":5,"altSnapXSize":0.0254,"altSnapYSize":0.0254,"gridType":"OUTLETS","multiGridType":"NONE","multiGridRatio":5,"highlightValue":0.5}|',
     '{"type":"ACTIVE_LAYER","ticket":2,"id":"ACTIVE_LAYER"}||{"layerId":1}|',
+    '{"type":"BOARD","ticket":2.5,"id":"board-001"}||{"left":0,"right":400,"top":400,"bottom":0}|',
     '{"type":"COMPONENT","ticket":3,"id":"pcb-cmp-001"}||{"x":200,"y":200,"rotation":0,"isMirror":false,"designator":"U1","name":"Power Regulator","componentType":"part"}|',
+    '{"type":"COMPONENT","ticket":3.1,"id":"pcb-cmp-002"}||{"x":20,"y":18,"rotation":0,"isMirror":false,"designator":"U2","name":"Edge Part","componentType":"part"}|',
     '{"type":"LINE","ticket":4,"id":"pcb-line-001"}||{"startX":210,"startY":200,"endX":260,"endY":200,"lineGroup":"pcb-track-001"}|',
     '{"type":"ATTR","ticket":5,"id":"pcb-net-001"}||{"parentId":"pcb-track-001","key":"NET","value":"VOUT"}|',
   ].join('\n');
@@ -606,7 +608,10 @@ function installMockEda(): void {
         (includeVerboseError ? [{ message: 'ok' }] : true),
     },
     pcb_Document: {
-      importChanges: async () => true,
+      importChanges: async () => {
+        currentDocumentSource = boardSource;
+        return true;
+      },
       save: async (_uuid: string) => true,
       getCalculatingRatlineStatus: async () => 'idle',
       startCalculatingRatline: async () => true,
@@ -1897,6 +1902,8 @@ async function run(): Promise<void> {
           payload: {
             componentClearance: 120,
             trackClearance: 70,
+            labelClearance: 80,
+            boardEdgeClearance: 40,
             maxIssues: 10,
           },
         },
@@ -1906,7 +1913,8 @@ async function run(): Promise<void> {
         if (response.status === 'success') {
           const data = response.result.data as { issueCount?: number; issues?: Array<{ type?: string }> };
           assert((data.issueCount ?? 0) > 0, 'pcb layout hygiene should report at least one issue');
-          assert((data.issues ?? []).some(issue => issue.type === 'component_track_proximity'), 'pcb layout hygiene should flag track crowding');
+          assert((data.issues ?? []).some(issue => issue.type === 'component_label_track_proximity'), 'pcb layout hygiene should flag label crowding');
+          assert((data.issues ?? []).some(issue => issue.type === 'board_edge_component_proximity'), 'pcb layout hygiene should flag board edge crowding');
         }
       },
     },
@@ -1996,6 +2004,25 @@ async function run(): Promise<void> {
       },
       verify: (response) => {
         assert(response.status === 'success', 'panel save should succeed');
+      },
+    },
+    {
+      name: 'restore schematic document',
+      request: {
+        id: 'smoke-002ra',
+        type: 'command.request',
+        protocolVersion: BRIDGE_PROTOCOL_VERSION,
+        sessionId: 'smoke-session',
+        command: {
+          domain: 'project',
+          action: 'open_document',
+          payload: {
+            documentUuid: 'schematic-001',
+          },
+        },
+      },
+      verify: (response) => {
+        assert(response.status === 'success', 'restore schematic document should succeed');
       },
     },
     {

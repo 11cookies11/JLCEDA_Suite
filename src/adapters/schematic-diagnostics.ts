@@ -99,6 +99,8 @@ interface LabelHygieneIssue {
   wireId?: string;
   wireNet?: string;
   distance?: number;
+  suggestedPosition?: Point;
+  recommendation?: string;
 }
 
 interface InspectConnectivityPayload {
@@ -135,6 +137,7 @@ interface PowerBlockComponentSuggestion {
   role: 'input_capacitor' | 'regulator' | 'output_capacitor' | 'indicator' | 'connector' | 'supporting_part';
   suggestedPosition: Point;
   rationale: string;
+  sequenceIndex: number;
 }
 
 interface PythonConnectivityComponentSource {
@@ -348,6 +351,23 @@ function isPowerKeyword(value: string | undefined): boolean {
   ].some(keyword => normalized.includes(keyword));
 }
 
+function getPowerRoleOrder(role: PowerBlockComponentSuggestion['role']): number {
+  switch (role) {
+    case 'connector':
+      return 0;
+    case 'input_capacitor':
+      return 1;
+    case 'regulator':
+      return 2;
+    case 'output_capacitor':
+      return 3;
+    case 'indicator':
+      return 4;
+    default:
+      return 5;
+  }
+}
+
 function classifyPowerBlockRole(component: SchematicComponentSource): PowerBlockComponentSuggestion['role'] {
   const tokens = [component.designator, component.name, component.componentType].filter(Boolean) as Array<string>;
   const joined = tokens.join(' ').toLowerCase();
@@ -392,6 +412,64 @@ function roleOffset(role: PowerBlockComponentSuggestion['role'], spacing: number
     default:
       return { x: 0, y: spacing };
   }
+}
+
+function getLabelPlacementCandidates(component: SchematicComponentSource, spacing: number): Array<Point> {
+  const step = Math.max(spacing, 64);
+  const labelGap = Math.min(56, Math.max(24, Math.round(step * 0.35)));
+
+  return [
+    { x: component.x + labelGap, y: component.y - step },
+    { x: component.x + step, y: component.y + labelGap * 0.2 },
+    { x: component.x - labelGap, y: component.y + step },
+    { x: component.x - step, y: component.y - labelGap * 0.2 },
+  ];
+}
+
+function scoreCrowdingAtPoint(
+  point: Point,
+  components: Array<SchematicComponentSource>,
+  segments: Array<ConnectivitySegment>,
+  ignoreComponentId: string,
+): number {
+  let nearestDistance = Number.POSITIVE_INFINITY;
+
+  for (const component of components) {
+    if (component.primitiveId === ignoreComponentId) {
+      continue;
+    }
+
+    const distance = Math.sqrt(distanceSquaredBetweenPoints(point, { x: component.x, y: component.y }));
+    nearestDistance = Math.min(nearestDistance, distance);
+  }
+
+  for (const segment of segments) {
+    const distance = Math.sqrt(distanceSquaredPointToSegment(point, segment.start, segment.end));
+    nearestDistance = Math.min(nearestDistance, distance);
+  }
+
+  return nearestDistance;
+}
+
+function suggestLabelPosition(
+  component: SchematicComponentSource,
+  components: Array<SchematicComponentSource>,
+  segments: Array<ConnectivitySegment>,
+  spacing: number,
+): Point {
+  const candidates = getLabelPlacementCandidates(component, spacing);
+  let bestCandidate = candidates[0] ?? { x: component.x, y: component.y };
+  let bestScore = Number.NEGATIVE_INFINITY;
+
+  for (const candidate of candidates) {
+    const score = scoreCrowdingAtPoint(candidate, components, segments, component.primitiveId);
+    if (score > bestScore) {
+      bestScore = score;
+      bestCandidate = candidate;
+    }
+  }
+
+  return bestCandidate;
 }
 
 function getRecordNumber(record: Record<string, unknown>, keys: string[]): number | undefined {
@@ -1050,6 +1128,7 @@ export async function inspectSchematicLabelHygieneResult(
 
   for (const component of labeledComponents) {
     const componentPoint = { x: component.x, y: component.y };
+    const suggestedPosition = suggestLabelPosition(component, components, segments, Math.max(labelClearance, wireLabelClearance));
 
     for (const other of components) {
       if (other.primitiveId === component.primitiveId) {
@@ -1070,6 +1149,8 @@ export async function inspectSchematicLabelHygieneResult(
         relatedComponentId: other.primitiveId,
         relatedDesignator: other.designator,
         distance,
+        suggestedPosition,
+        recommendation: 'Move the label toward the clearest quadrant around the component.',
       });
 
       if (issues.length >= maxIssues) {
@@ -1096,6 +1177,8 @@ export async function inspectSchematicLabelHygieneResult(
         wireId: segment.wireId,
         wireNet: segment.net,
         distance,
+        suggestedPosition,
+        recommendation: 'Move the label away from the nearby wire bundle.',
       });
 
       if (issues.length >= maxIssues) {
@@ -1147,13 +1230,15 @@ export async function suggestPowerBlockLayoutResult(
   const prioritized = [...powerComponents].sort((left, right) => {
     const leftRole = classifyPowerBlockRole(left);
     const rightRole = classifyPowerBlockRole(right);
-    return leftRole.localeCompare(rightRole) || (left.designator ?? '').localeCompare(right.designator ?? '');
+    return getPowerRoleOrder(leftRole) - getPowerRoleOrder(rightRole)
+      || (left.designator ?? '').localeCompare(right.designator ?? '');
   });
 
   const suggestions = prioritized.slice(0, maxSuggestions).map((component, index) => {
     const role = classifyPowerBlockRole(component);
     const offset = roleOffset(role, spacing);
     const rowOffset = Math.floor(index / 3) * spacing * 0.7;
+    const sequenceIndex = index + 1;
 
     return {
       primitiveId: component.primitiveId,
@@ -1175,6 +1260,7 @@ export async function suggestPowerBlockLayoutResult(
               : role === 'indicator'
                 ? 'Keep the indicator away from the main power loop.'
                 : 'Group supporting parts around the power core without crowding it.',
+      sequenceIndex,
     } satisfies PowerBlockComponentSuggestion;
   });
 

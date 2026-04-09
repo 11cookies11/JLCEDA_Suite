@@ -21,7 +21,7 @@ interface PcbTrackSegment {
 }
 
 interface PcbLayoutIssue {
-  type: 'component_component_proximity' | 'component_track_proximity';
+  type: 'component_component_proximity' | 'component_track_proximity' | 'component_label_component_proximity' | 'component_label_track_proximity' | 'board_edge_component_proximity';
   severity: 'warning' | 'info';
   message: string;
   componentId?: string;
@@ -31,13 +31,23 @@ interface PcbLayoutIssue {
   trackId?: string;
   trackNet?: string;
   distance?: number;
+  suggestedPosition?: Point;
 }
 
 interface InspectPcbLayoutHygienePayload {
   allPcbPages?: boolean;
   componentClearance?: number;
   trackClearance?: number;
+  labelClearance?: number;
+  boardEdgeClearance?: number;
   maxIssues?: number;
+}
+
+interface PcbBoardBounds {
+  left: number;
+  right: number;
+  top: number;
+  bottom: number;
 }
 
 function parseSourceRecord(line: string): { header: Record<string, unknown>; body: Record<string, unknown> } | undefined {
@@ -204,11 +214,72 @@ function parsePcbTracks(source: string): Array<PcbTrackSegment> {
   return segments;
 }
 
+function parsePcbBoardBounds(source: string): Array<PcbBoardBounds> {
+  const boards: Array<PcbBoardBounds> = [];
+
+  for (const line of source.split('\n')) {
+    const trimmed = line.trim();
+    if (!trimmed) {
+      continue;
+    }
+
+    const record = parseSourceRecord(trimmed);
+    if (!record) {
+      continue;
+    }
+
+    const type = String(record.header.type ?? '');
+    if (type !== 'BOARD' && type !== 'BOARD_OUTLINE' && type !== 'OUTLINE') {
+      continue;
+    }
+
+    const body = record.body;
+    const left = normalizeNumber(body.left ?? body.minX ?? body.x1);
+    const right = normalizeNumber(body.right ?? body.maxX ?? body.x2);
+    const top = normalizeNumber(body.top ?? body.maxY ?? body.y1);
+    const bottom = normalizeNumber(body.bottom ?? body.minY ?? body.y2);
+
+    if (left !== undefined && right !== undefined && top !== undefined && bottom !== undefined) {
+      boards.push({ left, right, top, bottom });
+      continue;
+    }
+
+    const x = normalizeNumber(body.x);
+    const y = normalizeNumber(body.y);
+    const width = normalizeNumber(body.width);
+    const height = normalizeNumber(body.height);
+
+    if (x !== undefined && y !== undefined && width !== undefined && height !== undefined) {
+      boards.push({
+        left: x,
+        right: x + width,
+        top: y,
+        bottom: y + height,
+      });
+    }
+  }
+
+  return boards;
+}
+
+function estimateLabelAnchor(component: PcbComponentSource): Point {
+  const nameLength = (component.designator ?? component.name ?? '').length;
+  const horizontalOffset = Math.min(64, 28 + nameLength * 2);
+  const verticalOffset = Math.min(48, 20 + Math.ceil(nameLength / 6) * 4);
+
+  return {
+    x: component.x + horizontalOffset,
+    y: component.y - verticalOffset,
+  };
+}
+
 export async function inspectPcbLayoutHygieneResult(
   payload?: InspectPcbLayoutHygienePayload,
 ): Promise<BridgeResult> {
   const componentClearance = payload?.componentClearance ?? 120;
   const trackClearance = payload?.trackClearance ?? 70;
+  const labelClearance = payload?.labelClearance ?? 90;
+  const boardEdgeClearance = payload?.boardEdgeClearance ?? 60;
   const maxIssues = payload?.maxIssues ?? 100;
   const source = await eda.sys_FileManager.getDocumentSource();
 
@@ -218,6 +289,7 @@ export async function inspectPcbLayoutHygieneResult(
 
   const components = parsePcbComponents(source);
   const tracks = parsePcbTracks(source);
+  const boardBounds = parsePcbBoardBounds(source);
   const issues: Array<PcbLayoutIssue> = [];
 
   for (let i = 0; i < components.length; i += 1) {
@@ -252,21 +324,84 @@ export async function inspectPcbLayoutHygieneResult(
       break;
     }
 
+    const labelAnchor = estimateLabelAnchor(component);
+
+    for (const other of components) {
+      if (other.primitiveId === component.primitiveId) {
+        continue;
+      }
+
+      const distance = Math.sqrt(distanceSquaredBetweenPoints(labelAnchor, { x: other.x, y: other.y }));
+      if (distance > labelClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'component_label_component_proximity',
+        severity: 'warning',
+        message: `PCB label for ${component.designator ?? component.primitiveId ?? 'unknown'} is crowded by ${other.designator ?? other.primitiveId ?? 'another component'} (${distance.toFixed(1)} < ${labelClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        relatedComponentId: other.primitiveId,
+        relatedDesignator: other.designator,
+        distance,
+        suggestedPosition: labelAnchor,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+
     for (const track of tracks) {
-      const distance = Math.sqrt(distanceSquaredPointToSegment(componentPoint, track.start, track.end));
+      const distance = Math.sqrt(distanceSquaredPointToSegment(labelAnchor, track.start, track.end));
       if (distance > trackClearance) {
         continue;
       }
 
       issues.push({
-        type: 'component_track_proximity',
+        type: 'component_label_track_proximity',
         severity: 'warning',
-        message: `PCB component ${component.designator ?? component.primitiveId ?? 'unknown'} is too close to track ${track.trackId}${track.net ? ` (${track.net})` : ''} (${distance.toFixed(1)} < ${trackClearance}).`,
+        message: `PCB label for ${component.designator ?? component.primitiveId ?? 'unknown'} is too close to track ${track.trackId}${track.net ? ` (${track.net})` : ''} (${distance.toFixed(1)} < ${trackClearance}).`,
         componentId: component.primitiveId,
         designator: component.designator,
         trackId: track.trackId,
         trackNet: track.net,
         distance,
+        suggestedPosition: labelAnchor,
+      });
+
+      if (issues.length >= maxIssues) {
+        break;
+      }
+    }
+
+    if (issues.length >= maxIssues) {
+      break;
+    }
+
+    for (const board of boardBounds) {
+      const leftDistance = componentPoint.x - board.left;
+      const rightDistance = board.right - componentPoint.x;
+      const topDistance = board.top - componentPoint.y;
+      const bottomDistance = componentPoint.y - board.bottom;
+
+      const nearestEdgeDistance = Math.min(leftDistance, rightDistance, topDistance, bottomDistance);
+      if (nearestEdgeDistance > boardEdgeClearance) {
+        continue;
+      }
+
+      issues.push({
+        type: 'board_edge_component_proximity',
+        severity: 'warning',
+        message: `PCB component ${component.designator ?? component.primitiveId ?? 'unknown'} is too close to the board edge (${nearestEdgeDistance.toFixed(1)} < ${boardEdgeClearance}).`,
+        componentId: component.primitiveId,
+        designator: component.designator,
+        distance: nearestEdgeDistance,
       });
 
       if (issues.length >= maxIssues) {
@@ -284,8 +419,11 @@ export async function inspectPcbLayoutHygieneResult(
     data: {
       componentCount: components.length,
       trackCount: tracks.length,
+      boardCount: boardBounds.length,
       componentClearance,
       trackClearance,
+      labelClearance,
+      boardEdgeClearance,
       issueCount: issues.length,
       issues,
     },

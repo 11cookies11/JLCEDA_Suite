@@ -324,6 +324,8 @@ export interface BridgeCommandPayloadMap {
     allPcbPages?: boolean;
     componentClearance?: number;
     trackClearance?: number;
+    labelClearance?: number;
+    boardEdgeClearance?: number;
     maxIssues?: number;
   };
   'pcb.get_primitive_at_point': {

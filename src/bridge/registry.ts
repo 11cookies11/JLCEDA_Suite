@@ -1034,7 +1034,7 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     name: 'pcb.inspect_layout_hygiene',
     domain: 'pcb',
     requiresConfirmationByDefault: false,
-    summary: 'Inspect PCB placement hygiene for crowded components and track collisions.',
+    summary: 'Inspect PCB placement hygiene for crowded components, labels, track collisions, and board edges.',
   },
   {
     name: 'pcb.import_changes',

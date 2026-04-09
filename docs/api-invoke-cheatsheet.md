@@ -106,7 +106,7 @@
 - `pcb_Document.getCurrentFilterConfiguration()`
 - `pcb_Document.clearRouting(type?)`
 - `pcb_Drc.check(strict, userInterface, includeVerboseError)`
-- `pcb.inspect_layout_hygiene(allPcbPages?, componentClearance?, trackClearance?, maxIssues?)`
+- `pcb.inspect_layout_hygiene(allPcbPages?, componentClearance?, trackClearance?, labelClearance?, boardEdgeClearance?, maxIssues?)`
 
 ### 文件与导出
 
