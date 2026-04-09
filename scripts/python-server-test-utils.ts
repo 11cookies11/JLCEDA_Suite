@@ -21,6 +21,33 @@ function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function forceKillProcessTree(pid: number): Promise<void> {
+  if (process.platform === 'win32') {
+    await new Promise<void>((resolve) => {
+      const killer = spawn('taskkill', ['/PID', String(pid), '/T', '/F'], {
+        stdio: 'ignore',
+      });
+      killer.once('exit', () => resolve());
+      killer.once('error', () => resolve());
+    });
+    return;
+  }
+
+  try {
+    process.kill(pid, 'SIGKILL');
+  }
+  catch {
+    // Ignore shutdown races.
+  }
+}
+
+function closeChildProcessPipes(server: PythonBridgeServerRuntime): void {
+  server.process.stdout?.removeAllListeners();
+  server.process.stderr?.removeAllListeners();
+  server.process.stdout?.destroy();
+  server.process.stderr?.destroy();
+}
+
 export function spawnPythonBridgeServer(options: PythonBridgeServerOptions): PythonBridgeServerRuntime {
   const serverProcess = spawn('python3', ['./scripts/python_bridge_server.py'], {
     cwd: process.cwd(),
@@ -101,6 +128,12 @@ export async function postJson<TResponse>(url: string, body: unknown, token: str
 }
 
 export async function stopPythonBridgeServer(server: PythonBridgeServerRuntime): Promise<void> {
+  if (server.process.exitCode !== null) {
+    closeChildProcessPipes(server);
+    await server.exitPromise.catch(() => undefined);
+    return;
+  }
+
   try {
     server.process.kill('SIGTERM');
   }
@@ -108,7 +141,23 @@ export async function stopPythonBridgeServer(server: PythonBridgeServerRuntime):
     // Ignore shutdown races.
   }
 
-  await server.exitPromise.catch(() => undefined);
+  const exitCode = await Promise.race([
+    server.exitPromise.catch(() => -1),
+    sleep(2_000).then(() => Number.NaN),
+  ]);
+
+  if (!Number.isNaN(exitCode)) {
+    closeChildProcessPipes(server);
+    await server.exitPromise.catch(() => undefined);
+    return;
+  }
+
+  if (server.process.pid) {
+    await forceKillProcessTree(server.process.pid);
+    await sleep(500);
+  }
+
+  closeChildProcessPipes(server);
 }
 
 export function flushPythonBridgeServerOutput(server: PythonBridgeServerRuntime): void {

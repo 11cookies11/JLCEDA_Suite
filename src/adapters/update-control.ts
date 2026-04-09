@@ -135,7 +135,7 @@ function buildLatestReleaseUrl(settings: UpdateCheckSettings): string {
 
 function getGitHubRequestHeaders(settings: UpdateCheckSettings): Record<string, string> {
   return {
-    accept: 'application/vnd.github+json',
+    'accept': 'application/vnd.github+json',
     'user-agent': 'JLCEDA-Suite',
     ...(settings.githubToken ? { authorization: `Bearer ${settings.githubToken}` } : {}),
     'x-github-api-version': '2022-11-28',
@@ -217,7 +217,6 @@ async function fetchLatestRelease(settings: UpdateCheckSettings): Promise<GitHub
 }
 
 async function loadUpdateSettingsFromStorage(): Promise<UpdateCheckSettings> {
-
   if (updateSettingsLoaded) {
     return updateSettings;
   }

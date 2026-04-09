@@ -109,6 +109,34 @@ class PendingBridgeRequest:
     client_id: str
     future: asyncio.Future[dict[str, Any]]
     timeout_handle: asyncio.TimerHandle
+    command_name: str
+    started_at: datetime
+
+
+@dataclass
+class RequestHistoryEntry:
+    request_id: str
+    client_id: str
+    command_name: str
+    status: str
+    started_at: datetime
+    completed_at: datetime
+    duration_ms: int
+    summary: str = ''
+    error: str = ''
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            'requestId': self.request_id,
+            'clientId': self.client_id,
+            'commandName': self.command_name,
+            'status': self.status,
+            'startedAt': self.started_at.isoformat(),
+            'completedAt': self.completed_at.isoformat(),
+            'durationMs': self.duration_ms,
+            'summary': self.summary,
+            'error': self.error,
+        }
 
 
 @dataclass(frozen=True)
@@ -490,6 +518,9 @@ class BridgeServer:
         self.sessions: dict[str, BridgeSession] = {}
         self.socket_clients: dict[int, str] = {}
         self.pending_requests: dict[str, PendingBridgeRequest] = {}
+        self.request_history: list[RequestHistoryEntry] = []
+        self.request_history_limit = 200
+        self.server_started_at = utc_now()
         self._bridge_runner: web.AppRunner | None = None
         self._control_runner: web.AppRunner | None = None
         self._bridge_site: web.TCPSite | None = None
@@ -507,6 +538,8 @@ class BridgeServer:
             control_app = web.Application()
             control_app.router.add_get('/health', self._handle_control_health)
             control_app.router.add_get('/sessions', self._handle_control_sessions)
+            control_app.router.add_get('/requests', self._handle_control_requests)
+            control_app.router.add_get('/debug/session/{client_id}', self._handle_control_session_debug)
             control_app.router.add_get('/profiles', self._handle_control_profiles)
             control_app.router.add_get('/profile', self._handle_control_profile)
             control_app.router.add_post('/profile', self._handle_control_profile_update)
@@ -549,6 +582,83 @@ class BridgeServer:
             })
         return sessions
 
+    def list_pending_requests(self) -> list[dict[str, Any]]:
+        pending_requests: list[dict[str, Any]] = []
+        now = utc_now()
+        for request_id, pending in self.pending_requests.items():
+            pending_requests.append({
+                'requestId': request_id,
+                'clientId': pending.client_id,
+                'commandName': pending.command_name,
+                'startedAt': pending.started_at.isoformat(),
+                'ageMs': int((now - pending.started_at).total_seconds() * 1000),
+            })
+        return pending_requests
+
+    def list_request_history(self, limit: int = 20, client_id: str = '') -> list[dict[str, Any]]:
+        limit = max(1, min(limit, self.request_history_limit))
+        entries = self.request_history
+        if client_id:
+            entries = [entry for entry in entries if entry.client_id == client_id]
+        return [entry.to_dict() for entry in entries[-limit:]][::-1]
+
+    def get_session_debug_info(self, client_id: str) -> dict[str, Any]:
+        session = self.sessions.get(client_id)
+        if session is None:
+            raise RuntimeError(f'Unknown client session: {client_id}')
+
+        pending_requests = [
+            pending
+            for pending in self.list_pending_requests()
+            if pending['clientId'] == client_id
+        ]
+
+        return {
+            'session': {
+                **session.registration,
+                'connectedAt': session.connected_at.isoformat(),
+                'lastSeenAt': session.last_seen_at.isoformat(),
+            },
+            'pendingRequests': pending_requests,
+            'recentRequests': self.list_request_history(limit=10, client_id=client_id),
+            'activeProfile': self.active_rule_profile_name,
+        }
+
+    def append_request_history(
+        self,
+        request_id: str,
+        client_id: str,
+        command_name: str,
+        status: str,
+        started_at: datetime,
+        summary: str = '',
+        error: str = '',
+    ) -> None:
+        completed_at = utc_now()
+        self.request_history.append(RequestHistoryEntry(
+            request_id=request_id,
+            client_id=client_id,
+            command_name=command_name,
+            status=status,
+            started_at=started_at,
+            completed_at=completed_at,
+            duration_ms=int((completed_at - started_at).total_seconds() * 1000),
+            summary=summary,
+            error=error,
+        ))
+        if len(self.request_history) > self.request_history_limit:
+            self.request_history = self.request_history[-self.request_history_limit:]
+
+    def build_health_payload(self) -> dict[str, Any]:
+        return {
+            'ok': True,
+            'activeProfile': self.active_rule_profile_name,
+            'serverStartedAt': self.server_started_at.isoformat(),
+            'sessionCount': len(self.sessions),
+            'pendingRequestCount': len(self.pending_requests),
+            'requestHistoryCount': len(self.request_history),
+        }
+
     def list_rule_profiles(self) -> list[dict[str, Any]]:
         return [
             {
@@ -579,6 +689,9 @@ class BridgeServer:
 
         loop = asyncio.get_running_loop()
         future: asyncio.Future[dict[str, Any]] = loop.create_future()
+        command = request.get('command') if isinstance(request.get('command'), dict) else {}
+        command_name = f"{command.get('domain', 'unknown')}.{command.get('action', 'unknown')}"
+        started_at = utc_now()
 
         def on_timeout() -> None:
             pending = self.pending_requests.pop(request['id'], None)
@@ -590,6 +703,8 @@ class BridgeServer:
             client_id=client_id,
             future=future,
             timeout_handle=timeout_handle,
+            command_name=command_name,
+            started_at=started_at,
         )
 
         await session.websocket.send_json({
@@ -598,7 +713,27 @@ class BridgeServer:
         })
 
         try:
-            return await future
+            response = await future
+            result = response.get('result') if isinstance(response.get('result'), dict) else {}
+            self.append_request_history(
+                request_id=str(request['id']),
+                client_id=client_id,
+                command_name=command_name,
+                status=str(response.get('status') or 'unknown'),
+                started_at=started_at,
+                summary=str(result.get('summary') or ''),
+            )
+            return response
+        except Exception as error:
+            self.append_request_history(
+                request_id=str(request['id']),
+                client_id=client_id,
+                command_name=command_name,
+                status='failed',
+                started_at=started_at,
+                error=str(error),
+            )
+            raise
         finally:
             pending = self.pending_requests.pop(request['id'], None)
             if pending is not None:
@@ -768,15 +903,50 @@ class BridgeServer:
     async def _handle_control_health(self, request: web.Request) -> web.Response:
         if not self._is_authorized(request):
             return write_json(401, {'error': 'unauthorized'})
-        return write_json(200, {
-            'ok': True,
-            'activeProfile': self.active_rule_profile_name,
-        })
+        return write_json(200, self.build_health_payload())
 
     async def _handle_control_sessions(self, request: web.Request) -> web.Response:
         if not self._is_authorized(request):
             return write_json(401, {'error': 'unauthorized'})
-        return write_json(200, {'sessions': self.list_sessions()})
+        return write_json(200, {
+            'sessions': self.list_sessions(),
+            'pendingRequests': self.list_pending_requests(),
+        })
+
+    async def _handle_control_requests(self, request: web.Request) -> web.Response:
+        if not self._is_authorized(request):
+            return write_json(401, {'error': 'unauthorized'})
+
+        raw_limit = request.query.get('limit', '20')
+        try:
+            limit = int(raw_limit)
+        except Exception:
+            limit = 20
+        client_id = str(request.query.get('clientId') or '')
+        return write_json(200, {
+            'requests': self.list_request_history(limit=limit, client_id=client_id),
+        })
+
+    async def _handle_control_session_debug(self, request: web.Request) -> web.Response:
+        if not self._is_authorized(request):
+            return write_json(401, {'error': 'unauthorized'})
+
+        client_id = str(request.match_info.get('client_id') or '')
+        if not client_id:
+            return write_json(400, {
+                'error': 'invalid_request',
+                'message': 'client_id is required.',
+            })
+
+        try:
+            payload = self.get_session_debug_info(client_id)
+        except RuntimeError as error:
+            return write_json(404, {
+                'error': 'not_found',
+                'message': str(error),
+            })
+
+        return write_json(200, payload)
 
     async def _handle_control_profiles(self, request: web.Request) -> web.Response:
         if not self._is_authorized(request):

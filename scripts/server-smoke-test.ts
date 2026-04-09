@@ -41,9 +41,29 @@ function waitForMessage<TMessage>(
   });
 }
 
+function getDefaultPort(offset: number): number {
+  return 30000 + (process.pid % 10000) + offset;
+}
+
+async function closeSocket(socket: WebSocket): Promise<void> {
+  if (socket.readyState === WebSocket.CLOSED) {
+    return;
+  }
+
+  await new Promise<void>((resolve) => {
+    const handleClose = () => {
+      socket.off('close', handleClose);
+      resolve();
+    };
+
+    socket.on('close', handleClose);
+    socket.close();
+  });
+}
+
 async function run(): Promise<void> {
-  const bridgePort = Number(process.env.BRIDGE_SERVER_SMOKE_PORT ?? '8792');
-  const controlPort = Number(process.env.BRIDGE_SERVER_SMOKE_CONTROL_PORT ?? '8793');
+  const bridgePort = Number(process.env.BRIDGE_SERVER_SMOKE_PORT ?? String(getDefaultPort(0)));
+  const controlPort = Number(process.env.BRIDGE_SERVER_SMOKE_CONTROL_PORT ?? String(getDefaultPort(1)));
   const host = process.env.BRIDGE_SERVER_SMOKE_HOST ?? '127.0.0.1';
   const token = process.env.BRIDGE_SERVER_SMOKE_TOKEN ?? 'smoke-token';
   const server = spawnPythonBridgeServer({
@@ -55,6 +75,26 @@ async function run(): Promise<void> {
 
   try {
     await waitForHealth(`http://${host}:${controlPort}/health`, token);
+
+    const healthResponse = await fetch(`http://${host}:${controlPort}/health`, {
+      headers: {
+        'x-bridge-control-token': token,
+      },
+    });
+    assert(healthResponse.ok, 'health endpoint should be available');
+    const healthPayload = await healthResponse.json() as {
+      ok?: boolean;
+      sessionCount?: number;
+      pendingRequestCount?: number;
+      requestHistoryCount?: number;
+      serverStartedAt?: string;
+    };
+    assert(healthPayload.ok === true, 'health endpoint should report ok');
+    assert(healthPayload.sessionCount === 0, 'health endpoint should start with zero sessions');
+    assert(healthPayload.pendingRequestCount === 0, 'health endpoint should start with zero pending requests');
+    assert(healthPayload.requestHistoryCount === 0, 'health endpoint should start with zero request history entries');
+    assert(typeof healthPayload.serverStartedAt === 'string' && healthPayload.serverStartedAt.length > 0, 'health endpoint should expose serverStartedAt');
+    console.log('PASS health payload');
 
     const socket = new WebSocket(`ws://${host}:${bridgePort}`);
     await new Promise<void>((resolve, reject) => {
@@ -90,9 +130,11 @@ async function run(): Promise<void> {
     assert(sessionsResponse.ok, 'sessions endpoint should be available');
     const sessionsPayload = await sessionsResponse.json() as {
       sessions: Array<{ clientId?: string }>;
+      pendingRequests?: Array<{ requestId?: string }>;
     };
     assert(sessionsPayload.sessions.length === 1, 'server should track one connected session');
     assert(sessionsPayload.sessions[0]?.clientId === 'client-smoke-001', 'server should store the expected client id');
+    assert((sessionsPayload.pendingRequests ?? []).length === 0, 'server should not report pending requests before dispatch');
     console.log('PASS session tracking');
 
     const profilesResponse = await fetch(`http://${host}:${controlPort}/profiles`, {
@@ -245,6 +287,38 @@ async function run(): Promise<void> {
     assert(bridgeRequest.type === 'bridge.request', 'server should forward a bridge request');
     console.log('PASS bridge request dispatch');
 
+    const pendingSessionsResponse = await fetch(`http://${host}:${controlPort}/sessions`, {
+      headers: {
+        'x-bridge-control-token': token,
+      },
+    });
+    assert(pendingSessionsResponse.ok, 'sessions endpoint should expose pending requests');
+    const pendingSessionsPayload = await pendingSessionsResponse.json() as {
+      pendingRequests?: Array<{ requestId?: string; clientId?: string; commandName?: string }>;
+    };
+    assert((pendingSessionsPayload.pendingRequests ?? []).length === 1, 'server should expose one pending request during dispatch');
+    assert(pendingSessionsPayload.pendingRequests?.[0]?.requestId === 'smoke-request-001', 'pending request should report the current request id');
+    assert(pendingSessionsPayload.pendingRequests?.[0]?.commandName === 'system.ping', 'pending request should expose the command name');
+    console.log('PASS pending request tracking');
+
+    const debugResponse = await fetch(`http://${host}:${controlPort}/debug/session/client-smoke-001`, {
+      headers: {
+        'x-bridge-control-token': token,
+      },
+    });
+    assert(debugResponse.ok, 'session debug endpoint should be available');
+    const debugPayload = await debugResponse.json() as {
+      session?: { clientId?: string };
+      pendingRequests?: Array<{ requestId?: string }>;
+      recentRequests?: Array<{ requestId?: string }>;
+      activeProfile?: string;
+    };
+    assert(debugPayload.session?.clientId === 'client-smoke-001', 'session debug should expose the active client');
+    assert((debugPayload.pendingRequests ?? []).length === 1, 'session debug should include the pending request');
+    assert((debugPayload.recentRequests ?? []).length === 0, 'session debug should not include history before the response returns');
+    assert(debugPayload.activeProfile === 'default', 'session debug should expose the active profile');
+    console.log('PASS session debug during request');
+
     const bridgeResponse: ClientToServerMessage = {
       type: 'bridge.response',
       clientId: 'client-smoke-001',
@@ -269,7 +343,39 @@ async function run(): Promise<void> {
     assert(requestResult.response.status === 'success', 'server should resolve with the client response');
     console.log('PASS bridge response routing');
 
-    socket.close();
+    const requestsResponse = await fetch(`http://${host}:${controlPort}/requests?limit=5&clientId=client-smoke-001`, {
+      headers: {
+        'x-bridge-control-token': token,
+      },
+    });
+    assert(requestsResponse.ok, 'requests endpoint should be available');
+    const requestsPayload = await requestsResponse.json() as {
+      requests?: Array<{ requestId?: string; clientId?: string; commandName?: string; status?: string }>;
+    };
+    assert((requestsPayload.requests ?? []).length === 1, 'request history should include the completed request');
+    assert(requestsPayload.requests?.[0]?.requestId === 'smoke-request-001', 'request history should preserve the request id');
+    assert(requestsPayload.requests?.[0]?.clientId === 'client-smoke-001', 'request history should preserve the client id');
+    assert(requestsPayload.requests?.[0]?.commandName === 'system.ping', 'request history should preserve the command name');
+    assert(requestsPayload.requests?.[0]?.status === 'success', 'request history should preserve the response status');
+    console.log('PASS request history');
+
+    const healthAfterRequestResponse = await fetch(`http://${host}:${controlPort}/health`, {
+      headers: {
+        'x-bridge-control-token': token,
+      },
+    });
+    assert(healthAfterRequestResponse.ok, 'health endpoint should remain available');
+    const healthAfterRequestPayload = await healthAfterRequestResponse.json() as {
+      sessionCount?: number;
+      pendingRequestCount?: number;
+      requestHistoryCount?: number;
+    };
+    assert(healthAfterRequestPayload.sessionCount === 1, 'health endpoint should report one active session after registration');
+    assert(healthAfterRequestPayload.pendingRequestCount === 0, 'health endpoint should report zero pending requests after completion');
+    assert(healthAfterRequestPayload.requestHistoryCount === 1, 'health endpoint should report one history entry after completion');
+    console.log('PASS health after request');
+
+    await closeSocket(socket);
   }
   finally {
     await stopPythonBridgeServer(server);
