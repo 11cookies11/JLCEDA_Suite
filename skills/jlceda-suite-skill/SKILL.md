@@ -14,6 +14,7 @@ The highest-value use case is schematic-first co-design:
 - inspect the current project, sheet, and selected primitives before changing anything
 - summarize the current design context for component selection or topology discussion
 - compare candidate parts and record the rationale for the chosen component
+- generate BOM-style notes and verification checklists for the selected part
 - place or edit schematic content after the design intent is clear
 - carry the same context forward into PCB assistance
 
@@ -103,6 +104,23 @@ What it does:
 - requests `schematic.get_current_schematic_info`
 - prints one structured JSON payload with suggested next steps
 
+### `scripts/server-part-selector.mjs`
+
+Use this when the user already has selection requirements or a short candidate list.
+
+Environment:
+- `BRIDGE_CONTROL_URL`: control-plane URL, default `http://127.0.0.1:8788`
+- `BRIDGE_CONTROL_TOKEN`: optional control-plane token
+- `BRIDGE_TARGET_CLIENT_ID`: optional client id to target
+- `BRIDGE_SELECTION_REQUIREMENTS_JSON`: JSON with the target role, constraints, and priorities
+- `BRIDGE_SELECTION_CANDIDATES_JSON`: optional JSON array of candidate parts to compare
+
+What it does:
+- reads the current JLCEDA schematic context
+- scores candidate parts against the supplied requirements
+- returns a recommendation, BOM note, verification checklist, and next schematic actions
+- returns a search plan when candidate parts are not supplied yet
+
 ### `scripts/server-project-flow.mjs`
 
 Use this when you need the standard create/open/project-inspection flow.
@@ -122,11 +140,12 @@ Use this for arbitrary multi-step control-plane sequences against a connected se
 
 ### Component selection
 
-1. Restate the electrical and mechanical requirements.
-2. Identify the surrounding function block in the schematic.
-3. Compare realistic candidate parts.
-4. Recommend one option and explain the tradeoffs.
-5. Record the decision in BOM-style notes.
+1. Run `server-part-selector.mjs` once the requirements and candidate list are available.
+2. Restate the electrical and mechanical requirements.
+3. Identify the surrounding function block in the schematic.
+4. Compare realistic candidate parts.
+5. Recommend one option and explain the tradeoffs.
+6. Record the decision in BOM-style notes and verification checks.
 
 ### Schematic refinement
 
@@ -145,6 +164,7 @@ The bridge supports two layers:
 Read [references/api-surface.md](references/api-surface.md) for the family-by-family API map.
 Read [references/task-sequences.md](references/task-sequences.md) for recommended call order.
 Read [references/schematic-co-design.md](references/schematic-co-design.md) for the schematic-first collaboration pattern.
+Read [references/component-selection.md](references/component-selection.md) for the part-selection workflow and output format.
 
 ## Call strategy
 
