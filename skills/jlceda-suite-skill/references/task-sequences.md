@@ -16,6 +16,18 @@ Recommended calls:
 
 Use `system.api_invoke` if the dedicated bridge command is missing for the exact read.
 
+
+Recommended script:
+
+- `scripts/server-context-summary.mjs`
+
+What to extract from the result:
+
+- active project and document kind
+- current schematic name and page count
+- current selection count
+- immediate next safe action for component selection or schematic refinement
+
 ## 2. Create or open a project
 
 Goal: start from a fresh project or reopen an existing one.
@@ -112,3 +124,24 @@ When the exact method is not wrapped:
 - Use `system.api_invoke` only for official API methods you can name precisely.
 - Save after each meaningful edit batch.
 - Run DRC or comparison checks before exporting final artifacts.
+
+## 9. Component selection and schematic co-design
+
+Goal: help the user choose parts and improve the current schematic together.
+
+Recommended sequence:
+
+1. `system.get_bridge_status`
+2. `project.get_document_summary`
+3. `project.get_selection_snapshot`
+4. `schematic.get_current_schematic_info`
+5. Library search or `system.api_invoke` for unresolved catalog calls
+6. Dedicated schematic edit command or `system.api_invoke` for the smallest safe edit
+7. `project.get_document_summary` again to verify the new state
+
+Notes:
+
+- Do not jump straight into mutation before the current function block is understood.
+- When the user asks for component selection, capture the requirements first and then compare candidates.
+- When the user asks for schematic improvement, prefer one local function block at a time.
+

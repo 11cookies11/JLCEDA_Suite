@@ -1,110 +1,161 @@
 ---
 name: jlceda-suite-skill
-description: Drive a connected JLCEDA Suite session through the suite server control plane, operate supported project/schematic/PCB/system APIs, and use system.api_invoke for the official JLCEDA API surface when the user wants an AI agent to operate JLCEDA through the suite.
+description: Drive a connected JLCEDA Suite session through the suite server control plane, inspect the current hardware design context, and assist with component selection, schematic refinement, and PCB follow-up work.
 ---
 
 # JLCEDA Suite Skill
 
 ## When to use
 
-Use this skill when the user wants an AI agent to drive a live JLCEDA session through the JLCEDA Suite Server instead of manually clicking the GUI.
+Use this skill when the user wants an AI agent to work together with them inside a live JLCEDA session.
 
-Typical requests:
+The highest-value use case is schematic-first co-design:
 
-- create or open a JLCEDA project from the server side
-- verify that the bridge session is connected before issuing editor commands
-- run a repeatable server-side project flow against a connected EDA client
-- package the bridge-session test flow together with the EDA plugin release
-- call supported JLCEDA APIs directly through the bridge, including `system.api_invoke` for official API methods not exposed as dedicated bridge commands
+- inspect the current project, sheet, and selected primitives before changing anything
+- summarize the current design context for component selection or topology discussion
+- compare candidate parts and record the rationale for the chosen component
+- place or edit schematic content after the design intent is clear
+- carry the same context forward into PCB assistance
 
-## Workflow
+## Default workflow
 
-1. Confirm the bridge server is running and the plugin session is connected.
-2. Use the control plane to read `/sessions` and pick the target `clientId`.
-3. Prefer dedicated bridge commands for common project, schematic, PCB, and system operations.
-4. Use `system.api_invoke` for official JLCEDA API methods that are not exposed as dedicated bridge commands.
-5. Run `scripts/server-project-flow.mjs` when you need the standard create/open/project-inspection flow.
-6. Run `scripts/server-command-runner.mjs` when you need an arbitrary multi-step control-plane sequence against a connected session.
-7. If the user wants more coverage, continue with explicit bridge requests on the same connected session.
+1. Confirm the JLCEDA Suite Server is running and the plugin session is connected.
+2. Read `/sessions` and pick the target `clientId`.
+3. Run `scripts/server-context-summary.mjs` to collect the current design context.
+4. Use the summary to decide which mode you are in: `inspect`, `select`, `design`, or `export`.
+5. Prefer dedicated bridge commands for common project, schematic, PCB, and system operations.
+6. Use `system.api_invoke` only when the official JLCEDA API exists but has not been wrapped yet.
+7. Keep the same connected session for the whole task chain so the design context stays coherent.
 
-## Script
+## Core modes
 
-Use `scripts/server-project-flow.mjs` for the server-side project flow.
+### 1. Inspect
+
+Use this first unless the current design state is already obvious.
+
+Goal:
+- read the current bridge status, document summary, selection snapshot, and current schematic state
+- identify the active project, active sheet, current selection, and immediate next design step
+
+Primary script:
+- `scripts/server-context-summary.mjs`
+
+Output to produce:
+- current document kind and project name
+- current schematic name and page count
+- whether the user already selected a component or net
+- short list of safe next steps
+
+### 2. Select
+
+Use this when the user wants help choosing parts.
+
+Goal:
+- capture requirements such as voltage, current, package, cost, availability, interface, and tolerance
+- compare 2-4 realistic candidates
+- record why one part is the better fit for the current schematic block
+
+Expected output:
+- requirement summary
+- candidate comparison table or bullet list
+- selected part and rationale
+- BOM note or follow-up validation note
+
+### 3. Design
+
+Use this when the user wants to improve the schematic.
+
+Goal:
+- identify the current function block
+- propose the smallest safe schematic edit
+- place parts, create wires, annotate nets, or import changes only after the design intent is agreed
+
+Expected output:
+- what will change
+- why it changes the design in the right direction
+- what to verify after the edit
+
+### 4. Export
+
+Use this when the user wants a handoff artifact.
+
+Goal:
+- export BOMs, summaries, or source snapshots for review
+- leave enough context for the next schematic or PCB step
+
+## Scripts
+
+### `scripts/server-context-summary.mjs`
+
+Use this as the default entry point for schematic collaboration.
 
 Environment:
-
 - `BRIDGE_CONTROL_URL`: control-plane URL, default `http://127.0.0.1:8788`
 - `BRIDGE_CONTROL_TOKEN`: optional control-plane token
 - `BRIDGE_TARGET_CLIENT_ID`: optional client id to target
-- `BRIDGE_PROJECT_NAME`: project friendly name, default `Codex Test Project`
-- `BRIDGE_PROJECT_CODE`: project code, default `codex-test-project`
 
-The script:
-
+What it does:
 - lists connected bridge sessions
-- selects the target client
-- creates a project
-- opens the project
-- reads project info and inventory
-- creates a schematic and a schematic page
-- reads the current schematic and document summary
+- reads session debug information from the control plane
+- requests `system.get_bridge_status`
+- requests `project.get_document_summary`
+- requests `project.get_selection_snapshot`
+- requests `schematic.get_current_schematic_info`
+- prints one structured JSON payload with suggested next steps
 
-Use `scripts/server-command-runner.mjs` for generic control-plane execution.
+### `scripts/server-project-flow.mjs`
 
-Environment:
+Use this when you need the standard create/open/project-inspection flow.
 
-- `BRIDGE_CONTROL_URL`: control-plane URL, default `http://127.0.0.1:8788`
-- `BRIDGE_CONTROL_TOKEN`: optional control-plane token
-- `BRIDGE_TARGET_CLIENT_ID`: optional client id to target
-- `BRIDGE_AUTO_APPROVE`: set to `true` to resubmit confirmation-required commands without manual intervention
-- `BRIDGE_COMMANDS_JSON`: inline JSON plan with `clientId` and `requests`
-- `BRIDGE_COMMANDS_FILE`: path to a JSON plan file
+### `scripts/server-command-runner.mjs`
 
-The plan format is:
+Use this for arbitrary multi-step control-plane sequences against a connected session.
 
-```json
-{
-  "clientId": "jlc-eda-main",
-  "requests": [
-    {
-      "id": "step-001",
-      "domain": "system",
-      "action": "get_bridge_status",
-      "payload": {}
-    }
-  ]
-}
-```
+## Task templates
 
-The runner:
+### Schematic context intake
 
-- resolves the target session
-- sends each command in order
-- prints each response
-- can auto-approve confirmation-required steps when requested
+1. Run `server-context-summary.mjs`.
+2. Summarize the active document, project, selection state, and current schematic.
+3. Name the next safe design action.
+4. Ask for design intent only if the next step is ambiguous.
+
+### Component selection
+
+1. Restate the electrical and mechanical requirements.
+2. Identify the surrounding function block in the schematic.
+3. Compare realistic candidate parts.
+4. Recommend one option and explain the tradeoffs.
+5. Record the decision in BOM-style notes.
+
+### Schematic refinement
+
+1. Read the current context.
+2. Propose the smallest meaningful change.
+3. Execute the change with dedicated bridge commands or `system.api_invoke`.
+4. Re-read the document state and verify the result.
 
 ## Supported API surface
 
 The bridge supports two layers:
 
-1. Dedicated bridge commands for the most common actions.
+1. Dedicated bridge commands for common actions.
 2. `system.api_invoke` for direct access to the underlying JLCEDA API surface.
 
-Read [references/api-surface.md](references/api-surface.md) for the family-by-family API map and the recommended call order.
-Read [references/task-sequences.md](references/task-sequences.md) for the shortest call sequences for common tasks.
+Read [references/api-surface.md](references/api-surface.md) for the family-by-family API map.
+Read [references/task-sequences.md](references/task-sequences.md) for recommended call order.
+Read [references/schematic-co-design.md](references/schematic-co-design.md) for the schematic-first collaboration pattern.
 
 ## Call strategy
 
-- Use dedicated bridge commands first when they exist and already cover the task.
-- Use `system.api_invoke` when the official JLCEDA API exists but has not been wrapped as a bridge command yet.
-- Use `scripts/server-command-runner.mjs` when you want Codex to drive a multi-step sequence from the control plane without hand-editing live GUI state.
-- Use confirmation-free read operations for inspection.
-- Keep confirmation enabled for state-changing operations unless the user explicitly requests a test path.
-- Keep the same connected session for any follow-up request chain.
-- If a command returns `confirmation_required`, stop and ask before retrying with confirmation.
+- Read first, mutate second.
+- Keep confirmation disabled for read-only inspection.
+- Keep confirmation enabled for state-changing operations unless the user explicitly wants a test path.
+- Prefer one function block at a time instead of changing the whole schematic at once.
+- After every meaningful edit batch, re-read context before continuing.
 
 ## Notes
 
-- Keep `requiresConfirmation` disabled for read-only bridge requests unless the user explicitly asks to test confirmation handling.
 - For `system.api_invoke`, pass a dotted path like `dmt_Project.getCurrentProjectInfo` or `eda.dmt_Project.getCurrentProjectInfo`.
-- For library, schematic, and PCB work, prefer first reading the current project/document context, then invoking the smallest method needed, then saving/exporting results.
+- For component selection, capture both circuit requirements and procurement constraints.
+- For schematic work, prefer first understanding power, interfaces, control logic, and critical nets before editing primitives.
