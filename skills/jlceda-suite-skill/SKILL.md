@@ -1,6 +1,6 @@
 ---
 name: jlceda-suite-skill
-description: Drive a connected JLCEDA Suite session through the suite server control plane, inspect the current hardware design context, and assist with component selection, schematic refinement, and PCB follow-up work.
+description: Drive a connected JLCEDA Suite session through the suite server control plane, inspect the current hardware design context, and assist with component selection, schematic refinement, and PCB assistance work.
 ---
 
 # JLCEDA Suite Skill
@@ -17,13 +17,14 @@ The highest-value use case is schematic-first co-design:
 - generate BOM-style notes and verification checklists for the selected part
 - place or edit schematic content after the design intent is clear
 - carry the same context forward into PCB assistance
+- summarize PCB hygiene, placement risks, and follow-up layout tasks
 
 ## Default workflow
 
 1. Confirm the JLCEDA Suite Server is running and the plugin session is connected.
 2. Read `/sessions` and pick the target `clientId`.
 3. Run `scripts/server-context-summary.mjs` to collect the current design context.
-4. Use the summary to decide which mode you are in: `inspect`, `select`, `design`, or `export`.
+4. Use the summary to decide which mode you are in: `inspect`, `select`, `design`, `pcb`, or `export`.
 5. Prefer dedicated bridge commands for common project, schematic, PCB, and system operations.
 6. Use `system.api_invoke` only when the official JLCEDA API exists but has not been wrapped yet.
 7. Keep the same connected session for the whole task chain so the design context stays coherent.
@@ -76,7 +77,22 @@ Expected output:
 - why it changes the design in the right direction
 - what to verify after the edit
 
-### 4. Export
+### 4. PCB
+
+Use this when the user wants to continue from schematic intent into board placement or layout review.
+
+Goal:
+- read the current PCB, board summary, hygiene state, and ratline status
+- identify the highest-risk placement or routing problem
+- produce layout advice and the next short PCB task list
+
+Expected output:
+- board and PCB summary
+- hygiene issue summary
+- placement advice
+- next PCB tasks
+
+### 5. Export
 
 Use this when the user wants a handoff artifact.
 
@@ -138,6 +154,22 @@ What it does:
 - reads the schematic context again after the edit batch
 - returns step-level results plus a validation summary
 
+### `scripts/server-pcb-assist.mjs`
+
+Use this when the next step is PCB placement review, hygiene review, or routing preparation.
+
+Environment:
+- `BRIDGE_CONTROL_URL`: control-plane URL, default `http://127.0.0.1:8788`
+- `BRIDGE_CONTROL_TOKEN`: optional control-plane token
+- `BRIDGE_TARGET_CLIENT_ID`: optional client id to target
+- `BRIDGE_PCB_ASSIST_OPTIONS_JSON`: optional JSON with hygiene thresholds, focus areas, and board goals
+
+What it does:
+- reads the current schematic and PCB context
+- requests `pcb.get_board_summary` and `pcb.get_current_pcb_info`
+- requests `pcb.inspect_layout_hygiene` and `pcb.get_calculating_ratline_status`
+- prints one structured JSON payload with PCB layout advice and next tasks
+
 ### `scripts/server-project-flow.mjs`
 
 Use this when you need the standard create/open/project-inspection flow.
@@ -172,6 +204,14 @@ Use this for arbitrary multi-step control-plane sequences against a connected se
 4. Execute the change with dedicated bridge commands or `system.api_invoke`.
 5. Re-read the document state and verify the result.
 
+### PCB assistance
+
+1. Run `server-pcb-assist.mjs` after the schematic block is clear enough to carry forward into layout.
+2. Read board summary, current PCB info, and hygiene status.
+3. Identify the highest-value placement or routing issue.
+4. Produce layout advice for the active block.
+5. Keep the next PCB tasks short and verifiable.
+
 ## Supported API surface
 
 The bridge supports two layers:
@@ -184,6 +224,7 @@ Read [references/task-sequences.md](references/task-sequences.md) for recommende
 Read [references/schematic-co-design.md](references/schematic-co-design.md) for the schematic-first collaboration pattern.
 Read [references/component-selection.md](references/component-selection.md) for the part-selection workflow and output format.
 Read [references/schematic-refinement.md](references/schematic-refinement.md) for the schematic edit-batch workflow and validation shape.
+Read [references/pcb-assist.md](references/pcb-assist.md) for the PCB follow-up workflow and layout guidance shape.
 
 ## Call strategy
 
