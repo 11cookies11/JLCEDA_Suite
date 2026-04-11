@@ -132,8 +132,8 @@ async function run(): Promise<void> {
         preferredPackage: 'SOIC-8',
       }),
       BRIDGE_SELECTION_CANDIDATES_JSON: JSON.stringify([
-        { name: 'Part A', manufacturer: 'VendorA', mfrPartNumber: 'VA-1', package: 'SOIC-8', voltage: 40, currentMa: 3000, availability: 'high', lifecycle: 'active' },
-        { name: 'Part B', manufacturer: 'VendorB', mfrPartNumber: 'VB-2', package: 'SOT-23', voltage: 24, currentMa: 800, availability: 'medium', lifecycle: 'active' },
+        { name: 'Part A', manufacturer: 'VendorA', mfrPartNumber: 'VA-1', package: 'SOIC-8', voltage: 40, currentMa: 3000, availability: 'high', lifecycle: 'active', pinInfo: { available: true, pinCount: 8, source: 'library symbol' } },
+        { name: 'Part B', manufacturer: 'VendorB', mfrPartNumber: 'VB-2', package: 'SOT-23', voltage: 24, currentMa: 800, availability: 'medium', lifecycle: 'active', pinInfo: { available: false, note: 'pin geometry not verified' } },
       ]),
     });
     if (!selectionStdout.includes('"recommendation"')) {

@@ -57,8 +57,8 @@ async function run(): Promise<void> {
         BRIDGE_TARGET_CLIENT_ID: 'mock-client',
         BRIDGE_SELECTION_REQUIREMENTS_JSON: JSON.stringify({ role: 'voltage-regulator', minVoltage: 12, minCurrentMa: 500, preferredPackage: 'SOT-223', maxUnitPrice: 1.5, availabilityPriority: 'high' }),
         BRIDGE_SELECTION_CANDIDATES_JSON: JSON.stringify([
-          { name: 'AMS1117-5.0', manufacturer: 'Advanced Monolithic Systems', mfrPartNumber: 'AMS1117-5.0', package: 'SOT-223', voltage: 15, currentMa: 800, unitPrice: 0.12, availability: 'high', lifecycle: 'active' },
-          { name: 'LM7805', manufacturer: 'TI', mfrPartNumber: 'LM7805', package: 'TO-220', voltage: 35, currentMa: 1000, unitPrice: 0.8, availability: 'medium', lifecycle: 'active' },
+          { name: 'AMS1117-5.0', manufacturer: 'Advanced Monolithic Systems', mfrPartNumber: 'AMS1117-5.0', package: 'SOT-223', voltage: 15, currentMa: 800, unitPrice: 0.12, availability: 'high', lifecycle: 'active', pinInfo: { available: true, pinCount: 3, source: 'library symbol' } },
+          { name: 'LM7805', manufacturer: 'TI', mfrPartNumber: 'LM7805', package: 'TO-220', voltage: 35, currentMa: 1000, unitPrice: 0.8, availability: 'medium', lifecycle: 'active', pinInfo: { available: true, pinCount: 3, source: 'library symbol' } },
         ]),
       },
       timeout: 15000,

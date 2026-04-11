@@ -129,12 +129,14 @@ Environment:
 - `BRIDGE_CONTROL_TOKEN`: optional control-plane token
 - `BRIDGE_TARGET_CLIENT_ID`: optional client id to target
 - `BRIDGE_SELECTION_REQUIREMENTS_JSON`: JSON with the target role, constraints, and priorities
-- `BRIDGE_SELECTION_CANDIDATES_JSON`: optional JSON array of candidate parts to compare
+- candidate parts should carry pin metadata when available, especially for connectors, TVS, and other schematic symbols that must be wired immediately
+- `BRIDGE_SELECTION_CANDIDATES_JSON`: optional JSON array of candidate parts to compare; each candidate should include pin information when available
 
 What it does:
 - reads the current JLCEDA schematic context
-- scores candidate parts against the supplied requirements
+- scores candidate parts against the supplied requirements and treats verified pin geometry as a hard selection gate
 - returns a recommendation, BOM note, verification checklist, and next schematic actions
+- excludes candidates without usable pin information from the preferred path
 - returns a search plan when candidate parts are not supplied yet
 
 ### `scripts/server-schematic-refine.mjs`

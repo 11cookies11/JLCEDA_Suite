@@ -26,6 +26,12 @@ interface Candidate {
   unitPrice?: number;
   availability?: 'unknown' | 'low' | 'medium' | 'high';
   lifecycle?: 'unknown' | 'active' | 'not_recommended' | 'obsolete';
+  pinInfo?: {
+    available: boolean;
+    pinCount?: number;
+    source?: string;
+    note?: string;
+  };
 }
 
 function env(name: string, fallback = ''): string {
@@ -87,8 +93,19 @@ function score(requirements: Req, candidate: Candidate) {
   let total = 0;
   const reasons: string[] = [];
   const risks: string[] = [];
+  const pinInfo = candidate.pinInfo;
   const preferredPackage = normalize(requirements.preferredPackage || requirements.requiredPackage);
   const candidatePackage = normalize(candidate.package);
+
+  if (!pinInfo?.available) {
+    total -= 100;
+    risks.push('pin geometry is not verified');
+  }
+  else {
+    total += 18;
+    const pinSummary = typeof pinInfo.pinCount === 'number' ? `${pinInfo.pinCount} pins` : 'pin geometry verified';
+    reasons.push(pinSummary + (pinInfo.source ? ` via ${pinInfo.source}` : ''));
+  }
 
   if (preferredPackage && candidatePackage) {
     if (candidatePackage.includes(preferredPackage) || preferredPackage.includes(candidatePackage)) {
@@ -174,6 +191,7 @@ function searchPlan(requirements: Req) {
       requirements.preferredManufacturer ?? '',
     ].map(item => item.trim()).filter(Boolean))),
     informationGaps: [
+      'pin geometry confirmation for the candidate library symbol',
       typeof requirements.minVoltage === 'number' ? '' : 'missing voltage constraint',
       typeof requirements.minCurrentMa === 'number' ? '' : 'missing current constraint',
       requirements.preferredPackage || requirements.requiredPackage ? '' : 'missing package constraint',
@@ -217,7 +235,7 @@ async function run() {
           winner.package ? `package=${winner.package}` : '',
         ].filter(Boolean).join(' | '),
         verificationChecklist: [
-          'Confirm the symbol pinout matches the intended device.',
+          'Confirm the symbol pinout is available and matches the intended device.',
           'Confirm key electrical limits fit the target block.',
           'Confirm package and PCB manufacturability constraints still fit.',
         ],

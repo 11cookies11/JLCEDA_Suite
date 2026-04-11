@@ -142,6 +142,6 @@ Recommended sequence:
 Notes:
 
 - Do not jump straight into mutation before the current function block is understood.
-- When the user asks for component selection, capture the requirements first and then compare candidates.
+- When the user asks for component selection, capture the requirements first and then compare candidates. Prefer candidates whose symbol pin geometry is already verified.
 - When the user asks for schematic improvement, prefer one local function block at a time.
 
