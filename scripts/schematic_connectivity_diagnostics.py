@@ -50,6 +50,36 @@ def normalize_boolean(value: Any) -> bool:
     return False
 
 
+def has_fallback_two_pin_shape(component: Dict[str, Any]) -> bool:
+    designator = str(component.get("designator") or "").strip().upper()
+    name = str(component.get("name") or "").strip().lower()
+    component_type = str(component.get("componentType") or "").strip().lower()
+
+    if designator.startswith(("P", "J", "X", "D")):
+        return True
+
+    return (
+        "connector" in name
+        or "terminal" in name
+        or "header" in name
+        or "jack" in name
+        or "tvs" in name
+        or "diode" in name
+        or "connector" in component_type
+        or "diode" in component_type
+    )
+
+
+def get_fallback_symbol_pins(component: Dict[str, Any]) -> List[Dict[str, Any]]:
+    if not has_fallback_two_pin_shape(component):
+        return []
+
+    return [
+        {"pinNumber": "1", "pinName": "Pin 1", "x": -20.0, "y": 0.0, "rotation": 0.0, "pinLength": 20.0},
+        {"pinNumber": "2", "pinName": "Pin 2", "x": 20.0, "y": 0.0, "rotation": 180.0, "pinLength": 20.0},
+    ]
+
+
 def transform_point(point: Dict[str, float], placement: Dict[str, Any]) -> Dict[str, float]:
     mirrored = {"x": -point["x"], "y": point["y"]} if placement["mirror"] else point
     rotation = int(placement["rotation"]) % 360
@@ -254,7 +284,8 @@ def build_absolute_pins(components: List[Dict[str, Any]], symbol_files: Dict[str
 
     for component in components:
         symbol_pins = parse_symbol_pins(symbol_files.get(component["primitiveId"], ""))
-        for pin in symbol_pins:
+        resolved_pins = symbol_pins if symbol_pins else get_fallback_symbol_pins(component)
+        for pin in resolved_pins:
             transformed = transform_point(
                 {"x": pin["x"], "y": pin["y"]},
                 {

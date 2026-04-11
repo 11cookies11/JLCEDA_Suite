@@ -33,7 +33,7 @@ async function run(): Promise<void> {
         sessions: [
           {
             clientId: 'mock-client',
-            pluginVersion: '0.1.25',
+            pluginVersion: '0.1.26',
             protocolVersion: '0.1.0',
             supportedCommands: ['system.get_bridge_status', 'project.get_document_summary'],
             connectedAt: new Date().toISOString(),

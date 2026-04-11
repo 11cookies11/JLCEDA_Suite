@@ -64,7 +64,7 @@ async function run(): Promise<void> {
       writeJson(response, 200, {
         sessions: [{
           clientId: 'mock-client',
-          pluginVersion: '0.1.25',
+          pluginVersion: '0.1.26',
           protocolVersion: '0.1.0',
           supportedCommands: [],
           connectedAt: new Date().toISOString(),
@@ -77,7 +77,7 @@ async function run(): Promise<void> {
     if (request.method === 'GET' && url.pathname === '/debug/session/mock-client') {
       writeJson(response, 200, {
         clientId: 'mock-client',
-        pluginVersion: '0.1.25',
+        pluginVersion: '0.1.26',
         protocolVersion: '0.1.0',
         activeRequestIds: [],
         recentRequests: [],

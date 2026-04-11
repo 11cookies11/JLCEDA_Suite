@@ -237,6 +237,52 @@ function normalizeBoolean(value: unknown): boolean {
   return false;
 }
 
+function hasFallbackTwoPinShape(component: SchematicComponentSource): boolean {
+  const designator = (component.designator ?? '').trim().toUpperCase();
+  const name = (component.name ?? '').trim().toLowerCase();
+  const componentType = (component.componentType ?? '').trim().toLowerCase();
+
+  if (designator.startsWith('P') || designator.startsWith('J') || designator.startsWith('X') || designator.startsWith('D')) {
+    return true;
+  }
+
+  return (
+    name.includes('connector')
+    || name.includes('terminal')
+    || name.includes('header')
+    || name.includes('jack')
+    || name.includes('tvs')
+    || name.includes('diode')
+    || componentType.includes('connector')
+    || componentType.includes('diode')
+  );
+}
+
+function getFallbackSymbolPins(component: SchematicComponentSource): Array<SymbolPinSource> {
+  if (!hasFallbackTwoPinShape(component)) {
+    return [];
+  }
+
+  return [
+    {
+      pinNumber: '1',
+      pinName: 'Pin 1',
+      x: -20,
+      y: 0,
+      rotation: 0,
+      pinLength: 20,
+    },
+    {
+      pinNumber: '2',
+      pinName: 'Pin 2',
+      x: 20,
+      y: 0,
+      rotation: 180,
+      pinLength: 20,
+    },
+  ];
+}
+
 function transformPoint(point: Point, placement: PlacementTransform): Point {
   const mirrored = placement.mirror
     ? { x: -point.x, y: point.y }
@@ -714,7 +760,9 @@ async function buildPinLocationsFromSource(
 
   for (const component of components) {
     const symbolPins = allPinsByComponentId.get(component.primitiveId) ?? [];
-    for (const pin of symbolPins) {
+    const resolvedPins = symbolPins.length > 0 ? symbolPins : getFallbackSymbolPins(component);
+
+    for (const pin of resolvedPins) {
       const transformed = transformPoint(
         { x: pin.x, y: pin.y },
         {

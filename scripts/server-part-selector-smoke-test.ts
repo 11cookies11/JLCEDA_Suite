@@ -25,7 +25,7 @@ async function run(): Promise<void> {
   const server = http.createServer(async (request, response) => {
     const url = new URL(request.url ?? '/', `http://${request.headers.host ?? '127.0.0.1:8795'}`);
     if (request.method === 'GET' && url.pathname === '/sessions') {
-      writeJson(response, 200, { sessions: [{ clientId: 'mock-client', pluginVersion: '0.1.25', protocolVersion: '0.1.0', supportedCommands: [], connectedAt: new Date().toISOString(), lastSeenAt: new Date().toISOString() }] });
+      writeJson(response, 200, { sessions: [{ clientId: 'mock-client', pluginVersion: '0.1.26', protocolVersion: '0.1.0', supportedCommands: [], connectedAt: new Date().toISOString(), lastSeenAt: new Date().toISOString() }] });
       return;
     }
     if (request.method === 'POST' && url.pathname === '/request') {
