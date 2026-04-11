@@ -2,6 +2,7 @@ import type { IncomingMessage, ServerResponse } from 'node:http';
 import { Buffer } from 'node:buffer';
 import { execFile } from 'node:child_process';
 import http from 'node:http';
+import path from 'node:path';
 import process from 'node:process';
 import { promisify } from 'node:util';
 
@@ -63,6 +64,7 @@ function writeJson(response: ServerResponse, statusCode: number, body: unknown):
 }
 
 async function run(): Promise<void> {
+  const commands: string[] = [];
   const server = http.createServer(async (request, response) => {
     const url = new URL(request.url ?? '/', `http://${request.headers.host ?? '127.0.0.1:8791'}`);
 
@@ -85,6 +87,8 @@ async function run(): Promise<void> {
 
     if (request.method === 'POST' && url.pathname === '/request') {
       const body = (await readJsonBody(request)) as ControlRequestBody;
+      const command = `${body.request.command.domain}.${body.request.command.action}`;
+      commands.push(command);
       writeJson(response, 200, {
         response: {
           id: 'mock-response',
@@ -94,7 +98,7 @@ async function run(): Promise<void> {
           result: {
             summary: 'mock',
             data: {
-              command: `${body.request.command.domain}.${body.request.command.action}`,
+              command,
             },
           },
         },
@@ -110,47 +114,69 @@ async function run(): Promise<void> {
     server.listen(8791, '127.0.0.1', () => resolve());
   });
 
-  const { stdout } = await execFileAsync('npx', [
-    'ts-node',
-    '--files',
-    './scripts/server-command-runner.ts',
-  ], {
-    cwd: process.cwd(),
-    env: {
-      ...process.env,
-      BRIDGE_CONTROL_URL: 'http://127.0.0.1:8791',
-      BRIDGE_COMMANDS_JSON: JSON.stringify({
-        clientId: 'mock-client',
-        requests: [
-          {
-            id: 'mock-step-001',
-            domain: 'system',
-            action: 'get_bridge_status',
-            payload: {},
-            requiresConfirmation: false,
-          },
-        ],
-      }),
-    },
-    timeout: 15_000,
-    maxBuffer: 1024 * 1024,
-  });
-
-  if (!stdout.includes('"command": "system.get_bridge_status"')) {
-    throw new Error('Runner smoke test did not execute the expected command.');
-  }
-
-  console.log('PASS server command runner');
-  await new Promise<void>((resolve, reject) => {
-    server.close((error) => {
-      if (error) {
-        reject(error);
-        return;
-      }
-
-      resolve();
+  try {
+    const tsNodeCli = path.join(process.cwd(), 'node_modules', 'ts-node', 'dist', 'bin.js');
+    const { stdout } = await execFileAsync(process.execPath, [
+      tsNodeCli,
+      '--files',
+      './scripts/server-command-runner.ts',
+    ], {
+      cwd: process.cwd(),
+      env: {
+        ...process.env,
+        BRIDGE_CONTROL_URL: 'http://127.0.0.1:8791',
+        BRIDGE_RUNNER_TEMPLATE: 'pcb',
+        BRIDGE_RUNNER_TEMPLATE_INPUT_JSON: JSON.stringify({
+          componentClearance: 120,
+          trackClearance: 70,
+          labelClearance: 90,
+          boardEdgeClearance: 60,
+          maxIssues: 8,
+        }),
+      },
+      timeout: 15_000,
+      maxBuffer: 1024 * 1024,
     });
-  });
+
+    const expected = [
+      'project.get_document_summary',
+      'schematic.get_current_schematic_info',
+      'pcb.get_board_summary',
+      'pcb.get_current_pcb_info',
+      'pcb.inspect_layout_hygiene',
+      'pcb.get_calculating_ratline_status',
+    ];
+
+    for (const command of expected) {
+      if (!commands.includes(command)) {
+        throw new Error(`Runner template did not execute expected command: ${command}`);
+      }
+    }
+
+    if (!stdout.includes('"mode": "template"')) {
+      throw new Error('Runner template output should include template mode.');
+    }
+    if (!stdout.includes('"template": "pcb"')) {
+      throw new Error('Runner template output should include template name.');
+    }
+    if (!stdout.includes('"totalCommands": 6')) {
+      throw new Error('Runner template output should summarize command count.');
+    }
+
+    console.log('PASS server command runner');
+  }
+  finally {
+    await new Promise<void>((resolve, reject) => {
+      server.close((error) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        resolve();
+      });
+    });
+  }
 }
 
 run().catch((error) => {

@@ -176,9 +176,25 @@ Use this when you need the standard create/open/project-inspection flow.
 
 ### `scripts/server-command-runner.mjs`
 
-Use this for arbitrary multi-step control-plane sequences against a connected session.
+Use this for arbitrary multi-step control-plane sequences against a connected session, or for reusable workflow templates such as `inspect`, `select`, `design`, `pcb`, and `export`.
+
+Environment:
+- `BRIDGE_CONTROL_URL`: control-plane URL, default `http://127.0.0.1:8788`
+- `BRIDGE_CONTROL_TOKEN`: optional control-plane token
+- `BRIDGE_TARGET_CLIENT_ID`: optional client id to target
+- `BRIDGE_RUNNER_TEMPLATE`: optional template name: `inspect`, `select`, `design`, `pcb`, or `export`
+- `BRIDGE_RUNNER_TEMPLATE_INPUT_JSON`: optional JSON payload for template thresholds or export settings
+- `BRIDGE_COMMANDS_JSON`: inline custom command plan when not using a template
+- `BRIDGE_COMMANDS_FILE`: JSON file path for a custom command plan when not using a template
+
+What it does:
+- resolves either a template plan or a custom plan
+- runs the command sequence against the connected JLCEDA session
+- prints one structured JSON payload with command-by-command results and a short execution summary
 
 ## Task templates
+
+The command runner can now be used as a reusable template executor when the dedicated scripts are too specific or when you want one normalized result shape across multiple workflow modes.
 
 ### Schematic context intake
 
@@ -211,6 +227,13 @@ Use this for arbitrary multi-step control-plane sequences against a connected se
 3. Identify the highest-value placement or routing issue.
 4. Produce layout advice for the active block.
 5. Keep the next PCB tasks short and verifiable.
+
+### Command runner templates
+
+1. Use `server-command-runner.mjs` with `BRIDGE_RUNNER_TEMPLATE` when you want a standard sequence without writing a custom request list.
+2. Pick `inspect`, `select`, `design`, `pcb`, or `export` based on the current collaboration phase.
+3. Pass `BRIDGE_RUNNER_TEMPLATE_INPUT_JSON` when you need inspection thresholds or export settings.
+4. Review the structured summary before deciding whether to switch to a dedicated workflow script.
 
 ## Supported API surface
 

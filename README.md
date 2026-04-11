@@ -32,7 +32,7 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - A plugin-side remote transport client built on `eda.sys_WebSocket`
 - Local end-to-end bridge validation that exercises server-to-plugin request routing
 - A local control plane and server-side project-flow runner for driving a connected bridge session
-- A generic server-side command runner for executing arbitrary multi-step bridge sequences against a connected session
+- A generic server-side command runner for executing arbitrary multi-step bridge sequences or reusable templates such as inspect, select, design, pcb, and export
 - Project, schematic, PCB, and board inventory commands
 - Read-only project inspection commands
 - Controlled project creation/opening commands
