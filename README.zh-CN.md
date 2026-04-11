@@ -299,3 +299,7 @@ GitHub Token：ghp_xxxxxxxxxxxxxxxxxxxx
 ## 许可证
 
 见 `LICENSE`。
+
+## Workflow Guide
+
+Read [docs/workflow-guide.md](docs/workflow-guide.md) ????? inspect -> select -> design -> pcb ?????????????? smoke test ???

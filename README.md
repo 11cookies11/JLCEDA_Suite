@@ -43,6 +43,7 @@ The repository has moved beyond the initial template-cleanup stage. It now inclu
 - BOM export support
 - A generic `system.api_invoke` bridge entry for expanding the callable official JLCEDA API surface
 - Plugin and server smoke tests, troubleshooting, and release-check documentation
+- A workflow-level skill smoke test plus a practical schematic-first usage guide
 
 The main gaps that remain are public-network validation, server-side Codex integration, and real JLCEDA runtime verification through local import and manual execution.
 
@@ -326,3 +327,7 @@ Current next steps:
 ## License
 
 See `LICENSE`.
+
+## Workflow Guide
+
+Read [docs/workflow-guide.md](docs/workflow-guide.md) for the recommended inspect -> select -> design -> pcb collaboration flow and the workflow-level smoke test entrypoint.
