@@ -24,7 +24,7 @@ The highest-value use case is schematic-first co-design:
 1. Confirm the JLCEDA Suite Server is running and the plugin session is connected.
 2. Read `/sessions` and pick the target `clientId`.
 3. Run `scripts/server-context-summary.mjs` to collect the current design context.
-4. Use the summary to decide which mode you are in: `inspect`, `select`, `design`, `pcb`, or `export`.
+4. Use the summary to decide which mode you are in: `inspect`, `select`, `design`, `text2schematic`, `pcb`, or `export`.
 5. Prefer dedicated bridge commands for common project, schematic, PCB, and system operations.
 6. Use `system.api_invoke` only when the official JLCEDA API exists but has not been wrapped yet.
 7. Keep the same connected session for the whole task chain so the design context stays coherent.
@@ -92,7 +92,23 @@ Expected output:
 - placement advice
 - next PCB tasks
 
-### 5. Export
+### 5. Text2Schematic
+
+Use this when the user gives text requirements and wants a structured model plus executable schematic plan.
+
+Goal:
+- convert requirement text into a typed requirement object
+- synthesize a circuit model with decisions and risks
+- compile an execution plan for JLCEDA
+- optionally execute the plan and capture structured failure feedback
+
+Expected output:
+- requirement model
+- circuit model
+- execution plan
+- execution summary and fallback events
+
+### 6. Export
 
 Use this when the user wants a handoff artifact.
 
@@ -172,6 +188,33 @@ What it does:
 - requests `pcb.inspect_layout_hygiene` and `pcb.get_calculating_ratline_status`
 - prints one structured JSON payload with PCB layout advice and next tasks
 
+### `scripts/server-text-to-schematic.mjs` (wrapper)
+
+This wrapper invokes the repository pipeline entry:
+- `python3 scripts/server_text_to_schematic.py`
+
+Use this for the end-to-end pipeline:
+- `RequirementSpec -> CircuitModel -> ExecutionPlan`
+- optional execution against connected JLCEDA session
+
+Environment:
+- `BRIDGE_REQUIREMENT_SPEC_JSON`: JSON requirement payload
+- `BRIDGE_COMPONENT_CATALOG_JSON`: JSON role->candidate part catalog, with library/symbol ids when available
+- `BRIDGE_AUTO_SEARCH_LIB`: `true/false`, auto search library candidates when the role catalog is missing (default `true`)
+- `BRIDGE_ENABLE_SAFE_WIRING`: `true/false`, generate wires only when pin set mapping is valid (default `true`)
+- `BRIDGE_EXECUTE_PLAN`: `true/false`, execute plan when true
+- `BRIDGE_CONTROL_URL`: control-plane URL, default `http://127.0.0.1:8788`
+- `BRIDGE_CONTROL_TOKEN`: optional control-plane token
+- `BRIDGE_TARGET_CLIENT_ID`: optional target client id
+- `BRIDGE_PIPELINE_OUTPUT_DIR`: optional output directory, default `.where/pipeline-output`
+
+What it does:
+- validates and normalizes requirement input
+- synthesizes a buck-oriented circuit model with calculations and design decisions
+- compiles executable operations with fallback rules
+- optionally executes operations and records structured feedback
+- writes requirement/model/plan/summary JSON artifacts
+
 ### `scripts/server-project-flow.mjs`
 
 Use this when you need the standard create/open/project-inspection flow.
@@ -250,6 +293,7 @@ Read [references/schematic-co-design.md](references/schematic-co-design.md) for 
 Read [references/component-selection.md](references/component-selection.md) for the part-selection workflow and output format.
 Read [references/schematic-refinement.md](references/schematic-refinement.md) for the schematic edit-batch workflow and validation shape.
 Read [references/pcb-assist.md](references/pcb-assist.md) for the PCB follow-up workflow and layout guidance shape.
+Read [references/text-to-schematic.md](references/text-to-schematic.md) for the model-driven text-to-schematic pipeline.
 
 ## Call strategy
 

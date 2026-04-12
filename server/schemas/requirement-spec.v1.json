@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/requirement-spec.v1.json",
+  "title": "RequirementSpec v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "goal",
+    "electrical_targets",
+    "constraints",
+    "preferences",
+    "acceptance_criteria",
+    "unknowns"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "requirement-spec.v1"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1
+    },
+    "electrical_targets": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vin_min_v",
+        "vin_max_v",
+        "vout_target_v",
+        "iout_max_a"
+      ],
+      "properties": {
+        "vin_min_v": {
+          "type": "number"
+        },
+        "vin_max_v": {
+          "type": "number"
+        },
+        "vout_target_v": {
+          "type": "number"
+        },
+        "iout_max_a": {
+          "type": "number"
+        },
+        "ripple_limit_mv": {
+          "type": "number"
+        },
+        "efficiency_target_percent": {
+          "type": "number"
+        },
+        "switching_frequency_hz": {
+          "type": "number"
+        },
+        "ambient_temp_min_c": {
+          "type": "number"
+        },
+        "ambient_temp_max_c": {
+          "type": "number"
+        }
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "max_bom_cost_cny": {
+          "type": "number"
+        },
+        "max_height_mm": {
+          "type": "number"
+        },
+        "max_area_mm2": {
+          "type": "number"
+        },
+        "mandatory_packages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "must_be_domestic": {
+          "type": "boolean"
+        },
+        "preferred_stock_level": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "preferences": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "topology": {
+          "type": "string"
+        },
+        "preferred_vendors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "preferred_packages": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "noise_priority": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        }
+      }
+    },
+    "acceptance_criteria": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

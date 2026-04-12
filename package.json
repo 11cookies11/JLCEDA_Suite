@@ -1,6 +1,6 @@
 {
   "name": "jlceda-suite",
-  "version": "0.1.26",
+  "version": "0.1.27",
   "private": true,
   "description": "Plugin, server, and skill package for AI-assisted hardware development with JLCEDA.",
   "author": "JLCEDA Suite contributors",
@@ -31,6 +31,9 @@
     "server:part-selector:smoke-test": "ts-node --files ./scripts/server-part-selector-smoke-test.ts",
     "server:schematic-refine": "ts-node --files ./scripts/server-schematic-refine.ts",
     "server:schematic-refine:smoke-test": "ts-node --files ./scripts/server-schematic-refine-smoke-test.ts",
+    "server:placement-multipage-test": "python3 ./scripts/server_placement_multipage_test.py",
+    "server:text-to-schematic": "python3 ./scripts/server_text_to_schematic.py",
+    "server:compile-plan": "python3 ./scripts/compile_execution_plan.py",
     "server:pcb-assist": "ts-node --files ./scripts/server-pcb-assist.ts",
     "server:pcb-assist:smoke-test": "ts-node --files ./scripts/server-pcb-assist-smoke-test.ts",
     "workflow:skill:e2e:smoke-test": "ts-node --files ./scripts/workflow-skill-e2e-smoke-test.ts"

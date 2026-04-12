@@ -263,6 +263,16 @@ function isPlacementClear(
   return true;
 }
 
+async function hasPrimitiveAtPoint(candidate: SchematicPlacementPoint): Promise<boolean> {
+  try {
+    const primitive = await Promise.resolve(eda.sch_Document.getPrimitiveAtPoint(candidate.x, candidate.y));
+    return Boolean(primitive);
+  }
+  catch {
+    return false;
+  }
+}
+
 async function resolveSchematicComponentPlacement(
   requestedPosition: BridgePoint,
 ): Promise<{
@@ -318,6 +328,10 @@ async function resolveSchematicComponentPlacement(
     };
 
     if (!isPlacementClear(candidate, geometry, componentClearance, wireClearance)) {
+      continue;
+    }
+    // Runtime occupancy check: source snapshots can be stale between rapid placements.
+    if (await hasPrimitiveAtPoint(candidate)) {
       continue;
     }
 

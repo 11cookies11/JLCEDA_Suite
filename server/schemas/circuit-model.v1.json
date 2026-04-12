@@ -1,0 +1,236 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/circuit-model.v1.json",
+  "title": "CircuitModel v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "topology",
+    "components",
+    "nets",
+    "calculations",
+    "design_decisions",
+    "risks"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "circuit-model.v1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "topology": {
+      "type": "string"
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref",
+          "role",
+          "value",
+          "selected_part",
+          "candidate_parts",
+          "availability_status"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "selected_part": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "part_id",
+              "display_name"
+            ],
+            "properties": {
+              "part_id": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string"
+              },
+              "lcsc_id": {
+                "type": "string"
+              },
+              "manufacturer": {
+                "type": "string"
+              },
+              "mpn": {
+                "type": "string"
+              },
+              "package": {
+                "type": "string"
+              },
+              "library_uuid": {
+                "type": "string"
+              },
+              "symbol_uuid": {
+                "type": "string"
+              },
+              "pin_count": {
+                "type": "integer"
+              }
+            }
+          },
+          "candidate_parts": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "part_id",
+                "display_name"
+              ],
+              "properties": {
+                "part_id": {
+                  "type": "string"
+                },
+                "display_name": {
+                  "type": "string"
+                },
+                "lcsc_id": {
+                  "type": "string"
+                },
+                "manufacturer": {
+                  "type": "string"
+                },
+                "mpn": {
+                  "type": "string"
+                },
+                "package": {
+                  "type": "string"
+                },
+                "library_uuid": {
+                  "type": "string"
+                },
+                "symbol_uuid": {
+                  "type": "string"
+                },
+                "pin_count": {
+                  "type": "integer"
+                }
+              }
+            }
+          },
+          "availability_status": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "available",
+              "unavailable"
+            ]
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "nets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "members"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "calculations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "formula",
+          "inputs",
+          "result",
+          "unit"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "formula": {
+            "type": "string"
+          },
+          "inputs": {
+            "type": "object"
+          },
+          "result": {
+            "type": "number"
+          },
+          "unit": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "design_decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "title",
+          "rationale"
+        ],
+        "properties": {
+          "title": {
+            "type": "string"
+          },
+          "rationale": {
+            "type": "string"
+          },
+          "impact": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

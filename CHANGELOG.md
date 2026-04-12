@@ -7,6 +7,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.1.27] - 2026-04-12
+
+### Added
+
+- Added a Python multipage placement validation script (`server_placement_multipage_test.py`) to verify placement behavior from simple to dense scenarios.
+- Added a generic circuit-model to execution-plan compiler (`compile_execution_plan.py`) and a companion mapping guide.
+
+### Fixed
+
+- Improved schematic placement collision avoidance by adding a runtime occupancy check before finalizing candidate coordinates.
+
 ## [0.1.26] - 2026-04-09
 
 ### Fixed
