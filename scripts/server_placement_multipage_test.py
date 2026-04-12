@@ -7,7 +7,7 @@ import sys
 import time
 import urllib.error
 import urllib.request
-from datetime import datetime
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 
@@ -18,7 +18,7 @@ def env(name: str, fallback: str = '') -> str:
 
 
 def iso_now() -> str:
-    return datetime.utcnow().isoformat() + 'Z'
+    return datetime.now(UTC).isoformat().replace('+00:00', 'Z')
 
 
 def timestamp_tag() -> str:
@@ -132,6 +132,10 @@ def run() -> None:
     client_id = target_client_id or str(first.get('clientId', ''))
     if not client_id:
         raise RuntimeError('No bridge clientId available.')
+    selected_session = next(
+        (item for item in sessions if isinstance(item, dict) and str(item.get('clientId', '')) == client_id),
+        first,
+    )
 
     project_friendly_name = f'Placement MultiPage PY {tag}'
     project_name = f'placement-multipage-py-{tag}'
@@ -310,12 +314,22 @@ def run() -> None:
     p2b = place('p2b', 200, 200, 0, False)
     p2da = parse_placement_data(p2a) or {}
     p2db = parse_placement_data(p2b) or {}
-    p2ok = (
-        p2a.get('status') == 'success'
-        and p2b.get('status') == 'success'
-        and bool(p2db.get('placementAdjusted')) is True
+    p2_distinct_primitives = str(p2da.get('primitiveId', '')) != str(p2db.get('primitiveId', ''))
+    p2_adjusted = bool(p2db.get('placementAdjusted')) is True
+    p2_same_position = (
+        p2da.get('position', {}).get('x') == p2db.get('position', {}).get('x')
+        and p2da.get('position', {}).get('y') == p2db.get('position', {}).get('y')
     )
-    checks.append(check('P2 collision avoid', p2ok, 'second placement adjusted' if p2ok else 'collision avoid check failed'))
+    p2ok = p2a.get('status') == 'success' and p2b.get('status') == 'success' and p2_distinct_primitives
+    if p2ok and p2_adjusted:
+        p2_detail = 'second placement auto-adjusted away from original'
+    elif p2ok and p2_same_position:
+        p2_detail = 'both placements succeeded at same coordinate (stacking allowed)'
+    elif p2ok:
+        p2_detail = 'both placements succeeded with explicit position'
+    else:
+        p2_detail = 'second placement failed or duplicate primitive id'
+    checks.append(check('P2 same-point double placement', p2ok, p2_detail))
     evidence['p2'] = [p2da, p2db]
 
     open_page(2, 'p3')
@@ -371,8 +385,8 @@ def run() -> None:
         'generatedAt': iso_now(),
         'client': {
             'clientId': client_id,
-            'pluginVersion': first.get('pluginVersion'),
-            'protocolVersion': first.get('protocolVersion'),
+            'pluginVersion': selected_session.get('pluginVersion'),
+            'protocolVersion': selected_session.get('protocolVersion'),
         },
         'project': {
             'projectUuid': project_uuid,

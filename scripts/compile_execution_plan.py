@@ -9,6 +9,8 @@ from dataclasses import dataclass, asdict, field
 from pathlib import Path
 from typing import Any
 
+from schematic_layout_rules import compile_layout_context
+
 
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
 PLAN_SCHEMA_VERSION = 'execution-plan.v1'
@@ -24,6 +26,16 @@ def parse_json_env(name: str) -> dict[str, Any] | None:
     if not raw:
         return None
     return json.loads(raw)
+
+
+def to_int_env(name: str, fallback: int) -> int:
+    raw = env(name)
+    if not raw:
+        return fallback
+    try:
+        return int(raw)
+    except (TypeError, ValueError):
+        return fallback
 
 
 def load_circuit_model() -> dict[str, Any]:
@@ -53,10 +65,27 @@ def is_power_net(net_name: str) -> bool:
     return normalized.startswith('+')
 
 
-def component_anchor(index: int) -> dict[str, int]:
-    col = index % 5
-    row = index // 5
-    return {'x': -120 + col * 90, 'y': -60 + row * 90}
+def get_schematic_layout_config() -> dict[str, int]:
+    return {
+        'origin_x': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_X', 420),
+        'origin_y': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_Y', 220),
+        'columns': max(1, to_int_env('BRIDGE_SCH_PLACE_COLUMNS', 4)),
+        'pitch_x': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_X', 120)),
+        'pitch_y': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_Y', 100)),
+        'label_x_offset': to_int_env('BRIDGE_SCH_LABEL_X_OFFSET', 420),
+        'label_y_start_offset': to_int_env('BRIDGE_SCH_LABEL_Y_START_OFFSET', -120),
+        'label_y_step': max(8, to_int_env('BRIDGE_SCH_LABEL_Y_STEP', 28)),
+        'flag_x_offset': to_int_env('BRIDGE_SCH_FLAG_X_OFFSET', 500),
+    }
+
+
+def component_anchor(index: int, layout: dict[str, int]) -> dict[str, int]:
+    col = index % layout['columns']
+    row = index // layout['columns']
+    return {
+        'x': layout['origin_x'] + col * layout['pitch_x'],
+        'y': layout['origin_y'] + row * layout['pitch_y'],
+    }
 
 
 @dataclass
@@ -94,6 +123,15 @@ def compile_plan(circuit_model: dict[str, Any]) -> ExecutionPlan:
     nets = circuit_model.get('nets', [])
 
     operations: list[ExecutionOperation] = []
+    layout = get_schematic_layout_config()
+    layout_context = compile_layout_context(
+        components=[item for item in components if isinstance(item, dict)],
+        nets=[item for item in nets if isinstance(item, dict)],
+        origin_x=layout['origin_x'],
+        origin_y=layout['origin_y'],
+    )
+    component_placements = layout_context.get('componentPlacements', {})
+    net_port_placements = layout_context.get('netPortPlacements', [])
 
     for index, component in enumerate(components):
         if not isinstance(component, dict):
@@ -106,7 +144,12 @@ def compile_plan(circuit_model: dict[str, Any]) -> ExecutionPlan:
         symbol_uuid = str(selected.get('symbol_uuid', ''))
         if not library_uuid or not symbol_uuid:
             continue
-        anchor = component_anchor(index)
+        ref = str(component.get('ref', f'U{index + 1}'))
+        anchor_data = component_placements.get(ref, {})
+        anchor = {
+            'x': int(anchor_data.get('x', component_anchor(index, layout)['x'])),
+            'y': int(anchor_data.get('y', component_anchor(index, layout)['y'])),
+        }
         operations.append(
             ExecutionOperation(
                 id=f'op-place-{ref.lower()}',
@@ -121,26 +164,33 @@ def compile_plan(circuit_model: dict[str, Any]) -> ExecutionPlan:
                     'addIntoPcb': True,
                 },
                 on_error='stop',
-                notes=[f'Place {ref}.'],
+                notes=[f'Place {ref}.', f'Rule block={anchor_data.get("block", "unknown")}'],
             )
         )
 
-    for net in nets:
-        if not isinstance(net, dict):
+    for placement in net_port_placements:
+        if not isinstance(placement, dict):
             continue
-        net_name = normalize_net_name(str(net.get('name', '')))
+        net_name = normalize_net_name(str(placement.get('netName', '')))
         if not net_name:
             continue
         operations.append(
             ExecutionOperation(
                 id=f'op-label-{net_name.lower().replace("+", "p")}',
-                kind='annotate_net',
+                kind='create_net_port',
                 payload={
-                    'netName': net_name,
-                    'position': {'x': 360, 'y': 40 + len(operations) * 12},
+                    'direction': 'BI',
+                    'net': net_name,
+                    'position': {
+                        'x': int(placement.get('x', layout['origin_x'] + layout['label_x_offset'])),
+                        'y': int(placement.get('y', layout['origin_y'] + layout['label_y_start_offset'])),
+                    },
                 },
                 on_error='continue',
-                notes=['Label-based fallback is deterministic when wire endpoints are unknown.'],
+                notes=[
+                    'Net-port fallback is robust in current JLCEDA runtime when label creation is unavailable.',
+                    f'Rule class={placement.get("netClass", "signal")} anchor={placement.get("anchorRef", "")}.{placement.get("anchorPin", "")}',
+                ],
             )
         )
         if is_ground_net(net_name):
@@ -151,7 +201,10 @@ def compile_plan(circuit_model: dict[str, Any]) -> ExecutionPlan:
                     payload={
                         'identification': 'Ground',
                         'net': net_name,
-                        'position': {'x': 420, 'y': 40 + len(operations) * 12},
+                        'position': {
+                            'x': int(placement.get('x', layout['origin_x'])) + 80,
+                            'y': int(placement.get('y', layout['origin_y'])),
+                        },
                     },
                     on_error='continue',
                 )
@@ -164,7 +217,10 @@ def compile_plan(circuit_model: dict[str, Any]) -> ExecutionPlan:
                     payload={
                         'identification': 'Power',
                         'net': net_name,
-                        'position': {'x': 420, 'y': 40 + len(operations) * 12},
+                        'position': {
+                            'x': int(placement.get('x', layout['origin_x'])) + 80,
+                            'y': int(placement.get('y', layout['origin_y'])),
+                        },
                     },
                     on_error='continue',
                 )

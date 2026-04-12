@@ -18,6 +18,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from schematic_layout_rules import compile_layout_context
 
 REQ_SCHEMA_VERSION = 'requirement-spec.v1'
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
@@ -70,6 +71,20 @@ def to_int_env(name: str, fallback: int) -> int:
         return int(raw)
     except (TypeError, ValueError):
         return fallback
+
+
+def get_schematic_layout_config() -> dict[str, int]:
+    return {
+        'origin_x': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_X', 420),
+        'origin_y': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_Y', 220),
+        'columns': max(1, to_int_env('BRIDGE_SCH_PLACE_COLUMNS', 4)),
+        'pitch_x': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_X', 120)),
+        'pitch_y': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_Y', 100)),
+        'label_x_offset': to_int_env('BRIDGE_SCH_LABEL_X_OFFSET', 420),
+        'label_y_start_offset': to_int_env('BRIDGE_SCH_LABEL_Y_START_OFFSET', -120),
+        'label_y_step': max(8, to_int_env('BRIDGE_SCH_LABEL_Y_STEP', 28)),
+        'flag_x_offset': to_int_env('BRIDGE_SCH_FLAG_X_OFFSET', 500),
+    }
 
 
 def normalize_number(value: Any) -> float | None:
@@ -582,22 +597,40 @@ def ensure_circuit_model(model: CircuitModel) -> None:
         raise ValueError('Circuit model must include nets.')
 
 
-def _component_anchor(index: int) -> dict[str, int]:
-    x_origin = -120
-    y_origin = -40
-    return {'x': x_origin + (index * 80), 'y': y_origin}
+def _component_anchor(index: int, layout: dict[str, int]) -> dict[str, int]:
+    col = index % layout['columns']
+    row = index // layout['columns']
+    return {
+        'x': layout['origin_x'] + (col * layout['pitch_x']),
+        'y': layout['origin_y'] + (row * layout['pitch_y']),
+    }
 
 
 def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[ExecutionOperation] | None = None) -> ExecutionPlan:
     ensure_circuit_model(model)
     operations: list[ExecutionOperation] = []
     placeable_refs: set[str] = set()
+    layout = get_schematic_layout_config()
+    layout_context = compile_layout_context(
+        components=[asdict(component) for component in model.components],
+        nets=[asdict(net) for net in model.nets],
+        origin_x=layout['origin_x'],
+        origin_y=layout['origin_y'],
+    )
+    layout_engine = str(layout_context.get('engine', 'rules'))
+    component_placements = layout_context.get('componentPlacements', {})
+    net_port_placements = layout_context.get('netPortPlacements', [])
 
     for idx, component in enumerate(model.components):
         selected = component.selected_part
         if not selected.library_uuid or not selected.symbol_uuid:
             continue
-        anchor = _component_anchor(idx)
+        anchor_data = component_placements.get(component.ref, {})
+        fallback_anchor = _component_anchor(idx, layout)
+        anchor = {
+            'x': int(anchor_data.get('x', fallback_anchor['x'])),
+            'y': int(anchor_data.get('y', fallback_anchor['y'])),
+        }
         operations.append(
             ExecutionOperation(
                 id=f'op-place-{component.ref.lower()}',
@@ -612,7 +645,11 @@ def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[Execu
                     'addIntoPcb': True,
                 },
                 on_error='stop',
-                notes=[f'Place {component.ref} ({component.role})'],
+                notes=[
+                    f'Place {component.ref} ({component.role})',
+                    f'Rule block={anchor_data.get("block", "unknown")} slot={anchor_data.get("slot", -1)}',
+                    f'Layout engine={layout_engine}',
+                ],
             )
         )
         placeable_refs.add(component.ref)
@@ -621,29 +658,44 @@ def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[Execu
     if safe_wire_operations:
         operations.extend(safe_wire_operations)
 
-    for net in model.nets:
+    for placement in net_port_placements:
+        if not isinstance(placement, dict):
+            continue
+        net_name = str(placement.get('netName', '') or '')
+        if not net_name:
+            continue
         operations.append(
             ExecutionOperation(
-                id=f'op-label-{net.name.lower().replace("+", "p")}',
-                kind='annotate_net',
+                id=f'op-label-{net_name.lower().replace("+", "p")}',
+                kind='create_net_port',
                 payload={
-                    'netName': net.name,
-                    'position': {'x': 360, 'y': 40 + (len(operations) * 12)},
+                    'direction': 'BI',
+                    'net': net_name,
+                    'position': {
+                        'x': int(placement.get('x', layout['origin_x'] + layout['label_x_offset'])),
+                        'y': int(placement.get('y', layout['origin_y'] + layout['label_y_start_offset'])),
+                    },
                 },
                 on_error='continue',
-                notes=['Net label is used as a robust fallback when exact wire endpoints are unavailable.'],
+                notes=[
+                    'Net port is used as a robust fallback when exact wire endpoints are unavailable.',
+                    f'Rule class={placement.get("netClass", "signal")} anchor={placement.get("anchorRef", "")}.{placement.get("anchorPin", "")}',
+                ],
             )
         )
-        if net.name in ('GND', '+3V3'):
-            flag_kind = 'Ground' if net.name == 'GND' else 'Power'
+        if net_name in ('GND', '+3V3'):
+            flag_kind = 'Ground' if net_name == 'GND' else 'Power'
             operations.append(
                 ExecutionOperation(
-                    id=f'op-flag-{net.name.lower().replace("+", "p")}',
+                    id=f'op-flag-{net_name.lower().replace("+", "p")}',
                     kind='create_net_flag',
                     payload={
                         'identification': flag_kind,
-                        'net': net.name,
-                        'position': {'x': 420, 'y': 40 + (len(operations) * 12)},
+                        'net': net_name,
+                        'position': {
+                            'x': int(placement.get('x', layout['origin_x'])) + 80,
+                            'y': int(placement.get('y', layout['origin_y'])),
+                        },
                     },
                     on_error='continue',
                 )
@@ -858,9 +910,10 @@ def flatten_search_items(payload: Any) -> list[dict[str, Any]]:
 
 
 def map_item_to_candidate(role: str, item: dict[str, Any], library_uuid: str) -> PartCandidate:
-    part_id = str(item.get('id', '') or item.get('uuid', '') or item.get('deviceUuid', '') or item.get('symbolUuid', '') or f'{role}-auto')
+    item_library_uuid = str(item.get('libraryUuid', '') or item.get('library_uuid', '') or library_uuid)
+    part_id = str(item.get('id', '') or item.get('deviceUuid', '') or item.get('uuid', '') or item.get('symbolUuid', '') or f'{role}-auto')
     display_name = str(item.get('name', '') or item.get('title', '') or item.get('displayName', '') or part_id)
-    symbol_uuid = str(item.get('uuid', '') or item.get('symbolUuid', '') or item.get('id', ''))
+    symbol_uuid = str(item.get('symbolUuid', '') or item.get('symbol_uuid', '') or item.get('uuid', '') or item.get('id', ''))
     lcsc_id = str(item.get('lcscId', '') or item.get('lcsc_id', '') or item.get('c', ''))
     package = str(item.get('package', '') or item.get('packageName', '') or item.get('encapsulation', ''))
     manufacturer = str(item.get('manufacturer', '') or item.get('brand', ''))
@@ -877,7 +930,7 @@ def map_item_to_candidate(role: str, item: dict[str, Any], library_uuid: str) ->
         manufacturer=manufacturer,
         mpn=mpn,
         package=package,
-        library_uuid=library_uuid,
+        library_uuid=item_library_uuid,
         symbol_uuid=symbol_uuid,
         pin_count=pin_count,
         availability_status='unknown',
@@ -1215,6 +1268,7 @@ def _to_bridge_request(request_id: str, op: ExecutionOperation) -> dict[str, Any
         'place_component': ('schematic', 'place_component'),
         'create_wire': ('schematic', 'create_wire'),
         'annotate_net': ('schematic', 'annotate_net'),
+        'create_net_port': ('schematic', 'create_net_port'),
         'create_net_flag': ('schematic', 'create_net_flag'),
         'save': ('schematic', 'save'),
         'inspect_connectivity': ('schematic', 'inspect_connectivity'),
@@ -1239,11 +1293,24 @@ def _to_bridge_request(request_id: str, op: ExecutionOperation) -> dict[str, Any
 
 def build_component_placement_map(model: CircuitModel) -> dict[str, dict[str, Any]]:
     placement_map: dict[str, dict[str, Any]] = {}
+    layout = get_schematic_layout_config()
+    layout_context = compile_layout_context(
+        components=[asdict(component) for component in model.components],
+        nets=[asdict(net) for net in model.nets],
+        origin_x=layout['origin_x'],
+        origin_y=layout['origin_y'],
+    )
+    component_placements = layout_context.get('componentPlacements', {})
     for index, component in enumerate(model.components):
         selected = component.selected_part
         if not selected.library_uuid or not selected.symbol_uuid:
             continue
-        anchor = _component_anchor(index)
+        anchor_data = component_placements.get(component.ref, {})
+        fallback_anchor = _component_anchor(index, layout)
+        anchor = {
+            'x': int(anchor_data.get('x', fallback_anchor['x'])),
+            'y': int(anchor_data.get('y', fallback_anchor['y'])),
+        }
         placement_map[component.ref] = {
             'ref': component.ref,
             'x': anchor['x'],
@@ -1568,6 +1635,7 @@ def run() -> None:
         wire_diagnostics = {'enabled': False}
 
     plan = compile_execution_plan(model, safe_wire_operations=safe_wire_operations)
+    requested_layout_engine = normalize_text(env('BRIDGE_LAYOUT_ENGINE', 'elk')) or 'elk'
 
     execute_enabled = normalize_text(env('BRIDGE_EXECUTE_PLAN', 'false')) in ('1', 'true', 'yes', 'on')
     execution_result: dict[str, Any] = {
@@ -1591,6 +1659,7 @@ def run() -> None:
             f'REQ parsed goal: {spec.goal}',
             f'MODEL synthesized topology: {model.topology}',
             f'PLAN compiled operations: {len(plan.operations)}',
+            f'LAYOUT engine requested: {requested_layout_engine}',
             f'EXEC mode: {"execute" if execute_enabled else "dry-run"}',
         ] + pipeline_logs,
         'openRisks': model.risks,
