@@ -16,9 +16,9 @@ RULES_SCHEMA_VERSION = 'layout-rules.v1'
 class BlockLayoutRule:
     role_to_block: dict[str, str]
     block_order: list[str]
-    block_pitch_x: int = 280
-    block_origin_y: int = 220
-    slot_pitch_y: int = 100
+    block_pitch_x: int = 320
+    block_origin_y: int = 240
+    slot_pitch_y: int = 140
 
 
 @dataclass
@@ -71,7 +71,7 @@ def build_default_layout_rules() -> LayoutRuleSet:
                 'feedback_resistor_top': 'feedback',
                 'feedback_resistor_bottom': 'feedback',
             },
-            block_order=['input', 'power_stage', 'feedback', 'output', 'io'],
+            block_order=['input', 'power_stage', 'output', 'feedback', 'io'],
         ),
         pin_anchor=PinAnchorRule(
             keyword_to_side={
@@ -323,49 +323,18 @@ def _build_elk_graph(
     nodes: list[dict[str, Any]] = []
     edges: list[dict[str, Any]] = []
 
-    # Build per-component ports only from nets we actually use.
-    port_map: dict[str, set[str]] = {}
-    for net in nets:
-        members = [str(item) for item in net.get('members', []) if isinstance(item, str)]
-        for member in members:
-            ref, pin = _extract_member_pin(member)
-            if not ref or not pin:
-                continue
-            port_map.setdefault(ref, set()).add(pin)
-
     for component in components:
         ref = str(component.get('ref', '') or '')
         if not ref:
             continue
         role = _role_of_component(component)
         block = _block_of_role(role, rules.block_layout)
-        ports: list[dict[str, Any]] = []
-        for pin in sorted(port_map.get(ref, set())):
-            side = _resolve_pin_side(pin, rules.pin_anchor)
-            side_label = 'EAST'
-            if side == 'left':
-                side_label = 'WEST'
-            elif side == 'top':
-                side_label = 'NORTH'
-            elif side == 'bottom':
-                side_label = 'SOUTH'
-            ports.append(
-                {
-                    'id': f'{ref}.{pin}',
-                    'width': 8,
-                    'height': 8,
-                    'layoutOptions': {
-                        'org.eclipse.elk.port.side': side_label,
-                    },
-                }
-            )
         nodes.append(
             {
                 'id': ref,
                 'width': 160,
                 'height': 90,
                 'labels': [{'text': ref}],
-                'ports': ports,
                 'layoutOptions': {
                     # Use the existing block info as a weak ordering hint.
                     'org.eclipse.elk.layered.layering.layerConstraint': 'NONE',
@@ -382,13 +351,13 @@ def _build_elk_graph(
         for index in range(len(members) - 1):
             src_ref, src_pin = _extract_member_pin(members[index])
             dst_ref, dst_pin = _extract_member_pin(members[index + 1])
-            if not src_ref or not src_pin or not dst_ref or not dst_pin:
+            if not src_ref or not dst_ref:
                 continue
             edges.append(
                 {
                     'id': f'e{edge_index}-{net.get("name", "")}',
-                    'sources': [f'{src_ref}.{src_pin}'],
-                    'targets': [f'{dst_ref}.{dst_pin}'],
+                    'sources': [src_ref],
+                    'targets': [dst_ref],
                 }
             )
             edge_index += 1
@@ -401,7 +370,6 @@ def _build_elk_graph(
             'org.eclipse.elk.spacing.nodeNode': '60',
             'org.eclipse.elk.layered.spacing.nodeNodeBetweenLayers': '90',
             'org.eclipse.elk.layered.nodePlacement.strategy': 'NETWORK_SIMPLEX',
-            'org.eclipse.elk.portConstraints': 'FIXED_SIDE',
         },
         'children': nodes,
         'edges': edges,

@@ -141,8 +141,8 @@ def compile_plan(circuit_model: dict[str, Any]) -> ExecutionPlan:
         if not isinstance(selected, dict):
             continue
         library_uuid = str(selected.get('library_uuid', ''))
-        symbol_uuid = str(selected.get('symbol_uuid', ''))
-        if not library_uuid or not symbol_uuid:
+        place_uuid = str(selected.get('symbol_uuid', '') or selected.get('place_uuid', ''))
+        if not library_uuid or not place_uuid:
             continue
         ref = str(component.get('ref', f'U{index + 1}'))
         anchor_data = component_placements.get(ref, {})
@@ -156,7 +156,7 @@ def compile_plan(circuit_model: dict[str, Any]) -> ExecutionPlan:
                 kind='place_component',
                 payload={
                     'libraryUuid': library_uuid,
-                    'uuid': symbol_uuid,
+                    'uuid': place_uuid,
                     'position': anchor,
                     'rotation': 0,
                     'mirror': False,

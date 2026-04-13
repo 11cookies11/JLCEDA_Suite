@@ -73,6 +73,23 @@ def to_int_env(name: str, fallback: int) -> int:
         return fallback
 
 
+def load_json_file(path: Path, fallback: Any) -> Any:
+    try:
+        if not path.exists():
+            return fallback
+        return json.loads(path.read_text(encoding='utf-8'))
+    except Exception:
+        return fallback
+
+
+def save_json_file(path: Path, payload: Any) -> None:
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+    except Exception:
+        pass
+
+
 def get_schematic_layout_config() -> dict[str, int]:
     return {
         'origin_x': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_X', 420),
@@ -210,6 +227,51 @@ def parse_symbol_pins_from_source_text(source_text: str) -> list[dict[str, Any]]
     return pins
 
 
+def resolve_pin_endpoint_local(pin: dict[str, Any]) -> dict[str, float]:
+    x = float(pin.get('x', 0.0))
+    y = float(pin.get('y', 0.0))
+    length = float(pin.get('pinLength', 0.0) or 0.0)
+    rotation = int(float(pin.get('rotation', 0.0)) or 0.0) % 360
+    endpoint_mode = normalize_text(env('BRIDGE_PIN_ENDPOINT_MODE', 'origin')) or 'origin'
+    if endpoint_mode == 'origin' or length <= 0:
+        return {'x': x, 'y': y}
+    if rotation == 90:
+        return {'x': x, 'y': y + length}
+    if rotation == 180:
+        return {'x': x - length, 'y': y}
+    if rotation == 270:
+        return {'x': x, 'y': y - length}
+    return {'x': x + length, 'y': y}
+
+
+def _points_equal(a: dict[str, float], b: dict[str, float]) -> bool:
+    return abs(float(a['x']) - float(b['x'])) < 0.01 and abs(float(a['y']) - float(b['y'])) < 0.01
+
+
+def build_wire_points_with_pin_stubs(source: dict[str, Any], target: dict[str, Any]) -> list[dict[str, float]]:
+    src_origin = source.get('origin')
+    tgt_origin = target.get('origin')
+    src_attach = {'x': float(source['x']), 'y': float(source['y'])}
+    tgt_attach = {'x': float(target['x']), 'y': float(target['y'])}
+    points: list[dict[str, float]] = []
+    if isinstance(src_origin, dict) and not _points_equal(src_origin, src_attach):
+        points.append({'x': float(src_origin['x']), 'y': float(src_origin['y'])})
+    points.append(src_attach)
+    manhattan = build_manhattan_wire_points(src_attach, tgt_attach)
+    if points and manhattan and _points_equal(points[-1], manhattan[0]):
+        points.extend(manhattan[1:])
+    else:
+        points.extend(manhattan)
+    if isinstance(tgt_origin, dict) and not _points_equal(tgt_origin, tgt_attach):
+        points.append({'x': float(tgt_origin['x']), 'y': float(tgt_origin['y'])})
+    # collapse duplicates
+    deduped: list[dict[str, float]] = []
+    for point in points:
+        if not deduped or not _points_equal(deduped[-1], point):
+            deduped.append(point)
+    return deduped
+
+
 def enrich_candidate_pin_geometry(
     client: 'BridgeControlClient',
     client_id: str,
@@ -222,7 +284,15 @@ def enrich_candidate_pin_geometry(
         return candidate
     cache_key = f'{candidate.library_uuid}:{candidate.symbol_uuid}'
     if cache_key in cache:
-        candidate.pin_count = cache[cache_key]
+        cached_value = cache.get(cache_key)
+        if isinstance(cached_value, dict):
+            candidate.pin_count = int(cached_value.get('pinCount', 0) or 0)
+            candidate.named_pin_count = int(cached_value.get('namedPinCount', 0) or 0)
+        else:
+            try:
+                candidate.pin_count = int(cached_value or 0)
+            except (TypeError, ValueError):
+                candidate.pin_count = 0
         return candidate
     try:
         base64_payload = fetch_symbol_file_base64(
@@ -265,8 +335,10 @@ def enrich_candidate_pin_geometry(
                 stats['openDocError'] = stats.get('openDocError', 0) + 1
 
     pin_count = len(pins)
-    cache[cache_key] = pin_count
+    named_pin_count = sum(1 for pin in pins if str(pin.get('pinName', '') or '').strip())
+    cache[cache_key] = {'pinCount': pin_count, 'namedPinCount': named_pin_count}
     candidate.pin_count = pin_count
+    candidate.named_pin_count = named_pin_count
     return candidate
 
 
@@ -303,8 +375,10 @@ class PartCandidate:
     mpn: str = ''
     package: str = ''
     library_uuid: str = ''
+    place_uuid: str = ''
     symbol_uuid: str = ''
     pin_count: int = 0
+    named_pin_count: int = 0
     availability_status: str = 'unknown'
 
 
@@ -413,8 +487,10 @@ def load_part_catalog() -> dict[str, list[PartCandidate]]:
                     mpn=str(entry.get('mpn', '')),
                     package=str(entry.get('package', '')),
                     library_uuid=str(entry.get('library_uuid', '') or entry.get('libraryUuid', '')),
+                    place_uuid=str(entry.get('place_uuid', '') or entry.get('placeUuid', '') or entry.get('uuid', '')),
                     symbol_uuid=str(entry.get('symbol_uuid', '') or entry.get('symbolUuid', '')),
                     pin_count=int(entry.get('pin_count', 0) or entry.get('pinCount', 0) or 0),
+                    named_pin_count=int(entry.get('named_pin_count', 0) or entry.get('namedPinCount', 0) or 0),
                     availability_status=str(entry.get('availability_status', '') or entry.get('availabilityStatus', '') or 'unknown'),
                 )
             )
@@ -492,7 +568,7 @@ def pick_part(role: str, catalog: dict[str, list[PartCandidate]], fallback_name:
         candidates,
         key=lambda c: (
             0 if c.availability_status == 'available' else 1,
-            0 if c.library_uuid and c.symbol_uuid else 1,
+            0 if c.library_uuid and (c.place_uuid or c.symbol_uuid) else 1,
             0 if c.pin_count > 0 else 1,
         ),
     )
@@ -555,10 +631,13 @@ def synthesize_circuit_model(spec: RequirementSpec, catalog: dict[str, list[Part
     risks: list[str] = []
     for component in components:
         selected = component.selected_part
-        if not selected.library_uuid or not selected.symbol_uuid:
+        place_uuid = selected.place_uuid or selected.symbol_uuid
+        if not selected.library_uuid or not place_uuid:
             risks.append(f'{component.ref} lacks library/symbol mapping and cannot be auto-placed yet.')
         if selected.pin_count <= 0:
             risks.append(f'{component.ref} pin geometry is not confirmed.')
+        if component.role == 'buck_regulator' and selected.named_pin_count <= 0:
+            risks.append(f'{component.ref} pins are unnamed; auto-wiring may be unreliable.')
         if component.availability_status == 'unavailable':
             risks.append(f'{component.ref} selected part is currently marked unavailable.')
 
@@ -623,7 +702,8 @@ def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[Execu
 
     for idx, component in enumerate(model.components):
         selected = component.selected_part
-        if not selected.library_uuid or not selected.symbol_uuid:
+        place_uuid = selected.place_uuid or selected.symbol_uuid
+        if not selected.library_uuid or not place_uuid:
             continue
         anchor_data = component_placements.get(component.ref, {})
         fallback_anchor = _component_anchor(idx, layout)
@@ -637,7 +717,7 @@ def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[Execu
                 kind='place_component',
                 payload={
                     'libraryUuid': selected.library_uuid,
-                    'uuid': selected.symbol_uuid,
+                    'uuid': place_uuid,
                     'position': anchor,
                     'rotation': 0,
                     'mirror': False,
@@ -911,9 +991,10 @@ def flatten_search_items(payload: Any) -> list[dict[str, Any]]:
 
 def map_item_to_candidate(role: str, item: dict[str, Any], library_uuid: str) -> PartCandidate:
     item_library_uuid = str(item.get('libraryUuid', '') or item.get('library_uuid', '') or library_uuid)
+    place_uuid = str(item.get('uuid', '') or item.get('deviceUuid', '') or item.get('id', '') or '')
     part_id = str(item.get('id', '') or item.get('deviceUuid', '') or item.get('uuid', '') or item.get('symbolUuid', '') or f'{role}-auto')
     display_name = str(item.get('name', '') or item.get('title', '') or item.get('displayName', '') or part_id)
-    symbol_uuid = str(item.get('symbolUuid', '') or item.get('symbol_uuid', '') or item.get('uuid', '') or item.get('id', ''))
+    symbol_uuid = str(item.get('symbolUuid', '') or item.get('symbol_uuid', '') or place_uuid or item.get('id', ''))
     lcsc_id = str(item.get('lcscId', '') or item.get('lcsc_id', '') or item.get('c', ''))
     package = str(item.get('package', '') or item.get('packageName', '') or item.get('encapsulation', ''))
     manufacturer = str(item.get('manufacturer', '') or item.get('brand', ''))
@@ -923,6 +1004,11 @@ def map_item_to_candidate(role: str, item: dict[str, Any], library_uuid: str) ->
         pin_count = int(pin_count_raw)
     except (TypeError, ValueError):
         pin_count = 0
+    named_pin_count_raw = item.get('namedPinCount', item.get('named_pin_count', 0))
+    try:
+        named_pin_count = int(named_pin_count_raw)
+    except (TypeError, ValueError):
+        named_pin_count = 0
     return PartCandidate(
         part_id=part_id,
         display_name=display_name,
@@ -931,8 +1017,10 @@ def map_item_to_candidate(role: str, item: dict[str, Any], library_uuid: str) ->
         mpn=mpn,
         package=package,
         library_uuid=item_library_uuid,
+        place_uuid=place_uuid,
         symbol_uuid=symbol_uuid,
         pin_count=pin_count,
+        named_pin_count=named_pin_count,
         availability_status='unknown',
     )
 
@@ -999,21 +1087,24 @@ def _closeness_score(value: float, target: float, full_score: int) -> int:
     return -6
 
 
-def score_candidate_for_role(role: str, candidate: PartCandidate) -> int:
+def score_candidate_for_role(role: str, candidate: PartCandidate, include_pin_count: bool = True) -> int:
     score = 0
     text = _candidate_text(candidate)
     rule = ROLE_FILTER_RULES.get(role, {})
     prefer_tokens = [normalize_text(token) for token in rule.get('prefer_tokens', [])]
     reject_tokens = [normalize_text(token) for token in rule.get('reject_tokens', [])]
 
-    if candidate.library_uuid and candidate.symbol_uuid:
+    if candidate.library_uuid and (candidate.place_uuid or candidate.symbol_uuid):
         score += 20
     if candidate.lcsc_id:
         score += 8
-    if candidate.pin_count > 0:
-        score += 50
-    else:
-        score -= 8
+    if include_pin_count:
+        if candidate.pin_count > 0:
+            score += 50
+        else:
+            score -= 8
+        if candidate.named_pin_count > 0:
+            score += 12
 
     prefer_hits = sum(1 for token in prefer_tokens if token and token in text)
     reject_hits = sum(1 for token in reject_tokens if token and token in text)
@@ -1052,9 +1143,17 @@ def is_candidate_rejected(role: str, candidate: PartCandidate) -> bool:
         return True
     if role.startswith('feedback_resistor') and has_reject:
         return True
-    if not candidate.library_uuid or not candidate.symbol_uuid:
+    if role == 'buck_regulator' and is_truthy_env('BRIDGE_REQUIRE_NAMED_PINS', 'false') and candidate.named_pin_count <= 0:
+        return True
+    if not candidate.library_uuid or not (candidate.place_uuid or candidate.symbol_uuid):
         return True
     return False
+
+
+def requires_named_pins(role: str) -> bool:
+    if not is_truthy_env('BRIDGE_REQUIRE_NAMED_PINS', 'false'):
+        return False
+    return normalize_text(role) in ('buck_regulator',)
 
 
 def try_search_path(
@@ -1120,6 +1219,17 @@ def auto_search_catalog(
     library_uuid = resolve_system_library_uuid(client, client_id)
     require_pin_geometry = is_truthy_env('BRIDGE_REQUIRE_PIN_GEOMETRY', 'true')
     allow_pinless_fallback = is_truthy_env('BRIDGE_ALLOW_PINLESS_FALLBACK', 'true')
+    cache_root = Path(env('BRIDGE_CACHE_DIR', '.where/cache'))
+    cache_path = cache_root / 'auto-search-cache-v2.json'
+    cache_payload = load_json_file(cache_path, {})
+    if not isinstance(cache_payload, dict):
+        cache_payload = {}
+    search_cache = cache_payload.get('searchResults', {})
+    if not isinstance(search_cache, dict):
+        search_cache = {}
+    pin_geometry_cache = cache_payload.get('pinGeometry', {})
+    if not isinstance(pin_geometry_cache, dict):
+        pin_geometry_cache = {}
     search_paths = [
         'LIB_Device.search',
         'LIB_Symbol.search',
@@ -1133,11 +1243,14 @@ def auto_search_catalog(
         'allowPinlessFallback': allow_pinless_fallback,
         'roles': {},
         'pinSourceStats': {},
+        'cachePath': str(cache_path),
+        'searchCacheHitCount': 0,
+        'searchCacheMissCount': 0,
     }
-    pin_geometry_cache: dict[str, int] = {}
     pin_source_stats: dict[str, int] = {}
     max_pin_probe_per_role = to_int_env('BRIDGE_MAX_PIN_PROBE_PER_ROLE', 16)
-    time_budget_sec = to_float(env('BRIDGE_AUTO_SEARCH_TIME_BUDGET_SEC', '25'), 25.0)
+    max_ranked_candidates_per_role = to_int_env('BRIDGE_MAX_RANKED_CANDIDATES_PER_ROLE', 8)
+    time_budget_sec = to_float(env('BRIDGE_AUTO_SEARCH_TIME_BUDGET_SEC', '120'), 120.0)
     started_at = time.monotonic()
     budget_exhausted = False
     for role, keywords in role_keywords.items():
@@ -1158,6 +1271,9 @@ def auto_search_catalog(
         strict_scored: list[tuple[int, PartCandidate]] = []
         relaxed_found: list[PartCandidate] = []
         relaxed_scored: list[tuple[int, PartCandidate]] = []
+        raw_candidates: list[tuple[int, PartCandidate]] = []
+        seen_part_ids: set[str] = set()
+        require_named_pins = requires_named_pins(role)
         raw_hit_count = 0
         pin_probe_count = 0
         duplicate_count = 0
@@ -1172,6 +1288,14 @@ def auto_search_catalog(
                 continue
             items: list[dict[str, Any]] = []
             for path_index, path in enumerate(search_paths):
+                cache_key = f'{role}|{path}|{normalized}'
+                if cache_key in search_cache:
+                    cached_items = search_cache.get(cache_key)
+                    items = [item for item in cached_items if isinstance(item, dict)] if isinstance(cached_items, list) else []
+                    diagnostics['searchCacheHitCount'] += 1
+                    if items:
+                        break
+                    continue
                 items = try_search_path(
                     client=client,
                     client_id=client_id,
@@ -1180,6 +1304,8 @@ def auto_search_catalog(
                     library_uuid=library_uuid,
                     request_prefix=f'search-{role}-{path_index + 1}',
                 )
+                search_cache[cache_key] = items
+                diagnostics['searchCacheMissCount'] += 1
                 if items:
                     break
             if not items:
@@ -1193,6 +1319,22 @@ def auto_search_catalog(
                 if is_candidate_rejected(role, candidate):
                     rejected_count += 1
                     continue
+                if candidate.part_id in seen_part_ids:
+                    duplicate_count += 1
+                    continue
+                seen_part_ids.add(candidate.part_id)
+                score = score_candidate_for_role(role, candidate, include_pin_count=True)
+                raw_candidates.append((score, candidate))
+            if len(raw_candidates) >= 24:
+                break
+
+        ranked_candidates = [item for _, item in sorted(raw_candidates, key=lambda pair: pair[0], reverse=True)]
+        candidate_limit = min(len(ranked_candidates), max_ranked_candidates_per_role)
+        for candidate in ranked_candidates[:candidate_limit]:
+            if time.monotonic() - started_at > time_budget_sec:
+                budget_exhausted = True
+                break
+            if candidate.pin_count <= 0:
                 if pin_probe_count >= max_pin_probe_per_role:
                     continue
                 candidate = enrich_candidate_pin_geometry(
@@ -1204,24 +1346,22 @@ def auto_search_catalog(
                     stats=pin_source_stats,
                 )
                 pin_probe_count += 1
-                if any(existing.part_id == candidate.part_id for existing in strict_found) or any(existing.part_id == candidate.part_id for existing in relaxed_found):
-                    duplicate_count += 1
-                    continue
-                score = score_candidate_for_role(role, candidate)
-                if candidate.pin_count > 0:
-                    strict_found.append(candidate)
-                    strict_scored.append((score, candidate))
-                    continue
-                missing_pin_geometry_count += 1
-                if require_pin_geometry:
-                    if allow_pinless_fallback:
-                        relaxed_found.append(candidate)
-                        relaxed_scored.append((score, candidate))
-                    continue
-                relaxed_found.append(candidate)
-                relaxed_scored.append((score, candidate))
-            if len(strict_found) >= 10:
-                break
+            score = score_candidate_for_role(role, candidate, include_pin_count=True)
+            has_required_pins = candidate.pin_count > 0 and (not require_named_pins or candidate.named_pin_count > 0)
+            if has_required_pins:
+                strict_found.append(candidate)
+                strict_scored.append((score, candidate))
+                if len(strict_found) >= 10:
+                    break
+                continue
+            missing_pin_geometry_count += 1
+            if require_pin_geometry:
+                if allow_pinless_fallback:
+                    relaxed_found.append(candidate)
+                    relaxed_scored.append((score, candidate))
+                continue
+            relaxed_found.append(candidate)
+            relaxed_scored.append((score, candidate))
 
         chosen_mode = 'none'
         selected: list[PartCandidate] = []
@@ -1258,6 +1398,10 @@ def auto_search_catalog(
     diagnostics['pinSourceStats'] = pin_source_stats
     diagnostics['timeBudgetSec'] = time_budget_sec
     diagnostics['budgetExhausted'] = budget_exhausted
+    cache_payload['searchResults'] = search_cache
+    cache_payload['pinGeometry'] = pin_geometry_cache
+    cache_payload['updatedAt'] = iso_now()
+    save_json_file(cache_path, cache_payload)
     if budget_exhausted:
         logs.append('Auto-search stopped early due to time budget exhaustion.')
     return catalog, logs, diagnostics
@@ -1303,7 +1447,8 @@ def build_component_placement_map(model: CircuitModel) -> dict[str, dict[str, An
     component_placements = layout_context.get('componentPlacements', {})
     for index, component in enumerate(model.components):
         selected = component.selected_part
-        if not selected.library_uuid or not selected.symbol_uuid:
+        place_uuid = selected.place_uuid or selected.symbol_uuid
+        if not selected.library_uuid or not place_uuid:
             continue
         anchor_data = component_placements.get(component.ref, {})
         fallback_anchor = _component_anchor(index, layout)
@@ -1313,12 +1458,15 @@ def build_component_placement_map(model: CircuitModel) -> dict[str, dict[str, An
         }
         placement_map[component.ref] = {
             'ref': component.ref,
+            'role': component.role,
             'x': anchor['x'],
             'y': anchor['y'],
             'rotation': 0,
             'mirror': False,
             'libraryUuid': selected.library_uuid,
+            'placeUuid': place_uuid,
             'symbolUuid': selected.symbol_uuid,
+            'block': anchor_data.get('block', ''),
         }
     return placement_map
 
@@ -1404,6 +1552,60 @@ def resolve_pin_for_selector(pins: list[dict[str, Any]], selector: str) -> dict[
     return None
 
 
+def resolve_pin_with_role_fallback(
+    pins: list[dict[str, Any]],
+    selector: str,
+    component_role: str,
+) -> dict[str, Any] | None:
+    resolved = resolve_pin_for_selector(pins, selector)
+    if resolved is not None:
+        return resolved
+
+    normalized_role = normalize_text(component_role)
+    normalized_selector = normalize_text(selector)
+    if normalized_role != 'buck_regulator' or not normalized_selector:
+        return None
+
+    fallback_number_map: dict[str, list[str]] = {
+        'vin': ['5', '6', '4'],
+        'in': ['5', '6', '4'],
+        'vcc': ['5', '6', '4'],
+        'vdd': ['5', '6', '4'],
+        'gnd': ['2', '3'],
+        'pgnd': ['2', '3'],
+        'agnd': ['2', '3'],
+        'sw': ['1', '4'],
+        'lx': ['1', '4'],
+        'fb': ['3', '2'],
+        'vfb': ['3', '2'],
+        'en': ['4', '6'],
+        'enable': ['4', '6'],
+    }
+    fallback_numbers = fallback_number_map.get(normalized_selector, [])
+    if not fallback_numbers:
+        return None
+
+    for number in fallback_numbers:
+        for pin in pins:
+            if normalize_text(str(pin.get('pinNumber', ''))) == number:
+                return pin
+    return None
+
+
+def build_manhattan_wire_points(source: dict[str, Any], target: dict[str, Any]) -> list[dict[str, float]]:
+    x1 = float(source['x'])
+    y1 = float(source['y'])
+    x2 = float(target['x'])
+    y2 = float(target['y'])
+    if abs(x1 - x2) < 0.5 or abs(y1 - y2) < 0.5:
+        return [{'x': x1, 'y': y1}, {'x': x2, 'y': y2}]
+    return [
+        {'x': x1, 'y': y1},
+        {'x': x2, 'y': y1},
+        {'x': x2, 'y': y2},
+    ]
+
+
 def build_safe_wire_operations(
     model: CircuitModel,
     control_url: str,
@@ -1413,8 +1615,11 @@ def build_safe_wire_operations(
     client = BridgeControlClient(control_url, control_token)
     placement_map = build_component_placement_map(model)
     pin_map: dict[str, list[dict[str, Any]]] = {}
+    symbol_pin_cache: dict[str, tuple[list[dict[str, Any]], str]] = {}
     logs: list[str] = []
     issues: list[str] = []
+    wiring_mode = normalize_text(env('BRIDGE_WIRING_MODE', 'full')) or 'full'
+    max_wire_distance = to_float(env('BRIDGE_WIRE_MAX_DISTANCE', '260'), 260.0)
     diagnostics: dict[str, Any] = {
         'components': {},
         'nets': {},
@@ -1422,26 +1627,45 @@ def build_safe_wire_operations(
     }
 
     for ref, placement in placement_map.items():
-        base64_payload = fetch_symbol_file_base64(
-            client=client,
-            client_id=client_id,
-            symbol_uuid=str(placement['symbolUuid']),
-            library_uuid=str(placement['libraryUuid']),
-            request_id=f'pin-file-{model.request_id}-{ref.lower()}',
-        )
-        parsed_pins = parse_symbol_pins_from_base64(base64_payload)
+        symbol_cache_key = f'{placement["libraryUuid"]}:{placement["symbolUuid"]}'
+        cached = symbol_pin_cache.get(symbol_cache_key)
+        if cached is not None:
+            parsed_pins, pin_source_mode = cached
+            base64_payload = ''
+            source_text = 'cached'
+        else:
+            parsed_pins = []
+            source_text = ''
+            base64_payload = fetch_symbol_file_base64(
+                client=client,
+                client_id=client_id,
+                symbol_uuid=str(placement['symbolUuid']),
+                library_uuid=str(placement['libraryUuid']),
+                request_id=f'pin-file-{model.request_id}-{ref.lower()}',
+            )
+            if base64_payload:
+                parsed_pins = parse_symbol_pins_from_base64(base64_payload)
+                pin_source_mode = 'archive_base64'
+            else:
+                parsed_pins = []
+                pin_source_mode = 'missing'
+            symbol_pin_cache[symbol_cache_key] = (parsed_pins, pin_source_mode)
         absolute_pins: list[dict[str, Any]] = []
         for pin in parsed_pins:
+            endpoint_local = resolve_pin_endpoint_local(pin)
+            origin_local = {'x': float(pin.get('x', 0.0)), 'y': float(pin.get('y', 0.0))}
             absolute = transform_point(
-                {'x': float(pin.get('x', 0.0)), 'y': float(pin.get('y', 0.0))},
+                {'x': endpoint_local['x'], 'y': endpoint_local['y']},
                 placement,
             )
+            absolute_origin = transform_point(origin_local, placement)
             absolute_pins.append(
                 {
                     'pinNumber': str(pin.get('pinNumber', '')),
                     'pinName': str(pin.get('pinName', '')),
                     'x': absolute['x'],
                     'y': absolute['y'],
+                    'origin': {'x': absolute_origin['x'], 'y': absolute_origin['y']},
                 }
             )
         pin_map[ref] = absolute_pins
@@ -1450,7 +1674,8 @@ def build_safe_wire_operations(
             'libraryUuid': placement['libraryUuid'],
             'symbolUuid': placement['symbolUuid'],
             'pinCount': len(absolute_pins),
-            'symbolFetchOk': bool(base64_payload),
+            'symbolFetchOk': bool(source_text or base64_payload or cached),
+            'pinSourceMode': pin_source_mode,
         }
 
     wire_operations: list[ExecutionOperation] = []
@@ -1463,7 +1688,8 @@ def build_safe_wire_operations(
                 continue
             ref, selector = member.split('.', 1)
             pins = pin_map.get(ref, [])
-            pin = resolve_pin_for_selector(pins, selector)
+            component_role = str(placement_map.get(ref, {}).get('role', ''))
+            pin = resolve_pin_with_role_fallback(pins, selector, component_role)
             if pin is None:
                 issues.append(f'{ERROR_PIN_MISSING}:{net.name}:{member}')
                 missing_members.append(member)
@@ -1479,16 +1705,24 @@ def build_safe_wire_operations(
             continue
         source = endpoints[0]
         for target in endpoints[1:]:
+            if wiring_mode == 'labels':
+                continue
+            if wiring_mode == 'hybrid':
+                src_block = placement_map.get(source['ref'], {}).get('block', '')
+                tgt_block = placement_map.get(target['ref'], {}).get('block', '')
+                if not src_block or src_block != tgt_block:
+                    continue
+                if abs(source['x'] - target['x']) > max_wire_distance or abs(source['y'] - target['y']) > max_wire_distance:
+                    continue
+            elif wiring_mode != 'full':
+                continue
             wire_index += 1
             wire_operations.append(
                 ExecutionOperation(
                     id=f'op-wire-safe-{wire_index:03d}',
                     kind='create_wire',
                     payload={
-                        'points': [
-                            {'x': source['x'], 'y': source['y']},
-                            {'x': target['x'], 'y': target['y']},
-                        ],
+                        'points': build_wire_points_with_pin_stubs(source, target),
                         'netName': net.name,
                     },
                     on_error='continue',
@@ -1506,6 +1740,74 @@ def execute_plan(plan: ExecutionPlan, control_url: str, control_token: str, clie
     results: list[dict[str, Any]] = []
     failed_count = 0
     fallback_events: list[dict[str, str]] = []
+    execution_page: dict[str, str] = {}
+
+    if is_truthy_env('BRIDGE_CREATE_NEW_PAGE', 'true'):
+        try:
+            info = client.bridge_request(
+                client_id=client_id,
+                domain='schematic',
+                action='get_current_schematic_info',
+                payload={},
+                request_id=f'{plan.request_id}-schematic-info',
+            )
+            info_data = info.get('result', {}).get('data', {})
+            schematic_uuid = str(
+                info_data.get('schematicUuid')
+                or info_data.get('uuid')
+                or (info_data.get('schematic', {}) if isinstance(info_data.get('schematic', {}), dict) else {}).get('uuid', '')
+                or ''
+            )
+            if schematic_uuid:
+                created = client.bridge_request(
+                    client_id=client_id,
+                    domain='schematic',
+                    action='create_schematic_page',
+                    payload={'schematicUuid': schematic_uuid},
+                    request_id=f'{plan.request_id}-schematic-new-page',
+                )
+                created_data = created.get('result', {}).get('data', {})
+                page_uuid = str(
+                    created_data.get('schematicPageUuid')
+                    or (created_data.get('schematicPage', {}) if isinstance(created_data.get('schematicPage', {}), dict) else {}).get('uuid', '')
+                    or (created_data.get('page', {}) if isinstance(created_data.get('page', {}), dict) else {}).get('uuid', '')
+                    or ''
+                )
+                page_name = str(
+                    (created_data.get('schematicPage', {}) if isinstance(created_data.get('schematicPage', {}), dict) else {}).get('name', '')
+                    or (created_data.get('page', {}) if isinstance(created_data.get('page', {}), dict) else {}).get('name', '')
+                    or ''
+                )
+                if page_uuid:
+                    execution_page = {'uuid': page_uuid, 'name': str(page_name or '')}
+                    opened_ok = False
+                    for attempt in range(3):
+                        opened = client.bridge_request(
+                            client_id=client_id,
+                            domain='project',
+                            action='open_document',
+                            payload={'documentUuid': page_uuid},
+                            request_id=f'{plan.request_id}-schematic-open-page-{attempt + 1}',
+                        )
+                        opened_ok = opened.get('status') == 'success'
+                        if opened_ok:
+                            break
+                        time.sleep(0.2)
+                    if not opened_ok:
+                        return {
+                            'ok': False,
+                            'failedCount': 1,
+                            'results': [],
+                            'fallbackEvents': [
+                                {
+                                    'trigger': ERROR_EXECUTION_FAILED,
+                                    'strategy': 'open_new_page_failed',
+                                }
+                            ],
+                            'page': execution_page,
+                        }
+        except Exception:
+            pass
 
     for index, op in enumerate(plan.operations):
         request_id = f'{plan.request_id}-exec-{index + 1:03d}'
@@ -1548,6 +1850,7 @@ def execute_plan(plan: ExecutionPlan, control_url: str, control_token: str, clie
         'failedCount': failed_count,
         'results': results,
         'fallbackEvents': fallback_events,
+        'page': execution_page,
     }
 
 
@@ -1613,7 +1916,10 @@ def run() -> None:
         auto_diagnostics = {'enabled': False}
 
     model = synthesize_circuit_model(spec, catalog)
+    wiring_mode = normalize_text(env('BRIDGE_WIRING_MODE', 'full')) or 'full'
     safe_wiring_enabled = is_truthy_env('BRIDGE_ENABLE_SAFE_WIRING', 'true')
+    if wiring_mode == 'labels':
+        safe_wiring_enabled = False
     safe_wire_operations: list[ExecutionOperation] = []
     safe_wiring_issues: list[str] = []
     if safe_wiring_enabled:
@@ -1660,6 +1966,7 @@ def run() -> None:
             f'MODEL synthesized topology: {model.topology}',
             f'PLAN compiled operations: {len(plan.operations)}',
             f'LAYOUT engine requested: {requested_layout_engine}',
+            f'WIRING mode: {wiring_mode}',
             f'EXEC mode: {"execute" if execute_enabled else "dry-run"}',
         ] + pipeline_logs,
         'openRisks': model.risks,
