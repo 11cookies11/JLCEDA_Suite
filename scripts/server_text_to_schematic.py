@@ -23,6 +23,7 @@ from schematic_layout_rules import compile_layout_context
 REQ_SCHEMA_VERSION = 'requirement-spec.v1'
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
 PLAN_SCHEMA_VERSION = 'execution-plan.v1'
+SCD_SCHEMA_VERSION = 'schematic-construction-description.v1'
 
 ERROR_PART_UNAVAILABLE = 'PART_UNAVAILABLE'
 ERROR_PIN_MISSING = 'PIN_MISSING'
@@ -454,6 +455,245 @@ class ExecutionPlan:
     fallback_rules: list[FallbackRule]
 
 
+@dataclass
+class SCDBlock:
+    name: str
+    role: str
+    scope: str
+    statements: list[str]
+    notes: list[str] = field(default_factory=list)
+    checks: list[str] = field(default_factory=list)
+
+
+@dataclass
+class SCDDocument:
+    schema_version: str
+    title: str
+    version: str
+    purpose: str
+    blocks: list[SCDBlock]
+    markdown: str
+
+
+class SCDParseError(ValueError):
+    def __init__(
+        self,
+        code: str,
+        message: str,
+        line_no: int | None = None,
+        line_text: str = '',
+        hint: str = '',
+    ) -> None:
+        super().__init__(message)
+        self.code = code
+        self.message = message
+        self.line_no = line_no
+        self.line_text = line_text
+        self.hint = hint
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            'code': self.code,
+            'message': self.message,
+            'line_no': self.line_no,
+            'line_text': self.line_text,
+            'hint': self.hint,
+        }
+
+
+def _scd_error(code: str, message: str, line_no: int | None = None, line_text: str = '', hint: str = '') -> SCDParseError:
+    return SCDParseError(code=code, message=message, line_no=line_no, line_text=line_text, hint=hint)
+
+
+SCD_HEADER_RE = re.compile(r'^# (Title|Version|Purpose):\s*(.+)$')
+SCD_BLOCK_RE = re.compile(r'^\[Block: (.+)\]$')
+SCD_SECTION_RE = re.compile(r'^\[(Notes|Checks)\]$')
+SCD_BULLET_RE = re.compile(r'^-\s+(.+)$')
+SCD_STATEMENT_PATTERNS = (
+    re.compile(r'^(?P<net>[^\s]+)\s*->\s*(?P<device_pin>[^\s.]+\.[^\s.]+)$'),
+    re.compile(r'^(?P<device_pin>[^\s.]+\.[^\s.]+)\s*->\s*(?P<net>[^\s]+)$'),
+    re.compile(r'^(?P<net>[^\s]+)\s*->\s*(?P<component>[^\s]+(?:\s+[^\s].*?)?)\s*->\s*GND$'),
+    re.compile(r'^(?P<net_a>[^\s]+)\s*->\s*(?P<component>[^\s]+(?:\s+[^\s].*?)?)\s*->\s*(?P<net_b>[^\s]+)$'),
+    re.compile(r'^(?P<net>[^\s]+)\s*->\s*(?P<device_pin>[^\s.]+\.[^\s.]+)\s*->\s*(?P<net_out>[^\s]+)$'),
+)
+
+
+def _normalize_scd_statement(text: str) -> str:
+    return re.sub(r'\s*->\s*', ' -> ', ' '.join(text.split()))
+
+
+def _is_scd_statement(text: str) -> bool:
+    return any(pattern.match(text) for pattern in SCD_STATEMENT_PATTERNS)
+
+
+def render_scd_document(document: SCDDocument) -> str:
+    lines = [
+        f'# Title: {document.title}',
+        f'# Version: {document.version}',
+        f'# Purpose: {document.purpose}',
+        '',
+    ]
+    for block in document.blocks:
+        lines.extend([
+            f'[Block: {block.name}]',
+            f'- Role: {block.role}',
+            f'- Scope: {block.scope}',
+            '',
+        ])
+        lines.extend(block.statements)
+        if block.notes:
+            lines.append('')
+            lines.append('[Notes]')
+            lines.extend([f'- {note}' for note in block.notes])
+        if block.checks:
+            lines.append('')
+            lines.append('[Checks]')
+            lines.extend([f'- {check}' for check in block.checks])
+        lines.append('')
+    while lines and not lines[-1].strip():
+        lines.pop()
+    return '\n'.join(lines) + '\n'
+
+
+def parse_scd_document(markdown: str) -> dict[str, Any]:
+    lines = markdown.splitlines()
+    index = 0
+
+    def advance(start: int) -> int:
+        current = start
+        while current < len(lines) and not lines[current].strip():
+            current += 1
+        return current
+
+    def fail(code: str, message: str, line_no: int | None = None, hint: str = '') -> SCDParseError:
+        line_text = lines[line_no - 1] if line_no and 1 <= line_no <= len(lines) else ''
+        return _scd_error(code, message, line_no, line_text, hint)
+
+    index = advance(index)
+    header: dict[str, str] = {}
+    for expected_key in ('Title', 'Version', 'Purpose'):
+        if index >= len(lines):
+            raise fail('SCD_HEADER_MISSING', f'Missing header field: {expected_key}', len(lines) or None, 'Add the three-line header at the top of the document.')
+        match = SCD_HEADER_RE.match(lines[index].strip())
+        if not match or match.group(1) != expected_key:
+            raise fail('SCD_HEADER_INVALID', f'Expected header field {expected_key}.', index + 1, 'Use the exact order: Title, Version, Purpose.')
+        header[expected_key.lower()] = match.group(2).strip()
+        index += 1
+        index = advance(index)
+
+    blocks: list[dict[str, Any]] = []
+    while index < len(lines):
+        current = lines[index].strip()
+        if not current:
+            index += 1
+            continue
+        block_match = SCD_BLOCK_RE.match(current)
+        if not block_match:
+            raise fail('SCD_BLOCK_INVALID', 'Expected a block header.', index + 1, 'Start each block with [Block: <name>].')
+        block_name = block_match.group(1).strip()
+        index += 1
+        index = advance(index)
+
+        if index >= len(lines):
+            raise fail('SCD_BLOCK_INCOMPLETE', f'Block {block_name} is incomplete.', len(lines) or None, 'Add Role and Scope lines.')
+        role_match = re.match(r'^- Role:\s*(.+)$', lines[index].strip())
+        if not role_match:
+            raise fail('SCD_ROLE_INVALID', f'Block {block_name} is missing Role.', index + 1, 'Add "- Role: ..." immediately after the block header.')
+        role = role_match.group(1).strip()
+        index += 1
+        index = advance(index)
+
+        if index >= len(lines):
+            raise fail('SCD_BLOCK_INCOMPLETE', f'Block {block_name} is incomplete.', len(lines) or None, 'Add a Scope line.')
+        scope_match = re.match(r'^- Scope:\s*(.+)$', lines[index].strip())
+        if not scope_match:
+            raise fail('SCD_SCOPE_INVALID', f'Block {block_name} is missing Scope.', index + 1, 'Add "- Scope: ..." immediately after Role.')
+        scope = scope_match.group(1).strip()
+        index += 1
+        index = advance(index)
+
+        statements: list[str] = []
+        notes: list[str] = []
+        checks: list[str] = []
+        active_section = 'statements'
+        seen_notes = False
+        seen_checks = False
+
+        while index < len(lines):
+            current = lines[index].strip()
+            if not current:
+                index += 1
+                continue
+            if SCD_BLOCK_RE.match(current):
+                break
+            section_match = SCD_SECTION_RE.match(current)
+            if section_match:
+                active_section = section_match.group(1).lower()
+                if active_section == 'notes':
+                    if seen_notes:
+                        raise fail('SCD_SECTION_DUPLICATE', f'Block {block_name} has duplicate Notes sections.', index + 1, 'Keep only one [Notes] section per block.')
+                    seen_notes = True
+                else:
+                    if seen_checks:
+                        raise fail('SCD_SECTION_DUPLICATE', f'Block {block_name} has duplicate Checks sections.', index + 1, 'Keep only one [Checks] section per block.')
+                    seen_checks = True
+                index += 1
+                continue
+            bullet_match = SCD_BULLET_RE.match(current)
+            if bullet_match:
+                if active_section == 'notes':
+                    notes.append(bullet_match.group(1).strip())
+                elif active_section == 'checks':
+                    checks.append(bullet_match.group(1).strip())
+                else:
+                    raise fail('SCD_BULLET_OUTSIDE_SECTION', 'Bullet items are only allowed in Notes or Checks sections.', index + 1, 'Move bullet lines under [Notes] or [Checks].')
+                index += 1
+                continue
+            normalized = _normalize_scd_statement(current)
+            if _is_scd_statement(normalized):
+                if active_section != 'statements':
+                    raise fail('SCD_STATEMENT_IN_SECTION', 'Connection statements are not allowed inside Notes or Checks.', index + 1, 'Move connection statements above the optional sections.')
+                statements.append(normalized)
+                index += 1
+                continue
+            raise fail('SCD_LINE_INVALID', 'Unrecognized line in SCD document.', index + 1, 'Use only block headers, role/scope lines, connection statements, and bullet sections.')
+
+        if not statements:
+            raise fail('SCD_BLOCK_EMPTY', f'Block {block_name} does not contain any statements.', index + 1 if index < len(lines) else len(lines) or None, 'Add at least one connection statement.')
+
+        blocks.append(
+            {
+                'name': block_name,
+                'role': role,
+                'scope': scope,
+                'statements': statements,
+                'notes': notes,
+                'checks': checks,
+            }
+        )
+
+    return {
+        'schema_version': SCD_SCHEMA_VERSION,
+        'title': header['title'],
+        'version': header['version'],
+        'purpose': header['purpose'],
+        'blocks': blocks,
+    }
+
+
+def summarize_scd_document(document: SCDDocument) -> dict[str, Any]:
+    return {
+        'schema_version': document.schema_version,
+        'title': document.title,
+        'version': document.version,
+        'purpose': document.purpose,
+        'blockCount': len(document.blocks),
+        'statementCount': sum(len(block.statements) for block in document.blocks),
+        'noteCount': sum(len(block.notes) for block in document.blocks),
+        'checkCount': sum(len(block.checks) for block in document.blocks),
+    }
+
+
 def ensure_requirement(spec: RequirementSpec) -> None:
     t = spec.electrical_targets
     if spec.schema_version != REQ_SCHEMA_VERSION:
@@ -674,6 +914,112 @@ def ensure_circuit_model(model: CircuitModel) -> None:
         raise ValueError('Circuit model must include at least one component.')
     if not model.nets:
         raise ValueError('Circuit model must include nets.')
+
+
+def build_scd_document(spec: RequirementSpec, model: CircuitModel) -> SCDDocument:
+    component_by_role = {component.role: component for component in model.components}
+    component_by_ref = {component.ref: component for component in model.components}
+
+    def describe_component(ref: str) -> str:
+        component = component_by_ref.get(ref)
+        if not component:
+            return ref
+        display_name = component.selected_part.display_name.strip() or component.selected_part.part_id.strip()
+        if display_name:
+            return f'{ref} ({display_name})'
+        return ref
+
+    u1 = component_by_role.get('buck_regulator')
+    l1 = component_by_role.get('inductor')
+    cin1 = component_by_role.get('input_capacitor')
+    cout1 = component_by_role.get('output_capacitor')
+    rfb1 = component_by_role.get('feedback_resistor_top')
+    rfb2 = component_by_role.get('feedback_resistor_bottom')
+    if not all([u1, l1, cin1, cout1, rfb1, rfb2]):
+        raise ValueError('Circuit model is missing expected power-stage roles for SCD generation.')
+
+    vin_net = next((net.name for net in model.nets if net.name.startswith('VIN') or net.name.endswith('5V')), 'VIN_5V')
+    vout_net = next((net.name for net in model.nets if net.name.startswith('+3V3')), '+3V3')
+    fb_net = next((net.name for net in model.nets if net.name == 'FB'), 'FB')
+    gnd_net = next((net.name for net in model.nets if net.name == 'GND'), 'GND')
+
+    calculation_map = {calculation.name: calculation for calculation in model.calculations}
+    inductance = calculation_map.get('inductance_estimate')
+    feedback = calculation_map.get('feedback_ratio_bottom_resistor')
+
+    blocks = [
+        SCDBlock(
+            name='Input Conditioning',
+            role='Provide the filtered input rail to the regulator',
+            scope=f'{describe_component(cin1.ref)}, {describe_component(u1.ref)}, {vin_net}, {gnd_net}',
+            statements=[
+                f'{vin_net} -> {cin1.ref} {cin1.value} -> {gnd_net}',
+                f'{vin_net} -> {u1.ref}.VIN',
+                f'{u1.ref}.GND -> {gnd_net}',
+            ],
+            notes=[
+                f'{u1.ref} selected part: {u1.selected_part.display_name}',
+                f'{cin1.ref} acts as the input decoupling capacitor.',
+            ],
+            checks=[
+                f'{cin1.ref} value matches the expected input decoupling.',
+                f'{u1.ref}.VIN is tied to the input rail.',
+            ],
+        ),
+        SCDBlock(
+            name='Buck Power Stage',
+            role='Convert the input rail to the 3.3V output rail',
+            scope=f'{describe_component(u1.ref)}, {describe_component(l1.ref)}, {describe_component(cout1.ref)}, {vout_net}',
+            statements=[
+                f'{u1.ref}.SW -> {l1.ref}.1',
+                f'{l1.ref}.2 -> {vout_net}',
+                f'{vout_net} -> {cout1.ref} {cout1.value} -> {gnd_net}',
+            ],
+            notes=[
+                f'{l1.ref} value: {l1.value}',
+                f'{u1.ref}.SW should stay local to the power stage.',
+            ],
+            checks=[
+                f'{l1.ref} connects between the switching node and {vout_net}.',
+                f'{cout1.ref} stabilizes the output rail.',
+            ],
+        ),
+        SCDBlock(
+            name='Feedback Network',
+            role='Sense the output voltage and close the regulation loop',
+            scope=f'{describe_component(rfb1.ref)}, {describe_component(rfb2.ref)}, {u1.ref}.FB, {fb_net}, {vout_net}',
+            statements=[
+                f'{vout_net} -> {rfb1.ref} {rfb1.value} -> {fb_net}',
+                f'{fb_net} -> {rfb2.ref} {rfb2.value} -> {gnd_net}',
+                f'{u1.ref}.FB -> {fb_net}',
+            ],
+            notes=[
+                f'{rfb1.ref} and {rfb2.ref} implement the feedback divider.',
+                f'{fb_net} should remain short and quiet near {u1.ref}.FB.',
+            ],
+            checks=[
+                f'Feedback divider ratio matches the {vout_net} target.',
+                f'{u1.ref}.FB is connected to the divider midpoint.',
+            ],
+        ),
+    ]
+
+    if inductance is not None:
+        blocks[1].notes.append(f'Estimated inductance: {inductance.result:.2f} {inductance.unit}.')
+    if feedback is not None:
+        blocks[2].notes.append(f'Estimated feedback bottom resistor: {feedback.result:.0f} {feedback.unit}.')
+
+    document = SCDDocument(
+        schema_version=SCD_SCHEMA_VERSION,
+        title=spec.goal or 'Theory Schematic',
+        version='v1',
+        purpose=spec.goal or 'Convert requirement text into a readable schematic construction description.',
+        blocks=blocks,
+        markdown='',
+    )
+    document.markdown = render_scd_document(document)
+    parse_scd_document(document.markdown)
+    return document
 
 
 def _component_anchor(index: int, layout: dict[str, int]) -> dict[str, int]:
@@ -1874,13 +2220,25 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
     output_dir.mkdir(parents=True, exist_ok=True)
     paths = {
         'requirement': output_dir / 'requirement-spec.json',
+        'schematic_construction_description_md': output_dir / 'schematic-construction-description.md',
+        'schematic_construction_description_json': output_dir / 'schematic-construction-description.json',
         'circuit': output_dir / 'circuit-model.json',
         'plan': output_dir / 'execution-plan.json',
         'summary': output_dir / 'pipeline-summary.json',
     }
-    for key, path in paths.items():
+    for key in ('requirement', 'circuit', 'plan', 'summary'):
+        path = paths[key]
         with path.open('w', encoding='utf-8') as file:
             json.dump(payload[key], file, ensure_ascii=False, indent=2)
+            file.write('\n')
+    scd = payload.get('schematic_construction_description')
+    if isinstance(scd, dict):
+        md_path = paths['schematic_construction_description_md']
+        json_path = paths['schematic_construction_description_json']
+        md_text = str(scd.get('markdown', '') or '')
+        md_path.write_text(md_text, encoding='utf-8')
+        with json_path.open('w', encoding='utf-8') as file:
+            json.dump(scd, file, ensure_ascii=False, indent=2)
             file.write('\n')
     return {name: str(path) for name, path in paths.items()}
 
@@ -1916,6 +2274,7 @@ def run() -> None:
         auto_diagnostics = {'enabled': False}
 
     model = synthesize_circuit_model(spec, catalog)
+    scd_document = build_scd_document(spec, model)
     wiring_mode = normalize_text(env('BRIDGE_WIRING_MODE', 'full')) or 'full'
     safe_wiring_enabled = is_truthy_env('BRIDGE_ENABLE_SAFE_WIRING', 'true')
     if wiring_mode == 'labels':
@@ -1958,11 +2317,13 @@ def run() -> None:
         'requestId': spec.request_id,
         'pipeline': {
             'requirementSchema': REQ_SCHEMA_VERSION,
+            'schematicConstructionSchema': SCD_SCHEMA_VERSION,
             'circuitSchema': MODEL_SCHEMA_VERSION,
             'planSchema': PLAN_SCHEMA_VERSION,
         },
         'log': [
             f'REQ parsed goal: {spec.goal}',
+            f'SCD normalized blocks: {len(scd_document.blocks)} / statements: {sum(len(block.statements) for block in scd_document.blocks)}',
             f'MODEL synthesized topology: {model.topology}',
             f'PLAN compiled operations: {len(plan.operations)}',
             f'LAYOUT engine requested: {requested_layout_engine}',
@@ -1982,6 +2343,7 @@ def run() -> None:
 
     output_bundle = {
         'requirement': asdict(spec),
+        'schematic_construction_description': asdict(scd_document),
         'circuit': asdict(model),
         'plan': asdict(plan),
         'summary': summary,
@@ -1994,6 +2356,7 @@ def run() -> None:
         'generatedAt': iso_now(),
         'outputFiles': output_files,
         'requirement': asdict(spec),
+        'schematic_construction_description': asdict(scd_document),
         'circuit': asdict(model),
         'plan': asdict(plan),
         'summary': summary,

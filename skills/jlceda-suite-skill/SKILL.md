@@ -98,12 +98,14 @@ Use this when the user gives text requirements and wants a structured model plus
 
 Goal:
 - convert requirement text into a typed requirement object
+- normalize the theory circuit into a strict Schematic Construction Description (SCD) before model synthesis
 - synthesize a circuit model with decisions and risks
 - compile an execution plan for JLCEDA
 - optionally execute the plan and capture structured failure feedback
 
 Expected output:
 - requirement model
+- SCD text with block structure, explicit nets, explicit pins, and review checks
 - circuit model
 - execution plan
 - execution summary and fallback events
@@ -293,6 +295,7 @@ Read [references/schematic-co-design.md](references/schematic-co-design.md) for 
 Read [references/component-selection.md](references/component-selection.md) for the part-selection workflow and output format.
 Read [references/schematic-refinement.md](references/schematic-refinement.md) for the schematic edit-batch workflow and validation shape.
 Read [references/pcb-assist.md](references/pcb-assist.md) for the PCB follow-up workflow and layout guidance shape.
+Read [references/schematic-construction-description.md](references/schematic-construction-description.md) for the strict SCD format and validation rules.
 Read [references/text-to-schematic.md](references/text-to-schematic.md) for the model-driven text-to-schematic pipeline.
 
 ## Call strategy
@@ -302,6 +305,7 @@ Read [references/text-to-schematic.md](references/text-to-schematic.md) for the 
 - Keep confirmation enabled for state-changing operations unless the user explicitly wants a test path.
 - Prefer one function block at a time instead of changing the whole schematic at once.
 - After every meaningful edit batch, re-read context before continuing.
+- When the user asks for theory schematic generation, produce SCD first, validate it, and only then synthesize `CircuitModel` or a drawing artifact.
 
 ## Notes
 

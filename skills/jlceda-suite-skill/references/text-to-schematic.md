@@ -4,6 +4,8 @@ This workflow implements the model-driven chain:
 
 `RequirementSpec -> CircuitModel -> ExecutionPlan -> (optional) Execute`
 
+Before the `CircuitModel` step, the agent should normalize the user-facing theory circuit into SCD, the strict textual schematic construction format described in [schematic-construction-description.md](schematic-construction-description.md).
+
 ## Input Contract
 
 - `BRIDGE_REQUIREMENT_SPEC_JSON`
@@ -15,10 +17,13 @@ Requirement payload should include:
 - `goal`
 - `electrical_targets`
 
+When the user wants a readable circuit description, the preferred intermediate output is SCD, not free-form prose.
+
 ## Output Artifacts
 
 The pipeline writes:
 - `requirement-spec.json`
+- `schematic-construction-description.md` when the readable theory schematic view is requested
 - `circuit-model.json`
 - `execution-plan.json`
 - `pipeline-summary.json`
@@ -41,6 +46,7 @@ Use these signals to let the AI agent:
 
 ## Practical Notes
 
+- Treat SCD as the canonical human-readable representation of the theory schematic.
 - Prefer candidates with verified `library_uuid`, `symbol_uuid`, and `pin_count > 0`.
 - Do not continue automatic wiring when pin geometry is missing.
 - Keep `design_decisions[]` updated when switching candidates or topology assumptions.
