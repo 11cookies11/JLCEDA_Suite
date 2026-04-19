@@ -24,6 +24,7 @@ from schematic_layout_rules import compile_layout_context
 REQ_SCHEMA_VERSION = 'requirement-spec.v1'
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
 NETLIST_SCHEMA_VERSION = 'netlist.v1'
+SPICE_NETLIST_SCHEMA_VERSION = 'spice-netlist.v1'
 PLAN_SCHEMA_VERSION = 'execution-plan.v1'
 SCD_SCHEMA_VERSION = 'schematic-construction-description.v1'
 
@@ -480,6 +481,25 @@ class NetlistModel:
     source_model: NetlistSourceModel
     components: list[NetlistComponent]
     nets: list[NetlistNet]
+
+
+@dataclass
+class SpiceNetlistLine:
+    ref: str
+    kind: str
+    line: str
+    supported: bool
+    notes: list[str] = field(default_factory=list)
+
+
+@dataclass
+class SpiceNetlistModel:
+    schema_version: str
+    request_id: str
+    source_netlist: str
+    lines: list[SpiceNetlistLine]
+    node_map: dict[str, str]
+    warnings: list[str] = field(default_factory=list)
 
 
 @dataclass
@@ -975,6 +995,122 @@ def _normalize_net_kind(name: str) -> str:
     if net_name.startswith('+') or any(keyword in net_name for keyword in ('VCC', 'VDD', 'VIN', 'VOUT', 'VREF', 'VBAT', 'VDDA', 'VSUP', 'PWR', 'POWER')):
         return 'power'
     return 'signal'
+
+
+def _sanitize_spice_node_name(name: str) -> str:
+    raw = name.strip()
+    if not raw:
+        return 'N_UNNAMED'
+    if raw.upper() in {'GND', 'AGND', 'DGND', 'PGND', 'SGND'}:
+        return '0'
+    sanitized = re.sub(r'[^A-Za-z0-9_]', '_', raw.replace('+', 'P_'))
+    if not re.match(r'^[A-Za-z_]', sanitized):
+        sanitized = f'N_{sanitized}'
+    return sanitized
+
+
+def _netlist_component_kind(component: NetlistComponent) -> str:
+    role = component.role.strip().lower()
+    value = component.value.strip().lower()
+    display_name = component.part.display_name.strip().lower()
+    if any(token in role for token in ('capacitor', 'decoupling', 'bypass', 'filter_cap')) or value.endswith('f') or 'cap' in display_name:
+        return 'capacitor'
+    if any(token in role for token in ('inductor', 'choke', 'coil')) or value.endswith('h') or 'inductor' in display_name:
+        return 'inductor'
+    if any(token in role for token in ('resistor', 'divider', 'pullup', 'pulldown', 'feedback')) or value.endswith('ohm') or 'resistor' in display_name or 'res' in display_name:
+        return 'resistor'
+    if any(token in role for token in ('voltage_source', 'source', 'input_source', 'reference')):
+        return 'voltage_source'
+    return 'unsupported'
+
+
+def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel:
+    node_map: dict[str, str] = {}
+    lines: list[SpiceNetlistLine] = []
+    warnings: list[str] = []
+    source_label = f'{netlist.source_model.schema_version}:{netlist.source_model.request_id}'
+
+    for net in netlist.nets:
+        node_map[net.name] = _sanitize_spice_node_name(net.name)
+
+    for component in netlist.components:
+        nodes = [node_map.get(pin.net, _sanitize_spice_node_name(pin.net)) for pin in component.pins]
+        kind = _netlist_component_kind(component)
+        supported = True
+        spice_line = ''
+        notes: list[str] = []
+
+        if kind in {'resistor', 'capacitor', 'inductor'}:
+            if len(nodes) != 2:
+                supported = False
+                notes.append(f'Expected 2 pins but found {len(nodes)}.')
+            else:
+                element_prefix = {'resistor': 'R', 'capacitor': 'C', 'inductor': 'L'}[kind]
+                value = component.value.strip() or '1'
+                spice_line = f'{element_prefix}{component.ref} {nodes[0]} {nodes[1]} {value}'
+        elif kind == 'voltage_source':
+            if len(nodes) < 2:
+                supported = False
+                notes.append(f'Expected at least 2 pins but found {len(nodes)}.')
+            else:
+                value = component.value.strip() or 'DC 0'
+                spice_line = f'V{component.ref} {nodes[0]} {nodes[1]} {value}'
+        else:
+            supported = False
+            notes.append(f'Unsupported component role "{component.role}" for SPICE export.')
+            notes.append(f'Pins: {", ".join(nodes) or "none"}.')
+            if component.value.strip():
+                notes.append(f'Value: {component.value.strip()}.')
+
+        if not supported:
+            warnings.append(f'{component.ref} was not exported as an active SPICE element.')
+            if not spice_line:
+                spice_line = f'* {component.ref} unsupported: role={component.role} pins={", ".join(nodes) or "none"} value={component.value.strip() or "n/a"}'
+
+        lines.append(
+            SpiceNetlistLine(
+                ref=component.ref,
+                kind=kind,
+                line=spice_line,
+                supported=supported,
+                notes=notes,
+            )
+        )
+
+    return SpiceNetlistModel(
+        schema_version=SPICE_NETLIST_SCHEMA_VERSION,
+        request_id=netlist.request_id,
+        source_netlist=source_label,
+        lines=lines,
+        node_map=node_map,
+        warnings=warnings,
+    )
+
+
+def render_spice_netlist(spice_netlist: SpiceNetlistModel) -> str:
+    lines = [
+        f'* JLCEDA Suite generated SPICE netlist ({spice_netlist.request_id})',
+        f'* Source: {spice_netlist.source_netlist}',
+        '',
+    ]
+    for original_name, node_name in sorted(spice_netlist.node_map.items()):
+        if original_name != node_name:
+            lines.append(f'* node-map: {original_name} -> {node_name}')
+    if spice_netlist.node_map:
+        lines.append('')
+    for line in spice_netlist.lines:
+        if line.line:
+            lines.append(line.line)
+        else:
+            lines.append(f'* {line.ref} exported as comment only')
+        for note in line.notes:
+            lines.append(f'*   note: {note}')
+    if spice_netlist.warnings:
+        lines.append('')
+        for warning in spice_netlist.warnings:
+            lines.append(f'* warning: {warning}')
+    lines.extend(['', '.op', '.end'])
+    return '\n'.join(lines) + '\n'
 
 
 def build_netlist_from_circuit_model(model: CircuitModel) -> NetlistModel:
@@ -2345,6 +2481,8 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
         'schematic_construction_description_json': output_dir / 'schematic-construction-description.json',
         'circuit': output_dir / 'circuit-model.json',
         'netlist': output_dir / 'netlist.json',
+        'spice_netlist': output_dir / 'spice-netlist.cir',
+        'spice_netlist_json': output_dir / 'spice-netlist.json',
         'plan': output_dir / 'execution-plan.json',
         'summary': output_dir / 'pipeline-summary.json',
     }
@@ -2355,6 +2493,14 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
             continue
         with path.open('w', encoding='utf-8') as file:
             json.dump(value, file, ensure_ascii=False, indent=2)
+            file.write('\n')
+    spice_netlist = payload.get('spice_netlist')
+    if isinstance(spice_netlist, dict):
+        cir_path = paths['spice_netlist']
+        json_path = paths['spice_netlist_json']
+        cir_path.write_text(str(spice_netlist.get('text', '') or ''), encoding='utf-8')
+        with json_path.open('w', encoding='utf-8') as file:
+            json.dump(spice_netlist, file, ensure_ascii=False, indent=2)
             file.write('\n')
     scd = payload.get('schematic_construction_description')
     if isinstance(scd, dict):
@@ -2400,6 +2546,7 @@ def run() -> None:
 
     model = synthesize_circuit_model(spec, catalog)
     netlist = build_netlist_from_circuit_model(model)
+    spice_netlist = build_spice_netlist_from_netlist(netlist)
     scd_document = build_scd_document(spec, model)
     wiring_mode = normalize_text(env('BRIDGE_WIRING_MODE', 'full')) or 'full'
     safe_wiring_enabled = is_truthy_env('BRIDGE_ENABLE_SAFE_WIRING', 'true')
@@ -2446,6 +2593,7 @@ def run() -> None:
             'schematicConstructionSchema': SCD_SCHEMA_VERSION,
             'circuitSchema': MODEL_SCHEMA_VERSION,
             'netlistSchema': NETLIST_SCHEMA_VERSION,
+            'spiceNetlistSchema': SPICE_NETLIST_SCHEMA_VERSION,
             'planSchema': PLAN_SCHEMA_VERSION,
         },
         'log': [
@@ -2453,6 +2601,7 @@ def run() -> None:
             f'SCD normalized blocks: {len(scd_document.blocks)} / statements: {sum(len(block.statements) for block in scd_document.blocks)}',
             f'MODEL synthesized topology: {model.topology}',
             f'NETLIST components: {len(netlist.components)} / nets: {len(netlist.nets)}',
+            f'SPICE lines: {len(spice_netlist.lines)} / warnings: {len(spice_netlist.warnings)}',
             f'PLAN compiled operations: {len(plan.operations)}',
             f'LAYOUT engine requested: {requested_layout_engine}',
             f'WIRING mode: {wiring_mode}',
@@ -2474,6 +2623,24 @@ def run() -> None:
         'schematic_construction_description': asdict(scd_document),
         'circuit': asdict(model),
         'netlist': asdict(netlist),
+        'spice_netlist': {
+            'schema_version': spice_netlist.schema_version,
+            'request_id': spice_netlist.request_id,
+            'source_netlist': spice_netlist.source_netlist,
+            'warnings': spice_netlist.warnings,
+            'node_map': spice_netlist.node_map,
+            'lines': [
+                {
+                    'ref': line.ref,
+                    'kind': line.kind,
+                    'line': line.line,
+                    'supported': line.supported,
+                    'notes': line.notes,
+                }
+                for line in spice_netlist.lines
+            ],
+            'text': render_spice_netlist(spice_netlist),
+        },
         'plan': asdict(plan),
         'summary': summary,
     }
@@ -2488,6 +2655,24 @@ def run() -> None:
         'schematic_construction_description': asdict(scd_document),
         'circuit': asdict(model),
         'netlist': asdict(netlist),
+        'spice_netlist': {
+            'schema_version': spice_netlist.schema_version,
+            'request_id': spice_netlist.request_id,
+            'source_netlist': spice_netlist.source_netlist,
+            'warnings': spice_netlist.warnings,
+            'node_map': spice_netlist.node_map,
+            'lines': [
+                {
+                    'ref': line.ref,
+                    'kind': line.kind,
+                    'line': line.line,
+                    'supported': line.supported,
+                    'notes': line.notes,
+                }
+                for line in spice_netlist.lines
+            ],
+            'text': render_spice_netlist(spice_netlist),
+        },
         'plan': asdict(plan),
         'summary': summary,
     }

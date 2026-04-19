@@ -70,5 +70,7 @@ BRIDGE_EXECUTE_PLAN=true npm run server:text-to-schematic
 
 - `server/schemas/netlist.v1.json` is landed.
 - `scripts/server_text_to_schematic.py` now emits `netlist.json` in the pipeline output bundle.
-- The next step is the SPICE exporter.
+- `server/schemas/spice-netlist.v1.json` is landed.
+- `scripts/server_text_to_schematic.py` now emits `spice-netlist.cir` and `spice-netlist.json`.
+- The next step is ngspice execution and result parsing.
 

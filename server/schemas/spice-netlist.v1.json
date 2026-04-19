@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/spice-netlist.v1.json",
+  "title": "SpiceNetlist v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "source_netlist",
+    "warnings",
+    "node_map",
+    "lines",
+    "text"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "spice-netlist.v1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "source_netlist": {
+      "type": "string"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "node_map": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "lines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref",
+          "kind",
+          "line",
+          "supported",
+          "notes"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "line": {
+            "type": "string"
+          },
+          "supported": {
+            "type": "boolean"
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "text": {
+      "type": "string"
+    }
+  }
+}

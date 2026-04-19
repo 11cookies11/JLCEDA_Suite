@@ -68,6 +68,8 @@ RequirementSpec
 - `requirement-spec.json`
 - `circuit-model.json`
 - `netlist.json`
+- `spice-netlist.cir`
+- `spice-netlist.json`
 - `execution-plan.json`
 - `pipeline-summary.json`
 
@@ -109,7 +111,7 @@ RequirementSpec
 
 ### Phase 2: SPICE 导出器
 
-实现 `Netlist -> SPICE Netlist` 的导出器。
+`Netlist -> SPICE Netlist` 的导出器已落地为 `scripts/server_text_to_schematic.py` 中的 `build_spice_netlist_from_netlist()` 和 `render_spice_netlist()`。
 
 要求支持：
 
