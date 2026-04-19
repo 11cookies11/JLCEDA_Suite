@@ -7,8 +7,11 @@ import json
 import math
 import os
 import re
+import shutil
+import subprocess
 import sys
 import time
+import tempfile
 import urllib.error
 import urllib.request
 import uuid
@@ -25,6 +28,7 @@ REQ_SCHEMA_VERSION = 'requirement-spec.v1'
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
 NETLIST_SCHEMA_VERSION = 'netlist.v1'
 SPICE_NETLIST_SCHEMA_VERSION = 'spice-netlist.v1'
+NGSPICE_EXECUTION_SCHEMA_VERSION = 'ngspice-execution.v1'
 PLAN_SCHEMA_VERSION = 'execution-plan.v1'
 SCD_SCHEMA_VERSION = 'schematic-construction-description.v1'
 
@@ -500,6 +504,26 @@ class SpiceNetlistModel:
     lines: list[SpiceNetlistLine]
     node_map: dict[str, str]
     warnings: list[str] = field(default_factory=list)
+
+
+@dataclass
+class NgspiceExecutionModel:
+    schema_version: str
+    request_id: str
+    enabled: bool
+    attempted: bool
+    executable: str
+    command: list[str]
+    netlist_path: str
+    log_path: str
+    returncode: int | None = None
+    success: bool = False
+    stdout: str = ''
+    stderr: str = ''
+    log_text: str = ''
+    parsed: dict[str, Any] = field(default_factory=dict)
+    warnings: list[str] = field(default_factory=list)
+    error: str = ''
 
 
 @dataclass
@@ -1111,6 +1135,176 @@ def render_spice_netlist(spice_netlist: SpiceNetlistModel) -> str:
             lines.append(f'* warning: {warning}')
     lines.extend(['', '.op', '.end'])
     return '\n'.join(lines) + '\n'
+
+
+def parse_ngspice_log(log_text: str) -> dict[str, Any]:
+    analysis_kinds: list[str] = []
+    warning_lines: list[str] = []
+    error_lines: list[str] = []
+    measurement_lines: list[str] = []
+    scalar_values: dict[str, str] = {}
+
+    analysis_patterns = [
+        (re.compile(r'\boperating point\b', re.IGNORECASE), 'op'),
+        (re.compile(r'\btransient\b', re.IGNORECASE), 'tran'),
+        (re.compile(r'\bac analysis\b', re.IGNORECASE), 'ac'),
+        (re.compile(r'\bdc analysis\b', re.IGNORECASE), 'dc'),
+        (re.compile(r'\bnoise analysis\b', re.IGNORECASE), 'noise'),
+    ]
+    scalar_pattern = re.compile(r'^([A-Za-z0-9_.$()+/\-\[\]<>:]+)\s*=\s*(.+?)\s*$')
+
+    lines = [line.strip() for line in log_text.splitlines() if line.strip()]
+    for line in lines:
+        lower = line.lower()
+        for pattern, kind in analysis_patterns:
+            if pattern.search(line) and kind not in analysis_kinds:
+                analysis_kinds.append(kind)
+        if lower.startswith('warning'):
+            warning_lines.append(line)
+        if lower.startswith('error'):
+            error_lines.append(line)
+        if 'measure' in lower or lower.startswith('measurement'):
+            measurement_lines.append(line)
+        match = scalar_pattern.match(line)
+        if match:
+            key = match.group(1).strip()
+            value = match.group(2).strip()
+            if len(key) <= 64 and len(value) <= 256:
+                scalar_values[key] = value
+
+    return {
+        'analysisKinds': analysis_kinds,
+        'warnings': warning_lines,
+        'errors': error_lines,
+        'measurements': measurement_lines,
+        'scalarValues': scalar_values,
+        'lineCount': len(lines),
+    }
+
+
+def resolve_ngspice_executable() -> str | None:
+    explicit = env('BRIDGE_NGSPICE_BIN')
+    if explicit:
+        return explicit
+    located = shutil.which('ngspice')
+    if located:
+        return located
+    if os.name == 'nt':
+        located = shutil.which('ngspice.exe')
+        if located:
+            return located
+    return None
+
+
+def execute_ngspice_netlist(spice_netlist: SpiceNetlistModel) -> NgspiceExecutionModel:
+    enabled = is_truthy_env('BRIDGE_RUN_NGSPICE', 'false')
+    command: list[str] = []
+    executable = resolve_ngspice_executable() or ''
+    warnings: list[str] = []
+    if not enabled:
+        return NgspiceExecutionModel(
+            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+            request_id=spice_netlist.request_id,
+            enabled=False,
+            attempted=False,
+            executable=executable,
+            command=command,
+            netlist_path='',
+            log_path='',
+            parsed=parse_ngspice_log(''),
+            warnings=['ngspice execution disabled by BRIDGE_RUN_NGSPICE.'],
+        )
+
+    if not executable:
+        return NgspiceExecutionModel(
+            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+            request_id=spice_netlist.request_id,
+            enabled=True,
+            attempted=True,
+            executable='',
+            command=[],
+            netlist_path='',
+            log_path='',
+            parsed=parse_ngspice_log(''),
+            warnings=['ngspice executable was not found. Set BRIDGE_NGSPICE_BIN or install ngspice.'],
+            error='NGSPICE_NOT_FOUND',
+        )
+
+    temp_dir = Path(tempfile.mkdtemp(prefix='jlceda-ngspice-'))
+    netlist_path = temp_dir / 'netlist.cir'
+    log_path = temp_dir / 'ngspice.log'
+    netlist_text = render_spice_netlist(spice_netlist)
+    netlist_path.write_text(netlist_text, encoding='utf-8')
+    command = [executable, '-b', '-o', str(log_path), str(netlist_path)]
+    try:
+        process = subprocess.run(
+            command,
+            cwd=str(temp_dir),
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            timeout=to_int_env('BRIDGE_NGSPICE_TIMEOUT_SEC', 60),
+            check=False,
+        )
+        log_text = ''
+        if log_path.exists():
+            log_text = log_path.read_text(encoding='utf-8', errors='replace')
+        elif process.stdout:
+            log_text = process.stdout
+        parsed = parse_ngspice_log(log_text)
+        success = process.returncode == 0
+        if not success:
+            warnings.append('ngspice returned a non-zero exit status.')
+        warnings.extend(parsed['warnings'])
+        if not log_text and process.stderr:
+            log_text = process.stderr
+        return NgspiceExecutionModel(
+            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+            request_id=spice_netlist.request_id,
+            enabled=True,
+            attempted=True,
+            executable=executable,
+            command=command,
+            netlist_path=str(netlist_path),
+            log_path=str(log_path),
+            returncode=process.returncode,
+            success=success,
+            stdout=process.stdout or '',
+            stderr=process.stderr or '',
+            log_text=log_text,
+            parsed=parsed,
+            warnings=warnings,
+        )
+    except subprocess.TimeoutExpired as error:
+        return NgspiceExecutionModel(
+            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+            request_id=spice_netlist.request_id,
+            enabled=True,
+            attempted=True,
+            executable=executable,
+            command=command,
+            netlist_path=str(netlist_path),
+            log_path=str(log_path),
+            success=False,
+            parsed=parse_ngspice_log(''),
+            warnings=['ngspice execution timed out.'],
+            error=str(error),
+        )
+    except Exception as error:  # noqa: BLE001
+        return NgspiceExecutionModel(
+            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+            request_id=spice_netlist.request_id,
+            enabled=True,
+            attempted=True,
+            executable=executable,
+            command=command,
+            netlist_path=str(netlist_path),
+            log_path=str(log_path),
+            success=False,
+            parsed=parse_ngspice_log(''),
+            warnings=['ngspice execution failed.'],
+            error=str(error),
+        )
 
 
 def build_netlist_from_circuit_model(model: CircuitModel) -> NetlistModel:
@@ -2483,6 +2677,8 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
         'netlist': output_dir / 'netlist.json',
         'spice_netlist': output_dir / 'spice-netlist.cir',
         'spice_netlist_json': output_dir / 'spice-netlist.json',
+        'ngspice_execution_json': output_dir / 'ngspice-execution.json',
+        'ngspice_execution_log': output_dir / 'ngspice-execution.log',
         'plan': output_dir / 'execution-plan.json',
         'summary': output_dir / 'pipeline-summary.json',
     }
@@ -2502,6 +2698,14 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
         with json_path.open('w', encoding='utf-8') as file:
             json.dump(spice_netlist, file, ensure_ascii=False, indent=2)
             file.write('\n')
+    ngspice_execution = payload.get('ngspice_execution')
+    if isinstance(ngspice_execution, dict):
+        json_path = paths['ngspice_execution_json']
+        log_path = paths['ngspice_execution_log']
+        with json_path.open('w', encoding='utf-8') as file:
+            json.dump(ngspice_execution, file, ensure_ascii=False, indent=2)
+            file.write('\n')
+        log_path.write_text(str(ngspice_execution.get('log_text', '') or ''), encoding='utf-8')
     scd = payload.get('schematic_construction_description')
     if isinstance(scd, dict):
         md_path = paths['schematic_construction_description_md']
@@ -2547,6 +2751,7 @@ def run() -> None:
     model = synthesize_circuit_model(spec, catalog)
     netlist = build_netlist_from_circuit_model(model)
     spice_netlist = build_spice_netlist_from_netlist(netlist)
+    ngspice_execution = execute_ngspice_netlist(spice_netlist)
     scd_document = build_scd_document(spec, model)
     wiring_mode = normalize_text(env('BRIDGE_WIRING_MODE', 'full')) or 'full'
     safe_wiring_enabled = is_truthy_env('BRIDGE_ENABLE_SAFE_WIRING', 'true')
@@ -2594,6 +2799,7 @@ def run() -> None:
             'circuitSchema': MODEL_SCHEMA_VERSION,
             'netlistSchema': NETLIST_SCHEMA_VERSION,
             'spiceNetlistSchema': SPICE_NETLIST_SCHEMA_VERSION,
+            'ngspiceExecutionSchema': NGSPICE_EXECUTION_SCHEMA_VERSION,
             'planSchema': PLAN_SCHEMA_VERSION,
         },
         'log': [
@@ -2602,6 +2808,7 @@ def run() -> None:
             f'MODEL synthesized topology: {model.topology}',
             f'NETLIST components: {len(netlist.components)} / nets: {len(netlist.nets)}',
             f'SPICE lines: {len(spice_netlist.lines)} / warnings: {len(spice_netlist.warnings)}',
+            f'NGSPICE enabled: {ngspice_execution.enabled} attempted: {ngspice_execution.attempted} success: {ngspice_execution.success}',
             f'PLAN compiled operations: {len(plan.operations)}',
             f'LAYOUT engine requested: {requested_layout_engine}',
             f'WIRING mode: {wiring_mode}',
@@ -2641,6 +2848,7 @@ def run() -> None:
             ],
             'text': render_spice_netlist(spice_netlist),
         },
+        'ngspice_execution': asdict(ngspice_execution),
         'plan': asdict(plan),
         'summary': summary,
     }
@@ -2673,6 +2881,7 @@ def run() -> None:
             ],
             'text': render_spice_netlist(spice_netlist),
         },
+        'ngspice_execution': asdict(ngspice_execution),
         'plan': asdict(plan),
         'summary': summary,
     }

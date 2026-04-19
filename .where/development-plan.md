@@ -1,4 +1,4 @@
-# JLCEDA Suite 开发计划说明（文本 -> JLCEDA）
+﻿# JLCEDA Suite 开发计划说明（文本 -> JLCEDA）
 
 ## 已完成主线
 - `RequirementSpec -> CircuitModel -> ExecutionPlan` 三层模型已落地。
@@ -72,5 +72,8 @@ BRIDGE_EXECUTE_PLAN=true npm run server:text-to-schematic
 - `scripts/server_text_to_schematic.py` now emits `netlist.json` in the pipeline output bundle.
 - `server/schemas/spice-netlist.v1.json` is landed.
 - `scripts/server_text_to_schematic.py` now emits `spice-netlist.cir` and `spice-netlist.json`.
-- The next step is ngspice execution and result parsing.
+- ngspice execution and result parsing are landed in `scripts/server_text_to_schematic.py`.
+
+
+- The next step is to turn parsed execution output into model-risk回写 and small regression samples.
 

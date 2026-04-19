@@ -1,4 +1,4 @@
-# ngspice 仿真开发计划
+﻿# ngspice 仿真开发计划
 
 ## 1. 目标
 
@@ -70,6 +70,8 @@ RequirementSpec
 - `netlist.json`
 - `spice-netlist.cir`
 - `spice-netlist.json`
+- `ngspice-execution.json`
+- `ngspice-execution.log`
 - `execution-plan.json`
 - `pipeline-summary.json`
 
@@ -129,15 +131,15 @@ RequirementSpec
 - 未确认连接显式标记
 - 无法表达的内容拒绝静默降级
 
-### Phase 3: ngspice 执行器
+### Phase 3: ngspice 执行与解析
 
-实现一个可脚本化的执行层，负责：
+执行层已落地到 `scripts/server_text_to_schematic.py` 中的 `execute_ngspice_netlist()`，并支持：
 
 - 写临时仿真文件
 - 调用 `ngspice`
 - 设置超时
-- 收集 stdout / stderr
-- 提取工作点、波形和测量结果
+- 收集 stdout / stderr / log
+- 提取基础日志解析结果
 
 优先采用命令行模式，先稳定再考虑更深的库级集成。
 
@@ -197,3 +199,4 @@ RequirementSpec
 - `.where/development-plan.md`
 
 后续如果 `Netlist` schema、导出器或执行器有变化，应同时更新文档与 where 记录，避免计划与实现分叉。
+
