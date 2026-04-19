@@ -77,4 +77,5 @@ BRIDGE_EXECUTE_PLAN=true npm run server:text-to-schematic
 - `scripts/server_text_to_schematic.py` now emits `ngspice-execution.json`, `ngspice-execution.log`, and `ngspice-feedback.json`.
 - ngspice execution, parsing, and feedback backwrite are landed in `scripts/server_text_to_schematic.py`.
 - `tests/fixtures/ngspice/regression-samples.json` is landed.
+- `scripts/ngspice-regression-test.py` is landed and exposed as `npm run server:ngspice:regression-test`.
 

@@ -23,7 +23,7 @@
     "remote-client:smoke-test": "ts-node --files ./scripts/remote-client-smoke-test.ts",
     "bridge:e2e-smoke-test": "ts-node --files ./scripts/bridge-e2e-smoke-test.ts",
     "server:command-runner:smoke-test": "ts-node --files ./scripts/server-command-runner-smoke-test.ts",
-    "release:check": "npm run lint && npm run build && npm run smoke-test && npm run server:smoke-test && npm run server:command-runner:smoke-test && npm run server:context-summary:smoke-test && npm run server:part-selector:smoke-test && npm run server:schematic-refine:smoke-test && npm run server:pcb-assist:smoke-test && npm run workflow:skill:e2e:smoke-test && npm run remote-client:smoke-test && npm run bridge:e2e-smoke-test",
+    "release:check": "npm run lint && npm run build && npm run smoke-test && npm run server:smoke-test && npm run server:command-runner:smoke-test && npm run server:context-summary:smoke-test && npm run server:part-selector:smoke-test && npm run server:schematic-refine:smoke-test && npm run server:pcb-assist:smoke-test && npm run server:ngspice:regression-test && npm run workflow:skill:e2e:smoke-test && npm run remote-client:smoke-test && npm run bridge:e2e-smoke-test",
     "server:context-summary": "ts-node --files ./scripts/server-context-summary.ts",
     "server:context-summary:smoke-test": "ts-node --files ./scripts/server-context-summary-smoke-test.ts",
     "server:library-pin-inspector": "ts-node --files ./scripts/library-pin-inspector.ts",
@@ -36,6 +36,7 @@
     "server:compile-plan": "python3 ./scripts/compile_execution_plan.py",
     "server:pcb-assist": "ts-node --files ./scripts/server-pcb-assist.ts",
     "server:pcb-assist:smoke-test": "ts-node --files ./scripts/server-pcb-assist-smoke-test.ts",
+    "server:ngspice:regression-test": "python3 ./scripts/ngspice-regression-test.py",
     "workflow:skill:e2e:smoke-test": "ts-node --files ./scripts/workflow-skill-e2e-smoke-test.ts"
   },
   "devDependencies": {

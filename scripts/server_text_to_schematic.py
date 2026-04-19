@@ -1222,7 +1222,7 @@ def build_ngspice_feedback(
         summary = 'ngspice execution completed successfully.'
         if analysis_kinds:
             recommendations.append(f'Observed analyses: {", ".join(analysis_kinds)}.')
-        if measurement_lines:
+        if measurement_lines or scalar_values:
             recommendations.append('Capture measurement lines into a regression fixture for later comparison.')
     else:
         summary = 'ngspice execution failed and should be treated as a blocking validation issue.'
