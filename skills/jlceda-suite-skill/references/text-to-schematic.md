@@ -17,6 +17,8 @@ Requirement payload should include:
 - `goal`
 - `electrical_targets`
 
+If the user's requirement is still underspecified, the pipeline should stop at clarification and not synthesize SCD yet.
+
 When the user wants a readable circuit description, the preferred intermediate output is SCD, not free-form prose.
 
 ## Output Artifacts
@@ -46,7 +48,20 @@ Use these signals to let the AI agent:
 
 ## Practical Notes
 
+- Treat incomplete prompts as requirement clarification tasks first, not schematic generation tasks.
+- If the requirement is still evolving, ask whether the requirement is finalized before moving into SCD generation.
+- Preferred clarification phrasing: "需求现在已经定稿了吗？如果还没有，我先帮你把需求补完整，再进入原理图构建。"
 - Treat SCD as the canonical human-readable representation of the theory schematic.
 - Prefer candidates with verified `library_uuid`, `symbol_uuid`, and `pin_count > 0`.
 - Do not continue automatic wiring when pin geometry is missing.
+
+## Reference set
+
+Use these companion references while working in this mode:
+
+- [requirement-clarification.md](requirement-clarification.md)
+- [strap-and-bias-rules.md](strap-and-bias-rules.md)
+- [netlist-guidelines.md](netlist-guidelines.md)
+- [simulation-guidelines.md](simulation-guidelines.md)
+- [decision-log-template.md](decision-log-template.md)
 - Keep `design_decisions[]` updated when switching candidates or topology assumptions.

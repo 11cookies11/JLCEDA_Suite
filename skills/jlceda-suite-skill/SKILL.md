@@ -28,6 +28,25 @@ The highest-value use case is schematic-first co-design:
 5. Prefer dedicated bridge commands for common project, schematic, PCB, and system operations.
 6. Use `system.api_invoke` only when the official JLCEDA API exists but has not been wrapped yet.
 7. Keep the same connected session for the whole task chain so the design context stays coherent.
+8. If the user's requirement is incomplete, ambiguous, or too short to support a stable design decision, pause and perform requirement clarification before generating SCD, CircuitModel, or ExecutionPlan.
+
+## Reference map
+
+Use the smallest relevant set of references for the current mode:
+
+- `references/task-sequences.md` for shortest safe bridge call sequences
+- `references/schematic-co-design.md` for live schematic collaboration
+- `references/component-selection.md` for part choice and candidate comparison
+- `references/text-to-schematic.md` for requirement-to-schematic workflows
+- `references/schematic-construction-description.md` for strict SCD structure and parsing
+- `references/requirement-clarification.md` for incomplete or unstable requirements
+- `references/strap-and-bias-rules.md` for mode pins, straps, pull networks, and defaults
+- `references/netlist-guidelines.md` for connection truth and simulation-ready structure
+- `references/simulation-guidelines.md` for ngspice-oriented validation flow
+- `references/decision-log-template.md` for recording engineering decisions and assumptions
+- `references/schematic-refinement.md` for small schematic edit batches
+- `references/pcb-assist.md` for board review and layout follow-up
+- `references/api-surface.md` for official API discovery and fallback calls
 
 ## Core modes
 
@@ -98,17 +117,39 @@ Use this when the user gives text requirements and wants a structured model plus
 
 Goal:
 - convert requirement text into a typed requirement object
+- clarify incomplete requirements before synthesis when the input does not yet define enough electrical intent
 - normalize the theory circuit into a strict Schematic Construction Description (SCD) before model synthesis
 - synthesize a circuit model with decisions and risks
 - compile an execution plan for JLCEDA
 - optionally execute the plan and capture structured failure feedback
 
 Expected output:
+- requirement clarification summary when the input is underspecified
 - requirement model
 - SCD text with block structure, explicit nets, explicit pins, and review checks
 - circuit model
 - execution plan
 - execution summary and fallback events
+
+Requirement clarification gate:
+
+- If the user gives only a short seed request, first restate what is known and what is missing.
+- If the requirement intent is still moving, ask whether the requirement is already finalized before proceeding.
+- Ask for the minimum electrical intent needed to continue, such as input source, output voltage, current, interface, package, or constraints.
+- Do not generate SCD or CircuitModel until the key design intent is confirmed or a clearly stated assumption set is accepted.
+- When assumptions are used, label them explicitly in the clarification summary and keep them visible in later outputs.
+
+Standard clarification prompt:
+
+- "需求现在已经定稿了吗？如果还没有，我先帮你把需求补完整，再进入原理图构建。"
+
+Reference priorities for this mode:
+
+- `references/requirement-clarification.md`
+- `references/strap-and-bias-rules.md`
+- `references/decision-log-template.md`
+- `references/schematic-construction-description.md`
+- `references/text-to-schematic.md`
 
 ### 6. Export
 
@@ -297,6 +338,11 @@ Read [references/schematic-refinement.md](references/schematic-refinement.md) fo
 Read [references/pcb-assist.md](references/pcb-assist.md) for the PCB follow-up workflow and layout guidance shape.
 Read [references/schematic-construction-description.md](references/schematic-construction-description.md) for the strict SCD format and validation rules.
 Read [references/text-to-schematic.md](references/text-to-schematic.md) for the model-driven text-to-schematic pipeline.
+Read [references/requirement-clarification.md](references/requirement-clarification.md) for the requirement gate and missing-intent workflow.
+Read [references/strap-and-bias-rules.md](references/strap-and-bias-rules.md) for strap, bias, and default-connection rules.
+Read [references/netlist-guidelines.md](references/netlist-guidelines.md) for the connection-truth layer and simulation-ready structure.
+Read [references/simulation-guidelines.md](references/simulation-guidelines.md) for the ngspice-oriented validation flow.
+Read [references/decision-log-template.md](references/decision-log-template.md) for the engineering decision record format.
 
 ## Call strategy
 
