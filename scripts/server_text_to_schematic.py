@@ -29,6 +29,7 @@ MODEL_SCHEMA_VERSION = 'circuit-model.v1'
 NETLIST_SCHEMA_VERSION = 'netlist.v1'
 SPICE_NETLIST_SCHEMA_VERSION = 'spice-netlist.v1'
 NGSPICE_EXECUTION_SCHEMA_VERSION = 'ngspice-execution.v1'
+NGSPICE_FEEDBACK_SCHEMA_VERSION = 'ngspice-feedback.v1'
 PLAN_SCHEMA_VERSION = 'execution-plan.v1'
 SCD_SCHEMA_VERSION = 'schematic-construction-description.v1'
 
@@ -524,6 +525,18 @@ class NgspiceExecutionModel:
     parsed: dict[str, Any] = field(default_factory=dict)
     warnings: list[str] = field(default_factory=list)
     error: str = ''
+
+
+@dataclass
+class NgspiceFeedbackModel:
+    schema_version: str
+    request_id: str
+    ok: bool
+    summary: str
+    risk_updates: list[str] = field(default_factory=list)
+    requirement_unknowns: list[str] = field(default_factory=list)
+    recommendations: list[str] = field(default_factory=list)
+    evidence: dict[str, Any] = field(default_factory=dict)
 
 
 @dataclass
@@ -1180,6 +1193,85 @@ def parse_ngspice_log(log_text: str) -> dict[str, Any]:
         'scalarValues': scalar_values,
         'lineCount': len(lines),
     }
+
+
+def build_ngspice_feedback(
+    spec: RequirementSpec,
+    model: CircuitModel,
+    spice_netlist: SpiceNetlistModel,
+    execution: NgspiceExecutionModel,
+) -> NgspiceFeedbackModel:
+    parsed = execution.parsed if isinstance(execution.parsed, dict) else {}
+    analysis_kinds = [str(item) for item in parsed.get('analysisKinds', []) if isinstance(item, str)]
+    parsed_warnings = [str(item) for item in parsed.get('warnings', []) if isinstance(item, str)]
+    parsed_errors = [str(item) for item in parsed.get('errors', []) if isinstance(item, str)]
+    measurement_lines = [str(item) for item in parsed.get('measurements', []) if isinstance(item, str)]
+    scalar_values = parsed.get('scalarValues', {}) if isinstance(parsed.get('scalarValues', {}), dict) else {}
+
+    risk_updates: list[str] = []
+    recommendations: list[str] = []
+    requirement_unknowns: list[str] = []
+
+    if not execution.enabled:
+        summary = 'ngspice execution was disabled, so no simulation feedback was produced.'
+        recommendations.append('Set BRIDGE_RUN_NGSPICE=true to enable execution feedback.')
+    elif not execution.attempted:
+        summary = 'ngspice execution was enabled but not attempted.'
+        recommendations.append('Verify ngspice is installed or BRIDGE_NGSPICE_BIN is set.')
+    elif execution.success:
+        summary = 'ngspice execution completed successfully.'
+        if analysis_kinds:
+            recommendations.append(f'Observed analyses: {", ".join(analysis_kinds)}.')
+        if measurement_lines:
+            recommendations.append('Capture measurement lines into a regression fixture for later comparison.')
+    else:
+        summary = 'ngspice execution failed and should be treated as a blocking validation issue.'
+        risk_updates.append('ngspice execution failed and must be resolved before accepting the circuit.')
+        if execution.error:
+            risk_updates.append(f'ngspice execution error: {execution.error}')
+        if execution.returncode not in (None, 0):
+            risk_updates.append(f'ngspice returned exit code {execution.returncode}.')
+        if parsed_errors:
+            risk_updates.extend(parsed_errors)
+        if parsed_warnings:
+            recommendations.append('Review ngspice warnings before regenerating the circuit.')
+
+    if spice_netlist.warnings:
+        risk_updates.extend([f'spice export warning: {warning}' for warning in spice_netlist.warnings])
+        recommendations.append('Resolve unsupported SPICE exports or provide richer component models.')
+
+    for component in model.components:
+        if component.availability_status != 'available':
+            requirement_unknowns.append(f'{component.ref} availability remains {component.availability_status}.')
+
+    if not analysis_kinds:
+        recommendations.append('Add a simple .op or .tran regression case to confirm the exporter and executor are wired correctly.')
+
+    if scalar_values:
+        recommendations.append(f'Captured {len(scalar_values)} scalar value(s) from ngspice log.')
+
+    evidence = {
+        'analysisKinds': analysis_kinds,
+        'warnings': parsed_warnings,
+        'errors': parsed_errors,
+        'measurements': measurement_lines,
+        'scalarValues': scalar_values,
+        'requestGoal': spec.goal,
+    }
+
+    if not requirement_unknowns:
+        requirement_unknowns = list(spec.unknowns)
+
+    return NgspiceFeedbackModel(
+        schema_version=NGSPICE_FEEDBACK_SCHEMA_VERSION,
+        request_id=spec.request_id,
+        ok=execution.success,
+        summary=summary,
+        risk_updates=risk_updates,
+        requirement_unknowns=requirement_unknowns,
+        recommendations=recommendations,
+        evidence=evidence,
+    )
 
 
 def resolve_ngspice_executable() -> str | None:
@@ -2679,6 +2771,7 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
         'spice_netlist_json': output_dir / 'spice-netlist.json',
         'ngspice_execution_json': output_dir / 'ngspice-execution.json',
         'ngspice_execution_log': output_dir / 'ngspice-execution.log',
+        'ngspice_feedback_json': output_dir / 'ngspice-feedback.json',
         'plan': output_dir / 'execution-plan.json',
         'summary': output_dir / 'pipeline-summary.json',
     }
@@ -2706,6 +2799,12 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
             json.dump(ngspice_execution, file, ensure_ascii=False, indent=2)
             file.write('\n')
         log_path.write_text(str(ngspice_execution.get('log_text', '') or ''), encoding='utf-8')
+    ngspice_feedback = payload.get('ngspice_feedback')
+    if isinstance(ngspice_feedback, dict):
+        json_path = paths['ngspice_feedback_json']
+        with json_path.open('w', encoding='utf-8') as file:
+            json.dump(ngspice_feedback, file, ensure_ascii=False, indent=2)
+            file.write('\n')
     scd = payload.get('schematic_construction_description')
     if isinstance(scd, dict):
         md_path = paths['schematic_construction_description_md']
@@ -2752,6 +2851,9 @@ def run() -> None:
     netlist = build_netlist_from_circuit_model(model)
     spice_netlist = build_spice_netlist_from_netlist(netlist)
     ngspice_execution = execute_ngspice_netlist(spice_netlist)
+    ngspice_feedback = build_ngspice_feedback(spec, model, spice_netlist, ngspice_execution)
+    model.risks = list(dict.fromkeys(model.risks + ngspice_feedback.risk_updates))
+    spec.unknowns = list(dict.fromkeys(spec.unknowns + ngspice_feedback.requirement_unknowns))
     scd_document = build_scd_document(spec, model)
     wiring_mode = normalize_text(env('BRIDGE_WIRING_MODE', 'full')) or 'full'
     safe_wiring_enabled = is_truthy_env('BRIDGE_ENABLE_SAFE_WIRING', 'true')
@@ -2800,6 +2902,7 @@ def run() -> None:
             'netlistSchema': NETLIST_SCHEMA_VERSION,
             'spiceNetlistSchema': SPICE_NETLIST_SCHEMA_VERSION,
             'ngspiceExecutionSchema': NGSPICE_EXECUTION_SCHEMA_VERSION,
+            'ngspiceFeedbackSchema': NGSPICE_FEEDBACK_SCHEMA_VERSION,
             'planSchema': PLAN_SCHEMA_VERSION,
         },
         'log': [
@@ -2809,12 +2912,14 @@ def run() -> None:
             f'NETLIST components: {len(netlist.components)} / nets: {len(netlist.nets)}',
             f'SPICE lines: {len(spice_netlist.lines)} / warnings: {len(spice_netlist.warnings)}',
             f'NGSPICE enabled: {ngspice_execution.enabled} attempted: {ngspice_execution.attempted} success: {ngspice_execution.success}',
+            f'NGSPICE feedback risks: {len(ngspice_feedback.risk_updates)} / recommendations: {len(ngspice_feedback.recommendations)}',
             f'PLAN compiled operations: {len(plan.operations)}',
             f'LAYOUT engine requested: {requested_layout_engine}',
             f'WIRING mode: {wiring_mode}',
             f'EXEC mode: {"execute" if execute_enabled else "dry-run"}',
         ] + pipeline_logs,
         'openRisks': model.risks,
+        'simulationFeedback': asdict(ngspice_feedback),
         'safeWiring': {
             'enabled': safe_wiring_enabled,
             'generatedWireCount': len(safe_wire_operations),
@@ -2849,6 +2954,7 @@ def run() -> None:
             'text': render_spice_netlist(spice_netlist),
         },
         'ngspice_execution': asdict(ngspice_execution),
+        'ngspice_feedback': asdict(ngspice_feedback),
         'plan': asdict(plan),
         'summary': summary,
     }
@@ -2882,6 +2988,7 @@ def run() -> None:
             'text': render_spice_netlist(spice_netlist),
         },
         'ngspice_execution': asdict(ngspice_execution),
+        'ngspice_feedback': asdict(ngspice_feedback),
         'plan': asdict(plan),
         'summary': summary,
     }

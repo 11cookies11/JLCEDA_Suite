@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/ngspice-feedback.v1.json",
+  "title": "NgspiceFeedback v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "ok",
+    "summary",
+    "risk_updates",
+    "requirement_unknowns",
+    "recommendations",
+    "evidence"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "ngspice-feedback.v1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "ok": {
+      "type": "boolean"
+    },
+    "summary": {
+      "type": "string"
+    },
+    "risk_updates": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "requirement_unknowns": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

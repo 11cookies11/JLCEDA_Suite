@@ -72,8 +72,9 @@ BRIDGE_EXECUTE_PLAN=true npm run server:text-to-schematic
 - `scripts/server_text_to_schematic.py` now emits `netlist.json` in the pipeline output bundle.
 - `server/schemas/spice-netlist.v1.json` is landed.
 - `scripts/server_text_to_schematic.py` now emits `spice-netlist.cir` and `spice-netlist.json`.
-- ngspice execution and result parsing are landed in `scripts/server_text_to_schematic.py`.
-
-
-- The next step is to turn parsed execution output into model-risk回写 and small regression samples.
+- `server/schemas/ngspice-execution.v1.json` is landed.
+- `server/schemas/ngspice-feedback.v1.json` is landed.
+- `scripts/server_text_to_schematic.py` now emits `ngspice-execution.json`, `ngspice-execution.log`, and `ngspice-feedback.json`.
+- ngspice execution, parsing, and feedback backwrite are landed in `scripts/server_text_to_schematic.py`.
+- `tests/fixtures/ngspice/regression-samples.json` is landed.
 

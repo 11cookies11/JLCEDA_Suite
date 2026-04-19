@@ -72,6 +72,7 @@ RequirementSpec
 - `spice-netlist.json`
 - `ngspice-execution.json`
 - `ngspice-execution.log`
+- `ngspice-feedback.json`
 - `execution-plan.json`
 - `pipeline-summary.json`
 
@@ -145,7 +146,7 @@ RequirementSpec
 
 ### Phase 4: 结果回写
 
-把仿真结果结构化回写到模型层。
+回写层已落地到 `scripts/server_text_to_schematic.py` 中的 `build_ngspice_feedback()`，并将结果写回：
 
 建议回写内容：
 
@@ -157,7 +158,9 @@ RequirementSpec
 
 ### Phase 5: 回归测试
 
-建立最小回归集，覆盖：
+最小回归 fixture 已落地到 `tests/fixtures/ngspice/regression-samples.json`。
+
+后续建立最小回归集，覆盖：
 
 - 简单分压
 - RC 低通

@@ -1,0 +1,56 @@
+{
+  "schema_version": "ngspice-regression-samples.v1",
+  "samples": [
+    {
+      "name": "rc-lowpass-op",
+      "description": "Simple RC low-pass expected to produce a stable operating point.",
+      "netlist": {
+        "components": [
+          {
+            "ref": "R1",
+            "role": "series_resistor",
+            "value": "1k",
+            "pins": [
+              {
+                "pin": "1",
+                "net": "VIN"
+              },
+              {
+                "pin": "2",
+                "net": "VOUT"
+              }
+            ]
+          },
+          {
+            "ref": "C1",
+            "role": "shunt_capacitor",
+            "value": "1uF",
+            "pins": [
+              {
+                "pin": "1",
+                "net": "VOUT"
+              },
+              {
+                "pin": "2",
+                "net": "GND"
+              }
+            ]
+          }
+        ],
+        "nets": [
+          { "name": "VIN", "kind": "signal", "members": ["R1.1"] },
+          { "name": "VOUT", "kind": "signal", "members": ["R1.2", "C1.1"] },
+          { "name": "GND", "kind": "ground", "members": ["C1.2"] }
+        ]
+      },
+      "expected": {
+        "analysisKinds": ["op"],
+        "ok": true,
+        "risk_contains": [],
+        "recommendation_contains": [
+          "Capture measurement lines into a regression fixture for later comparison."
+        ]
+      }
+    }
+  ]
+}
