@@ -158,7 +158,7 @@ RequirementSpec
 
 ### Phase 5: 回归测试
 
-最小回归 fixture 已落地到 `tests/fixtures/ngspice/regression-samples.json`，回归脚本已落地到 `scripts/ngspice-regression-test.py`，并挂到 `npm run server:ngspice:regression-test`。
+最小回归 fixture 已落地到 `tests/fixtures/ngspice/regression-samples.json`，回归脚本已落地到 `scripts/ngspice-regression-test.py`，并挂到 `npm run server:ngspice:regression-test`。当前样例同时覆盖成功与失败两类路径。
 
 后续建立最小回归集，覆盖：
 

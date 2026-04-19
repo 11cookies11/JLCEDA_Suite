@@ -78,4 +78,5 @@ BRIDGE_EXECUTE_PLAN=true npm run server:text-to-schematic
 - ngspice execution, parsing, and feedback backwrite are landed in `scripts/server_text_to_schematic.py`.
 - `tests/fixtures/ngspice/regression-samples.json` is landed.
 - `scripts/ngspice-regression-test.py` is landed and exposed as `npm run server:ngspice:regression-test`.
+- The regression runner covers both success and failure paths.
 

@@ -147,7 +147,9 @@ def run_sample(sample: dict[str, Any]) -> dict[str, Any]:
     model = build_circuit_model(netlist)
     requirement = build_requirement(netlist.request_id)
     spice = build_spice_netlist_from_netlist(netlist)
-    parsed = parse_ngspice_log('Operating point\nv(out) = 1.23\n')
+    log_text = str(sample.get('ngspice_log', 'Operating point\nv(out) = 1.23\n'))
+    parsed = parse_ngspice_log(log_text)
+    execution_ok = bool(sample.get('execution_ok', True))
     execution = NgspiceExecutionModel(
         schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
         request_id=netlist.request_id,
@@ -157,14 +159,14 @@ def run_sample(sample: dict[str, Any]) -> dict[str, Any]:
         command=['ngspice'],
         netlist_path='fixture.cir',
         log_path='fixture.log',
-        returncode=0,
-        success=True,
+        returncode=0 if execution_ok else 1,
+        success=execution_ok,
         stdout='',
         stderr='',
-        log_text='Operating point\nv(out) = 1.23\n',
+        log_text=log_text,
         parsed=parsed,
         warnings=[],
-        error='',
+        error='' if execution_ok else 'fixture failure',
     )
     feedback = build_ngspice_feedback(requirement, model, spice, execution)
     if parsed.get('analysisKinds') != expected.get('analysisKinds', []):

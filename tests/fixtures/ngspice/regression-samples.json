@@ -4,6 +4,8 @@
     {
       "name": "rc-lowpass-op",
       "description": "Simple RC low-pass expected to produce a stable operating point.",
+      "execution_ok": true,
+      "ngspice_log": "Operating point\nv(out) = 1.23\n",
       "netlist": {
         "components": [
           {
@@ -48,7 +50,46 @@
         "ok": true,
         "risk_contains": [],
         "recommendation_contains": [
+          "Observed analyses: op.",
           "Capture measurement lines into a regression fixture for later comparison."
+        ]
+      }
+    },
+    {
+      "name": "broken-netlist-fail",
+      "description": "Deliberately broken sample to verify failure feedback and risk backwrite.",
+      "execution_ok": false,
+      "ngspice_log": "Error: broken fixture netlist\n",
+      "netlist": {
+        "components": [
+          {
+            "ref": "R9",
+            "role": "unknown_block",
+            "value": "1k",
+            "pins": [
+              {
+                "pin": "1",
+                "net": "VIN"
+              }
+            ]
+          }
+        ],
+        "nets": [
+          { "name": "VIN", "kind": "signal", "members": ["R9.1"] }
+        ]
+      },
+      "expected": {
+        "analysisKinds": [],
+        "ok": false,
+        "risk_contains": [
+          "ngspice execution failed and must be resolved before accepting the circuit.",
+          "ngspice execution error: fixture failure",
+          "ngspice returned exit code 1."
+        ],
+        "recommendation_contains": [
+          "Resolve unsupported SPICE exports or provide richer component models.",
+          "Review ngspice errors before regenerating the circuit.",
+          "Add a simple .op or .tran regression case to confirm the exporter and executor are wired correctly."
         ]
       }
     }

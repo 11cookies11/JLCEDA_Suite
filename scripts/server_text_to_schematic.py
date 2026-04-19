@@ -1233,6 +1233,7 @@ def build_ngspice_feedback(
             risk_updates.append(f'ngspice returned exit code {execution.returncode}.')
         if parsed_errors:
             risk_updates.extend(parsed_errors)
+            recommendations.append('Review ngspice errors before regenerating the circuit.')
         if parsed_warnings:
             recommendations.append('Review ngspice warnings before regenerating the circuit.')
 
