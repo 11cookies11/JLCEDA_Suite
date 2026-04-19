@@ -13,6 +13,7 @@ import urllib.error
 import urllib.request
 import uuid
 import zipfile
+from collections import defaultdict
 from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -22,6 +23,7 @@ from schematic_layout_rules import compile_layout_context
 
 REQ_SCHEMA_VERSION = 'requirement-spec.v1'
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
+NETLIST_SCHEMA_VERSION = 'netlist.v1'
 PLAN_SCHEMA_VERSION = 'execution-plan.v1'
 SCD_SCHEMA_VERSION = 'schematic-construction-description.v1'
 
@@ -428,6 +430,56 @@ class CircuitModel:
     calculations: list[CircuitCalculation]
     design_decisions: list[DesignDecision]
     risks: list[str]
+
+
+@dataclass
+class NetlistPart:
+    part_id: str
+    display_name: str
+    library_uuid: str = ''
+    symbol_uuid: str = ''
+    pin_count: int = 0
+    named_pin_count: int = 0
+
+
+@dataclass
+class NetlistPin:
+    pin: str
+    net: str
+    pin_name: str = ''
+
+
+@dataclass
+class NetlistComponent:
+    ref: str
+    role: str
+    value: str
+    part: NetlistPart
+    pins: list[NetlistPin]
+    availability_status: str = 'unknown'
+
+
+@dataclass
+class NetlistNet:
+    name: str
+    kind: str
+    members: list[str]
+
+
+@dataclass
+class NetlistSourceModel:
+    schema_version: str
+    request_id: str
+
+
+@dataclass
+class NetlistModel:
+    schema_version: str
+    request_id: str
+    project_id: str
+    source_model: NetlistSourceModel
+    components: list[NetlistComponent]
+    nets: list[NetlistNet]
 
 
 @dataclass
@@ -914,6 +966,75 @@ def ensure_circuit_model(model: CircuitModel) -> None:
         raise ValueError('Circuit model must include at least one component.')
     if not model.nets:
         raise ValueError('Circuit model must include nets.')
+
+
+def _normalize_net_kind(name: str) -> str:
+    net_name = name.strip().upper()
+    if net_name in {'GND', 'AGND', 'DGND', 'PGND', 'SGND'}:
+        return 'ground'
+    if net_name.startswith('+') or any(keyword in net_name for keyword in ('VCC', 'VDD', 'VIN', 'VOUT', 'VREF', 'VBAT', 'VDDA', 'VSUP', 'PWR', 'POWER')):
+        return 'power'
+    return 'signal'
+
+
+def build_netlist_from_circuit_model(model: CircuitModel) -> NetlistModel:
+    ensure_circuit_model(model)
+    pin_map: dict[str, list[tuple[str, str]]] = defaultdict(list)
+    netlist_nets: list[NetlistNet] = []
+
+    for net in model.nets:
+        members = [str(member).strip() for member in net.members if str(member).strip()]
+        for member in members:
+            if '.' not in member:
+                continue
+            ref, pin = member.split('.', 1)
+            if ref and pin:
+                pin_map[ref].append((pin, net.name))
+        netlist_nets.append(
+            NetlistNet(
+                name=net.name,
+                kind=_normalize_net_kind(net.name),
+                members=members,
+            )
+        )
+
+    netlist_components: list[NetlistComponent] = []
+    for component in model.components:
+        selected_part = component.selected_part
+        part = NetlistPart(
+            part_id=selected_part.part_id,
+            display_name=selected_part.display_name,
+            library_uuid=selected_part.library_uuid,
+            symbol_uuid=selected_part.symbol_uuid,
+            pin_count=selected_part.pin_count,
+            named_pin_count=selected_part.named_pin_count,
+        )
+        pins = [
+            NetlistPin(pin=pin, net=net_name)
+            for pin, net_name in sorted(pin_map.get(component.ref, []), key=lambda item: item[0])
+        ]
+        netlist_components.append(
+            NetlistComponent(
+                ref=component.ref,
+                role=component.role,
+                value=component.value,
+                part=part,
+                pins=pins,
+                availability_status=component.availability_status,
+            )
+        )
+
+    return NetlistModel(
+        schema_version=NETLIST_SCHEMA_VERSION,
+        request_id=model.request_id,
+        project_id=model.project_id,
+        source_model=NetlistSourceModel(
+            schema_version=model.schema_version,
+            request_id=model.request_id,
+        ),
+        components=netlist_components,
+        nets=netlist_nets,
+    )
 
 
 def build_scd_document(spec: RequirementSpec, model: CircuitModel) -> SCDDocument:
@@ -2223,13 +2344,17 @@ def write_output_files(payload: dict[str, Any], output_dir: Path) -> dict[str, s
         'schematic_construction_description_md': output_dir / 'schematic-construction-description.md',
         'schematic_construction_description_json': output_dir / 'schematic-construction-description.json',
         'circuit': output_dir / 'circuit-model.json',
+        'netlist': output_dir / 'netlist.json',
         'plan': output_dir / 'execution-plan.json',
         'summary': output_dir / 'pipeline-summary.json',
     }
-    for key in ('requirement', 'circuit', 'plan', 'summary'):
+    for key in ('requirement', 'circuit', 'netlist', 'plan', 'summary'):
         path = paths[key]
+        value = payload.get(key)
+        if value is None:
+            continue
         with path.open('w', encoding='utf-8') as file:
-            json.dump(payload[key], file, ensure_ascii=False, indent=2)
+            json.dump(value, file, ensure_ascii=False, indent=2)
             file.write('\n')
     scd = payload.get('schematic_construction_description')
     if isinstance(scd, dict):
@@ -2274,6 +2399,7 @@ def run() -> None:
         auto_diagnostics = {'enabled': False}
 
     model = synthesize_circuit_model(spec, catalog)
+    netlist = build_netlist_from_circuit_model(model)
     scd_document = build_scd_document(spec, model)
     wiring_mode = normalize_text(env('BRIDGE_WIRING_MODE', 'full')) or 'full'
     safe_wiring_enabled = is_truthy_env('BRIDGE_ENABLE_SAFE_WIRING', 'true')
@@ -2319,12 +2445,14 @@ def run() -> None:
             'requirementSchema': REQ_SCHEMA_VERSION,
             'schematicConstructionSchema': SCD_SCHEMA_VERSION,
             'circuitSchema': MODEL_SCHEMA_VERSION,
+            'netlistSchema': NETLIST_SCHEMA_VERSION,
             'planSchema': PLAN_SCHEMA_VERSION,
         },
         'log': [
             f'REQ parsed goal: {spec.goal}',
             f'SCD normalized blocks: {len(scd_document.blocks)} / statements: {sum(len(block.statements) for block in scd_document.blocks)}',
             f'MODEL synthesized topology: {model.topology}',
+            f'NETLIST components: {len(netlist.components)} / nets: {len(netlist.nets)}',
             f'PLAN compiled operations: {len(plan.operations)}',
             f'LAYOUT engine requested: {requested_layout_engine}',
             f'WIRING mode: {wiring_mode}',
@@ -2345,6 +2473,7 @@ def run() -> None:
         'requirement': asdict(spec),
         'schematic_construction_description': asdict(scd_document),
         'circuit': asdict(model),
+        'netlist': asdict(netlist),
         'plan': asdict(plan),
         'summary': summary,
     }
@@ -2358,6 +2487,7 @@ def run() -> None:
         'requirement': asdict(spec),
         'schematic_construction_description': asdict(scd_document),
         'circuit': asdict(model),
+        'netlist': asdict(netlist),
         'plan': asdict(plan),
         'summary': summary,
     }

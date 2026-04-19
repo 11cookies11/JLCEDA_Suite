@@ -63,6 +63,14 @@ RequirementSpec
 - `SPICE Netlist` 是仿真器可直接消费的文本输入
 - `Validation Report` 保存仿真结果、失败原因和建议动作
 
+输出文件现在至少包括：
+
+- `requirement-spec.json`
+- `circuit-model.json`
+- `netlist.json`
+- `execution-plan.json`
+- `pipeline-summary.json`
+
 ## 5. 开发阶段
 
 ### Phase 0: 范围定义

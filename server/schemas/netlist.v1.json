@@ -1,0 +1,158 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/netlist.v1.json",
+  "title": "Netlist v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "project_id",
+    "source_model",
+    "components",
+    "nets"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "netlist.v1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "source_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "request_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "request_id": {
+          "type": "string"
+        }
+      }
+    },
+    "components": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref",
+          "role",
+          "value",
+          "part",
+          "pins"
+        ],
+        "properties": {
+          "ref": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          },
+          "part": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "part_id",
+              "display_name"
+            ],
+            "properties": {
+              "part_id": {
+                "type": "string"
+              },
+              "display_name": {
+                "type": "string"
+              },
+              "library_uuid": {
+                "type": "string"
+              },
+              "symbol_uuid": {
+                "type": "string"
+              },
+              "pin_count": {
+                "type": "integer"
+              },
+              "named_pin_count": {
+                "type": "integer"
+              }
+            }
+          },
+          "pins": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "pin",
+                "net"
+              ],
+              "properties": {
+                "pin": {
+                  "type": "string"
+                },
+                "net": {
+                  "type": "string"
+                },
+                "pin_name": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "availability_status": {
+            "type": "string",
+            "enum": [
+              "unknown",
+              "available",
+              "unavailable"
+            ]
+          }
+        }
+      }
+    },
+    "nets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "kind",
+          "members"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "signal",
+              "power",
+              "ground",
+              "unknown"
+            ]
+          },
+          "members": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    }
+  }
+}

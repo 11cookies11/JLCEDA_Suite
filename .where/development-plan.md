@@ -66,3 +66,9 @@ BRIDGE_EXECUTE_PLAN=true npm run server:text-to-schematic
 - Add examples and anti-examples for each new reference.
 - Keep the skill workflow and where status in sync.
 
+## ngspice netlist handoff
+
+- `server/schemas/netlist.v1.json` is landed.
+- `scripts/server_text_to_schematic.py` now emits `netlist.json` in the pipeline output bundle.
+- The next step is the SPICE exporter.
+
