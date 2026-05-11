@@ -100,6 +100,73 @@ async function run(): Promise<void> {
   client.disconnect();
   assert(closedSocketId === 'jlceda-suite-remote-bridge', 'disconnect should close the bridge socket');
   console.log('PASS remote client disconnect');
+
+  const reconnectConfigs = new Map<string, unknown>();
+  let reconnectMessageHandler: ((event: MessageEvent<string>) => void | Promise<void>) | undefined;
+  let reconnectConnectedHandler: (() => void | Promise<void>) | undefined;
+  let reconnectCloseReason: string | undefined;
+  let heartbeatFailureArmed = false;
+
+  const reconnectClient = new RemoteBridgeClient({
+    registerSocket: (_id, _serviceUri, receiveMessageCallFn, onConnected) => {
+      reconnectMessageHandler = receiveMessageCallFn;
+      reconnectConnectedHandler = onConnected;
+    },
+    sendSocketData: (_id, data) => {
+      const message = JSON.parse(data) as { type?: string };
+      if (heartbeatFailureArmed && message.type === 'agent.heartbeat') {
+        throw new Error('simulated heartbeat send failure');
+      }
+    },
+    closeSocket: (_id, _code, reason) => {
+      reconnectCloseReason = reason;
+    },
+    getConfig: key => reconnectConfigs.get(key),
+    setConfig: async (key, value) => {
+      reconnectConfigs.set(key, value);
+      return true;
+    },
+    executeRequest: async (request: BridgeRequest): Promise<BridgeResponse> => ({
+      id: request.id,
+      type: 'command.response',
+      protocolVersion: request.protocolVersion,
+      status: 'success',
+      result: {
+        summary: 'remote execution complete',
+      },
+    }),
+  });
+
+  await reconnectClient.saveSettings({
+    serverUrl: 'ws://127.0.0.1:8787',
+    clientId: 'remote-client-reconnect-001',
+    autoConnect: true,
+  });
+  await reconnectClient.connect();
+  await reconnectConnectedHandler?.();
+
+  heartbeatFailureArmed = true;
+  await reconnectMessageHandler?.({
+    data: JSON.stringify({
+      type: 'server.registered',
+      clientId: 'remote-client-reconnect-001',
+      session: {
+        clientId: 'remote-client-reconnect-001',
+        pluginVersion: '0.1.0',
+        protocolVersion: '0.1.0',
+        supportedCommands: [],
+        connectedAt: new Date().toISOString(),
+        lastSeenAt: new Date().toISOString(),
+      },
+    } satisfies ServerToClientMessage),
+  } as MessageEvent<string>);
+
+  const reconnectStatus = reconnectClient.getStatus();
+  assert(reconnectStatus.connected === false, 'heartbeat send failure should mark the client disconnected');
+  assert(reconnectStatus.reconnectScheduled === true, 'heartbeat send failure should schedule reconnect');
+  assert(reconnectCloseReason === 'remote bridge transport failure', 'heartbeat send failure should close the stale socket');
+  reconnectClient.disconnect();
+  console.log('PASS remote client heartbeat failure reconnect');
 }
 
 run().catch((error) => {

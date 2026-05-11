@@ -18,6 +18,7 @@ import {
 const REMOTE_BRIDGE_SOCKET_ID = 'jlceda-suite-remote-bridge';
 const DEFAULT_CONNECT_TIMEOUT_MS = 15_000;
 const DEFAULT_HEARTBEAT_INTERVAL_MS = 20_000;
+const DEFAULT_HEARTBEAT_ACK_TIMEOUT_MS = 65_000;
 const RECONNECT_DELAY_MS = 3_000;
 const RECONNECT_JITTER_MS = 1_000;
 
@@ -93,6 +94,7 @@ export class RemoteBridgeClient {
   private connectTimer: ReturnType<typeof setTimeout> | undefined;
   private heartbeatTimer: ReturnType<typeof setInterval> | undefined;
   private reconnectTimer: ReturnType<typeof setTimeout> | undefined;
+  private lastHeartbeatAckMs: number | undefined;
   private status: RemoteBridgeStatus = {
     configured: false,
     connected: false,
@@ -212,14 +214,7 @@ export class RemoteBridgeClient {
         return;
       }
 
-      this.stopHeartbeat();
-      this.status = {
-        ...this.status,
-        connecting: false,
-        connected: false,
-        lastError: 'Timed out waiting for remote bridge registration.',
-      };
-      this.scheduleReconnect();
+      this.handleTransportFailure('Timed out waiting for remote bridge registration.');
     }, DEFAULT_CONNECT_TIMEOUT_MS);
 
     try {
@@ -233,26 +228,17 @@ export class RemoteBridgeClient {
           }
           catch (error) {
             this.clearConnectTimeout();
-            this.stopHeartbeat();
-            this.status = {
-              ...this.status,
-              connecting: false,
-              connected: false,
-              lastError: error instanceof Error ? error.message : 'Failed to finish remote bridge registration.',
-            };
-            this.scheduleReconnect();
+            this.handleTransportFailure(
+              error instanceof Error ? error.message : 'Failed to finish remote bridge registration.',
+            );
           }
         },
       );
     }
     catch (error) {
-      this.status = {
-        ...this.status,
-        connecting: false,
-        connected: false,
-        lastError: error instanceof Error ? error.message : 'Failed to register remote bridge socket.',
-      };
-      this.scheduleReconnect();
+      this.handleTransportFailure(
+        error instanceof Error ? error.message : 'Failed to register remote bridge socket.',
+      );
       throw error;
     }
   }
@@ -261,7 +247,8 @@ export class RemoteBridgeClient {
     this.clearReconnectSchedule();
     this.clearConnectTimeout();
     this.stopHeartbeat();
-    this.dependencies.closeSocket(REMOTE_BRIDGE_SOCKET_ID, 1000, 'manual disconnect');
+    this.lastHeartbeatAckMs = undefined;
+    this.closeTransport(1000, 'manual disconnect');
     this.status = {
       ...this.status,
       connecting: false,
@@ -299,16 +286,13 @@ export class RemoteBridgeClient {
 
   private startHeartbeat(): void {
     this.stopHeartbeat();
+    this.lastHeartbeatAckMs = Date.now();
 
     this.heartbeatTimer = setInterval(() => {
-      const clientId = this.getSettings().clientId;
-
-      this.dependencies.sendSocketData(REMOTE_BRIDGE_SOCKET_ID, JSON.stringify({
-        type: 'agent.heartbeat',
-        clientId,
-        timestamp: new Date().toISOString(),
-      }));
+      this.sendHeartbeat();
     }, DEFAULT_HEARTBEAT_INTERVAL_MS);
+
+    this.sendHeartbeat();
   }
 
   private stopHeartbeat(): void {
@@ -318,6 +302,28 @@ export class RemoteBridgeClient {
 
     clearInterval(this.heartbeatTimer);
     this.heartbeatTimer = undefined;
+  }
+
+  private sendHeartbeat(): void {
+    if (this.lastHeartbeatAckMs && Date.now() - this.lastHeartbeatAckMs > DEFAULT_HEARTBEAT_ACK_TIMEOUT_MS) {
+      this.handleTransportFailure('Timed out waiting for remote bridge heartbeat acknowledgment.');
+      return;
+    }
+
+    try {
+      const clientId = this.getSettings().clientId;
+
+      this.dependencies.sendSocketData(REMOTE_BRIDGE_SOCKET_ID, JSON.stringify({
+        type: 'agent.heartbeat',
+        clientId,
+        timestamp: new Date().toISOString(),
+      }));
+    }
+    catch (error) {
+      this.handleTransportFailure(
+        error instanceof Error ? error.message : 'Failed to send remote bridge heartbeat.',
+      );
+    }
   }
 
   private scheduleReconnect(): void {
@@ -363,6 +369,29 @@ export class RemoteBridgeClient {
     this.connectTimer = undefined;
   }
 
+  private closeTransport(code?: number, reason?: string): void {
+    try {
+      this.dependencies.closeSocket(REMOTE_BRIDGE_SOCKET_ID, code, reason);
+    }
+    catch {
+      // Closing a missing or already-closed JLCEDA socket is harmless.
+    }
+  }
+
+  private handleTransportFailure(message: string): void {
+    this.clearConnectTimeout();
+    this.stopHeartbeat();
+    this.lastHeartbeatAckMs = undefined;
+    this.closeTransport(4000, 'remote bridge transport failure');
+    this.status = {
+      ...this.status,
+      connecting: false,
+      connected: false,
+      lastError: message,
+    };
+    this.scheduleReconnect();
+  }
+
   private async handleServerMessage(rawMessage: string): Promise<void> {
     let message: ServerToClientMessage;
 
@@ -380,7 +409,7 @@ export class RemoteBridgeClient {
     switch (message.type) {
       case 'server.registered':
         this.clearConnectTimeout();
-        this.startHeartbeat();
+        this.lastHeartbeatAckMs = Date.now();
         this.status = {
           ...this.status,
           connected: true,
@@ -392,8 +421,10 @@ export class RemoteBridgeClient {
           lastHeartbeatAt: message.session.lastSeenAt,
           lastError: undefined,
         };
+        this.startHeartbeat();
         break;
       case 'server.heartbeat_ack':
+        this.lastHeartbeatAckMs = Date.now();
         this.status = {
           ...this.status,
           lastHeartbeatAt: message.timestamp,
@@ -404,6 +435,9 @@ export class RemoteBridgeClient {
         await this.handleBridgeRequest(message.request);
         break;
       case 'server.error':
+        this.stopHeartbeat();
+        this.lastHeartbeatAckMs = undefined;
+        this.closeTransport(4001, message.code);
         this.status = {
           ...this.status,
           connected: false,
@@ -421,11 +455,18 @@ export class RemoteBridgeClient {
     const clientId = this.getSettings().clientId;
     const response = await this.dependencies.executeRequest(request);
 
-    this.dependencies.sendSocketData(REMOTE_BRIDGE_SOCKET_ID, JSON.stringify({
-      type: 'bridge.response',
-      clientId,
-      response,
-    }));
+    try {
+      this.dependencies.sendSocketData(REMOTE_BRIDGE_SOCKET_ID, JSON.stringify({
+        type: 'bridge.response',
+        clientId,
+        response,
+      }));
+    }
+    catch (error) {
+      this.handleTransportFailure(
+        error instanceof Error ? error.message : 'Failed to send remote bridge response.',
+      );
+    }
   }
 }
 

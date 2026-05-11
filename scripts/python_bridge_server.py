@@ -504,6 +504,7 @@ class BridgeServer:
         bridge_port: int,
         auth_token: str = '',
         request_timeout_ms: int = 15_000,
+        websocket_heartbeat_sec: float = 0.0,
         control_host: str = '127.0.0.1',
         control_port: Optional[int] = None,
         control_token: str = '',
@@ -514,6 +515,7 @@ class BridgeServer:
         self.bridge_port = bridge_port
         self.auth_token = auth_token
         self.request_timeout_ms = request_timeout_ms
+        self.websocket_heartbeat_sec = websocket_heartbeat_sec
         self.control_host = control_host
         self.control_port = control_port
         self.control_token = control_token
@@ -661,6 +663,7 @@ class BridgeServer:
             'sessionCount': len(self.sessions),
             'pendingRequestCount': len(self.pending_requests),
             'requestHistoryCount': len(self.request_history),
+            'websocketHeartbeatSec': self.websocket_heartbeat_sec,
         }
 
     def list_rule_profiles(self) -> list[dict[str, Any]]:
@@ -744,7 +747,9 @@ class BridgeServer:
                 pending.timeout_handle.cancel()
 
     async def _handle_bridge_http_request(self, request: web.Request) -> web.StreamResponse:
-        ws = web.WebSocketResponse()
+        ws = web.WebSocketResponse(
+            heartbeat=self.websocket_heartbeat_sec if self.websocket_heartbeat_sec > 0 else None,
+        )
         can_prepare = ws.can_prepare(request)
         if not can_prepare.ok:
             raise web.HTTPNotFound()
@@ -830,22 +835,27 @@ class BridgeServer:
         self.sessions[client_id] = session
         self.socket_clients[id(websocket)] = client_id
 
-        try:
-            await websocket.send_json({
-                'type': 'server.registered',
-                'clientId': client_id,
-                'session': {
-                    **client,
-                    'connectedAt': session.connected_at.isoformat(),
-                    'lastSeenAt': session.last_seen_at.isoformat(),
-                },
-            })
-        except Exception:
-            # Transport already closed — clean up and let the client retry.
-            self.sessions.pop(client_id, None)
-            self.socket_clients.pop(id(websocket), None)
-            await websocket.close()
-            return
+        # Delay the registration response to let JLCEDA's WebSocket transport stabilise.
+        loop = asyncio.get_running_loop()
+
+        def _send_registered() -> None:
+            async def _send() -> None:
+                try:
+                    await websocket.send_json({
+                        'type': 'server.registered',
+                        'clientId': client_id,
+                        'session': {
+                            **client,
+                            'connectedAt': session.connected_at.isoformat(),
+                            'lastSeenAt': session.last_seen_at.isoformat(),
+                        },
+                    })
+                    logger.info(f'Agent registered: {client_id}')
+                except Exception:
+                    logger.warning(f'Registration send_json failed for {client_id} (will retry)')
+            asyncio.ensure_future(_send())
+
+        loop.call_later(0.5, _send_registered)
 
     async def _handle_agent_heartbeat(self, websocket: web.WebSocketResponse, message: dict[str, Any]) -> None:
         client_id = self.socket_clients.get(id(websocket))
@@ -1051,6 +1061,7 @@ async def main() -> None:
     bridge_host = os.environ.get('BRIDGE_SERVER_HOST', '0.0.0.0')
     auth_token = os.environ.get('BRIDGE_SERVER_TOKEN', '')
     request_timeout_ms = int(os.environ.get('BRIDGE_SERVER_REQUEST_TIMEOUT_MS', '15000'))
+    websocket_heartbeat_sec = float(os.environ.get('BRIDGE_SERVER_WEBSOCKET_HEARTBEAT_SEC', '0'))
     control_port_raw = os.environ.get('BRIDGE_SERVER_CONTROL_PORT')
     control_port = int(control_port_raw) if control_port_raw else None
     control_host = os.environ.get('BRIDGE_SERVER_CONTROL_HOST', '127.0.0.1')
@@ -1084,6 +1095,7 @@ async def main() -> None:
         bridge_port=bridge_port,
         auth_token=auth_token,
         request_timeout_ms=request_timeout_ms,
+        websocket_heartbeat_sec=websocket_heartbeat_sec,
         control_host=control_host,
         control_port=control_port,
         control_token=control_token,

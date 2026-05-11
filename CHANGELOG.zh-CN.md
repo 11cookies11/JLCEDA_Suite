@@ -7,6 +7,14 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，
 版本号遵循 [语义化版本](https://semver.org/spec/v2.0.0.html)。
 
+## [0.1.28] - 2026-05-11
+
+### 修复
+
+- 提升远程 bridge 连接韧性：心跳和响应发送失败会按传输故障处理并触发重连。
+- 默认关闭 server 端 WebSocket 协议级 heartbeat，避免与 JLCEDA WebSocket 运行时不兼容，同时保留应用层心跳。
+- 增加 heartbeat 失败后重连的 bridge smoke 覆盖。
+
 ## [0.1.27] - 2026-04-12
 
 ### 新增

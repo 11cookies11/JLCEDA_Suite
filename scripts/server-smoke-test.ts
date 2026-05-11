@@ -202,7 +202,7 @@ async function run(): Promise<void> {
     assert(profilePayload.profile?.schematic?.powerRowSpacingFactor === 0.7, 'default profile should expose power row spacing factor');
     assert(profilePayload.profile?.schematic?.labelGapRatio === 0.35, 'default profile should expose label gap ratio');
     assert(profilePayload.profile?.schematic?.placementStep === 40, 'default profile should expose placement step');
-    assert(profilePayload.profile?.schematic?.placementMaxRing === 8, 'default profile should expose placement max ring');
+    assert(profilePayload.profile?.schematic?.placementMaxRing === 12, 'default profile should expose placement max ring');
     assert((profilePayload.profile?.schematic?.powerKeywords ?? []).includes('vin'), 'default profile should expose power keywords');
     assert((profilePayload.profile?.schematic?.powerRoleKeywords?.regulator ?? []).includes('ldo'), 'default profile should expose power role keywords');
     assert(profilePayload.profile?.schematic?.powerRoleOffsets?.connector?.x === -320, 'default profile should expose connector offset');

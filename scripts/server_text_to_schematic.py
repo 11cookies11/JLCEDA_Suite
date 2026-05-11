@@ -38,6 +38,25 @@ ERROR_PIN_MISSING = 'PIN_MISSING'
 ERROR_WIRE_FAILED = 'WIRE_FAILED'
 ERROR_EXECUTION_FAILED = 'EXECUTION_FAILED'
 
+TWO_PIN_VIRTUAL_PIN_ROLES = {
+    'current_limit_resistor',
+    'feedback_resistor_top',
+    'feedback_resistor_bottom',
+    'input_capacitor',
+    'output_capacitor',
+    'inductor',
+    'indicator',
+}
+
+TWO_PIN_VIRTUAL_PIN_ALIASES = {
+    'indicator': ('A', 'K'),
+}
+
+TWO_PIN_VIRTUAL_PIN_SIDES = {
+    'current_limit_resistor': ('right', 'left'),
+    'indicator': ('left', 'right'),
+}
+
 
 def iso_now() -> str:
     return datetime.now(timezone.utc).isoformat()
@@ -159,6 +178,45 @@ def parse_symbol_pins_from_source_text(source_text: str) -> list[dict[str, Any]]
     return pins
 
 
+def parse_device_symbol_uuid_from_base64(base64_payload: str) -> str:
+    if not base64_payload:
+        return ''
+    try:
+        raw = base64.b64decode(base64_payload)
+        archive = zipfile.ZipFile(io.BytesIO(raw), 'r')
+    except Exception:
+        return ''
+
+    def find_symbol_uuid(value: Any) -> str:
+        if isinstance(value, dict):
+            direct = value.get('Symbol') or value.get('symbol') or value.get('symbolUuid') or value.get('symbol_uuid')
+            if isinstance(direct, str) and direct.strip():
+                return direct.strip()
+            for nested in value.values():
+                found = find_symbol_uuid(nested)
+                if found:
+                    return found
+        elif isinstance(value, list):
+            for nested in value:
+                found = find_symbol_uuid(nested)
+                if found:
+                    return found
+        return ''
+
+    for info in archive.infolist():
+        if info.is_dir():
+            continue
+        try:
+            text = archive.read(info).decode('utf-8', errors='replace')
+            payload = json.loads(text)
+        except Exception:
+            continue
+        found = find_symbol_uuid(payload)
+        if found:
+            return found
+    return ''
+
+
 def resolve_pin_endpoint_local(pin: dict[str, Any]) -> dict[str, float]:
     x = float(pin.get('x', 0.0))
     y = float(pin.get('y', 0.0))
@@ -204,6 +262,63 @@ def build_wire_points_with_pin_stubs(source: dict[str, Any], target: dict[str, A
     return deduped
 
 
+def is_two_pin_virtual_role(role: str) -> bool:
+    normalized_role = normalize_text(role)
+    return normalized_role in TWO_PIN_VIRTUAL_PIN_ROLES or any(
+        token in normalized_role
+        for token in ('resistor', 'capacitor', 'inductor', 'led', 'diode')
+    )
+
+
+def build_virtual_two_pin_geometry(role: str, placement: dict[str, Any]) -> list[dict[str, Any]]:
+    """Return conservative absolute pin anchors for simple two-terminal parts.
+
+    This fallback is intentionally limited to passives/indicators. Complex ICs
+    still require verified symbol pin geometry so the planner does not invent
+    unsafe pin mappings.
+    """
+    normalized_role = normalize_text(role)
+    if not is_two_pin_virtual_role(normalized_role):
+        return []
+
+    half_span = to_float(env('BRIDGE_TWO_PIN_VIRTUAL_HALF_SPAN', '60'), 60.0)
+    center_x = float(placement.get('x', 0.0))
+    center_y = float(placement.get('y', 0.0))
+    pin_names = TWO_PIN_VIRTUAL_PIN_ALIASES.get(normalized_role, ('1', '2'))
+    sides = TWO_PIN_VIRTUAL_PIN_SIDES.get(normalized_role, ('left', 'right'))
+
+    def x_for_side(side: str) -> float:
+        return center_x - half_span if side == 'left' else center_x + half_span
+
+    first_x = x_for_side(sides[0])
+    second_x = x_for_side(sides[1])
+    return [
+        {
+            'pinNumber': '1',
+            'pinName': pin_names[0],
+            'x': first_x,
+            'y': center_y,
+            'origin': {'x': first_x, 'y': center_y},
+            'virtual': True,
+        },
+        {
+            'pinNumber': '2',
+            'pinName': pin_names[1],
+            'x': second_x,
+            'y': center_y,
+            'origin': {'x': second_x, 'y': center_y},
+            'virtual': True,
+        },
+    ]
+
+
+def adjust_schematic_wire_command_point(point: dict[str, Any]) -> dict[str, float]:
+    return {
+        'x': float(point.get('x', 0.0)) + to_float(env('BRIDGE_SCHEMATIC_WIRE_PIN_OFFSET_X', '-2'), -2.0),
+        'y': float(point.get('y', 0.0)) + to_float(env('BRIDGE_SCHEMATIC_WIRE_PIN_OFFSET_Y', '-2'), -2.0),
+    }
+
+
 def enrich_candidate_pin_geometry(
     client: 'BridgeControlClient',
     client_id: str,
@@ -220,12 +335,16 @@ def enrich_candidate_pin_geometry(
         if isinstance(cached_value, dict):
             candidate.pin_count = int(cached_value.get('pinCount', 0) or 0)
             candidate.named_pin_count = int(cached_value.get('namedPinCount', 0) or 0)
+            cached_symbol_uuid = cached_value.get('symbolUuid')
+            if isinstance(cached_symbol_uuid, str) and cached_symbol_uuid:
+                candidate.symbol_uuid = cached_symbol_uuid
         else:
             try:
                 candidate.pin_count = int(cached_value or 0)
             except (TypeError, ValueError):
                 candidate.pin_count = 0
         return candidate
+    resolved_symbol_uuid = candidate.symbol_uuid
     try:
         base64_payload = fetch_symbol_file_base64(
             client=client,
@@ -239,6 +358,29 @@ def enrich_candidate_pin_geometry(
             stats['symbolFileAttempt'] = stats.get('symbolFileAttempt', 0) + 1
             if pins:
                 stats['symbolFileSuccess'] = stats.get('symbolFileSuccess', 0) + 1
+        if not pins:
+            device_uuid = candidate.place_uuid or candidate.part_id
+            device_base64 = fetch_device_file_base64(
+                client=client,
+                client_id=client_id,
+                device_uuid=device_uuid,
+                request_id=f'{request_id_prefix}-device-{device_uuid[:8]}',
+            )
+            symbol_uuid = parse_device_symbol_uuid_from_base64(device_base64)
+            if symbol_uuid and symbol_uuid != candidate.symbol_uuid:
+                resolved_symbol_uuid = symbol_uuid
+                base64_payload = fetch_symbol_file_base64(
+                    client=client,
+                    client_id=client_id,
+                    symbol_uuid=symbol_uuid,
+                    library_uuid=candidate.library_uuid,
+                    request_id=f'{request_id_prefix}-symbol-{symbol_uuid[:8]}',
+                )
+                pins = parse_symbol_pins_from_base64(base64_payload)
+                if stats is not None:
+                    stats['deviceSymbolResolveSuccess'] = stats.get('deviceSymbolResolveSuccess', 0) + 1
+                    if pins:
+                        stats['deviceSymbolPinSuccess'] = stats.get('deviceSymbolPinSuccess', 0) + 1
     except Exception:  # noqa: BLE001
         pins = []
         if stats is not None:
@@ -253,9 +395,9 @@ def enrich_candidate_pin_geometry(
             source_text = fetch_symbol_source_by_open_document(
                 client=client,
                 client_id=client_id,
-                symbol_uuid=candidate.symbol_uuid,
+                symbol_uuid=resolved_symbol_uuid,
                 library_uuid=candidate.library_uuid,
-                request_id=f'{request_id_prefix}-src-{candidate.symbol_uuid[:8]}',
+                request_id=f'{request_id_prefix}-src-{resolved_symbol_uuid[:8]}',
             )
             pins = parse_symbol_pins_from_source_text(source_text)
             if stats is not None:
@@ -286,7 +428,9 @@ def enrich_candidate_pin_geometry(
                 'width': max(20.0, max_x - min_x),
                 'height': max(20.0, max_y - min_y),
             }
-    cache[cache_key] = {'pinCount': pin_count, 'namedPinCount': named_pin_count, **bbox}
+    if pins:
+        candidate.symbol_uuid = resolved_symbol_uuid
+    cache[cache_key] = {'pinCount': pin_count, 'namedPinCount': named_pin_count, 'symbolUuid': candidate.symbol_uuid, **bbox}
     candidate.pin_count = pin_count
     candidate.named_pin_count = named_pin_count
     return candidate
@@ -898,6 +1042,10 @@ def pick_part(role: str, catalog: dict[str, list[PartCandidate]], fallback_name:
 
 
 def synthesize_circuit_model(spec: RequirementSpec, catalog: dict[str, list[PartCandidate]]) -> CircuitModel:
+    requested_topology = normalize_text(str(spec.preferences.get('topology', '') or spec.goal))
+    if any(token in requested_topology for token in ('led', 'indicator', '指示灯', '发光二极管')):
+        return synthesize_led_indicator_model(spec, catalog)
+
     t = spec.electrical_targets
     delta_i = max(0.3 * t.iout_max_a, 0.4)
     freq = max(t.switching_frequency_hz, 100000.0)
@@ -983,6 +1131,76 @@ def synthesize_circuit_model(spec: RequirementSpec, catalog: dict[str, list[Part
         nets=nets,
         calculations=calculations,
         design_decisions=decisions,
+        risks=risks,
+    )
+
+
+def synthesize_led_indicator_model(spec: RequirementSpec, catalog: dict[str, list[PartCandidate]]) -> CircuitModel:
+    supply_v = spec.electrical_targets.vin_min_v or 5.0
+    led_forward_v = to_float(spec.constraints.get('led_forward_v', spec.constraints.get('ledForwardV', 2.0)), 2.0)
+    led_current_ma = to_float(spec.constraints.get('led_current_ma', spec.constraints.get('ledCurrentMa', 3.0)), 3.0)
+    resistor_ohm = max((supply_v - led_forward_v) / max(led_current_ma / 1000.0, 0.001), 100.0)
+    preferred_resistor = int(round(resistor_ohm / 100.0) * 100)
+
+    resistor, resistor_candidates, resistor_status = pick_part(
+        'current_limit_resistor',
+        catalog,
+        'Current Limit Resistor Placeholder',
+    )
+    led, led_candidates, led_status = pick_part('indicator', catalog, 'LED Indicator Placeholder')
+
+    components = [
+        CircuitComponent('R1', 'current_limit_resistor', f'{preferred_resistor}R', resistor, resistor_candidates, resistor_status),
+        CircuitComponent('LED1', 'indicator', 'red LED', led, led_candidates, led_status),
+    ]
+
+    nets = [
+        CircuitNet('VCC_5V', ['R1.2'], ['Power entry for the indicator chain.']),
+        CircuitNet('LED_A', ['R1.1', 'LED1.1'], ['Series connection between current limit resistor and LED anode.']),
+        CircuitNet('GND', ['LED1.2'], ['LED cathode return.']),
+    ]
+
+    calculations = [
+        CircuitCalculation(
+            name='led_current_limit_resistor',
+            formula='R = (Vin - Vf) / If',
+            inputs={'vin_v': supply_v, 'vf_v': led_forward_v, 'if_a': led_current_ma / 1000.0},
+            result=float(preferred_resistor),
+            unit='ohm',
+        ),
+    ]
+
+    risks: list[str] = []
+    for component in components:
+        selected = component.selected_part
+        place_uuid = selected.place_uuid or selected.symbol_uuid
+        if not selected.library_uuid or not place_uuid:
+            risks.append(f'{component.ref} lacks library/symbol mapping and cannot be auto-placed yet.')
+        if selected.pin_count <= 0 and not is_two_pin_virtual_role(component.role):
+            risks.append(f'{component.ref} pin geometry is not confirmed.')
+        if component.availability_status == 'unavailable':
+            risks.append(f'{component.ref} selected part is currently marked unavailable.')
+
+    return CircuitModel(
+        schema_version=MODEL_SCHEMA_VERSION,
+        request_id=spec.request_id,
+        project_id=spec.project_id,
+        topology='led_indicator',
+        components=components,
+        nets=nets,
+        calculations=calculations,
+        design_decisions=[
+            DesignDecision(
+                title='Use a series resistor LED indicator',
+                rationale='A resistor-limited LED is the smallest complete visual power indicator circuit.',
+                impact='Creates a directly buildable two-component schematic block.',
+            ),
+            DesignDecision(
+                title='Allow verified two-terminal fallback geometry',
+                rationale='Simple passives and LEDs have two terminals, so the planner can generate conservative endpoints when the library omits pin metadata.',
+                impact='Avoids blocking small circuits while still requiring real pin data for complex ICs.',
+            ),
+        ],
         risks=risks,
     )
 
@@ -1453,6 +1671,44 @@ def build_scd_document(spec: RequirementSpec, model: CircuitModel) -> SCDDocumen
     cout1 = component_by_role.get('output_capacitor')
     rfb1 = component_by_role.get('feedback_resistor_top')
     rfb2 = component_by_role.get('feedback_resistor_bottom')
+    current_limit = component_by_role.get('current_limit_resistor')
+    indicator = component_by_role.get('indicator')
+    if current_limit and indicator:
+        vcc_net = next((net.name for net in model.nets if net.name.startswith('VCC') or net.name.startswith('VIN')), 'VCC_5V')
+        gnd_net = next((net.name for net in model.nets if net.name == 'GND'), 'GND')
+        blocks = [
+            SCDBlock(
+                name='LED Indicator',
+                role='Show that the supply rail is present',
+                scope=f'{describe_component(current_limit.ref)}, {describe_component(indicator.ref)}, {vcc_net}, {gnd_net}',
+                statements=[
+                    f'{vcc_net} -> {current_limit.ref}.1',
+                    f'{current_limit.ref}.2 -> {indicator.ref}.1',
+                    f'{indicator.ref}.2 -> {gnd_net}',
+                ],
+                notes=[
+                    f'{current_limit.ref} limits LED current.',
+                    f'{indicator.ref} is modeled as the visual indicator load.',
+                ],
+                checks=[
+                    f'{current_limit.ref} and {indicator.ref} form a series path.',
+                    f'{indicator.ref}.2 returns to {gnd_net}.',
+                ],
+            ),
+        ]
+        document = SCDDocument(
+            schema_version=SCD_SCHEMA_VERSION,
+            title=spec.goal or 'LED Indicator Schematic',
+            version='1.0',
+            purpose=spec.goal or 'Build a complete two-component LED indicator schematic.',
+            blocks=blocks,
+            markdown='',
+        )
+        document.markdown = render_scd_document(document)
+        document.summary = summarize_scd_document(document)
+        parse_scd_document(document.markdown)
+        return document
+
     if not all([u1, l1, cin1, cout1, rfb1, rfb2]):
         raise ValueError('Circuit model is missing expected power-stage roles for SCD generation.')
 
@@ -1601,6 +1857,12 @@ def compute_rotation_from_neighbors(
         return 90 if dy_total >= 0 else 270
 
 
+def should_use_fixed_two_pin_rotation(component: CircuitComponent, model: CircuitModel) -> bool:
+    if normalize_text(model.topology) == 'led_indicator':
+        return normalize_text(component.role) in {'current_limit_resistor', 'indicator'}
+    return False
+
+
 # Known roles that should not be overridden by inference.
 _PRESET_ROLES = frozenset({
     'input_protection', 'input_capacitor', 'buck_regulator', 'inductor',
@@ -1660,6 +1922,8 @@ def _infer_component_role(
         return 'connector'
     if any(kw in text for kw in ('led', 'indicator')):
         return 'indicator'
+    if 'current_limit' in text or 'limit resistor' in text:
+        return 'current_limit_resistor'
 
     # ---- net-name hints (for capacitors & passives) ----
     net_role_votes: dict[str, int] = {}
@@ -1716,7 +1980,7 @@ def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[Execu
     # Pre-compute rotations from neighbour directions (replaces uniform rotation=0).
     rotations: dict[str, int] = {}
     for component in model.components:
-        rotations[component.ref] = compute_rotation_from_neighbors(
+        rotations[component.ref] = 0 if should_use_fixed_two_pin_rotation(component, model) else compute_rotation_from_neighbors(
             component.ref, model.nets, component_placements,
         )
 
@@ -1758,7 +2022,8 @@ def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[Execu
     if safe_wire_operations:
         operations.extend(safe_wire_operations)
 
-    for placement in net_port_placements:
+    safe_wiring_handles_terminals = bool(safe_wire_operations) and normalize_text(model.topology) == 'led_indicator'
+    for placement in ([] if safe_wiring_handles_terminals else net_port_placements):
         if not isinstance(placement, dict):
             continue
         net_name = str(placement.get('netName', '') or '')
@@ -1952,6 +2217,8 @@ ROLE_SEARCH_KEYWORDS: dict[str, list[str]] = {
     'output_capacitor': ['capacitor', '电容', '22uF', '10V'],
     'feedback_resistor_top': ['resistor', '电阻', '200k'],
     'feedback_resistor_bottom': ['resistor', '电阻', '44.2k'],
+    'current_limit_resistor': ['resistor', '电阻', '1k'],
+    'indicator': ['LED', 'red LED', '发光二极管', '指示灯'],
 }
 
 ROLE_FILTER_RULES: dict[str, dict[str, Any]] = {
@@ -1983,6 +2250,15 @@ ROLE_FILTER_RULES: dict[str, dict[str, Any]] = {
         'prefer_tokens': ['resistor', '电阻', '44.2k', '43k', '47k'],
         'reject_tokens': ['pot', 'trimmer', '可调'],
         'target_ohm': 44200.0,
+    },
+    'current_limit_resistor': {
+        'prefer_tokens': ['resistor', '电阻', '1k', '1000'],
+        'reject_tokens': ['pot', 'trimmer', '可调'],
+        'target_ohm': 1000.0,
+    },
+    'indicator': {
+        'prefer_tokens': ['led', '发光二极管', '指示灯', 'red', '红'],
+        'reject_tokens': ['driver', 'controller', 'module', 'strip'],
     },
 }
 
@@ -2477,7 +2753,7 @@ def build_component_placement_map(model: CircuitModel) -> dict[str, dict[str, An
     # Pre-compute rotations from neighbour directions.
     rotations: dict[str, int] = {}
     for component in model.components:
-        rotations[component.ref] = compute_rotation_from_neighbors(
+        rotations[component.ref] = 0 if should_use_fixed_two_pin_rotation(component, model) else compute_rotation_from_neighbors(
             component.ref, model.nets, component_placements,
         )
 
@@ -2515,6 +2791,31 @@ def fetch_symbol_file_base64(client: BridgeControlClient, client_id: str, symbol
         payload={
             'symbolUuid': symbol_uuid,
             'libraryUuid': library_uuid,
+        },
+        request_id=request_id,
+    )
+    if bridge.get('status') != 'success':
+        return ''
+    file_payload = (
+        bridge.get('result', {})
+        .get('data', {})
+        .get('file', {})
+    )
+    if not isinstance(file_payload, dict):
+        return ''
+    base64_payload = file_payload.get('base64')
+    return str(base64_payload) if isinstance(base64_payload, str) else ''
+
+
+def fetch_device_file_base64(client: BridgeControlClient, client_id: str, device_uuid: str, request_id: str) -> str:
+    if not device_uuid:
+        return ''
+    bridge = client.bridge_request(
+        client_id=client_id,
+        domain='system',
+        action='file_manager_get_device_file_by_device_uuid',
+        payload={
+            'deviceUuid': device_uuid,
         },
         request_id=request_id,
     )
@@ -2642,6 +2943,83 @@ def build_manhattan_wire_points(source: dict[str, Any], target: dict[str, Any]) 
     ]
 
 
+def operation_id_fragment(value: str) -> str:
+    fragment = re.sub(r'[^a-z0-9]+', '-', normalize_text(value)).strip('-')
+    return fragment or 'net'
+
+
+def build_external_net_terminal(endpoint: dict[str, Any], net_name: str) -> dict[str, float]:
+    kind = _normalize_net_kind(net_name)
+    offset = to_float(env('BRIDGE_EXTERNAL_NET_STUB_LENGTH', '80'), 80.0)
+    direction = -1.0 if kind == 'power' else 1.0
+    return {
+        'x': float(endpoint['x']) + direction * offset,
+        'y': float(endpoint['y']),
+    }
+
+
+def set_designator_in_source_text(source: str, primitive_id: str, designator: str) -> tuple[str, bool]:
+    updated_lines: list[str] = []
+    changed = False
+    for line in source.splitlines():
+        record = parse_source_record(line.strip())
+        if not record:
+            updated_lines.append(line)
+            continue
+        header = record['header']
+        body = record['body']
+        if (
+            str(header.get('type', '')) == 'ATTR'
+            and str(body.get('parentId', '')) == primitive_id
+            and str(body.get('key', '')) == 'Designator'
+        ):
+            body['value'] = designator
+            body['valueVisible'] = True
+            updated_lines.append(f'{json.dumps(header, separators=(",", ":"))}||{json.dumps(body, ensure_ascii=False, separators=(",", ":"))}|')
+            changed = True
+            continue
+        updated_lines.append(line)
+    return '\n'.join(updated_lines), changed
+
+
+def set_component_designator(
+    client: 'BridgeControlClient',
+    client_id: str,
+    primitive_id: str,
+    designator: str,
+    request_id: str,
+) -> bool:
+    if not primitive_id or not designator:
+        return False
+    source_response = client.bridge_request(
+        client_id=client_id,
+        domain='system',
+        action='file_manager_get_document_source',
+        payload={},
+        request_id=f'{request_id}-source',
+    )
+    if source_response.get('status') != 'success':
+        return False
+    source = (
+        source_response.get('result', {})
+        .get('data', {})
+        .get('source', '')
+    )
+    if not isinstance(source, str) or not source:
+        return False
+    updated_source, changed = set_designator_in_source_text(source, primitive_id, designator)
+    if not changed:
+        return False
+    set_response = client.bridge_request(
+        client_id=client_id,
+        domain='system',
+        action='file_manager_set_document_source',
+        payload={'source': updated_source},
+        request_id=f'{request_id}-set',
+    )
+    return set_response.get('status') == 'success'
+
+
 def build_safe_wire_operations(
     model: CircuitModel,
     control_url: str,
@@ -2685,31 +3063,58 @@ def build_safe_wire_operations(
             else:
                 parsed_pins = []
                 pin_source_mode = 'missing'
+            if not parsed_pins:
+                device_uuid = str(placement.get('placeUuid', '') or '')
+                device_base64 = fetch_device_file_base64(
+                    client=client,
+                    client_id=client_id,
+                    device_uuid=device_uuid,
+                    request_id=f'pin-device-{model.request_id}-{ref.lower()}',
+                )
+                resolved_symbol_uuid = parse_device_symbol_uuid_from_base64(device_base64)
+                if resolved_symbol_uuid:
+                    resolved_base64 = fetch_symbol_file_base64(
+                        client=client,
+                        client_id=client_id,
+                        symbol_uuid=resolved_symbol_uuid,
+                        library_uuid=str(placement['libraryUuid']),
+                        request_id=f'pin-symbol-{model.request_id}-{ref.lower()}',
+                    )
+                    resolved_pins = parse_symbol_pins_from_base64(resolved_base64)
+                    if resolved_pins:
+                        parsed_pins = resolved_pins
+                        placement['symbolUuid'] = resolved_symbol_uuid
+                        pin_source_mode = 'device_symbol_archive'
             symbol_pin_cache[symbol_cache_key] = (parsed_pins, pin_source_mode)
         absolute_pins: list[dict[str, Any]] = []
-        for pin in parsed_pins:
-            endpoint_local = resolve_pin_endpoint_local(pin)
-            origin_local = {'x': float(pin.get('x', 0.0)), 'y': float(pin.get('y', 0.0))}
-            absolute = transform_point(
-                {'x': endpoint_local['x'], 'y': endpoint_local['y']},
-                placement,
-            )
-            absolute_origin = transform_point(origin_local, placement)
-            absolute_pins.append(
-                {
-                    'pinNumber': str(pin.get('pinNumber', '')),
-                    'pinName': str(pin.get('pinName', '')),
-                    'x': absolute['x'],
-                    'y': absolute['y'],
-                    'origin': {'x': absolute_origin['x'], 'y': absolute_origin['y']},
-                }
-            )
+        if parsed_pins:
+            for pin in parsed_pins:
+                endpoint_local = resolve_pin_endpoint_local(pin)
+                origin_local = {'x': float(pin.get('x', 0.0)), 'y': float(pin.get('y', 0.0))}
+                absolute = transform_point(
+                    {'x': endpoint_local['x'], 'y': endpoint_local['y']},
+                    placement,
+                )
+                absolute_origin = transform_point(origin_local, placement)
+                absolute_pins.append(
+                    {
+                        'pinNumber': str(pin.get('pinNumber', '')),
+                        'pinName': str(pin.get('pinName', '')),
+                        'x': absolute['x'],
+                        'y': absolute['y'],
+                        'origin': {'x': absolute_origin['x'], 'y': absolute_origin['y']},
+                    }
+                )
+        elif is_truthy_env('BRIDGE_ALLOW_TWO_PIN_VIRTUAL_PINS', 'true') and is_two_pin_virtual_role(str(placement.get('role', ''))):
+            absolute_pins = build_virtual_two_pin_geometry(str(placement.get('role', '')), placement)
+            pin_source_mode = 'virtual_two_pin'
         pin_map[ref] = absolute_pins
         logs.append(f'Pin map resolved for {ref}: {len(absolute_pins)} pins.')
         diagnostics['components'][ref] = {
             'libraryUuid': placement['libraryUuid'],
             'symbolUuid': placement['symbolUuid'],
             'pinCount': len(absolute_pins),
+            'virtualPinCount': sum(1 for pin in absolute_pins if pin.get('virtual')),
             'symbolFetchOk': bool(source_text or base64_payload or cached),
             'pinSourceMode': pin_source_mode,
         }
@@ -2731,12 +3136,70 @@ def build_safe_wire_operations(
                 missing_members.append(member)
                 diagnostics['missingSelectors'].setdefault(ref, []).append(selector)
                 continue
-            endpoints.append({'ref': ref, 'selector': selector, 'x': pin['x'], 'y': pin['y']})
+            attach = adjust_schematic_wire_command_point(pin)
+            origin = pin.get('origin')
+            adjusted_origin = adjust_schematic_wire_command_point(origin) if isinstance(origin, dict) else None
+            endpoints.append({
+                'ref': ref,
+                'selector': selector,
+                'x': attach['x'],
+                'y': attach['y'],
+                'origin': adjusted_origin,
+            })
         diagnostics['nets'][net.name] = {
             'memberCount': len(net.members),
             'resolvedEndpoints': len(endpoints),
             'missingMembers': missing_members,
         }
+        if len(endpoints) == 1 and wiring_mode != 'labels' and _normalize_net_kind(net.name) in {'power', 'ground'}:
+            endpoint = endpoints[0]
+            terminal = build_external_net_terminal(endpoint, net.name)
+            net_id = operation_id_fragment(net.name)
+            if _normalize_net_kind(net.name) == 'ground':
+                wire_index += 1
+                wire_operations.append(
+                    ExecutionOperation(
+                        id=f'op-terminal-flag-{net_id}',
+                        kind='create_net_flag',
+                        payload={
+                            'identification': 'Ground',
+                            'net': net.name,
+                            'position': terminal,
+                        },
+                        on_error='continue',
+                        notes=[f'Create ground symbol connected to {endpoint["ref"]}.{endpoint["selector"]}.'],
+                    )
+                )
+            else:
+                wire_operations.append(
+                    ExecutionOperation(
+                        id=f'op-terminal-port-{net_id}',
+                        kind='create_net_port',
+                        payload={
+                            'direction': 'BI',
+                            'net': net.name,
+                            'position': terminal,
+                        },
+                        on_error='continue',
+                        notes=[f'Create power/net port connected to {endpoint["ref"]}.{endpoint["selector"]}.'],
+                    )
+                )
+            wire_index += 1
+            wire_operations.append(
+                ExecutionOperation(
+                    id=f'op-wire-terminal-{wire_index:03d}',
+                    kind='create_wire',
+                    payload={
+                        'points': build_manhattan_wire_points(terminal, endpoint),
+                        'netName': net.name,
+                    },
+                    on_error='continue',
+                    notes=[
+                        f'Wire external net terminal {net.name} to {endpoint["ref"]}.{endpoint["selector"]}',
+                    ],
+                )
+            )
+            continue
         if len(endpoints) < 2:
             continue
         source = endpoints[0]

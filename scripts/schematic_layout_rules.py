@@ -71,6 +71,8 @@ def build_default_layout_rules() -> LayoutRuleSet:
                 'output_capacitor': 'output',
                 'feedback_resistor_top': 'feedback',
                 'feedback_resistor_bottom': 'feedback',
+                'current_limit_resistor': 'power_stage',
+                'indicator': 'output',
             },
             block_order=['input', 'power_stage', 'output', 'feedback', 'io'],
         ),
