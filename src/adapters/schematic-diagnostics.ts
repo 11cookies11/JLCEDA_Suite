@@ -856,7 +856,7 @@ export async function collectCurrentSchematicPinLocations(
 export function snapPointsToNearbyPins(
   points: Array<Point>,
   pins: Array<ConnectivityPointRef>,
-  tolerance = 1.5,
+  tolerance = 25,
 ): Array<Point> {
   if (!points.length || !pins.length) {
     return points.map(point => ({ ...point }));

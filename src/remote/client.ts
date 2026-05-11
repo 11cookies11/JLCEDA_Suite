@@ -18,13 +18,11 @@ import {
 const REMOTE_BRIDGE_SOCKET_ID = 'jlceda-suite-remote-bridge';
 const DEFAULT_CONNECT_TIMEOUT_MS = 15_000;
 const DEFAULT_HEARTBEAT_INTERVAL_MS = 20_000;
-const DEFAULT_RECONNECT_DELAY_MS = 5_000;
-const MAX_RECONNECT_DELAY_MS = 60_000;
+const RECONNECT_DELAY_MS = 3_000;
+const RECONNECT_JITTER_MS = 1_000;
 
-function computeReconnectDelay(attempts: number): number {
-  const exponential = Math.min(DEFAULT_RECONNECT_DELAY_MS * 2 ** attempts, MAX_RECONNECT_DELAY_MS);
-  const jitter = Math.floor(Math.random() * 2_000);
-  return exponential + jitter;
+function computeReconnectDelay(_attempts: number): number {
+  return RECONNECT_DELAY_MS + Math.floor(Math.random() * RECONNECT_JITTER_MS);
 }
 
 export interface RemoteBridgeSettings {

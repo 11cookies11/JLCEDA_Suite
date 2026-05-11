@@ -530,7 +530,6 @@ class BridgeServer:
         self._control_runner: web.AppRunner | None = None
         self._bridge_site: web.TCPSite | None = None
         self._control_site: web.TCPSite | None = None
-
     async def start(self) -> None:
         bridge_app = web.Application()
         bridge_app.router.add_route('*', '/{tail:.*}', self._handle_bridge_http_request)
@@ -755,11 +754,14 @@ class BridgeServer:
         return ws
 
     async def _handle_ws_connection(self, websocket: web.WebSocketResponse) -> None:
-        async for message in websocket:
-            if message.type == WSMsgType.TEXT:
-                await self._handle_socket_message(websocket, message.data)
-            elif message.type == WSMsgType.ERROR:
-                break
+        try:
+            async for message in websocket:
+                if message.type == WSMsgType.TEXT:
+                    await self._handle_socket_message(websocket, message.data)
+                elif message.type == WSMsgType.ERROR:
+                    break
+        except Exception:
+            pass
         await self._handle_socket_close(websocket)
 
     async def _handle_socket_message(self, websocket: web.WebSocketResponse, raw_message: str) -> None:
@@ -828,15 +830,22 @@ class BridgeServer:
         self.sessions[client_id] = session
         self.socket_clients[id(websocket)] = client_id
 
-        await websocket.send_json({
-            'type': 'server.registered',
-            'clientId': client_id,
-            'session': {
-                **client,
-                'connectedAt': session.connected_at.isoformat(),
-                'lastSeenAt': session.last_seen_at.isoformat(),
-            },
-        })
+        try:
+            await websocket.send_json({
+                'type': 'server.registered',
+                'clientId': client_id,
+                'session': {
+                    **client,
+                    'connectedAt': session.connected_at.isoformat(),
+                    'lastSeenAt': session.last_seen_at.isoformat(),
+                },
+            })
+        except Exception:
+            # Transport already closed — clean up and let the client retry.
+            self.sessions.pop(client_id, None)
+            self.socket_clients.pop(id(websocket), None)
+            await websocket.close()
+            return
 
     async def _handle_agent_heartbeat(self, websocket: web.WebSocketResponse, message: dict[str, Any]) -> None:
         client_id = self.socket_clients.get(id(websocket))
@@ -863,11 +872,14 @@ class BridgeServer:
         except Exception:
             session.last_seen_at = utc_now()
 
-        await websocket.send_json({
-            'type': 'server.heartbeat_ack',
-            'clientId': client_id,
-            'timestamp': isoformat_now(),
-        })
+        try:
+            await websocket.send_json({
+                'type': 'server.heartbeat_ack',
+                'clientId': client_id,
+                'timestamp': isoformat_now(),
+            })
+        except Exception:
+            pass
 
     async def _handle_bridge_response(self, message: dict[str, Any]) -> None:
         response = message.get('response') or {}
@@ -890,6 +902,12 @@ class BridgeServer:
         if not client_id:
             return
 
+        session = self.sessions.get(client_id)
+        if session is None or session.websocket is not websocket:
+            logger.warning(f'Socket closed for {client_id} but session mismatch (session_ws={id(session.websocket) if session else None} closing_ws={id(websocket)})')
+            return
+
+        logger.info(f'Socket closed for {client_id}, removing session')
         self.sessions.pop(client_id, None)
         for request_id, pending in list(self.pending_requests.items()):
             if pending.client_id != client_id:
