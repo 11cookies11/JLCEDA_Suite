@@ -1,6 +1,6 @@
 import type { BridgeResult } from '../bridge/protocol';
 import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
-import { type Point2D, parseSourceRecord, normalizeNumber, distanceSquaredBetweenPoints, distanceSquaredPointToSegment } from './shared-utils';
+import { distanceSquaredBetweenPoints, distanceSquaredPointToSegment, normalizeNumber, parseSourceRecord } from './shared-utils';
 
 interface Point {
   x: number;

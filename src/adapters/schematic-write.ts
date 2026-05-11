@@ -1,7 +1,8 @@
 import type { BridgePoint, BridgeResult } from '../bridge/protocol';
+import type { SourceRecord } from './shared-utils';
 import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
 import { collectCurrentSchematicPinLocations, snapPointsToNearbyPins } from './schematic-diagnostics';
-import { type Point2D, type SourceRecord, parseSourceRecord, normalizeNumber, distanceSquaredBetweenPoints, distanceSquaredPointToSegment } from './shared-utils';
+import { distanceSquaredBetweenPoints, distanceSquaredPointToSegment, normalizeNumber, parseSourceRecord } from './shared-utils';
 
 export interface PlaceComponentPayload {
   libraryUuid: string;

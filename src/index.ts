@@ -669,26 +669,6 @@ function showInputDialog(
   });
 }
 
-function showSelectDialog(
-  options: Array<{ value: string; displayContent: string }>,
-  beforeContent: string,
-  title: string,
-): Promise<string | undefined> {
-  return new Promise((resolve) => {
-    eda.sys_Dialog.showSelectDialog(
-      options,
-      beforeContent,
-      '',
-      title,
-      options[0]?.value,
-      false,
-      (value) => {
-        resolve(typeof value === 'string' ? value : undefined);
-      },
-    );
-  });
-}
-
 export async function configureRemoteBridge(): Promise<void> {
   const currentSettings = remoteBridgeClient.getSettings();
   const serverUrl = await showInputDialog(
