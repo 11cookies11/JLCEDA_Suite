@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import logging
 import os
 import signal
 import subprocess
@@ -12,6 +13,10 @@ from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Optional
+
+from log_utils import setup_logging
+
+logger = setup_logging()
 
 
 def utc_now() -> datetime:
@@ -1032,6 +1037,24 @@ async def main() -> None:
     control_port = int(control_port_raw) if control_port_raw else None
     control_host = os.environ.get('BRIDGE_SERVER_CONTROL_HOST', '127.0.0.1')
     control_token = os.environ.get('BRIDGE_SERVER_CONTROL_TOKEN', '')
+
+    # Require auth token when binding to a public interface
+    if bridge_host == '0.0.0.0' and not auth_token:
+        print(
+            'ERROR: BRIDGE_SERVER_TOKEN is required when BRIDGE_SERVER_HOST is 0.0.0.0.\n'
+            'Set the BRIDGE_SERVER_TOKEN environment variable to enable authentication.\n'
+            'Example: BRIDGE_SERVER_TOKEN=your-secret-token npm run server:public',
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    if control_host == '0.0.0.0' and not control_token:
+        print(
+            'ERROR: BRIDGE_SERVER_CONTROL_TOKEN is required when BRIDGE_SERVER_CONTROL_HOST is 0.0.0.0.\n'
+            'Set the BRIDGE_SERVER_CONTROL_TOKEN environment variable to enable authentication.',
+            file=sys.stderr,
+        )
+        sys.exit(1)
     rule_profile_file = os.environ.get('BRIDGE_RULE_PROFILE_FILE')
     rule_profiles, active_rule_profile_name = load_rule_profiles(rule_profile_file)
     requested_profile = os.environ.get('BRIDGE_RULE_PROFILE', active_rule_profile_name)
@@ -1051,12 +1074,12 @@ async def main() -> None:
     )
     await server.start()
 
-    print(f'Bridge server listening on ws://{bridge_host}:{bridge_port}')
-    print(f'Auth token enabled: {"yes" if auth_token else "no"}')
-    print(f'Rule profile active: {server.active_rule_profile_name}')
+    logger.info(f'Bridge server listening on ws://{bridge_host}:{bridge_port}')
+    logger.info(f'Auth token enabled: {"yes" if auth_token else "no"}')
+    logger.info(f'Rule profile active: {server.active_rule_profile_name}')
     if control_port is not None:
-        print(f'Control server listening on http://{control_host}:{control_port}')
-        print(f'Control token enabled: {"yes" if control_token else "no"}')
+        logger.info(f'Control server listening on http://{control_host}:{control_port}')
+        logger.info(f'Control token enabled: {"yes" if control_token else "no"}')
 
     stop_event = asyncio.Event()
 

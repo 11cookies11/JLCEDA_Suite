@@ -11,6 +11,15 @@ Thumbs.db
 .vscode/
 node_modules/
 
+# Secrets & environment
+*.env
+.env.*
+
+# Python
+__pycache__/
+.pytest_cache/
+*.pyc
+
 # Common build outputs (optional)
 dist/
 out/

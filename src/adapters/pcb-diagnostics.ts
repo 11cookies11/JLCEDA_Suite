@@ -1,5 +1,6 @@
 import type { BridgeResult } from '../bridge/protocol';
 import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
+import { type Point2D, parseSourceRecord, normalizeNumber, distanceSquaredBetweenPoints, distanceSquaredPointToSegment } from './shared-utils';
 
 interface Point {
   x: number;
@@ -49,64 +50,6 @@ interface PcbBoardBounds {
   right: number;
   top: number;
   bottom: number;
-}
-
-function parseSourceRecord(line: string): { header: Record<string, unknown>; body: Record<string, unknown> } | undefined {
-  const separatorIndex = line.indexOf('||');
-  if (separatorIndex < 0) {
-    return undefined;
-  }
-
-  const headerText = line.slice(0, separatorIndex);
-  const bodyText = line.slice(separatorIndex + 2).replace(/\|$/, '');
-
-  try {
-    return {
-      header: JSON.parse(headerText) as Record<string, unknown>,
-      body: JSON.parse(bodyText) as Record<string, unknown>,
-    };
-  }
-  catch {
-    return undefined;
-  }
-}
-
-function normalizeNumber(value: unknown): number | undefined {
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return value;
-  }
-
-  if (typeof value === 'string' && value.trim().length > 0) {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : undefined;
-  }
-
-  return undefined;
-}
-
-function distanceSquaredBetweenPoints(left: Point, right: Point): number {
-  const dx = left.x - right.x;
-  const dy = left.y - right.y;
-  return dx * dx + dy * dy;
-}
-
-function distanceSquaredPointToSegment(point: Point, start: Point, end: Point): number {
-  const dx = end.x - start.x;
-  const dy = end.y - start.y;
-  const lengthSquared = dx * dx + dy * dy;
-
-  if (lengthSquared === 0) {
-    return distanceSquaredBetweenPoints(point, start);
-  }
-
-  const rawT = ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared;
-  const t = Math.min(1, Math.max(0, rawT));
-  const projected = {
-    x: start.x + dx * t,
-    y: start.y + dy * t,
-  };
-
-  return distanceSquaredBetweenPoints(point, projected);
 }
 
 function parsePcbComponents(source: string): Array<PcbComponentSource> {

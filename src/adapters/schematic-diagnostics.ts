@@ -1,11 +1,7 @@
 import type { BridgeResult } from '../bridge/protocol';
 import JSZip from 'jszip';
 import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
-
-interface SourceRecord {
-  header: Record<string, unknown>;
-  body: Record<string, unknown>;
-}
+import { type Point2D, type SourceRecord, parseSourceRecord, normalizeNumber, distanceSquaredBetweenPoints, distanceSquaredPointToSegment } from './shared-utils';
 
 interface Point {
   x: number;
@@ -167,6 +163,10 @@ interface PythonConnectivityInput {
   symbolFiles: Record<string, string>;
 }
 
+// ---------------------------------------------------------------------------
+// Node.js / Python bridge utilities
+// ---------------------------------------------------------------------------
+
 function loadNodeBuiltin(moduleName: string): any {
   // eslint-disable-next-line no-new-func, unicorn/new-for-builtins
   const nodeRequire = Function('return require')() as (id: string) => any;
@@ -191,40 +191,6 @@ function spawnNodePython(scriptPath: string, input: string): { stdout: string; s
     maxBuffer: 10 * 1024 * 1024,
   }) as { stdout: string; stderr: string; status: number | null; error?: Error };
 }
-function parseSourceRecord(line: string): SourceRecord | undefined {
-  const separatorIndex = line.indexOf('||');
-
-  if (separatorIndex < 0) {
-    return undefined;
-  }
-
-  const headerText = line.slice(0, separatorIndex);
-  const bodyText = line.slice(separatorIndex + 2).replace(/\|$/, '');
-
-  try {
-    return {
-      header: JSON.parse(headerText) as Record<string, unknown>,
-      body: JSON.parse(bodyText) as Record<string, unknown>,
-    };
-  }
-  catch {
-    return undefined;
-  }
-}
-
-function normalizeNumber(value: unknown): number | undefined {
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return value;
-  }
-
-  if (typeof value === 'string' && value.trim().length > 0) {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : undefined;
-  }
-
-  return undefined;
-}
-
 function normalizeBoolean(value: unknown): boolean {
   if (typeof value === 'boolean') {
     return value;
@@ -302,30 +268,9 @@ function pointOnSegment(point: Point, start: Point, end: Point, tolerance: numbe
   return true;
 }
 
-function distanceSquaredBetweenPoints(left: Point, right: Point): number {
-  const dx = left.x - right.x;
-  const dy = left.y - right.y;
-  return dx * dx + dy * dy;
-}
-
-function distanceSquaredPointToSegment(point: Point, start: Point, end: Point): number {
-  const dx = end.x - start.x;
-  const dy = end.y - start.y;
-  const lengthSquared = dx * dx + dy * dy;
-
-  if (lengthSquared === 0) {
-    return distanceSquaredBetweenPoints(point, start);
-  }
-
-  const rawT = ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared;
-  const t = Math.min(1, Math.max(0, rawT));
-  const projected = {
-    x: start.x + dx * t,
-    y: start.y + dy * t,
-  };
-
-  return distanceSquaredBetweenPoints(point, projected);
-}
+// ---------------------------------------------------------------------------
+// Power block layout helpers
+// ---------------------------------------------------------------------------
 
 function isPowerKeyword(value: string | undefined, keywords: Array<string>): boolean {
   if (!value) {
@@ -413,6 +358,10 @@ function roleOffset(
       };
   }
 }
+
+// ---------------------------------------------------------------------------
+// Geometry & label positioning
+// ---------------------------------------------------------------------------
 
 function getLabelPlacementCandidates(
   component: SchematicComponentSource,
@@ -764,6 +713,10 @@ function summarizeConnectivityComponent(
     symbol: component.symbol,
   };
 }
+
+// ---------------------------------------------------------------------------
+// Connectivity analysis
+// ---------------------------------------------------------------------------
 
 async function buildConnectivityDiagnosticsInput(
   payload: InspectConnectivityPayload,

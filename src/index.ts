@@ -488,9 +488,7 @@ async function handleBridgeUiRpc(message: any): Promise<any> {
   }
 }
 
-export function activate(status?: 'onStartupFinished', arg?: string): void {
-  void status;
-  void arg;
+export function activate(_status?: 'onStartupFinished', _arg?: string): void {
   ensureBridgeUiRpcRegistered();
   ensureBridgeUiRequestBridgeRegistered();
   void remoteBridgeClient.autoConnectIfEnabled();
@@ -805,81 +803,6 @@ export function showRemoteBridgeStatus(): void {
   ].join('\n');
 
   eda.sys_Dialog.showInformationMessage(message, '远程状态');
-}
-
-async function _openBridgeMenuFallback(): Promise<void> {
-  const remoteStatus = remoteBridgeClient.getStatus();
-  const action = await showSelectDialog(
-    [
-      { value: 'status', displayContent: '桥接状态  查看当前桥接与运行环境' },
-      { value: 'document', displayContent: '当前文档  查看当前工程与选区摘要' },
-      { value: 'self-check', displayContent: '桥接自检  快速检查桥接链路' },
-      { value: 'check-update', displayContent: '检查更新  查询最新插件版本' },
-      { value: 'open-update-page', displayContent: '打开更新页  前往最新插件下载页' },
-      { value: 'configure', displayContent: '配置远程服务  设置地址、令牌与客户端 ID' },
-      {
-        value: remoteStatus.connected ? 'disconnect' : 'connect',
-        displayContent: remoteStatus.connected ? '断开远程服务  结束当前连接' : '连接远程服务  启动远程桥接',
-      },
-      { value: 'remote-status', displayContent: '远程状态  查看连接细节与最近错误' },
-      { value: 'about', displayContent: '关于插件  查看插件简介与版本' },
-    ],
-    [
-      '选择一个操作',
-      '',
-      `远程状态：${remoteStatus.connected ? '已连接' : remoteStatus.connecting ? '连接中' : remoteStatus.configured ? '待连接' : '未配置'}`,
-      `插件版本：${extensionConfig.version}`,
-      `更新状态：${getUpdateStatusSnapshot().updateAvailable ? '可更新' : '已是最新'}`,
-    ].join('\n'),
-    'JLCEDA Suite',
-  );
-
-  switch (action) {
-    case 'status':
-      await showBridgeStatus();
-      break;
-    case 'document':
-      await inspectCurrentDocument();
-      break;
-    case 'self-check':
-      await runBridgeSelfCheck();
-      break;
-    case 'check-update':
-      await refreshUpdateStatus(true);
-      eda.sys_Dialog.showInformationMessage(
-        [
-          '更新检查已完成。',
-          '',
-          ...summarizeUpdateStatus(),
-        ].join('\n'),
-        '版本更新',
-      );
-      break;
-    case 'open-update-page': {
-      const updateStatus = await refreshUpdateStatus(true);
-      const targetUrl = updateStatus.latestDownloadUrl
-        ?? updateStatus.latestReleaseUrl
-        ?? 'https://github.com/11cookies11/JLCEDA_Suite/releases/latest';
-
-      eda.sys_Window.open(targetUrl, '_blank');
-      break;
-    }
-    case 'configure':
-      await configureRemoteBridge();
-      break;
-    case 'connect':
-      await connectRemoteBridge();
-      break;
-    case 'disconnect':
-      disconnectRemoteBridge();
-      break;
-    case 'remote-status':
-      showRemoteBridgeStatus();
-      break;
-    case 'about':
-      about();
-      break;
-  }
 }
 
 async function openBridgeMenuInternal(): Promise<void> {

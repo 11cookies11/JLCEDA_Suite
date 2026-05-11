@@ -10,8 +10,8 @@
   },
   "scripts": {
     "compile": "rimraf ./dist/ && ts-node ./config/esbuild.prod.ts",
-    "lint": "eslint build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts scripts/smoke-test.ts scripts/server-smoke-test.ts scripts/server-command-runner-smoke-test.ts scripts/remote-client-smoke-test.ts scripts/bridge-e2e-smoke-test.ts scripts/python-server-test-utils.ts scripts/server-project-flow.ts scripts/server-command-runner.ts scripts/server-context-summary.ts scripts/server-context-summary-smoke-test.ts scripts/server-part-selector.ts scripts/server-part-selector-smoke-test.ts scripts/server-schematic-refine.ts scripts/server-schematic-refine-smoke-test.ts scripts/server-pcb-assist.ts scripts/server-pcb-assist-smoke-test.ts scripts/workflow-skill-e2e-smoke-test.ts scripts/library-pin-inspector.ts src/index.ts src/adapters/api-control.ts src/adapters/document-control.ts src/adapters/export.ts src/adapters/pcb-diagnostics.ts src/adapters/read-only.ts src/adapters/schematic-diagnostics.ts src/adapters/schematic-write.ts src/adapters/system-control.ts src/adapters/update-control.ts src/adapters/update-control.ts src/adapters/utility-control.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts src/remote/client.ts src/server/protocol.ts eslint.config.mjs",
-    "fix": "eslint --fix build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts scripts/smoke-test.ts scripts/server-smoke-test.ts scripts/server-command-runner-smoke-test.ts scripts/remote-client-smoke-test.ts scripts/bridge-e2e-smoke-test.ts scripts/python-server-test-utils.ts scripts/server-project-flow.ts scripts/server-command-runner.ts scripts/server-context-summary.ts scripts/server-context-summary-smoke-test.ts scripts/server-part-selector.ts scripts/server-part-selector-smoke-test.ts scripts/server-schematic-refine.ts scripts/server-schematic-refine-smoke-test.ts scripts/server-pcb-assist.ts scripts/server-pcb-assist-smoke-test.ts scripts/workflow-skill-e2e-smoke-test.ts scripts/library-pin-inspector.ts src/index.ts src/adapters/api-control.ts src/adapters/document-control.ts src/adapters/export.ts src/adapters/pcb-diagnostics.ts src/adapters/read-only.ts src/adapters/schematic-diagnostics.ts src/adapters/schematic-write.ts src/adapters/system-control.ts src/adapters/update-control.ts src/adapters/update-control.ts src/adapters/utility-control.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts src/remote/client.ts src/server/protocol.ts eslint.config.mjs",
+    "lint": "eslint build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts scripts/smoke-test.ts scripts/server-smoke-test.ts scripts/server-command-runner-smoke-test.ts scripts/remote-client-smoke-test.ts scripts/bridge-e2e-smoke-test.ts scripts/python-server-test-utils.ts scripts/server-project-flow.ts scripts/server-command-runner.ts scripts/server-context-summary.ts scripts/server-context-summary-smoke-test.ts scripts/server-part-selector.ts scripts/server-part-selector-smoke-test.ts scripts/server-schematic-refine.ts scripts/server-schematic-refine-smoke-test.ts scripts/server-pcb-assist.ts scripts/server-pcb-assist-smoke-test.ts scripts/workflow-skill-e2e-smoke-test.ts scripts/library-pin-inspector.ts src/index.ts src/adapters/api-control.ts src/adapters/document-control.ts src/adapters/export.ts src/adapters/pcb-diagnostics.ts src/adapters/read-only.ts src/adapters/schematic-diagnostics.ts src/adapters/schematic-write.ts src/adapters/shared-utils.ts src/adapters/system-control.ts src/adapters/update-control.ts src/adapters/utility-control.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts src/remote/client.ts src/server/protocol.ts eslint.config.mjs",
+    "fix": "eslint --fix build/packaged.ts config/esbuild.common.ts config/esbuild.prod.ts scripts/smoke-test.ts scripts/server-smoke-test.ts scripts/server-command-runner-smoke-test.ts scripts/remote-client-smoke-test.ts scripts/bridge-e2e-smoke-test.ts scripts/python-server-test-utils.ts scripts/server-project-flow.ts scripts/server-command-runner.ts scripts/server-context-summary.ts scripts/server-context-summary-smoke-test.ts scripts/server-part-selector.ts scripts/server-part-selector-smoke-test.ts scripts/server-schematic-refine.ts scripts/server-schematic-refine-smoke-test.ts scripts/server-pcb-assist.ts scripts/server-pcb-assist-smoke-test.ts scripts/workflow-skill-e2e-smoke-test.ts scripts/library-pin-inspector.ts src/index.ts src/adapters/api-control.ts src/adapters/document-control.ts src/adapters/export.ts src/adapters/pcb-diagnostics.ts src/adapters/read-only.ts src/adapters/schematic-diagnostics.ts src/adapters/schematic-write.ts src/adapters/shared-utils.ts src/adapters/system-control.ts src/adapters/update-control.ts src/adapters/utility-control.ts src/bridge/protocol.ts src/bridge/registry.ts src/bridge/handlers.ts src/remote/client.ts src/server/protocol.ts eslint.config.mjs",
     "build": "npm run compile && ts-node ./build/packaged.ts",
     "smoke-test": "ts-node --files ./scripts/smoke-test.ts",
     "server:start": "python3 ./scripts/python_bridge_server.py",
@@ -43,21 +43,21 @@
     "@antfu/eslint-config": "^5.4.1",
     "@jlceda/pro-api-types": "^0.2.25",
     "@types/fs-extra": "^11.0.4",
+    "@types/react": "^19.2.14",
     "esbuild": "^0.24.2",
     "eslint": "^9.37.0",
     "fs-extra": "^11.3.0",
     "ignore": "^7.0.3",
     "jszip": "^3.10.1",
+    "react": "^19.2.4",
+    "react-reconciler": "^0.33.0",
     "rimraf": "^6.0.1",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "@types/react": "^19.2.14",
     "@types/ws": "^8.18.1",
     "elkjs": "^0.11.1",
-    "react": "^19.2.4",
-    "react-reconciler": "^0.33.0",
     "ws": "^8.20.0"
   }
 }

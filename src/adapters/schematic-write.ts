@@ -1,6 +1,7 @@
 import type { BridgePoint, BridgeResult } from '../bridge/protocol';
 import { getDefaultRuleProfileSnapshot, getRuleProfileSnapshot } from '../remote/rule-profile';
 import { collectCurrentSchematicPinLocations, snapPointsToNearbyPins } from './schematic-diagnostics';
+import { type Point2D, type SourceRecord, parseSourceRecord, normalizeNumber, distanceSquaredBetweenPoints, distanceSquaredPointToSegment } from './shared-utils';
 
 export interface PlaceComponentPayload {
   libraryUuid: string;
@@ -63,11 +64,6 @@ interface PcbFootprintPlacementTransform {
   componentKey: string;
 }
 
-interface SerializedSourceRecord {
-  header: Record<string, unknown>;
-  body: Record<string, unknown>;
-}
-
 interface SchematicPlacementPoint {
   x: number;
   y: number;
@@ -81,42 +77,8 @@ interface SchematicPlacementGeometry {
   }>;
 }
 
-function parseSourceRecord(line: string): SerializedSourceRecord | undefined {
-  const separatorIndex = line.indexOf('||');
-
-  if (separatorIndex < 0) {
-    return undefined;
-  }
-
-  const headerText = line.slice(0, separatorIndex);
-  const bodyText = line.slice(separatorIndex + 2).replace(/\|$/, '');
-
-  try {
-    return {
-      header: JSON.parse(headerText) as Record<string, unknown>,
-      body: JSON.parse(bodyText) as Record<string, unknown>,
-    };
-  }
-  catch {
-    return undefined;
-  }
-}
-
-function stringifySourceRecord(record: SerializedSourceRecord): string {
+function stringifySourceRecord(record: SourceRecord): string {
   return `${JSON.stringify(record.header)}||${JSON.stringify(record.body)}|`;
-}
-
-function normalizePlacementNumber(value: unknown): number | undefined {
-  if (typeof value === 'number' && Number.isFinite(value)) {
-    return value;
-  }
-
-  if (typeof value === 'string' && value.trim().length > 0) {
-    const parsed = Number(value);
-    return Number.isFinite(parsed) ? parsed : undefined;
-  }
-
-  return undefined;
 }
 
 function parseCurrentSchematicPlacementGeometry(source: string): SchematicPlacementGeometry {
@@ -145,8 +107,8 @@ function parseCurrentSchematicPlacementGeometry(source: string): SchematicPlacem
     const type = String(record.header.type ?? '');
 
     if (type === 'COMPONENT') {
-      const x = normalizePlacementNumber(record.body.x);
-      const y = normalizePlacementNumber(record.body.y);
+      const x = normalizeNumber(record.body.x);
+      const y = normalizeNumber(record.body.y);
       if (x !== undefined && y !== undefined) {
         components.push({ x, y });
       }
@@ -155,10 +117,10 @@ function parseCurrentSchematicPlacementGeometry(source: string): SchematicPlacem
 
     if (type === 'LINE') {
       const lineGroup = String(record.body.lineGroup ?? '');
-      const startX = normalizePlacementNumber(record.body.startX);
-      const startY = normalizePlacementNumber(record.body.startY);
-      const endX = normalizePlacementNumber(record.body.endX);
-      const endY = normalizePlacementNumber(record.body.endY);
+      const startX = normalizeNumber(record.body.startX);
+      const startY = normalizeNumber(record.body.startY);
+      const endX = normalizeNumber(record.body.endX);
+      const endY = normalizeNumber(record.body.endY);
 
       if (!lineGroup || startX === undefined || startY === undefined || endX === undefined || endY === undefined) {
         continue;
@@ -186,37 +148,8 @@ function parseCurrentSchematicPlacementGeometry(source: string): SchematicPlacem
   };
 }
 
-function distanceSquaredBetweenPoints(left: SchematicPlacementPoint, right: SchematicPlacementPoint): number {
-  const dx = left.x - right.x;
-  const dy = left.y - right.y;
-  return dx * dx + dy * dy;
-}
-
-function distanceSquaredPointToSegment(
-  point: SchematicPlacementPoint,
-  start: SchematicPlacementPoint,
-  end: SchematicPlacementPoint,
-): number {
-  const dx = end.x - start.x;
-  const dy = end.y - start.y;
-  const lengthSquared = dx * dx + dy * dy;
-
-  if (lengthSquared === 0) {
-    return distanceSquaredBetweenPoints(point, start);
-  }
-
-  const rawT = ((point.x - start.x) * dx + (point.y - start.y) * dy) / lengthSquared;
-  const t = Math.min(1, Math.max(0, rawT));
-  const projected = {
-    x: start.x + dx * t,
-    y: start.y + dy * t,
-  };
-
-  return distanceSquaredBetweenPoints(point, projected);
-}
-
 function generatePlacementOffsets(step: number, maxRing: number): Array<SchematicPlacementPoint> {
-  const offsets: Array<SchematicPlacementPoint> = [{ x: 0, y: 0 }];
+  const candidateOffsets: Array<SchematicPlacementPoint> = [{ x: 0, y: 0 }];
 
   for (let ring = 1; ring <= maxRing; ring += 1) {
     const distance = ring * step;
@@ -232,11 +165,14 @@ function generatePlacementOffsets(step: number, maxRing: number): Array<Schemati
     ] as const;
 
     for (const [x, y] of coordinates) {
-      offsets.push({ x, y });
+      candidateOffsets.push({ x, y });
     }
   }
 
-  return offsets;
+  // Sort by distance from origin so closer positions are tried first
+  candidateOffsets.sort((a, b) => (a.x * a.x + a.y * a.y) - (b.x * b.x + b.y * b.y));
+
+  return candidateOffsets;
 }
 
 function isPlacementClear(
@@ -490,7 +426,7 @@ function buildPlacedFootprintSource(
     .map(line => line.trim())
     .filter(line => line.length > 0)
     .map(parseSourceRecord)
-    .filter((record): record is SerializedSourceRecord => Boolean(record))
+    .filter((record): record is SourceRecord => Boolean(record))
     .filter((record) => {
       const recordType = String(record.header.type ?? '');
       return ['PAD', 'POLY', 'FILL', 'ATTR'].includes(recordType);

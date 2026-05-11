@@ -4,7 +4,6 @@ from __future__ import annotations
 import base64
 import io
 import json
-import math
 import os
 import re
 import shutil
@@ -23,6 +22,7 @@ from pathlib import Path
 from typing import Any
 
 from schematic_layout_rules import compile_layout_context
+from env_utils import env, parse_json_env, is_truthy_env, to_int_env, normalize_text, to_float, normalize_number, normalize_bool, get_schematic_layout_config
 
 REQ_SCHEMA_VERSION = 'requirement-spec.v1'
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
@@ -43,45 +43,6 @@ def iso_now() -> str:
     return datetime.now(timezone.utc).isoformat()
 
 
-def to_float(value: Any, fallback: float) -> float:
-    try:
-        if value is None:
-            return fallback
-        return float(value)
-    except (TypeError, ValueError):
-        return fallback
-
-
-def env(name: str, fallback: str = '') -> str:
-    value = os.environ.get(name)
-    return value if isinstance(value, str) and value else fallback
-
-
-def parse_json_env(name: str, fallback: Any) -> Any:
-    raw = env(name)
-    if not raw:
-        return fallback
-    return json.loads(raw)
-
-
-def normalize_text(value: str) -> str:
-    return value.strip().lower()
-
-
-def is_truthy_env(name: str, fallback: str = 'false') -> bool:
-    return normalize_text(env(name, fallback)) in ('1', 'true', 'yes', 'on')
-
-
-def to_int_env(name: str, fallback: int) -> int:
-    raw = env(name)
-    if not raw:
-        return fallback
-    try:
-        return int(raw)
-    except (TypeError, ValueError):
-        return fallback
-
-
 def load_json_file(path: Path, fallback: Any) -> Any:
     try:
         if not path.exists():
@@ -97,44 +58,6 @@ def save_json_file(path: Path, payload: Any) -> None:
         path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     except Exception:
         pass
-
-
-def get_schematic_layout_config() -> dict[str, int]:
-    return {
-        'origin_x': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_X', 420),
-        'origin_y': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_Y', 220),
-        'columns': max(1, to_int_env('BRIDGE_SCH_PLACE_COLUMNS', 4)),
-        'pitch_x': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_X', 120)),
-        'pitch_y': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_Y', 100)),
-        'label_x_offset': to_int_env('BRIDGE_SCH_LABEL_X_OFFSET', 420),
-        'label_y_start_offset': to_int_env('BRIDGE_SCH_LABEL_Y_START_OFFSET', -120),
-        'label_y_step': max(8, to_int_env('BRIDGE_SCH_LABEL_Y_STEP', 28)),
-        'flag_x_offset': to_int_env('BRIDGE_SCH_FLAG_X_OFFSET', 500),
-    }
-
-
-def normalize_number(value: Any) -> float | None:
-    if isinstance(value, (int, float)):
-        number = float(value)
-        if math.isfinite(number):
-            return number
-        return None
-    if isinstance(value, str) and value.strip():
-        try:
-            number = float(value)
-            if math.isfinite(number):
-                return number
-        except ValueError:
-            return None
-    return None
-
-
-def normalize_bool(value: Any) -> bool:
-    if isinstance(value, bool):
-        return value
-    if isinstance(value, str):
-        return value.strip().lower() in ('true', '1', 'yes')
-    return False
 
 
 def parse_source_record(line: str) -> dict[str, dict[str, Any]] | None:
@@ -1330,74 +1253,77 @@ def execute_ngspice_netlist(spice_netlist: SpiceNetlistModel) -> NgspiceExecutio
     netlist_path.write_text(netlist_text, encoding='utf-8')
     command = [executable, '-b', '-o', str(log_path), str(netlist_path)]
     try:
-        process = subprocess.run(
-            command,
-            cwd=str(temp_dir),
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            timeout=to_int_env('BRIDGE_NGSPICE_TIMEOUT_SEC', 60),
-            check=False,
-        )
-        log_text = ''
-        if log_path.exists():
-            log_text = log_path.read_text(encoding='utf-8', errors='replace')
-        elif process.stdout:
-            log_text = process.stdout
-        parsed = parse_ngspice_log(log_text)
-        success = process.returncode == 0
-        if not success:
-            warnings.append('ngspice returned a non-zero exit status.')
-        warnings.extend(parsed['warnings'])
-        if not log_text and process.stderr:
-            log_text = process.stderr
-        return NgspiceExecutionModel(
-            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
-            request_id=spice_netlist.request_id,
-            enabled=True,
-            attempted=True,
-            executable=executable,
-            command=command,
-            netlist_path=str(netlist_path),
-            log_path=str(log_path),
-            returncode=process.returncode,
-            success=success,
-            stdout=process.stdout or '',
-            stderr=process.stderr or '',
-            log_text=log_text,
-            parsed=parsed,
-            warnings=warnings,
-        )
-    except subprocess.TimeoutExpired as error:
-        return NgspiceExecutionModel(
-            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
-            request_id=spice_netlist.request_id,
-            enabled=True,
-            attempted=True,
-            executable=executable,
-            command=command,
-            netlist_path=str(netlist_path),
-            log_path=str(log_path),
-            success=False,
-            parsed=parse_ngspice_log(''),
-            warnings=['ngspice execution timed out.'],
-            error=str(error),
-        )
-    except Exception as error:  # noqa: BLE001
-        return NgspiceExecutionModel(
-            schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
-            request_id=spice_netlist.request_id,
-            enabled=True,
-            attempted=True,
-            executable=executable,
-            command=command,
-            netlist_path=str(netlist_path),
-            log_path=str(log_path),
-            success=False,
-            parsed=parse_ngspice_log(''),
-            warnings=['ngspice execution failed.'],
-            error=str(error),
-        )
+        try:
+            process = subprocess.run(
+                command,
+                cwd=str(temp_dir),
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                text=True,
+                timeout=to_int_env('BRIDGE_NGSPICE_TIMEOUT_SEC', 60),
+                check=False,
+            )
+            log_text = ''
+            if log_path.exists():
+                log_text = log_path.read_text(encoding='utf-8', errors='replace')
+            elif process.stdout:
+                log_text = process.stdout
+            parsed = parse_ngspice_log(log_text)
+            success = process.returncode == 0
+            if not success:
+                warnings.append('ngspice returned a non-zero exit status.')
+            warnings.extend(parsed['warnings'])
+            if not log_text and process.stderr:
+                log_text = process.stderr
+            return NgspiceExecutionModel(
+                schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+                request_id=spice_netlist.request_id,
+                enabled=True,
+                attempted=True,
+                executable=executable,
+                command=command,
+                netlist_path=str(netlist_path),
+                log_path=str(log_path),
+                returncode=process.returncode,
+                success=success,
+                stdout=process.stdout or '',
+                stderr=process.stderr or '',
+                log_text=log_text,
+                parsed=parsed,
+                warnings=warnings,
+            )
+        except subprocess.TimeoutExpired as error:
+            return NgspiceExecutionModel(
+                schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+                request_id=spice_netlist.request_id,
+                enabled=True,
+                attempted=True,
+                executable=executable,
+                command=command,
+                netlist_path=str(netlist_path),
+                log_path=str(log_path),
+                success=False,
+                parsed=parse_ngspice_log(''),
+                warnings=['ngspice execution timed out.'],
+                error=str(error),
+            )
+        except Exception as error:  # noqa: BLE001
+            return NgspiceExecutionModel(
+                schema_version=NGSPICE_EXECUTION_SCHEMA_VERSION,
+                request_id=spice_netlist.request_id,
+                enabled=True,
+                attempted=True,
+                executable=executable,
+                command=command,
+                netlist_path=str(netlist_path),
+                log_path=str(log_path),
+                success=False,
+                parsed=parse_ngspice_log(''),
+                warnings=['ngspice execution failed.'],
+                error=str(error),
+            )
+    finally:
+        shutil.rmtree(str(temp_dir), ignore_errors=True)
 
 
 def build_netlist_from_circuit_model(model: CircuitModel) -> NetlistModel:

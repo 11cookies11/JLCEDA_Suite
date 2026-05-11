@@ -308,39 +308,43 @@ function getConfirmationResponseIfNeeded(
   return createConfirmationResponse(request.id, {
     reason: `${commandKey} modifies editor state and requires explicit confirmation.`,
     riskLevel: descriptor.domain === 'system' || descriptor.domain === 'project' ? 'medium' : 'high',
-    token: `confirm_${request.id}`,
+    token: `confirm_${globalThis.crypto.randomUUID()}`,
   });
 }
 
 export async function executeBridgeRequest(request: BridgeRequest): Promise<BridgeResponse> {
-  const commandKey = getCommandKey(request);
-  const validationError = validateRequest(request, commandKey);
+  const rawKey = getCommandKey(request);
+  const validationError = validateRequest(request, rawKey);
 
   if (validationError) {
     return createErrorResponse(request.id, validationError);
   }
 
-  const resolvedCommandKey = commandKey as BridgeCommandName;
+  const commandKey = rawKey as BridgeCommandName;
 
-  const confirmationResponse = getConfirmationResponseIfNeeded(request, resolvedCommandKey);
+  const confirmationResponse = getConfirmationResponseIfNeeded(request, commandKey);
 
   if (confirmationResponse) {
     return confirmationResponse;
   }
 
-  if (!isCommandImplemented(resolvedCommandKey)) {
+  if (!isCommandImplemented(commandKey)) {
     return createErrorResponse(request.id, {
       code: 'UNSUPPORTED_ACTION',
-      message: `Command is registered but not implemented yet: ${resolvedCommandKey}`,
+      message: `Command is registered but not implemented yet: ${commandKey}`,
       retryable: false,
       details: {
-        command: resolvedCommandKey,
+        command: commandKey,
       },
     });
   }
 
+  return dispatchCommand(commandKey, request);
+}
+
+async function dispatchCommand(commandKey: BridgeCommandName, request: BridgeRequest): Promise<BridgeResponse> {
   try {
-    switch (resolvedCommandKey) {
+    switch (commandKey) {
       case 'system.ping':
         return createSuccessResponse(
           request.id,
@@ -1129,10 +1133,10 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
       default:
         return createErrorResponse(request.id, {
           code: 'UNSUPPORTED_ACTION',
-          message: `No execution branch is available for ${resolvedCommandKey}`,
+          message: `No execution branch is available for ${commandKey}`,
           retryable: false,
           details: {
-            command: resolvedCommandKey,
+            command: commandKey,
           },
         });
     }
@@ -1143,7 +1147,7 @@ export async function executeBridgeRequest(request: BridgeRequest): Promise<Brid
       message: error instanceof Error ? error.message : 'Unknown bridge execution failure',
       retryable: true,
       details: {
-        command: resolvedCommandKey,
+        command: commandKey,
       },
     });
   }

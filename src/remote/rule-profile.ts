@@ -79,7 +79,7 @@ const DEFAULT_PROFILE: RuleProfileSnapshot = {
     powerRowSpacingFactor: 0.7,
     labelGapRatio: 0.35,
     placementStep: 40,
-    placementMaxRing: 8,
+    placementMaxRing: 12,
     powerKeywords: ['vin', 'vout', 'vcc', 'vdd', '3v3', '5v', 'gnd', 'reg', 'ldo', 'buck', 'boost', 'power', 'pwr', 'dc', 'usb'],
     powerRoleKeywords: {
       inputCapacitor: ['cap', 'decoupl'],

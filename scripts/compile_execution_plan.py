@@ -10,38 +10,17 @@ from pathlib import Path
 from typing import Any
 
 from schematic_layout_rules import compile_layout_context
+from env_utils import env, to_int_env, get_schematic_layout_config
 
 
 MODEL_SCHEMA_VERSION = 'circuit-model.v1'
 PLAN_SCHEMA_VERSION = 'execution-plan.v1'
 
 
-def env(name: str, fallback: str = '') -> str:
-    value = os.environ.get(name)
-    return value if isinstance(value, str) and value else fallback
-
-
-def parse_json_env(name: str) -> dict[str, Any] | None:
-    raw = env(name)
-    if not raw:
-        return None
-    return json.loads(raw)
-
-
-def to_int_env(name: str, fallback: int) -> int:
-    raw = env(name)
-    if not raw:
-        return fallback
-    try:
-        return int(raw)
-    except (TypeError, ValueError):
-        return fallback
-
-
 def load_circuit_model() -> dict[str, Any]:
-    from_env = parse_json_env('BRIDGE_CIRCUIT_MODEL_JSON')
-    if from_env is not None:
-        return from_env
+    raw = env('BRIDGE_CIRCUIT_MODEL_JSON')
+    if raw:
+        return json.loads(raw)
 
     file_path = env('BRIDGE_CIRCUIT_MODEL_FILE')
     if not file_path:
@@ -63,20 +42,6 @@ def is_power_net(net_name: str) -> bool:
     if normalized in ('3V3', '+3V3', '5V', '+5V', '12V', '+12V', 'VIN', 'VCC', 'VDD'):
         return True
     return normalized.startswith('+')
-
-
-def get_schematic_layout_config() -> dict[str, int]:
-    return {
-        'origin_x': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_X', 420),
-        'origin_y': to_int_env('BRIDGE_SCH_PLACE_ORIGIN_Y', 220),
-        'columns': max(1, to_int_env('BRIDGE_SCH_PLACE_COLUMNS', 4)),
-        'pitch_x': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_X', 120)),
-        'pitch_y': max(20, to_int_env('BRIDGE_SCH_PLACE_PITCH_Y', 100)),
-        'label_x_offset': to_int_env('BRIDGE_SCH_LABEL_X_OFFSET', 420),
-        'label_y_start_offset': to_int_env('BRIDGE_SCH_LABEL_Y_START_OFFSET', -120),
-        'label_y_step': max(8, to_int_env('BRIDGE_SCH_LABEL_Y_STEP', 28)),
-        'flag_x_offset': to_int_env('BRIDGE_SCH_FLAG_X_OFFSET', 500),
-    }
 
 
 def component_anchor(index: int, layout: dict[str, int]) -> dict[str, int]:
