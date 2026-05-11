@@ -268,10 +268,58 @@ def enrich_candidate_pin_geometry(
 
     pin_count = len(pins)
     named_pin_count = sum(1 for pin in pins if str(pin.get('pinName', '') or '').strip())
-    cache[cache_key] = {'pinCount': pin_count, 'namedPinCount': named_pin_count}
+    bbox: dict[str, float] = {}
+    if pins:
+        xs = [float(p.get('x', 0) or 0) for p in pins]
+        ys = [float(p.get('y', 0) or 0) for p in pins]
+        if xs and ys:
+            padding = 10.0  # small margin around pin cluster
+            min_x = min(xs) - padding
+            max_x = max(xs) + padding
+            min_y = min(ys) - padding
+            max_y = max(ys) + padding
+            bbox = {
+                'minX': min_x,
+                'maxX': max_x,
+                'minY': min_y,
+                'maxY': max_y,
+                'width': max(20.0, max_x - min_x),
+                'height': max(20.0, max_y - min_y),
+            }
+    cache[cache_key] = {'pinCount': pin_count, 'namedPinCount': named_pin_count, **bbox}
     candidate.pin_count = pin_count
     candidate.named_pin_count = named_pin_count
     return candidate
+
+
+def build_symbol_dimensions_from_components(
+    components: list[CircuitComponent],
+    cache_dir: str | None = None,
+) -> dict[str, dict[str, float]]:
+    """Return {ref: {width, height}} for each component using cached symbol pin data.
+
+    Reads the auto-search pin cache (populated by enrich_candidate_pin_geometry).
+    Falls back to pin_count heuristic stored on the component when the cache
+    entry doesn't include bounding-box coordinates.
+    """
+    cache_root = Path(cache_dir or env('BRIDGE_CACHE_DIR', '.where/cache'))
+    cache_path = cache_root / 'auto-search-cache-v2.json'
+    cache_payload = load_json_file(cache_path, {})
+    if not isinstance(cache_payload, dict):
+        cache_payload = {}
+
+    dimensions: dict[str, dict[str, float]] = {}
+    for component in components:
+        ref = component.ref
+        selected = component.selected_part
+        cache_key = f'{selected.library_uuid}:{selected.symbol_uuid}'
+        cached_entry = cache_payload.get(cache_key)
+        if isinstance(cached_entry, dict):
+            w = float(cached_entry.get('width', 0) or 0)
+            h = float(cached_entry.get('height', 0) or 0)
+            if w > 0 and h > 0:
+                dimensions[ref] = {'width': w, 'height': h}
+    return dimensions
 
 
 @dataclass
@@ -1501,20 +1549,81 @@ def _component_anchor(index: int, layout: dict[str, int]) -> dict[str, int]:
     }
 
 
+def compute_rotation_from_neighbors(
+    component_ref: str,
+    nets: list[CircuitNet],
+    placements: dict[str, dict[str, Any]],
+) -> int:
+    """Return the best rotation (0/90/180/270) so the component faces its neighbours.
+
+    Analyses all nets the component participates in and finds the dominant
+    direction toward the other connected components.  Falls back to 0 when
+    there are no connected neighbours with known positions.
+    """
+    dx_total = 0.0
+    dy_total = 0.0
+    own_pos = placements.get(component_ref)
+    if not own_pos:
+        return 0
+
+    own_x = float(own_pos.get('x', 0))
+    own_y = float(own_pos.get('y', 0))
+    peer_contributions = 0
+
+    for net in nets:
+        members = [str(m) for m in net.members]
+        # Include nets that reference this component at least once.
+        if not any(m.startswith(f'{component_ref}.') for m in members):
+            continue
+
+        # Gather neighbour refs on the same net (exclude self).
+        peer_refs: set[str] = set()
+        for member in members:
+            ref, _pin = member.split('.', 1) if '.' in member else (member, '')
+            if ref and ref != component_ref:
+                peer_refs.add(ref)
+
+        for peer_ref in peer_refs:
+            peer_pos = placements.get(peer_ref)
+            if not peer_pos:
+                continue
+            dx_total += float(peer_pos.get('x', 0)) - own_x
+            dy_total += float(peer_pos.get('y', 0)) - own_y
+            peer_contributions += 1
+
+    if peer_contributions == 0:
+        return 0
+
+    # Determine dominant quadrant.
+    if abs(dx_total) >= abs(dy_total):
+        return 0 if dx_total >= 0 else 180
+    else:
+        return 90 if dy_total >= 0 else 270
+
+
 def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[ExecutionOperation] | None = None) -> ExecutionPlan:
     ensure_circuit_model(model)
     operations: list[ExecutionOperation] = []
     placeable_refs: set[str] = set()
     layout = get_schematic_layout_config()
+    symbol_dims = build_symbol_dimensions_from_components(model.components)
     layout_context = compile_layout_context(
         components=[asdict(component) for component in model.components],
         nets=[asdict(net) for net in model.nets],
         origin_x=layout['origin_x'],
         origin_y=layout['origin_y'],
+        symbol_dimensions=symbol_dims if symbol_dims else None,
     )
     layout_engine = str(layout_context.get('engine', 'rules'))
     component_placements = layout_context.get('componentPlacements', {})
     net_port_placements = layout_context.get('netPortPlacements', [])
+
+    # Pre-compute rotations from neighbour directions (replaces uniform rotation=0).
+    rotations: dict[str, int] = {}
+    for component in model.components:
+        rotations[component.ref] = compute_rotation_from_neighbors(
+            component.ref, model.nets, component_placements,
+        )
 
     for idx, component in enumerate(model.components):
         selected = component.selected_part
@@ -1535,14 +1644,14 @@ def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[Execu
                     'libraryUuid': selected.library_uuid,
                     'uuid': place_uuid,
                     'position': anchor,
-                    'rotation': 0,
+                    'rotation': rotations.get(component.ref, 0),
                     'mirror': False,
                     'addIntoBom': True,
                     'addIntoPcb': True,
                 },
                 on_error='stop',
                 notes=[
-                    f'Place {component.ref} ({component.role})',
+                    f'Place {component.ref} ({component.role}) rot={rotations.get(component.ref, 0)}',
                     f'Rule block={anchor_data.get("block", "unknown")} slot={anchor_data.get("slot", -1)}',
                     f'Layout engine={layout_engine}',
                 ],
@@ -2254,13 +2363,22 @@ def _to_bridge_request(request_id: str, op: ExecutionOperation) -> dict[str, Any
 def build_component_placement_map(model: CircuitModel) -> dict[str, dict[str, Any]]:
     placement_map: dict[str, dict[str, Any]] = {}
     layout = get_schematic_layout_config()
+    symbol_dims = build_symbol_dimensions_from_components(model.components)
     layout_context = compile_layout_context(
         components=[asdict(component) for component in model.components],
         nets=[asdict(net) for net in model.nets],
         origin_x=layout['origin_x'],
         origin_y=layout['origin_y'],
+        symbol_dimensions=symbol_dims if symbol_dims else None,
     )
     component_placements = layout_context.get('componentPlacements', {})
+    # Pre-compute rotations from neighbour directions.
+    rotations: dict[str, int] = {}
+    for component in model.components:
+        rotations[component.ref] = compute_rotation_from_neighbors(
+            component.ref, model.nets, component_placements,
+        )
+
     for index, component in enumerate(model.components):
         selected = component.selected_part
         place_uuid = selected.place_uuid or selected.symbol_uuid
@@ -2277,7 +2395,7 @@ def build_component_placement_map(model: CircuitModel) -> dict[str, dict[str, An
             'role': component.role,
             'x': anchor['x'],
             'y': anchor['y'],
-            'rotation': 0,
+            'rotation': rotations.get(component.ref, 0),
             'mirror': False,
             'libraryUuid': selected.library_uuid,
             'placeUuid': place_uuid,

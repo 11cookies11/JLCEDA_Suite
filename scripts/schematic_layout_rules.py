@@ -168,43 +168,15 @@ def _index_by_ref(components: list[dict[str, Any]]) -> dict[str, dict[str, Any]]
     return output
 
 
-def _compile_layout_context_rules(
-    components: list[dict[str, Any]],
+def _compute_net_ports(
     nets: list[dict[str, Any]],
+    placements: dict[str, dict[str, Any]],
     origin_x: int,
     origin_y: int,
-    rules: LayoutRuleSet | None = None,
-) -> dict[str, Any]:
-    active_rules = rules or build_default_layout_rules()
-    block_rule = active_rules.block_layout
-    anchor_rule = active_rules.pin_anchor
-    net_rule = active_rules.net_class
-
-    grouped: dict[str, list[dict[str, Any]]] = {block: [] for block in block_rule.block_order}
-    grouped.setdefault('io', [])
-    for component in components:
-        block = _block_of_role(_role_of_component(component), block_rule)
-        grouped.setdefault(block, [])
-        grouped[block].append(component)
-
-    placements: dict[str, dict[str, Any]] = {}
-    for block_index, block_name in enumerate(block_rule.block_order):
-        block_items = grouped.get(block_name, [])
-        block_x = origin_x + (block_index * block_rule.block_pitch_x)
-        block_y = origin_y if block_name != 'io' else origin_y + 80
-        for slot_index, component in enumerate(block_items):
-            ref = str(component.get('ref', '') or '')
-            if not ref:
-                continue
-            placements[ref] = {
-                'x': block_x,
-                'y': block_y + (slot_index * block_rule.slot_pitch_y),
-                'block': block_name,
-                'slot': slot_index,
-                'role': _role_of_component(component),
-            }
-
-    component_map = _index_by_ref(components)
+    block_rule: BlockLayoutRule,
+    anchor_rule: PinAnchorRule,
+    net_rule: NetClassRule,
+) -> list[dict[str, Any]]:
     net_ports: list[dict[str, Any]] = []
     lane_counters: dict[str, int] = {}
     anchor_side_counters: dict[str, int] = {}
@@ -254,6 +226,55 @@ def _compile_layout_context_rules(
                 'anchorPin': anchor_pin,
             }
         )
+    return net_ports
+
+
+def _compile_layout_context_rules(
+    components: list[dict[str, Any]],
+    nets: list[dict[str, Any]],
+    origin_x: int,
+    origin_y: int,
+    rules: LayoutRuleSet | None = None,
+) -> dict[str, Any]:
+    active_rules = rules or build_default_layout_rules()
+    block_rule = active_rules.block_layout
+    anchor_rule = active_rules.pin_anchor
+    net_rule = active_rules.net_class
+
+    grouped: dict[str, list[dict[str, Any]]] = {block: [] for block in block_rule.block_order}
+    grouped.setdefault('io', [])
+    for component in components:
+        block = _block_of_role(_role_of_component(component), block_rule)
+        grouped.setdefault(block, [])
+        grouped[block].append(component)
+
+    placements: dict[str, dict[str, Any]] = {}
+    for block_index, block_name in enumerate(block_rule.block_order):
+        block_items = grouped.get(block_name, [])
+        block_x = origin_x + (block_index * block_rule.block_pitch_x)
+        block_y = origin_y if block_name != 'io' else origin_y + 80
+        for slot_index, component in enumerate(block_items):
+            ref = str(component.get('ref', '') or '')
+            if not ref:
+                continue
+            placements[ref] = {
+                'x': block_x,
+                'y': block_y + (slot_index * block_rule.slot_pitch_y),
+                'block': block_name,
+                'slot': slot_index,
+                'role': _role_of_component(component),
+            }
+
+    component_map = _index_by_ref(components)
+    net_ports = _compute_net_ports(
+        nets=nets,
+        placements=placements,
+        origin_x=origin_x,
+        origin_y=origin_y,
+        block_rule=block_rule,
+        anchor_rule=anchor_rule,
+        net_rule=net_rule,
+    )
 
     net_edges: list[dict[str, Any]] = []
     for net in nets:
@@ -315,10 +336,48 @@ def _compile_layout_context_rules(
     }
 
 
+def _estimate_node_dimensions(component: dict[str, Any], symbol_dimensions: dict[str, dict[str, float]] | None) -> tuple[float, float]:
+    """Return (width, height) for a component's ELK node.
+
+    Uses real symbol bounding-box data when available (from library pin
+    positions).  Falls back to a pin-count heuristic when the symbol
+    hasn't been fetched, and ultimately to a safe 160×90 default.
+    """
+    ref = str(component.get('ref', '') or '')
+    if symbol_dimensions and ref in symbol_dimensions:
+        dims = symbol_dimensions[ref]
+        w = float(dims.get('width', 0) or 0)
+        h = float(dims.get('height', 0) or 0)
+        if w > 0 and h > 0:
+            return w, h
+
+    # Pin-count heuristic fallback – better than uniform 160×90
+    selected = component.get('selected_part') if isinstance(component.get('selected_part'), dict) else None
+    pin_count = 0
+    if selected:
+        pin_count = int(selected.get('pin_count', 0) or 0)
+    if not pin_count:
+        pin_count = int(component.get('pin_count', 0) or 0)
+
+    if pin_count <= 2:
+        return 60, 80
+    if pin_count <= 4:
+        return 80, 100
+    if pin_count <= 8:
+        return 120, 130
+    if pin_count <= 16:
+        return 160, 170
+    if pin_count > 16:
+        return 210, 210
+
+    return 160, 90
+
+
 def _build_elk_graph(
     components: list[dict[str, Any]],
     nets: list[dict[str, Any]],
     rules: LayoutRuleSet,
+    symbol_dimensions: dict[str, dict[str, float]] | None = None,
 ) -> dict[str, Any]:
     nodes: list[dict[str, Any]] = []
     edges: list[dict[str, Any]] = []
@@ -329,11 +388,12 @@ def _build_elk_graph(
             continue
         role = _role_of_component(component)
         block = _block_of_role(role, rules.block_layout)
+        width, height = _estimate_node_dimensions(component, symbol_dimensions)
         nodes.append(
             {
                 'id': ref,
-                'width': 160,
-                'height': 90,
+                'width': width,
+                'height': height,
                 'labels': [{'text': ref}],
                 'layoutOptions': {
                     # Use the existing block info as a weak ordering hint.
@@ -415,8 +475,9 @@ def _compile_layout_context_elk(
     origin_x: int,
     origin_y: int,
     rules: LayoutRuleSet,
+    symbol_dimensions: dict[str, dict[str, float]] | None = None,
 ) -> dict[str, Any]:
-    graph = _build_elk_graph(components, nets, rules)
+    graph = _build_elk_graph(components, nets, rules, symbol_dimensions)
     timeout_ms = int(os.environ.get('BRIDGE_ELK_TIMEOUT_MS', '2000') or '2000')
     layout_tree = _run_elk_layout(graph, timeout_ms=timeout_ms)
     elk_nodes = _collect_elk_nodes(layout_tree)
@@ -435,6 +496,19 @@ def _compile_layout_context_elk(
     base['elk'] = {
         'nodeCount': len(elk_nodes),
     }
+
+    # Recompute net port positions based on the updated ELK component locations.
+    if elk_nodes:
+        base['netPortPlacements'] = _compute_net_ports(
+            nets=nets,
+            placements=placements,
+            origin_x=origin_x,
+            origin_y=origin_y,
+            block_rule=rules.block_layout,
+            anchor_rule=rules.pin_anchor,
+            net_rule=rules.net_class,
+        )
+
     return base
 
 
@@ -444,6 +518,7 @@ def compile_layout_context(
     origin_x: int,
     origin_y: int,
     rules: LayoutRuleSet | None = None,
+    symbol_dimensions: dict[str, dict[str, float]] | None = None,
 ) -> dict[str, Any]:
     active_rules = rules or build_default_layout_rules()
     engine = str(os.environ.get('BRIDGE_LAYOUT_ENGINE', 'elk') or 'elk').strip().lower()
@@ -452,7 +527,7 @@ def compile_layout_context(
     if engine == 'rules':
         return _compile_layout_context_rules(components, nets, origin_x, origin_y, active_rules)
     try:
-        return _compile_layout_context_elk(components, nets, origin_x, origin_y, active_rules)
+        return _compile_layout_context_elk(components, nets, origin_x, origin_y, active_rules, symbol_dimensions)
     except Exception as error:  # noqa: BLE001
         fallback = _compile_layout_context_rules(components, nets, origin_x, origin_y, active_rules)
         fallback['engine'] = 'rules'
