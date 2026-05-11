@@ -65,6 +65,7 @@ def build_default_layout_rules() -> LayoutRuleSet:
             role_to_block={
                 'input_protection': 'input',
                 'input_capacitor': 'input',
+                'connector': 'input',
                 'buck_regulator': 'power_stage',
                 'inductor': 'power_stage',
                 'output_capacitor': 'output',

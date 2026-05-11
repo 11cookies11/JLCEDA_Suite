@@ -1601,14 +1601,109 @@ def compute_rotation_from_neighbors(
         return 90 if dy_total >= 0 else 270
 
 
+# Known roles that should not be overridden by inference.
+_PRESET_ROLES = frozenset({
+    'input_protection', 'input_capacitor', 'buck_regulator', 'inductor',
+    'output_capacitor', 'feedback_resistor_top', 'feedback_resistor_bottom',
+    'connector', 'indicator',
+})
+
+# Keywords mapping net names to inferred roles.
+_NET_ROLE_HINTS: dict[str, str] = {
+    'VIN': 'input_capacitor',
+    'VCC': 'input_capacitor',
+    'VDD': 'input_capacitor',
+    'VOUT': 'output_capacitor',
+    'OUT': 'output_capacitor',
+    'SW': 'inductor',
+    'LX': 'inductor',
+    'FB': 'feedback_resistor_top',
+    'COMP': 'feedback_resistor_bottom',
+    'EN': 'input_protection',
+    'GND': '',  # too generic, don't infer from GND alone
+}
+
+
+def _infer_component_role(
+    component: CircuitComponent,
+    nets: list[CircuitNet],
+) -> str:
+    """Return a role for *component* when its assigned role is missing or generic.
+
+    Uses net-name patterns and component-designator keywords as signals.
+    Does NOT override an already-assigned concrete role.
+    """
+    current_role = (component.role or '').strip()
+    if current_role in _PRESET_ROLES:
+        return current_role
+
+    # Collect every net the component participates in.
+    connected_nets: list[str] = []
+    for net in nets:
+        members = [str(m) for m in net.members]
+        if any(m.startswith(f'{component.ref}.') for m in members):
+            connected_nets.append(net.name.upper())
+
+    # ---- component-name hints (strong signals first) ----
+    text = ' '.join([
+        component.ref or '',
+        component.value or '',
+        component.selected_part.display_name or '',
+        component.selected_part.package or '',
+    ]).lower()
+
+    if any(kw in text for kw in ('reg', 'ldo', 'buck', 'boost', 'ams1117', '1117', 'mp', 'tps')):
+        return 'buck_regulator'
+    if any(kw in text for kw in ('inductor', 'inductance', 'ferrite', 'bead')):
+        return 'inductor'
+    if any(kw in text for kw in ('conn', 'term', 'header', 'socket', 'pin header')):
+        return 'connector'
+    if any(kw in text for kw in ('led', 'indicator')):
+        return 'indicator'
+
+    # ---- net-name hints (for capacitors & passives) ----
+    net_role_votes: dict[str, int] = {}
+    for net_name in connected_nets:
+        role = _NET_ROLE_HINTS.get(net_name, '')
+        if role:
+            net_role_votes[role] = net_role_votes.get(role, 0) + 1
+
+    if net_role_votes:
+        best_role = max(net_role_votes, key=lambda r: net_role_votes[r])
+        if net_role_votes[best_role] >= 1:
+            return best_role
+
+    if 'cap' in text or 'capacitor' in text:
+        for net_name in connected_nets:
+            if net_name in ('VCC', 'VIN', 'VDD'):
+                return 'input_capacitor'
+            if net_name in ('VOUT', 'OUT'):
+                return 'output_capacitor'
+        return 'input_capacitor'
+    if any(kw in text for kw in ('res', 'resistor')) and component.ref.lower().startswith('r'):
+        for net_name in connected_nets:
+            if net_name == 'FB':
+                return 'feedback_resistor_top'
+
+    return current_role or 'io'
+
+
 def compile_execution_plan(model: CircuitModel, safe_wire_operations: list[ExecutionOperation] | None = None) -> ExecutionPlan:
     ensure_circuit_model(model)
     operations: list[ExecutionOperation] = []
     placeable_refs: set[str] = set()
     layout = get_schematic_layout_config()
+
+    # Enrich components whose role is empty/generic before layout.
+    enriched_components: list[dict[str, Any]] = []
+    for component in model.components:
+        comp_dict = asdict(component)
+        comp_dict['role'] = _infer_component_role(component, model.nets)
+        enriched_components.append(comp_dict)
+
     symbol_dims = build_symbol_dimensions_from_components(model.components)
     layout_context = compile_layout_context(
-        components=[asdict(component) for component in model.components],
+        components=enriched_components,
         nets=[asdict(net) for net in model.nets],
         origin_x=layout['origin_x'],
         origin_y=layout['origin_y'],
@@ -2363,9 +2458,16 @@ def _to_bridge_request(request_id: str, op: ExecutionOperation) -> dict[str, Any
 def build_component_placement_map(model: CircuitModel) -> dict[str, dict[str, Any]]:
     placement_map: dict[str, dict[str, Any]] = {}
     layout = get_schematic_layout_config()
+
+    enriched_components: list[dict[str, Any]] = []
+    for component in model.components:
+        comp_dict = asdict(component)
+        comp_dict['role'] = _infer_component_role(component, model.nets)
+        enriched_components.append(comp_dict)
+
     symbol_dims = build_symbol_dimensions_from_components(model.components)
     layout_context = compile_layout_context(
-        components=[asdict(component) for component in model.components],
+        components=enriched_components,
         nets=[asdict(net) for net in model.nets],
         origin_x=layout['origin_x'],
         origin_y=layout['origin_y'],
