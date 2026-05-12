@@ -87,6 +87,7 @@ def build_default_layout_rules() -> LayoutRuleSet:
                 'rf_shunt_matching_capacitor': 'rf',
                 'antenna_connector': 'rf',
                 'uart_programming_header': 'io',
+                'usb_connector': 'io',
                 'led_current_limit_resistor': 'indicator',
                 'power_indicator': 'indicator',
                 'vdd3p3_bulk_capacitor': 'power',

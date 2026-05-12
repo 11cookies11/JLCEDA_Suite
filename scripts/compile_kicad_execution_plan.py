@@ -144,6 +144,8 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
     if 'antenna' in role:
         return 'Connector:Conn_Coaxial', package or 'Connector_Coaxial:SMA_Amphenol_132134-10_Vertical', notes
     if ref.startswith('J') or 'connector' in role or 'header' in role:
+        if 'usb' in role:
+            return 'Connector_Generic:Conn_01x04', package or 'Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical', notes
         if 'uart' in role or 'programming' in role:
             return 'Connector_Generic:Conn_01x04', package or 'Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical', notes
         notes.append('Mapped connector role to local AIAgent:Conn_01x04 placeholder symbol.')
@@ -226,6 +228,7 @@ _KNOWN_SYMBOL_SIZES: dict[str, tuple[float, float]] = {
     'AIAgent:Conn_01x04': (15.24, 17.78),
     'AIAgent:Generic_2Pin': (12.7, 10.16),
     'MCU_Espressif:ESP32-C3': (50.8, 55.88),
+    'Connector:USB_C_Receptacle': (20.32, 17.78),
 }
 
 
