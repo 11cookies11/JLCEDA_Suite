@@ -276,6 +276,11 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, float]]:
             visit(child)
 
     visit(tree)
+    if not pins:
+        extends = next((child[1] for child in tree if isinstance(child, list) and sexpr_head(child) == 'extends'), None)
+        if isinstance(extends, str) and extends:
+            parent_pins = parse_symbol_pin_map(f'{library}:{extends}')
+            pins.update(parent_pins)
     SYMBOL_PIN_CACHE[lib_id] = pins
     return pins
 
@@ -952,8 +957,7 @@ def intra_module_wiring(
 
     for net in nets:
         net_kind = str(net.get('kind', 'signal'))
-        if net_kind in ('power', 'ground'):
-            continue
+        is_power_rail = net_kind in ('power', 'ground')
         members = net.get('members', [])
         if not isinstance(members, list):
             continue
@@ -984,6 +988,8 @@ def intra_module_wiring(
                 x, y, _direction = pin_endpoint(by_ref[ref], pin)
                 ref_pins.append((ref, pin, (x, y)))
             blocks.extend(_route_intra_block(ref_pins))
+            if is_power_rail:
+                continue
             if cross_module:
                 for ref, pin in group[1:]:
                     suppress_labels.add((ref, pin))
