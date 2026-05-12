@@ -251,6 +251,9 @@ export interface BridgeCommandPayloadMap {
     tolerance?: number;
     maxIssues?: number;
   };
+  'schematic.collect_pin_locations': {
+    allSchematicPages?: boolean;
+  };
   'schematic.inspect_layout_hygiene': {
     allSchematicPages?: boolean;
     componentClearance?: number;

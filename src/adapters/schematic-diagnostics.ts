@@ -853,6 +853,17 @@ export async function collectCurrentSchematicPinLocations(
   }
 }
 
+export async function collectPinLocationsResult(payload?: { allSchematicPages?: boolean }): Promise<BridgeResult> {
+  const pins = await collectCurrentSchematicPinLocations(payload?.allSchematicPages ?? true);
+  return {
+    summary: 'pin locations collected',
+    data: {
+      pinCount: pins.length,
+      pins,
+    },
+  };
+}
+
 export function snapPointsToNearbyPins(
   points: Array<Point>,
   pins: Array<ConnectivityPointRef>,

@@ -333,17 +333,24 @@ def enrich_candidate_pin_geometry(
     if cache_key in cache:
         cached_value = cache.get(cache_key)
         if isinstance(cached_value, dict):
+            pins_data = cached_value.get('pins')
+            if isinstance(pins_data, list) and pins_data:
+                # Cache hit with full pin data — reuse it
+                candidate.pin_count = int(cached_value.get('pinCount', 0) or 0)
+                candidate.named_pin_count = int(cached_value.get('namedPinCount', 0) or 0)
+                cached_symbol_uuid = cached_value.get('symbolUuid')
+                if isinstance(cached_symbol_uuid, str) and cached_symbol_uuid:
+                    candidate.symbol_uuid = cached_symbol_uuid
+                return candidate
+            # Stale cache entry without pins — fall through to re-fetch
             candidate.pin_count = int(cached_value.get('pinCount', 0) or 0)
             candidate.named_pin_count = int(cached_value.get('namedPinCount', 0) or 0)
-            cached_symbol_uuid = cached_value.get('symbolUuid')
-            if isinstance(cached_symbol_uuid, str) and cached_symbol_uuid:
-                candidate.symbol_uuid = cached_symbol_uuid
         else:
             try:
                 candidate.pin_count = int(cached_value or 0)
             except (TypeError, ValueError):
                 candidate.pin_count = 0
-        return candidate
+            return candidate
     resolved_symbol_uuid = candidate.symbol_uuid
     try:
         base64_payload = fetch_symbol_file_base64(
@@ -430,7 +437,18 @@ def enrich_candidate_pin_geometry(
             }
     if pins:
         candidate.symbol_uuid = resolved_symbol_uuid
-    cache[cache_key] = {'pinCount': pin_count, 'namedPinCount': named_pin_count, 'symbolUuid': candidate.symbol_uuid, **bbox}
+    # Store individual pin positions (local symbol coords) for later wiring.
+    pin_list: list[dict[str, Any]] = []
+    for p in pins:
+        pin_list.append({
+            'pinNumber': str(p.get('pinNumber', '') or ''),
+            'pinName': str(p.get('pinName', '') or ''),
+            'x': float(p.get('x', 0.0) or 0.0),
+            'y': float(p.get('y', 0.0) or 0.0),
+            'rotation': float(p.get('rotation', 0.0) or 0.0),
+            'pinLength': float(p.get('pinLength', 0.0) or 0.0),
+        })
+    cache[cache_key] = {'pinCount': pin_count, 'namedPinCount': named_pin_count, 'symbolUuid': candidate.symbol_uuid, 'pins': pin_list, **bbox}
     candidate.pin_count = pin_count
     candidate.named_pin_count = named_pin_count
     return candidate
@@ -3234,6 +3252,170 @@ def build_safe_wire_operations(
     return wire_operations, logs, issues, diagnostics
 
 
+# Pin-side direction hints (reuses the same names as PinAnchorRule)
+_PIN_SIDE_KEYWORDS: dict[str, str] = {
+    'VIN': 'left', 'EN': 'left', 'SW': 'right', 'VOUT': 'right',
+    'FB': 'right', 'COMP': 'right', 'GND': 'bottom', 'PGND': 'bottom', 'AGND': 'bottom',
+}
+_PIN_SIDE_OFFSETS: dict[str, tuple[int, int]] = {
+    'left': (-80, 0), 'right': (80, 0), 'top': (0, 60), 'bottom': (0, -60),
+}
+
+
+def _pin_direction(pin_name: str) -> str:
+    for keyword, side in _PIN_SIDE_KEYWORDS.items():
+        if keyword in pin_name.upper():
+            return side
+    return 'right'
+
+
+def build_wire_ops_from_placements(
+    plan: ExecutionPlan,
+    model: Any,  # CircuitModel
+) -> list[ExecutionOperation]:
+    """Build wire operations using real pin positions from the auto-search cache.
+
+    Uses the cached symbol pin data (stored by enrich_candidate_pin_geometry)
+    together with the placed component positions to calculate absolute pin
+    endpoints, then creates Manhattan-routed wires between pins on the same net.
+    """
+    # Load pin cache (pin data is stored under the 'pinGeometry' key)
+    cache_root = Path(env('BRIDGE_CACHE_DIR', '.where/cache'))
+    cache_path = cache_root / 'auto-search-cache-v2.json'
+    cache_payload = load_json_file(cache_path, {})
+    if not isinstance(cache_payload, dict):
+        cache_payload = {}
+    pin_cache = cache_payload.get('pinGeometry', {})
+    if not isinstance(pin_cache, dict):
+        pin_cache = {}
+
+    # Build {ref: (x, y, rotation, mirror, libUuid, symUuid)} from plan
+    placements: dict[str, dict[str, Any]] = {}
+    for op in plan.operations:
+        if op.kind != 'place_component':
+            continue
+        notes = op.notes or []
+        ref = ''
+        for note in notes:
+            if note.startswith('Place '):
+                ref = note.split(' ')[1]
+                break
+        if not ref:
+            continue
+        pos = op.payload.get('position', {})
+        placements[ref] = {
+            'x': float(pos.get('x', 0)),
+            'y': float(pos.get('y', 0)),
+            'rotation': int(op.payload.get('rotation', 0) or 0),
+            'mirror': bool(op.payload.get('mirror', False)),
+            'libraryUuid': str(op.payload.get('libraryUuid', '') or ''),
+            'symbolUuid': str(op.payload.get('uuid', '') or ''),
+        }
+
+    if len(placements) < 2:
+        return []
+
+    wire_ops: list[ExecutionOperation] = []
+    for net in model.nets if hasattr(model, 'nets') else (model.get('nets', []) or []):
+        if hasattr(net, 'name'):
+            net_name = net.name
+            members = net.members
+        elif isinstance(net, dict):
+            net_name = str(net.get('name', '') or '')
+            members = [str(m) for m in net.get('members', [])]
+        else:
+            continue
+
+        if len(members) < 2:
+            continue
+
+        # Calculate absolute pin positions for each member
+        endpoints: list[dict[str, float]] = []
+        for member in members:
+            ref, pin_key = member.split('.', 1) if '.' in member else (member, '')
+            placement = placements.get(ref)
+            if not placement:
+                continue
+
+            # Look up cached pin data (under pinGeometry key)
+            cache_key = f'{placement["libraryUuid"]}:{placement["symbolUuid"]}'
+            cached = pin_cache.get(cache_key)
+            pin_list: list[dict[str, Any]] = cached.get('pins', []) if isinstance(cached, dict) else []
+            if not pin_list:
+                # Fallback: direction heuristic from pin name
+                direction = _pin_direction(pin_key)
+                dx, dy = _PIN_SIDE_OFFSETS.get(direction, (80, 0))
+                endpoints.append({'x': placement['x'] + dx, 'y': placement['y'] + dy})
+                continue
+
+            # Find matching pin in cached data
+            best_pin: dict[str, Any] | None = None
+            pin_key_upper = pin_key.upper()
+            # Try exact match by pinNumber or pinName
+            for p in pin_list:
+                pn = str(p.get('pinNumber', '') or p.get('pinName', '') or '').upper()
+                if pn == pin_key_upper or pin_key_upper in pn or pn in pin_key_upper:
+                    best_pin = p
+                    break
+
+            if not best_pin:
+                # Direction heuristic: pick the pin closest to the expected side
+                direction = _pin_direction(pin_key)
+                if direction == 'left':
+                    best_pin = min(pin_list, key=lambda p: p.get('x', 0))
+                elif direction == 'right':
+                    best_pin = max(pin_list, key=lambda p: p.get('x', 0))
+                elif direction == 'bottom':
+                    best_pin = min(pin_list, key=lambda p: p.get('y', 0))
+                elif direction == 'top':
+                    best_pin = max(pin_list, key=lambda p: p.get('y', 0))
+                else:
+                    best_pin = pin_list[0] if pin_list else None
+
+            if best_pin:
+                # Apply placement transform to get absolute pin position
+                local_x = float(best_pin.get('x', 0) or 0)
+                local_y = float(best_pin.get('y', 0) or 0)
+                # Simple rotation transform
+                rot = placement['rotation']
+                if rot == 90:
+                    abs_x = placement['x'] - local_y
+                    abs_y = placement['y'] + local_x
+                elif rot == 180:
+                    abs_x = placement['x'] - local_x
+                    abs_y = placement['y'] - local_y
+                elif rot == 270:
+                    abs_x = placement['x'] + local_y
+                    abs_y = placement['y'] - local_x
+                else:
+                    abs_x = placement['x'] + local_x
+                    abs_y = placement['y'] + local_y
+                endpoints.append({'x': abs_x, 'y': abs_y})
+
+        if len(endpoints) < 2:
+            continue
+
+        # Manhattan routing between endpoints
+        points: list[dict[str, float]] = [endpoints[0]]
+        for i in range(1, len(endpoints)):
+            prev = points[-1]
+            curr = endpoints[i]
+            mid_x = (prev['x'] + curr['x']) / 2
+            points.append({'x': mid_x, 'y': prev['y']})
+            points.append({'x': mid_x, 'y': curr['y']})
+            points.append({'x': curr['x'], 'y': curr['y']})
+
+        wire_ops.append(ExecutionOperation(
+            id=f'op-wire-pinmap-{net_name.lower().replace("+", "p").replace(" ", "-")}',
+            kind='create_wire',
+            payload={'points': points, 'netName': net_name},
+            on_error='continue',
+            notes=[f'Wire {net_name} from library pin data ({len(endpoints)} pins)'],
+        ))
+
+    return wire_ops
+
+
 def execute_plan(plan: ExecutionPlan, control_url: str, control_token: str, client_id: str) -> dict[str, Any]:
     client = BridgeControlClient(control_url, control_token)
     results: list[dict[str, Any]] = []
@@ -3500,7 +3682,44 @@ def run() -> None:
     if execute_enabled:
         client_id = resolve_client_id(control_url, control_token)
         execution_result['clientId'] = client_id
-        execution_result['result'] = execute_plan(plan, control_url, control_token, client_id)
+
+        # ---- Phase 1: place components, labels, and flags (skip wires) ----
+        placement_ops = [op for op in plan.operations if op.kind != 'create_wire']
+        plan.operations = placement_ops
+        os.environ['BRIDGE_CREATE_NEW_PAGE'] = 'false'
+        phase1_result = execute_plan(plan, control_url, control_token, client_id)
+        del os.environ['BRIDGE_CREATE_NEW_PAGE']
+        pipeline_logs.append(f"Phase 1 (placement): {len(placement_ops)} ops, ok={phase1_result.get('ok')}, failed={phase1_result.get('failedCount', 0)}")
+
+        # ---- Phase 2: wire from placed component positions ----
+        if phase1_result.get('ok'):
+            try:
+                wire_ops = build_wire_ops_from_placements(plan, model)
+                if wire_ops:
+                    wire_plan = ExecutionPlan(
+                        schema_version=plan.schema_version,
+                        request_id=plan.request_id,
+                        target=plan.target,
+                        operations=wire_ops,
+                        fallback_rules=[],
+                    )
+                    # Phase 2 must NOT create a new page — use the same page as Phase 1
+                    os.environ['BRIDGE_CREATE_NEW_PAGE'] = 'false'
+                    wire_result = execute_plan(wire_plan, control_url, control_token, client_id)
+                    del os.environ['BRIDGE_CREATE_NEW_PAGE']
+                    pipeline_logs.append(f"Phase 2 (wiring from pins): {len(wire_ops)} ops, ok={wire_result.get('ok')}, failed={wire_result.get('failedCount', 0)}")
+                    # Save after Phase 2 wiring
+                    try:
+                        save_client = BridgeControlClient(control_url, control_token)
+                        save_client.bridge_request(client_id=client_id, domain='schematic', action='save', payload={}, request_id=f'{plan.request_id}-save-phase2')
+                    except Exception:
+                        pass
+                else:
+                    pipeline_logs.append('Phase 2 (wiring): no pin locations available, keeping original wires')
+            except Exception as error:
+                pipeline_logs.append(f'Phase 2 (wiring) skipped: {error}')
+
+        execution_result['result'] = phase1_result
     execution_result['finishedAt'] = iso_now()
 
     summary = {

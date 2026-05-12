@@ -142,6 +142,7 @@ export const IMPLEMENTED_COMMANDS: BridgeCommandName[] = [
   'schematic.auto_routing',
   'schematic.auto_layout',
   'schematic.inspect_connectivity',
+  'schematic.collect_pin_locations',
   'schematic.inspect_layout_hygiene',
   'schematic.inspect_label_hygiene',
   'schematic.suggest_power_block_layout',
@@ -975,6 +976,12 @@ export const SUPPORTED_COMMANDS: BridgeCommandDescriptor[] = [
     domain: 'schematic',
     requiresConfirmationByDefault: false,
     summary: 'Inspect schematic wire and pin connectivity.',
+  },
+  {
+    name: 'schematic.collect_pin_locations',
+    domain: 'schematic',
+    requiresConfirmationByDefault: false,
+    summary: 'Collect absolute pin positions from the current schematic page.',
   },
   {
     name: 'schematic.inspect_layout_hygiene',

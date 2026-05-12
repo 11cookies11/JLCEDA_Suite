@@ -98,6 +98,7 @@ import {
   pingBridgeResult,
 } from '../adapters/read-only';
 import {
+  collectPinLocationsResult,
   inspectSchematicConnectivityResult,
   inspectSchematicLabelHygieneResult,
   inspectSchematicLayoutHygieneResult,
@@ -999,6 +1000,13 @@ async function dispatchCommand(commandKey: BridgeCommandName, request: BridgeReq
           request.id,
           await inspectSchematicConnectivityResult(
             request.command.payload as BridgeCommandPayloadMap['schematic.inspect_connectivity'],
+          ),
+        );
+      case 'schematic.collect_pin_locations':
+        return createSuccessResponse(
+          request.id,
+          await collectPinLocationsResult(
+            request.command.payload as BridgeCommandPayloadMap['schematic.collect_pin_locations'],
           ),
         );
       case 'schematic.inspect_layout_hygiene':
