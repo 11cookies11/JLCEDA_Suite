@@ -9,7 +9,7 @@ from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from server_text_to_schematic import (  # noqa: E402
+from circuit_pipeline import (  # noqa: E402
     CircuitComponent,
     CircuitModel,
     CircuitNet,

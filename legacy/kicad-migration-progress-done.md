@@ -1,0 +1,38 @@
+# Plan: KiCad Suite 改装主线
+- [x] K1 归档旧 JLCEDA where 计划 <!-- where:id:where-0ddf9aabc9c8 -->
+- [x] K2 建立 KiCad 改装主线计划 <!-- where:id:where-d3ac3c1a5137 -->
+- [x] K3 定义 KiCad 文件级 agent 最小闭环 <!-- where:id:where-7078a51ebdb6 -->
+- [x] K3.1 定义 kicad-execution-plan.v1 schema <!-- where:id:where-7dfbecdb0a79 -->
+- [x] K3.2 实现 CircuitModel -> KiCadExecutionPlan 编译器 <!-- where:id:where-d9941cd3f2e4 -->
+- [x] K3.3 实现最小 KiCad 工程写入器 <!-- where:id:where-8a229b5468a2 -->
+- [x] K3.4 支持生成 .kicad_pro 和 .kicad_sch <!-- where:id:where-a9282823cd4b -->
+- [x] K3.5 支持常见器件符号映射：R/C/L/LED/Diode/Power/GND <!-- where:id:where-5bfb56169c4e -->
+- [x] K3.6 支持 net label 和 global label 生成 <!-- where:id:where-a6f4f54fc626 -->
+- [x] K3.7 输出结构化诊断摘要 <!-- where:id:where-ad25310e838f -->
+- [x] K4 接入 KiCad CLI 校验 <!-- where:id:where-04c8e0d05a34 -->
+- [x] K4.1 探测本机 kicad-cli 可用性和版本 <!-- where:id:where-c4007159c3e8 -->
+- [x] K4.2 接入 schematic ERC 执行 <!-- where:id:where-f10cd1927ad6 -->
+- [x] K4.3 解析 ERC 输出并回写诊断 <!-- where:id:where-9ca59cb004fd -->
+- [x] K5 保留并复用 ngspice 仿真管线 <!-- where:id:where-b35e7c2b9cf1 -->
+- [x] K5.1 确认现有 netlist -> spice 路线不绑定 JLCEDA <!-- where:id:where-a41ea641af4c -->
+- [x] K5.2 将仿真反馈并入 KiCad 输出摘要 <!-- where:id:where-a79d94773de2 -->
+- [x] K6 改造命令入口 <!-- where:id:where-f1c5af9bd164 -->
+- [x] K6.1 增加 EDA_TARGET=kicad|jlceda 分支 <!-- where:id:where-e3eccabb5220 -->
+- [x] K6.2 增加 npm script 或 Python 入口用于 text -> KiCad <!-- where:id:where-dcef9c13e001 -->
+- [x] K6.3 保留 JLCEDA legacy 入口，避免一次性破坏旧能力 <!-- where:id:where-bc50dee46b0a -->
+- [!] K7 更新文档与 skill <!-- where:id:where-372753a7d843 -->
+- [x] K7.1 新增 text-to-kicad-pipeline 文档 <!-- where:id:where-ddb0f1d9c1f2 -->
+- [ ] K7.2 新增或迁移 kicad-suite-skill <!-- where:id:where-eda6d08212ef -->
+- [ ] K7.3 标记 JLCEDA bridge/plugin 为 legacy <!-- where:id:where-98470d88bc5f -->
+- [x] K7.4 生成 ESP32-C3 最小系统 KiCad 预览工程 <!-- where:id:where-5897401d00df -->
+- [x] K7.5 优化 ESP32-C3 最小系统原理图语义布局 <!-- where:id:where-3316b8f90b8a -->
+- [x] K7.6 生成 ESP32-C3 裸芯片最小系统 KiCad 预览工程 <!-- where:id:where-65c88d57d347 -->
+- [x] K7.7 接入 KiCad 官方 ESP32-C3、UART 连接器和同轴连接器符号 <!-- where:id:where-1b147e9bde5d -->
+- [x] K7.8 ERC 反馈修复器：从 KiCad 符号库自动解析 pin 坐标 <!-- where:id:where-025b927f756b -->
+- [x] K7.9 ESP32-C3 裸芯片预览工程 ERC 清零 <!-- where:id:where-26119b4ce056 -->
+- [x] K7.10 优化 ESP32-C3 裸芯片预览工程可读布局
+- [x] K7.11 ESP32-C3 局部功能块改用实际导线连接
+- [ ] K8 扩展到 PCB 与生产资料 <!-- where:id:where-7325790e2f8d -->
+- [ ] K8.1 生成基础 .kicad_pcb <!-- where:id:where-d5bb13ccf2f9 -->
+- [ ] K8.2 接入 DRC <!-- where:id:where-50a23d55a9f1 -->
+- [ ] K8.3 导出 BOM/Gerber/坐标文件 <!-- where:id:where-0bb04521f3a1 -->

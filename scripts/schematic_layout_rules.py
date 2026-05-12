@@ -73,8 +73,22 @@ def build_default_layout_rules() -> LayoutRuleSet:
                 'feedback_resistor_bottom': 'feedback',
                 'current_limit_resistor': 'power_stage',
                 'indicator': 'output',
+                'esp32_c3_module': 'mcu',
+                'esp32_c3_bare_chip_qfn32': 'mcu',
+                'chip_en_pullup_resistor': 'reset',
+                'chip_en_reset_capacitor': 'reset',
+                'reset_button': 'reset',
+                'gpio9_boot_pullup_resistor': 'boot',
+                'boot_button': 'boot',
+                'gpio8_strap_pullup_resistor': 'strap',
+                'crystal_40mhz': 'crystal',
+                'xtal_load_capacitor': 'crystal',
+                'rf_series_matching_inductor': 'rf',
+                'rf_shunt_matching_capacitor': 'rf',
+                'antenna_connector': 'rf',
+                'uart_programming_header': 'io',
             },
-            block_order=['input', 'power_stage', 'output', 'feedback', 'io'],
+            block_order=['input', 'power_stage', 'output', 'feedback', 'mcu', 'power', 'reset', 'boot', 'strap', 'crystal', 'rf', 'io'],
         ),
         pin_anchor=PinAnchorRule(
             keyword_to_side={
@@ -160,6 +174,45 @@ def _role_of_component(component: dict[str, Any]) -> str:
 
 def _block_of_role(role: str, rules: BlockLayoutRule) -> str:
     return rules.role_to_block.get(role, 'io')
+
+
+_WIRING_SUFFIXES = sorted(
+    [
+        '_series_matching_inductor',
+        '_shunt_matching_capacitor',
+        '_decoupling_capacitor',
+        '_load_capacitor',
+        '_pullup_resistor',
+        '_reset_capacitor',
+        '_bulk_capacitor',
+        '_resistor',
+        '_capacitor',
+        '_inductor',
+        '_button',
+        '_connector',
+        '_header',
+    ],
+    key=len,
+    reverse=True,
+)
+
+
+def _resolve_wiring_block(role: str, rules: BlockLayoutRule) -> str:
+    if role in rules.role_to_block:
+        return rules.role_to_block[role]
+    best_prefix = ''
+    best_len = 0
+    for suffix in _WIRING_SUFFIXES:
+        if role.endswith(suffix) and len(suffix) > best_len:
+            prefix = role[:-len(suffix)]
+            if prefix:
+                best_prefix = prefix
+                best_len = len(suffix)
+    if best_prefix:
+        if best_prefix in rules.role_to_block:
+            return rules.role_to_block[best_prefix]
+        return best_prefix
+    return role
 
 
 def _index_by_ref(components: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
