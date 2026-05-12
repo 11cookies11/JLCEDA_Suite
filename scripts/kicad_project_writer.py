@@ -280,19 +280,28 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, float]]:
     return pins
 
 
-def endpoint_from_pin(pin_data: dict[str, float], origin_x: float, origin_y: float) -> tuple[float, float, float]:
-    x = origin_x + float(pin_data.get('x', 0.0))
-    y = origin_y - float(pin_data.get('y', 0.0))
-    rotation = float(pin_data.get('rotation', 0.0)) % 360.0
-    if rotation == 0.0:
+def endpoint_from_pin(pin_data: dict[str, float], origin_x: float, origin_y: float, symbol_rotation: float = 0.0) -> tuple[float, float, float]:
+    import math
+    lx = float(pin_data.get('x', 0.0))
+    ly = float(pin_data.get('y', 0.0))
+    pin_rotation = float(pin_data.get('rotation', 0.0))
+    theta = math.radians(symbol_rotation)
+    cos_t = math.cos(theta)
+    sin_t = math.sin(theta)
+    rx = lx * cos_t - ly * sin_t
+    ry = lx * sin_t + ly * cos_t
+    x = origin_x + rx
+    y = origin_y - ry
+    direction = (pin_rotation + symbol_rotation) % 360.0
+    if direction == 0.0 or direction == 360.0:
         return x, y, 180.0
-    if rotation == 180.0:
+    if direction == 180.0:
         return x, y, 0.0
-    if rotation == 90.0:
+    if direction == 90.0:
         return x, y, 90.0
-    if rotation == 270.0:
+    if direction == 270.0:
         return x, y, 270.0
-    return x, y, rotation
+    return x, y, 180.0
 
 
 def local_two_pin_symbol(lib_id: str, reference_prefix: str) -> str:
@@ -575,13 +584,14 @@ def pin_endpoint(symbol: dict[str, Any], pin_number: str) -> tuple[float, float,
     at = symbol.get('at', {})
     x = float(at.get('x', 0.0))
     y = float(at.get('y', 0.0))
+    rotation = float(at.get('rotation', 0.0))
     lib_id = str(symbol.get('lib_id', ''))
     pin = str(pin_number).strip().upper()
 
     pin_map = parse_symbol_pin_map(lib_id)
     pin_data = pin_map.get(pin_number) or pin_map.get(pin)
     if pin_data:
-        return endpoint_from_pin(pin_data, x, y)
+        return endpoint_from_pin(pin_data, x, y, rotation)
 
     if lib_id == 'AIAgent:Buck_Regulator':
         if pin == 'VIN':

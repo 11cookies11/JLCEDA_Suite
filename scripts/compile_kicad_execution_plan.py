@@ -214,6 +214,110 @@ def build_netlist_from_circuit_model(model: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _resolve_block(role: str) -> str:
+    from schematic_layout_rules import build_default_layout_rules, _resolve_wiring_block
+    return _resolve_wiring_block(role, build_default_layout_rules().block_layout)
+
+
+_KNOWN_SYMBOL_SIZES: dict[str, tuple[float, float]] = {
+    'AIAgent:ESP32_C3_Module': (35.56, 38.1),
+    'AIAgent:ESP32_C3_Bare_QFN32': (45.72, 55.88),
+    'AIAgent:Buck_Regulator': (22.86, 17.78),
+    'AIAgent:Conn_01x04': (15.24, 17.78),
+    'AIAgent:Generic_2Pin': (12.7, 10.16),
+    'MCU_Espressif:ESP32-C3': (50.8, 55.88),
+}
+
+
+def _estimate_symbol_size(lib_id: str) -> tuple[float, float]:
+    """Estimate symbol width/height in mm from real KiCad pin positions."""
+    if lib_id in _KNOWN_SYMBOL_SIZES:
+        return _KNOWN_SYMBOL_SIZES[lib_id]
+
+    from kicad_project_writer import parse_symbol_pin_map
+    pins = parse_symbol_pin_map(lib_id)
+    if not pins:
+        return 12.7, 10.16
+    xs = [p['x'] for p in pins.values()]
+    ys = [p['y'] for p in pins.values()]
+    if not xs:
+        return 12.7, 10.16
+    w = max(xs) - min(xs) + 7.62
+    h = max(ys) - min(ys) + 7.62
+    return max(w, 10.0), max(h, 8.0)
+
+
+_GRID = 2.54
+
+def _snap(value: float) -> float:
+    return round(value / _GRID) * _GRID
+
+
+_BLOCK_GAP = 20.32
+_VSLOT_PITCH = 17.78
+_LAYOUT_ORIGIN_X = 35.56
+_LAYOUT_ORIGIN_Y = 38.1
+_BLOCK_FLOW = ['power', 'indicator', 'reset', 'mcu', 'boot', 'io']
+
+def _compute_block_layout(
+    components: list[tuple[str, str, str]],
+) -> dict[str, tuple[float, float]]:
+    """Two-pass auto-layout: group by block, measure symbol widths, place columns.
+
+    Args:
+        components: list of (ref, role, lib_id) tuples.
+
+    Returns:
+        Dict mapping block_name → (center_x, next_y_slot).
+    """
+    blocks: dict[str, list[tuple[str, str]]] = {}
+    for ref, role, lib_id in components:
+        block = _resolve_block(role)
+        blocks.setdefault(block, []).append((ref, lib_id))
+
+    block_widths: dict[str, float] = {}
+    for block, items in blocks.items():
+        max_w = 0.0
+        for _ref, lib_id in items:
+            w, _h = _estimate_symbol_size(lib_id)
+            if w > max_w:
+                max_w = w
+        block_widths[block] = max_w
+
+    block_order = [b for b in _BLOCK_FLOW if b in blocks]
+    for b in blocks:
+        if b not in block_order:
+            block_order.append(b)
+
+    layout: dict[str, tuple[float, float]] = {}
+    cursor = _LAYOUT_ORIGIN_X
+    for block in block_order:
+        half_w = block_widths[block] / 2.0
+        center_x = _snap(cursor + half_w)
+        layout[block] = (center_x, _LAYOUT_ORIGIN_Y)
+        cursor = _snap(cursor + block_widths[block] + _BLOCK_GAP)
+    return layout
+
+
+_ROLE_ROTATION: dict[str, float] = {
+    'power_indicator': 90.0,
+}
+
+
+def _auto_position(
+    ref: str, role: str, lib_id: str,
+    block_x: dict[str, float], block_slot: dict[str, int],
+) -> KiCadPoint:
+    block = _resolve_block(role)
+    x = block_x.get(block, _LAYOUT_ORIGIN_X)
+    slot = block_slot.get(block, 0)
+    block_slot[block] = slot + 1
+    _, h = _estimate_symbol_size(lib_id)
+    y = _snap(_LAYOUT_ORIGIN_Y + slot * max(_VSLOT_PITCH, h + 5.0))
+    rotation = _ROLE_ROTATION.get(role, 0.0)
+    return KiCadPoint(x=x, y=y, rotation=rotation)
+
+
 def role_aware_position(
     model: dict[str, Any],
     component: dict[str, Any],
@@ -223,54 +327,15 @@ def role_aware_position(
     pitch_x: float,
     pitch_y: float,
     columns: int,
+    block_x: dict[str, float] | None = None,
+    block_slot: dict[str, int] | None = None,
 ) -> KiCadPoint:
-    topology = str(model.get('topology', '')).strip().lower()
     ref = str(component.get('ref', '')).strip().upper()
     role = str(component.get('role', '')).strip().lower()
+    lib_id = str(component.get('_lib_id', ''))
 
-    if ('esp32_c3_bare' in topology or 'esp32_c3_chip' in topology or '裸芯片' in topology):
-        bare_positions: dict[str, tuple[float, float]] = {
-            'U1': (101.6, 76.2),
-            'C1': (35.56, 25.4),
-            'C2': (35.56, 43.18),
-            'C3': (35.56, 60.96),
-            'C4': (35.56, 78.74),
-            'C5': (35.56, 96.52),
-            'R1': (63.5, 116.84),
-            'C6': (63.5, 132.08),
-            'SW1': (63.5, 147.32),
-            'R2': (101.6, 116.84),
-            'SW2': (101.6, 132.08),
-            'R3': (132.08, 116.84),
-            'Y1': (101.6, 160.02),
-            'C7': (83.82, 175.26),
-            'C8': (119.38, 175.26),
-            'J1': (177.8, 73.66),
-            'L1': (154.94, 35.56),
-            'C9': (170.18, 50.8),
-            'J2': (190.5, 35.56),
-        }
-        if ref in bare_positions:
-            x, y = bare_positions[ref]
-            return KiCadPoint(x=x, y=y, rotation=0.0)
-    if 'esp32_c3' in topology or 'esp32' in topology:
-        esp32_positions: dict[str, tuple[float, float]] = {
-            'U1': (101.6, 76.2),
-            'C1': (50.8, 43.18),
-            'C2': (50.8, 53.34),
-            'R1': (58.42, 71.12),
-            'C3': (58.42, 81.28),
-            'SW1': (58.42, 91.44),
-            'SW2': (101.6, 116.84),
-            'J1': (154.94, 73.66),
-        }
-        if ref in esp32_positions:
-            x, y = esp32_positions[ref]
-            return KiCadPoint(x=x, y=y, rotation=0.0)
-        if 'decoupling' in role:
-            return KiCadPoint(x=50.8, y=43.18 + index * 10.16, rotation=0.0)
-        if 'uart' in role or 'connector' in role:
-            return KiCadPoint(x=154.94, y=73.66 + index * 5.08, rotation=0.0)
+    if block_x is not None and block_slot is not None:
+        return _auto_position(ref, role, lib_id, block_x, block_slot)
 
     col = index % columns
     row = index // columns
@@ -316,10 +381,26 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
     }
 
     diagnostics = KiCadDiagnostics()
-    symbols: list[KiCadSymbol] = []
-    for index, ref in enumerate(component_by_ref):
+
+    # Pass 1: resolve lib_ids for auto-layout
+    preflight: list[tuple[str, str, str, str, list[str]]] = []
+    for ref in component_by_ref:
         component = component_by_ref[ref]
         lib_id, footprint, notes = symbol_mapping_for(component)
+        role = str(component.get('role', ''))
+        preflight.append((ref, role, lib_id, footprint, notes))
+        component['_lib_id'] = lib_id  # stash for role_aware_position
+
+    # Compute block layout from real symbol dimensions
+    comp_info = [(ref, role, lib_id) for ref, role, lib_id, _fp, _n in preflight]
+    block_layout = _compute_block_layout(comp_info)
+    block_x = {b: x for b, (x, _y) in block_layout.items()}
+    block_slot: dict[str, int] = {}
+
+    # Pass 2: create symbols with auto positions
+    symbols: list[KiCadSymbol] = []
+    for ref, role, lib_id, footprint, notes in preflight:
+        component = component_by_ref[ref]
         net_component = netlist_by_ref.get(ref, {})
         pins = [
             KiCadPin(
@@ -338,17 +419,19 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
         at = role_aware_position(
             model=model,
             component=component,
-            index=index,
+            index=0,
             origin_x=origin_x,
             origin_y=origin_y,
             pitch_x=pitch_x,
             pitch_y=pitch_y,
             columns=columns,
+            block_x=block_x,
+            block_slot=block_slot,
         )
         symbols.append(
             KiCadSymbol(
                 ref=ref,
-                role=str(component.get('role', '')),
+                role=role,
                 value=str(component.get('value', '')),
                 lib_id=lib_id,
                 footprint=footprint,

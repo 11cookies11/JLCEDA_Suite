@@ -87,8 +87,12 @@ def build_default_layout_rules() -> LayoutRuleSet:
                 'rf_shunt_matching_capacitor': 'rf',
                 'antenna_connector': 'rf',
                 'uart_programming_header': 'io',
+                'led_current_limit_resistor': 'indicator',
+                'power_indicator': 'indicator',
+                'vdd3p3_bulk_capacitor': 'power',
+                'vdd3p3_decoupling_capacitor': 'power',
             },
-            block_order=['input', 'power_stage', 'output', 'feedback', 'mcu', 'power', 'reset', 'boot', 'strap', 'crystal', 'rf', 'io'],
+            block_order=['input', 'power_stage', 'output', 'feedback', 'mcu', 'power', 'reset', 'boot', 'strap', 'crystal', 'rf', 'io', 'indicator'],
         ),
         pin_anchor=PinAnchorRule(
             keyword_to_side={
@@ -180,6 +184,7 @@ _WIRING_SUFFIXES = sorted(
     [
         '_series_matching_inductor',
         '_shunt_matching_capacitor',
+        '_current_limit_resistor',
         '_decoupling_capacitor',
         '_load_capacitor',
         '_pullup_resistor',
