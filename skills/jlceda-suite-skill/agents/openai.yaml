@@ -1,7 +1,7 @@
 interface:
-  display_name: "KiCad Suite Skill"
-  short_description: "Generate and validate KiCad design artifacts from an AI agent"
-  default_prompt: "Use $kicad-suite-skill to run the KiCad Suite requirement-to-KiCad pipeline."
+  display_name: "Hardware Development Skill"
+  short_description: "Use repo resources to build, validate, and improve hardware designs"
+  default_prompt: "Use $kicad-suite-skill to develop the hardware design with the repository's models, configs, symbols, validation tools, and KiCad pipeline."
 
 policy:
   allow_implicit_invocation: true
