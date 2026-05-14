@@ -118,7 +118,7 @@ KICAD_RUN_ERC=true npm run text-to-kicad
 ## 仓库结构
 
 - `scripts/`：当前主线 Python/Node 流水线脚本
-- `server/schemas/`：当前模型契约的 JSON Schema
+- `schemas/`：当前模型契约的 JSON Schema
 - `docs/`：架构与工作流说明
 - `skills/`：面向 agent 的工作流参考
 - `legacy/`：已归档的 EasyEDA/JLCEDA 桥接实现和历史文档

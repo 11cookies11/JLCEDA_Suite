@@ -114,7 +114,7 @@ Set `KICAD_RUN_ERC=true` to let the full pipeline attempt ERC after writing the 
 ## Repository Layout
 
 - `scripts/`: active Python and Node pipeline scripts
-- `server/schemas/`: JSON schemas for the active model contracts
+- `schemas/`: JSON schemas for the active model contracts
 - `docs/`: architecture and workflow notes
 - `skills/`: agent-facing workflow references
 - `legacy/`: archived EasyEDA/JLCEDA bridge implementation and historical docs

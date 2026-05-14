@@ -76,7 +76,7 @@ RequirementSpec
 schema 文件：
 
 ```text
-server/schemas/kicad-execution-plan.v1.json
+schemas/kicad-execution-plan.v1.json
 ```
 
 ## ERC

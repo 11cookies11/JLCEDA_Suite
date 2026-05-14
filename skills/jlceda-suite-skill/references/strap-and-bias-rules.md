@@ -1,4 +1,4 @@
-# JLCEDA Suite Strap and Bias Rules
+# Hardware Development Strap and Bias Rules
 
 This reference collects the rules for mode straps, bias defaults, pull networks, startup choices, and other decisions that should not be guessed silently.
 
@@ -50,4 +50,3 @@ Before synthesis or execution, check:
 - every pull network has an explicit reason
 - every startup-sensitive node has a documented choice
 - every unresolved decision is marked as pending
-

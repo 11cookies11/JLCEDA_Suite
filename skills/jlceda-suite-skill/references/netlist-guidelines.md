@@ -1,4 +1,4 @@
-# JLCEDA Suite Netlist Guidelines
+# Hardware Development Netlist Guidelines
 
 This reference defines the internal connection-level representation that should sit between CircuitModel and simulation or display layers.
 
@@ -50,4 +50,3 @@ The netlist can feed:
 - simulation
 - connectivity verification
 - display graph generation
-

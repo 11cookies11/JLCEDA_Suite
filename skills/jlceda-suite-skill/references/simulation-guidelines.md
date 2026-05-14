@@ -1,4 +1,4 @@
-# JLCEDA Suite Simulation Guidelines
+# Hardware Development Simulation Guidelines
 
 This reference defines how the skill should prepare and use simulation results, with `ngspice` as the initial target.
 
@@ -53,4 +53,3 @@ A good result should include:
 - pass or fail outcome
 - failure reason if any
 - next recommended action
-

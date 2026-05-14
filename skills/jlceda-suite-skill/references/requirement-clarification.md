@@ -1,4 +1,4 @@
-# JLCEDA Suite Requirement Clarification
+# Hardware Development Requirement Clarification
 
 This reference defines how the skill should handle incomplete, ambiguous, or unstable design intent before any schematic synthesis begins.
 
@@ -53,4 +53,3 @@ The agent should stop at clarification when:
 - label any fallback assumption clearly
 - keep the assumption visible in later outputs
 - do not synthesize SCD until the intent is stable
-

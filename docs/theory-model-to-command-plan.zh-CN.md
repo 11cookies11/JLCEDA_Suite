@@ -36,5 +36,5 @@ src/kicad_suite/kicad_project_writer.py
 schema 位于：
 
 ```text
-server/schemas/kicad-execution-plan.v1.json
+schemas/kicad-execution-plan.v1.json
 ```

@@ -1,6 +1,6 @@
 # KiCad Suite 代码规范（v1）
 
-本文用于统一 `scripts/`、`server/schemas/`、`skills/` 和文档的开发风格。
+本文用于统一 `scripts/`、`schemas/`、`skills/` 和文档的开发风格。
 
 ## 1. 总体原则
 
@@ -22,7 +22,7 @@
 ## 3. Python 规范
 
 - 公共函数使用类型注解。
-- 数据模型字段应与 `server/schemas/` 中的 JSON Schema 对齐。
+- 数据模型字段应与 `schemas/` 中的 JSON Schema 对齐。
 - 解析、建模、编译、执行、反馈应尽量保持模块边界清晰。
 - 错误和诊断优先返回结构化对象。
 - 不要静默降级重要电气问题；用 `risks`、`warnings` 或 `unsupported` 暴露。

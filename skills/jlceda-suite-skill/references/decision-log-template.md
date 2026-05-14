@@ -1,4 +1,4 @@
-# JLCEDA Suite Decision Log Template
+# Hardware Development Decision Log Template
 
 This reference defines the minimal decision record the agent should keep while synthesizing or refining a circuit.
 
@@ -39,4 +39,3 @@ The agent should place the decision log into:
 - SCD notes
 - circuit model risks
 - simulation follow-up summaries
-
