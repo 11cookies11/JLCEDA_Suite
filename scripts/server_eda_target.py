@@ -1,19 +1,12 @@
 #!/usr/bin/env python3
-from __future__ import annotations
-
+from pathlib import Path
 import sys
 
-from server_text_to_kicad import run as run_kicad
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'src'))
 
-
-def run() -> None:
-    run_kicad()
+from kicad_suite.server_eda_target import run
 
 
 if __name__ == '__main__':
-    try:
-        run()
-    except Exception as error:  # noqa: BLE001
-        print('KiCad pipeline failed.', file=sys.stderr)
-        print(str(error), file=sys.stderr)
-        sys.exit(1)
+    run()
+

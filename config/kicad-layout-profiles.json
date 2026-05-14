@@ -1,0 +1,38 @@
+{
+  "schema_version": "kicad-layout-profiles.v1",
+  "default": {
+    "block_order": ["input", "power", "reset", "mcu", "memory", "crystal", "boot", "io", "indicator"],
+    "role_rotations": {
+      "power_indicator": 90
+    },
+    "layout": {
+      "origin_x": 35.56,
+      "origin_y": 38.1,
+      "block_gap": 20.32,
+      "slot_pitch": 17.78,
+      "max_x": 260,
+      "row_gap": 63.5
+    }
+  },
+  "profiles": {
+    "rp2040_minimal_devboard": {
+      "positions": {
+        "J1": { "x": 35.56, "y": 63.5, "rotation": 0 },
+        "U1": { "x": 45.72, "y": 116.84, "rotation": 0 },
+        "C1": { "x": 22.86, "y": 137.16, "rotation": 0 },
+        "C2": { "x": 68.58, "y": 137.16, "rotation": 0 },
+        "SW1": { "x": 96.52, "y": 66.04, "rotation": 0 },
+        "U2": { "x": 147.32, "y": 76.2, "rotation": 0 },
+        "U3": { "x": 226.06, "y": 76.2, "rotation": 0 },
+        "SW2": { "x": 226.06, "y": 116.84, "rotation": 0 },
+        "Y1": { "x": 147.32, "y": 147.32, "rotation": 0 },
+        "C3": { "x": 124.46, "y": 167.64, "rotation": 0 },
+        "C4": { "x": 170.18, "y": 167.64, "rotation": 0 },
+        "R1": { "x": 104.14, "y": 96.52, "rotation": 0 },
+        "R2": { "x": 203.2, "y": 152.4, "rotation": 0 },
+        "LED1": { "x": 231.14, "y": 152.4, "rotation": 90 },
+        "J2": { "x": 259.08, "y": 132.08, "rotation": 0 }
+      }
+    }
+  }
+}

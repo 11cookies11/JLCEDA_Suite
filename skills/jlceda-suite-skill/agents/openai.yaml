@@ -1,7 +1,7 @@
 interface:
-  display_name: "JLCEDA Suite Skill"
-  short_description: "Drive connected JLCEDA Suite sessions from an AI agent"
-  default_prompt: "Use $jlceda-suite-skill to run the JLCEDA Suite server-side project flow and drive a connected session."
+  display_name: "KiCad Suite Skill"
+  short_description: "Generate and validate KiCad design artifacts from an AI agent"
+  default_prompt: "Use $kicad-suite-skill to run the KiCad Suite requirement-to-KiCad pipeline."
 
 policy:
   allow_implicit_invocation: true

@@ -1,52 +1,64 @@
-# JLCEDA Suite 代码规范（v1）
+# KiCad Suite 代码规范（v1）
 
-本文档用于统一 `server (Python)`、`plugin (TypeScript)` 与 `skill/workflow` 的开发风格，减少跨层协作返工。
+本文用于统一 `scripts/`、`server/schemas/`、`skills/` 和文档的开发风格。
 
 ## 1. 总体原则
-- 先定义契约，再写逻辑：所有跨层数据先定义结构，再实现转换代码。
-- 可读性优先于技巧：默认选择直白、可维护的实现。
-- 一次改动一个意图：避免把重构、功能、修复混在同一个提交。
-- 文档与代码同步：接口字段变更必须同步更新文档与 where。
+
+- 先定义契约，再写转换逻辑。
+- 当前主线只面向 KiCad；EasyEDA/JLCEDA 代码只保留在 `legacy/`。
+- 可读性优先于技巧。
+- 一次改动一个意图，避免把重构、功能、修复混在同一提交。
+- 接口字段变更必须同步更新 schema、文档和 where 记录。
 
 ## 2. 编码与命名
-- 全仓库文件编码统一为 `UTF-8`（无 BOM）。
-- Python 命名：`snake_case`；TypeScript 命名：`camelCase`；常量：`UPPER_SNAKE_CASE`。
+
+- 全仓库文本文件使用 UTF-8。
+- Python 使用 `snake_case`。
+- TypeScript/JavaScript 使用 `camelCase`。
+- 常量使用 `UPPER_SNAKE_CASE`。
 - 文件名与导出名应表达职责，不使用无意义缩写。
-- 注释只解释“为什么”，不解释显而易见的“做了什么”。
+- 注释只解释必要的“为什么”，不解释显而易见的“做了什么”。
 
-## 3. Python（server）规范
-- 使用类型注解，公共函数必须有参数与返回值类型。
-- 数据模型使用 `pydantic`（或等价方案）统一定义与校验。
-- 模块职责单一：解析、建模、编译、执行反馈拆分到独立模块。
-- 错误返回结构化对象，不直接拼接自由文本给上游。
+## 3. Python 规范
 
-## 4. TypeScript（plugin）规范
-- 维持 `strict` 风格，避免新增 `any`。
-- 插件层只做执行，不承载设计推理逻辑。
-- 所有桥接返回值都要做最小结构检查，避免脏数据透传。
-- 对外暴露接口应稳定，新增字段优先可选并保持向后兼容。
+- 公共函数使用类型注解。
+- 数据模型字段应与 `server/schemas/` 中的 JSON Schema 对齐。
+- 解析、建模、编译、执行、反馈应尽量保持模块边界清晰。
+- 错误和诊断优先返回结构化对象。
+- 不要静默降级重要电气问题；用 `risks`、`warnings` 或 `unsupported` 暴露。
 
-## 5. 契约与版本
-- 三层模型统一带 `schema_version` 字段。
-- 跨层结构变更遵循：新增可选字段 -> 消费端兼容 -> 再升级必填。
-- 错误对象统一字段：
-- `code`: 稳定错误码（如 `PART_UNAVAILABLE`）
-- `message`: 面向人类的简短描述
-- `details`: 结构化上下文
-- `retryable`: 是否可重试
+## 4. 模型契约
 
-## 6. 日志与可追溯
-- 关键流程统一阶段前缀：`REQ` / `MODEL` / `PLAN` / `EXEC`。
-- 同一请求链路保留 `request_id`，便于跨模块追踪。
-- 设计决策必须记录在 `design_decisions[]`，保证文本与落图一致。
+- 跨层模型统一带 `schema_version`。
+- 结构变更遵循：新增可选字段 -> 消费端兼容 -> 再升级必填字段。
+- `Netlist` 只表达电气连接真值，不混入布局信息。
+- `KiCadExecutionPlan` 表达 KiCad 文件生成意图，不表达仿真语义。
+- ngspice 反馈只作为验证证据，不替代工程判断。
 
-## 7. 提交与变更管理
-- 提交信息使用仓库既有提交模板。
-- 提交前至少完成：`lint`、构建命令通过（按仓库现状执行）。
-- 不在同一提交中混入无关格式化与功能改动。
-- 若修改对外契约，提交说明中必须写明兼容性影响。
+## 5. KiCad 生成规则
 
-## 8. 与 where 的同步约定
-- 每完成一个里程碑子任务，立即更新 `.where-agent-progress.md` 状态。
-- 阻塞项使用 `[!]` 并在任务名写清楚阻塞原因。
-- 计划细节写入 `.where/development-plan.md`，避免看板信息过载。
+- 优先使用真实 KiCad library symbol 和 footprint 映射。
+- 使用占位符时必须写入诊断。
+- 角色映射、布局规则和 symbol 尺寸要集中维护，避免散落硬编码。
+- 生成文件应可重复，避免不必要的随机变化。
+
+## 6. 日志与追踪
+
+- 保留 `request_id`，方便跨模型追踪。
+- 设计依据写入 `design_decisions[]`。
+- 仿真和 ERC 结果写入结构化 summary。
+
+## 7. 验证
+
+提交前至少按影响范围执行：
+
+- `python3 -m py_compile scripts/*.py` 等价检查
+- `npm run text-to-kicad`
+- `npm run ngspice:regression`
+- `npm run erc`，如果本机有 KiCad CLI 或指定输入文件
+
+## 8. where 同步
+
+- 每个阶段性任务更新 `.where-agent-progress.md`。
+- 阻塞项使用 `[!]` 并写清原因。
+- 长期计划写入 `.where/development-plan.md`，避免进度文件过载。

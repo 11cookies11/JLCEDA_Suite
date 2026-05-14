@@ -1,72 +1,61 @@
-# Schematic-First Architecture
+# KiCad-First Architecture
 
 ## Goal
 
-Build a usable developer version that lets Codex and the user iteratively produce high-quality schematics first, then hand them to JLCEDA for PCB transfer, auto placement, and auto routing.
+Build a usable developer pipeline that lets Codex and the user iteratively produce high-quality KiCad schematics from structured requirements.
 
 The system should be:
 
-- usable
-- stable
-- configurable
-- able to improve over time without rewriting code for every rule tweak
+- file-based
+- repeatable
+- schema-driven
+- simulation-aware
+- able to improve without rewriting every rule as code
 
 ## Core Principle
 
-The system should not duplicate JLCEDA capabilities when JLCEDA already provides them.
+KiCad is the only active EDA target.
 
-Instead:
+The pipeline should generate clear intermediate artifacts before writing KiCad files:
 
-- reuse native JLCEDA features first
-- add policy/configuration for project preferences
-- implement fallback heuristics only where native behavior is missing or insufficient
+- `RequirementSpec` captures design intent
+- `CircuitModel` captures selected topology, parts, risks, and decisions
+- `Netlist` captures electrical connection truth
+- `SPICE Netlist` captures simulation input
+- `KiCadExecutionPlan` captures schematic file generation intent
 
 ## Responsibility Split
 
 ### Codex
 
-Codex owns the high-level decision making:
+Codex owns high-level decision making:
 
-- choose the task strategy
-- decide which workflow to use
-- interpret the output of checks and suggestions
-- request follow-up operations
+- clarify incomplete requirements
+- choose the workflow
+- interpret diagnostics and simulation feedback
+- decide the next model or mapping improvement
 
-### Server
+### Python Pipeline
 
-The Python server is the control plane and rules brain:
+The Python pipeline owns transformation and validation:
 
-- command orchestration
-- heuristic evaluation
-- layout suggestions
-- profile loading
-- result normalization
-- fallback rule computation
+- requirement normalization
+- circuit model synthesis
+- part role mapping
+- netlist generation
+- SPICE export
+- ngspice execution and feedback
+- KiCad execution plan compilation
+- KiCad project and schematic writing
 
-The server should be allowed to do more than transport.
+### KiCad
 
-### Plugin
+KiCad owns downstream EDA validation and editing:
 
-The plugin is the execution plane inside JLCEDA:
-
-- read the actual document state
-- call `eda.*`
-- place parts
-- draw wires
-- import changes
-- save documents
-- return the real runtime result
-
-### Native JLCEDA
-
-Native JLCEDA behavior should be preferred for:
-
-- schematic to PCB transfer
-- auto layout
-- auto routing
-- DRC
-- document import/save
-- library and footprint access
+- schematic review
+- ERC through `kicad-cli`
+- manual or future scripted refinement
+- PCB work after schematic quality is acceptable
 
 ## Design Layers
 
@@ -76,144 +65,116 @@ These are safety boundaries and should stay in code.
 
 Examples:
 
-- wire endpoints must connect to pins
-- components must not overlap
-- PCB components must not be too close to board edges
-- silk should not collide with pads
+- netlist members must resolve to component pins
+- ground and power nets must be classified consistently
+- unsupported SPICE exports must be explicit
+- placeholder KiCad symbols must be reported in diagnostics
 
-### 2. Profiles
+### 2. Profiles and Rules
 
 These are configurable engineering preferences.
 
 Examples:
 
+- block placement order
 - spacing thresholds
-- label clearance
-- power block arrangement style
-- preferred board-edge conservatism
-- component grouping weights
-
-Profiles should be project-specific when needed.
+- symbol dimensions
+- preferred role-to-library mappings
+- net label style
 
 ### 3. Fallback Heuristics
 
-Fallbacks are used when native JLCEDA support is missing or too weak.
+Fallbacks are used when verified library metadata is missing.
 
 Examples:
 
-- label crowding suggestions
-- power block placement guidance
-- placement avoidance for schematic parts
-- PCB placement hygiene checks
+- local placeholder symbols
+- estimated symbol sizes
+- conservative schematic layout positions
+- diagnostics that name missing mappings
 
 ## Schematic-First Workflow
 
-### Step 1: Generate or load schematic
+### Step 1: Normalize Requirements
 
-The system should build a schematic that is:
+Capture enough electrical intent before synthesis:
 
-- connected correctly
-- readable
-- organized into blocks
-- minimal in overlap and clutter
+- input source
+- output rails
+- current limits
+- interfaces
+- package or procurement constraints
+- acceptance criteria
 
-### Step 2: Run schematic checks
+### Step 2: Build Circuit and Netlist Models
 
-Checks should cover:
+Generate:
 
-- connectivity
-- layout hygiene
-- label hygiene
-- power block guidance
+- `circuit-model.json`
+- `netlist.json`
+- design decisions
+- model risks
 
-### Step 3: Apply minimal fixes
+### Step 3: Simulate Where Possible
 
-Only apply changes that improve correctness or reduce obvious clutter.
+Generate SPICE artifacts and run ngspice when available:
 
-Avoid adding complex style rules too early.
+- `spice-netlist.cir`
+- `ngspice-execution.json`
+- `ngspice-feedback.json`
 
-### Step 4: Hand off to native JLCEDA
+Simulation feedback should update risk, not hide uncertainty.
 
-Let JLCEDA handle:
+### Step 4: Write KiCad Files
 
-- schematic to PCB transfer
-- PCB auto placement
-- PCB auto routing
-- DRC
+Compile `kicad-execution-plan.json`, then write:
 
-### Step 5: Review and iterate
+- `<project_name>.kicad_pro`
+- `<project_name>.kicad_sch`
+- `kicad-write-summary.json`
 
-The system should capture human edits and turn them into the next profile revision.
+### Step 5: Run ERC and Iterate
+
+Use `kicad-cli` ERC when available. Feed diagnostics back into:
+
+- role mapping
+- pin mapping
+- netlist generation
+- schematic layout rules
+- regression fixtures
 
 ## What We Should Avoid
 
-- hardcoding every preference as code
-- reimplementing JLCEDA-native behavior
-- adding low-value special cases too early
-- building a full PCB optimizer before schematic quality is stable
+- adding new EasyEDA/JLCEDA bridge behavior outside `legacy/`
+- hiding placeholder symbols as if they were verified library parts
+- mixing layout concerns into `Netlist`
+- accepting a circuit solely because file generation succeeded
+- making GUI automation a dependency for the core pipeline
 
 ## Development Strategy
 
-### Phase 1: Usable
+### Phase 1: Reliable Files
 
-Ship a developer version that can:
+Ship deterministic KiCad project and schematic generation with clear diagnostics.
 
-- create and edit schematic reliably
-- avoid obvious wire/component/label collisions
-- validate connectivity
-- keep the workflow stable
+### Phase 2: Better Mappings
 
-### Phase 2: Configurable
+Add verified KiCad symbol and footprint mappings for common components.
 
-Add:
+### Phase 3: Stronger Validation
 
-- profiles
-- rule parameters
-- project overrides
-- recommendation tuning
+Expand ngspice fixtures, ERC parsing, and regression coverage.
 
-### Phase 3: Adaptive
+### Phase 4: PCB Handoff
 
-Add feedback loops:
-
-- record human fixes
-- adjust defaults
-- learn project-specific preferences
-
-## Plugin Freeze Policy
-
-The plugin should be treated as a stable execution layer once a baseline release is working.
-
-Default policy:
-
-- prefer changing server profiles, rules, and orchestration first
-- avoid touching the plugin unless JLCEDA runtime behavior changes or a plugin bug blocks execution
-- keep plugin releases infrequent and capability-driven
-
-This lets the team iterate on behavior without forcing constant plugin reinstallation.
-
-## Recommended Initial Scope
-
-Focus on:
-
-- schematic connectivity
-- schematic placement hygiene
-- label hygiene
-- power block ordering and guidance
-- minimal PCB hygiene checks
-
-Defer:
-
-- deep PCB auto-optimization
-- low-frequency aesthetic rules
-- custom reimplementation of JLCEDA native algorithms
+After schematic generation is stable, add PCB-oriented handoff artifacts and checks.
 
 ## Summary
 
-This architecture is a controlled, schematic-first, schema-driven workflow:
+This architecture is a KiCad-first, schema-driven workflow:
 
-- Codex decides
-- Server reasons and coordinates
-- Plugin executes in JLCEDA
-- Native JLCEDA features are reused first
-- Custom rules are configurable, not permanently hardcoded
+- Codex clarifies and decides
+- Python transforms and validates
+- ngspice checks electrical behavior where possible
+- KiCad receives generated project files
+- legacy EasyEDA/JLCEDA code stays archived under `legacy/`

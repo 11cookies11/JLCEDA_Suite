@@ -10,9 +10,13 @@
   },
   "scripts": {
     "pipeline": "python3 ./scripts/server_eda_target.py",
+    "text-to-kicad": "python3 ./scripts/server_text_to_kicad.py",
+    "server:text-to-kicad": "python3 ./scripts/server_text_to_kicad.py",
+    "server:text-to-eda": "python3 ./scripts/server_eda_target.py",
     "compile-plan": "python3 ./scripts/compile_kicad_execution_plan.py",
     "write-project": "python3 ./scripts/kicad_project_writer.py",
     "erc": "python3 ./scripts/kicad_erc_runner.py",
+    "server:kicad:erc": "python3 ./scripts/kicad_erc_runner.py",
     "ngspice:regression": "python3 ./scripts/ngspice-regression-test.py"
   },
   "dependencies": {

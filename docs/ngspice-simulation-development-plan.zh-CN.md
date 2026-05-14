@@ -2,12 +2,12 @@
 
 ## 1. 目标
 
-本计划定义 JLCEDA Suite 引入 `ngspice` 的最小可用仿真路线，目标不是一次性覆盖所有电路类型，而是先把“AI 生成电路 -> 电气验证 -> 结果回写”这条链路打通。
+本计划定义 KiCad Suite 引入 `ngspice` 的最小可用仿真路线，目标不是一次性覆盖所有电路类型，而是先把“AI 生成电路 -> 电气验证 -> 结果回写”这条链路打通。
 
 核心目标：
 
 - 让 `CircuitModel` 可以派生出可仿真的连接表示
-- 让仿真输入与 JLCEDA 执行计划解耦
+- 让仿真输入与 KiCad 执行计划解耦
 - 让仿真失败能够结构化回写到模型与规则层
 - 让 agent 不再依赖“默认连法”来掩盖不确定性
 
@@ -114,7 +114,7 @@ RequirementSpec
 
 ### Phase 2: SPICE 导出器
 
-`Netlist -> SPICE Netlist` 的导出器已落地为 `scripts/server_text_to_schematic.py` 中的 `build_spice_netlist_from_netlist()` 和 `render_spice_netlist()`。
+`Netlist -> SPICE Netlist` 的导出器已落地为 `src/kicad_suite/circuit_pipeline.py` 中的 `build_spice_netlist_from_netlist()` 和 `render_spice_netlist()`。
 
 要求支持：
 
@@ -134,7 +134,7 @@ RequirementSpec
 
 ### Phase 3: ngspice 执行与解析
 
-执行层已落地到 `scripts/server_text_to_schematic.py` 中的 `execute_ngspice_netlist()`，并支持：
+执行层已落地到 `src/kicad_suite/circuit_pipeline.py` 中的 `execute_ngspice_netlist()`，并支持：
 
 - 写临时仿真文件
 - 调用 `ngspice`
@@ -146,7 +146,7 @@ RequirementSpec
 
 ### Phase 4: 结果回写
 
-回写层已落地到 `scripts/server_text_to_schematic.py` 中的 `build_ngspice_feedback()`，并将结果写回：
+回写层已落地到 `src/kicad_suite/circuit_pipeline.py` 中的 `build_ngspice_feedback()`，并将结果写回：
 
 建议回写内容：
 
@@ -158,7 +158,7 @@ RequirementSpec
 
 ### Phase 5: 回归测试
 
-最小回归 fixture 已落地到 `tests/fixtures/ngspice/regression-samples.json`，回归脚本已落地到 `scripts/ngspice-regression-test.py`，并挂到 `npm run server:ngspice:regression-test`。当前样例同时覆盖成功与失败两类路径。
+最小回归 fixture 已落地到 `tests/fixtures/ngspice/regression-samples.json`，回归模块已落地到 `src/kicad_suite/ngspice_regression_test.py`，并通过 `scripts/ngspice-regression-test.py` 兼容入口挂到 `npm run ngspice:regression`。当前样例同时覆盖成功与失败两类路径。
 
 后续建立最小回归集，覆盖：
 
@@ -189,7 +189,7 @@ RequirementSpec
 
 以下内容暂不纳入第一阶段：
 
-- 完整替代 JLCEDA 原理图执行层
+- 完整 PCB 级 KiCad 自动生成
 - 完整 PCB 级寄生建模
 - 完整 EMI / SI 仿真
 - 复杂大规模并行优化

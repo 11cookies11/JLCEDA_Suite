@@ -5,11 +5,11 @@ import process from 'node:process';
 import { spawnSync } from 'node:child_process';
 
 const currentDir = dirname(fileURLToPath(import.meta.url));
-const repoScript = resolve(currentDir, '../../../scripts/server_text_to_schematic.py');
+const repoScript = resolve(currentDir, '../../../scripts/server_text_to_kicad.py');
 
 if (!existsSync(repoScript)) {
   console.error(`Pipeline script not found: ${repoScript}`);
-  console.error('Run from repository root with: npm run server:text-to-schematic');
+  console.error('Run from repository root with: npm run text-to-kicad');
   process.exit(1);
 }
 

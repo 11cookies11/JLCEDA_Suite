@@ -1,0 +1,168 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "rp2040-minimal-devboard-demo",
+  "project_id": "rp2040-minimal-devboard",
+  "topology": "rp2040_minimal_devboard",
+  "components": [
+    {
+      "ref": "J1",
+      "role": "usb_connector",
+      "value": "USB power/data",
+      "selected_part": { "part_id": "usb-connector-01x04", "display_name": "USB connector simplified 1x04", "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "pin_count": 4, "named_pin_count": 4 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Simplified connector: 1=VBUS, 2=D-, 3=D+, 4=GND."]
+    },
+    {
+      "ref": "U1",
+      "role": "ldo_regulator",
+      "value": "5V to 3V3 LDO",
+      "selected_part": { "part_id": "ams1117-3v3-demo", "display_name": "3.3V LDO placeholder", "package": "Package_TO_SOT_SMD:SOT-223-3_TabPin2", "pin_count": 3, "named_pin_count": 3 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C1",
+      "role": "ldo_input_capacitor",
+      "value": "10uF",
+      "selected_part": { "part_id": "cap-10uf", "display_name": "10uF capacitor", "package": "Capacitor_SMD:C_0805_2012Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C2",
+      "role": "ldo_output_capacitor",
+      "value": "10uF",
+      "selected_part": { "part_id": "cap-10uf", "display_name": "10uF capacitor", "package": "Capacitor_SMD:C_0805_2012Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "U2",
+      "role": "rp2040_mcu",
+      "value": "RP2040",
+      "selected_part": { "part_id": "rp2040", "display_name": "Raspberry Pi RP2040", "package": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP5.4x5.4mm", "pin_count": 56, "named_pin_count": 21 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "U3",
+      "role": "qspi_flash",
+      "value": "W25Q16JV",
+      "selected_part": { "part_id": "w25q16-demo", "display_name": "QSPI flash placeholder", "package": "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm", "pin_count": 8, "named_pin_count": 8 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "Y1",
+      "role": "crystal_12mhz",
+      "value": "12MHz",
+      "selected_part": { "part_id": "crystal-12mhz", "display_name": "12MHz crystal", "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C3",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "18pF capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C4",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "18pF capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R1",
+      "role": "run_pullup_resistor",
+      "value": "10k",
+      "selected_part": { "part_id": "res-10k", "display_name": "10k resistor", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "RESET",
+      "selected_part": { "part_id": "switch-reset", "display_name": "Reset pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW2",
+      "role": "boot_button",
+      "value": "BOOTSEL",
+      "selected_part": { "part_id": "switch-boot", "display_name": "BOOTSEL pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R2",
+      "role": "status_led_resistor",
+      "value": "330R",
+      "selected_part": { "part_id": "res-330", "display_name": "330R resistor", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "LED1",
+      "role": "power_indicator",
+      "value": "USER LED",
+      "selected_part": { "part_id": "led-green", "display_name": "Green LED", "package": "LED_SMD:LED_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "J2",
+      "role": "uart_programming_header",
+      "value": "UART/SWD header",
+      "selected_part": { "part_id": "conn-01x04", "display_name": "1x04 header", "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "pin_count": 4, "named_pin_count": 4 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Simplified header: 1=3V3, 2=GND, 3=GPIO0/UART_TX, 4=GPIO1/UART_RX."]
+    }
+  ],
+  "nets": [
+    { "name": "VBUS", "members": ["J1.1", "U1.VIN", "C1.1", "U2.VREG_IN"] },
+    { "name": "+3V3", "members": ["U1.VOUT", "C2.1", "U2.IOVDD", "U2.DVDD", "U2.ADC_AVDD", "U2.USB_VDD", "U2.VREG_VOUT", "U3.VCC", "R1.1", "J2.1"] },
+    { "name": "GND", "members": ["J1.4", "U1.GND", "C1.2", "C2.2", "U2.GND", "U3.GND", "C3.2", "C4.2", "SW1.2", "SW2.2", "LED1.2", "J2.2"] },
+    { "name": "USB_DM", "members": ["J1.2", "U2.USB_DM"] },
+    { "name": "USB_DP", "members": ["J1.3", "U2.USB_DP"] },
+    { "name": "RUN", "members": ["U2.RUN", "R1.2", "SW1.1"] },
+    { "name": "QSPI_SS", "members": ["U2.QSPI_SS", "U3.CS", "SW2.1"] },
+    { "name": "QSPI_SCLK", "members": ["U2.QSPI_SCLK", "U3.SCK"] },
+    { "name": "QSPI_SD0", "members": ["U2.QSPI_SD0", "U3.IO0"] },
+    { "name": "QSPI_SD1", "members": ["U2.QSPI_SD1", "U3.IO1"] },
+    { "name": "QSPI_SD2", "members": ["U2.QSPI_SD2", "U3.IO2"] },
+    { "name": "QSPI_SD3", "members": ["U2.QSPI_SD3", "U3.IO3"] },
+    { "name": "XIN", "members": ["U2.XIN", "Y1.1", "C3.1"] },
+    { "name": "XOUT", "members": ["U2.XOUT", "Y1.2", "C4.1"] },
+    { "name": "USER_LED", "members": ["U2.GPIO25", "R2.1"] },
+    { "name": "LED_A", "members": ["R2.2", "LED1.1"] },
+    { "name": "UART_TX", "members": ["U2.GPIO0", "J2.3"] },
+    { "name": "UART_RX", "members": ["U2.GPIO1", "J2.4"] }
+  ],
+  "calculations": [],
+  "design_decisions": [
+    {
+      "title": "Use external QSPI flash",
+      "rationale": "RP2040 requires external nonvolatile storage; W25Q-style QSPI flash is represented with a local placeholder symbol.",
+      "impact": "Demo exposes QSPI nets explicitly for later footprint and routing refinement."
+    },
+    {
+      "title": "Keep demo schematic minimal",
+      "rationale": "The first demo focuses on power, USB data, clock, reset, BOOTSEL, flash, LED, and a small header.",
+      "impact": "ESD, USB CC resistors, SWD connector details, and production power-tree details remain follow-up items."
+    }
+  ],
+  "risks": [
+    "RP2040 and QSPI flash use local placeholder symbols; replace with verified KiCad library symbols before production.",
+    "USB connector is simplified as a 1x04 symbol and does not model USB-C CC pins or ESD protection.",
+    "This demo is a schematic-generation smoke artifact, not a production-ready RP2040 reference design."
+  ]
+}
