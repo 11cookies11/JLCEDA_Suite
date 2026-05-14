@@ -1,0 +1,307 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "rp2040-esp32c3-cmsis-dap-host-demo",
+  "project_id": "rp2040-esp32c3-cmsis-dap-host",
+  "topology": "rp2040_esp32c3_cmsis_dap_host",
+  "components": [
+    {
+      "ref": "J1",
+      "role": "usb_connector",
+      "value": "USB 5V power/data to ESP32-C3",
+      "selected_part": { "part_id": "usb-connector-01x04", "display_name": "USB connector simplified 1x04", "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "pin_count": 4, "named_pin_count": 4 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Simplified connector: 1=VBUS, 2=D-, 3=D+, 4=GND."]
+    },
+    {
+      "ref": "F1",
+      "role": "usb_vbus_polyfuse",
+      "value": "750mA PTC",
+      "selected_part": { "part_id": "polyfuse-750ma", "display_name": "USB VBUS resettable fuse", "package": "Fuse:Fuse_1206_3216Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "D1",
+      "role": "vbus_tvs_diode",
+      "value": "5V TVS",
+      "selected_part": { "part_id": "tvs-5v-unidirectional", "display_name": "5V VBUS TVS diode", "package": "Diode_SMD:D_SOD-523", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "U1",
+      "role": "ldo_regulator",
+      "value": "5V to 3V3 LDO",
+      "selected_part": { "part_id": "ldo-3v3-demo", "display_name": "3.3V LDO placeholder", "package": "Package_TO_SOT_SMD:SOT-223-3_TabPin2", "pin_count": 3, "named_pin_count": 3 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Select a regulator with enough peak current for ESP32-C3 RF bursts plus RP2040 load."]
+    },
+    {
+      "ref": "C1",
+      "role": "ldo_input_capacitor",
+      "value": "10uF",
+      "selected_part": { "part_id": "cap-10uf", "display_name": "LDO input bulk capacitor", "package": "Capacitor_SMD:C_0805_2012Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C2",
+      "role": "ldo_output_capacitor",
+      "value": "22uF",
+      "selected_part": { "part_id": "cap-22uf", "display_name": "LDO output bulk capacitor", "package": "Capacitor_SMD:C_0805_2012Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C3",
+      "role": "esp32_vdd3p3_decoupling_capacitor",
+      "value": "100nF",
+      "selected_part": { "part_id": "cap-100nf", "display_name": "ESP32-C3 local decoupling", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C4",
+      "role": "rp2040_vdd3p3_decoupling_capacitor",
+      "value": "100nF",
+      "selected_part": { "part_id": "cap-100nf", "display_name": "RP2040 local decoupling", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "U2",
+      "role": "esp32_c3_bare_host_mcu",
+      "value": "ESP32-C3FH4/FH8X host",
+      "selected_part": { "part_id": "esp32-c3-bare-qfn32", "display_name": "ESP32-C3 bare chip QFN32", "package": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.3x3.3mm", "pin_count": 33, "named_pin_count": 24 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["USB D+/D- terminate at ESP32-C3; ESP32-C3 hosts system transactions and supervises RP2040."]
+    },
+    {
+      "ref": "R1",
+      "role": "chip_en_pullup_resistor",
+      "value": "10k",
+      "selected_part": { "part_id": "res-10k", "display_name": "ESP32-C3 EN pullup", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C5",
+      "role": "chip_en_reset_capacitor",
+      "value": "100nF",
+      "selected_part": { "part_id": "cap-100nf", "display_name": "ESP32-C3 EN reset capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "ESP_RESET",
+      "selected_part": { "part_id": "switch-reset", "display_name": "ESP32-C3 reset pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R2",
+      "role": "gpio9_boot_pullup_resistor",
+      "value": "10k",
+      "selected_part": { "part_id": "res-10k", "display_name": "ESP32-C3 BOOT pullup", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW2",
+      "role": "boot_button",
+      "value": "ESP_BOOT",
+      "selected_part": { "part_id": "switch-boot", "display_name": "ESP32-C3 BOOT pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "Y1",
+      "role": "crystal_40mhz",
+      "value": "40MHz",
+      "selected_part": { "part_id": "crystal-40mhz", "display_name": "ESP32-C3 40MHz crystal", "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C6",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "ESP32-C3 crystal load capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C7",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "ESP32-C3 crystal load capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "L1",
+      "role": "rf_series_matching_inductor",
+      "value": "0R/RF link",
+      "selected_part": { "part_id": "rf-link", "display_name": "RF series matching placeholder", "package": "Inductor_SMD:L_0402_1005Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "ANT1",
+      "role": "antenna_connector",
+      "value": "Antenna",
+      "selected_part": { "part_id": "antenna-coax-demo", "display_name": "RF antenna connector placeholder", "package": "Connector_Coaxial:SMA_Amphenol_132134-10_Vertical", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "U3",
+      "role": "rp2040_dap_mcu",
+      "value": "RP2040 CMSIS-DAP",
+      "selected_part": { "part_id": "rp2040", "display_name": "Raspberry Pi RP2040 bare chip", "package": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP5.4x5.4mm", "pin_count": 56, "named_pin_count": 25 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["RP2040 firmware role: CMSIS-DAP engine. It exchanges transactions with ESP32-C3 over UART."]
+    },
+    {
+      "ref": "U4",
+      "role": "qspi_flash",
+      "value": "W25Q16JV",
+      "selected_part": { "part_id": "w25q16-demo", "display_name": "RP2040 QSPI flash placeholder", "package": "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm", "pin_count": 8, "named_pin_count": 8 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R3",
+      "role": "rp2040_run_pullup_resistor",
+      "value": "10k",
+      "selected_part": { "part_id": "res-10k", "display_name": "RP2040 RUN pullup", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW3",
+      "role": "reset_button",
+      "value": "RP_RESET",
+      "selected_part": { "part_id": "switch-reset", "display_name": "RP2040 reset pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW4",
+      "role": "boot_button",
+      "value": "RP_BOOTSEL",
+      "selected_part": { "part_id": "switch-boot", "display_name": "RP2040 BOOTSEL pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "Y2",
+      "role": "crystal_12mhz",
+      "value": "12MHz",
+      "selected_part": { "part_id": "crystal-12mhz", "display_name": "RP2040 12MHz crystal", "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C8",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "RP2040 crystal load capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C9",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "RP2040 crystal load capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "J2",
+      "role": "swd_target_header",
+      "value": "CMSIS-DAP target SWD",
+      "selected_part": { "part_id": "conn-01x04", "display_name": "1x04 target SWD header", "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "pin_count": 4, "named_pin_count": 4 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Simplified target header: 1=VTREF/+3V3, 2=SWDIO, 3=GND, 4=SWCLK."]
+    },
+    {
+      "ref": "R4",
+      "role": "status_led_resistor",
+      "value": "330R",
+      "selected_part": { "part_id": "res-330", "display_name": "DAP activity LED resistor", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "LED1",
+      "role": "power_indicator",
+      "value": "DAP ACT",
+      "selected_part": { "part_id": "led-green", "display_name": "DAP activity LED", "package": "LED_SMD:LED_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    }
+  ],
+  "nets": [
+    { "name": "USB_VBUS_RAW", "members": ["J1.1", "F1.1"] },
+    { "name": "+5V_USB", "members": ["F1.2", "D1.1", "U1.VIN", "C1.1"] },
+    { "name": "+3V3", "members": ["U1.VOUT", "C2.1", "C3.1", "C4.1", "U2.2", "U2.3", "U2.11", "U2.17", "U2.18", "U2.31", "U2.32", "R1.1", "R2.1", "U3.IOVDD", "U3.DVDD", "U3.ADC_AVDD", "U3.USB_VDD", "U3.VREG_VOUT", "U4.VCC", "R3.1", "J2.1"] },
+    { "name": "GND", "members": ["J1.4", "D1.2", "U1.GND", "C1.2", "C2.2", "C3.2", "C4.2", "U2.33", "C5.2", "C6.2", "C7.2", "ANT1.2", "U3.GND", "U4.GND", "C8.2", "C9.2", "SW1.2", "SW2.2", "SW3.2", "SW4.2", "J2.3", "LED1.2"] },
+    { "name": "USB_DM", "members": ["J1.2", "U2.25"] },
+    { "name": "USB_DP", "members": ["J1.3", "U2.26"] },
+    { "name": "ESP_CHIP_EN", "members": ["U2.7", "R1.2", "C5.1", "SW1.1"] },
+    { "name": "ESP_BOOT", "members": ["U2.15", "R2.2", "SW2.1"] },
+    { "name": "ESP_XTAL_P", "members": ["U2.30", "Y1.1", "C6.1"] },
+    { "name": "ESP_XTAL_N", "members": ["U2.29", "Y1.2", "C7.1"] },
+    { "name": "RF_LNA", "members": ["U2.1", "L1.1"] },
+    { "name": "RF_ANT", "members": ["L1.2", "ANT1.1"] },
+    { "name": "ESP_TO_RP_UART", "members": ["U2.28", "U3.GPIO1"] },
+    { "name": "RP_TO_ESP_UART", "members": ["U3.GPIO0", "U2.27"] },
+    { "name": "ESP_RP_RUN_CTRL", "members": ["U2.6", "U3.RUN", "R3.2", "SW3.1"] },
+    { "name": "ESP_RP_BOOTSEL_CTRL", "members": ["U2.14", "U3.QSPI_SS", "U4.CS", "SW4.1"] },
+    { "name": "QSPI_SCLK", "members": ["U3.QSPI_SCLK", "U4.SCK"] },
+    { "name": "QSPI_SD0", "members": ["U3.QSPI_SD0", "U4.IO0"] },
+    { "name": "QSPI_SD1", "members": ["U3.QSPI_SD1", "U4.IO1"] },
+    { "name": "QSPI_SD2", "members": ["U3.QSPI_SD2", "U4.IO2"] },
+    { "name": "QSPI_SD3", "members": ["U3.QSPI_SD3", "U4.IO3"] },
+    { "name": "RP_XIN", "members": ["U3.XIN", "Y2.1", "C8.1"] },
+    { "name": "RP_XOUT", "members": ["U3.XOUT", "Y2.2", "C9.1"] },
+    { "name": "DAP_SWDIO", "members": ["U3.GPIO2", "J2.2"] },
+    { "name": "DAP_SWCLK", "members": ["U3.GPIO3", "J2.4"] },
+    { "name": "DAP_ACTIVITY", "members": ["U3.GPIO25", "R4.1"] },
+    { "name": "LED_A", "members": ["R4.2", "LED1.1"] }
+  ],
+  "calculations": [],
+  "design_decisions": [
+    {
+      "title": "ESP32-C3 owns the USB interface",
+      "rationale": "The requested USB path is direct to ESP32-C3, so host traffic enters the ESP32-C3 first.",
+      "impact": "RP2040 USB pins are intentionally unused in this topology; RP2040 receives work over the ESP/RP UART link."
+    },
+    {
+      "title": "RP2040 is the CMSIS-DAP engine",
+      "rationale": "RP2040 has deterministic GPIO timing and runs the DAP firmware role, while ESP32-C3 handles transactions and management.",
+      "impact": "RP2040 GPIO2/GPIO3 drive the target SWDIO/SWCLK header."
+    },
+    {
+      "title": "ESP32-C3 supervises RP2040 boot and reset",
+      "rationale": "The host MCU needs to recover and reflash the RP2040 without manual intervention.",
+      "impact": "ESP32-C3 GPIO2 controls RP2040 RUN, and GPIO8 can pull RP2040 QSPI_SS low for BOOTSEL during reset."
+    }
+  ],
+  "risks": [
+    "This is a schematic-generation demo, not a production-ready debug probe reference design.",
+    "The RP2040 and ESP32-C3 symbols are local placeholders; verify final pinout against vendor datasheets before PCB layout.",
+    "ESP32-C3 GPIO2/GPIO8 strap and boot behavior must be checked before production use as RP2040 control lines.",
+    "The target SWD header is simplified to 4 pins and does not include target reset, level shifting, isolation, or target VREF sensing.",
+    "The LDO current rating, thermal budget, RF matching, USB-C CC pins, and high-speed USB ESD are placeholders for later engineering refinement."
+  ]
+}

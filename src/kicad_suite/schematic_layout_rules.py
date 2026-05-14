@@ -8,14 +8,18 @@ from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
 
+from .env_utils import env
+
 
 RULES_SCHEMA_VERSION = 'layout-rules.v1'
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 @dataclass
 class BlockLayoutRule:
     role_to_block: dict[str, str]
     block_order: list[str]
+    role_match_rules: list[dict[str, Any]] = field(default_factory=list)
     block_pitch_x: int = 320
     block_origin_y: int = 240
     slot_pitch_y: int = 140
@@ -59,7 +63,7 @@ class LayoutRuleSet:
 
 
 def build_default_layout_rules() -> LayoutRuleSet:
-    return LayoutRuleSet(
+    rules = LayoutRuleSet(
         schema_version=RULES_SCHEMA_VERSION,
         block_layout=BlockLayoutRule(
             role_to_block={
@@ -153,6 +157,44 @@ def build_default_layout_rules() -> LayoutRuleSet:
         ),
         quality=QualityRule(),
     )
+    apply_layout_profile_rule_overrides(rules)
+    return rules
+
+
+def _load_layout_profile_config() -> dict[str, Any]:
+    path = Path(env('KICAD_LAYOUT_PROFILES_FILE', str(REPO_ROOT / 'config' / 'kicad-layout-profiles.json')))
+    if not path.exists():
+        return {}
+    try:
+        with path.open('r', encoding='utf-8') as file:
+            payload = json.load(file)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def apply_layout_profile_rule_overrides(rules: LayoutRuleSet) -> None:
+    defaults = _load_layout_profile_config().get('default', {})
+    if not isinstance(defaults, dict):
+        return
+
+    block_order = defaults.get('block_order')
+    if isinstance(block_order, list):
+        merged_order = [str(item) for item in block_order if str(item)]
+        for block in rules.block_layout.block_order:
+            if block not in merged_order:
+                merged_order.append(block)
+        rules.block_layout.block_order = merged_order
+
+    role_to_block = defaults.get('role_to_block')
+    if isinstance(role_to_block, dict):
+        for role, block in role_to_block.items():
+            if str(role) and str(block):
+                rules.block_layout.role_to_block[str(role)] = str(block)
+
+    role_match_rules = defaults.get('role_match_rules')
+    if isinstance(role_match_rules, list):
+        rules.block_layout.role_match_rules = [item for item in role_match_rules if isinstance(item, dict)]
 
 
 def _normalize_net_name(value: str) -> str:
@@ -187,7 +229,7 @@ def _role_of_component(component: dict[str, Any]) -> str:
 
 
 def _block_of_role(role: str, rules: BlockLayoutRule) -> str:
-    return rules.role_to_block.get(role, 'io')
+    return _resolve_wiring_block(role, rules)
 
 
 _WIRING_SUFFIXES = sorted(
@@ -218,10 +260,18 @@ _WIRING_SUFFIXES = sorted(
 def _resolve_wiring_block(role: str, rules: BlockLayoutRule) -> str:
     if role in rules.role_to_block:
         return rules.role_to_block[role]
-    if any(token in role for token in ('tvs', 'esd', 'fuse', 'polyfuse', 'ptc')):
-        return 'input'
-    if 'led' in role:
-        return 'indicator'
+    for rule in rules.role_match_rules:
+        block = str(rule.get('block', '')).strip()
+        if not block:
+            continue
+        any_contains = [str(item).lower() for item in rule.get('any_contains', []) if str(item)] if isinstance(rule.get('any_contains', []), list) else []
+        all_contains = [str(item).lower() for item in rule.get('all_contains', []) if str(item)] if isinstance(rule.get('all_contains', []), list) else []
+        if any_contains and not any(token in role for token in any_contains):
+            continue
+        if all_contains and not all(token in role for token in all_contains):
+            continue
+        if any_contains or all_contains:
+            return block
     best_prefix = ''
     best_len = 0
     for suffix in _WIRING_SUFFIXES:
