@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 import sys
 import uuid
@@ -57,9 +58,15 @@ def symbol_prefix(lib_id: str, ref: str) -> str:
 
 def local_symbol_library(symbols: list[dict[str, Any]]) -> str:
     lib_ids = sorted({str(symbol.get('lib_id', 'AIAgent:Generic_2Pin')) for symbol in symbols})
+    footprints_by_lib_id: dict[str, str] = {}
+    for symbol in symbols:
+        lib_id = str(symbol.get('lib_id', 'AIAgent:Generic_2Pin'))
+        footprint = str(symbol.get('footprint', '')).strip()
+        if footprint and lib_id not in footprints_by_lib_id:
+            footprints_by_lib_id[lib_id] = footprint
     blocks = ['  (lib_symbols']
     for lib_id in lib_ids:
-        blocks.append(symbol_block_for_lib_id(lib_id))
+        blocks.append(symbol_block_with_default_footprint(symbol_block_for_lib_id(lib_id), footprints_by_lib_id.get(lib_id, '')))
     blocks.append('  )')
     return '\n'.join(blocks)
 
@@ -227,6 +234,43 @@ def symbol_block_for_lib_id(lib_id: str) -> str:
         'power:PWR_FLAG': '#FLG',
     }
     return local_two_pin_symbol(lib_id, fallback_prefixes.get(lib_id, 'R'))
+
+
+def symbol_block_with_default_footprint(block: str, footprint: str) -> str:
+    if not footprint:
+        return block
+    lines = block.splitlines()
+
+    # Replace existing Footprint property
+    for index, line in enumerate(lines):
+        if '(property "Footprint"' in line:
+            lines[index] = re.sub(r'\(property "Footprint" "([^"]*)"', f'(property "Footprint" {q(footprint)}', line, count=1)
+            return '\n'.join(lines)
+
+    # No Footprint property — insert one after the Value property block
+    result: list[str] = []
+    depth = 0
+    in_value = False
+    inserted_after: int = -1
+    for index, line in enumerate(lines):
+        if not in_value and '(property "Value"' in line:
+            in_value = True
+            depth = 1
+        elif in_value:
+            depth += line.count('(') - line.count(')')
+            if depth <= 0:
+                inserted_after = index
+                in_value = False
+        result.append(line)
+        if inserted_after == index:
+            indent = line[:len(line) - len(line.lstrip())] if line.strip() else '      '
+            result.append(f'{indent}(property "Footprint" {q(footprint)} (at 0 0 0)')
+            result.append(f'{indent}  (hide yes)')
+            result.append(f'{indent}  (effects (font (size 1.27 1.27)))')
+            result.append(f'{indent})')
+            inserted_after = -1
+
+    return '\n'.join(result)
 
 
 def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, float]]:
@@ -661,18 +705,62 @@ def sanitize_sheet_name(value: str) -> str:
     return cleaned or 'sheet'
 
 
+def load_layout_profile_config() -> dict[str, Any]:
+    path = Path(env('KICAD_LAYOUT_PROFILES_FILE', str(REPO_ROOT / 'config' / 'kicad-layout-profiles.json')))
+    if not path.exists():
+        return {}
+    try:
+        with path.open('r', encoding='utf-8') as file:
+            payload = json.load(file)
+    except (OSError, json.JSONDecodeError):
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def topology_from_plan(plan: dict[str, Any]) -> str:
+    target = plan.get('target', {})
+    if isinstance(target, dict):
+        return str(target.get('project_name', '')).strip()
+    return ''
+
+
+def configured_sheet_groups(topology: str) -> list[dict[str, Any]]:
+    config = load_layout_profile_config()
+    profiles = config.get('profiles', {})
+    profile = profiles.get(topology, {}) if isinstance(profiles, dict) else {}
+    groups = profile.get('sheet_groups', []) if isinstance(profile, dict) else []
+    return [group for group in groups if isinstance(group, dict)]
+
+
 def symbol_block(symbol: dict[str, Any]) -> str:
     role = str(symbol.get('role', '')).strip().lower()
     return _resolve_wiring_block(role, build_default_layout_rules().block_layout)
 
 
-def group_symbols_by_sheet(symbols: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+def group_symbols_by_sheet(symbols: list[dict[str, Any]], topology: str = '') -> dict[str, list[dict[str, Any]]]:
     pages: dict[str, list[dict[str, Any]]] = {}
     order = build_default_layout_rules().block_layout.block_order
     order_index = {name: index for index, name in enumerate(order)}
+    block_to_sheet: dict[str, str] = {}
+    sheet_order: list[str] = []
+    for group in configured_sheet_groups(topology):
+        name = sanitize_sheet_name(str(group.get('name', '')).strip())
+        blocks = group.get('blocks', [])
+        if not name or not isinstance(blocks, list):
+            continue
+        sheet_order.append(name)
+        for block in blocks:
+            if str(block):
+                block_to_sheet[str(block)] = name
     for symbol in symbols:
         block = symbol_block(symbol)
-        pages.setdefault(block, []).append(symbol)
+        sheet = block_to_sheet.get(block, block)
+        pages.setdefault(sheet, []).append(symbol)
+    if sheet_order:
+        for sheet in pages:
+            if sheet not in sheet_order:
+                sheet_order.append(sheet)
+        return dict(sorted(pages.items(), key=lambda item: (sheet_order.index(item[0]) if item[0] in sheet_order else 999, item[0])))
     return dict(sorted(pages.items(), key=lambda item: (order_index.get(item[0], 999), item[0])))
 
 
@@ -846,21 +934,43 @@ def render_child_schematic(
 
 def write_hierarchical_project(plan: dict[str, Any], output_dir: Path, schematic_file: Path) -> dict[str, Any]:
     base_symbols = [symbol for symbol in plan.get('symbols', []) if isinstance(symbol, dict)]
-    pages = group_symbols_by_sheet(base_symbols)
-    ref_to_sheet = symbol_ref_to_sheet(pages)
-    cross_net_pages = page_cross_nets(plan, ref_to_sheet)
     target = plan.get('target', {})
     project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
+    pages = group_symbols_by_sheet(base_symbols, project_name)
+    ref_to_sheet = symbol_ref_to_sheet(pages)
+    cross_net_pages = page_cross_nets(plan, ref_to_sheet)
+
+    # Collect power/ground nets that are entirely local to a single sheet.
+    # These need sheet pins so EasyEDA can map global labels through the hierarchy.
+    net_kind_lookup = {str(net.get('name', '')): str(net.get('kind', 'signal')) for net in plan.get('nets', []) if isinstance(net, dict)}
+    local_power_nets: dict[str, set[str]] = {}
+    for net in plan.get('nets', []):
+        if not isinstance(net, dict):
+            continue
+        net_name = str(net.get('name', '')).strip()
+        kind = str(net.get('kind', 'signal'))
+        if kind not in ('power', 'ground') or net_name in cross_net_pages:
+            continue
+        sheet_members: set[str] = set()
+        for member in net.get('members', []):
+            if not isinstance(member, str):
+                continue
+            ref, _pin = parse_member_ref_pin(member)
+            if ref in ref_to_sheet:
+                sheet_members.add(ref_to_sheet[ref])
+        if len(sheet_members) == 1:
+            sheet_name = next(iter(sheet_members))
+            local_power_nets.setdefault(sheet_name, set()).add(net_name)
 
     sheet_pages: list[dict[str, Any]] = []
     cursor_x = 25.4
     cursor_y = 25.4
     max_x = 210.0
-    for index, (name, symbols) in enumerate(pages.items()):
-        page_nets = sorted(net for net, net_pages in cross_net_pages.items() if name in net_pages)
+    for index, (name, symbols) in enumerate(pages.items(), start=1):
+        page_nets = sorted(set(net for net, net_pages in cross_net_pages.items() if name in net_pages) | local_power_nets.get(name, set()))
         height = max(20.32, 15.24 + len(page_nets) * 7.62)
         sheet_name = sanitize_sheet_name(name)
-        file_name = f'{project_name}_{sheet_name}.kicad_sch'
+        file_name = f'{index:02d}_{sheet_name}.kicad_sch'
         if cursor_x > max_x:
             cursor_x = 25.4
             cursor_y += 45.72
@@ -931,6 +1041,25 @@ def render_project() -> str:
     ) + '\n'
 
 
+def write_fp_lib_table(output_dir: Path) -> None:
+    repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
+    if not repo_fp.exists():
+        return
+    output_resolved = output_dir.resolve()
+    lines = ['(fp_lib_table']
+    for pretty_dir in sorted(repo_fp.glob('*.pretty')):
+        lib_name = pretty_dir.name.rsplit('.', 1)[0]
+        try:
+            rel = Path(os.path.relpath(str(pretty_dir), str(output_resolved)))
+        except ValueError:
+            rel = pretty_dir
+        uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
+        lines.append(f'  (lib (name "{lib_name}")(type "KiCad")(uri "{uri}")(options "")(descr "AIAgent custom footprints"))')
+    lines.append(')\n')
+    content = '\n'.join(lines)
+    (output_dir / 'fp-lib-table').write_text(content, encoding='utf-8')
+
+
 def write_project(plan: dict[str, Any]) -> dict[str, Any]:
     target = plan.get('target', {})
     if not isinstance(target, dict):
@@ -943,6 +1072,7 @@ def write_project(plan: dict[str, Any]) -> dict[str, Any]:
     project_file.parent.mkdir(parents=True, exist_ok=True)
     schematic_file.parent.mkdir(parents=True, exist_ok=True)
     project_file.write_text(render_project(), encoding='utf-8')
+    write_fp_lib_table(output_dir)
     hierarchical = env('KICAD_HIERARCHICAL_SHEETS', '').strip().lower() in {'1', 'true', 'yes', 'on'}
     hierarchical_summary: dict[str, Any] = {}
     if hierarchical:

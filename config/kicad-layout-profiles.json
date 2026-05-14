@@ -1,17 +1,36 @@
 {
   "schema_version": "kicad-layout-profiles.v1",
   "default": {
-    "block_order": ["input", "power", "reset", "host_mcu", "dap_mcu", "mcu", "memory", "crystal", "boot", "io", "indicator"],
+    "block_order": ["input", "power_reg", "power_decouple", "power", "host_mcu", "host_reset", "host_boot", "host_crystal", "rf", "dap_mcu", "dap_reset", "dap_boot", "dap_crystal", "memory", "mcu", "reset", "crystal", "boot", "io", "indicator"],
     "role_to_block": {
       "esp32_c3_bare_host_mcu": "host_mcu",
-      "rp2040_dap_mcu": "dap_mcu"
+      "rp2040_dap_mcu": "dap_mcu",
+      "esp_reset_button": "host_reset",
+      "esp_boot_button": "host_boot",
+      "rp_reset_button": "dap_reset",
+      "rp_boot_button": "dap_boot",
+      "esp_xtal_load_capacitor": "host_crystal",
+      "rp_xtal_load_capacitor": "dap_crystal",
+      "chip_en_pullup_resistor": "host_reset",
+      "chip_en_reset_capacitor": "host_reset",
+      "crystal_40mhz": "host_crystal",
+      "chip_antenna": "rf",
+      "gpio9_boot_pullup_resistor": "host_boot",
+      "gpio8_strap_pullup_resistor": "host_boot",
+      "rp2040_run_pullup_resistor": "dap_reset",
+      "crystal_12mhz": "dap_crystal",
+      "usb_connector": "input",
+      "ldo_regulator": "power_reg",
+      "ldo_input_capacitor": "power_reg",
+      "ldo_output_capacitor": "power_reg",
+      "vdd3p3_bulk_capacitor": "power_reg"
     },
     "role_match_rules": [
       { "any_contains": ["tvs", "esd", "fuse", "polyfuse", "ptc"], "block": "input" },
       { "any_contains": ["led"], "block": "indicator" },
-      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["capacitor"], "block": "power" },
-      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["decoupling"], "block": "power" },
-      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["bulk"], "block": "power" },
+      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["decoupling"], "block": "power_decouple" },
+      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["bulk"], "block": "power_reg" },
+      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["capacitor"], "block": "power_reg" },
       { "any_contains": ["run", "reset", "enable"], "all_contains": ["pullup"], "block": "reset" },
       { "any_contains": ["run", "reset", "enable"], "all_contains": ["button"], "block": "reset" },
       { "any_contains": ["run", "reset", "enable"], "all_contains": ["capacitor"], "block": "reset" },
@@ -25,10 +44,10 @@
     "layout": {
       "origin_x": 35.56,
       "origin_y": 38.1,
-      "block_gap": 20.32,
-      "slot_pitch": 17.78,
-      "max_x": 260,
-      "row_gap": 63.5
+      "block_gap": 35.56,
+      "slot_pitch": 27.94,
+      "max_x": 280,
+      "row_gap": 76.2
     }
   },
   "profiles": {
@@ -77,38 +96,12 @@
       }
     },
     "rp2040_esp32c3_cmsis_dap_host": {
-      "positions": {
-        "J1": { "x": 35.56, "y": 63.5, "rotation": 0 },
-        "F1": { "x": 60.96, "y": 63.5, "rotation": 0 },
-        "D1": { "x": 76.2, "y": 86.36, "rotation": 90 },
-        "U1": { "x": 76.2, "y": 116.84, "rotation": 0 },
-        "C1": { "x": 22.86, "y": 137.16, "rotation": 0 },
-        "C2": { "x": 99.06, "y": 137.16, "rotation": 0 },
-        "C3": { "x": 116.84, "y": 137.16, "rotation": 0 },
-        "C4": { "x": 134.62, "y": 137.16, "rotation": 0 },
-        "U2": { "x": 147.32, "y": 73.66, "rotation": 0 },
-        "R1": { "x": 96.52, "y": 60.96, "rotation": 0 },
-        "C5": { "x": 96.52, "y": 78.74, "rotation": 0 },
-        "SW1": { "x": 96.52, "y": 96.52, "rotation": 0 },
-        "R2": { "x": 96.52, "y": 116.84, "rotation": 0 },
-        "SW2": { "x": 96.52, "y": 134.62, "rotation": 0 },
-        "Y1": { "x": 147.32, "y": 142.24, "rotation": 0 },
-        "C6": { "x": 124.46, "y": 162.56, "rotation": 0 },
-        "C7": { "x": 170.18, "y": 162.56, "rotation": 0 },
-        "L1": { "x": 210.82, "y": 104.14, "rotation": 90 },
-        "ANT1": { "x": 243.84, "y": 104.14, "rotation": 0 },
-        "U3": { "x": 231.14, "y": 180.34, "rotation": 0 },
-        "U4": { "x": 314.96, "y": 170.18, "rotation": 0 },
-        "R3": { "x": 177.8, "y": 198.12, "rotation": 0 },
-        "SW3": { "x": 177.8, "y": 218.44, "rotation": 0 },
-        "SW4": { "x": 314.96, "y": 215.9, "rotation": 0 },
-        "Y2": { "x": 231.14, "y": 261.62, "rotation": 0 },
-        "C8": { "x": 208.28, "y": 281.94, "rotation": 0 },
-        "C9": { "x": 254.0, "y": 281.94, "rotation": 0 },
-        "J2": { "x": 337.82, "y": 127.0, "rotation": 0 },
-        "R4": { "x": 314.96, "y": 254.0, "rotation": 0 },
-        "LED1": { "x": 342.9, "y": 254.0, "rotation": 90 }
-      }
+      "sheet_groups": [
+        { "name": "power_input", "blocks": ["input", "power_reg", "power_decouple"] },
+        { "name": "esp32c3_host", "blocks": ["host_mcu", "host_reset", "host_boot", "host_crystal", "rf"] },
+        { "name": "rp2040_dap", "blocks": ["dap_mcu", "dap_reset", "dap_boot", "dap_crystal", "memory"] },
+        { "name": "debug_io", "blocks": ["io", "indicator"] }
+      ]
     }
   }
 }

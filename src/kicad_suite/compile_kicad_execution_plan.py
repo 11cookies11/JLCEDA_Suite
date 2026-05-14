@@ -18,6 +18,7 @@ KICAD_PLAN_SCHEMA_VERSION = 'kicad-execution-plan.v1'
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SYMBOL_MAP_CACHE: dict[str, Any] | None = None
 LAYOUT_PROFILES_CACHE: dict[str, Any] | None = None
+FOOTPRINT_EXISTS_CACHE: dict[str, bool] = {}
 
 
 @dataclass
@@ -201,17 +202,62 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
         note = str(mapping.get('note', ''))
         if note:
             notes.append(note)
-        return str(mapping.get('lib_id', 'AIAgent:Generic_2Pin')), package or str(mapping.get('footprint', '')), notes
+        return str(mapping.get('lib_id', 'AIAgent:Generic_2Pin')), normalize_footprint(package or str(mapping.get('footprint', ''))), notes
 
     fallback = symbol_map.get('fallback', {})
     if isinstance(fallback, dict):
         note = str(fallback.get('note', ''))
         if note:
             notes.append(note)
-        return str(fallback.get('lib_id', 'AIAgent:Generic_2Pin')), package or str(fallback.get('footprint', '')), notes
+        return str(fallback.get('lib_id', 'AIAgent:Generic_2Pin')), normalize_footprint(package or str(fallback.get('footprint', ''))), notes
 
     notes.append(f'Mapped unknown role "{role}" to local AIAgent:Generic_2Pin placeholder symbol.')
-    return 'AIAgent:Generic_2Pin', package, notes
+    return 'AIAgent:Generic_2Pin', normalize_footprint(package), notes
+
+
+def normalize_footprint(footprint: str) -> str:
+    aliases = load_symbol_map().get('footprint_aliases', {})
+    if isinstance(aliases, dict):
+        return str(aliases.get(footprint, footprint))
+    return footprint
+
+
+def kicad_footprint_roots() -> list[Path]:
+    roots: list[Path] = []
+    explicit = env('KICAD_FOOTPRINT_DIR')
+    if explicit:
+        roots.append(Path(explicit))
+    extra = env('KICAD_EXTRA_FOOTPRINT_DIR')
+    if extra:
+        roots.extend(Path(item) for item in extra.split(';') if item.strip())
+    repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
+    if repo_fp.exists():
+        roots.append(repo_fp)
+    for base in (Path('D:/Program Files/KiCad'), Path('C:/Program Files/KiCad')):
+        if base.exists():
+            roots.extend(path / 'share' / 'kicad' / 'footprints' for path in sorted(base.glob('*'), reverse=True))
+    return roots
+
+
+def footprint_exists(footprint: str) -> bool | None:
+    footprint = footprint.strip()
+    if not footprint:
+        return False
+    if footprint in FOOTPRINT_EXISTS_CACHE:
+        return FOOTPRINT_EXISTS_CACHE[footprint]
+    if ':' not in footprint:
+        FOOTPRINT_EXISTS_CACHE[footprint] = False
+        return False
+    library, footprint_name = footprint.split(':', 1)
+    roots = kicad_footprint_roots()
+    if not roots:
+        return None
+    for root in roots:
+        if (root / f'{library}.pretty' / f'{footprint_name}.kicad_mod').exists():
+            FOOTPRINT_EXISTS_CACHE[footprint] = True
+            return True
+    FOOTPRINT_EXISTS_CACHE[footprint] = False
+    return False
 
 
 def build_netlist_from_circuit_model(model: dict[str, Any]) -> dict[str, Any]:
@@ -457,7 +503,7 @@ def load_inputs() -> tuple[dict[str, Any], dict[str, Any]]:
 def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecutionPlan:
     request_id = str(model.get('request_id') or netlist.get('request_id') or uuid.uuid4())
     project_name = slugify_project_name(env('KICAD_PROJECT_NAME', str(model.get('topology', '') or request_id)))
-    output_root = Path(env('KICAD_OUTPUT_DIR', '.where/kicad-output'))
+    output_root = Path(env('KICAD_OUTPUT_DIR', 'tmp'))
     output_dir = output_root / project_name
 
     origin_x = to_float_env('KICAD_SCH_ORIGIN_X_MM', 38.1)
@@ -513,6 +559,12 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
             diagnostics.warnings.append(f'{ref} has no net pins; symbol will be placed without connectivity labels.')
         if lib_id.startswith('AIAgent:'):
             diagnostics.unsupported.append(f'{ref} uses placeholder symbol {lib_id}; replace with verified KiCad library symbol later.')
+        exists = footprint_exists(footprint)
+        if exists is False:
+            if footprint:
+                diagnostics.unsupported.append(f'{ref} footprint {footprint} was not found in the configured KiCad footprint libraries.')
+            else:
+                diagnostics.unsupported.append(f'{ref} has no KiCad footprint assignment.')
 
         at = role_aware_position(
             model=model,

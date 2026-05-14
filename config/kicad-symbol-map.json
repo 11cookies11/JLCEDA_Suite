@@ -4,27 +4,28 @@
     {
       "match": { "ref_prefix": "R", "role_contains": ["resistor"] },
       "lib_id": "Device:R",
-      "footprint": ""
+      "footprint": "Resistor_SMD:R_0603_1608Metric"
     },
     {
       "match": { "ref_prefix": "C", "role_contains": ["capacitor"] },
       "lib_id": "Device:C",
-      "footprint": ""
+      "footprint": "Capacitor_SMD:C_0603_1608Metric"
     },
     {
       "match": { "ref_prefix": "F", "role_contains": ["fuse", "polyfuse", "ptc"] },
       "lib_id": "Device:Fuse",
-      "footprint": ""
+      "footprint": "Fuse:Fuse_1206_3216Metric"
     },
     {
       "match": { "role_contains": ["tvs", "esd"] },
       "lib_id": "Device:D_TVS",
-      "footprint": ""
+      "footprint": "Diode_SMD:D_SOD-523"
     },
     {
       "match": { "role_contains": ["usb"] },
       "lib_id": "Connector_Generic:Conn_01x04",
-      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+      "footprint": "AIAgent:USB_A_PCB_traces_small",
+      "note": "PCB-edge USB-A male plug, from KiCad stickhub demo."
     },
     {
       "match": { "role_contains": ["uart", "programming", "swd"] },
@@ -34,13 +35,13 @@
     {
       "match": { "role_contains": ["rp2040"], "value_contains": ["rp2040"] },
       "lib_id": "AIAgent:RP2040_QFN56",
-      "footprint": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP5.4x5.4mm",
+      "footprint": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
       "note": "Mapped RP2040 role to local placeholder symbol."
     },
     {
       "match": { "role_contains": ["qspi", "flash"] },
       "lib_id": "AIAgent:QSPI_Flash",
-      "footprint": "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm",
+      "footprint": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
       "note": "Mapped external flash role to local placeholder symbol."
     },
     {
@@ -52,22 +53,29 @@
     {
       "match": { "role_contains": ["indicator", "led"], "ref_prefix": "LED" },
       "lib_id": "Device:LED",
-      "footprint": ""
+      "footprint": "LED_SMD:LED_0603_1608Metric"
     },
     {
       "match": { "role_contains": ["crystal", "xtal"], "ref_prefix": "Y" },
       "lib_id": "Device:Crystal",
-      "footprint": ""
+      "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"
     },
     {
       "match": { "ref_prefix": "SW", "role_contains": ["button", "switch", "boot", "reset"] },
       "lib_id": "Switch:SW_Push",
-      "footprint": ""
+      "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2"
+    },
+    {
+      "match": { "role_contains": ["chip_antenna"] },
+      "lib_id": "Device:Antenna",
+      "footprint": "RF_Antenna:Johanson_2450AT18x100",
+      "note": "2.4GHz chip antenna for ESP32-C3 WiFi/BLE."
     },
     {
       "match": { "role_contains": ["antenna"] },
       "lib_id": "Connector:Conn_Coaxial",
-      "footprint": "Connector_Coaxial:SMA_Amphenol_132134-10_Vertical"
+      "footprint": "Connector_Coaxial:SMA_Amphenol_132134-10_Vertical",
+      "note": "Generic antenna / RF connector."
     },
     {
       "match": { "role_contains": ["esp32_c3_bare", "bare_chip", "qfn32"] },
@@ -78,12 +86,12 @@
     {
       "match": { "ref_prefix": "L", "role_contains": ["inductor"] },
       "lib_id": "Device:L",
-      "footprint": ""
+      "footprint": "Inductor_SMD:L_0603_1608Metric"
     },
     {
       "match": { "ref_prefix": "D", "role_contains": ["diode"] },
       "lib_id": "Device:D",
-      "footprint": ""
+      "footprint": "Diode_SMD:D_SOD-523"
     },
     {
       "match": { "role_contains": ["esp32"], "value_contains": ["esp32"] },
@@ -106,8 +114,8 @@
     {
       "match": { "ref_prefix": "J" },
       "lib_id": "AIAgent:Conn_01x04",
-      "footprint": "",
-      "note": "Default connector placeholder."
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal",
+      "note": "Default connector placeholder (right-angle)."
     }
   ],
   "fallback": {
@@ -115,15 +123,19 @@
     "footprint": "",
     "note": "Mapped unknown role to local generic placeholder symbol."
   },
+  "footprint_aliases": {
+    "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP5.4x5.4mm": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
+    "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm"
+  },
   "symbol_sizes": {
     "AIAgent:ESP32_C3_Module": [35.56, 38.1],
-    "AIAgent:ESP32_C3_Bare_QFN32": [45.72, 55.88],
+    "AIAgent:ESP32_C3_Bare_QFN32": [50.8, 71.12],
     "AIAgent:Buck_Regulator": [22.86, 17.78],
     "AIAgent:Conn_01x04": [15.24, 17.78],
     "AIAgent:Generic_2Pin": [12.7, 10.16],
     "AIAgent:LDO_3V3": [22.86, 17.78],
     "AIAgent:QSPI_Flash": [25.4, 27.94],
-    "AIAgent:RP2040_QFN56": [63.5, 68.58],
+    "AIAgent:RP2040_QFN56": [76.2, 106.68],
     "MCU_Espressif:ESP32-C3": [50.8, 55.88],
     "Connector:USB_C_Receptacle": [20.32, 17.78]
   }
