@@ -12,6 +12,16 @@
       "footprint": ""
     },
     {
+      "match": { "ref_prefix": "F", "role_contains": ["fuse", "polyfuse", "ptc"] },
+      "lib_id": "Device:Fuse",
+      "footprint": ""
+    },
+    {
+      "match": { "role_contains": ["tvs", "esd"] },
+      "lib_id": "Device:D_TVS",
+      "footprint": ""
+    },
+    {
       "match": { "role_contains": ["usb"] },
       "lib_id": "Connector_Generic:Conn_01x04",
       "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
@@ -58,6 +68,12 @@
       "match": { "role_contains": ["antenna"] },
       "lib_id": "Connector:Conn_Coaxial",
       "footprint": "Connector_Coaxial:SMA_Amphenol_132134-10_Vertical"
+    },
+    {
+      "match": { "role_contains": ["esp32_c3_bare", "bare_chip", "qfn32"] },
+      "lib_id": "AIAgent:ESP32_C3_Bare_QFN32",
+      "footprint": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.3x3.3mm",
+      "note": "Mapped ESP32-C3 bare-chip role to local QFN32 placeholder symbol."
     },
     {
       "match": { "ref_prefix": "L", "role_contains": ["inductor"] },

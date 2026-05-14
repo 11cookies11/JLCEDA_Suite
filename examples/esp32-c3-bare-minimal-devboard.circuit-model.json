@@ -1,0 +1,224 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "esp32-c3-bare-minimal-devboard-demo",
+  "project_id": "esp32-c3-bare-minimal-devboard",
+  "topology": "esp32_c3_bare_minimal_devboard",
+  "components": [
+    {
+      "ref": "J1",
+      "role": "usb_connector",
+      "value": "USB 5V power/data",
+      "selected_part": { "part_id": "usb-connector-01x04", "display_name": "USB connector simplified 1x04", "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "pin_count": 4, "named_pin_count": 4 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Simplified connector: 1=VBUS, 2=D-, 3=D+, 4=GND."]
+    },
+    {
+      "ref": "F1",
+      "role": "usb_vbus_polyfuse",
+      "value": "500mA PTC",
+      "selected_part": { "part_id": "polyfuse-500ma", "display_name": "USB VBUS resettable fuse", "package": "Fuse:Fuse_1206_3216Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Protects the upstream USB source from downstream shorts on the board."]
+    },
+    {
+      "ref": "D1",
+      "role": "vbus_tvs_diode",
+      "value": "5V TVS",
+      "selected_part": { "part_id": "tvs-5v-unidirectional", "display_name": "5V VBUS TVS diode", "package": "Diode_SMD:D_SOD-523", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Place close to the USB power entry and route to ground with a short return path."]
+    },
+    {
+      "ref": "U1",
+      "role": "ldo_regulator",
+      "value": "5V to 3V3 LDO",
+      "selected_part": { "part_id": "ams1117-3v3-demo", "display_name": "3.3V LDO placeholder", "package": "Package_TO_SOT_SMD:SOT-223-3_TabPin2", "pin_count": 3, "named_pin_count": 3 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C1",
+      "role": "ldo_input_capacitor",
+      "value": "10uF",
+      "selected_part": { "part_id": "cap-10uf", "display_name": "10uF input capacitor", "package": "Capacitor_SMD:C_0805_2012Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C2",
+      "role": "ldo_output_capacitor",
+      "value": "10uF",
+      "selected_part": { "part_id": "cap-10uf", "display_name": "10uF output capacitor", "package": "Capacitor_SMD:C_0805_2012Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C3",
+      "role": "vdd3p3_decoupling_capacitor",
+      "value": "100nF",
+      "selected_part": { "part_id": "cap-100nf", "display_name": "100nF decoupling capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "U2",
+      "role": "esp32_c3_bare_chip_qfn32",
+      "value": "ESP32-C3FH4/FH8X",
+      "selected_part": { "part_id": "esp32-c3-bare-qfn32", "display_name": "ESP32-C3 bare chip QFN32", "package": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.3x3.3mm", "pin_count": 33, "named_pin_count": 24 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Bare-chip placeholder uses QFN32 numeric pin numbers from the local AIAgent symbol."]
+    },
+    {
+      "ref": "R1",
+      "role": "chip_en_pullup_resistor",
+      "value": "10k",
+      "selected_part": { "part_id": "res-10k", "display_name": "10k resistor", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C6",
+      "role": "chip_en_reset_capacitor",
+      "value": "100nF",
+      "selected_part": { "part_id": "cap-100nf", "display_name": "EN reset capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "RESET",
+      "selected_part": { "part_id": "switch-reset", "display_name": "Reset pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R2",
+      "role": "gpio9_boot_pullup_resistor",
+      "value": "10k",
+      "selected_part": { "part_id": "res-10k", "display_name": "GPIO9 boot pullup", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW2",
+      "role": "boot_button",
+      "value": "BOOT",
+      "selected_part": { "part_id": "switch-boot", "display_name": "BOOT pushbutton", "package": "Button_Switch_SMD:SW_SPST_SKQG_WithStem", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "Y1",
+      "role": "crystal_40mhz",
+      "value": "40MHz",
+      "selected_part": { "part_id": "crystal-40mhz", "display_name": "40MHz crystal", "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C4",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "18pF crystal load capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C5",
+      "role": "xtal_load_capacitor",
+      "value": "18pF",
+      "selected_part": { "part_id": "cap-18pf", "display_name": "18pF crystal load capacitor", "package": "Capacitor_SMD:C_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "J2",
+      "role": "uart_programming_header",
+      "value": "UART header",
+      "selected_part": { "part_id": "conn-01x04", "display_name": "1x04 UART header", "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical", "pin_count": 4, "named_pin_count": 4 },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": ["Simplified header: 1=3V3, 2=GND, 3=U0TXD, 4=U0RXD."]
+    },
+    {
+      "ref": "R3",
+      "role": "status_led_resistor",
+      "value": "330R",
+      "selected_part": { "part_id": "res-330", "display_name": "330R LED resistor", "package": "Resistor_SMD:R_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "LED1",
+      "role": "power_indicator",
+      "value": "USER LED",
+      "selected_part": { "part_id": "led-green", "display_name": "Green LED", "package": "LED_SMD:LED_0603_1608Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "L1",
+      "role": "rf_series_matching_inductor",
+      "value": "0R/RF link",
+      "selected_part": { "part_id": "rf-link", "display_name": "RF series matching placeholder", "package": "Inductor_SMD:L_0402_1005Metric", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "ANT1",
+      "role": "antenna_connector",
+      "value": "Antenna",
+      "selected_part": { "part_id": "antenna-coax-demo", "display_name": "RF antenna connector placeholder", "package": "Connector_Coaxial:SMA_Amphenol_132134-10_Vertical", "pin_count": 2, "named_pin_count": 2 },
+      "candidate_parts": [],
+      "availability_status": "available"
+    }
+  ],
+  "nets": [
+    { "name": "USB_VBUS_RAW", "members": ["J1.1", "F1.1"] },
+    { "name": "+5V_USB", "members": ["F1.2", "D1.1", "U1.VIN", "C1.1"] },
+    { "name": "+3V3", "members": ["U1.VOUT", "C2.1", "C3.1", "U2.2", "U2.3", "U2.11", "U2.17", "U2.18", "U2.31", "U2.32", "R1.1", "R2.1", "J2.1"] },
+    { "name": "GND", "members": ["J1.4", "D1.2", "U1.GND", "C1.2", "C2.2", "C3.2", "U2.33", "C4.2", "C5.2", "C6.2", "SW1.2", "SW2.2", "LED1.2", "J2.2", "ANT1.2"] },
+    { "name": "USB_DM", "members": ["J1.2", "U2.25"] },
+    { "name": "USB_DP", "members": ["J1.3", "U2.26"] },
+    { "name": "CHIP_EN", "members": ["U2.7", "R1.2", "C6.1", "SW1.1"] },
+    { "name": "GPIO9_BOOT", "members": ["U2.15", "R2.2", "SW2.1"] },
+    { "name": "XTAL_P", "members": ["U2.30", "Y1.1", "C4.1"] },
+    { "name": "XTAL_N", "members": ["U2.29", "Y1.2", "C5.1"] },
+    { "name": "UART_TX", "members": ["U2.28", "J2.3"] },
+    { "name": "UART_RX", "members": ["U2.27", "J2.4"] },
+    { "name": "USER_LED", "members": ["U2.6", "R3.1"] },
+    { "name": "LED_A", "members": ["R3.2", "LED1.1"] },
+    { "name": "RF_LNA", "members": ["U2.1", "L1.1"] },
+    { "name": "RF_ANT", "members": ["L1.2", "ANT1.1"] }
+  ],
+  "calculations": [],
+  "design_decisions": [
+    {
+      "title": "Use bare ESP32-C3 QFN32",
+      "rationale": "The user requested a bare-chip ESP32-C3 minimum development board rather than a module.",
+      "impact": "Power, EN, BOOT, crystal, USB, UART, and RF antenna connections are explicit in the netlist."
+    },
+    {
+      "title": "Use USB 5V input with local 3V3 regulation",
+      "rationale": "USB VBUS provides 5V, while ESP32-C3 core and IO pins require a 3.3V rail.",
+      "impact": "The demo includes an LDO placeholder, input/output bulk capacitors, a protected USB 5V rail, and a VBUS TVS clamp."
+    },
+    {
+      "title": "Protect the USB power entry",
+      "rationale": "A resettable fuse limits board fault current, while a TVS diode provides a first-pass transient clamp on the 5V input.",
+      "impact": "The raw USB VBUS net is separated from the protected +5V_USB net before feeding the LDO."
+    }
+  ],
+  "risks": [
+    "ESP32-C3 bare-chip and LDO use local placeholder symbols; replace with verified KiCad symbols before production.",
+    "USB connector is simplified as a 1x04 symbol and does not model USB-C CC pins or high-speed USB data ESD protection.",
+    "PTC and TVS values are engineering placeholders; select final parts from current limit, clamp voltage, leakage, and package constraints.",
+    "RF matching is represented as a minimal placeholder link; production RF layout requires Espressif reference design review.",
+    "This is a schematic-generation smoke artifact, not a production-ready ESP32-C3 reference design."
+  ]
+}

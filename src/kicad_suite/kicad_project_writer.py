@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import re
 import sys
 import uuid
 from pathlib import Path
@@ -364,11 +365,23 @@ def label_shape(kind: str) -> str:
     return 'bidirectional'
 
 
+def label_token_shape(kind: str) -> str:
+    if kind == 'ground':
+        return 'input'
+    if kind == 'power':
+        return 'input'
+    return 'bidirectional'
+
+
 def net_kind_by_name(plan: dict[str, Any]) -> dict[str, str]:
     return {str(net.get('name', '')): str(net.get('kind', 'signal')) for net in plan.get('nets', []) if isinstance(net, dict)}
 
 
 def render_symbol_instance(symbol: dict[str, Any], project_name: str) -> str:
+    return render_symbol_instance_at_path(symbol, project_name, '/')
+
+
+def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sheet_path: str) -> str:
     at = symbol.get('at', {})
     x = float(at.get('x', 0.0))
     y = float(at.get('y', 0.0))
@@ -412,7 +425,7 @@ def render_symbol_instance(symbol: dict[str, Any], project_name: str) -> str:
 {chr(10).join(pin_lines)}
     (instances
       (project {q(project_name)}
-        (path "/"
+        (path {q(sheet_path)}
           (reference {q(ref)})
           (unit 1)
         )
@@ -574,11 +587,17 @@ def intra_module_wiring(
     return blocks, suppress_labels
 
 
-def render_connectivity(plan: dict[str, Any], symbols: list[dict[str, Any]] | None = None) -> str:
+def render_connectivity(
+    plan: dict[str, Any],
+    symbols: list[dict[str, Any]] | None = None,
+    force_global_nets: set[str] | None = None,
+) -> str:
     kind_map = net_kind_by_name(plan)
     blocks: list[str] = []
     if symbols is None:
         symbols = [symbol for symbol in plan.get('symbols', []) if isinstance(symbol, dict)]
+    if force_global_nets is None:
+        force_global_nets = set()
     nets = plan.get('nets', [])
     direct_blocks, suppress_labels = intra_module_wiring(symbols, nets)
     blocks.extend(direct_blocks)
@@ -595,7 +614,7 @@ def render_connectivity(plan: dict[str, Any], symbols: list[dict[str, Any]] | No
             pin_number = str(pin.get('number', '')).strip()
             if not net_name or not pin_number:
                 continue
-            if (ref, pin_number) in suppress_labels:
+            if (ref, pin_number) in suppress_labels and net_name not in force_global_nets:
                 continue
             x, y, direction = pin_endpoint(symbol, pin_number)
             stub = 3.81
@@ -612,7 +631,9 @@ def render_connectivity(plan: dict[str, Any], symbols: list[dict[str, Any]] | No
             if label_key in rendered_labels:
                 continue
             rendered_labels.add(label_key)
-            if kind in {'ground', 'power'}:
+            if net_name in force_global_nets:
+                blocks.append(render_hierarchical_label(net_name, kind, label_x, label_y, 0.0, justify=justify))
+            elif kind in {'ground', 'power'}:
                 blocks.append(f'''  (global_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(label_x)} {fmt(label_y)} 0)
     (effects (font (size 1.27 1.27)){justify_effect})
     (uuid {q(new_uuid())})
@@ -632,6 +653,84 @@ def render_connectivity(plan: dict[str, Any], symbols: list[dict[str, Any]] | No
     (uuid {q(new_uuid())})
   )''')
     return '\n'.join(blocks)
+
+
+def sanitize_sheet_name(value: str) -> str:
+    cleaned = re.sub(r'[^A-Za-z0-9_.-]+', '_', value.strip().lower())
+    cleaned = cleaned.strip('._-')
+    return cleaned or 'sheet'
+
+
+def symbol_block(symbol: dict[str, Any]) -> str:
+    role = str(symbol.get('role', '')).strip().lower()
+    return _resolve_wiring_block(role, build_default_layout_rules().block_layout)
+
+
+def group_symbols_by_sheet(symbols: list[dict[str, Any]]) -> dict[str, list[dict[str, Any]]]:
+    pages: dict[str, list[dict[str, Any]]] = {}
+    order = build_default_layout_rules().block_layout.block_order
+    order_index = {name: index for index, name in enumerate(order)}
+    for symbol in symbols:
+        block = symbol_block(symbol)
+        pages.setdefault(block, []).append(symbol)
+    return dict(sorted(pages.items(), key=lambda item: (order_index.get(item[0], 999), item[0])))
+
+
+def symbol_ref_to_sheet(pages: dict[str, list[dict[str, Any]]]) -> dict[str, str]:
+    refs: dict[str, str] = {}
+    for sheet_name, symbols in pages.items():
+        for symbol in symbols:
+            ref = str(symbol.get('ref', '')).strip().upper()
+            if ref:
+                refs[ref] = sheet_name
+    return refs
+
+
+def page_cross_nets(plan: dict[str, Any], ref_to_sheet: dict[str, str]) -> dict[str, set[str]]:
+    result: dict[str, set[str]] = {}
+    for net in plan.get('nets', []):
+        if not isinstance(net, dict):
+            continue
+        name = str(net.get('name', '')).strip()
+        if not name:
+            continue
+        pages: set[str] = set()
+        for member in net.get('members', []):
+            if not isinstance(member, str):
+                continue
+            ref, _pin = parse_member_ref_pin(member)
+            if ref in ref_to_sheet:
+                pages.add(ref_to_sheet[ref])
+        if len(pages) > 1:
+            result[name] = pages
+    return result
+
+
+def shifted_symbols_for_page(symbols: list[dict[str, Any]], origin_x: float = 50.8, origin_y: float = 50.8) -> list[dict[str, Any]]:
+    positioned = [symbol for symbol in symbols if isinstance(symbol.get('at', {}), dict)]
+    if not positioned:
+        return symbols
+    min_x = min(float(symbol.get('at', {}).get('x', origin_x)) for symbol in positioned)
+    min_y = min(float(symbol.get('at', {}).get('y', origin_y)) for symbol in positioned)
+    dx = origin_x - min_x
+    dy = origin_y - min_y
+    shifted: list[dict[str, Any]] = []
+    for symbol in symbols:
+        copy = dict(symbol)
+        at = dict(symbol.get('at', {})) if isinstance(symbol.get('at', {}), dict) else {}
+        at['x'] = float(at.get('x', origin_x)) + dx
+        at['y'] = float(at.get('y', origin_y)) + dy
+        copy['at'] = at
+        shifted.append(copy)
+    return shifted
+
+
+def render_sheet_instances(sheet_pages: list[dict[str, Any]]) -> str:
+    lines = ['  (sheet_instances', '    (path "/" (page "1"))']
+    for index, page in enumerate(sheet_pages, start=2):
+        lines.append(f'    (path {q(page["path"])} (page {q(str(index))}))')
+    lines.append('  )')
+    return '\n'.join(lines)
 
 
 def render_schematic(plan: dict[str, Any]) -> str:
@@ -654,6 +753,153 @@ def render_schematic(plan: dict[str, Any]) -> str:
     (path "/" (page "1"))
   )
 )'''
+
+
+def render_hierarchical_label(name: str, kind: str, x: float, y: float, angle: float, justify: str = 'left') -> str:
+    justify_effect = f' (justify {justify})' if justify != 'center' else ''
+    return f'''  (hierarchical_label {q(name)} (shape {label_token_shape(kind)}) (at {fmt(x)} {fmt(y)} {fmt(angle)})
+    (effects (font (size 1.27 1.27)){justify_effect})
+    (uuid {q(new_uuid())})
+  )'''
+
+
+def render_sheet_pin(name: str, kind: str, x: float, y: float, angle: float) -> str:
+    return f'''    (pin {q(name)} {label_token_shape(kind)} (at {fmt(x)} {fmt(y)} {fmt(angle)})
+      (effects (font (size 1.27 1.27)))
+      (uuid {q(new_uuid())})
+    )'''
+
+
+def render_root_sheet(page: dict[str, Any], kind_map: dict[str, str]) -> str:
+    x = float(page['x'])
+    y = float(page['y'])
+    w = float(page['w'])
+    h = float(page['h'])
+    pins = []
+    root_labels = []
+    for index, net_name in enumerate(page['pins']):
+        pin_y = y + 7.62 + index * 7.62
+        pin_x = x + w
+        kind = kind_map.get(net_name, 'signal')
+        pins.append(render_sheet_pin(net_name, kind, pin_x, pin_y, 0.0))
+        root_labels.append(wire_segment((pin_x, pin_y), (pin_x + 5.08, pin_y)))
+        root_labels.append(f'''  (global_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(pin_x + 5.08)} {fmt(pin_y)} 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid {q(new_uuid())})
+  )''')
+    return f'''  (sheet
+    (at {fmt(x)} {fmt(y)})
+    (size {fmt(w)} {fmt(h)})
+    (stroke (width 0.1524) (type solid))
+    (fill (color 0 0 0 0.0000))
+    (uuid {q(page['uuid'])})
+    (property "Sheetname" {q(page['name'])} (at {fmt(x)} {fmt(y - 1.27)} 0)
+      (effects (font (size 1.27 1.27)) (justify left bottom))
+    )
+    (property "Sheetfile" {q(page['file'])} (at {fmt(x)} {fmt(y + h + 1.27)} 0)
+      (effects (font (size 1.27 1.27)) (justify left top))
+    )
+{chr(10).join(pins)}
+  )
+{chr(10).join(root_labels)}'''
+
+
+def render_root_schematic(plan: dict[str, Any], sheet_pages: list[dict[str, Any]]) -> str:
+    kind_map = net_kind_by_name(plan)
+    sheets = '\n'.join(render_root_sheet(page, kind_map) for page in sheet_pages)
+    return f'''(kicad_sch
+  (version 20250610)
+  (generator "kicad-suite-agent")
+  (generator_version "10.0")
+  (uuid {q(new_uuid())})
+  (paper "A4")
+  (lib_symbols)
+{sheets}
+{render_sheet_instances(sheet_pages)}
+)'''
+
+
+def render_child_schematic(
+    plan: dict[str, Any],
+    page: dict[str, Any],
+    symbols: list[dict[str, Any]],
+    sheet_pages: list[dict[str, Any]],
+    cross_nets: set[str],
+) -> str:
+    target = plan.get('target', {})
+    project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
+    page_symbols = shifted_symbols_for_page(symbols)
+    instances = '\n'.join(render_symbol_instance_at_path(symbol, project_name, page['path']) for symbol in page_symbols)
+    connectivity = render_connectivity(plan, page_symbols, force_global_nets=cross_nets)
+    return f'''(kicad_sch
+  (version 20250610)
+  (generator "kicad-suite-agent")
+  (generator_version "10.0")
+  (uuid {q(new_uuid())})
+  (paper "A4")
+{local_symbol_library(page_symbols)}
+{instances}
+{connectivity}
+{render_sheet_instances(sheet_pages)}
+)'''
+
+
+def write_hierarchical_project(plan: dict[str, Any], output_dir: Path, schematic_file: Path) -> dict[str, Any]:
+    base_symbols = [symbol for symbol in plan.get('symbols', []) if isinstance(symbol, dict)]
+    pages = group_symbols_by_sheet(base_symbols)
+    ref_to_sheet = symbol_ref_to_sheet(pages)
+    cross_net_pages = page_cross_nets(plan, ref_to_sheet)
+    target = plan.get('target', {})
+    project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
+
+    sheet_pages: list[dict[str, Any]] = []
+    cursor_x = 25.4
+    cursor_y = 25.4
+    max_x = 210.0
+    for index, (name, symbols) in enumerate(pages.items()):
+        page_nets = sorted(net for net, net_pages in cross_net_pages.items() if name in net_pages)
+        height = max(20.32, 15.24 + len(page_nets) * 7.62)
+        sheet_name = sanitize_sheet_name(name)
+        file_name = f'{project_name}_{sheet_name}.kicad_sch'
+        if cursor_x > max_x:
+            cursor_x = 25.4
+            cursor_y += 45.72
+        sheet_uuid = new_uuid()
+        sheet_pages.append(
+            {
+                'name': name,
+                'file': file_name,
+                'path': f'/{sheet_uuid}',
+                'uuid': sheet_uuid,
+                'x': cursor_x,
+                'y': cursor_y,
+                'w': 48.26,
+                'h': height,
+                'pins': page_nets,
+                'symbols': symbols,
+            }
+        )
+        cursor_x += 66.04
+
+    schematic_file.write_text(render_root_schematic(plan, sheet_pages) + '\n', encoding='utf-8')
+    for page in sheet_pages:
+        child_path = schematic_file.parent / page['file']
+        child_path.write_text(
+            render_child_schematic(
+                plan=plan,
+                page=page,
+                symbols=page['symbols'],
+                sheet_pages=sheet_pages,
+                cross_nets=set(page['pins']),
+            ) + '\n',
+            encoding='utf-8',
+        )
+
+    return {
+        'sheet_count': len(sheet_pages) + 1,
+        'root_schematic_file': str(schematic_file),
+        'sheet_files': [str(schematic_file.parent / page['file']) for page in sheet_pages],
+    }
 
 
 def render_project() -> str:
@@ -697,7 +943,12 @@ def write_project(plan: dict[str, Any]) -> dict[str, Any]:
     project_file.parent.mkdir(parents=True, exist_ok=True)
     schematic_file.parent.mkdir(parents=True, exist_ok=True)
     project_file.write_text(render_project(), encoding='utf-8')
-    schematic_file.write_text(render_schematic(plan) + '\n', encoding='utf-8')
+    hierarchical = env('KICAD_HIERARCHICAL_SHEETS', '').strip().lower() in {'1', 'true', 'yes', 'on'}
+    hierarchical_summary: dict[str, Any] = {}
+    if hierarchical:
+        hierarchical_summary = write_hierarchical_project(plan, output_dir, schematic_file)
+    else:
+        schematic_file.write_text(render_schematic(plan) + '\n', encoding='utf-8')
 
     summary = {
         'schema_version': 'kicad-project-write-result.v1',
@@ -708,6 +959,8 @@ def write_project(plan: dict[str, Any]) -> dict[str, Any]:
         'net_count': len([item for item in plan.get('nets', []) if isinstance(item, dict)]),
         'diagnostics': plan.get('diagnostics', {}),
     }
+    if hierarchical_summary:
+        summary['hierarchical_sheets'] = hierarchical_summary
     summary_file = output_dir / 'kicad-write-summary.json'
     summary_file.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     summary['summary_file'] = str(summary_file)

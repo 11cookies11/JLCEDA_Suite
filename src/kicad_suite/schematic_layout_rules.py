@@ -218,6 +218,10 @@ _WIRING_SUFFIXES = sorted(
 def _resolve_wiring_block(role: str, rules: BlockLayoutRule) -> str:
     if role in rules.role_to_block:
         return rules.role_to_block[role]
+    if any(token in role for token in ('tvs', 'esd', 'fuse', 'polyfuse', 'ptc')):
+        return 'input'
+    if 'led' in role:
+        return 'indicator'
     best_prefix = ''
     best_len = 0
     for suffix in _WIRING_SUFFIXES:
