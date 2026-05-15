@@ -165,6 +165,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     output.mkdir(parents=True, exist_ok=True)
     os.environ['KICAD_PROJECT_NAME'] = project_name
     os.environ['KICAD_OUTPUT_DIR'] = str(output)
+    os.environ['KICAD_TOPOLOGY'] = model.get('topology', '')
     netlist = build_netlist(model)
     plan: KiCadExecutionPlan = compile_plan(model, netlist)
     plan_file = write_output(plan)

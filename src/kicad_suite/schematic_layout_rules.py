@@ -62,11 +62,42 @@ class LayoutRuleSet:
     quality: QualityRule
 
 
-def build_default_layout_rules() -> LayoutRuleSet:
+def _load_profile_config() -> dict[str, Any]:
+    config_path = Path(env('KICAD_LAYOUT_PROFILES_FILE', str(REPO_ROOT / 'config' / 'kicad-layout-profiles.json')))
+    if not config_path.exists():
+        return {}
+    try:
+        with config_path.open('r', encoding='utf-8') as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return {}
+
+
+def build_default_layout_rules(topology: str = '') -> LayoutRuleSet:
+    # Load profile-specific rules
+    profile_rules: list[dict[str, Any]] = []
+    profile_role_to_block: dict[str, str] = {}
+    profile_block_order: list[str] = []
+    if not topology:
+        topology = env('KICAD_TOPOLOGY', '')
+    if topology:
+        config = _load_profile_config()
+        profiles = config.get('profiles', {})
+        if isinstance(profiles, dict):
+            profile = profiles.get(topology, {})
+            if isinstance(profile, dict):
+                profile_rules = profile.get('role_match_rules', [])
+                profile_role_to_block = profile.get('role_to_block', {})
+                profile_block_order = profile.get('block_order', [])
+
+    default_block_order = (profile_block_order if profile_block_order else
+        ['input', 'power', 'reset', 'mcu', 'memory', 'crystal', 'boot', 'io', 'indicator', 'power_stage', 'output', 'feedback', 'strap', 'rf'])
+
     rules = LayoutRuleSet(
         schema_version=RULES_SCHEMA_VERSION,
         block_layout=BlockLayoutRule(
             role_to_block={
+                **profile_role_to_block,
                 'input_protection': 'input',
                 'input_capacitor': 'input',
                 'connector': 'input',
@@ -106,7 +137,8 @@ def build_default_layout_rules() -> LayoutRuleSet:
                 'vdd3p3_bulk_capacitor': 'power',
                 'vdd3p3_decoupling_capacitor': 'power',
             },
-            block_order=['input', 'power', 'reset', 'mcu', 'memory', 'crystal', 'boot', 'io', 'indicator', 'power_stage', 'output', 'feedback', 'strap', 'rf'],
+            role_match_rules=profile_rules,
+            block_order=default_block_order,
         ),
         pin_anchor=PinAnchorRule(
             keyword_to_side={
@@ -194,7 +226,12 @@ def apply_layout_profile_rule_overrides(rules: LayoutRuleSet) -> None:
 
     role_match_rules = defaults.get('role_match_rules')
     if isinstance(role_match_rules, list):
-        rules.block_layout.role_match_rules = [item for item in role_match_rules if isinstance(item, dict)]
+        # Merge: profile rules first (higher priority), default rules as fallback
+        existing = rules.block_layout.role_match_rules
+        default_rules = [item for item in role_match_rules if isinstance(item, dict)]
+        # Keep profile rules that don't conflict with defaults
+        merged = [r for r in existing if r not in default_rules] + default_rules
+        rules.block_layout.role_match_rules = merged
 
 
 def _normalize_net_name(value: str) -> str:

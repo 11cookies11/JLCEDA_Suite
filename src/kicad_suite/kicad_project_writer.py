@@ -1190,7 +1190,7 @@ def write_project(plan: dict[str, Any]) -> dict[str, Any]:
     schematic_file.parent.mkdir(parents=True, exist_ok=True)
     project_file.write_text(render_project(output_dir), encoding='utf-8')
     write_fp_lib_table(output_dir)
-    hierarchical = env('KICAD_HIERARCHICAL_SHEETS', '').strip().lower() in {'1', 'true', 'yes', 'on'}
+    hierarchical = env('KICAD_HIERARCHICAL_SHEETS', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
     hierarchical_summary: dict[str, Any] = {}
     if hierarchical:
         hierarchical_summary = write_hierarchical_project(plan, output_dir, schematic_file)

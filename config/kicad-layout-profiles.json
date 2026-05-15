@@ -1,7 +1,28 @@
 {
   "schema_version": "kicad-layout-profiles.v1",
   "default": {
-    "block_order": ["input", "power_reg", "power_decouple", "power", "host_mcu", "host_reset", "host_boot", "host_crystal", "rf", "dap_mcu", "dap_reset", "dap_boot", "dap_crystal", "memory", "mcu", "reset", "crystal", "boot", "io", "indicator"],
+    "block_order": [
+      "input",
+      "power_reg",
+      "power_decouple",
+      "power",
+      "host_mcu",
+      "host_reset",
+      "host_boot",
+      "host_crystal",
+      "rf",
+      "dap_mcu",
+      "dap_reset",
+      "dap_boot",
+      "dap_crystal",
+      "memory",
+      "mcu",
+      "reset",
+      "crystal",
+      "boot",
+      "io",
+      "indicator"
+    ],
     "role_to_block": {
       "esp32_c3_bare_host_mcu": "host_mcu",
       "rp2040_dap_mcu": "dap_mcu",
@@ -26,17 +47,128 @@
       "vdd3p3_bulk_capacitor": "power_reg"
     },
     "role_match_rules": [
-      { "any_contains": ["tvs", "esd", "fuse", "polyfuse", "ptc"], "block": "input" },
-      { "any_contains": ["led"], "block": "indicator" },
-      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["decoupling"], "block": "power_decouple" },
-      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["bulk"], "block": "power_reg" },
-      { "any_contains": ["vdd", "vcc", "vbus", "power"], "all_contains": ["capacitor"], "block": "power_reg" },
-      { "any_contains": ["run", "reset", "enable"], "all_contains": ["pullup"], "block": "reset" },
-      { "any_contains": ["run", "reset", "enable"], "all_contains": ["button"], "block": "reset" },
-      { "any_contains": ["run", "reset", "enable"], "all_contains": ["capacitor"], "block": "reset" },
-      { "any_contains": ["run", "reset", "enable"], "all_contains": ["resistor"], "block": "reset" },
-      { "any_contains": ["swd", "uart", "debug", "programming", "target"], "all_contains": ["header"], "block": "io" },
-      { "any_contains": ["swd", "uart", "debug", "programming", "target"], "all_contains": ["connector"], "block": "io" }
+      {
+        "any_contains": [
+          "tvs",
+          "esd",
+          "fuse",
+          "polyfuse",
+          "ptc"
+        ],
+        "block": "input"
+      },
+      {
+        "any_contains": [
+          "led"
+        ],
+        "block": "indicator"
+      },
+      {
+        "any_contains": [
+          "vdd",
+          "vcc",
+          "vbus",
+          "power"
+        ],
+        "all_contains": [
+          "decoupling"
+        ],
+        "block": "power_decouple"
+      },
+      {
+        "any_contains": [
+          "vdd",
+          "vcc",
+          "vbus",
+          "power"
+        ],
+        "all_contains": [
+          "bulk"
+        ],
+        "block": "power_reg"
+      },
+      {
+        "any_contains": [
+          "vdd",
+          "vcc",
+          "vbus",
+          "power"
+        ],
+        "all_contains": [
+          "capacitor"
+        ],
+        "block": "power_reg"
+      },
+      {
+        "any_contains": [
+          "run",
+          "reset",
+          "enable"
+        ],
+        "all_contains": [
+          "pullup"
+        ],
+        "block": "reset"
+      },
+      {
+        "any_contains": [
+          "run",
+          "reset",
+          "enable"
+        ],
+        "all_contains": [
+          "button"
+        ],
+        "block": "reset"
+      },
+      {
+        "any_contains": [
+          "run",
+          "reset",
+          "enable"
+        ],
+        "all_contains": [
+          "capacitor"
+        ],
+        "block": "reset"
+      },
+      {
+        "any_contains": [
+          "run",
+          "reset",
+          "enable"
+        ],
+        "all_contains": [
+          "resistor"
+        ],
+        "block": "reset"
+      },
+      {
+        "any_contains": [
+          "swd",
+          "uart",
+          "debug",
+          "programming",
+          "target"
+        ],
+        "all_contains": [
+          "header"
+        ],
+        "block": "io"
+      },
+      {
+        "any_contains": [
+          "swd",
+          "uart",
+          "debug",
+          "programming",
+          "target"
+        ],
+        "all_contains": [
+          "connector"
+        ],
+        "block": "io"
+      }
     ],
     "role_rotations": {
       "power_indicator": 90
@@ -53,54 +185,453 @@
   "profiles": {
     "rp2040_minimal_devboard": {
       "positions": {
-        "J1": { "x": 35.56, "y": 63.5, "rotation": 0 },
-        "U1": { "x": 45.72, "y": 116.84, "rotation": 0 },
-        "C1": { "x": 22.86, "y": 137.16, "rotation": 0 },
-        "C2": { "x": 68.58, "y": 137.16, "rotation": 0 },
-        "SW1": { "x": 96.52, "y": 66.04, "rotation": 0 },
-        "U2": { "x": 147.32, "y": 76.2, "rotation": 0 },
-        "U3": { "x": 226.06, "y": 76.2, "rotation": 0 },
-        "SW2": { "x": 226.06, "y": 116.84, "rotation": 0 },
-        "Y1": { "x": 147.32, "y": 147.32, "rotation": 0 },
-        "C3": { "x": 124.46, "y": 167.64, "rotation": 0 },
-        "C4": { "x": 170.18, "y": 167.64, "rotation": 0 },
-        "R1": { "x": 104.14, "y": 96.52, "rotation": 0 },
-        "R2": { "x": 203.2, "y": 152.4, "rotation": 0 },
-        "LED1": { "x": 231.14, "y": 152.4, "rotation": 90 },
-        "J2": { "x": 259.08, "y": 132.08, "rotation": 0 }
+        "J1": {
+          "x": 35.56,
+          "y": 63.5,
+          "rotation": 0
+        },
+        "U1": {
+          "x": 45.72,
+          "y": 116.84,
+          "rotation": 0
+        },
+        "C1": {
+          "x": 22.86,
+          "y": 137.16,
+          "rotation": 0
+        },
+        "C2": {
+          "x": 68.58,
+          "y": 137.16,
+          "rotation": 0
+        },
+        "SW1": {
+          "x": 96.52,
+          "y": 66.04,
+          "rotation": 0
+        },
+        "U2": {
+          "x": 147.32,
+          "y": 76.2,
+          "rotation": 0
+        },
+        "U3": {
+          "x": 226.06,
+          "y": 76.2,
+          "rotation": 0
+        },
+        "SW2": {
+          "x": 226.06,
+          "y": 116.84,
+          "rotation": 0
+        },
+        "Y1": {
+          "x": 147.32,
+          "y": 147.32,
+          "rotation": 0
+        },
+        "C3": {
+          "x": 124.46,
+          "y": 167.64,
+          "rotation": 0
+        },
+        "C4": {
+          "x": 170.18,
+          "y": 167.64,
+          "rotation": 0
+        },
+        "R1": {
+          "x": 104.14,
+          "y": 96.52,
+          "rotation": 0
+        },
+        "R2": {
+          "x": 203.2,
+          "y": 152.4,
+          "rotation": 0
+        },
+        "LED1": {
+          "x": 231.14,
+          "y": 152.4,
+          "rotation": 90
+        },
+        "J2": {
+          "x": 259.08,
+          "y": 132.08,
+          "rotation": 0
+        }
       }
     },
     "esp32_c3_bare_minimal_devboard": {
       "positions": {
-        "J1": { "x": 35.56, "y": 63.5, "rotation": 0 },
-        "F1": { "x": 60.96, "y": 63.5, "rotation": 0 },
-        "D1": { "x": 76.2, "y": 86.36, "rotation": 90 },
-        "U1": { "x": 76.2, "y": 116.84, "rotation": 0 },
-        "C1": { "x": 22.86, "y": 137.16, "rotation": 0 },
-        "C2": { "x": 99.06, "y": 137.16, "rotation": 0 },
-        "C3": { "x": 116.84, "y": 137.16, "rotation": 0 },
-        "U2": { "x": 147.32, "y": 86.36, "rotation": 0 },
-        "R1": { "x": 96.52, "y": 71.12, "rotation": 0 },
-        "C6": { "x": 96.52, "y": 91.44, "rotation": 0 },
-        "SW1": { "x": 96.52, "y": 111.76, "rotation": 0 },
-        "R2": { "x": 96.52, "y": 137.16, "rotation": 0 },
-        "SW2": { "x": 96.52, "y": 157.48, "rotation": 0 },
-        "Y1": { "x": 147.32, "y": 157.48, "rotation": 0 },
-        "C4": { "x": 124.46, "y": 177.8, "rotation": 0 },
-        "C5": { "x": 170.18, "y": 177.8, "rotation": 0 },
-        "J2": { "x": 226.06, "y": 71.12, "rotation": 0 },
-        "R3": { "x": 203.2, "y": 121.92, "rotation": 0 },
-        "LED1": { "x": 231.14, "y": 121.92, "rotation": 90 },
-        "L1": { "x": 226.06, "y": 157.48, "rotation": 90 },
-        "ANT1": { "x": 259.08, "y": 157.48, "rotation": 0 }
+        "J1": {
+          "x": 35.56,
+          "y": 63.5,
+          "rotation": 0
+        },
+        "F1": {
+          "x": 60.96,
+          "y": 63.5,
+          "rotation": 0
+        },
+        "D1": {
+          "x": 76.2,
+          "y": 86.36,
+          "rotation": 90
+        },
+        "U1": {
+          "x": 76.2,
+          "y": 116.84,
+          "rotation": 0
+        },
+        "C1": {
+          "x": 22.86,
+          "y": 137.16,
+          "rotation": 0
+        },
+        "C2": {
+          "x": 99.06,
+          "y": 137.16,
+          "rotation": 0
+        },
+        "C3": {
+          "x": 116.84,
+          "y": 137.16,
+          "rotation": 0
+        },
+        "U2": {
+          "x": 147.32,
+          "y": 86.36,
+          "rotation": 0
+        },
+        "R1": {
+          "x": 96.52,
+          "y": 71.12,
+          "rotation": 0
+        },
+        "C6": {
+          "x": 96.52,
+          "y": 91.44,
+          "rotation": 0
+        },
+        "SW1": {
+          "x": 96.52,
+          "y": 111.76,
+          "rotation": 0
+        },
+        "R2": {
+          "x": 96.52,
+          "y": 137.16,
+          "rotation": 0
+        },
+        "SW2": {
+          "x": 96.52,
+          "y": 157.48,
+          "rotation": 0
+        },
+        "Y1": {
+          "x": 147.32,
+          "y": 157.48,
+          "rotation": 0
+        },
+        "C4": {
+          "x": 124.46,
+          "y": 177.8,
+          "rotation": 0
+        },
+        "C5": {
+          "x": 170.18,
+          "y": 177.8,
+          "rotation": 0
+        },
+        "J2": {
+          "x": 226.06,
+          "y": 71.12,
+          "rotation": 0
+        },
+        "R3": {
+          "x": 203.2,
+          "y": 121.92,
+          "rotation": 0
+        },
+        "LED1": {
+          "x": 231.14,
+          "y": 121.92,
+          "rotation": 90
+        },
+        "L1": {
+          "x": 226.06,
+          "y": 157.48,
+          "rotation": 90
+        },
+        "ANT1": {
+          "x": 259.08,
+          "y": 157.48,
+          "rotation": 0
+        }
       }
     },
     "rp2040_esp32c3_cmsis_dap_host": {
       "sheet_groups": [
-        { "name": "power_input", "blocks": ["input", "power_reg", "power_decouple"] },
-        { "name": "esp32c3_host", "blocks": ["host_mcu", "host_reset", "host_boot", "host_crystal", "rf"] },
-        { "name": "rp2040_dap", "blocks": ["dap_mcu", "dap_reset", "dap_boot", "dap_crystal", "memory"] },
-        { "name": "debug_io", "blocks": ["io", "indicator"] }
+        {
+          "name": "power_input",
+          "blocks": [
+            "input",
+            "power_reg",
+            "power_decouple"
+          ]
+        },
+        {
+          "name": "esp32c3_host",
+          "blocks": [
+            "host_mcu",
+            "host_reset",
+            "host_boot",
+            "host_crystal",
+            "rf"
+          ]
+        },
+        {
+          "name": "rp2040_dap",
+          "blocks": [
+            "dap_mcu",
+            "dap_reset",
+            "dap_boot",
+            "dap_crystal",
+            "memory"
+          ]
+        },
+        {
+          "name": "debug_io",
+          "blocks": [
+            "io",
+            "indicator"
+          ]
+        }
+      ]
+    },
+    "nema23_industrial_stepper_driver_v0_1": {
+      "role_match_rules": [
+        {
+          "any_contains": [
+            "power_input",
+            "input_fuse",
+            "bus_tvs",
+            "reverse_protection",
+            "emi_filter"
+          ],
+          "block": "power_input"
+        },
+        {
+          "any_contains": [
+            "bus_bulk",
+            "bus_ceramic",
+            "braking_resistor"
+          ],
+          "block": "bus_cap"
+        },
+        {
+          "any_contains": [
+            "buck_5v",
+            "buck_input",
+            "buck_output",
+            "buck_bootstrap",
+            "buck_inductor",
+            "buck_catch"
+          ],
+          "block": "buck_5v"
+        },
+        {
+          "any_contains": [
+            "ldo_3v3",
+            "ldo_input",
+            "ldo_output"
+          ],
+          "block": "ldo_3v3"
+        },
+        {
+          "any_contains": [
+            "stm32g4_mcu",
+            "mcu_decoupling",
+            "mcu_vdda"
+          ],
+          "block": "mcu"
+        },
+        {
+          "any_contains": [
+            "crystal"
+          ],
+          "block": "mcu_crystal"
+        },
+        {
+          "any_contains": [
+            "nrst",
+            "boot0"
+          ],
+          "block": "mcu_config"
+        },
+        {
+          "any_contains": [
+            "half_bridge",
+            "gate_driver",
+            "bootstrap_capacitor"
+          ],
+          "block": "gate_driver"
+        },
+        {
+          "any_contains": [
+            "mosfet",
+            "h_bridge_switch",
+            "gate_resistor",
+            "gate_source"
+          ],
+          "block": "h_bridge"
+        },
+        {
+          "any_contains": [
+            "current_sense",
+            "ia_adc",
+            "ib_adc"
+          ],
+          "block": "current_sense"
+        },
+        {
+          "any_contains": [
+            "overcurrent",
+            "oc_reference"
+          ],
+          "block": "protection"
+        },
+        {
+          "any_contains": [
+            "bus_voltage_sense",
+            "bus_sense"
+          ],
+          "block": "bus_sense"
+        },
+        {
+          "any_contains": [
+            "temperature",
+            "ntc",
+            "temp_sense",
+            "temp_bias"
+          ],
+          "block": "temp_sense"
+        },
+        {
+          "any_contains": [
+            "motor_output",
+            "motor_tvs",
+            "motor_snubber"
+          ],
+          "block": "motor_output"
+        },
+        {
+          "any_contains": [
+            "step_",
+            "dir_",
+            "en_",
+            "step_dir_enable"
+          ],
+          "block": "control_input"
+        },
+        {
+          "any_contains": [
+            "swd_",
+            "uart_",
+            "usb_uart",
+            "usb_c_",
+            "usb_dp",
+            "usb_dn",
+            "usb_vbus"
+          ],
+          "block": "debug"
+        },
+        {
+          "any_contains": [
+            "_led",
+            "power_led",
+            "status_led",
+            "fault_led"
+          ],
+          "block": "indicator"
+        },
+        {
+          "any_contains": [
+            "test_point"
+          ],
+          "block": "test_points"
+        }
+      ],
+      "sheet_groups": [
+        {
+          "name": "1_power",
+          "blocks": [
+            "power_input",
+            "bus_cap",
+            "buck_5v",
+            "ldo_3v3"
+          ]
+        },
+        {
+          "name": "2_mcu",
+          "blocks": [
+            "mcu",
+            "mcu_crystal",
+            "mcu_config"
+          ]
+        },
+        {
+          "name": "3_motor_drive",
+          "blocks": [
+            "gate_driver",
+            "h_bridge"
+          ]
+        },
+        {
+          "name": "4_sensing",
+          "blocks": [
+            "current_sense",
+            "protection",
+            "bus_sense",
+            "temp_sense"
+          ]
+        },
+        {
+          "name": "5_io",
+          "blocks": [
+            "motor_output",
+            "control_input",
+            "debug"
+          ]
+        },
+        {
+          "name": "6_indicator",
+          "blocks": [
+            "indicator",
+            "test_points"
+          ]
+        }
+      ],
+      "block_order": [
+        "power_input",
+        "bus_cap",
+        "buck_5v",
+        "ldo_3v3",
+        "mcu",
+        "mcu_crystal",
+        "mcu_config",
+        "gate_driver",
+        "h_bridge",
+        "current_sense",
+        "protection",
+        "bus_sense",
+        "temp_sense",
+        "motor_output",
+        "control_input",
+        "debug",
+        "indicator",
+        "test_points"
       ]
     }
   }
