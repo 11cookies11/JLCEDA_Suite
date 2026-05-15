@@ -75,10 +75,14 @@
         "display_name": "Bus TVS diode",
         "package": "Diode_SMD:D_SMB",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "C353350",
+        "mpn": "SMBJ58A",
+        "manufacturer": "MDD",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "TVS across VM_BUS to GND."
       ]
@@ -134,12 +138,17 @@
         "display_name": "EMI inductor or ferrite bead (reserved position)",
         "package": "Inductor_SMD:L_1210_3225Metric",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "",
+        "mpn": "",
+        "manufacturer": "",
+        "availability_status": "unpopulated"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "unpopulated",
       "notes": [
-        "Reserved EMI filter position; can be replaced with 0R jumper for V0.1."
+        "Reserved EMI filter position; can be replaced with 0R jumper for V0.1.",
+        "Reserved EMI position; 0R jumper for V0.1"
       ]
     },
     {
@@ -151,12 +160,17 @@
         "display_name": "Braking dump resistor placeholder",
         "package": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "",
+        "mpn": "",
+        "manufacturer": "",
+        "availability_status": "unpopulated"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "unpopulated",
       "notes": [
-        "Reserved for regenerative braking; not populated in V0.1."
+        "Reserved for regenerative braking; not populated in V0.1.",
+        "Reserved; V0.1 scope exclusion"
       ]
     },
     {
@@ -224,10 +238,14 @@
         "display_name": "Buck power inductor",
         "package": "Inductor_SMD:L_12x12mm",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "C49230815",
+        "mpn": "CD54-470M",
+        "manufacturer": "SANLI",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "D_BUCK",
@@ -426,10 +444,14 @@
         "display_name": "8MHz crystal with load caps",
         "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
         "pin_count": 4,
-        "named_pin_count": 4
+        "named_pin_count": 4,
+        "lcsc_id": "C9002",
+        "mpn": "X322512MSB4SI",
+        "manufacturer": "YXC",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "MCU HSE crystal."
       ]
@@ -1065,12 +1087,17 @@
         "display_name": "Motor output TVS diode placeholder",
         "package": "Diode_SMD:D_SMC",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "",
+        "mpn": "",
+        "manufacturer": "",
+        "availability_status": "unpopulated"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "unpopulated",
       "notes": [
-        "Reserved TVS across motor outputs; populate based on motor inductance."
+        "Reserved TVS across motor outputs; populate based on motor inductance.",
+        "Reserved; populate after motor selection"
       ]
     },
     {
@@ -1082,12 +1109,17 @@
         "display_name": "Snubber resistor placeholder",
         "package": "Resistor_SMD:R_1206_3216Metric",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "",
+        "mpn": "",
+        "manufacturer": "",
+        "availability_status": "unpopulated"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "unpopulated",
       "notes": [
-        "Reserved RC snubber for phase A."
+        "Reserved RC snubber for phase A.",
+        "Reserved RC snubber"
       ]
     },
     {
@@ -1099,10 +1131,17 @@
         "display_name": "Snubber capacitor placeholder",
         "package": "Capacitor_SMD:C_1206_3216Metric",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "",
+        "mpn": "",
+        "manufacturer": "",
+        "availability_status": "unpopulated"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "unpopulated",
+      "notes": [
+        "Reserved RC snubber"
+      ]
     },
     {
       "ref": "J_CTRL",
@@ -1113,10 +1152,14 @@
         "display_name": "4-pin control input header",
         "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
         "pin_count": 4,
-        "named_pin_count": 4
+        "named_pin_count": 4,
+        "lcsc_id": "C49257",
+        "mpn": "PinHeader 1x04 P2.54",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "R_STEP_SERIES",
@@ -1295,10 +1338,14 @@
         "display_name": "5-pin SWD header",
         "package": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
         "pin_count": 5,
-        "named_pin_count": 5
+        "named_pin_count": 5,
+        "lcsc_id": "C13531",
+        "mpn": "PinHeader 1x05 P2.54",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "J_UART",
@@ -1309,10 +1356,14 @@
         "display_name": "4-pin UART header",
         "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
         "pin_count": 4,
-        "named_pin_count": 4
+        "named_pin_count": 4,
+        "lcsc_id": "C49257",
+        "mpn": "PinHeader 1x04 P2.54",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "U_USB_UART",
@@ -1323,10 +1374,14 @@
         "display_name": "USB-UART bridge IC",
         "package": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
         "pin_count": 16,
-        "named_pin_count": 16
+        "named_pin_count": 16,
+        "lcsc_id": "C7464026",
+        "mpn": "CH340C",
+        "manufacturer": "WCH",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "Optional USB-UART bridge for debug and configuration."
       ]
@@ -1340,10 +1395,14 @@
         "display_name": "USB-C receptacle",
         "package": "Connector:USB_C_Receptacle",
         "pin_count": 16,
-        "named_pin_count": 6
+        "named_pin_count": 6,
+        "lcsc_id": "C393939",
+        "mpn": "TYPE-C16PIN",
+        "manufacturer": "SHOU",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "USB-C connector for USB-UART; only USB2.0 D+/D- and VBUS/GND connected."
       ]
@@ -1514,10 +1573,14 @@
         "display_name": "Test point",
         "package": "TestPoint:TestPoint_Pad_D1.5mm",
         "pin_count": 1,
-        "named_pin_count": 1
+        "named_pin_count": 1,
+        "lcsc_id": "C290182",
+        "mpn": "TestPoint SMD",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "TP_3V3",
@@ -1528,10 +1591,14 @@
         "display_name": "Test point",
         "package": "TestPoint:TestPoint_Pad_D1.5mm",
         "pin_count": 1,
-        "named_pin_count": 1
+        "named_pin_count": 1,
+        "lcsc_id": "C290182",
+        "mpn": "TestPoint SMD",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "TP_5V",
@@ -1542,10 +1609,14 @@
         "display_name": "Test point",
         "package": "TestPoint:TestPoint_Pad_D1.5mm",
         "pin_count": 1,
-        "named_pin_count": 1
+        "named_pin_count": 1,
+        "lcsc_id": "C290182",
+        "mpn": "TestPoint SMD",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "TP_VM",
@@ -1556,10 +1627,14 @@
         "display_name": "Test point",
         "package": "TestPoint:TestPoint_Pad_D1.5mm",
         "pin_count": 1,
-        "named_pin_count": 1
+        "named_pin_count": 1,
+        "lcsc_id": "C290182",
+        "mpn": "TestPoint SMD",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "TP_IA",
@@ -1570,10 +1645,14 @@
         "display_name": "Test point",
         "package": "TestPoint:TestPoint_Pad_D1.5mm",
         "pin_count": 1,
-        "named_pin_count": 1
+        "named_pin_count": 1,
+        "lcsc_id": "C290182",
+        "mpn": "TestPoint SMD",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "TP_IB",
@@ -1584,10 +1663,14 @@
         "display_name": "Test point",
         "package": "TestPoint:TestPoint_Pad_D1.5mm",
         "pin_count": 1,
-        "named_pin_count": 1
+        "named_pin_count": 1,
+        "lcsc_id": "C290182",
+        "mpn": "TestPoint SMD",
+        "manufacturer": "BOOMELE",
+        "availability_status": "locked"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "U_GATE_AH",

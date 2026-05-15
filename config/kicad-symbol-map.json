@@ -4,6 +4,38 @@
     {
       "match": {
         "role_contains": [
+          "test_point"
+        ]
+      },
+      "lib_id": "Connector:TestPoint",
+      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+      "note": "Standard test point; use Connector library for KiCad 10.0 compatibility."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "step_dir_enable_input_header",
+          "swd_debug_header",
+          "uart_debug_header"
+        ]
+      },
+      "lib_id": "Connector_Generic:Conn_01x04",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+      "note": "Standard pin header; replace AIAgent placeholder."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_c_receptacle"
+        ]
+      },
+      "lib_id": "Connector:USB_C_Receptacle",
+      "footprint": "Connector_USB:USB_C_Receptacle_USB2.0",
+      "note": "USB-C receptacle for USB-UART bridge."
+    },
+    {
+      "match": {
+        "role_contains": [
           "stm32g4_mcu"
         ]
       },
