@@ -137,6 +137,8 @@ Run the validator against the JSON summary emitted by `kas pipeline` or `scripts
 
 ERC validation is included when the summary exposes the ERC report paths. If `kicad-cli` is unavailable, the validator records that state instead of failing the whole pipeline.
 
+Pipeline summaries may include top-level `warnings` for structured fallbacks such as mock parts resolution, disabled ERC, or postprocess registration failures. Those warnings mean the run completed, but they should be reviewed before treating the result as production-ready. Use `--strict` when you want those warnings to fail validation.
+
 Optional KiCad ERC:
 
 ```bash
@@ -144,6 +146,8 @@ npm run erc
 ```
 
 Set `KICAD_RUN_ERC=true` to let the full pipeline attempt ERC after writing the schematic. If `kicad-cli` is not installed, the runner returns a structured diagnostic instead of blocking file generation.
+
+The run summary surfaces these conditions through structured `warnings` rather than hiding them. That keeps compatibility with older flows while making fallback paths visible to validators and agents.
 
 ## Online LCSC Search
 

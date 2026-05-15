@@ -39,6 +39,7 @@ When an agent needs to use this repository directly, prefer this order:
 3. If real parts are needed, use the repository's parts pipeline and JLC MCP bridge instead of ad hoc searches or manual library copying.
 4. Read the generated summary before changing the design. Let validation errors, ERC failures, and missing paths drive the next edit.
 5. Improve reusable resources, configs, and validators first; avoid patching only the current board unless the change is truly one-off.
+6. Treat top-level summary warnings as structured fallback signals. A run can complete with warnings and still need review before acceptance.
 
 ## Default Workflow
 
@@ -47,7 +48,7 @@ When an agent needs to use this repository directly, prefer this order:
 3. Build or normalize `BRIDGE_REQUIREMENT_SPEC_JSON`.
 4. Run the KiCad pipeline with `npm run pipeline` or `python scripts/kas.py pipeline <model.json> <output-dir>`.
 5. If real LCSC parts are needed, enable `KICAD_PARTS_PIPELINE=true` to generate `part.lock.yaml` and `part-risk-report.md`.
-6. Review generated model, netlist, ngspice feedback, KiCad execution plan, ERC summary, and validation report.
+6. Review generated model, netlist, ngspice feedback, KiCad execution plan, ERC summary, validation report, and any top-level summary warnings.
 7. Run `npm run ngspice:regression`, `npm run erc`, or `npm run validate:artifacts -- --summary <summary.json>` when relevant.
 8. When code or pipeline gaps appear, improve the reusable hardware-development resources rather than patching only the current board.
 9. Report generated files, diagnostics, part selection summary, and next modeling, mapping, validation, or resource-improvement tasks.
@@ -387,7 +388,7 @@ With `KICAD_PARTS_PIPELINE=true`, additionally:
 - When the issue is in generation, validation, orchestration, or CLI behavior, modify the code.
 - Use ngspice feedback to surface verification risk, not to silently accept a design.
 - Use KiCad ERC as an additional check after file generation.
-- Use `validate-artifacts` before declaring a run complete.
+- Use `validate-artifacts` before declaring a run complete, and use `--strict` when you want structured warnings to fail the run.
 - Do not reintroduce EasyEDA/JLCEDA GUI bridge flows; keep EasyEDA references limited to library/resource import tooling.
 
 ## Tooling Compatibility Rules
@@ -396,6 +397,7 @@ With `KICAD_PARTS_PIPELINE=true`, additionally:
 - Prefer additive changes over breaking changes. If behavior must change, keep the old form working during a transition period.
 - Keep `scripts/` thin and move shared logic into `src/kicad_suite/` so compatibility wrappers can stay small.
 - When a schema or summary format changes, bump the schema version and keep the validator able to read the previous stable shape when feasible.
+- Keep summary warnings structured and machine-readable; do not hide fallback paths in prose-only logs when they affect acceptance.
 - Add or update tests for both the new path and the legacy path before removing compatibility code.
 - Treat deprecations explicitly: document them in the skill, README, or release notes instead of letting callers discover breakage by accident.
 - For any new stage, prefer a stable adapter layer over direct coupling to one board, one script, or one temporary folder.

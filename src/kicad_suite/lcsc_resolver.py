@@ -15,10 +15,11 @@ import time
 import urllib.request
 import urllib.parse
 import urllib.error
-import subprocess
 from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Protocol
+
+from .adapters.jlc_mcp import extract_bridge_results, is_http_backend_reachable, resolve_bridge_script, run_bridge_search
 
 
 # ---------------------------------------------------------------------------
@@ -213,8 +214,7 @@ class JlcMcpCliBackend:
         timeout: float = 30.0,
         source: str = "lcsc",
     ) -> None:
-        repo_root = Path(__file__).resolve().parents[2]
-        self._bridge_script = Path(bridge_script) if bridge_script else repo_root / "scripts" / "jlc_mcp_bridge.mjs"
+        self._bridge_script = resolve_bridge_script(bridge_script)
         self._timeout = timeout
         self._source = source
 
@@ -226,44 +226,14 @@ class JlcMcpCliBackend:
         if not self.configured:
             return []
 
-        command = [
-            "node",
-            str(self._bridge_script),
-            "search",
-            "--query",
-            query,
-            "--source",
-            self._source,
-            "--limit",
-            str(limit),
-        ]
-        if bool(kwargs.get("in_stock", kwargs.get("is_available", True))):
-            command.append("--in-stock")
-        if bool(kwargs.get("basic_only", False)):
-            command.append("--basic-only")
-
-        try:
-            proc = subprocess.run(
-                command,
-                capture_output=True,
-                text=True,
-                encoding="utf-8",
-                errors="replace",
-                timeout=self._timeout,
-                check=False,
-            )
-        except (OSError, subprocess.TimeoutExpired):
-            return []
-
-        if proc.returncode != 0:
-            return []
-
-        try:
-            payload = json.loads(proc.stdout)
-        except json.JSONDecodeError:
-            return []
-
-        results = _extract_jlc_mcp_results(payload)
+        results = run_bridge_search(
+            query=query,
+            limit=limit,
+            source=self._source,
+            bridge_script=self._bridge_script,
+            timeout=self._timeout,
+            **kwargs,
+        )
         for item in results:
             item["_source"] = "jlcpcb_parts"
         return results[:limit]
@@ -306,16 +276,7 @@ def _extract_lcsc_product_dicts(payload: object) -> list[dict]:
 
 
 def _extract_jlc_mcp_results(payload: object) -> list[dict]:
-    if not isinstance(payload, dict):
-        return []
-    result = payload.get("result", payload)
-    if isinstance(result, dict):
-        raw_results = result.get("results", [])
-        if isinstance(raw_results, list):
-            return [item for item in raw_results if isinstance(item, dict)]
-    if isinstance(result, list):
-        return [item for item in result if isinstance(item, dict)]
-    return []
+    return extract_bridge_results(payload)
 
 
 def get_default_backend(*, timeout: float = 15.0) -> SearchBackend:
@@ -365,6 +326,12 @@ def describe_live_backend_status() -> dict[str, object]:
         }
 
     mcp_base_url = os.environ.get("LCSC_MCP_BASE_URL", "http://localhost:3847")
+    if is_http_backend_reachable(mcp_base_url):
+        return {
+            "ok": True,
+            "backend": "mcp_http",
+            "base_url": mcp_base_url,
+        }
     return {
         "ok": False,
         "backend": "unconfigured",

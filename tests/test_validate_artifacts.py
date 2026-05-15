@@ -189,7 +189,7 @@ class ValidateArtifactsTests(unittest.TestCase):
     def test_strict_mode_fails_on_warning(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
-            summary = {}
+            summary = {"warnings": ["structured fallback"]}
             summary_path = root / "summary.json"
             _write_json(summary_path, summary)
 
@@ -197,6 +197,7 @@ class ValidateArtifactsTests(unittest.TestCase):
 
             self.assertFalse(report.ok)
             self.assertTrue(any("strict mode" in item for item in report.errors))
+            self.assertTrue(any("structured fallback" in item for item in report.warnings))
 
 
 if __name__ == "__main__":

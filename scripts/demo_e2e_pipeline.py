@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 os.environ["KICAD_PARTS_PIPELINE"] = "true"
 
 from kicad_suite.run_pipeline import run_pipeline
-from kicad_suite.parts_pipeline import run_parts_pipeline
+from kicad_suite.parts.workflow import run_parts_pipeline
 
 
 def main():

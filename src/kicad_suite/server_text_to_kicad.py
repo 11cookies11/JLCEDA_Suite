@@ -22,7 +22,7 @@ from .compile_kicad_execution_plan import compile_plan, write_output
 from .env_utils import is_truthy_env, env
 from .kicad_erc_runner import run as run_kicad_erc
 from .kicad_project_writer import write_project
-from .parts_pipeline import run_parts_pipeline
+from .parts.workflow import run_parts_pipeline
 
 
 def write_json(path: Path, payload: Any) -> None:
