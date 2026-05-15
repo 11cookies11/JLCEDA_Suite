@@ -849,7 +849,7 @@ def render_schematic(plan: dict[str, Any]) -> str:
     connectivity = render_connectivity(plan, symbols)
     return f'''(kicad_sch
   (version 20250610)
-  (generator "kicad-suite-agent")
+  (generator "kicad-agent-suite")
   (generator_version "10.0")
   (uuid {q(new_uuid())})
   (paper "A4")
@@ -916,7 +916,7 @@ def render_root_schematic(plan: dict[str, Any], sheet_pages: list[dict[str, Any]
     sheets = '\n'.join(render_root_sheet(page, kind_map) for page in sheet_pages)
     return f'''(kicad_sch
   (version 20250610)
-  (generator "kicad-suite-agent")
+  (generator "kicad-agent-suite")
   (generator_version "10.0")
   (uuid {q(new_uuid())})
   (paper "A4")
@@ -940,7 +940,7 @@ def render_child_schematic(
     connectivity = render_connectivity(plan, page_symbols, force_global_nets=cross_nets)
     return f'''(kicad_sch
   (version 20250610)
-  (generator "kicad-suite-agent")
+  (generator "kicad-agent-suite")
   (generator_version "10.0")
   (uuid {q(new_uuid())})
   (paper "A4")

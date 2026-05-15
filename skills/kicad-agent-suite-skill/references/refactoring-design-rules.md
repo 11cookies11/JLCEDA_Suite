@@ -14,7 +14,7 @@ Optimize the reusable hardware-development resource base, not only the current b
 - Layout defaults and board/topology placement profiles: `config/kicad-layout-profiles.json`
 - Local KiCad symbols: `resources/kicad/symbols/*.kicad_sym`
 - Example circuit models: `examples/*.circuit-model.json`
-- Skill guidance for agent behavior: `skills/jlceda-suite-skill/references/`
+- Skill guidance for agent behavior: `skills/kicad-agent-suite-skill/references/`
 - Temporary generated projects: `tmp/` or `.where/kicad-output/`, not committed unless explicitly requested
 
 ## Design Rules

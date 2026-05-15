@@ -1,5 +1,5 @@
 ---
-name: kicad-suite-skill
+name: kicad-agent-suite-skill
 description: Help an AI agent use this repository's reusable hardware-development resources to design, validate, and improve circuit projects. Use when working from requirements to circuit models, netlists, simulation feedback, KiCad schematic/project generation, symbol/layout resources, LCSC part selection, EasyEDA footprint import, or refactoring the hardware agent pipeline for better generality without hardcoded project-specific logic.
 ---
 
@@ -25,7 +25,7 @@ The current workflow is:
 - write `.kicad_pro` and `.kicad_sch` files (with LCSC/MPN/Manufacturer fields)
 - optionally run `kicad-cli` ERC
 
-Legacy EasyEDA/JLCEDA live-session bridge flows are archived under `legacy/` and should not be used for new work.
+The old EasyEDA/JLCEDA live-session bridge flows have been removed and should not be reintroduced for new work.
 
 ## Default Workflow
 
@@ -282,7 +282,7 @@ With `KICAD_PARTS_PIPELINE=true`, additionally:
 - Refactor when the current structure blocks generality; do not only append special cases.
 - Use ngspice feedback to surface verification risk, not to silently accept a design.
 - Use KiCad ERC as an additional check after file generation.
-- Keep EasyEDA/JLCEDA references confined to `legacy/`.
+- Do not reintroduce EasyEDA/JLCEDA GUI bridge flows; keep EasyEDA references limited to library/resource import tooling.
 
 ## Reference Map
 

@@ -1,12 +1,12 @@
-# KiCad Suite
+# KiCad Agent Suite
 
-AI 辅助 KiCad 硬件开发流水线。
+Agent 辅助 KiCad 硬件开发流水线。
 
 语言：简体中文 | [English](README.md)
 
 ## 项目简介
 
-`KiCad Suite` 的目标是把结构化硬件需求转换成可检查、可仿真、可交付给 KiCad 的工程文件。当前主线是文件生成流水线，不控制 GUI 编辑器。
+`KiCad Agent Suite` 的目标是把结构化硬件需求转换成可检查、可仿真、可交付给 KiCad 的工程文件。当前主线是文件生成流水线，不控制 GUI 编辑器。
 
 当前链路：
 
@@ -21,7 +21,7 @@ RequirementSpec
   -> 可选 kicad-cli ERC
 ```
 
-旧 EasyEDA/JLCEDA 桥接代码只保留在 `legacy/` 目录作为历史参考。新的开发默认只面向 KiCad。
+旧 EasyEDA/JLCEDA 插件桥接代码已经移除。新的开发只面向 KiCad 工程生成以及可复用的 KiCad/LCSC 资源。
 
 ## 当前能力
 
@@ -121,7 +121,6 @@ KICAD_RUN_ERC=true npm run text-to-kicad
 - `schemas/`：当前模型契约的 JSON Schema
 - `docs/`：架构与工作流说明
 - `skills/`：面向 agent 的工作流参考
-- `legacy/`：已归档的 EasyEDA/JLCEDA 桥接实现和历史文档
 - `.where/`：本地生成输出、日志和计划记录
 
 ## 开发方向
@@ -135,7 +134,7 @@ KiCad 现在是唯一活跃 EDA 目标。后续优先投入：
 - KiCad ERC 集成
 - 清晰的模型契约与回归样例
 
-不要在 `legacy/` 之外新增 EasyEDA/JLCEDA 桥接能力。
+不要新增 EasyEDA/JLCEDA GUI 桥接能力。EasyEDA 相关引用应仅限于 `easyeda2kicad` 等库资源导入工具。
 
 ## License
 

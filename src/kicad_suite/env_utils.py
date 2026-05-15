@@ -1,4 +1,4 @@
-"""Environment variable and type conversion utilities for JLCEDA Suite server scripts."""
+"""Environment variable and type conversion utilities for KiCad Agent Suite scripts."""
 
 from __future__ import annotations
 

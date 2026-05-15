@@ -1,12 +1,12 @@
-# KiCad Suite
+# KiCad Agent Suite
 
-AI-assisted KiCad hardware development pipeline.
+Agent-assisted KiCad hardware development pipeline.
 
 Language: English | [简体中文](README.zh-CN.md)
 
 ## Overview
 
-`KiCad Suite` turns structured hardware requirements into KiCad-ready artifacts. The current workflow is file-based: it does not drive a GUI editor. Instead, it generates intermediate design models, simulation inputs, KiCad schematic/project files, and structured validation summaries.
+`KiCad Agent Suite` turns structured hardware requirements into KiCad-ready artifacts. The current workflow is file-based: it does not drive a GUI editor. Instead, it generates intermediate design models, simulation inputs, KiCad schematic/project files, and structured validation summaries.
 
 The active pipeline is:
 
@@ -21,7 +21,7 @@ RequirementSpec
   -> optional kicad-cli ERC
 ```
 
-Older EasyEDA/JLCEDA bridge code is kept under `legacy/` for reference only. New work should target KiCad.
+The old EasyEDA/JLCEDA plugin bridge has been removed. New work targets KiCad project generation and reusable KiCad/LCSC resources only.
 
 ## Current Status
 
@@ -117,7 +117,6 @@ Set `KICAD_RUN_ERC=true` to let the full pipeline attempt ERC after writing the 
 - `schemas/`: JSON schemas for the active model contracts
 - `docs/`: architecture and workflow notes
 - `skills/`: agent-facing workflow references
-- `legacy/`: archived EasyEDA/JLCEDA bridge implementation and historical docs
 - `.where/`: local generated outputs, logs, and planning notes
 
 ## Development Direction
@@ -131,7 +130,7 @@ KiCad is now the only active EDA target. Prefer changes that improve:
 - KiCad ERC integration
 - clear model contracts and regression fixtures
 
-Do not add new EasyEDA/JLCEDA bridge functionality outside `legacy/`.
+Do not add new EasyEDA/JLCEDA GUI bridge functionality. EasyEDA references should be limited to library/resource import tooling such as `easyeda2kicad`.
 
 ## License
 

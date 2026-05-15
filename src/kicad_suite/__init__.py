@@ -1,2 +1,1 @@
-"""Core package for the KiCad Suite generation pipeline."""
-
+"""Core package for the KiCad Agent Suite generation pipeline."""

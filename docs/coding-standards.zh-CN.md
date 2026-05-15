@@ -1,11 +1,11 @@
-# KiCad Suite 代码规范（v1）
+# KiCad Agent Suite 代码规范（v1）
 
 本文用于统一 `scripts/`、`schemas/`、`skills/` 和文档的开发风格。
 
 ## 1. 总体原则
 
 - 先定义契约，再写转换逻辑。
-- 当前主线只面向 KiCad；EasyEDA/JLCEDA 代码只保留在 `legacy/`。
+- 当前主线只面向 KiCad；不要新增 EasyEDA/JLCEDA GUI 桥接代码。
 - 可读性优先于技巧。
 - 一次改动一个意图，避免把重构、功能、修复混在同一提交。
 - 接口字段变更必须同步更新 schema、文档和 where 记录。

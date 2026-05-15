@@ -145,7 +145,7 @@ Use `kicad-cli` ERC when available. Feed diagnostics back into:
 
 ## What We Should Avoid
 
-- adding new EasyEDA/JLCEDA bridge behavior outside `legacy/`
+- adding new EasyEDA/JLCEDA GUI bridge behavior
 - hiding placeholder symbols as if they were verified library parts
 - mixing layout concerns into `Netlist`
 - accepting a circuit solely because file generation succeeded
@@ -177,4 +177,4 @@ This architecture is a KiCad-first, schema-driven workflow:
 - Python transforms and validates
 - ngspice checks electrical behavior where possible
 - KiCad receives generated project files
-- legacy EasyEDA/JLCEDA code stays archived under `legacy/`
+- historical EasyEDA/JLCEDA GUI bridge code is no longer part of this repository
