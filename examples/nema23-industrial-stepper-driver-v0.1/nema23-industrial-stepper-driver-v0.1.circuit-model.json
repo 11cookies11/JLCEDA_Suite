@@ -1,0 +1,2570 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "nema23-industrial-stepper-driver-v0.1",
+  "project_id": "nema23-industrial-stepper-driver-v0.1",
+  "topology": "nema23_industrial_stepper_driver_v0_1",
+  "components": [
+    {
+      "ref": "J1",
+      "role": "power_input_terminal",
+      "value": "18V-50V DC input",
+      "selected_part": {
+        "part_id": "power-input-terminal-pending",
+        "display_name": "2-pin high-current power input terminal",
+        "package": "TerminalBlock:TerminalBlock_bornier-2_P5.08mm",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "1=VM_IN, 2=GND. Final current rating and pitch require LCSC selection."
+      ]
+    },
+    {
+      "ref": "F1",
+      "role": "input_fuse",
+      "value": "5A fuse/PTC",
+      "selected_part": {
+        "part_id": "input-fuse-pending",
+        "display_name": "Input fuse or resettable fuse",
+        "package": "Fuse:Fuse_1206_3216Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_REV",
+      "role": "reverse_protection_pmos",
+      "value": "PMOS reverse protection",
+      "selected_part": {
+        "part_id": "reverse-pmos-pending",
+        "display_name": "P-channel MOSFET reverse-polarity protection",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "PMOS with gate pull-down to GND; body diode conducts forward then channel turns on."
+      ]
+    },
+    {
+      "ref": "R_GATE_REV",
+      "role": "reverse_protection_gate_resistor",
+      "value": "10k gate pull-down",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "10k 0603 resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_TVS",
+      "role": "bus_tvs_diode",
+      "value": "58V SMBJ-class TVS",
+      "selected_part": {
+        "part_id": "bus-tvs-pending",
+        "display_name": "Bus TVS diode",
+        "package": "Diode_SMD:D_SMB",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "TVS across VM_BUS to GND."
+      ]
+    },
+    {
+      "ref": "C_BULK1",
+      "role": "bus_bulk_capacitor",
+      "value": "470uF 80V electrolytic",
+      "selected_part": {
+        "part_id": "bus-bulk-cap-pending",
+        "display_name": "Bus bulk electrolytic capacitor",
+        "package": "Capacitor_THT:CP_Radial_D10.0mm_P5.00mm",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_BUS_MLCC1",
+      "role": "bus_ceramic_capacitor",
+      "value": "1uF 100V X7R 1210",
+      "selected_part": {
+        "part_id": "bus-ceramic-cap-pending",
+        "display_name": "Bus ceramic decoupling capacitor",
+        "package": "Capacitor_SMD:C_1210_3225Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_BUS_MLCC2",
+      "role": "bus_ceramic_capacitor",
+      "value": "100nF 100V X7R 0805",
+      "selected_part": {
+        "part_id": "bus-ceramic-cap-2-pending",
+        "display_name": "Bus ceramic decoupling capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "L_EMI",
+      "role": "emi_filter_inductor_reserved",
+      "value": "EMI ferrite bead / inductor reserved",
+      "selected_part": {
+        "part_id": "emi-inductor-reserved-pending",
+        "display_name": "EMI inductor or ferrite bead (reserved position)",
+        "package": "Inductor_SMD:L_1210_3225Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "Reserved EMI filter position; can be replaced with 0R jumper for V0.1."
+      ]
+    },
+    {
+      "ref": "R_BRAKE",
+      "role": "braking_resistor_reserved",
+      "value": "Braking dump resistor (reserved)",
+      "selected_part": {
+        "part_id": "braking-resistor-reserved-pending",
+        "display_name": "Braking dump resistor placeholder",
+        "package": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "Reserved for regenerative braking; not populated in V0.1."
+      ]
+    },
+    {
+      "ref": "U_BUCK",
+      "role": "buck_5v_regulator",
+      "value": "60V to 5V buck regulator",
+      "selected_part": {
+        "part_id": "buck-5v-pending",
+        "display_name": "60V-capable 5V buck regulator",
+        "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "pin_count": 8,
+        "named_pin_count": 8
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_BUCK_IN",
+      "role": "buck_input_capacitor",
+      "value": "10uF 100V MLCC",
+      "selected_part": {
+        "part_id": "buck-input-cap-pending",
+        "display_name": "Buck input capacitor",
+        "package": "Capacitor_SMD:C_1210_3225Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_BUCK_OUT",
+      "role": "buck_output_capacitor",
+      "value": "22uF 10V MLCC",
+      "selected_part": {
+        "part_id": "buck-output-cap-pending",
+        "display_name": "Buck output capacitor",
+        "package": "Capacitor_SMD:C_1210_3225Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_BUCK_BS",
+      "role": "buck_bootstrap_capacitor",
+      "value": "100nF 50V",
+      "selected_part": {
+        "part_id": "buck-bs-cap-pending",
+        "display_name": "Buck bootstrap capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "L_BUCK",
+      "role": "buck_inductor",
+      "value": "47uH power inductor",
+      "selected_part": {
+        "part_id": "buck-inductor-pending",
+        "display_name": "Buck power inductor",
+        "package": "Inductor_SMD:L_12x12mm",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_BUCK",
+      "role": "buck_catch_diode",
+      "value": "Schottky catch diode",
+      "selected_part": {
+        "part_id": "buck-diode-pending",
+        "display_name": "Buck catch diode",
+        "package": "Diode_SMD:D_SMA",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "U_LDO",
+      "role": "ldo_3v3_regulator",
+      "value": "5V to 3.3V LDO",
+      "selected_part": {
+        "part_id": "ldo-3v3-pending",
+        "display_name": "3.3V LDO regulator",
+        "package": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_LDO_IN",
+      "role": "ldo_input_capacitor",
+      "value": "10uF 10V MLCC",
+      "selected_part": {
+        "part_id": "ldo-input-cap-pending",
+        "display_name": "LDO input capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_LDO_OUT",
+      "role": "ldo_output_capacitor",
+      "value": "10uF 10V MLCC",
+      "selected_part": {
+        "part_id": "ldo-output-cap-pending",
+        "display_name": "LDO output capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "U_MCU",
+      "role": "stm32g4_mcu",
+      "value": "STM32G431CBT6",
+      "selected_part": {
+        "part_id": "stm32g431cbt6-pending",
+        "display_name": "STM32G431CBT6 motor-control MCU",
+        "package": "MCU_ST_STM32G4:STM32G431CBTx",
+        "pin_count": 48,
+        "named_pin_count": 48
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "LQFP-48 motor-control MCU."
+      ]
+    },
+    {
+      "ref": "C_MCU_DEC1",
+      "role": "mcu_decoupling_capacitor",
+      "value": "100nF 10V X7R 0603",
+      "selected_part": {
+        "part_id": "mcu-decap-pending",
+        "display_name": "MCU VDD decoupling capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_MCU_DEC2",
+      "role": "mcu_decoupling_capacitor",
+      "value": "100nF 10V X7R 0603",
+      "selected_part": {
+        "part_id": "mcu-decap-pending",
+        "display_name": "MCU VDD decoupling capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_MCU_DEC3",
+      "role": "mcu_decoupling_capacitor",
+      "value": "100nF 10V X7R 0603",
+      "selected_part": {
+        "part_id": "mcu-decap-pending",
+        "display_name": "MCU VDD decoupling capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_MCU_DEC4",
+      "role": "mcu_decoupling_capacitor",
+      "value": "4.7uF 10V X7R 0805",
+      "selected_part": {
+        "part_id": "mcu-bulk-decap-pending",
+        "display_name": "MCU bulk decoupling capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_VDDA",
+      "role": "mcu_vdda_capacitor",
+      "value": "100nF 10V + 1uF 10V",
+      "selected_part": {
+        "part_id": "mcu-vdda-cap-pending",
+        "display_name": "MCU VDDA decoupling capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "VDDA decoupling for ADC reference."
+      ]
+    },
+    {
+      "ref": "R_NRST",
+      "role": "nrst_pullup_resistor",
+      "value": "10k pull-up",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "10k 0603 resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_NRST",
+      "role": "nrst_filter_capacitor",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "cap-100nf-0603-pending",
+        "display_name": "NRST filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_BOOT0",
+      "role": "boot0_pulldown_resistor",
+      "value": "10k pull-down",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "10k 0603 resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Y_MCU",
+      "role": "mcu_crystal_oscillator",
+      "value": "8MHz crystal or OSC",
+      "selected_part": {
+        "part_id": "crystal-8mhz-pending",
+        "display_name": "8MHz crystal with load caps",
+        "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "MCU HSE crystal."
+      ]
+    },
+    {
+      "ref": "C_OSC1",
+      "role": "crystal_load_capacitor",
+      "value": "12pF 50V NP0 0603",
+      "selected_part": {
+        "part_id": "cap-12pf-0603-pending",
+        "display_name": "Crystal load capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_OSC2",
+      "role": "crystal_load_capacitor",
+      "value": "12pF 50V NP0 0603",
+      "selected_part": {
+        "part_id": "cap-12pf-0603-pending",
+        "display_name": "Crystal load capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_A_HL",
+      "role": "phase_a_high_left_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_A_LL",
+      "role": "phase_a_low_left_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_A_HR",
+      "role": "phase_a_high_right_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_A_LR",
+      "role": "phase_a_low_right_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_B_HL",
+      "role": "phase_b_high_left_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_B_LL",
+      "role": "phase_b_low_left_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_B_HR",
+      "role": "phase_b_high_right_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "Q_B_LR",
+      "role": "phase_b_low_right_mosfet",
+      "value": "100V N-MOSFET",
+      "selected_part": {
+        "part_id": "power-mosfet-pending",
+        "display_name": "N-channel power MOSFET",
+        "package": "Package_TO_SOT_SMD:TO-252-2",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_A_HL",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_A_LL",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_A_HR",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_A_LR",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_B_HL",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_B_LL",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_B_HR",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RG_B_LR",
+      "role": "gate_resistor",
+      "value": "10R 0603",
+      "selected_part": {
+        "part_id": "gate-resistor-pending",
+        "display_name": "MOSFET gate resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_A_HL",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_A_LL",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_A_HR",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_A_LR",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_B_HL",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_B_LL",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_B_HR",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RGS_B_LR",
+      "role": "gate_source_resistor",
+      "value": "100k 0603",
+      "selected_part": {
+        "part_id": "gs-pulldown-pending",
+        "display_name": "Gate-source pulldown resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "RSH_A",
+      "role": "phase_a_current_sense_resistor",
+      "value": "50mR 1% 2512",
+      "selected_part": {
+        "part_id": "phase-a-shunt-pending",
+        "display_name": "Phase A current sense shunt",
+        "package": "Resistor_SMD:R_2512_6332Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "Kelvin connection required."
+      ]
+    },
+    {
+      "ref": "RSH_B",
+      "role": "phase_b_current_sense_resistor",
+      "value": "50mR 1% 2512",
+      "selected_part": {
+        "part_id": "phase-b-shunt-pending",
+        "display_name": "Phase B current sense shunt",
+        "package": "Resistor_SMD:R_2512_6332Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "Kelvin connection required."
+      ]
+    },
+    {
+      "ref": "U_AMP_A",
+      "role": "phase_a_current_sense_amplifier",
+      "value": "Current sense amplifier A",
+      "selected_part": {
+        "part_id": "current-sense-amp-pending",
+        "display_name": "Current sense amplifier",
+        "package": "Package_TO_SOT_SMD:SOT-23-5",
+        "pin_count": 5,
+        "named_pin_count": 5
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "U_AMP_B",
+      "role": "phase_b_current_sense_amplifier",
+      "value": "Current sense amplifier B",
+      "selected_part": {
+        "part_id": "current-sense-amp-pending",
+        "display_name": "Current sense amplifier",
+        "package": "Package_TO_SOT_SMD:SOT-23-5",
+        "pin_count": 5,
+        "named_pin_count": 5
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_IA_FLT",
+      "role": "ia_adc_filter_resistor",
+      "value": "100R 0603",
+      "selected_part": {
+        "part_id": "adc-filter-r-pending",
+        "display_name": "ADC filter resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_IA_FLT",
+      "role": "ia_adc_filter_capacitor",
+      "value": "1nF 50V NP0 0603",
+      "selected_part": {
+        "part_id": "adc-filter-c-pending",
+        "display_name": "ADC filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_IB_FLT",
+      "role": "ib_adc_filter_resistor",
+      "value": "100R 0603",
+      "selected_part": {
+        "part_id": "adc-filter-r-pending",
+        "display_name": "ADC filter resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_IB_FLT",
+      "role": "ib_adc_filter_capacitor",
+      "value": "1nF 50V NP0 0603",
+      "selected_part": {
+        "part_id": "adc-filter-c-pending",
+        "display_name": "ADC filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "U_OC",
+      "role": "hardware_overcurrent_comparator",
+      "value": "OC comparator",
+      "selected_part": {
+        "part_id": "overcurrent-comparator-pending",
+        "display_name": "Overcurrent comparator",
+        "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "pin_count": 8,
+        "named_pin_count": 8
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_OC_REF1",
+      "role": "oc_reference_resistor",
+      "value": "10k 1% 0603",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "OC threshold divider resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_OC_REF2",
+      "role": "oc_reference_resistor",
+      "value": "2.2k 1% 0603",
+      "selected_part": {
+        "part_id": "resistor-2k2-0603-pending",
+        "display_name": "OC threshold divider resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_BUS_TOP",
+      "role": "bus_voltage_sense_top_resistor",
+      "value": "200k 0.1% 0603",
+      "selected_part": {
+        "part_id": "bus-divider-top-pending",
+        "display_name": "Bus divider top resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_BUS_BOT",
+      "role": "bus_voltage_sense_bottom_resistor",
+      "value": "12k 0.1% 0603",
+      "selected_part": {
+        "part_id": "bus-divider-bottom-pending",
+        "display_name": "Bus divider bottom resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_BUS_SENSE",
+      "role": "bus_sense_filter_capacitor",
+      "value": "10nF 50V NP0 0603",
+      "selected_part": {
+        "part_id": "bus-sense-cap-pending",
+        "display_name": "Bus sense filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_NTC",
+      "role": "temperature_sense_ntc",
+      "value": "10k NTC 0603",
+      "selected_part": {
+        "part_id": "ntc-10k-pending",
+        "display_name": "10k NTC thermistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_TEMP_BIAS",
+      "role": "temperature_bias_resistor",
+      "value": "10k 1% 0603",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "NTC bias resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_TEMP_FLT",
+      "role": "temp_sense_filter_capacitor",
+      "value": "10nF 50V NP0 0603",
+      "selected_part": {
+        "part_id": "temp-sense-cap-pending",
+        "display_name": "Temp sense filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "J_MOTOR",
+      "role": "motor_output_terminal",
+      "value": "A+ A- B+ B-",
+      "selected_part": {
+        "part_id": "motor-terminal-pending",
+        "display_name": "4-pin high-current motor terminal",
+        "package": "TerminalBlock:TerminalBlock_bornier-4_P5.08mm",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_MOTOR_TVS1",
+      "role": "motor_tvs_reserved",
+      "value": "Motor output TVS (reserved)",
+      "selected_part": {
+        "part_id": "motor-tvs-reserved-pending",
+        "display_name": "Motor output TVS diode placeholder",
+        "package": "Diode_SMD:D_SMC",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "Reserved TVS across motor outputs; populate based on motor inductance."
+      ]
+    },
+    {
+      "ref": "R_SNUB_A",
+      "role": "motor_snubber_reserved",
+      "value": "RC snubber A (reserved)",
+      "selected_part": {
+        "part_id": "snubber-r-reserved-pending",
+        "display_name": "Snubber resistor placeholder",
+        "package": "Resistor_SMD:R_1206_3216Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "Reserved RC snubber for phase A."
+      ]
+    },
+    {
+      "ref": "C_SNUB_A",
+      "role": "motor_snubber_reserved",
+      "value": "RC snubber A (reserved)",
+      "selected_part": {
+        "part_id": "snubber-c-reserved-pending",
+        "display_name": "Snubber capacitor placeholder",
+        "package": "Capacitor_SMD:C_1206_3216Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "J_CTRL",
+      "role": "step_dir_enable_input_header",
+      "value": "STEP DIR EN GND",
+      "selected_part": {
+        "part_id": "control-header-pending",
+        "display_name": "4-pin control input header",
+        "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_STEP_SERIES",
+      "role": "step_series_resistor",
+      "value": "100R 0603",
+      "selected_part": {
+        "part_id": "resistor-100r-0603-pending",
+        "display_name": "STEP series protection resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_DIR_SERIES",
+      "role": "dir_series_resistor",
+      "value": "100R 0603",
+      "selected_part": {
+        "part_id": "resistor-100r-0603-pending",
+        "display_name": "DIR series protection resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_EN_SERIES",
+      "role": "en_series_resistor",
+      "value": "100R 0603",
+      "selected_part": {
+        "part_id": "resistor-100r-0603-pending",
+        "display_name": "EN series protection resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_STEP_PU",
+      "role": "step_pullup_resistor",
+      "value": "10k 0603",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "STEP pull-up to 3V3",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_DIR_PU",
+      "role": "dir_pullup_resistor",
+      "value": "10k 0603",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "DIR pull-up to 3V3",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_EN_PU",
+      "role": "en_pullup_resistor",
+      "value": "10k 0603",
+      "selected_part": {
+        "part_id": "resistor-10k-0603-pending",
+        "display_name": "EN pull-up to 3V3",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_STEP_FLT",
+      "role": "step_filter_capacitor",
+      "value": "1nF 50V 0603",
+      "selected_part": {
+        "part_id": "step-filter-cap-pending",
+        "display_name": "STEP RC filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_DIR_FLT",
+      "role": "dir_filter_capacitor",
+      "value": "1nF 50V 0603",
+      "selected_part": {
+        "part_id": "dir-filter-cap-pending",
+        "display_name": "DIR RC filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_EN_FLT",
+      "role": "en_filter_capacitor",
+      "value": "1nF 50V 0603",
+      "selected_part": {
+        "part_id": "en-filter-cap-pending",
+        "display_name": "EN RC filter capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_ESD_STEP",
+      "role": "step_esd_diode",
+      "value": "ESD protection diode",
+      "selected_part": {
+        "part_id": "esd-diode-pending",
+        "display_name": "ESD protection diode",
+        "package": "Diode_SMD:D_SOD-523",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_ESD_DIR",
+      "role": "dir_esd_diode",
+      "value": "ESD protection diode",
+      "selected_part": {
+        "part_id": "esd-diode-pending",
+        "display_name": "ESD protection diode",
+        "package": "Diode_SMD:D_SOD-523",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_ESD_EN",
+      "role": "en_esd_diode",
+      "value": "ESD protection diode",
+      "selected_part": {
+        "part_id": "esd-diode-pending",
+        "display_name": "ESD protection diode",
+        "package": "Diode_SMD:D_SOD-523",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "J_SWD",
+      "role": "swd_debug_header",
+      "value": "SWD",
+      "selected_part": {
+        "part_id": "swd-header-pending",
+        "display_name": "5-pin SWD header",
+        "package": "Connector_PinHeader_2.54mm:PinHeader_1x05_P2.54mm_Vertical",
+        "pin_count": 5,
+        "named_pin_count": 5
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "J_UART",
+      "role": "uart_debug_header",
+      "value": "UART",
+      "selected_part": {
+        "part_id": "uart-header-pending",
+        "display_name": "4-pin UART header",
+        "package": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "U_USB_UART",
+      "role": "usb_uart_bridge",
+      "value": "CH340C USB-UART",
+      "selected_part": {
+        "part_id": "usb-uart-pending",
+        "display_name": "USB-UART bridge IC",
+        "package": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+        "pin_count": 16,
+        "named_pin_count": 16
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "Optional USB-UART bridge for debug and configuration."
+      ]
+    },
+    {
+      "ref": "J_USB",
+      "role": "usb_c_receptacle",
+      "value": "USB-C receptacle",
+      "selected_part": {
+        "part_id": "usb-c-receptacle-pending",
+        "display_name": "USB-C receptacle",
+        "package": "Connector:USB_C_Receptacle",
+        "pin_count": 16,
+        "named_pin_count": 6
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "USB-C connector for USB-UART; only USB2.0 D+/D- and VBUS/GND connected."
+      ]
+    },
+    {
+      "ref": "C_USB_VBUS",
+      "role": "usb_vbus_capacitor",
+      "value": "10uF 10V 0805",
+      "selected_part": {
+        "part_id": "usb-vbus-cap-pending",
+        "display_name": "USB VBUS decoupling capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_USB_DEC",
+      "role": "usb_uart_decoupling",
+      "value": "100nF 10V 0603",
+      "selected_part": {
+        "part_id": "usb-uart-decap-pending",
+        "display_name": "USB-UART decoupling capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_USB_DP",
+      "role": "usb_dp_resistor",
+      "value": "22R 0603",
+      "selected_part": {
+        "part_id": "usb-dp-r-pending",
+        "display_name": "USB D+ series resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_USB_DN",
+      "role": "usb_dn_resistor",
+      "value": "22R 0603",
+      "selected_part": {
+        "part_id": "usb-dn-r-pending",
+        "display_name": "USB D- series resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "C_USB_V3",
+      "role": "usb_uart_3v3_capacitor",
+      "value": "100nF 10V 0603",
+      "selected_part": {
+        "part_id": "usb-uart-v3-cap-pending",
+        "display_name": "CH340C V3 capacitor",
+        "package": "Capacitor_SMD:C_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown",
+      "notes": [
+        "CH340C V3 pin decoupling to GND."
+      ]
+    },
+    {
+      "ref": "D_PWR_LED",
+      "role": "power_led",
+      "value": "Green LED",
+      "selected_part": {
+        "part_id": "led-green-0603-pending",
+        "display_name": "Green LED 0603",
+        "package": "LED_SMD:LED_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_PWR_LED",
+      "role": "power_led_resistor",
+      "value": "1k 0603",
+      "selected_part": {
+        "part_id": "resistor-1k-0603-pending",
+        "display_name": "LED current-limit resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_STAT_LED",
+      "role": "status_led",
+      "value": "Blue LED",
+      "selected_part": {
+        "part_id": "led-blue-0603-pending",
+        "display_name": "Blue LED 0603",
+        "package": "LED_SMD:LED_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_STAT_LED",
+      "role": "status_led_resistor",
+      "value": "470R 0603",
+      "selected_part": {
+        "part_id": "resistor-470r-0603-pending",
+        "display_name": "LED current-limit resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "D_FAULT_LED",
+      "role": "fault_led",
+      "value": "Red LED",
+      "selected_part": {
+        "part_id": "led-red-0603-pending",
+        "display_name": "Red LED 0603",
+        "package": "LED_SMD:LED_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "R_FAULT_LED",
+      "role": "fault_led_resistor",
+      "value": "470R 0603",
+      "selected_part": {
+        "part_id": "resistor-470r-0603-pending",
+        "display_name": "LED current-limit resistor",
+        "package": "Resistor_SMD:R_0603_1608Metric",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "TP_GND",
+      "role": "test_point",
+      "value": "TP GND",
+      "selected_part": {
+        "part_id": "test-point-pending",
+        "display_name": "Test point",
+        "package": "TestPoint:TestPoint_Pad_D1.5mm",
+        "pin_count": 1,
+        "named_pin_count": 1
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "TP_3V3",
+      "role": "test_point",
+      "value": "TP 3V3",
+      "selected_part": {
+        "part_id": "test-point-pending",
+        "display_name": "Test point",
+        "package": "TestPoint:TestPoint_Pad_D1.5mm",
+        "pin_count": 1,
+        "named_pin_count": 1
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "TP_5V",
+      "role": "test_point",
+      "value": "TP 5V",
+      "selected_part": {
+        "part_id": "test-point-pending",
+        "display_name": "Test point",
+        "package": "TestPoint:TestPoint_Pad_D1.5mm",
+        "pin_count": 1,
+        "named_pin_count": 1
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "TP_VM",
+      "role": "test_point",
+      "value": "TP VM_BUS",
+      "selected_part": {
+        "part_id": "test-point-pending",
+        "display_name": "Test point",
+        "package": "TestPoint:TestPoint_Pad_D1.5mm",
+        "pin_count": 1,
+        "named_pin_count": 1
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "TP_IA",
+      "role": "test_point",
+      "value": "TP IA_ADC",
+      "selected_part": {
+        "part_id": "test-point-pending",
+        "display_name": "Test point",
+        "package": "TestPoint:TestPoint_Pad_D1.5mm",
+        "pin_count": 1,
+        "named_pin_count": 1
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "TP_IB",
+      "role": "test_point",
+      "value": "TP IB_ADC",
+      "selected_part": {
+        "part_id": "test-point-pending",
+        "display_name": "Test point",
+        "package": "TestPoint:TestPoint_Pad_D1.5mm",
+        "pin_count": 1,
+        "named_pin_count": 1
+      },
+      "candidate_parts": [],
+      "availability_status": "unknown"
+    },
+    {
+      "ref": "U_GATE_AH",
+      "role": "phase_a_high_half_bridge",
+      "value": "IRS2104STR half-bridge gate driver",
+      "selected_part": {
+        "part_id": "irs2104str-locked",
+        "display_name": "Phase A high-side half-bridge",
+        "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "pin_count": 8,
+        "named_pin_count": 8,
+        "mpn": "IRS2104STR(UMW)",
+        "manufacturer": "UMW",
+        "lcsc_id": "C20623202",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    },
+    {
+      "ref": "U_GATE_AL",
+      "role": "phase_a_low_half_bridge",
+      "value": "IRS2104STR half-bridge gate driver",
+      "selected_part": {
+        "part_id": "irs2104str-locked",
+        "display_name": "Phase A low-side half-bridge",
+        "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "pin_count": 8,
+        "named_pin_count": 8,
+        "mpn": "IRS2104STR(UMW)",
+        "manufacturer": "UMW",
+        "lcsc_id": "C20623202",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    },
+    {
+      "ref": "U_GATE_BH",
+      "role": "phase_b_high_half_bridge",
+      "value": "IRS2104STR half-bridge gate driver",
+      "selected_part": {
+        "part_id": "irs2104str-locked",
+        "display_name": "Phase B high-side half-bridge",
+        "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "pin_count": 8,
+        "named_pin_count": 8,
+        "mpn": "IRS2104STR(UMW)",
+        "manufacturer": "UMW",
+        "lcsc_id": "C20623202",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    },
+    {
+      "ref": "U_GATE_BL",
+      "role": "phase_b_low_half_bridge",
+      "value": "IRS2104STR half-bridge gate driver",
+      "selected_part": {
+        "part_id": "irs2104str-locked",
+        "display_name": "Phase B low-side half-bridge",
+        "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+        "pin_count": 8,
+        "named_pin_count": 8,
+        "mpn": "IRS2104STR(UMW)",
+        "manufacturer": "UMW",
+        "lcsc_id": "C20623202",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    },
+    {
+      "ref": "C_BOOT_AH",
+      "role": "bootstrap_capacitor",
+      "value": "1uF 50V X7R 0805",
+      "selected_part": {
+        "part_id": "bootstrap-cap-locked",
+        "display_name": "Bootstrap capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2,
+        "lcsc_id": "C15850",
+        "mpn": "CC0805KRX7R9BB105",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    },
+    {
+      "ref": "C_BOOT_AL",
+      "role": "bootstrap_capacitor",
+      "value": "1uF 50V X7R 0805",
+      "selected_part": {
+        "part_id": "bootstrap-cap-locked",
+        "display_name": "Bootstrap capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2,
+        "lcsc_id": "C15850",
+        "mpn": "CC0805KRX7R9BB105",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    },
+    {
+      "ref": "C_BOOT_BH",
+      "role": "bootstrap_capacitor",
+      "value": "1uF 50V X7R 0805",
+      "selected_part": {
+        "part_id": "bootstrap-cap-locked",
+        "display_name": "Bootstrap capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2,
+        "lcsc_id": "C15850",
+        "mpn": "CC0805KRX7R9BB105",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    },
+    {
+      "ref": "C_BOOT_BL",
+      "role": "bootstrap_capacitor",
+      "value": "1uF 50V X7R 0805",
+      "selected_part": {
+        "part_id": "bootstrap-cap-locked",
+        "display_name": "Bootstrap capacitor",
+        "package": "Capacitor_SMD:C_0805_2012Metric",
+        "pin_count": 2,
+        "named_pin_count": 2,
+        "lcsc_id": "C15850",
+        "mpn": "CC0805KRX7R9BB105",
+        "availability_status": "locked"
+      },
+      "candidate_parts": [],
+      "availability_status": "locked"
+    }
+  ],
+  "nets": [
+    {
+      "name": "VM_IN",
+      "members": [
+        "J1.1",
+        "F1.1"
+      ]
+    },
+    {
+      "name": "VM_RAW",
+      "members": [
+        "F1.2",
+        "Q_REV.2",
+        "L_EMI.1"
+      ]
+    },
+    {
+      "name": "L_EMI_OUT",
+      "members": [
+        "L_EMI.2",
+        "R_GATE_REV.1"
+      ]
+    },
+    {
+      "name": "GATE_REV",
+      "members": [
+        "R_GATE_REV.2",
+        "Q_REV.1"
+      ]
+    },
+    {
+      "name": "VM_BUS",
+      "members": [
+        "Q_REV.3",
+        "D_TVS.1",
+        "C_BULK1.1",
+        "C_BUS_MLCC1.1",
+        "C_BUS_MLCC2.1",
+        "U_BUCK.1",
+        "C_BUCK_IN.1",
+        "Q_A_HL.2",
+        "Q_A_HR.2",
+        "Q_B_HL.2",
+        "Q_B_HR.2",
+        "R_BUS_TOP.1",
+        "R_BRAKE.1",
+        "R_PWR_LED.1",
+        "TP_VM.1"
+      ]
+    },
+    {
+      "name": "BUCK_SW",
+      "members": [
+        "U_BUCK.3",
+        "L_BUCK.1",
+        "D_BUCK.1"
+      ]
+    },
+    {
+      "name": "BUCK_FB",
+      "members": [
+        "U_BUCK.5",
+        "L_BUCK.2",
+        "C_BUCK_OUT.1"
+      ]
+    },
+    {
+      "name": "BUCK_BS",
+      "members": [
+        "U_BUCK.6",
+        "C_BUCK_BS.1"
+      ]
+    },
+    {
+      "name": "BUCK_BS_RTN",
+      "members": [
+        "C_BUCK_BS.2",
+        "L_BUCK.2"
+      ]
+    },
+    {
+      "name": "+5V",
+      "members": [
+        "C_BUCK_OUT.1",
+        "U_BUCK.5",
+        "U_LDO.3",
+        "C_LDO_IN.1",
+        "U_GATE_A.5",
+        "C_GVDD_A.1",
+        "U_GATE_B.5",
+        "C_GVDD_B.1",
+        "D_BOOT_A.1",
+        "D_BOOT_B.1",
+        "TP_5V.1",
+        "U_GATE_AH.1",
+        "U_GATE_AL.1",
+        "U_GATE_BH.1",
+        "U_GATE_BL.1"
+      ]
+    },
+    {
+      "name": "+3V3",
+      "members": [
+        "U_LDO.2",
+        "C_LDO_OUT.1",
+        "U_MCU.1",
+        "C_MCU_DEC1.1",
+        "C_MCU_DEC2.1",
+        "C_MCU_DEC3.1",
+        "C_MCU_DEC4.1",
+        "C_VDDA.1",
+        "R_NRST.1",
+        "U_AMP_A.5",
+        "U_AMP_B.5",
+        "U_OC.8",
+        "J_SWD.1",
+        "J_UART.1",
+        "R_TEMP_BIAS.1",
+        "R_STEP_PU.1",
+        "R_DIR_PU.1",
+        "R_EN_PU.1",
+        "D_STAT_LED.1",
+        "D_FAULT_LED.1",
+        "U_USB_UART.4",
+        "C_USB_V3.1",
+        "TP_3V3.1",
+        "R_OC_REF1.1"
+      ]
+    },
+    {
+      "name": "GND",
+      "members": [
+        "J1.2",
+        "D_TVS.2",
+        "C_BULK1.2",
+        "C_BUS_MLCC1.2",
+        "C_BUS_MLCC2.2",
+        "Q_REV.1",
+        "R_GATE_REV.2",
+        "U_BUCK.2",
+        "U_BUCK.4",
+        "C_BUCK_IN.2",
+        "C_BUCK_OUT.2",
+        "D_BUCK.2",
+        "U_LDO.1",
+        "C_LDO_IN.2",
+        "C_LDO_OUT.2",
+        "U_MCU.8",
+        "C_MCU_DEC1.2",
+        "C_MCU_DEC2.2",
+        "C_MCU_DEC3.2",
+        "C_MCU_DEC4.2",
+        "C_VDDA.2",
+        "C_NRST.2",
+        "R_BOOT0.2",
+        "U_GATE_A.2",
+        "U_GATE_A.4",
+        "C_GVDD_A.2",
+        "U_GATE_B.2",
+        "U_GATE_B.4",
+        "C_GVDD_B.2",
+        "Q_A_LL.3",
+        "Q_A_LR.3",
+        "Q_B_LL.3",
+        "Q_B_LR.3",
+        "RSH_A.2",
+        "RSH_B.2",
+        "U_AMP_A.2",
+        "U_AMP_B.2",
+        "C_IA_FLT.2",
+        "C_IB_FLT.2",
+        "U_OC.4",
+        "R_OC_REF2.2",
+        "R_BUS_BOT.2",
+        "C_BUS_SENSE.2",
+        "R_NTC.2",
+        "C_TEMP_FLT.2",
+        "J_CTRL.4",
+        "R_STEP_PU.2",
+        "R_DIR_PU.2",
+        "R_EN_PU.2",
+        "C_STEP_FLT.2",
+        "C_DIR_FLT.2",
+        "C_EN_FLT.2",
+        "D_ESD_STEP.2",
+        "D_ESD_DIR.2",
+        "D_ESD_EN.2",
+        "J_SWD.2",
+        "J_UART.2",
+        "R_PWR_LED.2",
+        "R_STAT_LED.2",
+        "R_FAULT_LED.2",
+        "RGS_A_HL.2",
+        "RGS_A_LL.2",
+        "RGS_A_HR.2",
+        "RGS_A_LR.2",
+        "RGS_B_HL.2",
+        "RGS_B_LL.2",
+        "RGS_B_HR.2",
+        "RGS_B_LR.2",
+        "U_USB_UART.8",
+        "C_USB_DEC.2",
+        "C_USB_V3.2",
+        "J_USB.5",
+        "C_SNUB_A.2",
+        "TP_GND.1",
+        "R_BRAKE.2",
+        "D_PWR_LED.2",
+        "D_STAT_LED.2",
+        "D_FAULT_LED.2",
+        "Y_MCU.3",
+        "Y_MCU.4",
+        "C_OSC1.2",
+        "C_OSC2.2",
+        "R_SNUB_A.2",
+        "C_USB_VBUS.2",
+        "U_GATE_AH.4",
+        "U_GATE_AL.4",
+        "U_GATE_BH.4",
+        "U_GATE_BL.4"
+      ]
+    },
+    {
+      "name": "PHASE_A_PLUS",
+      "members": [
+        "Q_A_HL.3",
+        "Q_A_LL.2",
+        "J_MOTOR.1",
+        "U_GATE_AH.6",
+        "C_BOOT_AH.2"
+      ]
+    },
+    {
+      "name": "PHASE_A_MINUS",
+      "members": [
+        "Q_A_HR.3",
+        "Q_A_LR.2",
+        "J_MOTOR.2",
+        "U_GATE_AL.6",
+        "C_BOOT_AL.2"
+      ]
+    },
+    {
+      "name": "PHASE_B_PLUS",
+      "members": [
+        "Q_B_HL.3",
+        "Q_B_LL.2",
+        "J_MOTOR.3",
+        "U_GATE_BH.6",
+        "C_BOOT_BH.2"
+      ]
+    },
+    {
+      "name": "PHASE_B_MINUS",
+      "members": [
+        "Q_B_HR.3",
+        "Q_B_LR.2",
+        "J_MOTOR.4",
+        "U_GATE_BL.6",
+        "C_BOOT_BL.2"
+      ]
+    },
+    {
+      "name": "PHASE_A_LOW_RETURN",
+      "members": [
+        "Q_A_LL.3",
+        "Q_A_LR.3",
+        "RSH_A.1"
+      ]
+    },
+    {
+      "name": "PHASE_B_LOW_RETURN",
+      "members": [
+        "Q_B_LL.3",
+        "Q_B_LR.3",
+        "RSH_B.1"
+      ]
+    },
+    {
+      "name": "PWM_AH",
+      "members": [
+        "U_MCU.20",
+        "U_GATE_AH.2",
+        "U_GATE_AL.2"
+      ]
+    },
+    {
+      "name": "PWM_AL",
+      "members": [
+        "U_MCU.21",
+        "U_GATE_AH.3",
+        "U_GATE_AL.3"
+      ]
+    },
+    {
+      "name": "PWM_BH",
+      "members": [
+        "U_MCU.22",
+        "U_GATE_BH.2",
+        "U_GATE_BL.2"
+      ]
+    },
+    {
+      "name": "PWM_BL",
+      "members": [
+        "U_MCU.23",
+        "U_GATE_BH.3",
+        "U_GATE_BL.3"
+      ]
+    },
+    {
+      "name": "IA_SENSE_RAW",
+      "members": [
+        "RSH_A.1",
+        "U_AMP_A.1",
+        "U_AMP_A.3",
+        "U_OC.1"
+      ]
+    },
+    {
+      "name": "IB_SENSE_RAW",
+      "members": [
+        "RSH_B.1",
+        "U_AMP_B.1",
+        "U_AMP_B.3",
+        "U_OC.2"
+      ]
+    },
+    {
+      "name": "IA_AMP_OUT",
+      "members": [
+        "U_AMP_A.4",
+        "R_IA_FLT.1"
+      ]
+    },
+    {
+      "name": "IB_AMP_OUT",
+      "members": [
+        "U_AMP_B.4",
+        "R_IB_FLT.1"
+      ]
+    },
+    {
+      "name": "IA_ADC",
+      "members": [
+        "R_IA_FLT.2",
+        "C_IA_FLT.1",
+        "U_MCU.10",
+        "TP_IA.1"
+      ]
+    },
+    {
+      "name": "IB_ADC",
+      "members": [
+        "R_IB_FLT.2",
+        "C_IB_FLT.1",
+        "U_MCU.11",
+        "TP_IB.1"
+      ]
+    },
+    {
+      "name": "OC_REF",
+      "members": [
+        "R_OC_REF1.2",
+        "R_OC_REF2.1",
+        "U_OC.3"
+      ]
+    },
+    {
+      "name": "OC_FAULT",
+      "members": [
+        "U_OC.7",
+        "U_MCU.24"
+      ]
+    },
+    {
+      "name": "BUS_VSENSE",
+      "members": [
+        "R_BUS_TOP.2",
+        "R_BUS_BOT.1",
+        "C_BUS_SENSE.1",
+        "U_MCU.12"
+      ]
+    },
+    {
+      "name": "TEMP_BIAS",
+      "members": [
+        "R_TEMP_BIAS.2",
+        "R_NTC.1",
+        "C_TEMP_FLT.1",
+        "U_MCU.13"
+      ]
+    },
+    {
+      "name": "STEP_RAW",
+      "members": [
+        "J_CTRL.1",
+        "R_STEP_SERIES.1"
+      ]
+    },
+    {
+      "name": "DIR_RAW",
+      "members": [
+        "J_CTRL.2",
+        "R_DIR_SERIES.1"
+      ]
+    },
+    {
+      "name": "EN_RAW",
+      "members": [
+        "J_CTRL.3",
+        "R_EN_SERIES.1"
+      ]
+    },
+    {
+      "name": "STEP_IN",
+      "members": [
+        "R_STEP_SERIES.2",
+        "R_STEP_PU.1",
+        "C_STEP_FLT.1",
+        "D_ESD_STEP.1",
+        "U_MCU.30"
+      ]
+    },
+    {
+      "name": "DIR_IN",
+      "members": [
+        "R_DIR_SERIES.2",
+        "R_DIR_PU.1",
+        "C_DIR_FLT.1",
+        "D_ESD_DIR.1",
+        "U_MCU.31"
+      ]
+    },
+    {
+      "name": "EN_IN",
+      "members": [
+        "R_EN_SERIES.2",
+        "R_EN_PU.1",
+        "C_EN_FLT.1",
+        "D_ESD_EN.1",
+        "U_MCU.32"
+      ]
+    },
+    {
+      "name": "SWDIO",
+      "members": [
+        "J_SWD.3",
+        "U_MCU.34"
+      ]
+    },
+    {
+      "name": "SWCLK",
+      "members": [
+        "J_SWD.4",
+        "U_MCU.37"
+      ]
+    },
+    {
+      "name": "NRST",
+      "members": [
+        "J_SWD.5",
+        "U_MCU.7",
+        "R_NRST.2",
+        "C_NRST.1"
+      ]
+    },
+    {
+      "name": "UART_TX",
+      "members": [
+        "U_MCU.40",
+        "J_UART.3",
+        "U_USB_UART.2"
+      ]
+    },
+    {
+      "name": "UART_RX",
+      "members": [
+        "U_MCU.41",
+        "J_UART.4",
+        "U_USB_UART.3"
+      ]
+    },
+    {
+      "name": "USB_VBUS",
+      "members": [
+        "J_USB.1",
+        "C_USB_VBUS.1"
+      ]
+    },
+    {
+      "name": "USB_DP",
+      "members": [
+        "J_USB.3",
+        "R_USB_DP.1"
+      ]
+    },
+    {
+      "name": "USB_DN",
+      "members": [
+        "J_USB.4",
+        "R_USB_DN.1"
+      ]
+    },
+    {
+      "name": "USB_DP_UART",
+      "members": [
+        "R_USB_DP.2",
+        "U_USB_UART.6"
+      ]
+    },
+    {
+      "name": "USB_DN_UART",
+      "members": [
+        "R_USB_DN.2",
+        "U_USB_UART.7"
+      ]
+    },
+    {
+      "name": "USB_UART_DEC",
+      "members": [
+        "U_USB_UART.16",
+        "C_USB_DEC.1"
+      ]
+    },
+    {
+      "name": "MCU_BOOT0",
+      "members": [
+        "U_MCU.44",
+        "R_BOOT0.1"
+      ]
+    },
+    {
+      "name": "MCU_OSC_IN",
+      "members": [
+        "U_MCU.5",
+        "Y_MCU.1",
+        "C_OSC1.1"
+      ]
+    },
+    {
+      "name": "MCU_OSC_OUT",
+      "members": [
+        "U_MCU.6",
+        "Y_MCU.2",
+        "C_OSC2.1"
+      ]
+    },
+    {
+      "name": "PWR_LED_NET",
+      "members": [
+        "R_PWR_LED.2",
+        "D_PWR_LED.1"
+      ]
+    },
+    {
+      "name": "STAT_LED_IN",
+      "members": [
+        "U_MCU.33",
+        "R_STAT_LED.1"
+      ]
+    },
+    {
+      "name": "STAT_LED_NET",
+      "members": [
+        "R_STAT_LED.2",
+        "D_STAT_LED.1"
+      ]
+    },
+    {
+      "name": "FAULT_LED_IN",
+      "members": [
+        "U_MCU.42",
+        "R_FAULT_LED.1"
+      ]
+    },
+    {
+      "name": "FAULT_LED_NET",
+      "members": [
+        "R_FAULT_LED.2",
+        "D_FAULT_LED.1"
+      ]
+    },
+    {
+      "name": "SNUB_A",
+      "members": [
+        "R_SNUB_A.1",
+        "C_SNUB_A.1"
+      ]
+    },
+    {
+      "name": "GATE_AH_HO",
+      "members": [
+        "U_GATE_AH.7",
+        "RG_A_HL.1"
+      ]
+    },
+    {
+      "name": "GATE_AH_HO_MOS",
+      "members": [
+        "RG_A_HL.2",
+        "Q_A_HL.1",
+        "RGS_A_HL.1"
+      ]
+    },
+    {
+      "name": "GATE_AH_LO",
+      "members": [
+        "U_GATE_AH.5",
+        "RG_A_LL.1"
+      ]
+    },
+    {
+      "name": "GATE_AH_LO_MOS",
+      "members": [
+        "RG_A_LL.2",
+        "Q_A_LL.1",
+        "RGS_A_LL.1"
+      ]
+    },
+    {
+      "name": "GATE_AL_HO",
+      "members": [
+        "U_GATE_AL.7",
+        "RG_A_HR.1"
+      ]
+    },
+    {
+      "name": "GATE_AL_HO_MOS",
+      "members": [
+        "RG_A_HR.2",
+        "Q_A_HR.1",
+        "RGS_A_HR.1"
+      ]
+    },
+    {
+      "name": "GATE_AL_LO",
+      "members": [
+        "U_GATE_AL.5",
+        "RG_A_LR.1"
+      ]
+    },
+    {
+      "name": "GATE_AL_LO_MOS",
+      "members": [
+        "RG_A_LR.2",
+        "Q_A_LR.1",
+        "RGS_A_LR.1"
+      ]
+    },
+    {
+      "name": "GATE_BH_HO",
+      "members": [
+        "U_GATE_BH.7",
+        "RG_B_HL.1"
+      ]
+    },
+    {
+      "name": "GATE_BH_HO_MOS",
+      "members": [
+        "RG_B_HL.2",
+        "Q_B_HL.1",
+        "RGS_B_HL.1"
+      ]
+    },
+    {
+      "name": "GATE_BH_LO",
+      "members": [
+        "U_GATE_BH.5",
+        "RG_B_LL.1"
+      ]
+    },
+    {
+      "name": "GATE_BH_LO_MOS",
+      "members": [
+        "RG_B_LL.2",
+        "Q_B_LL.1",
+        "RGS_B_LL.1"
+      ]
+    },
+    {
+      "name": "GATE_BL_HO",
+      "members": [
+        "U_GATE_BL.7",
+        "RG_B_HR.1"
+      ]
+    },
+    {
+      "name": "GATE_BL_HO_MOS",
+      "members": [
+        "RG_B_HR.2",
+        "Q_B_HR.1",
+        "RGS_B_HR.1"
+      ]
+    },
+    {
+      "name": "GATE_BL_LO",
+      "members": [
+        "U_GATE_BL.5",
+        "RG_B_LR.1"
+      ]
+    },
+    {
+      "name": "GATE_BL_LO_MOS",
+      "members": [
+        "RG_B_LR.2",
+        "Q_B_LR.1",
+        "RGS_B_LR.1"
+      ]
+    },
+    {
+      "name": "BOOT_AH_CAP",
+      "members": [
+        "C_BOOT_AH.1",
+        "U_GATE_AH.8"
+      ]
+    },
+    {
+      "name": "BOOT_AH_VS",
+      "members": [
+        "C_BOOT_AH.2",
+        "U_GATE_AH.6"
+      ]
+    },
+    {
+      "name": "BOOT_AL_CAP",
+      "members": [
+        "C_BOOT_AL.1",
+        "U_GATE_AL.8"
+      ]
+    },
+    {
+      "name": "BOOT_AL_VS",
+      "members": [
+        "C_BOOT_AL.2",
+        "U_GATE_AL.6"
+      ]
+    },
+    {
+      "name": "BOOT_BH_CAP",
+      "members": [
+        "C_BOOT_BH.1",
+        "U_GATE_BH.8"
+      ]
+    },
+    {
+      "name": "BOOT_BH_VS",
+      "members": [
+        "C_BOOT_BH.2",
+        "U_GATE_BH.6"
+      ]
+    },
+    {
+      "name": "BOOT_BL_CAP",
+      "members": [
+        "C_BOOT_BL.1",
+        "U_GATE_BL.8"
+      ]
+    },
+    {
+      "name": "BOOT_BL_VS",
+      "members": [
+        "C_BOOT_BL.2",
+        "U_GATE_BL.6"
+      ]
+    }
+  ],
+  "calculations": [
+    {
+      "name": "phase_current_target",
+      "formula": "I_peak = 3A, I_rms = 2A",
+      "inputs": {
+        "phase_current_rms_a": 2.0,
+        "phase_current_peak_a": 3.0
+      },
+      "result": 3.0,
+      "unit": "A_peak"
+    },
+    {
+      "name": "bus_voltage_sense_ratio",
+      "formula": "Vadc = Vbus * Rbottom / (Rtop + Rbottom)",
+      "inputs": {
+        "vbus_max_v": 50.0,
+        "rtop_ohm": 200000.0,
+        "rbottom_ohm": 12000.0
+      },
+      "result": 2.83,
+      "unit": "V_at_50V"
+    }
+  ],
+  "design_decisions": [
+    {
+      "title": "Use external gate drivers and MOSFET H-bridges",
+      "rationale": "The V0.1 board validates an industrial stepper-driver architecture without integrated driver ICs.",
+      "impact": "The design exposes gate driver, MOSFET, shunt, and hardware protection blocks for review."
+    },
+    {
+      "title": "Use STM32G4-class MCU",
+      "rationale": "STM32G4 devices provide motor-control timers, complementary PWM, ADC synchronization, DMA, break inputs, UART, and SWD.",
+      "impact": "The schematic skeleton reserves PWM, ADC, fault, STEP/DIR/EN, UART, and SWD nets."
+    },
+    {
+      "title": "Gate resistors and bootstrap capacitors added",
+      "rationale": "Each MOSFET gate must have a series resistor to control switching speed and prevent ringing. Bootstrap capacitors are required for high-side N-MOSFET drive.",
+      "impact": "Added 8 gate resistors, 8 gate-source pulldown resistors, and 2 bootstrap capacitors with bootstrap diodes."
+    },
+    {
+      "title": "ADC RC filters added for all analog inputs",
+      "rationale": "Current sense, bus voltage sense, and temperature sense signals require anti-aliasing filters before the MCU ADC inputs.",
+      "impact": "Added RC low-pass filters for IA, IB, VBUS, and TEMP ADC channels."
+    },
+    {
+      "title": "USB-UART bridge included as optional debug interface",
+      "rationale": "A USB-UART bridge (CH340C-class) provides convenient debug and configuration access without requiring an external USB-UART adapter.",
+      "impact": "Added USB-C connector and CH340C-class bridge IC connections, sharing TX/RX with the UART debug header."
+    },
+    {
+      "title": "Keep LCSC locking pending",
+      "rationale": "Availability, stock, package, and EasyEDA/KiCad library quality must be checked live before locking fabrication parts.",
+      "impact": "The model uses pending placeholder parts and requires a later part.lock.yaml pass."
+    },
+    {
+      "title": "Use 4x IRS2104STR SOIC-8 half-bridge gate drivers",
+      "rationale": "Each IRS2104STR drives one half-bridge (2 MOSFETs). Two half-bridges per phase form a full H-bridge. Matches hardware spec option A.",
+      "impact": "Updated model from 2x16p full-bridge to 4x8p half-bridge drivers with individual bootstrap caps and PWM routing."
+    }
+  ],
+  "risks": [
+    "This is a KiCad skeleton model, not a production-ready schematic.",
+    "Final LCSC part numbers are not locked; run resolver and datasheet review before fabrication.",
+    "Gate-driver and MOSFET pairing is high risk until drive current, bootstrap behavior, UVLO, Qg, and dead-time behavior are verified.",
+    "MOSFET thermal design and high-current terminal footprints require manual PCB review.",
+    "Hardware overcurrent threshold values and comparator delay are not finalized.",
+    "Bus regenerative energy handling is only reserved conceptually; braking dump control is not implemented in V0.1.",
+    "Gate resistors may need tuning based on actual MOSFET Qg and driver strength to optimize switching losses vs EMI.",
+    "Bootstrap capacitor values depend on gate driver switching frequency and MOSFET Qg; verify before fabrication."
+  ]
+}

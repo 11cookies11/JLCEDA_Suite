@@ -17,9 +17,15 @@
     "write-project": "python3 ./scripts/kicad_project_writer.py",
     "erc": "python3 ./scripts/kicad_erc_runner.py",
     "server:kicad:erc": "python3 ./scripts/kicad_erc_runner.py",
-    "ngspice:regression": "python3 ./scripts/ngspice-regression-test.py"
+    "ngspice:regression": "python3 ./scripts/ngspice-regression-test.py",
+    "jlc:list-tools": "node ./scripts/jlc_mcp_bridge.mjs list-tools",
+    "jlc:search": "node ./scripts/jlc_mcp_bridge.mjs search",
+    "jlc:install": "node ./scripts/jlc_mcp_bridge.mjs install",
+    "jlc:fix": "node ./scripts/jlc_mcp_bridge.mjs fix"
   },
   "dependencies": {
+    "@jlcpcb/mcp": "^0.3.2",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "elkjs": "^0.11.1"
   }
 }

@@ -13,7 +13,12 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.lcsc_resolver import PartRequirement, resolve_many, McpHttpBackend
+from kicad_suite.lcsc_resolver import (
+    PartRequirement,
+    describe_live_backend_status,
+    get_default_backend,
+    resolve_many,
+)
 from kicad_suite.part_selector import select_parts
 
 DEMO_REQUIREMENTS = [
@@ -54,7 +59,16 @@ def run_demo() -> None:
     print("Part Selector — Demo")
     print("=" * 70)
 
-    backend = McpHttpBackend()
+    status = describe_live_backend_status()
+    if not status["ok"]:
+        print(json.dumps({
+            "ok": False,
+            "error": "No live LCSC backend is configured.",
+            **status,
+        }, indent=2, ensure_ascii=False))
+        return
+
+    backend = get_default_backend(timeout=float(os.environ.get("LCSC_OPENAPI_TIMEOUT_SEC", "15.0")))
     resolver_results = resolve_many(DEMO_REQUIREMENTS, backend=backend)
     selections = select_parts(DEMO_REQUIREMENTS, resolver_results)
 
@@ -74,7 +88,18 @@ def run_from_file(path: str) -> None:
         data = json.load(f)
     requirements = [PartRequirement(**item) for item in data["requirements"]]
 
-    backend = McpHttpBackend()
+    status = describe_live_backend_status()
+    if not status["ok"]:
+        print(json.dumps({
+            "ok": False,
+            "error": "No live LCSC backend is configured.",
+            **status,
+            "requirement_count": len(requirements),
+        }, indent=2, ensure_ascii=False))
+        return
+
+    timeout = float(os.environ.get("LCSC_OPENAPI_TIMEOUT_SEC", os.environ.get("LCSC_MCP_TIMEOUT_SEC", "15.0")))
+    backend = get_default_backend(timeout=timeout)
     resolver_results = resolve_many(requirements, backend=backend)
     selections = select_parts(requirements, resolver_results)
 
@@ -92,8 +117,15 @@ def run_from_file(path: str) -> None:
                 "mpn": sel.selected.mpn,
                 "manufacturer": sel.selected.manufacturer,
                 "package": sel.selected.package,
+                "description": sel.selected.description,
                 "price": sel.selected.price,
                 "stock": sel.selected.stock,
+                "basic_or_extended": sel.selected.basic_or_extended,
+                "has_easyeda_symbol": sel.selected.has_easyeda_symbol,
+                "has_easyeda_footprint": sel.selected.has_easyeda_footprint,
+                "has_3d_model": sel.selected.has_3d_model,
+                "source": sel.selected.source,
+                "confidence": sel.selected.confidence,
                 "composite_score": sel.selected.composite_score,
                 "needs_review": sel.selected.needs_review,
                 "reasons": sel.selected.reasons,
@@ -104,12 +136,27 @@ def run_from_file(path: str) -> None:
                 "mpn": c.mpn,
                 "lcsc_id": c.lcsc_id,
                 "package": c.package,
+                "price": c.price,
+                "stock": c.stock,
+                "basic_or_extended": c.basic_or_extended,
                 "composite_score": c.composite_score,
                 "needs_review": c.needs_review,
             })
         output.append(entry)
 
-    print(json.dumps(output, indent=2, ensure_ascii=False))
+    rendered = json.dumps(output, indent=2, ensure_ascii=False)
+    output_path = _arg_value("--output")
+    if output_path:
+        with open(output_path, "w", encoding="utf-8") as f:
+            f.write(rendered + "\n")
+    print(rendered)
+
+
+def _arg_value(name: str) -> str:
+    for idx, arg in enumerate(sys.argv):
+        if arg == name and idx + 1 < len(sys.argv):
+            return sys.argv[idx + 1]
+    return ""
 
 
 if __name__ == "__main__":

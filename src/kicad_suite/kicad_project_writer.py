@@ -14,6 +14,7 @@ from .schematic_layout_rules import BlockLayoutRule, build_default_layout_rules,
 
 
 KICAD_PLAN_SCHEMA_VERSION = 'kicad-execution-plan.v1'
+KICAD_SCHEMATIC_FILE_VERSION = '20250114'
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SYMBOL_PIN_CACHE: dict[str, dict[str, dict[str, float]]] = {}
 
@@ -848,7 +849,7 @@ def render_schematic(plan: dict[str, Any]) -> str:
     instances = '\n'.join(render_symbol_instance(symbol, project_name) for symbol in symbols)
     connectivity = render_connectivity(plan, symbols)
     return f'''(kicad_sch
-  (version 20250610)
+  (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
   (generator_version "10.0")
   (uuid {q(new_uuid())})
@@ -915,7 +916,7 @@ def render_root_schematic(plan: dict[str, Any], sheet_pages: list[dict[str, Any]
     kind_map = net_kind_by_name(plan)
     sheets = '\n'.join(render_root_sheet(page, kind_map) for page in sheet_pages)
     return f'''(kicad_sch
-  (version 20250610)
+  (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
   (generator_version "10.0")
   (uuid {q(new_uuid())})
@@ -939,7 +940,7 @@ def render_child_schematic(
     instances = '\n'.join(render_symbol_instance_at_path(symbol, project_name, page['path']) for symbol in page_symbols)
     connectivity = render_connectivity(plan, page_symbols, force_global_nets=cross_nets)
     return f'''(kicad_sch
-  (version 20250610)
+  (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
   (generator_version "10.0")
   (uuid {q(new_uuid())})
@@ -1215,4 +1216,3 @@ if __name__ == '__main__':
         print('Write KiCad project failed.', file=sys.stderr)
         print(str(error), file=sys.stderr)
         sys.exit(1)
-

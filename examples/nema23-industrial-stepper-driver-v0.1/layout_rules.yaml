@@ -1,0 +1,42 @@
+project: nema23_industrial_stepper_driver_v0_1
+schema_version: layout-rules.v1
+
+board:
+  layers: 4
+  preferred_stackup:
+    L1: signal and local power
+    L2: continuous ground plane
+    L3: power planes and high-current distribution
+    L4: signal and local power
+
+power_stage:
+  - Keep each H-bridge high-current loop area as small as possible.
+  - Place ceramic bus decoupling close to MOSFET bridge supply pins.
+  - Place bulk capacitors near the power input and MOSFET bridge.
+  - Keep motor output traces short, wide, and away from MCU/ADC regions.
+  - Do not route high-current paths through the signal ground area.
+
+gate_driver:
+  - Place gate drivers close to their MOSFETs.
+  - Keep gate traces short and add individual series gate resistors.
+  - Place bootstrap capacitors close to gate-driver pins.
+  - Place driver supply decoupling close to each driver IC.
+
+current_sense:
+  - Place shunts in the intended current return path.
+  - Route Kelvin sense pairs directly from shunt pads.
+  - Keep sense lines away from switch nodes and motor outputs.
+  - Place current sense amplifiers close to shunts.
+  - Place ADC RC filters close to MCU ADC pins.
+
+mcu:
+  - Keep MCU away from high dv/dt MOSFET switch regions.
+  - Keep ADC traces away from PWM and gate-drive traces.
+  - Place 3.3V decoupling near every MCU VDD pin.
+  - Put SWD and UART connectors on an accessible board edge.
+
+thermal:
+  - Use large copper areas for MOSFET drains and thermal pads.
+  - Add thermal vias under power packages where the footprint allows.
+  - Reserve airflow or heatsink space near the MOSFET region.
+  - Place NTC or temperature sensor near the power MOSFET heat source.

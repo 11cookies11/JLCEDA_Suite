@@ -64,14 +64,14 @@ def _yaml_dumps(obj: object, indent: int = 0) -> str:
                         if isinstance(item, dict):
                             item_rendered = _yaml_dumps(item, indent + 1)
                             item_lines = item_rendered.splitlines()
-                            if item_lines:
-                                # First key prefixed with "- "
-                                lines.append(f"{pad}  - {item_lines[0].strip()}")
-                                # Remaining keys aligned under the key (4-space indent from key level)
-                                for nl in item_lines[1:]:
-                                    stripped = nl.strip()
-                                    if stripped:
-                                        lines.append(f"{pad}    {stripped}")
+                        if item_lines:
+                            # First key prefixed with "- "
+                            lines.append(f"{pad}  - {item_lines[0].strip()}")
+                            # Remaining keys aligned under the key (4-space indent from key level)
+                            for nl in item_lines[1:]:
+                                if nl.strip():
+                                    relative = nl[2:] if nl.startswith("  ") else nl.lstrip()
+                                    lines.append(f"{pad}    {relative}")
                         else:
                             lines.append(f"{pad}  - {_yaml_value(item)}")
                 else:

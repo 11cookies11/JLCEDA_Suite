@@ -1,0 +1,29 @@
+project: nema23_industrial_stepper_driver_v0_1
+schema_version: safety-rules.v1
+
+faults:
+  undervoltage:
+    detection: bus voltage ADC threshold
+    action: disable PWM and report fault
+  overvoltage:
+    detection: bus voltage ADC threshold
+    action: disable PWM; reserve braking dump interface for future revision
+  overcurrent:
+    detection: hardware comparator from phase current sense
+    action: immediately disable gate drivers and assert MCU break input
+  overtemperature:
+    detection: NTC or digital temperature sensor near MOSFET region
+    action: derate current, then disable output at hard threshold
+
+must_have_paths:
+  - current sense to comparator
+  - comparator to gate-driver disable
+  - comparator to MCU BKIN or fault input
+  - gate-driver fault to MCU GPIO
+  - firmware clear_fault command through UART
+
+bringup_limits:
+  first_power_voltage: 12V or lower with current-limited supply
+  first_pwm_test: no motor connected, low duty cycle
+  first_motor_test: reduced current limit
+  fault_clear_policy: explicit UART command or reset required

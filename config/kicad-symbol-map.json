@@ -2,123 +2,450 @@
   "schema_version": "kicad-symbol-map.v1",
   "mappings": [
     {
-      "match": { "ref_prefix": "R", "role_contains": ["resistor"] },
+      "match": {
+        "role_contains": [
+          "stm32g4_mcu"
+        ]
+      },
+      "lib_id": "JLC-MCP-MCUs:STM32G431CBT6",
+      "footprint": "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL",
+      "note": "NEMA23: STM32G431CBT6 motor-control MCU locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "buck_5v_regulator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:XL7015E1",
+      "footprint": "JLC-MCP:TO-252-5_L6.5-W6.1-P1.14-LS9.9-BR",
+      "note": "NEMA23: XL7015E1 5-80V buck locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "ldo_3v3_regulator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:AMS1117-3_3",
+      "footprint": "JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR",
+      "note": "NEMA23: AMS1117-3.3 locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "half_bridge",
+          "gate_driver"
+        ]
+      },
+      "lib_id": "JLC-MCP-Transistors:IRS2104STR_UMW_",
+      "footprint": "JLC-MCP:SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL",
+      "note": "NEMA23: IRS2104STR half-bridge gate driver locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "mosfet",
+          "h_bridge_switch"
+        ]
+      },
+      "lib_id": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+      "footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR",
+      "note": "NEMA23: IRFR3710Z 100V N-MOSFET locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "reverse_protection_pmos"
+        ]
+      },
+      "lib_id": "JLC-MCP-Transistors:AP9575GH-HF",
+      "footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR",
+      "note": "NEMA23: AP9575GH-HF P-MOSFET reverse protection locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "current_sense_amplifier",
+          "op_amp"
+        ]
+      },
+      "lib_id": "JLC-MCP-Sensors:INA180A1IDBVR_LX_",
+      "footprint": "JLC-MCP:SOT-23-5_L3.0-W1.6-P0.95-LS2.8-BR",
+      "note": "NEMA23: INA180 current sense amp locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "comparator",
+          "overcurrent"
+        ]
+      },
+      "lib_id": "JLC-MCP-Misc:LM393_C5252905",
+      "footprint": "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL",
+      "note": "NEMA23: LM393 comparator (repaired 8-pin) locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "current_sense_resistor"
+        ]
+      },
+      "lib_id": "JLC-MCP-Resistors:RLP25FEER050",
+      "footprint": "JLC-MCP:2512_L6.4-W3.2",
+      "note": "NEMA23: RLP25FEER050 50mR shunt locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "motor_output_terminal"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:DB2EVC-5_08-4P",
+      "footprint": "JLC-MCP:DB2EVC-5.08-4P-GN",
+      "note": "NEMA23: DB2EVC 4P motor terminal locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "power_input_terminal"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:KF2EDGR-5_0-2P",
+      "footprint": "JLC-MCP:KF2EDGR-5.0-2P",
+      "note": "NEMA23: KF2EDGR 2P power terminal locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "bus_tvs_diode"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:SMBJ58A_C353350",
+      "footprint": "JLC-MCP:SMB_L4.6-W3.6",
+      "note": "NEMA23: SMBJ58A TVS locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "crystal_oscillator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
+      "footprint": "JLC-MCP:Crystal_SMD_3225-4Pin",
+      "note": "NEMA23: 8MHz crystal locked via JLC MCP."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_uart_bridge"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
+      "footprint": "JLC-MCP:SOP-16_L10.0-W3.9-P1.27-LS6.0-BL",
+      "note": "NEMA23: CH340C USB-UART locked via JLC MCP."
+    },
+    {
+      "match": {
+        "ref_prefix": "R",
+        "role_contains": [
+          "resistor"
+        ]
+      },
       "lib_id": "Device:R",
       "footprint": "Resistor_SMD:R_0603_1608Metric"
     },
     {
-      "match": { "ref_prefix": "C", "role_contains": ["capacitor"] },
+      "match": {
+        "ref_prefix": "C",
+        "role_contains": [
+          "capacitor"
+        ]
+      },
       "lib_id": "Device:C",
       "footprint": "Capacitor_SMD:C_0603_1608Metric"
     },
     {
-      "match": { "ref_prefix": "F", "role_contains": ["fuse", "polyfuse", "ptc"] },
+      "match": {
+        "ref_prefix": "F",
+        "role_contains": [
+          "fuse",
+          "polyfuse",
+          "ptc"
+        ]
+      },
       "lib_id": "Device:Fuse",
       "footprint": "Fuse:Fuse_1206_3216Metric"
     },
     {
-      "match": { "role_contains": ["tvs", "esd"] },
+      "match": {
+        "role_contains": [
+          "tvs",
+          "esd"
+        ]
+      },
       "lib_id": "Device:D_TVS",
       "footprint": "Diode_SMD:D_SOD-523"
     },
     {
-      "match": { "role_contains": ["usb"] },
+      "match": {
+        "role_contains": [
+          "usb"
+        ]
+      },
       "lib_id": "Connector_Generic:Conn_01x04",
       "footprint": "AIAgent:USB_A_PCB_traces_small",
       "note": "PCB-edge USB-A male plug, from KiCad stickhub demo."
     },
     {
-      "match": { "role_contains": ["uart", "programming", "swd"] },
+      "match": {
+        "role_contains": [
+          "uart",
+          "programming",
+          "swd"
+        ]
+      },
       "lib_id": "Connector_Generic:Conn_01x04",
       "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
     },
     {
-      "match": { "role_contains": ["stm32", "stm32f103", "mcu"] },
+      "match": {
+        "role_contains": [
+          "stm32g4",
+          "stm32g431",
+          "stm32g474"
+        ]
+      },
+      "lib_id": "MCU_ST_STM32G4:STM32G431CBTx",
+      "footprint": "Package_QFP:LQFP-48_7x7mm_P0.5mm",
+      "note": "STM32G4-class motor-control MCU placeholder mapping for KiCad skeleton generation."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "gate_driver",
+          "half_bridge_driver"
+        ]
+      },
+      "lib_id": "AIAgent:Generic_2Pin",
+      "footprint": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+      "note": "Gate-driver role requires final LCSC-backed symbol and footprint selection."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "mosfet",
+          "h_bridge_switch"
+        ]
+      },
+      "lib_id": "Device:Q_NMOS_GDS",
+      "footprint": "Package_TO_SOT_SMD:TO-252-2",
+      "note": "Power MOSFET placeholder mapping; verify thermal pad footprint manually."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "current_sense_amplifier",
+          "op_amp"
+        ]
+      },
+      "lib_id": "Amplifier_Operational:LMV321",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "note": "Current-sense amplifier placeholder mapping; select final common-mode range and gain."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "comparator",
+          "overcurrent"
+        ]
+      },
+      "lib_id": "Comparator:LM393",
+      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
+      "note": "Hardware overcurrent comparator placeholder mapping."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "terminal",
+          "motor_output"
+        ]
+      },
+      "lib_id": "Connector_Generic:Conn_01x04",
+      "footprint": "TerminalBlock:TerminalBlock_bornier-4_P5.08mm",
+      "note": "High-current terminal placeholder; verify actual terminal current and creepage."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "stm32",
+          "stm32f103",
+          "mcu"
+        ]
+      },
       "lib_id": "MCU_ST_STM32F1:STM32F103C8Tx",
       "footprint": "Package_QFP:LQFP-48_7x7mm_P0.5mm",
       "note": "STM32F103C8Tx — ARM Cortex-M3, 64KB Flash, LQFP-48"
     },
     {
-      "match": { "role_contains": ["rp2040"], "value_contains": ["rp2040"] },
+      "match": {
+        "role_contains": [
+          "rp2040"
+        ],
+        "value_contains": [
+          "rp2040"
+        ]
+      },
       "lib_id": "AIAgent:RP2040_QFN56",
       "footprint": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
       "note": "Mapped RP2040 role to local placeholder symbol."
     },
     {
-      "match": { "role_contains": ["qspi", "flash"] },
+      "match": {
+        "role_contains": [
+          "qspi",
+          "flash"
+        ]
+      },
       "lib_id": "AIAgent:QSPI_Flash",
       "footprint": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
       "note": "Mapped external flash role to local placeholder symbol."
     },
     {
-      "match": { "role_contains": ["ldo"] },
+      "match": {
+        "role_contains": [
+          "ldo"
+        ]
+      },
       "lib_id": "AIAgent:LDO_3V3",
       "footprint": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
       "note": "Mapped LDO role to local placeholder symbol."
     },
     {
-      "match": { "role_contains": ["indicator", "led"], "ref_prefix": "LED" },
+      "match": {
+        "role_contains": [
+          "indicator",
+          "led"
+        ],
+        "ref_prefix": "LED"
+      },
       "lib_id": "Device:LED",
       "footprint": "LED_SMD:LED_0603_1608Metric"
     },
     {
-      "match": { "role_contains": ["crystal", "xtal"], "ref_prefix": "Y" },
+      "match": {
+        "role_contains": [
+          "crystal",
+          "xtal"
+        ],
+        "ref_prefix": "Y"
+      },
       "lib_id": "Device:Crystal",
       "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"
     },
     {
-      "match": { "ref_prefix": "SW", "role_contains": ["button", "switch", "boot", "reset"] },
+      "match": {
+        "ref_prefix": "SW",
+        "role_contains": [
+          "button",
+          "switch",
+          "boot",
+          "reset"
+        ]
+      },
       "lib_id": "Switch:SW_Push",
       "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2"
     },
     {
-      "match": { "role_contains": ["chip_antenna"] },
+      "match": {
+        "role_contains": [
+          "chip_antenna"
+        ]
+      },
       "lib_id": "Device:Antenna",
       "footprint": "RF_Antenna:Johanson_2450AT18x100",
       "note": "2.4GHz chip antenna for ESP32-C3 WiFi/BLE."
     },
     {
-      "match": { "role_contains": ["antenna"] },
+      "match": {
+        "role_contains": [
+          "antenna"
+        ]
+      },
       "lib_id": "Connector:Conn_Coaxial",
       "footprint": "Connector_Coaxial:SMA_Amphenol_132134-10_Vertical",
       "note": "Generic antenna / RF connector."
     },
     {
-      "match": { "role_contains": ["esp32_c3_bare", "bare_chip", "qfn32"] },
+      "match": {
+        "role_contains": [
+          "esp32_c3_bare",
+          "bare_chip",
+          "qfn32"
+        ]
+      },
       "lib_id": "AIAgent:ESP32_C3_Bare_QFN32",
       "footprint": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.3x3.3mm",
       "note": "Mapped ESP32-C3 bare-chip role to local QFN32 placeholder symbol."
     },
     {
-      "match": { "ref_prefix": "L", "role_contains": ["inductor"] },
+      "match": {
+        "ref_prefix": "L",
+        "role_contains": [
+          "inductor"
+        ]
+      },
       "lib_id": "Device:L",
       "footprint": "Inductor_SMD:L_0603_1608Metric"
     },
     {
-      "match": { "ref_prefix": "D", "role_contains": ["diode"] },
+      "match": {
+        "ref_prefix": "D",
+        "role_contains": [
+          "diode"
+        ]
+      },
       "lib_id": "Device:D",
       "footprint": "Diode_SMD:D_SOD-523"
     },
     {
-      "match": { "role_contains": ["esp32"], "value_contains": ["esp32"] },
+      "match": {
+        "role_contains": [
+          "esp32"
+        ],
+        "value_contains": [
+          "esp32"
+        ]
+      },
       "lib_id": "AIAgent:ESP32_C3_Module",
       "footprint": "",
       "note": "Mapped ESP32-C3 role to local placeholder symbol."
     },
     {
-      "match": { "role_contains": ["buck"] },
+      "match": {
+        "role_contains": [
+          "buck"
+        ]
+      },
       "lib_id": "AIAgent:Buck_Regulator",
       "footprint": "",
       "note": "Mapped complex regulator role to local placeholder symbol."
     },
     {
-      "match": { "role_contains": ["connector", "header"] },
+      "match": {
+        "role_contains": [
+          "connector",
+          "header"
+        ]
+      },
       "lib_id": "AIAgent:Conn_01x04",
       "footprint": "",
       "note": "Default connector/header placeholder."
     },
     {
-      "match": { "ref_prefix": "J" },
+      "match": {
+        "ref_prefix": "J"
+      },
       "lib_id": "AIAgent:Conn_01x04",
       "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Horizontal",
       "note": "Default connector placeholder (right-angle)."
@@ -134,16 +461,53 @@
     "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm"
   },
   "symbol_sizes": {
-    "AIAgent:ESP32_C3_Module": [35.56, 38.1],
-    "AIAgent:ESP32_C3_Bare_QFN32": [50.8, 71.12],
-    "AIAgent:Buck_Regulator": [22.86, 17.78],
-    "AIAgent:Conn_01x04": [15.24, 17.78],
-    "AIAgent:Generic_2Pin": [12.7, 10.16],
-    "AIAgent:LDO_3V3": [22.86, 17.78],
-    "AIAgent:QSPI_Flash": [25.4, 27.94],
-    "AIAgent:RP2040_QFN56": [76.2, 106.68],
-    "MCU_ST_STM32F1:STM32F103C8Tx": [55.88, 76.2],
-    "MCU_Espressif:ESP32-C3": [50.8, 55.88],
-    "Connector:USB_C_Receptacle": [20.32, 17.78]
+    "AIAgent:ESP32_C3_Module": [
+      35.56,
+      38.1
+    ],
+    "AIAgent:ESP32_C3_Bare_QFN32": [
+      50.8,
+      71.12
+    ],
+    "AIAgent:Buck_Regulator": [
+      22.86,
+      17.78
+    ],
+    "AIAgent:Conn_01x04": [
+      15.24,
+      17.78
+    ],
+    "AIAgent:Generic_2Pin": [
+      12.7,
+      10.16
+    ],
+    "AIAgent:LDO_3V3": [
+      22.86,
+      17.78
+    ],
+    "AIAgent:QSPI_Flash": [
+      25.4,
+      27.94
+    ],
+    "AIAgent:RP2040_QFN56": [
+      76.2,
+      106.68
+    ],
+    "MCU_ST_STM32F1:STM32F103C8Tx": [
+      55.88,
+      76.2
+    ],
+    "MCU_ST_STM32G4:STM32G431CBTx": [
+      55.88,
+      76.2
+    ],
+    "MCU_Espressif:ESP32-C3": [
+      50.8,
+      55.88
+    ],
+    "Connector:USB_C_Receptacle": [
+      20.32,
+      17.78
+    ]
   }
 }

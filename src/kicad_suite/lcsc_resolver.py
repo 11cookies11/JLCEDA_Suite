@@ -7,10 +7,16 @@ Does NOT make final selection. Only searches + scores + organizes.
 from __future__ import annotations
 
 import json
+import hashlib
+import os
+import secrets
 import re
+import time
 import urllib.request
 import urllib.parse
 import urllib.error
+import subprocess
+from pathlib import Path
 from dataclasses import dataclass, field
 from typing import Protocol
 
@@ -121,6 +127,254 @@ class McpHttpBackend:
             else:
                 r["_source"] = "easyeda_community"  # default
         return raw_results
+
+
+class LcscOpenApiBackend:
+    """Talks directly to LCSC's official OpenAPI product search.
+
+    Required environment variables for normal CLI use:
+    - LCSC_API_KEY
+    - LCSC_API_SECRET
+
+    Signature format follows LCSC documentation:
+    sha1(key=xxx&nonce=xxx&secret=xxxx&timestamp=xxx)
+    """
+
+    def __init__(
+        self,
+        *,
+        key: str = "",
+        secret: str = "",
+        base_url: str = "https://ips.lcsc.com",
+        timeout: float = 15.0,
+        currency: str = "USD",
+    ) -> None:
+        self._key = key or os.environ.get("LCSC_API_KEY", "")
+        self._secret = secret or os.environ.get("LCSC_API_SECRET", "")
+        self._base_url = base_url.rstrip("/")
+        self._timeout = timeout
+        self._currency = currency
+
+    @property
+    def configured(self) -> bool:
+        return bool(self._key and self._secret)
+
+    @property
+    def base_url(self) -> str:
+        return self._base_url
+
+    def _signed_params(self) -> dict[str, str]:
+        nonce = secrets.token_hex(8)[:16]
+        timestamp = str(int(time.time() * 1000))
+        payload = f"key={self._key}&nonce={nonce}&secret={self._secret}&timestamp={timestamp}"
+        signature = hashlib.sha1(payload.encode("utf-8")).hexdigest()
+        return {
+            "key": self._key,
+            "nonce": nonce,
+            "timestamp": timestamp,
+            "signature": signature,
+        }
+
+    def search(self, query: str, limit: int = 10, **kwargs: object) -> list[dict]:
+        if not self.configured:
+            return []
+
+        params: dict[str, object] = {
+            **self._signed_params(),
+            "keyword": query,
+            "match_type": kwargs.get("match_type", "fuzzy"),
+            "current_page": 1,
+            "page_size": min(max(int(limit), 1), 30),
+            "is_available": str(bool(kwargs.get("is_available", True))).lower(),
+            "is_pre_sale": str(bool(kwargs.get("is_pre_sale", False))).lower(),
+            "currency": kwargs.get("currency", self._currency),
+        }
+        url = f"{self._base_url}/rest/wmsc2agent/search/product?{urllib.parse.urlencode(params)}"
+        try:
+            req = urllib.request.Request(url, headers={"Accept": "application/json"})
+            with urllib.request.urlopen(req, timeout=self._timeout) as resp:
+                body = json.loads(resp.read().decode("utf-8"))
+        except (urllib.error.URLError, OSError, json.JSONDecodeError):
+            return []
+
+        results = _extract_lcsc_product_dicts(body)
+        for item in results:
+            item["_source"] = "jlcpcb_parts"
+        return results[:limit]
+
+
+class JlcMcpCliBackend:
+    """Search LCSC through the repository's @jlcpcb/mcp bridge script."""
+
+    def __init__(
+        self,
+        *,
+        bridge_script: str | Path | None = None,
+        timeout: float = 30.0,
+        source: str = "lcsc",
+    ) -> None:
+        repo_root = Path(__file__).resolve().parents[2]
+        self._bridge_script = Path(bridge_script) if bridge_script else repo_root / "scripts" / "jlc_mcp_bridge.mjs"
+        self._timeout = timeout
+        self._source = source
+
+    @property
+    def configured(self) -> bool:
+        return self._bridge_script.exists()
+
+    def search(self, query: str, limit: int = 10, **kwargs: object) -> list[dict]:
+        if not self.configured:
+            return []
+
+        command = [
+            "node",
+            str(self._bridge_script),
+            "search",
+            "--query",
+            query,
+            "--source",
+            self._source,
+            "--limit",
+            str(limit),
+        ]
+        if bool(kwargs.get("in_stock", kwargs.get("is_available", True))):
+            command.append("--in-stock")
+        if bool(kwargs.get("basic_only", False)):
+            command.append("--basic-only")
+
+        try:
+            proc = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                encoding="utf-8",
+                errors="replace",
+                timeout=self._timeout,
+                check=False,
+            )
+        except (OSError, subprocess.TimeoutExpired):
+            return []
+
+        if proc.returncode != 0:
+            return []
+
+        try:
+            payload = json.loads(proc.stdout)
+        except json.JSONDecodeError:
+            return []
+
+        results = _extract_jlc_mcp_results(payload)
+        for item in results:
+            item["_source"] = "jlcpcb_parts"
+        return results[:limit]
+
+
+def _first_value(raw: dict, keys: list[str]) -> object:
+    for key in keys:
+        if key in raw and raw[key] not in (None, ""):
+            return raw[key]
+    lowered = {str(k).lower(): v for k, v in raw.items()}
+    for key in keys:
+        value = lowered.get(key.lower())
+        if value not in (None, ""):
+            return value
+    return ""
+
+
+def _extract_lcsc_product_dicts(payload: object) -> list[dict]:
+    """Extract product-shaped dictionaries from flexible LCSC API JSON."""
+    found: list[dict] = []
+
+    def visit(value: object) -> None:
+        if isinstance(value, list):
+            for item in value:
+                visit(item)
+            return
+        if not isinstance(value, dict):
+            return
+        if any(str(key).lower() in {
+            "lcscpartnumber", "lcsc_part_number", "productnumber", "product_number",
+            "productcode", "product_code", "productmodel", "product_model",
+        } for key in value):
+            found.append(value)
+            return
+        for child in value.values():
+            visit(child)
+
+    visit(payload)
+    return found
+
+
+def _extract_jlc_mcp_results(payload: object) -> list[dict]:
+    if not isinstance(payload, dict):
+        return []
+    result = payload.get("result", payload)
+    if isinstance(result, dict):
+        raw_results = result.get("results", [])
+        if isinstance(raw_results, list):
+            return [item for item in raw_results if isinstance(item, dict)]
+    if isinstance(result, list):
+        return [item for item in result if isinstance(item, dict)]
+    return []
+
+
+def get_default_backend(*, timeout: float = 15.0) -> SearchBackend:
+    """Choose the best live search backend for the current environment.
+
+    Prefer LCSC's official OpenAPI when credentials are configured. Otherwise
+    fall back to the legacy local MCP HTTP backend.
+    """
+    jlc_mcp = JlcMcpCliBackend(timeout=timeout)
+    if os.environ.get("KICAD_DISABLE_JLC_MCP", "").lower() not in {"1", "true", "yes"} and jlc_mcp.configured:
+        return jlc_mcp
+
+    openapi = LcscOpenApiBackend(
+        base_url=os.environ.get("LCSC_OPENAPI_BASE_URL", "https://ips.lcsc.com"),
+        timeout=timeout,
+        currency=os.environ.get("LCSC_OPENAPI_CURRENCY", "USD"),
+    )
+    if openapi.configured:
+        return openapi
+
+    return McpHttpBackend(
+        base_url=os.environ.get("LCSC_MCP_BASE_URL", "http://localhost:3847"),
+        timeout=timeout,
+    )
+
+
+def describe_live_backend_status() -> dict[str, object]:
+    """Return a small, serializable status object for CLI preflight checks."""
+    jlc_mcp = JlcMcpCliBackend(timeout=float(os.environ.get("JLC_MCP_TIMEOUT_SEC", "30.0")))
+    if os.environ.get("KICAD_DISABLE_JLC_MCP", "").lower() not in {"1", "true", "yes"} and jlc_mcp.configured:
+        return {
+            "ok": True,
+            "backend": "jlc_mcp_cli",
+            "bridge_script": str(jlc_mcp._bridge_script),
+        }
+
+    openapi = LcscOpenApiBackend(
+        base_url=os.environ.get("LCSC_OPENAPI_BASE_URL", "https://ips.lcsc.com"),
+        timeout=float(os.environ.get("LCSC_OPENAPI_TIMEOUT_SEC", "3.0")),
+        currency=os.environ.get("LCSC_OPENAPI_CURRENCY", "USD"),
+    )
+    if openapi.configured:
+        return {
+            "ok": True,
+            "backend": "lcsc_openapi",
+            "base_url": openapi.base_url,
+        }
+
+    mcp_base_url = os.environ.get("LCSC_MCP_BASE_URL", "http://localhost:3847")
+    return {
+        "ok": False,
+        "backend": "unconfigured",
+        "base_url": mcp_base_url,
+        "hint": (
+            "Run npm install to enable the @jlcpcb/mcp bridge, set LCSC_API_KEY "
+            "and LCSC_API_SECRET for LCSC official OpenAPI, or start a local MCP "
+            "HTTP server that exposes /api/search."
+        ),
+    }
 
 
 # ---------------------------------------------------------------------------
@@ -326,18 +580,20 @@ def _normalize_result(raw: dict) -> ResolvedPart:
 
     if source == "jlcpcb_parts":
         price_raw = raw.get("price", raw.get("unit_price"))
+        if price_raw is None:
+            price_raw = _first_value(raw, ["price", "unit_price", "productPrice", "product_price"])
         try:
             price_val = float(price_raw) if price_raw is not None else None
         except (TypeError, ValueError):
             price_val = None
         return ResolvedPart(
-            lcsc_id=raw.get("lcsc_id", raw.get("lcsc", "")),
-            mpn=raw.get("mpn", raw.get("title", "")),
-            manufacturer=raw.get("manufacturer", raw.get("brand_name", "")),
-            package=raw.get("package", ""),
-            description=raw.get("description", raw.get("title", "")),
-            stock=int(raw.get("stock", raw.get("stock_number", 0))),
-            basic_or_extended=str(raw.get("basic_or_extended", raw.get("part_type", ""))),
+            lcsc_id=str(_first_value(raw, ["lcsc_id", "lcsc", "lcscPartNumber", "lcsc_part_number", "productNumber", "product_number", "productCode", "product_code"])),
+            mpn=str(_first_value(raw, ["mpn", "name", "productModel", "product_model", "productName", "product_name", "title"])),
+            manufacturer=str(_first_value(raw, ["manufacturer", "brand_name", "brandName", "brand", "manufacturerName"])),
+            package=str(_first_value(raw, ["package", "packageType", "package_type", "encapStandard", "encap_standard"])),
+            description=str(_first_value(raw, ["description", "productDesc", "product_desc", "title", "productName", "product_name"])),
+            stock=int(_first_value(raw, ["stock", "stock_number", "stockNumber", "quantity", "productStock"]) or 0),
+            basic_or_extended=str(_first_value(raw, ["basic_or_extended", "library_type", "part_type", "productType", "componentType", "assemblyType"])).title(),
             price=price_val,
             has_easyeda_symbol=bool(raw.get("has_symbol", False)),
             has_easyeda_footprint=bool(raw.get("has_footprint", False)),
@@ -394,7 +650,7 @@ def resolve(
         ResolverResult with ranked candidates.
     """
     if backend is None:
-        backend = McpHttpBackend()
+        backend = get_default_backend()
 
     category = requirement.category or infer_category(requirement.function)
     queries = _build_queries(requirement, category)
@@ -406,7 +662,12 @@ def resolve(
         if len(all_candidates) >= max_candidates:
             break
 
-        raw_results = backend.search(query_str, limit=10)
+        raw_results = backend.search(
+            query_str,
+            limit=10,
+            in_stock=requirement.in_stock_only,
+            basic_only=requirement.basic_only,
+        )
 
         for raw in raw_results:
             candidate = _normalize_result(raw)

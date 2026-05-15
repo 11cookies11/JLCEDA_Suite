@@ -13,7 +13,15 @@ from typing import Any
 import urllib.request
 import urllib.error
 
-from .lcsc_resolver import PartRequirement, ResolverResult, ResolvedPart, resolve_many, McpHttpBackend
+from .lcsc_resolver import (
+    PartRequirement,
+    ResolverResult,
+    ResolvedPart,
+    SearchBackend,
+    describe_live_backend_status,
+    get_default_backend,
+    resolve_many,
+)
 from .part_selector import select_parts, SelectedPart, SelectionResult
 from .kicad_lib_importer import import_parts, _build_lock_data, _build_risk_report, _yaml_dumps
 
@@ -138,7 +146,7 @@ def run_parts_pipeline(
     *,
     project_name: str = "",
     run_importer: bool = False,
-    mcp_backend: McpHttpBackend | None = None,
+    mcp_backend: SearchBackend | None = None,
 ) -> dict[str, Any]:
     """Run the full parts pipeline: resolve → select → lock.
 
@@ -147,7 +155,7 @@ def run_parts_pipeline(
         output_dir: Directory to write part.lock.yaml and part-risk-report.md.
         project_name: Project name for part.lock.yaml metadata.
         run_importer: If True, attempt to run easyeda2kicad to import parts.
-        mcp_backend: Optional MCP backend for LCSC resolution.
+        mcp_backend: Optional live backend for LCSC resolution.
 
     Returns:
         Dict with keys: lock_file, risk_report_file, selections, import_result (if run_importer).
@@ -171,16 +179,16 @@ def run_parts_pipeline(
     # Step 1: Convert components → PartRequirements
     requirements = _components_to_requirements(components)
 
-    # Step 2: Resolve LCSC parts (with graceful fallback if MCP unavailable)
-    mcp_available = _check_mcp_backend()
-    if mcp_available:
+    # Step 2: Resolve LCSC parts (with graceful fallback if live lookup unavailable)
+    live_available = bool(describe_live_backend_status().get("ok"))
+    if live_available:
         try:
-            backend = mcp_backend or McpHttpBackend(timeout=10.0)
+            backend = mcp_backend or get_default_backend(timeout=10.0)
             resolver_results = resolve_many(requirements, backend=backend)
         except Exception:
-            mcp_available = False
+            live_available = False
 
-    if not mcp_available:
+    if not live_available:
         resolver_results = _mock_resolver_results(requirements, components)
 
     # Step 3: Select best parts

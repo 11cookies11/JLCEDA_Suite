@@ -1,0 +1,128 @@
+project: nema23_industrial_stepper_driver_v0_1
+schema_version: part-requirements.v1
+selection_status: pending_live_lcsc_resolution
+
+requirements:
+  - id: mcu_stm32g4
+    refs: [U3]
+    function: motor-control MCU with complementary PWM, ADC trigger synchronization, DMA, UART, and SWD
+    preferred_mpn: [STM32G431CBT6, STM32G474CBT6]
+    package_preferred: [LQFP-48, LQFP-64]
+    required_features:
+      - advanced timer with complementary outputs
+      - dead-time insertion and break input
+      - multi-channel ADC
+      - ADC synchronized to PWM
+      - DMA
+      - UART
+      - SWD
+
+  - id: buck_5v
+    refs: [U1]
+    function: 18V-50V bus to 5V buck regulator
+    input_voltage_min: 18V
+    input_voltage_max: 50V
+    input_voltage_margin_min: 60V
+    output_voltage: 5V
+    output_current_min: 500mA
+    package_preferred: [SOP, SOIC, QFN]
+
+  - id: ldo_3v3
+    refs: [U2]
+    function: 5V to 3.3V regulator for MCU, logic, and analog front end
+    input_voltage: 5V
+    output_voltage: 3.3V
+    output_current_min: 300mA
+    package_preferred: [SOT-223, SOT-23-5, SOT-89]
+
+  - id: gate_driver_phase
+    refs: [U4, U5]
+    function: high-side and low-side N-MOSFET gate driver for one H-bridge phase
+    quantity: 2
+    bus_voltage_max: 50V
+    required_features:
+      - high-side drive
+      - low-side drive
+      - enable input
+      - fault or undervoltage indication
+      - bootstrap support or equivalent high-side supply
+    package_preferred: [SOIC, TSSOP, QFN]
+
+  - id: power_mosfet
+    refs: [Q1, Q2, Q3, Q4, Q5, Q6, Q7, Q8]
+    function: N-channel MOSFET for dual H-bridge power stage
+    quantity: 8
+    vds_min: 80V
+    current_target: 3A peak per phase
+    required_checks:
+      - Rds(on)
+      - gate charge
+      - thermal resistance
+      - pulse current
+      - avalanche energy
+      - SOA
+    package_preferred: [TO-252, DPAK, LFPAK, PowerPAK, PDFN]
+
+  - id: current_sense_resistor
+    refs: [RSH1, RSH2]
+    function: low-side phase current shunt with Kelvin routing
+    quantity: 2
+    value_target: 50mR to 100mR
+    tolerance_max: 1%
+    tempco_preferred: low
+    package_preferred: [2512, 3920, 4527]
+
+  - id: current_sense_amplifier
+    refs: [U6, U7]
+    function: amplify phase shunt voltage for MCU ADC
+    quantity: 2
+    supply_voltage: 3.3V
+    required_features:
+      - rail-to-rail output preferred
+      - input common-mode supports low-side sensing
+      - bandwidth sufficient for PWM current loop
+      - gain stability with RC filtering
+    package_preferred: [SOT-23-5, SOIC-8, MSOP-8]
+
+  - id: overcurrent_comparator
+    refs: [U8]
+    function: hardware overcurrent comparator and gate-driver disable path
+    supply_voltage: 3.3V or 5V
+    required_features:
+      - fast response
+      - threshold reference support
+      - output compatible with gate-driver disable and MCU BKIN
+    package_preferred: [SOIC-8, SOT-23-5, MSOP-8]
+
+  - id: motor_output_terminal
+    refs: [J3]
+    function: four-position high-current motor output terminal
+    pins: [A+, A-, B+, B-]
+    current_rating_min: 5A
+    pitch_preferred: 5.08mm or larger
+
+  - id: control_input_connector
+    refs: [J4]
+    function: STEP/DIR/EN/GND external input connector
+    pins: [STEP, DIR, EN, GND]
+    package_preferred: [2.54mm header, terminal block]
+
+  - id: swd_header
+    refs: [J5]
+    function: SWD programming header
+    pins: [3V3, GND, SWDIO, SWCLK, NRST]
+
+  - id: uart_header
+    refs: [J6]
+    function: UART debug header
+    pins: [3V3, GND, TX, RX]
+
+  - id: usb_uart_optional
+    refs: [U9, J7]
+    function: optional USB-UART bridge for debug and configuration
+    preferred_mpn: [CH340C, CH343P, CP2102N]
+    status: optional
+
+notes:
+  - Final part.lock.yaml must be produced by live LCSC resolver and selector review.
+  - Do not fabricate from placeholder packages without datasheet and footprint verification.

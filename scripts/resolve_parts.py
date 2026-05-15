@@ -13,7 +13,12 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.lcsc_resolver import PartRequirement, resolve_many
+from kicad_suite.lcsc_resolver import (
+    PartRequirement,
+    describe_live_backend_status,
+    get_default_backend,
+    resolve_many,
+)
 
 
 DEMO_REQUIREMENTS = [
@@ -47,7 +52,17 @@ def run_demo() -> None:
     print("=" * 70)
     print("LCSC Resolver — Demo")
     print("=" * 70)
-    for result in resolve_many(DEMO_REQUIREMENTS):
+    status = describe_live_backend_status()
+    if not status["ok"]:
+        print(json.dumps({
+            "ok": False,
+            "error": "No live LCSC backend is configured.",
+            **status,
+        }, indent=2, ensure_ascii=False))
+        return
+
+    backend = get_default_backend(timeout=float(os.environ.get("LCSC_OPENAPI_TIMEOUT_SEC", "15.0")))
+    for result in resolve_many(DEMO_REQUIREMENTS, backend=backend):
         print(f"\n--- {result.id} ({result.query_context['category_inferred']}) ---")
         print(f"    queries: {len(result.query_context['queries'])}")
         for c in result.candidates:
@@ -62,7 +77,18 @@ def run_from_file(path: str) -> None:
     with open(path, encoding="utf-8") as f:
         data = json.load(f)
     requirements = [PartRequirement(**item) for item in data["requirements"]]
-    results = resolve_many(requirements)
+    status = describe_live_backend_status()
+    if not status["ok"]:
+        print(json.dumps({
+            "ok": False,
+            "error": "No live LCSC backend is configured.",
+            **status,
+            "requirement_count": len(requirements),
+        }, indent=2, ensure_ascii=False))
+        return
+    timeout = float(os.environ.get("LCSC_OPENAPI_TIMEOUT_SEC", os.environ.get("LCSC_MCP_TIMEOUT_SEC", "15.0")))
+    backend = get_default_backend(timeout=timeout)
+    results = resolve_many(requirements, backend=backend)
     output = [{"id": r.id, "candidates": [c.__dict__ for c in r.candidates], "query_context": r.query_context} for r in results]
     print(json.dumps(output, indent=2, ensure_ascii=False))
 

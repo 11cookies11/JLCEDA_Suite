@@ -70,6 +70,82 @@ PartRequirement → LCSC Resolver → ResolverResult (candidates)
 | `EASYEDA2KICAD_BIN` | Path to easyeda2kicad executable |
 | `KICAD_SYMBOL_MAP_FILE` | Override symbol map (e.g., project-specific JLC map) |
 | `KICAD_EXTRA_FOOTPRINT_DIR` | Additional footprint search paths |
+| `KICAD_DISABLE_JLC_MCP` | Set to `1` to bypass the repository `@jlcpcb/mcp` bridge |
+| `JLC_MCP_COMMAND` | Optional custom command for starting the JLC MCP server |
+| `JLC_MCP_ARGS` | Optional JSON array of command args for `JLC_MCP_COMMAND` |
+| `JLC_MCP_DEBUG` | Set to `1` to print MCP server stderr |
+| `JLC_MCP_INSTALL_TIMEOUT_SEC` | Optional per-part timeout for JLC MCP batch installation |
+| `JLC_MCP_INSTALL_RETRIES` | Optional retry count for JLC MCP batch installation |
+| `LCSC_API_KEY` | LCSC official OpenAPI key for online part search |
+| `LCSC_API_SECRET` | LCSC official OpenAPI secret for request signatures |
+| `LCSC_OPENAPI_BASE_URL` | Optional OpenAPI base URL; defaults to `https://ips.lcsc.com` |
+| `LCSC_OPENAPI_TIMEOUT_SEC` | Optional OpenAPI request timeout |
+| `LCSC_OPENAPI_CURRENCY` | Optional pricing currency, e.g. `USD`, `CNY`, `EUR`, `HKD` |
+| `LCSC_MCP_BASE_URL` | Optional legacy local MCP HTTP backend exposing `/api/search` |
+
+### Online LCSC Resolver
+
+For live component search, use the repository bridge to `@jlcpcb/mcp`:
+
+```powershell
+npm run jlc:list-tools
+node scripts\jlc_mcp_bridge.mjs search --query "STM32G431" --source lcsc --limit 3 --in-stock
+python scripts\select_parts.py --json examples\nema23-industrial-stepper-driver-v0.1\part.requirements.resolver.json
+```
+
+To import a selected component into KiCad libraries through JLC MCP:
+
+```powershell
+node scripts\jlc_mcp_bridge.mjs install --id C529355 --project-path .where\nema23-industrial-stepper-driver-v0.1 --include-3d
+```
+
+To install all selected, non-review parts from a selector result:
+
+```powershell
+python scripts\select_parts.py --json examples\nema23-industrial-stepper-driver-v0.1\part.requirements.resolver.json --output .where\nema23-industrial-stepper-driver-v0.1\selected-parts.json
+python scripts\install_jlc_mcp_parts.py --selections .where\nema23-industrial-stepper-driver-v0.1\selected-parts.json --project-dir .where\nema23-industrial-stepper-driver-v0.1\nema23_industrial_stepper_driver_v0_1 --include-3d --timeout 180 --retries 1
+python scripts\write_jlc_mcp_part_lock.py --selections .where\nema23-industrial-stepper-driver-v0.1\selected-parts.json --install-report .where\nema23-industrial-stepper-driver-v0.1\jlc-mcp-install-report.json --project-dir .where\nema23-industrial-stepper-driver-v0.1\nema23_industrial_stepper_driver_v0_1
+```
+
+For known symbol issues, apply a targeted repair before writing the final lock:
+
+```powershell
+python scripts\fix_lm393_jlc_mcp_symbol.py --project-dir .where\nema23-industrial-stepper-driver-v0.1\nema23_industrial_stepper_driver_v0_1 --id C5252905
+python scripts\install_jlc_mcp_parts.py --project-dir .where\nema23-industrial-stepper-driver-v0.1\nema23_industrial_stepper_driver_v0_1 --register-only
+```
+
+The Python resolver prefers this bridge when available. As a fallback, it can use LCSC's official OpenAPI:
+
+```powershell
+$env:LCSC_API_KEY = '<your-api-key>'
+$env:LCSC_API_SECRET = '<your-api-secret>'
+python scripts\select_parts.py --json examples\nema23-industrial-stepper-driver-v0.1\part.requirements.resolver.json
+```
+
+If neither the MCP bridge nor OpenAPI credentials are available, the CLI reports a structured setup error. The old `localhost:3847` path is treated only as an optional legacy backend.
+
+#### JLC MCP Details
+
+- Treat `@jlcpcb/mcp` as the preferred online LCSC source for this repository.
+- Do not assume Claude Code's `.claude/mcp.json` is available in other agent runtimes; use `scripts/jlc_mcp_bridge.mjs` from the repo instead.
+- The bridge starts the local dependency at `node_modules/@jlcpcb/mcp/dist/index.js` after `npm install`; if missing, it can fall back to `npx -y @jlcpcb/mcp@0.3.2`.
+- `component_search` uses `source=lcsc` for official LCSC/JLCPCB parts and `source=community` for EasyEDA community libraries.
+- Pass requirement filters through to live search: `PartRequirement.in_stock_only` maps to `--in-stock`, and `PartRequirement.basic_only` maps to `--basic-only`.
+- `library_install` accepts an LCSC ID such as `C529355` and can install KiCad assets into a project-local library with `--project-path`.
+- `scripts/install_jlc_mcp_parts.py` reads selector JSON and installs selected LCSC IDs in batch; by default it skips `needs_review=true` parts unless `--include-review` is supplied.
+- `scripts/write_jlc_mcp_part_lock.py` converts selector and install reports into `part.lock.yaml` and `part-risk-report.md`.
+- `scripts/fix_lm393_jlc_mcp_symbol.py` repairs the known LM393 SOP-8 missing-pin case using the standard dual-comparator pinout.
+- Treat MCP validation warnings as design work, not noise. For example, `pin_pad_match=false` or `pin_count=0` means the generated symbol/footprint must be manually checked or repaired before schematic acceptance.
+- Use `JLC_MCP_DEBUG=1` only while diagnosing bridge startup or MCP stderr output.
+- Use `KICAD_DISABLE_JLC_MCP=1` only when intentionally testing OpenAPI or legacy HTTP fallback behavior.
+
+Direct checks:
+
+```powershell
+npm run jlc:list-tools
+node scripts\jlc_mcp_bridge.mjs search --query "100nF 0603" --source lcsc --limit 3 --in-stock --basic-only
+node scripts\jlc_mcp_bridge.mjs search --query "XIAO RP2040" --source community --limit 3
+```
 
 ### Part Selector Scoring Rules
 
@@ -221,6 +297,11 @@ kicad-cli sym export svg --symbol "jlc_symbols:STM32F103C8T6" --output test/ pat
 
 - `python scripts/resolve_parts.py`: test LCSC Resolver with built-in demo
 - `python scripts/select_parts.py`: test Part Selector with built-in demo
+- `node scripts/jlc_mcp_bridge.mjs search --query "STM32G431" --source lcsc --limit 3 --in-stock`: direct `@jlcpcb/mcp` search
+- `node scripts/jlc_mcp_bridge.mjs install --id C529355 --project-path <project-dir>`: install JLC MCP KiCad library assets
+- `python scripts/install_jlc_mcp_parts.py --selections selections.json --project-dir <project-dir>`: batch-install selected non-review LCSC assets through JLC MCP
+- `python scripts/write_jlc_mcp_part_lock.py --selections selections.json --install-report jlc-mcp-install-report.json --project-dir <project-dir>`: write JLC MCP `part.lock.yaml`
+- `python scripts/fix_lm393_jlc_mcp_symbol.py --project-dir <project-dir> --id C5252905`: repair missing LM393 pins after JLC MCP install
 - `python scripts/import_parts.py --selections selections.json --project-dir ./project`: import parts to project
 - `python scripts/import_jlc_parts.py <circuit-model.json> <project-dir> [--delay 3.0]`: import all LCSC parts from a circuit model
 - `python scripts/demo_parts_pipeline.py`: end-to-end parts pipeline demo

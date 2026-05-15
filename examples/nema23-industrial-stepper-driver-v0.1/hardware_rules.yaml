@@ -1,0 +1,31 @@
+project: nema23_industrial_stepper_driver_v0_1
+schema_version: hardware-rules.v1
+
+rules:
+  - id: no_integrated_stepper_driver
+    level: must
+    text: Do not use integrated stepper driver chips in V0.1.
+
+  - id: no_direct_mosfet_drive
+    level: must
+    text: MCU pins must not drive MOSFET gates directly; gate-driver ICs are required.
+
+  - id: hardware_overcurrent_required
+    level: must
+    text: Hardware overcurrent protection must be able to disable gate drivers independently of firmware.
+
+  - id: adc_protection
+    level: must
+    text: Every MCU ADC input must remain within 0V to 3.3V under normal and expected fault-divider conditions.
+
+  - id: current_sense_kelvin
+    level: must
+    text: Phase current shunts must use Kelvin sense routing.
+
+  - id: swd_uart_required
+    level: must
+    text: SWD and UART debug access must be present on the V0.1 board.
+
+  - id: lcsccbom_traceability
+    level: should
+    text: Every key component should have LCSC ID, MPN, manufacturer, package, risk level, and KiCad footprint recorded before fabrication.

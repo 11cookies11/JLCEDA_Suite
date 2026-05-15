@@ -1,0 +1,82 @@
+{
+  "project": "nema23_industrial_stepper_driver_v0_1",
+  "schema_version": "part-requirements-resolver.v1",
+  "requirements": [
+    {
+      "id": "mcu_stm32g4",
+      "function": "STM32G4 motor-control MCU with complementary PWM ADC DMA UART SWD",
+      "preferred_mpn": ["STM32G431CBT6", "STM32G474CBT6"],
+      "package_preferred": ["LQFP-48", "LQFP-64"],
+      "assembly": "JLCPCB",
+      "price_max": 8.0
+    },
+    {
+      "id": "buck_5v",
+      "function": "60V input buck regulator 5V 500mA 1A",
+      "package_preferred": ["SOIC", "SOP", "QFN"],
+      "voltage_min": 60.0,
+      "current_min": 0.5,
+      "output_voltage": 5.0,
+      "assembly": "JLCPCB",
+      "price_max": 2.0
+    },
+    {
+      "id": "ldo_3v3",
+      "function": "3.3V LDO regulator 300mA from 5V",
+      "preferred_mpn": ["AMS1117-3.3", "ME6211C33", "XC6206P332MR"],
+      "package_preferred": ["SOT-223", "SOT-23-5", "SOT-89"],
+      "output_voltage": 3.3,
+      "current_min": 0.3,
+      "assembly": "JLCPCB",
+      "price_max": 0.5
+    },
+    {
+      "id": "gate_driver_phase",
+      "function": "high side low side N MOSFET half bridge gate driver bootstrap 50V motor driver",
+      "preferred_mpn": ["IRS2104", "IR2104", "EG2133", "EG2181"],
+      "package_preferred": ["SOIC-8", "SOIC-14", "SOP-8", "TSSOP"],
+      "assembly": "JLCPCB",
+      "price_max": 2.0
+    },
+    {
+      "id": "power_mosfet",
+      "function": "N channel MOSFET 80V 100V low Rds on TO252 DPAK for H bridge",
+      "package_preferred": ["TO-252", "DPAK", "LFPAK", "PowerPAK", "PDFN"],
+      "voltage_min": 80.0,
+      "current_min": 3.0,
+      "assembly": "JLCPCB",
+      "price_max": 1.5
+    },
+    {
+      "id": "current_sense_resistor",
+      "function": "50mR 100mR 1% current sense shunt resistor 2512 low tempco",
+      "package_preferred": ["2512", "3920", "4527"],
+      "assembly": "JLCPCB",
+      "price_max": 0.5
+    },
+    {
+      "id": "current_sense_amplifier",
+      "function": "current sense amplifier low side shunt 3.3V rail to rail output",
+      "preferred_mpn": ["INA180A1", "INA181A1", "MAX4080", "LMV321"],
+      "package_preferred": ["SOT-23-5", "SOIC-8", "MSOP-8"],
+      "assembly": "JLCPCB",
+      "price_max": 1.5
+    },
+    {
+      "id": "overcurrent_comparator",
+      "function": "fast comparator overcurrent protection 3.3V 5V output gate driver disable",
+      "preferred_mpn": ["LM393", "LMV331", "TLV3201"],
+      "package_preferred": ["SOIC-8", "SOT-23-5", "MSOP-8"],
+      "assembly": "JLCPCB",
+      "price_max": 0.8
+    },
+    {
+      "id": "motor_output_terminal",
+      "function": "4 pin terminal block 5.08mm high current 5A motor output",
+      "package_preferred": ["5.08mm", "terminal block", "4P"],
+      "current_min": 5.0,
+      "assembly": "JLCPCB",
+      "price_max": 1.0
+    }
+  ]
+}
