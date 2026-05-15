@@ -1,7 +1,7 @@
 interface:
   display_name: "Hardware Development Skill"
-  short_description: "Use repo resources to build, validate, and improve hardware designs"
-  default_prompt: "Use $kicad-agent-suite-skill to develop the hardware design with the repository's models, configs, symbols, validation tools, and KiCad pipeline."
+  short_description: "Use repo resources to build, validate, and improve KiCad hardware designs"
+  default_prompt: "Use $kicad-agent-suite-skill to work through the repository's unified kas entrypoint, pipeline models, parts tools, and artifact validation before declaring a KiCad design complete."
 
 policy:
   allow_implicit_invocation: true

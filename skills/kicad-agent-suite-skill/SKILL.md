@@ -19,7 +19,7 @@ The current workflow is:
 - derive connection truth as `Netlist`
 - export a SPICE netlist and collect ngspice feedback
 - **run LCSC Resolver → Part Selector to choose real components**
-- **import EasyEDA footprints via easyeda2kicad**
+- **use the repository's parts pipeline to resolve, select, and import JLC assets when needed**
 - **generate part.lock.yaml and part-risk-report.md**
 - compile a `KiCadExecutionPlan`
 - write `.kicad_pro` and `.kicad_sch` files (with LCSC/MPN/Manufacturer fields)
@@ -27,18 +27,30 @@ The current workflow is:
 
 The old EasyEDA/JLCEDA live-session bridge flows have been removed and should not be reintroduced for new work.
 
+## Agent Quick Start
+
+When an agent needs to use this repository directly, prefer this order:
+
+1. Inspect the user's goal and identify the missing electrical constraints.
+2. Use the unified local entrypoint for pipeline work:
+   - `python scripts/kas.py pipeline <model.json> <output-dir>`
+   - `python scripts/kas.py validate-artifacts --summary <summary.json>`
+   - `python scripts/kas.py erc`
+3. If real parts are needed, use the repository's parts pipeline and JLC MCP bridge instead of ad hoc searches or manual library copying.
+4. Read the generated summary before changing the design. Let validation errors, ERC failures, and missing paths drive the next edit.
+5. Improve reusable resources, configs, and validators first; avoid patching only the current board unless the change is truly one-off.
+
 ## Default Workflow
 
 1. Read the user's design intent and identify missing electrical constraints.
 2. If the requirement is underspecified, clarify input source, outputs, current, interfaces, packages, and acceptance checks.
 3. Build or normalize `BRIDGE_REQUIREMENT_SPEC_JSON`.
-4. Run the KiCad pipeline with `npm run text-to-kicad` or `python scripts/run_pipeline.py`.
-5. **If real LCSC parts are needed, enable `KICAD_PARTS_PIPELINE=true` to generate part.lock.yaml and part-risk-report.md.**
-6. **To import EasyEDA symbols/footprints/3D models, run `python scripts/import_jlc_parts.py <circuit-model.json> <project-dir>`.**
-7. Review generated model, netlist, ngspice feedback, KiCad execution plan, part lock file, and risk report.
-8. Run `npm run ngspice:regression` or `npm run erc` when relevant.
-9. When code or pipeline gaps appear, improve the reusable hardware-development resources rather than patching only the current board.
-10. Report generated files, diagnostics, part selection summary, and next modeling, mapping, validation, or resource-improvement tasks.
+4. Run the KiCad pipeline with `npm run pipeline` or `python scripts/kas.py pipeline <model.json> <output-dir>`.
+5. If real LCSC parts are needed, enable `KICAD_PARTS_PIPELINE=true` to generate `part.lock.yaml` and `part-risk-report.md`.
+6. Review generated model, netlist, ngspice feedback, KiCad execution plan, ERC summary, and validation report.
+7. Run `npm run ngspice:regression`, `npm run erc`, or `npm run validate:artifacts -- --summary <summary.json>` when relevant.
+8. When code or pipeline gaps appear, improve the reusable hardware-development resources rather than patching only the current board.
+9. Report generated files, diagnostics, part selection summary, and next modeling, mapping, validation, or resource-improvement tasks.
 
 ## Parts Pipeline (New)
 
@@ -56,17 +68,17 @@ PartRequirement → LCSC Resolver → ResolverResult (candidates)
 
 | Module | File | Purpose |
 |--------|------|---------|
-| LCSC Resolver | `src/kicad_suite/lcsc_resolver.py` | Search LCSC + EasyEDA for parts by MPN/function/package |
+| LCSC Resolver | `src/kicad_suite/lcsc_resolver.py` | Search LCSC + EasyEDA resources for parts by MPN/function/package |
 | Part Selector | `src/kicad_suite/part_selector.py` | Multi-factor scoring (MPN/package/Basic/stock/price/library), risk assessment, final selection |
-| Parts Pipeline | `src/kicad_suite/parts_pipeline.py` | Integration: resolve → select → lock file → risk report |
-| KiCad Lib Importer | `src/kicad_suite/kicad_lib_importer.py` | Run easyeda2kicad subprocess, generate part.lock.yaml, build risk report |
+| Parts Pipeline | `src/kicad_suite/parts_pipeline.py` | Integration: resolve -> select -> lock file -> risk report |
+| KiCad Lib Importer | `src/kicad_suite/kicad_lib_importer.py` | Import JLC assets, generate part.lock.yaml, build risk report |
 
 ### Env Vars
 
 | Variable | Purpose |
 |----------|---------|
 | `KICAD_PARTS_PIPELINE=true` | Enable parts pipeline in server_text_to_kicad / run_pipeline |
-| `KICAD_PARTS_IMPORT=true` | Also run easyeda2kicad import (requires tool installed) |
+| `KICAD_PARTS_IMPORT=true` | Also run KiCad library import after part selection |
 | `EASYEDA2KICAD_BIN` | Path to easyeda2kicad executable |
 | `KICAD_SYMBOL_MAP_FILE` | Override symbol map (e.g., project-specific JLC map) |
 | `KICAD_EXTRA_FOOTPRINT_DIR` | Additional footprint search paths |
@@ -82,6 +94,8 @@ PartRequirement → LCSC Resolver → ResolverResult (candidates)
 | `LCSC_OPENAPI_TIMEOUT_SEC` | Optional OpenAPI request timeout |
 | `LCSC_OPENAPI_CURRENCY` | Optional pricing currency, e.g. `USD`, `CNY`, `EUR`, `HKD` |
 | `LCSC_MCP_BASE_URL` | Optional legacy local MCP HTTP backend exposing `/api/search` |
+
+Prefer the `kas` entrypoint when possible. Use environment variables for configuration, not for choosing which stage to run.
 
 ### Online LCSC Resolver
 
@@ -286,8 +300,10 @@ kicad-cli sym export svg --symbol "jlc_symbols:STM32F103C8T6" --output test/ pat
 
 ### Root Commands
 
-- `npm run text-to-kicad`: end-to-end RequirementSpec to KiCad output
-- `npm run pipeline`: same KiCad target through the generic entry
+- `npm run kas -- --help`: inspect the unified local CLI
+- `npm run pipeline`: run the main KiCad pipeline through the unified entrypoint
+- `npm run text-to-kicad`: run the text-to-KiCad flow through the unified entrypoint
+- `npm run validate:artifacts -- --summary <summary.json>`: validate generated outputs and ERC summaries
 - `npm run compile-plan`: compile CircuitModel and Netlist into KiCadExecutionPlan
 - `npm run write-project`: write KiCad project files from an execution plan
 - `npm run erc`: run KiCad ERC when `kicad-cli` and input paths are available
@@ -308,13 +324,16 @@ kicad-cli sym export svg --symbol "jlc_symbols:STM32F103C8T6" --output test/ pat
 - `python scripts/demo_e2e_pipeline.py`: full pipeline demo with KiCad output
 - `python scripts/run_pipeline.py <circuit-model.json> <output-dir>`: run full KiCad pipeline from existing circuit model
 
-### `scripts/server-text-to-schematic.mjs`
+### `scripts/kas.py`
 
-Compatibility wrapper for older skill callers. It now invokes:
+Unified local CLI entrypoint for this skill.
 
-- `src/kicad_suite/server_text_to_kicad.py`; the compatibility entry remains at `scripts/server_text_to_kicad.py`
+- `python scripts/kas.py pipeline <model.json> <output-dir>`: run the main KiCad pipeline
+- `python scripts/kas.py validate-artifacts --summary <summary.json>`: validate generated outputs and ERC summaries
+- `python scripts/kas.py erc`: run KiCad ERC on the resolved schematic
+- `python scripts/kas.py text-to-kicad`: run the text-to-KiCad flow
 
-Prefer the root command `npm run text-to-kicad` for new work.
+Prefer `kas` for new work instead of calling stage scripts directly.
 
 ## Output Expectations
 
@@ -336,7 +355,10 @@ Expected artifacts:
 - `<project_name>.kicad_pro`
 - `<project_name>.kicad_sch`
 - `kicad-write-summary.json`
+- `kicad-erc.summary.json`
+- `kicad-erc.json`
 - `text-to-kicad-summary.json`
+- validation output on stdout when `--json` is used
 
 With `KICAD_PARTS_PIPELINE=true`, additionally:
 
@@ -361,9 +383,22 @@ With `KICAD_PARTS_PIPELINE=true`, additionally:
 - Prefer real KiCad library mappings over placeholder symbols when available.
 - Prefer reusable config/resources/parsers over hardcoded demo-specific branches.
 - Refactor when the current structure blocks generality; do not only append special cases.
+- When the issue is electrical, modify the circuit model, netlist, or KiCad execution plan.
+- When the issue is in generation, validation, orchestration, or CLI behavior, modify the code.
 - Use ngspice feedback to surface verification risk, not to silently accept a design.
 - Use KiCad ERC as an additional check after file generation.
+- Use `validate-artifacts` before declaring a run complete.
 - Do not reintroduce EasyEDA/JLCEDA GUI bridge flows; keep EasyEDA references limited to library/resource import tooling.
+
+## Tooling Compatibility Rules
+
+- Preserve existing CLI entrypoints when possible; add adapters or wrappers before removing old paths.
+- Prefer additive changes over breaking changes. If behavior must change, keep the old form working during a transition period.
+- Keep `scripts/` thin and move shared logic into `src/kicad_suite/` so compatibility wrappers can stay small.
+- When a schema or summary format changes, bump the schema version and keep the validator able to read the previous stable shape when feasible.
+- Add or update tests for both the new path and the legacy path before removing compatibility code.
+- Treat deprecations explicitly: document them in the skill, README, or release notes instead of letting callers discover breakage by accident.
+- For any new stage, prefer a stable adapter layer over direct coupling to one board, one script, or one temporary folder.
 
 ## Reference Map
 
