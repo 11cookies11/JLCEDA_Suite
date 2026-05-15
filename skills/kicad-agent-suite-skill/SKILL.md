@@ -389,3 +389,68 @@ Treat the repository as the agent's hardware-development resource base:
 - `schemas/` contains JSON Schema contracts for all pipeline stages
 - `references/` inside this skill contains engineering workflow guidance
 - generated outputs are evidence to inspect, not source-of-truth design rules
+
+## Troubleshooting: JLC-MCP Symbols Not Visible in KiCad
+
+### Symptom
+
+After running `python scripts/run_pipeline.py`, opening the generated `.kicad_pro` in KiCad shows JLC-MCP components as tiny 2-pin boxes or completely blank symbols. This affects all non-Device-library components (STM32, gate drivers, MOSFETs, LDOs, connectors from `@jlcpcb/mcp`).
+
+### Root Cause
+
+`kicad_project_writer.py` generates 2-pin placeholder stubs for symbols outside the KiCad Device library. These stubs are embedded in the `.kicad_sch` file's `(lib_symbols ...)` section. KiCad reads this embedded data to render symbols — it **does not resolve external sym-lib-table references** during rendering.
+
+Even if the full symbol definition exists in `libraries/symbols/JLC-MCP-*.kicad_sym` and is correctly registered in `sym-lib-table`, KiCad will use the embedded stub instead.
+
+### Automatic Fix (Built-in)
+
+As of commit `2136792`, `run_pipeline.py` automatically runs symbol injection after schematic generation. The `_inject_jlc_symbols()` function:
+
+1. Scans `libraries/symbols/JLC-MCP-*.kicad_sym` for all installed symbols
+2. Replaces each 2-pin stub in the schematic's `lib_symbols` section with the complete symbol definition (all pins, graphics, properties)
+3. Handles symbol name prefixing (`STM32G431CBT6` → `JLC-MCP-MCUs:STM32G431CBT6`)
+
+The pipeline summary includes `symbols_injected: true` when injection succeeds.
+
+### Manual Fix
+
+If automatic injection fails or symbols are installed after pipeline run:
+
+```powershell
+python scripts/inject_jlc_symbols.py
+```
+
+This operates on the schematic at `.where/<project>/<project_name>/<project_name>.kicad_sch`.
+
+### Preconditions
+
+- JLC-MCP symbols must be installed via `node scripts/jlc_mcp_bridge.mjs install --id Cxxxxx --project-path <dir> --include-3d`
+- For KiCad 10.0 compatibility, upgrade library files first: `kicad-cli sym upgrade <library.kicad_sym>`
+- The `libraries/symbols/` directory must contain the upgraded `.kicad_sym` files
+
+### Verification
+
+```powershell
+# Export schematic to SVG — rendered symbols will be visible
+kicad-cli sch export svg -o ./preview/ .where/<project>/<project_name>/<project_name>.kicad_sch
+
+# Check embedded symbol pin counts
+python -c "
+import re
+from pathlib import Path
+sch = Path('.where/<project>/<project_name>/<project_name>.kicad_sch').read_text()
+for m in re.finditer(r'\(symbol \"(JLC-MCP-[^\"]+)\"', sch):
+    s = m.start(); d = 0
+    for i in range(s, len(sch)):
+        if sch[i] == '(': d += 1
+        elif sch[i] == ')': d -= 1
+        if d == 0:
+            pins = sch[s:i].count('(pin ')
+            print(f'{m.group(1)}: {pins} pins {\"OK\" if pins > 2 else \"STUB\"}')
+            break
+"
+```
+
+### Known Edge Case
+
+JLC MCP may miscategorize some symbols (e.g., placing `DB2EVC` and `KF2EDGR` connectors in `JLC-MCP-Capacitors.kicad_sym`). The injection script searches ALL `JLC-MCP-*.kicad_sym` files, so miscategorized symbols will still be found and injected under their correct library prefix.
