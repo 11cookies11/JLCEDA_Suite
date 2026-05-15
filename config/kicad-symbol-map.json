@@ -4,24 +4,91 @@
     {
       "match": {
         "role_contains": [
-          "test_point"
-        ]
+          "resistor"
+        ],
+        "ref_prefix": "R"
       },
-      "lib_id": "Connector:TestPoint",
-      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
-      "note": "Standard test point; use Connector library for KiCad 10.0 compatibility."
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
     },
     {
       "match": {
         "role_contains": [
-          "step_dir_enable_input_header",
-          "swd_debug_header",
-          "uart_debug_header"
+          "capacitor"
+        ],
+        "ref_prefix": "C"
+      },
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "note": "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "power_led",
+          "status_led",
+          "fault_led",
+          "enable_led"
         ]
       },
-      "lib_id": "Connector_Generic:Conn_01x04",
-      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
-      "note": "Standard pin header; replace AIAgent placeholder."
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "JLC-MCP LED (EasyEDA origin) - using LED symbol"
+    },
+    {
+      "match": {
+        "ref_prefix": "D",
+        "role_contains": [
+          "diode"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:SMBJ58A_C353350",
+      "footprint": "JLC-MCP:SMB_L4.6-W3.6-LS5.3-RD",
+      "note": "JLC-MCP diode symbol (EasyEDA origin)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "fuse"
+        ]
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "JLC-MCP fuse placeholder (EasyEDA origin)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "inductor",
+          "ferrite"
+        ]
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "JLC-MCP inductor placeholder (EasyEDA origin)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "test_point"
+        ]
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "JLC-MCP test point placeholder (EasyEDA origin)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "header",
+          "input_header",
+          "debug_header"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
+      "footprint": "JLC-MCP:R0603",
+      "note": "JLC-MCP connector placeholder (EasyEDA origin)"
     },
     {
       "match": {
@@ -29,9 +96,9 @@
           "usb_c_receptacle"
         ]
       },
-      "lib_id": "Connector:USB_C_Receptacle",
-      "footprint": "Connector_USB:USB_C_Receptacle_USB2.0",
-      "note": "USB-C receptacle for USB-UART bridge."
+      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
+      "footprint": "JLC-MCP:R0603",
+      "note": "JLC-MCP USB placeholder (EasyEDA origin)"
     },
     {
       "match": {
@@ -116,16 +183,6 @@
       "lib_id": "JLC-MCP-Misc:LM393_C5252905",
       "footprint": "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL",
       "note": "NEMA23: LM393 comparator (repaired 8-pin) locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "current_sense_resistor"
-        ]
-      },
-      "lib_id": "JLC-MCP-Resistors:RLP25FEER050",
-      "footprint": "JLC-MCP:2512_L6.4-W3.2",
-      "note": "NEMA23: RLP25FEER050 50mR shunt locked via JLC MCP."
     },
     {
       "match": {
@@ -462,17 +519,6 @@
       "lib_id": "AIAgent:Buck_Regulator",
       "footprint": "",
       "note": "Mapped complex regulator role to local placeholder symbol."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "connector",
-          "header"
-        ]
-      },
-      "lib_id": "AIAgent:Conn_01x04",
-      "footprint": "",
-      "note": "Default connector/header placeholder."
     },
     {
       "match": {
