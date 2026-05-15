@@ -4,6 +4,117 @@
     {
       "match": {
         "role_contains": [
+          "step_dir_enable_input_header",
+          "uart_debug_header"
+        ]
+      },
+      "lib_id": "JLC-MCP-Capacitors:DB2EVC-5_08-4P",
+      "footprint": "JLC-MCP:CONN-TH_4P-P5.08_DB2EVC-5.08-4P",
+      "note": "4-pin header using JLC-MCP DB2EVC 4P symbol"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "swd_debug_header"
+        ]
+      },
+      "lib_id": "JLC-MCP-Capacitors:DB2EVC-5_08-4P",
+      "footprint": "JLC-MCP:CONN-TH_4P-P5.08_DB2EVC-5.08-4P",
+      "note": "SWD 5-pin header; verify pin count match"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_c_receptacle"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
+      "footprint": "JLC-MCP:SOP-16_L10.0-W3.9-P1.27-LS6.0-BL",
+      "note": "USB-C placeholder; update to actual USB-C JLC-MCP symbol"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "test_point"
+        ]
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "Test point using 0603 resistor pad as placeholder"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "stm32g4_mcu"
+        ]
+      },
+      "lib_id": "JLC-MCP-MCUs:STM32G431CBT6",
+      "footprint": "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL",
+      "note": "STM32G431 with JLC-MCP LQFP-48 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "motor_output_terminal"
+        ]
+      },
+      "lib_id": "JLC-MCP-Capacitors:DB2EVC-5_08-4P",
+      "footprint": "JLC-MCP:CONN-TH_4P-P5.08_DB2EVC-5.08-4P",
+      "note": "Motor terminal with JLC-MCP 4P 5.08mm footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "power_input_terminal"
+        ]
+      },
+      "lib_id": "JLC-MCP-Capacitors:KF2EDGR-5_0-2P",
+      "footprint": "JLC-MCP:CONN-TH_P5.00_KF2EDGR-5.0-2P",
+      "note": "Power input with JLC-MCP 2P 5.0mm footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "ldo_3v3_regulator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:AMS1117-3_3",
+      "footprint": "JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR",
+      "note": "AMS1117 with JLC-MCP SOT-223 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "buck_5v_regulator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:XL7015E1",
+      "footprint": "JLC-MCP:TO-252-5_L6.6-W5.8-P1.27-TL",
+      "note": "XL7015E1 5-pin TO-252; model pin assignments must match"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "crystal_oscillator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
+      "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
+      "note": "8MHz crystal with JLC-MCP 3225 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_uart_bridge"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
+      "footprint": "JLC-MCP:SOP-16_L10.0-W3.9-P1.27-LS6.0-BL",
+      "note": "CH340C with JLC-MCP SOP-16 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
           "resistor"
         ],
         "ref_prefix": "R"
@@ -71,68 +182,6 @@
     {
       "match": {
         "role_contains": [
-          "test_point"
-        ]
-      },
-      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
-      "footprint": "JLC-MCP:R0603",
-      "note": "JLC-MCP test point placeholder (EasyEDA origin)"
-    },
-    {
-      "match": {
-        "role_contains": [
-          "header",
-          "input_header",
-          "debug_header"
-        ]
-      },
-      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
-      "footprint": "JLC-MCP:R0603",
-      "note": "JLC-MCP connector placeholder (EasyEDA origin)"
-    },
-    {
-      "match": {
-        "role_contains": [
-          "usb_c_receptacle"
-        ]
-      },
-      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
-      "footprint": "JLC-MCP:R0603",
-      "note": "JLC-MCP USB placeholder (EasyEDA origin)"
-    },
-    {
-      "match": {
-        "role_contains": [
-          "stm32g4_mcu"
-        ]
-      },
-      "lib_id": "JLC-MCP-MCUs:STM32G431CBT6",
-      "footprint": "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL",
-      "note": "NEMA23: STM32G431CBT6 motor-control MCU locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "buck_5v_regulator"
-        ]
-      },
-      "lib_id": "JLC-MCP-Power:XL7015E1",
-      "footprint": "JLC-MCP:TO-252-5_L6.5-W6.1-P1.14-LS9.9-BR",
-      "note": "NEMA23: XL7015E1 5-80V buck locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "ldo_3v3_regulator"
-        ]
-      },
-      "lib_id": "JLC-MCP-Power:AMS1117-3_3",
-      "footprint": "JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR",
-      "note": "NEMA23: AMS1117-3.3 locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
           "half_bridge",
           "gate_driver"
         ]
@@ -187,52 +236,12 @@
     {
       "match": {
         "role_contains": [
-          "motor_output_terminal"
-        ]
-      },
-      "lib_id": "JLC-MCP-Connectors:DB2EVC-5_08-4P",
-      "footprint": "JLC-MCP:DB2EVC-5.08-4P-GN",
-      "note": "NEMA23: DB2EVC 4P motor terminal locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "power_input_terminal"
-        ]
-      },
-      "lib_id": "JLC-MCP-Connectors:KF2EDGR-5_0-2P",
-      "footprint": "JLC-MCP:KF2EDGR-5.0-2P",
-      "note": "NEMA23: KF2EDGR 2P power terminal locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
           "bus_tvs_diode"
         ]
       },
       "lib_id": "JLC-MCP-Diodes:SMBJ58A_C353350",
       "footprint": "JLC-MCP:SMB_L4.6-W3.6",
       "note": "NEMA23: SMBJ58A TVS locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "crystal_oscillator"
-        ]
-      },
-      "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
-      "footprint": "JLC-MCP:Crystal_SMD_3225-4Pin",
-      "note": "NEMA23: 8MHz crystal locked via JLC MCP."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "usb_uart_bridge"
-        ]
-      },
-      "lib_id": "JLC-MCP-Connectors:CH340C_C7464026",
-      "footprint": "JLC-MCP:SOP-16_L10.0-W3.9-P1.27-LS6.0-BL",
-      "note": "NEMA23: CH340C USB-UART locked via JLC MCP."
     },
     {
       "match": {

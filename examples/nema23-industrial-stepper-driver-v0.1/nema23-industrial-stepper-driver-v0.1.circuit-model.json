@@ -11,7 +11,7 @@
       "selected_part": {
         "part_id": "power-input-terminal-pending",
         "display_name": "2-pin high-current power input terminal",
-        "package": "TerminalBlock:TerminalBlock_bornier-2_P5.08mm",
+        "package": "JLC-MCP:CONN-TH_P5.00_KF2EDGR-5.0-2P",
         "pin_count": 2,
         "named_pin_count": 2,
         "lcsc_id": "C441193",
@@ -141,7 +141,7 @@
       "selected_part": {
         "part_id": "emi-inductor-reserved-pending",
         "display_name": "EMI inductor or ferrite bead (reserved position)",
-        "package": "Inductor_SMD:L_1210_3225Metric",
+        "package": "JLC-MCP:R0603",
         "pin_count": 2,
         "named_pin_count": 2,
         "lcsc_id": "",
@@ -163,7 +163,7 @@
       "selected_part": {
         "part_id": "braking-resistor-reserved-pending",
         "display_name": "Braking dump resistor placeholder",
-        "package": "Resistor_THT:R_Axial_DIN0207_L6.3mm_D2.5mm",
+        "package": "JLC-MCP:R0603",
         "pin_count": 2,
         "named_pin_count": 2,
         "lcsc_id": "",
@@ -185,9 +185,9 @@
       "selected_part": {
         "part_id": "buck-5v-pending",
         "display_name": "60V-capable 5V buck regulator",
-        "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
-        "pin_count": 8,
-        "named_pin_count": 8,
+        "package": "JLC-MCP:TO-252-5_L6.6-W5.8-P1.27-TL",
+        "pin_count": 6,
+        "named_pin_count": 6,
         "lcsc_id": "C73013",
         "mpn": "XL7015E1",
         "manufacturer": "XLSEMI",
@@ -246,7 +246,7 @@
       "selected_part": {
         "part_id": "buck-inductor-pending",
         "display_name": "Buck power inductor",
-        "package": "Inductor_SMD:L_12x12mm",
+        "package": "JLC-MCP:TO-252-5_L6.6-W5.8-P1.27-TL",
         "pin_count": 2,
         "named_pin_count": 2,
         "lcsc_id": "C49230815",
@@ -278,9 +278,9 @@
       "selected_part": {
         "part_id": "ldo-3v3-pending",
         "display_name": "3.3V LDO regulator",
-        "package": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
-        "pin_count": 3,
-        "named_pin_count": 3,
+        "package": "JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR",
+        "pin_count": 4,
+        "named_pin_count": 4,
         "lcsc_id": "C6186",
         "mpn": "AMS1117-3.3",
         "manufacturer": "Advanced Monolithic Systems",
@@ -325,7 +325,7 @@
       "selected_part": {
         "part_id": "stm32g431cbt6-pending",
         "display_name": "STM32G431CBT6 motor-control MCU",
-        "package": "MCU_ST_STM32G4:STM32G431CBTx",
+        "package": "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL",
         "pin_count": 48,
         "named_pin_count": 48,
         "lcsc_id": "C529355",
@@ -462,7 +462,7 @@
       "selected_part": {
         "part_id": "crystal-8mhz-pending",
         "display_name": "8MHz crystal with load caps",
-        "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+        "package": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
         "pin_count": 4,
         "named_pin_count": 4,
         "lcsc_id": "C9002",
@@ -1156,7 +1156,7 @@
       "selected_part": {
         "part_id": "motor-terminal-pending",
         "display_name": "4-pin high-current motor terminal",
-        "package": "TerminalBlock:TerminalBlock_bornier-4_P5.08mm",
+        "package": "JLC-MCP:CONN-TH_4P-P5.08_DB2EVC-5.08-4P",
         "pin_count": 4,
         "named_pin_count": 4,
         "lcsc_id": "C395750",
@@ -1175,7 +1175,7 @@
       "selected_part": {
         "part_id": "motor-tvs-reserved-pending",
         "display_name": "Motor output TVS diode placeholder",
-        "package": "Diode_SMD:D_SMC",
+        "package": "JLC-MCP:SMB_L4.6-W3.6-LS5.3-RD",
         "pin_count": 2,
         "named_pin_count": 2,
         "lcsc_id": "",
@@ -1197,7 +1197,7 @@
       "selected_part": {
         "part_id": "snubber-r-reserved-pending",
         "display_name": "Snubber resistor placeholder",
-        "package": "Resistor_SMD:R_1206_3216Metric",
+        "package": "JLC-MCP:R0603",
         "pin_count": 2,
         "named_pin_count": 2,
         "lcsc_id": "",
@@ -1219,7 +1219,7 @@
       "selected_part": {
         "part_id": "snubber-c-reserved-pending",
         "display_name": "Snubber capacitor placeholder",
-        "package": "Capacitor_SMD:C_1206_3216Metric",
+        "package": "JLC-MCP:C0603",
         "pin_count": 2,
         "named_pin_count": 2,
         "lcsc_id": "",
@@ -1462,7 +1462,7 @@
       "selected_part": {
         "part_id": "usb-uart-pending",
         "display_name": "USB-UART bridge IC",
-        "package": "Package_SO:SOIC-16_3.9x9.9mm_P1.27mm",
+        "package": "JLC-MCP:SOP-16_L10.0-W3.9-P1.27-LS6.0-BL",
         "pin_count": 16,
         "named_pin_count": 16,
         "lcsc_id": "C7464026",
@@ -1483,7 +1483,7 @@
       "selected_part": {
         "part_id": "usb-c-receptacle-pending",
         "display_name": "USB-C receptacle",
-        "package": "Connector:USB_C_Receptacle",
+        "package": "JLC-MCP:SOP-16_L10.0-W3.9-P1.27-LS6.0-BL",
         "pin_count": 16,
         "named_pin_count": 6,
         "lcsc_id": "C393939",
@@ -1995,7 +1995,6 @@
       "name": "+5V",
       "members": [
         "C_BUCK_OUT.1",
-        "U_BUCK.5",
         "U_LDO.3",
         "C_LDO_IN.1",
         "U_GATE_A.5",
