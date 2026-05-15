@@ -45,6 +45,9 @@ class KiCadSymbol:
     at: KiCadPoint
     pins: list[KiCadPin]
     notes: list[str] = field(default_factory=list)
+    lcsc: str = ""
+    mpn: str = ""
+    manufacturer: str = ""
 
 
 @dataclass
@@ -175,6 +178,8 @@ def mapping_matches(match: dict[str, Any], ref: str, role: str, value: str) -> b
     ref_upper = ref.upper()
     role_lower = role.lower()
     value_lower = value.lower()
+    if 'ref' in match:
+        checks.append(ref_upper == str(match['ref']).upper())
     if 'ref_prefix' in match:
         checks.append(any(ref_upper.startswith(prefix.upper()) for prefix in _as_list(match['ref_prefix'])))
     if 'role_contains' in match:
@@ -202,14 +207,14 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
         note = str(mapping.get('note', ''))
         if note:
             notes.append(note)
-        return str(mapping.get('lib_id', 'AIAgent:Generic_2Pin')), normalize_footprint(package or str(mapping.get('footprint', ''))), notes
+        return str(mapping.get('lib_id', 'AIAgent:Generic_2Pin')), resolve_footprint(package, str(mapping.get('footprint', ''))), notes
 
     fallback = symbol_map.get('fallback', {})
     if isinstance(fallback, dict):
         note = str(fallback.get('note', ''))
         if note:
             notes.append(note)
-        return str(fallback.get('lib_id', 'AIAgent:Generic_2Pin')), normalize_footprint(package or str(fallback.get('footprint', ''))), notes
+        return str(fallback.get('lib_id', 'AIAgent:Generic_2Pin')), resolve_footprint(package, str(fallback.get('footprint', ''))), notes
 
     notes.append(f'Mapped unknown role "{role}" to local AIAgent:Generic_2Pin placeholder symbol.')
     return 'AIAgent:Generic_2Pin', normalize_footprint(package), notes
@@ -220,6 +225,26 @@ def normalize_footprint(footprint: str) -> str:
     if isinstance(aliases, dict):
         return str(aliases.get(footprint, footprint))
     return footprint
+
+
+def _has_library_prefix(footprint: str) -> bool:
+    """Check if a footprint string has the full 'Library:Name' format."""
+    return ':' in footprint.strip()
+
+
+def resolve_footprint(component_package: str, mapping_footprint: str) -> str:
+    """Resolve footprint: prefer component package if it has library prefix, else use mapping.
+
+    KiCad requires the full 'Library:FootprintName' format. Short names like '0603'
+    cause warnings and failures in KiCad.
+    """
+    if component_package and _has_library_prefix(component_package):
+        return normalize_footprint(component_package)
+    if mapping_footprint:
+        return normalize_footprint(mapping_footprint)
+    if component_package:
+        return normalize_footprint(component_package)
+    return ''
 
 
 def kicad_footprint_roots() -> list[Path]:
@@ -233,6 +258,17 @@ def kicad_footprint_roots() -> list[Path]:
     repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
     if repo_fp.exists():
         roots.append(repo_fp)
+    # Check project-local libs directory (for EasyEDA imported footprints)
+    output_root = env('KICAD_OUTPUT_DIR', '')
+    if output_root:
+        project_libs = Path(output_root) / 'libs'
+        if project_libs.exists():
+            roots.append(project_libs)
+    output_project = env('KICAD_OUTPUT_PROJECT_DIR', '')
+    if output_project:
+        parent_libs = Path(output_project).parent / 'libs'
+        if parent_libs.exists():
+            roots.append(parent_libs)
     for base in (Path('D:/Program Files/KiCad'), Path('C:/Program Files/KiCad')):
         if base.exists():
             roots.extend(path / 'share' / 'kicad' / 'footprints' for path in sorted(base.glob('*'), reverse=True))
@@ -579,6 +615,7 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
             block_y=block_y,
             block_slot=block_slot,
         )
+        sp = component.get('selected_part', {}) if isinstance(component.get('selected_part'), dict) else {}
         symbols.append(
             KiCadSymbol(
                 ref=ref,
@@ -589,6 +626,9 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
                 at=at,
                 pins=pins,
                 notes=notes,
+                lcsc=str(sp.get('lcsc_id', '')),
+                mpn=str(sp.get('mpn', '')),
+                manufacturer=str(sp.get('manufacturer', '')),
             )
         )
 

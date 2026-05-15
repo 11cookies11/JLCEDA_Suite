@@ -79,6 +79,15 @@ def kicad_symbol_roots() -> list[Path]:
     extra = env('KICAD_EXTRA_SYMBOL_DIR')
     if extra:
         roots.extend(Path(item) for item in extra.split(';') if item.strip())
+    # Check project-local libs directory (for custom generated symbols)
+    output_root = env('KICAD_OUTPUT_DIR', '')
+    if output_root:
+        for candidate in [
+            Path(output_root) / 'libs',
+            Path(output_root).parent / 'libs',
+        ]:
+            if candidate.exists():
+                roots.append(candidate)
     for base in (Path('D:/Program Files/KiCad'), Path('C:/Program Files/KiCad')):
         if base.exists():
             roots.extend(path / 'share' / 'kicad' / 'symbols' for path in sorted(base.glob('*'), reverse=True))
@@ -447,6 +456,16 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
 
     ref_y = y - 7.62 if lib_id == 'MCU_Espressif:ESP32-C3' else y - 5.08
     value_y = y + 7.62 if lib_id == 'MCU_Espressif:ESP32-C3' else y + 5.08
+    lcsc = str(symbol.get('lcsc', ''))
+    mpn = str(symbol.get('mpn', ''))
+    manufacturer = str(symbol.get('manufacturer', ''))
+    extra_props = ""
+    if lcsc:
+        extra_props += f'\n      (property "LCSC" {q(lcsc)} (at 0 0 0)\n        (hide yes)\n        (effects (font (size 1.27 1.27)))\n      )'
+    if mpn:
+        extra_props += f'\n      (property "MPN" {q(mpn)} (at 0 0 0)\n        (hide yes)\n        (effects (font (size 1.27 1.27)))\n      )'
+    if manufacturer:
+        extra_props += f'\n      (property "Manufacturer" {q(manufacturer)} (at 0 0 0)\n        (hide yes)\n        (effects (font (size 1.27 1.27)))\n      )'
     return f'''  (symbol
     (lib_id {q(lib_id)})
     (at {fmt(x)} {fmt(y)} {fmt(rotation)})
@@ -465,7 +484,7 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
     (property "Footprint" {q(footprint)} (at {fmt(x)} {fmt(y)} 0)
       (hide yes)
       (effects (font (size 1.27 1.27)))
-    )
+    ){extra_props}
 {chr(10).join(pin_lines)}
     (instances
       (project {q(project_name)}
@@ -1012,52 +1031,138 @@ def write_hierarchical_project(plan: dict[str, Any], output_dir: Path, schematic
     }
 
 
-def render_project() -> str:
-    return json.dumps(
-        {
-            'board': {
-                'design_settings': {
-                    'defaults': {},
-                    'rules': {},
-                }
-            },
+def render_project(output_dir: str | Path | None = None) -> str:
+    project_json: dict[str, Any] = {
+        'board': {
+            'design_settings': {
+                'defaults': {},
+                'rules': {},
+            }
+        },
+        'meta': {
+            'version': 1,
+        },
+        'net_settings': {
+            'classes': [],
             'meta': {
-                'version': 1,
-            },
-            'net_settings': {
-                'classes': [],
-                'meta': {
-                    'version': 3,
-                },
-            },
-            'schematic': {
-                'drawing': {},
-                'legacy_lib_dir': '',
-                'legacy_lib_list': [],
+                'version': 3,
             },
         },
-        ensure_ascii=False,
-        indent=2,
-    ) + '\n'
+        'schematic': {
+            'drawing': {},
+            'legacy_lib_dir': '',
+            'legacy_lib_list': [],
+        },
+    }
+
+    # Add project-local JLC libraries if they exist
+    if output_dir:
+        output_path = Path(output_dir)
+        pinned_fp: list[dict[str, str]] = []
+        pinned_sym: list[dict[str, str]] = []
+
+        jlc_fp_dir = _find_jlc_lib_dir(output_path)
+        jlc_sym_file = _find_jlc_sym_file(output_path)
+
+        if jlc_fp_dir:
+            try:
+                rel = Path(os.path.relpath(str(jlc_fp_dir), str(output_path.resolve())))
+            except ValueError:
+                rel = jlc_fp_dir
+            uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
+            pinned_fp.append({
+                "name": "jlc_footprints",
+                "type": "KiCad",
+                "uri": uri,
+                "options": "",
+                "description": "JLC/LCSC imported footprints",
+            })
+
+        if jlc_sym_file:
+            try:
+                rel = Path(os.path.relpath(str(jlc_sym_file), str(output_path.resolve())))
+            except ValueError:
+                rel = jlc_sym_file
+            uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
+            pinned_sym.append({
+                "name": "jlc_symbols",
+                "type": "KiCad",
+                "uri": uri,
+                "options": "",
+                "description": "JLC/LCSC imported symbols",
+            })
+
+        if pinned_fp or pinned_sym:
+            project_json['libraries'] = {
+                'pinned_footprint_libs': pinned_fp,
+                'pinned_symbol_libs': pinned_sym,
+            }
+
+    return json.dumps(project_json, ensure_ascii=False, indent=2) + '\n'
+
+
+def _find_jlc_lib_dir(output_dir: Path) -> Path | None:
+    """Find the JLC footprint library directory relative to the project."""
+    for candidate in [
+        output_dir / 'libs' / 'jlc_footprints.pretty',
+        output_dir.parent / 'libs' / 'jlc_footprints.pretty',
+    ]:
+        if candidate.exists():
+            return candidate
+    return None
+
+
+def _find_jlc_sym_file(output_dir: Path) -> Path | None:
+    """Find the JLC symbol library file relative to the project."""
+    for candidate in [
+        output_dir / 'libs' / 'jlc_symbols.kicad_sym',
+        output_dir.parent / 'libs' / 'jlc_symbols.kicad_sym',
+    ]:
+        if candidate.exists():
+            return candidate
+    return None
 
 
 def write_fp_lib_table(output_dir: Path) -> None:
-    repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
-    if not repo_fp.exists():
-        return
     output_resolved = output_dir.resolve()
     lines = ['(fp_lib_table']
-    for pretty_dir in sorted(repo_fp.glob('*.pretty')):
-        lib_name = pretty_dir.name.rsplit('.', 1)[0]
+
+    # Repo AIAgent footprints
+    repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
+    if repo_fp.exists():
+        for pretty_dir in sorted(repo_fp.glob('*.pretty')):
+            lib_name = pretty_dir.name.rsplit('.', 1)[0]
+            try:
+                rel = Path(os.path.relpath(str(pretty_dir), str(output_resolved)))
+            except ValueError:
+                rel = pretty_dir
+            uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
+            lines.append(f'  (lib (name "{lib_name}")(type "KiCad")(uri "{uri}")(options "")(descr "AIAgent custom footprints"))')
+
+    # JLC/LCSC imported footprints
+    jlc_fp = _find_jlc_lib_dir(output_dir)
+    if jlc_fp:
         try:
-            rel = Path(os.path.relpath(str(pretty_dir), str(output_resolved)))
+            rel = Path(os.path.relpath(str(jlc_fp), str(output_resolved)))
         except ValueError:
-            rel = pretty_dir
+            rel = jlc_fp
         uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
-        lines.append(f'  (lib (name "{lib_name}")(type "KiCad")(uri "{uri}")(options "")(descr "AIAgent custom footprints"))')
+        lines.append(f'  (lib (name "jlc_footprints")(type "KiCad")(uri "{uri}")(options "")(descr "JLC/LCSC imported footprints"))')
+
     lines.append(')\n')
     content = '\n'.join(lines)
     (output_dir / 'fp-lib-table').write_text(content, encoding='utf-8')
+
+    # Also write sym-lib-table for JLC symbols
+    jlc_sym = _find_jlc_sym_file(output_dir)
+    if jlc_sym:
+        try:
+            rel = Path(os.path.relpath(str(jlc_sym), str(output_resolved)))
+        except ValueError:
+            rel = jlc_sym
+        uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
+        sym_content = f'(sym_lib_table\n  (lib (name "jlc_symbols")(type "KiCad")(uri "{uri}")(options "")(descr "JLC/LCSC imported symbols"))\n)\n'
+        (output_dir / 'sym-lib-table').write_text(sym_content, encoding='utf-8')
 
 
 def write_project(plan: dict[str, Any]) -> dict[str, Any]:
@@ -1071,7 +1176,7 @@ def write_project(plan: dict[str, Any]) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
     project_file.parent.mkdir(parents=True, exist_ok=True)
     schematic_file.parent.mkdir(parents=True, exist_ok=True)
-    project_file.write_text(render_project(), encoding='utf-8')
+    project_file.write_text(render_project(output_dir), encoding='utf-8')
     write_fp_lib_table(output_dir)
     hierarchical = env('KICAD_HIERARCHICAL_SHEETS', '').strip().lower() in {'1', 'true', 'yes', 'on'}
     hierarchical_summary: dict[str, Any] = {}

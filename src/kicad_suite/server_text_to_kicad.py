@@ -19,9 +19,10 @@ from .circuit_pipeline import (
     synthesize_circuit_model,
 )
 from .compile_kicad_execution_plan import compile_plan, write_output
-from .env_utils import is_truthy_env
+from .env_utils import is_truthy_env, env
 from .kicad_erc_runner import run as run_kicad_erc
 from .kicad_project_writer import write_project
+from .parts_pipeline import run_parts_pipeline
 
 
 def write_json(path: Path, payload: Any) -> None:
@@ -51,6 +52,21 @@ def run() -> None:
     if is_truthy_env('KICAD_RUN_ERC', 'false'):
         os.environ['KICAD_EXECUTION_PLAN_FILE'] = plan_file
         erc_summary = run_kicad_erc(emit=False)
+
+    # Optional: run Parts Pipeline (LCSC resolve → select → part.lock.yaml)
+    parts_result: dict[str, Any] = {}
+    if is_truthy_env('KICAD_PARTS_PIPELINE', 'false'):
+        output_dir = Path(plan.target.output_dir)
+        project_name = env('KICAD_PROJECT_NAME', model.topology or spec.request_id)
+        try:
+            parts_result = run_parts_pipeline(
+                asdict(model),
+                output_dir,
+                project_name=project_name,
+                run_importer=is_truthy_env('KICAD_PARTS_IMPORT', 'false'),
+            )
+        except Exception as parts_error:
+            parts_result = {"error": str(parts_error)}
 
     output_dir = Path(plan.target.output_dir)
     requirement_file = output_dir / 'requirement-spec.json'
@@ -85,6 +101,8 @@ def run() -> None:
             'kicad_write_summary': write_summary.get('summary_file'),
             'kicad_erc_summary': erc_summary.get('summary_file'),
             'kicad_erc_report': erc_summary.get('output_file'),
+            'part_lock': parts_result.get('lock_file', ''),
+            'part_risk_report': parts_result.get('risk_report_file', ''),
         },
         'counts': {
             'components': len(model.components),
@@ -103,6 +121,7 @@ def run() -> None:
                 'error': ngspice_execution.error,
                 'recommendations': ngspice_feedback.recommendations,
             },
+            'parts_pipeline': parts_result.get('summary', parts_result.get('warning', parts_result.get('error', ''))),
         },
     }
     write_json(pipeline_file, summary)

@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/part-lock.v1.json",
+  "title": "Part Lock v1 — Lock file schema",
+
+  "definitions": {
+    "LockedPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref", "role", "mpn", "lcsc_id", "package", "source", "risk"],
+      "properties": {
+        "ref": { "type": "string", "description": "Reference designator, e.g. U1, R1" },
+        "role": { "type": "string", "description": "Component role, e.g. main_mcu, power_ldo" },
+        "mpn": { "type": "string", "description": "Manufacturer part number" },
+        "value": { "type": "string", "description": "Component value, e.g. 10k, 100nF" },
+        "lcsc_id": { "type": "string", "description": "LCSC part number, e.g. C2040" },
+        "package": { "type": "string", "description": "Physical package, e.g. SOT-223, 0603" },
+        "source": { "type": "string", "description": "Part source, e.g. LCSC/EasyEDA" },
+        "kicad_symbol": { "type": "string", "description": "KiCad symbol library reference, e.g. JLC:ESP32-C3-WROOM-02" },
+        "kicad_footprint": { "type": "string", "description": "KiCad footprint library reference" },
+        "risk": { "type": "string", "enum": ["low", "medium", "high"], "description": "EasyEDA import risk level" },
+        "note": { "type": "string", "description": "Human note or risk explanation" },
+        "imported_at": { "type": "string", "format": "date-time" },
+        "price": { "type": ["number", "null"] },
+        "status": { "type": "string", "enum": ["locked", "review"] }
+      }
+    }
+  },
+
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "parts"],
+  "properties": {
+    "schema_version": { "type": "string", "const": "part-lock.v1" },
+    "project": { "type": "string", "description": "Project name, e.g. esp32-c3-debugger" },
+    "generated_at": { "type": "string", "format": "date-time" },
+    "parts": { "type": "array", "items": { "$ref": "#/definitions/LockedPart" } }
+  }
+}

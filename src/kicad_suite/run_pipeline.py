@@ -14,8 +14,10 @@ from .circuit_pipeline import (
     build_netlist_from_circuit_model,
 )
 from .compile_kicad_execution_plan import compile_plan, write_output, KiCadExecutionPlan
+from .env_utils import is_truthy_env
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import write_project
+from .parts_pipeline import run_parts_pipeline
 
 
 def load_json(path: str) -> dict[str, Any]:
@@ -88,6 +90,19 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     except Exception as exc:
         erc_result = {'error': str(exc)}
 
+    # Optional: run Parts Pipeline
+    parts_result: dict[str, Any] = {}
+    if is_truthy_env('KICAD_PARTS_PIPELINE', 'false'):
+        try:
+            parts_result = run_parts_pipeline(
+                model,
+                output,
+                project_name=project_name,
+                run_importer=is_truthy_env('KICAD_PARTS_IMPORT', 'false'),
+            )
+        except Exception as exc:
+            parts_result = {"error": str(exc)}
+
     summary = {
         'project_name': project_name,
         'output_dir': str(output),
@@ -97,6 +112,8 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             'project': result.get('project_file'),
             'schematic': result.get('schematic_file'),
             'summary': result.get('summary_file'),
+            'part_lock': parts_result.get('lock_file', ''),
+            'part_risk_report': parts_result.get('risk_report_file', ''),
         },
         'counts': {
             'symbols': result.get('symbol_count', 0),

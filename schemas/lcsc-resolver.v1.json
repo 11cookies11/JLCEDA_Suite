@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/lcsc-resolver.v1.json",
+  "title": "LCSC Resolver v1 — Input/Output schemas",
+
+  "definitions": {
+    "PartRequirement": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "function"],
+      "properties": {
+        "id": { "type": "string", "description": "Unique requirement id, e.g. 'power_ldo'" },
+        "function": { "type": "string", "description": "Human description, e.g. '3.3V LDO regulator'" },
+        "preferred_mpn": {
+          "type": "array", "items": { "type": "string" },
+          "description": "Preferred manufacturer part numbers in priority order"
+        },
+        "package_preferred": {
+          "type": "array", "items": { "type": "string" },
+          "description": "Preferred packages, e.g. ['SOT-223']"
+        },
+        "voltage_min": { "type": "number" },
+        "current_min": { "type": "number" },
+        "output_voltage": { "type": "number", "description": "Required output voltage, e.g. 3.3" },
+        "assembly": { "type": "string", "description": "Assembly service, e.g. JLCPCB", "default": "JLCPCB" },
+        "price_max": { "type": "number", "description": "Maximum acceptable unit price in USD" },
+        "category": { "type": "string", "description": "Override category; auto-inferred from function if empty" },
+        "exclude_mpn": { "type": "array", "items": { "type": "string" } },
+        "in_stock_only": { "type": "boolean", "default": true },
+        "basic_only": { "type": "boolean", "default": false }
+      }
+    },
+
+    "ResolvedPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lcsc_id", "mpn", "manufacturer", "package", "description", "stock", "basic_or_extended", "has_easyeda_symbol", "has_easyeda_footprint", "has_3d_model", "source", "confidence"],
+      "properties": {
+        "lcsc_id": { "type": "string", "description": "LCSC part number, e.g. 'C2040'. Empty for community results." },
+        "mpn": { "type": "string" },
+        "manufacturer": { "type": "string" },
+        "package": { "type": "string" },
+        "description": { "type": "string" },
+        "stock": { "type": "integer" },
+        "basic_or_extended": { "type": "string", "enum": ["Basic", "Extended", ""] },
+        "price": { "type": ["number", "null"], "description": "Unit price in USD from JLCPCB" },
+        "has_easyeda_symbol": { "type": "boolean" },
+        "has_easyeda_footprint": { "type": "boolean" },
+        "has_3d_model": { "type": "boolean" },
+        "source": { "type": "string", "enum": ["jlcpcb_parts", "easyeda_community"] },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 }
+      }
+    },
+
+    "ResolverResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "candidates", "query_context"],
+      "properties": {
+        "id": { "type": "string" },
+        "candidates": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ResolvedPart" }
+        },
+        "query_context": {
+          "type": "object"
+        }
+      }
+    }
+  }
+}

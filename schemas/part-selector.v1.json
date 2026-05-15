@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://jlceda-suite.local/schema/part-selector.v1.json",
+  "title": "Part Selector v1 — Selection result schemas",
+
+  "definitions": {
+    "RiskItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["category", "message", "level"],
+      "properties": {
+        "category": { "type": "string", "description": "Risk category, e.g. 'stock_risk', 'package_risk'" },
+        "message": { "type": "string", "description": "Human-readable risk description" },
+        "level": { "type": "string", "enum": ["low", "medium", "high"] }
+      }
+    },
+
+    "SelectedPart": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requirement_id", "lcsc_id", "mpn", "manufacturer", "package",
+        "description", "stock", "basic_or_extended",
+        "has_easyeda_symbol", "has_easyeda_footprint", "has_3d_model",
+        "source", "confidence", "composite_score", "reasons", "risks", "needs_review"
+      ],
+      "properties": {
+        "requirement_id": { "type": "string" },
+        "lcsc_id": { "type": "string" },
+        "mpn": { "type": "string" },
+        "manufacturer": { "type": "string" },
+        "package": { "type": "string" },
+        "description": { "type": "string" },
+        "price": { "type": ["number", "null"] },
+        "stock": { "type": "integer" },
+        "basic_or_extended": { "type": "string" },
+        "has_easyeda_symbol": { "type": "boolean" },
+        "has_easyeda_footprint": { "type": "boolean" },
+        "has_3d_model": { "type": "boolean" },
+        "source": { "type": "string" },
+        "confidence": { "type": "number", "minimum": 0, "maximum": 1 },
+        "composite_score": { "type": "number", "minimum": 0, "maximum": 100 },
+        "reasons": { "type": "array", "items": { "type": "string" } },
+        "risks": { "type": "array", "items": { "$ref": "#/definitions/RiskItem" } },
+        "needs_review": { "type": "boolean" },
+        "value": { "type": "string", "description": "Component value, e.g. 10k, 100nF" },
+        "note": { "type": "string", "description": "Human note" }
+      }
+    },
+
+    "SelectionResult": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["requirement_id", "selected", "all_candidates", "summary"],
+      "properties": {
+        "requirement_id": { "type": "string" },
+        "selected": { "anyOf": [{ "$ref": "#/definitions/SelectedPart" }, { "type": "null" }] },
+        "all_candidates": { "type": "array", "items": { "$ref": "#/definitions/SelectedPart" } },
+        "summary": { "type": "string" }
+      }
+    }
+  }
+}

@@ -33,6 +33,12 @@
       "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
     },
     {
+      "match": { "role_contains": ["stm32", "stm32f103", "mcu"] },
+      "lib_id": "MCU_ST_STM32F1:STM32F103C8Tx",
+      "footprint": "Package_QFP:LQFP-48_7x7mm_P0.5mm",
+      "note": "STM32F103C8Tx — ARM Cortex-M3, 64KB Flash, LQFP-48"
+    },
+    {
       "match": { "role_contains": ["rp2040"], "value_contains": ["rp2040"] },
       "lib_id": "AIAgent:RP2040_QFN56",
       "footprint": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
@@ -136,6 +142,7 @@
     "AIAgent:LDO_3V3": [22.86, 17.78],
     "AIAgent:QSPI_Flash": [25.4, 27.94],
     "AIAgent:RP2040_QFN56": [76.2, 106.68],
+    "MCU_ST_STM32F1:STM32F103C8Tx": [55.88, 76.2],
     "MCU_Espressif:ESP32-C3": [50.8, 55.88],
     "Connector:USB_C_Receptacle": [20.32, 17.78]
   }
