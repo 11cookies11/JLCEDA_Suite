@@ -138,11 +138,8 @@ def _installed_asset_exists(project_dir: Path, lcsc_id: str) -> bool:
 
 
 def _project_uri(project_dir: Path, target: Path) -> str:
-    try:
-        rel = target.resolve().relative_to(project_dir.resolve())
-        return "${KIPRJMOD}/" + rel.as_posix()
-    except ValueError:
-        return target.resolve().as_posix()
+    """Return absolute URI — KiCad 10.0 does not resolve ${KIPRJMOD} reliably."""
+    return target.resolve().as_posix()
 
 
 def _write_project_lib_tables(project_dir: Path) -> dict[str, Any]:
@@ -182,6 +179,98 @@ def _write_project_lib_tables(project_dir: Path) -> dict[str, Any]:
     }
 
 
+def _fix_3d_model_paths(project_dir: Path) -> dict[str, Any]:
+    """Replace ${KICAD9_3RD_PARTY} variable with absolute paths in all .kicad_mod files.
+
+    JLC MCP generates footprints referencing ${KICAD9_3RD_PARTY}/jlc_mcp/3dmodels/...
+    which does not exist in KiCad 10.0. Replace with absolute paths to the project's
+    3dmodels directory.
+    """
+    import re
+    model_dir = (project_dir / "libraries" / "3dmodels" / "JLC-MCP.3dshapes").resolve()
+    fp_dir = project_dir / "libraries" / "footprints" / "JLC-MCP.pretty"
+    if not fp_dir.exists():
+        return {"fixed": 0, "footprint_dir_missing": True}
+
+    old_prefix = "${KICAD9_3RD_PARTY}/jlc_mcp/3dmodels/JLC-MCP.3dshapes/"
+    new_prefix = model_dir.as_posix() + "/"
+    fixed = 0
+    for fp_file in fp_dir.glob("*.kicad_mod"):
+        content = fp_file.read_text(encoding="utf-8")
+        if old_prefix in content:
+            fp_file.write_text(content.replace(old_prefix, new_prefix), encoding="utf-8")
+            fixed += 1
+
+    return {"fixed": fixed, "model_dir": str(model_dir)}
+
+
+def _register_global_libraries(project_dir: Path) -> dict[str, Any]:
+    """Copy JLC-MCP symbols and footprints to KiCad global library directory.
+
+    KiCad 10.0 does not reliably load project-level sym-lib-table / fp-lib-table.
+    Copying to the global KiCad library directory and registering in the global
+    table ensures symbols, footprints, and 3D models are always available.
+    """
+    import shutil
+    home = Path.home()
+    kicad_global = home / "AppData" / "Roaming" / "kicad" / "10.0"
+    global_libs = kicad_global / "libraries"
+
+    result: dict[str, Any] = {"global_lib_dir": str(global_libs)}
+
+    # Copy symbol libraries
+    symbols_dir = project_dir / "libraries" / "symbols"
+    if symbols_dir.exists():
+        global_libs.mkdir(parents=True, exist_ok=True)
+        for sym_file in symbols_dir.glob("JLC-MCP-*.kicad_sym"):
+            shutil.copy2(sym_file, global_libs / sym_file.name)
+        result["symbols_copied"] = len(list(symbols_dir.glob("JLC-MCP-*.kicad_sym")))
+
+    # Copy footprint libraries
+    fp_dir = project_dir / "libraries" / "footprints" / "JLC-MCP.pretty"
+    if fp_dir.exists():
+        global_fp = global_libs / "JLC-MCP.pretty"
+        if global_fp.exists():
+            shutil.rmtree(global_fp)
+        shutil.copytree(fp_dir, global_fp)
+        result["footprints_copied"] = len(list(global_fp.glob("*.kicad_mod")))
+
+    # Copy 3D models
+    model_dir = project_dir / "libraries" / "3dmodels" / "JLC-MCP.3dshapes"
+    if model_dir.exists():
+        global_3d = global_libs / "JLC-MCP.3dshapes"
+        global_3d.mkdir(parents=True, exist_ok=True)
+        for step_file in model_dir.glob("*.step"):
+            shutil.copy2(step_file, global_3d / step_file.name)
+        result["models_copied"] = len(list(model_dir.glob("*.step")))
+
+    # Update global sym-lib-table
+    sym_table_path = kicad_global / "sym-lib-table"
+    if sym_table_path.exists():
+        content = sym_table_path.read_text(encoding="utf-8")
+        for sym_file in sorted((global_libs).glob("JLC-MCP-*.kicad_sym")):
+            name = sym_file.stem
+            uri = sym_file.resolve().as_posix()
+            entry = f'  (lib (name "{name}")(type "KiCad")(uri "{uri}")(options "")(descr "JLC-MCP {name}"))\n'
+            if name not in content:
+                content = content.replace(")", entry + ")", 1)
+        sym_table_path.write_text(content, encoding="utf-8")
+        result["sym_table_updated"] = True
+
+    # Update global fp-lib-table
+    fp_table_path = kicad_global / "fp-lib-table"
+    if fp_table_path.exists():
+        content = fp_table_path.read_text(encoding="utf-8")
+        if "JLC-MCP" not in content:
+            uri = (global_libs / "JLC-MCP.pretty").resolve().as_posix()
+            entry = f'  (lib (name "JLC-MCP")(type "KiCad")(uri "{uri}")(options "")(descr "JLC-MCP footprints (EasyEDA origin)"))\n'
+            content = content.replace(")", entry + ")", 1)
+            fp_table_path.write_text(content, encoding="utf-8")
+        result["fp_table_updated"] = True
+
+    return result
+
+
 def main() -> None:
     selections_file = _arg_value("--selections")
     project_dir_raw = _arg_value("--project-dir")
@@ -203,11 +292,15 @@ def main() -> None:
 
     if register_only:
         lib_tables = _write_project_lib_tables(project_dir)
+        model_fix = _fix_3d_model_paths(project_dir)
+        global_reg = _register_global_libraries(project_dir)
         report = {
             "ok": True,
             "project_dir": str(project_dir),
             "register_only": True,
             "library_tables": lib_tables,
+            "3d_path_fix": model_fix,
+            "global_registration": global_reg,
         }
         rendered = json.dumps(report, indent=2, ensure_ascii=False)
         output_path = Path(output_raw) if output_raw else project_dir / "jlc-mcp-install-report.json"
@@ -237,6 +330,8 @@ def main() -> None:
     ]
 
     lib_tables = _write_project_lib_tables(project_dir)
+    model_fix = _fix_3d_model_paths(project_dir)
+    global_reg = _register_global_libraries(project_dir)
 
     report = {
         "ok": all(item.get("ok") for item in results) if results else True,
@@ -248,6 +343,8 @@ def main() -> None:
         "installed_count": sum(1 for item in results if item.get("ok")),
         "failed_count": sum(1 for item in results if not item.get("ok")),
         "library_tables": lib_tables,
+        "3d_path_fix": model_fix,
+        "global_registration": global_reg,
         "results": results,
     }
 

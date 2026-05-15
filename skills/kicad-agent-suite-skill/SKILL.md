@@ -454,3 +454,36 @@ for m in re.finditer(r'\(symbol \"(JLC-MCP-[^\"]+)\"', sch):
 ### Known Edge Case
 
 JLC MCP may miscategorize some symbols (e.g., placing `DB2EVC` and `KF2EDGR` connectors in `JLC-MCP-Capacitors.kicad_sym`). The injection script searches ALL `JLC-MCP-*.kicad_sym` files, so miscategorized symbols will still be found and injected under their correct library prefix.
+
+## Root Cause: KiCad 10.0 Path Resolution
+
+JLC MCP (`@jlcpcb/mcp`) generates KiCad files with path variables that do not resolve in KiCad 10.0:
+
+| Asset | JLC MCP Output | Problem | Fix |
+|-------|---------------|---------|-----|
+| Symbols | `${KIPRJMOD}` in sym-lib-table | KiCad 10.0 doesn't load project sym-lib-table | Embed in `.kicad_sch` via `_inject_jlc_symbols()` |
+| Footprints | `${KIPRJMOD}` in fp-lib-table | Same — project fp-lib-table not loaded | Copy to global `%APPDATA%/kicad/10.0/libraries/` |
+| 3D Models | `${KICAD9_3RD_PARTY}` in `.kicad_mod` | Variable removed in KiCad 10.0 | Replace with absolute paths via `_fix_3d_model_paths()` |
+
+**Automatic fix**: `install_jlc_mcp_parts.py` (v2) now runs three post-install steps:
+
+1. `_write_project_lib_tables()` — writes sym/fp-lib-tables with **absolute** URIs
+2. `_fix_3d_model_paths()` — replaces `${KICAD9_3RD_PARTY}` with absolute 3D model paths
+3. `_register_global_libraries()` — copies symbols/footprints/3D models to KiCad global library directory and updates global sym/fp-lib-tables
+
+`run_pipeline.py` automatically invokes `install_jlc_mcp_parts.py --register-only` after schematic generation.
+
+**Manual fix** (if automation fails):
+```powershell
+python scripts/install_jlc_mcp_parts.py --project-dir <project-dir> --register-only
+```
+
+**Verification**:
+```powershell
+# Check symbols render
+kicad-cli sch export svg -o ./preview/ <project>.kicad_sch
+# Check global fp-lib-table has JLC-MCP
+cat $env:APPDATA/kicad/10.0/fp-lib-table
+# Check 3D model paths in footprints
+python -c "import re; from pathlib import Path; fp=Path('...kicad_mod'); [print(m.group(1)) for m in re.finditer(r'\(model\s+\"([^\"]+)\"', fp.read_text())]"
+```

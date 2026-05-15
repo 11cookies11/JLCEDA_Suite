@@ -180,6 +180,18 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         except Exception:
             pass
 
+    # Auto-register JLC-MCP libraries: fix sym/fp-lib-tables, 3D paths, global registration
+    project_dir = schematic_file.parent if schematic_file.exists() else output / project_name
+    try:
+        import subprocess, sys
+        install_script = str(Path(__file__).resolve().parents[2] / 'scripts' / 'install_jlc_mcp_parts.py')
+        subprocess.run(
+            [sys.executable, install_script, '--project-dir', str(project_dir), '--register-only'],
+            capture_output=True, text=True, timeout=30, check=False,
+        )
+    except Exception:
+        pass
+
     erc_result = {'enabled': False, 'attempted': False, 'finding_count': 0}
     os.environ['KICAD_SCHEMATIC_FILE'] = str(result['schematic_file'])
     try:
