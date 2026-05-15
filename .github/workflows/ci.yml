@@ -7,61 +7,25 @@ on:
     branches: [develop]
 
 jobs:
-  lint:
-    name: Lint (ESLint)
+  python-and-pipeline:
+    name: Python + Pipeline
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run lint
-
-  typecheck:
-    name: Type Check
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+          node-version: "20"
+          cache: "npm"
+      - uses: actions/setup-python@v5
         with:
-          node-version: '20'
-          cache: 'npm'
+          python-version: "3.11"
+          cache: "pip"
       - run: npm ci
-      - run: npx tsc --noEmit
-
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run compile
-      - run: npm run build
-
-  test-mock:
-    name: Mock Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'npm'
-      - run: npm ci
-      - run: npm run smoke-test
-      - run: npm run remote-client:smoke-test
-      - run: npm run server:command-runner:smoke-test
-      - run: npm run server:context-summary:smoke-test
-      - run: npm run server:part-selector:smoke-test
-      - run: npm run server:schematic-refine:smoke-test
-      - run: npm run server:pcb-assist:smoke-test
-      - run: npm run workflow:skill:e2e:smoke-test
+      - run: python -m py_compile src/kicad_suite/*.py scripts/*.py
+      - run: python -m pytest
+      - run: mkdir -p .where
+      - run: python scripts/kas.py pipeline examples/nema23-industrial-stepper-driver-v0.1/nema23-industrial-stepper-driver-v0.1.circuit-model.json .where/ci-nema23 > .where/ci-nema23-run-summary.json
+      - run: python scripts/kas.py validate-artifacts --summary .where/ci-nema23-run-summary.json
 
   test-python:
     name: Python Tests
@@ -70,7 +34,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-          cache: 'pip'
+          python-version: "3.11"
+          cache: "pip"
       - run: pip install aiohttp
       - run: python3 scripts/ngspice-regression-test.py

@@ -198,7 +198,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     try:
         erc_result = run_erc(emit=False)
     except Exception as exc:
-        erc_result = {'error': str(exc)}
+        erc_result = {'enabled': False, 'attempted': True, 'success': False, 'finding_count': 0, 'error': str(exc)}
 
     # Optional: run Parts Pipeline
     parts_result: dict[str, Any] = {}
@@ -222,6 +222,8 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             'project': result.get('project_file'),
             'schematic': result.get('schematic_file'),
             'summary': result.get('summary_file'),
+            'kicad_erc_summary': erc_result.get('summary_file', ''),
+            'kicad_erc_report': erc_result.get('output_file', ''),
             'part_lock': parts_result.get('lock_file', ''),
             'part_risk_report': parts_result.get('risk_report_file', ''),
         },
@@ -230,9 +232,16 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             'nets': result.get('net_count', 0),
         },
         'erc': {
+            'schema_version': erc_result.get('schema_version', ''),
+            'enabled': erc_result.get('enabled', False),
+            'attempted': erc_result.get('attempted', False),
             'success': erc_result.get('success', False),
+            'return_code': erc_result.get('return_code', None),
             'findings': erc_result.get('finding_count', 0),
             'executable': erc_result.get('executable', ''),
+            'summary_file': erc_result.get('summary_file', ''),
+            'output_file': erc_result.get('output_file', ''),
+            'error': erc_result.get('error', ''),
         },
         'diagnostics': asdict(plan.diagnostics) if hasattr(plan, 'diagnostics') else {},
         'symbols_injected': symbols_injected,
