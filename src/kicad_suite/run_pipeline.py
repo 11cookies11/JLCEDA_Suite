@@ -70,6 +70,94 @@ def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
     return asdict(netlist_obj)
 
 
+def _inject_jlc_symbols(schematic_path: Path) -> bool:
+    """Replace JLC-MCP 2-pin stubs with full symbol definitions from library files."""
+    import re
+    sym_dir = schematic_path.parent / 'libraries' / 'symbols'
+    if not sym_dir.exists():
+        return False
+
+    sch = schematic_path.read_text(encoding='utf-8')
+    lib_start = sch.find('(lib_symbols')
+    if lib_start < 0:
+        return False
+
+    depth = 0
+    lib_end = lib_start
+    for i in range(lib_start, len(sch)):
+        if sch[i] == '(':
+            depth += 1
+        elif sch[i] == ')':
+            depth -= 1
+            if depth == 0:
+                lib_end = i + 1
+                break
+    lib_section = sch[lib_start:lib_end]
+
+    replaced = 0
+    for lib_file in sorted(sym_dir.glob('JLC-MCP-*.kicad_sym')):
+        lib_name = lib_file.stem
+        lib_content = lib_file.read_text(encoding='utf-8')
+        for sym_match in re.finditer(r'\(symbol\s+\"([^\"]+)\"', lib_content):
+            sym_name = sym_match.group(1)
+            if re.search(r'_\d+_\d+$', sym_name):
+                continue
+            full_lib_id = lib_name + ':' + sym_name
+            if ('(symbol "' + full_lib_id + '"') not in lib_section:
+                continue
+            s = sym_match.start()
+            d2, e = 0, s
+            for j in range(s, len(lib_content)):
+                if lib_content[j] == '(':
+                    d2 += 1
+                elif lib_content[j] == ')':
+                    d2 -= 1
+                    if d2 == 0:
+                        e = j + 1
+                        break
+            full_def = lib_content[s:e]
+            derived = []
+            pat = re.compile(r'\(symbol\s+\"' + re.escape(sym_name) + r'_\d+_\d+\"')
+            for dm in pat.finditer(lib_content):
+                ds = dm.start()
+                d3, de2 = 0, ds
+                for j in range(ds, len(lib_content)):
+                    if lib_content[j] == '(':
+                        d3 += 1
+                    elif lib_content[j] == ')':
+                        d3 -= 1
+                        if d3 == 0:
+                            de2 = j + 1
+                            break
+                dname = dm.group(0).split('"')[1]
+                derived.append((dname, lib_content[ds:de2]))
+            si = lib_section.find('(symbol "' + full_lib_id + '"')
+            if si < 0:
+                continue
+            d4, se = 0, si
+            for j in range(si, len(lib_section)):
+                if lib_section[j] == '(':
+                    d4 += 1
+                elif lib_section[j] == ')':
+                    d4 -= 1
+                    if d4 == 0:
+                        se = j + 1
+                        break
+            old_stub = lib_section[si:se]
+            new_content = full_def.replace('(symbol "' + sym_name + '"', '(symbol "' + full_lib_id + '"', 1)
+            for dname, ddef in derived:
+                prefixed = lib_name + ':' + dname
+                ddef2 = ddef.replace('(symbol "' + dname + '"', '(symbol "' + prefixed + '"', 1)
+                new_content += '\n' + ddef2
+            lib_section = lib_section.replace(old_stub, new_content.strip(), 1)
+            replaced += 1
+
+    if replaced > 0:
+        new_sch = sch[:lib_start] + lib_section + sch[lib_end:]
+        schematic_path.write_text(new_sch, encoding='utf-8')
+    return replaced > 0
+
+
 def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     model = load_json(model_path)
     project_name = model.get('topology', model.get('request_id', 'kicad_project'))
@@ -82,6 +170,15 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     plan_file = write_output(plan)
 
     result = write_project(asdict(plan))
+
+    # Post-process: inject full JLC-MCP symbol definitions (replace 2-pin stubs)
+    schematic_file = Path(result.get('schematic_file', ''))
+    symbols_injected = False
+    if schematic_file.exists():
+        try:
+            symbols_injected = _inject_jlc_symbols(schematic_file)
+        except Exception:
+            pass
 
     erc_result = {'enabled': False, 'attempted': False, 'finding_count': 0}
     os.environ['KICAD_SCHEMATIC_FILE'] = str(result['schematic_file'])
@@ -125,6 +222,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             'executable': erc_result.get('executable', ''),
         },
         'diagnostics': asdict(plan.diagnostics) if hasattr(plan, 'diagnostics') else {},
+        'symbols_injected': symbols_injected,
     }
     return summary
 

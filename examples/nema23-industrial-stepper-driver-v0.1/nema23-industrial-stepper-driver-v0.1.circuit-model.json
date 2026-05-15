@@ -13,10 +13,15 @@
         "display_name": "2-pin high-current power input terminal",
         "package": "TerminalBlock:TerminalBlock_bornier-2_P5.08mm",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "C441193",
+        "mpn": "KF2EDGR-5.0-2P",
+        "manufacturer": "Cixi Kefa Elec",
+        "kicad_symbol": "JLC-MCP-Connectors:KF2EDGR-5_0-2P",
+        "kicad_footprint": "JLC-MCP:KF2EDGR-5.0-2P"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "1=VM_IN, 2=GND. Final current rating and pitch require LCSC selection."
       ]
@@ -182,10 +187,15 @@
         "display_name": "60V-capable 5V buck regulator",
         "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
         "pin_count": 8,
-        "named_pin_count": 8
+        "named_pin_count": 8,
+        "lcsc_id": "C73013",
+        "mpn": "XL7015E1",
+        "manufacturer": "XLSEMI",
+        "kicad_symbol": "JLC-MCP-Power:XL7015E1",
+        "kicad_footprint": "JLC-MCP:TO-252-5_L6.5-W6.1-P1.14-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "C_BUCK_IN",
@@ -270,10 +280,15 @@
         "display_name": "3.3V LDO regulator",
         "package": "Package_TO_SOT_SMD:SOT-223-3_TabPin2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C6186",
+        "mpn": "AMS1117-3.3",
+        "manufacturer": "Advanced Monolithic Systems",
+        "kicad_symbol": "JLC-MCP-Power:AMS1117-3_3",
+        "kicad_footprint": "JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "C_LDO_IN",
@@ -312,10 +327,15 @@
         "display_name": "STM32G431CBT6 motor-control MCU",
         "package": "MCU_ST_STM32G4:STM32G431CBTx",
         "pin_count": 48,
-        "named_pin_count": 48
+        "named_pin_count": 48,
+        "lcsc_id": "C529355",
+        "mpn": "STM32G431CBT6",
+        "manufacturer": "STMicroelectronics",
+        "kicad_symbol": "JLC-MCP-MCUs:STM32G431CBT6",
+        "kicad_footprint": "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "LQFP-48 motor-control MCU."
       ]
@@ -493,10 +513,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "Q_A_LL",
@@ -507,10 +532,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "Q_A_HR",
@@ -521,10 +551,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "Q_A_LR",
@@ -535,10 +570,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "Q_B_HL",
@@ -549,10 +589,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "Q_B_LL",
@@ -563,10 +608,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "Q_B_HR",
@@ -577,10 +627,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "Q_B_LR",
@@ -591,10 +646,15 @@
         "display_name": "N-channel power MOSFET",
         "package": "Package_TO_SOT_SMD:TO-252-2",
         "pin_count": 3,
-        "named_pin_count": 3
+        "named_pin_count": 3,
+        "lcsc_id": "C52839",
+        "mpn": "IRFR3710ZTRPBF",
+        "manufacturer": "Infineon",
+        "kicad_symbol": "JLC-MCP-Transistors:IRFR3710ZTRPBF",
+        "kicad_footprint": "JLC-MCP:TO-252-2_L6.5-W6.1-P4.57-LS9.9-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "RG_A_HL",
@@ -829,10 +889,15 @@
         "display_name": "Phase A current sense shunt",
         "package": "Resistor_SMD:R_2512_6332Metric",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "C160588",
+        "mpn": "RLP25FEER050",
+        "manufacturer": "TA-I Tech",
+        "kicad_symbol": "JLC-MCP-Resistors:RLP25FEER050",
+        "kicad_footprint": "JLC-MCP:2512_L6.4-W3.2"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "Kelvin connection required."
       ]
@@ -846,10 +911,15 @@
         "display_name": "Phase B current sense shunt",
         "package": "Resistor_SMD:R_2512_6332Metric",
         "pin_count": 2,
-        "named_pin_count": 2
+        "named_pin_count": 2,
+        "lcsc_id": "C160588",
+        "mpn": "RLP25FEER050",
+        "manufacturer": "TA-I Tech",
+        "kicad_symbol": "JLC-MCP-Resistors:RLP25FEER050",
+        "kicad_footprint": "JLC-MCP:2512_L6.4-W3.2"
       },
       "candidate_parts": [],
-      "availability_status": "unknown",
+      "availability_status": "locked",
       "notes": [
         "Kelvin connection required."
       ]
@@ -863,10 +933,15 @@
         "display_name": "Current sense amplifier",
         "package": "Package_TO_SOT_SMD:SOT-23-5",
         "pin_count": 5,
-        "named_pin_count": 5
+        "named_pin_count": 5,
+        "lcsc_id": "C48533472",
+        "mpn": "INA180A1IDBVR(LX)",
+        "manufacturer": "lingxingic",
+        "kicad_symbol": "JLC-MCP-Sensors:INA180A1IDBVR_LX_",
+        "kicad_footprint": "JLC-MCP:SOT-23-5_L3.0-W1.6-P0.95-LS2.8-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "U_AMP_B",
@@ -877,10 +952,15 @@
         "display_name": "Current sense amplifier",
         "package": "Package_TO_SOT_SMD:SOT-23-5",
         "pin_count": 5,
-        "named_pin_count": 5
+        "named_pin_count": 5,
+        "lcsc_id": "C48533472",
+        "mpn": "INA180A1IDBVR(LX)",
+        "manufacturer": "lingxingic",
+        "kicad_symbol": "JLC-MCP-Sensors:INA180A1IDBVR_LX_",
+        "kicad_footprint": "JLC-MCP:SOT-23-5_L3.0-W1.6-P0.95-LS2.8-BR"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "R_IA_FLT",
@@ -947,10 +1027,15 @@
         "display_name": "Overcurrent comparator",
         "package": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
         "pin_count": 8,
-        "named_pin_count": 8
+        "named_pin_count": 8,
+        "lcsc_id": "C5252905",
+        "mpn": "LM393",
+        "manufacturer": "MSKSEMI",
+        "kicad_symbol": "JLC-MCP-Misc:LM393_C5252905",
+        "kicad_footprint": "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "R_OC_REF1",
@@ -1073,10 +1158,15 @@
         "display_name": "4-pin high-current motor terminal",
         "package": "TerminalBlock:TerminalBlock_bornier-4_P5.08mm",
         "pin_count": 4,
-        "named_pin_count": 4
+        "named_pin_count": 4,
+        "lcsc_id": "C395750",
+        "mpn": "DB2EVC-5.08-4P-GN",
+        "manufacturer": "DORABO",
+        "kicad_symbol": "JLC-MCP-Connectors:DB2EVC-5_08-4P-GN",
+        "kicad_footprint": "JLC-MCP:DB2EVC-5.08-4P-GN"
       },
       "candidate_parts": [],
-      "availability_status": "unknown"
+      "availability_status": "locked"
     },
     {
       "ref": "D_MOTOR_TVS1",
@@ -1685,7 +1775,9 @@
         "mpn": "IRS2104STR(UMW)",
         "manufacturer": "UMW",
         "lcsc_id": "C20623202",
-        "availability_status": "locked"
+        "availability_status": "locked",
+        "kicad_symbol": "JLC-MCP-Transistors:IRS2104STR_UMW_",
+        "kicad_footprint": "JLC-MCP:SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
       },
       "candidate_parts": [],
       "availability_status": "locked"
@@ -1703,7 +1795,9 @@
         "mpn": "IRS2104STR(UMW)",
         "manufacturer": "UMW",
         "lcsc_id": "C20623202",
-        "availability_status": "locked"
+        "availability_status": "locked",
+        "kicad_symbol": "JLC-MCP-Transistors:IRS2104STR_UMW_",
+        "kicad_footprint": "JLC-MCP:SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
       },
       "candidate_parts": [],
       "availability_status": "locked"
@@ -1721,7 +1815,9 @@
         "mpn": "IRS2104STR(UMW)",
         "manufacturer": "UMW",
         "lcsc_id": "C20623202",
-        "availability_status": "locked"
+        "availability_status": "locked",
+        "kicad_symbol": "JLC-MCP-Transistors:IRS2104STR_UMW_",
+        "kicad_footprint": "JLC-MCP:SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
       },
       "candidate_parts": [],
       "availability_status": "locked"
@@ -1739,7 +1835,9 @@
         "mpn": "IRS2104STR(UMW)",
         "manufacturer": "UMW",
         "lcsc_id": "C20623202",
-        "availability_status": "locked"
+        "availability_status": "locked",
+        "kicad_symbol": "JLC-MCP-Transistors:IRS2104STR_UMW_",
+        "kicad_footprint": "JLC-MCP:SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
       },
       "candidate_parts": [],
       "availability_status": "locked"
