@@ -80,14 +80,25 @@ def kicad_symbol_roots() -> list[Path]:
     extra = env('KICAD_EXTRA_SYMBOL_DIR')
     if extra:
         roots.extend(Path(item) for item in extra.split(';') if item.strip())
-    # Check project-local libs directory (for custom generated symbols)
+    # Check project-local libs directory (for custom generated symbols, e.g. JLC-MCP)
     output_root = env('KICAD_OUTPUT_DIR', '')
+    project_name = env('KICAD_PROJECT_NAME', '')
     if output_root:
-        for candidate in [
+        candidates = [
+            Path(output_root) / project_name / 'libraries' / 'symbols',
+            Path(output_root) / 'libraries' / 'symbols',
             Path(output_root) / 'libs',
-            Path(output_root).parent / 'libs',
-        ]:
-            if candidate.exists():
+        ]
+        # Also search one level deep for any project subdirectories
+        try:
+            for subdir in Path(output_root).iterdir():
+                if subdir.is_dir():
+                    candidates.append(subdir / 'libraries' / 'symbols')
+                    candidates.append(subdir / 'libs')
+        except OSError:
+            pass
+        for candidate in candidates:
+            if candidate.exists() and candidate not in roots:
                 roots.append(candidate)
     for base in (Path('D:/Program Files/KiCad'), Path('C:/Program Files/KiCad')):
         if base.exists():
