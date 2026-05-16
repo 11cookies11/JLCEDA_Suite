@@ -1,0 +1,449 @@
+{
+  "project": "nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap",
+  "generated_at": "2026-05-16",
+  "selections": [
+    {
+      "requirement_id": "rp2040_mcu",
+      "selected": {
+        "lcsc_id": "C2040",
+        "mpn": "RP2040",
+        "manufacturer": "Raspberry Pi",
+        "package": "LQFN-56(7x7)",
+        "description": "Dual-core Cortex-M0+ 133MHz 30 I/O QFN-56",
+        "price": 0.98,
+        "stock": 33996,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 65,
+        "needs_review": false,
+        "reasons": [
+          "MPN exact match: RP2040",
+          "Very high stock: 33996",
+          "Price $0.98 within budget $2.00"
+        ],
+        "risks": [
+          "Complex package (LQFN-56) requires careful reflow soldering",
+          "Symbol/footprint need manual verification after JLC MCP install"
+        ],
+        "note": "Standard CMSIS-DAP engine. JLC MCP can install symbol + footprint via library_install."
+      }
+    },
+    {
+      "requirement_id": "esp32c3_mcu",
+      "selected": {
+        "lcsc_id": "C2838500",
+        "mpn": "ESP32-C3",
+        "manufacturer": "Espressif Systems",
+        "package": "QFN-32-EP(5x5)",
+        "description": "RISC-V 32-bit 160MHz 22 I/O WiFi BLE 5.0 QFN-32 bare chip",
+        "price": 1.83,
+        "stock": 7689,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 61,
+        "needs_review": false,
+        "reasons": [
+          "MPN exact match: ESP32-C3",
+          "High stock: 7689",
+          "Price $1.83 within budget $3.00"
+        ],
+        "risks": [
+          "Complex package (QFN-32) requires careful reflow soldering",
+          "Bare chip requires external 40MHz crystal, RF matching network, and PCB antenna design",
+          "Refer to Espressif ESP32-C3 Hardware Design Guidelines for RF layout"
+        ],
+        "note": "Bare ESP32-C3 chip (not module). Built-in 4MB flash. Requires 40MHz crystal, PCB antenna with pi-matching network."
+      }
+    },
+    {
+      "requirement_id": "rp2040_flash_qspi",
+      "selected": {
+        "lcsc_id": "C2904431",
+        "mpn": "GD25Q16ETIGR",
+        "manufacturer": "GigaDevice",
+        "package": "SOP-8",
+        "description": "16Mbit QSPI NOR Flash 133MHz 2.7-3.6V SOP-8",
+        "price": 0.44,
+        "stock": 19037,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 89,
+        "needs_review": false,
+        "reasons": [
+          "MPN exact match: GD25Q16ETIGR",
+          "Package exact match: SOP-8 (easy hand-solder)",
+          "Very high stock: 19037",
+          "Price $0.44 within budget $0.80"
+        ],
+        "risks": [],
+        "note": "16Mbit sufficient for CMSIS-DAP firmware. W25Q32JVSSIQ (32Mbit) alternative for future-proofing."
+      }
+    },
+    {
+      "requirement_id": "main_buck_3v3",
+      "selected": {
+        "lcsc_id": "C479074",
+        "mpn": "SY8089A1AAC",
+        "manufacturer": "Silergy Corp",
+        "package": "SOT-23-5",
+        "description": "Synchronous buck 2.5-5.5V input, adjustable output, 2A, 1.5MHz, SOT-23-5",
+        "price": 0.084,
+        "stock": 29242,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 88,
+        "needs_review": false,
+        "reasons": [
+          "SOT-23-5 package (hand-solderable!)",
+          "2A output gives 2x margin over 1A requirement",
+          "Synchronous rectification for >90% efficiency",
+          "Very high stock: 29242, price $0.084",
+          "1.5MHz switching = small external inductor"
+        ],
+        "risks": [],
+        "note": "Best choice. Needs external 2.2-4.7uH inductor + input/output MLCC. Adjustable output set to 3.3V via feedback resistors."
+      }
+    },
+    {
+      "requirement_id": "target_power_switch",
+      "selected": {
+        "lcsc_id": "C131941",
+        "mpn": "TPS22918DBVR",
+        "manufacturer": "Texas Instruments",
+        "package": "SOT-23-6",
+        "description": "Load switch 1-5.5V, 2A, 53mΩ, active high enable, SOT-23-6",
+        "price": 0.24,
+        "stock": 18496,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 63,
+        "needs_review": false,
+        "reasons": [
+          "Very high stock: 18496",
+          "Price $0.24 within budget $1.00",
+          "SOT-23-6 easy to solder"
+        ],
+        "risks": [
+          "Verify reverse current blocking - add external Schottky if needed"
+        ],
+        "note": "TPS22918 has output discharge when disabled. For true reverse current blocking, verify or consider TPS22919 + external Schottky for anti-backfeed."
+      }
+    },
+    {
+      "requirement_id": "input_efuse",
+      "selected": {
+        "lcsc_id": "C42403123",
+        "mpn": "MNCP380HSN05AAT1G",
+        "manufacturer": "MSKSEMI",
+        "package": "SOT-23-5",
+        "description": "USB power switch with current limit, SOT-23-5",
+        "price": 0.20,
+        "stock": 1381,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 61,
+        "needs_review": false,
+        "reasons": [
+          "SOT-23-5 easy to solder",
+          "Price $0.20 within budget $1.50",
+          "Provides overcurrent protection for USB input"
+        ],
+        "risks": [
+          "Verify current limit threshold and trip characteristics"
+        ],
+        "note": "Alternative: TPS25200 if higher precision current limit needed."
+      }
+    },
+    {
+      "requirement_id": "digital_isolator",
+      "selected": {
+        "lcsc_id": "C528654",
+        "mpn": "CA-IS3742HW",
+        "manufacturer": "Chipanalog",
+        "package": "SOIC-16-300mil",
+        "description": "4-ch digital isolator: 2 forward + 2 reverse, 150Mbps, 12ns delay, 5000Vrms",
+        "price": 0.98,
+        "stock": 1000,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 65,
+        "needs_review": false,
+        "reasons": [
+          "150Mbps sufficient for 10MHz SWD",
+          "12ns propagation delay",
+          "5000Vrms isolation",
+          "Price $0.98 within budget $5.00"
+        ],
+        "risks": [
+          "SWDIO bidirectional path requires external direction control circuit (tri-state buffer + GPIO)"
+        ],
+        "note": "Channels: 2 fwd (SWCLK, nRESET) + 2 rev (SWO, UART_RX). SWDIO needs external direction ctrl. Alternative: CA-IS3742CHW (C41784139) with configurable channel direction at 40Mbps."
+      }
+    },
+    {
+      "requirement_id": "isolated_dcdc",
+      "selected": {
+        "lcsc_id": "C7465178",
+        "mpn": "B0505S-1WR3",
+        "manufacturer": "EVISUN",
+        "package": "SIP-4",
+        "description": "Isolated DC-DC 5V/5V 1W 200mA 1500V isolation SIP-4",
+        "price": 0.76,
+        "stock": 101761,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 83,
+        "needs_review": true,
+        "reasons": [
+          "Very high stock: 101k",
+          "Price $0.76 within budget $5.00"
+        ],
+        "risks": [
+          "1W may be insufficient if target 300mA power goes through isolation. Consider B0505S-2WR3 (2W) if target power is also isolated.",
+          "Ripple ~30mVpp - needs post-LDO filtering"
+        ],
+        "note": "Outputs 5V isolated. Use XC6206P332MR LDO downstream for clean 3.3V. If target power (300mA) goes through isolation, upgrade to 2W model."
+      }
+    },
+    {
+      "requirement_id": "target_ldo_3v3",
+      "selected": {
+        "lcsc_id": "C347376",
+        "mpn": "XC6206P332MR",
+        "manufacturer": "UMW (Youtai)",
+        "package": "SOT-23",
+        "description": "3.3V LDO 250mA low dropout SOT-23",
+        "price": 0.017,
+        "stock": 1424281,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 85,
+        "needs_review": false,
+        "reasons": [
+          "MPN exact match: XC6206P332MR",
+          "Very high stock: 1.4M",
+          "Price $0.017 ultra-low cost"
+        ],
+        "risks": [
+          "250mA max - for higher current consider ME6211C33 (500mA) or AMS1117-3.3 (1A)"
+        ],
+        "note": "Post-isolation LDO for clean target-side 3.3V. Dropout ~250mV at 200mA means 5V input works fine."
+      }
+    },
+    {
+      "requirement_id": "usb_esd",
+      "selected": {
+        "lcsc_id": "C2827654",
+        "mpn": "USBLC6-2SC6",
+        "manufacturer": "TECH PUBLIC",
+        "package": "SOT-23-6",
+        "description": "USB 2.0 ESD protection, 2-channel, 0.35pF, SOT-23-6",
+        "price": 0.041,
+        "stock": 144008,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 94,
+        "needs_review": false,
+        "reasons": [
+          "MPN exact match: USBLC6-2SC6",
+          "Package exact match: SOT-23-6",
+          "Very high stock: 144k",
+          "Very low price $0.041"
+        ],
+        "risks": [],
+        "note": "Place close to USB-C connector. Protects D+, D- and VBUS."
+      }
+    },
+    {
+      "requirement_id": "usb_c_receptacle",
+      "selected": {
+        "lcsc_id": "C393939",
+        "mpn": "TYPE-C16PIN",
+        "manufacturer": "SHOU HAN",
+        "package": "SMD",
+        "description": "USB-C receptacle 16-pin female SMD right-angle, 3A, 10k cycles",
+        "price": 0.071,
+        "stock": 356330,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 72,
+        "needs_review": false,
+        "reasons": [
+          "USB-C 16-pin SMD right-angle",
+          "Very high stock: 356k",
+          "3A current rating",
+          "10,000 cycle durability"
+        ],
+        "risks": [],
+        "note": "CC1/CC2 each require 5.1kΩ pull-down to GND for 5V/500mA USB-C power delivery."
+      }
+    },
+    {
+      "requirement_id": "rp2040_crystal",
+      "selected": {
+        "lcsc_id": "C7275086",
+        "mpn": "HY12MSMD3225EB1R30",
+        "manufacturer": "Huiyuan Crystal",
+        "package": "SMD3225-4P",
+        "description": "12MHz crystal 3225 10pF ±30ppm",
+        "price": 0.074,
+        "stock": 2129,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 70,
+        "needs_review": false,
+        "reasons": [
+          "12MHz 3225 SMD package",
+          "Good stock: 2129",
+          "Price $0.074"
+        ],
+        "risks": [
+          "Verify load capacitance (10pF) matches RP2040 requirements"
+        ],
+        "note": "RP2040 requires 12MHz crystal. Load capacitors (~15-22pF) per crystal CL spec. Place close to XIN/XOUT."
+      }
+    },
+    {
+      "requirement_id": "esp32c3_crystal",
+      "selected": {
+        "lcsc_id": "C5265885",
+        "mpn": "HY40MSMD3225GB1R30",
+        "manufacturer": "Huiyuan Crystal",
+        "package": "SMD3225-4P",
+        "description": "40MHz crystal 3225 15pF ±10ppm ±30ppm",
+        "price": 0.074,
+        "stock": 2231,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 70,
+        "needs_review": false,
+        "reasons": [
+          "40MHz 3225 SMD suitable for ESP32-C3 WiFi",
+          "Good stock: 2231",
+          "±10ppm initial tolerance",
+          "Price $0.074"
+        ],
+        "risks": [
+          "Verify ESP32-C3 crystal requirements: ESR <50Ω, CL per datasheet"
+        ],
+        "note": "ESP32-C3 requires 40MHz crystal for WiFi operation. Place close to chip. Refer to Espressif Hardware Design Guidelines."
+      }
+    },
+    {
+      "requirement_id": "target_esd",
+      "selected": {
+        "lcsc_id": "C2836319",
+        "mpn": "SRV05-4",
+        "manufacturer": "MSKSEMI",
+        "package": "SOT-23-6",
+        "description": "4-channel ESD protection 5V 0.6pF SOT-23-6",
+        "price": 0.025,
+        "stock": 172125,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 95,
+        "needs_review": false,
+        "reasons": [
+          "MPN exact match: SRV05-4",
+          "Package exact match: SOT-23-6",
+          "Very high stock: 172k",
+          "Very low price $0.025",
+          "4 channels cover SWDIO/SWCLK/SWO/nRESET"
+        ],
+        "risks": [],
+        "note": "Place close to target connector on isolated side. 0.6pF low capacitance suitable for high-speed SWD signals."
+      }
+    },
+    {
+      "requirement_id": "power_led",
+      "selected": {
+        "lcsc_id": "C99290",
+        "mpn": "LTST-C191TBKT",
+        "manufacturer": "Lite-On",
+        "package": "0603",
+        "description": "Blue LED 0603 465-475nm 104mcd",
+        "price": 0.019,
+        "stock": 36397,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 43,
+        "needs_review": false,
+        "reasons": [
+          "Package exact match: 0603",
+          "Very high stock: 36k",
+          "Price $0.019"
+        ],
+        "risks": [],
+        "note": "Blue LED for power indication. Add 330Ω-1kΩ series resistor for ~1mA at 3.3V. Recommend adding green (status) and red (error) LEDs too."
+      }
+    },
+    {
+      "requirement_id": "target_connector_arm10",
+      "selected": {
+        "lcsc_id": "C41376037",
+        "mpn": "HX PZ1.27-2x5P TP",
+        "manufacturer": "Hanxia",
+        "package": "SMD,P=1.27mm",
+        "description": "2x5P 1.27mm pin header SMD vertical, gold plated",
+        "price": 0.084,
+        "stock": 5360,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 55,
+        "needs_review": false,
+        "reasons": [
+          "1.27mm 2x5P matches ARM Cortex 10-pin standard",
+          "Gold plated for reliable contact",
+          "Good stock: 5360",
+          "Price $0.084"
+        ],
+        "risks": [
+          "Verify pin alignment with standard ARM Cortex 10-pin debug connector pinout"
+        ],
+        "note": "Standard ARM 10-pin debug connector (1.27mm pitch, 2x5). For polarized box header, consider 1.27mm IDC shrouded header."
+      }
+    },
+    {
+      "requirement_id": "usb_cc_resistor",
+      "selected": {
+        "lcsc_id": "C22356228",
+        "mpn": "RCA025K1JLF",
+        "manufacturer": "HKR",
+        "package": "0402",
+        "description": "5.1kΩ ±5% 0402 chip resistor",
+        "price": 0.001,
+        "stock": 1247478,
+        "basic_or_extended": "Extended",
+        "source": "jlcpcb_parts",
+        "composite_score": 44,
+        "needs_review": false,
+        "reasons": [
+          "5.1kΩ correct value for USB-C CC pull-down",
+          "Very high stock: 1.25M",
+          "Price $0.001 (negligible)"
+        ],
+        "risks": [],
+        "note": "Two required (CC1, CC2). 5.1kΩ → GND signals USB-C 5V/500mA. For 900mA mode, use 10kΩ (USB-C 1.5A)."
+      }
+    }
+  ],
+  "additional_parts_required": [
+    {"role": "buck_inductor", "function": "2.2-4.7uH power inductor for SY8089A1AAC, >=1.5A Isat", "suggestion": "Standard SMD power inductor, 0805 or larger"},
+    {"role": "buck_caps", "function": "10-22uF MLCC X5R/X7R for buck input/output", "suggestion": "10uF 16V 0805 X5R"},
+    {"role": "feedback_resistors", "function": "Voltage divider for buck Vout=3.3V", "suggestion": "Standard 1% chip resistors per SY8089A1AAC datasheet"},
+    {"role": "crystal_load_caps", "function": "Load capacitors for 12MHz and 40MHz crystals", "suggestion": "12-22pF NP0/C0G per crystal datasheet calculation, 2 per crystal"},
+    {"role": "rf_matching_network", "function": "PCB antenna + pi-matching network for ESP32-C3 WiFi", "suggestion": "Refer to Espressif AN205231. Needs ~3pF + 2.4nH + 0Ω typical"},
+    {"role": "decoupling_caps", "function": "100nF + bulk caps per power pin pair for all ICs", "suggestion": "100nF 0402/0603 X7R (qty ~20), 10uF 0805 bulk (qty ~5)"},
+    {"role": "swdio_direction_ctrl", "function": "Tri-state buffer for SWDIO bidirectional isolation control", "suggestion": "SN74LVC1G125 (single buffer) or similar, controlled by RP2040 GPIO"},
+    {"role": "target_diy_header_254", "function": "1x9P 2.54mm pin header male for J3", "suggestion": "DS1021-1x9SF11-B (C7430365) or any standard 1x9P 2.54mm header"},
+    {"role": "nreset_odrive", "function": "Open-drain driver for nRESET line", "suggestion": "2N7002 N-MOSFET (C113152) or dedicated open-drain buffer"},
+    {"role": "vtref_adc_divider", "function": "Resistor divider for VTREF ADC sensing", "suggestion": "10k+10k 1% divider + 100nF filter cap"},
+    {"role": "status_leds", "function": "Additional green/red LEDs for status/target power indication", "suggestion": "0603 LEDs green + red with series resistors"}
+  ],
+  "cost_summary": {
+    "total_selected_parts": 17,
+    "total_price_estimate": 6.27,
+    "currency": "USD",
+    "note": "Estimate for main ICs only. Excludes passives, connectors, PCB. Add ~$2-3 for passives and connectors."
+  }
+}

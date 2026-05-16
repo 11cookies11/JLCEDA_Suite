@@ -1,0 +1,1236 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-17T01:25:34",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.1",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/b50ab33b-bea9-4ac6-8cdb-a63ef5c041e6",
+            "violations": [
+                {
+                    "description": "在符号库中 'Conn_02x03' 找不到符号 'Connector_Generic'",
+                    "items": [
+                        {
+                            "description": "符号 J1 [Conn_02x03]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "8a786055-272f-4b87-8994-3ac96b3dae2c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_CC1 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.7874
+                            },
+                            "uuid": "62cfdb8d-a27e-4e13-9a4e-97957897cbb7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_VDDA [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 0.508
+                            },
+                            "uuid": "d209b778-2c7c-4031-a92a-a704918831a2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_CC2 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.0668
+                            },
+                            "uuid": "cb91c603-d42a-49f5-9061-88abd2b618b5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_DEC1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 0.7874
+                            },
+                            "uuid": "eabbad33-9c72-48a8-99d9-029dacb0f32d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "在 'D:/GitRepository/AI/KiCadAgentSuite/.where/nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap/kicad-output-v13/nexdap_dual_chip_cmsis_dap/libraries/symbols/JLC-MCP-Diodes.kicad_sym' 中找不到符号库 'JLC-MCP-Diodes'",
+                    "items": [
+                        {
+                            "description": "符号 D_USB_ESD [USBLC6-2SC6_C2827654]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.3462
+                            },
+                            "uuid": "0fb42992-e763-4b4e-af0f-76dec72bb469"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_DEC2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 1.0668
+                            },
+                            "uuid": "925d35fc-bcab-4601-9cc9-e0ff4ed9af12"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_BULK [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 1.3462
+                            },
+                            "uuid": "d1a28265-9f39-4542-b857-3eb3a3670330"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_DEC1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 1.6256
+                            },
+                            "uuid": "af81510b-5d2d-4667-8049-9a1ee470c15c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_RF_SHUNT [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.905
+                            },
+                            "uuid": "c3c1de49-015c-45b9-881e-0bba2a1ad688"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_DEC2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 1.905
+                            },
+                            "uuid": "26f1b2cf-03c2-41e3-9009-8ff313ef9114"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 L_RF [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 2.1082,
+                                "y": 0.508
+                            },
+                            "uuid": "c711771a-9092-4f89-b879-31b2867494d0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_BULK [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 2.1844
+                            },
+                            "uuid": "b7ca4710-dbd7-465f-aa2a-160dbb91f4a8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 L_BUCK [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 2.1336,
+                                "y": 1.5494
+                            },
+                            "uuid": "852e33f8-3abb-4d51-8c0a-60dc64990260"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_BULK_3V3 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 2.4638
+                            },
+                            "uuid": "34ad8729-81b5-45d4-b2bc-bbffad5379a1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_IN [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 2.1336,
+                                "y": 1.8288
+                            },
+                            "uuid": "40f36be9-7a47-41d7-be11-1d9246b1fc0a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_OUT [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 2.1336,
+                                "y": 2.1082
+                            },
+                            "uuid": "3b725590-87ea-48a7-b12d-b70884481d4e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_BUCK_FB1 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 2.1336,
+                                "y": 2.3876
+                            },
+                            "uuid": "00963db8-a5dc-4364-9946-2513bc9bc6e9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_BUCK_FB2 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 2.1336,
+                                "y": 2.667
+                            },
+                            "uuid": "76779a09-93e5-4692-a25f-c6ddb1e89c34"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'SW_Push' 与来源库 'Switch' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 SW_ESP_RST [SW_Push]",
+                            "pos": {
+                                "x": 1.4224,
+                                "y": 0.508
+                            },
+                            "uuid": "dfd61482-a7cf-44ac-bfc3-a18d41183268"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "全局标签 'ESP_TGT_PWR_EN'",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 1.7526
+                            },
+                            "uuid": "16883622-bcd9-4957-b2a5-122a6b355490"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_ESP_EN [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.3114
+                            },
+                            "uuid": "5470460f-05b1-425c-bce3-12b4b4f7e684"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "位于 546100, 2311400 处的标签连接了不止一条连线",
+                    "items": [
+                        {
+                            "description": "标签 'ESP_GPIO8'",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 2.3114
+                            },
+                            "uuid": "72064ca4-b43d-4779-a02b-003dba0c82cb"
+                        },
+                        {
+                            "description": "水平线, 长度 0.0254 mm",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 2.3114
+                            },
+                            "uuid": "7be82443-db40-4dbd-a8b4-87ad4ad5be6c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "label_multiple_wires"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_EN [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.5908
+                            },
+                            "uuid": "96cbec42-2e39-41e9-bb6d-d99787c05d46"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_ESP_BOOT [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.8702
+                            },
+                            "uuid": "197565fd-6a5a-4b1c-bacc-14abd55881ca"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_ESP_GPIO8 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 3.1496
+                            },
+                            "uuid": "d72d6d4e-653b-45b7-8829-b942fb3423cd"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_ESP_GPIO2 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 3.429
+                            },
+                            "uuid": "a6ed8b09-3ab4-4f3f-b680-10927a495f16"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'X322512MSB4SI' 与来源库 'JLC-MCP-Crystals' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 Y_ESP32 [X322512MSB4SI]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 3.7084
+                            },
+                            "uuid": "c99516d5-02d0-4454-a606-a7f28ca70506"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_XTAL1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 3.9878
+                            },
+                            "uuid": "beca0112-a957-49ed-8390-e89781cd6c92"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_XTAL2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.2672
+                            },
+                            "uuid": "4699c710-f821-4b17-8386-9788c8aefb15"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'ESP_UART0_RX'",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 4.5466
+                            },
+                            "uuid": "16bd1df0-0f34-4af9-a444-129bfdf4bab0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "符号 'Conn_01x03' 与来源库 'Connector_Generic' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 TP_ESP_UART [Conn_01x03]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.5466
+                            },
+                            "uuid": "6737e728-f8a4-4403-bc53-239345bf99a6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_LED_DAP [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.3462
+                            },
+                            "uuid": "e75fc84a-7abd-4283-b273-5212a143322a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "全局标签 'GND_TARGET_ISO'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.5748
+                            },
+                            "uuid": "3141fd67-4b37-445f-a401-ab4d56164e75"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "全局标签 'ISO_3V3_TARGET'",
+                            "pos": {
+                                "x": 0.4445,
+                                "y": 1.905
+                            },
+                            "uuid": "2dff08d6-a1e1-4a59-a059-bb27d0e16a90"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_LED_TGT [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.905
+                            },
+                            "uuid": "4373cd21-61ed-4376-8585-14cc6afe4add"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'SW_Push' 与来源库 'Switch' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 SW_RP_BOOT [SW_Push]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.27
+                            },
+                            "uuid": "ce909179-c7fa-4652-aa0f-78d7c349bc9f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "全局标签 'HOST_SWDIO'",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 1.7272
+                            },
+                            "uuid": "c470ee02-9974-47d4-b4aa-96024ecca3d8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "全局标签 'HOST_SWCLK'",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 1.7526
+                            },
+                            "uuid": "e19eced5-bbab-4517-a6fc-903fa76f681c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "符号 'SW_Push' 与来源库 'Switch' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 SW_RP_RST [SW_Push]",
+                            "pos": {
+                                "x": 2.6416,
+                                "y": 0.508
+                            },
+                            "uuid": "ff9d0506-4390-4312-844d-b42fb6755a6f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "全局标签 'HOST_SWO_IN'",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 2.0066
+                            },
+                            "uuid": "df56c92a-d196-479f-ac52-93443203f084"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "全局标签 'HOST_nRESET_CTRL'",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 2.032
+                            },
+                            "uuid": "36ca1c22-cc62-480f-93d6-4a0cd21f78e2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'HOST_SWDIO_DIR'",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 2.0574
+                            },
+                            "uuid": "81218ef3-3490-4af2-85cc-f3627dcddc29"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "符号 '0603WAF1002T5E' 与来源库 'JLC-MCP-Resistors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 R_RP_RUN [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 2.5908
+                            },
+                            "uuid": "67368c39-ada5-4094-9d2d-112ecffd6ef7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'X322512MSB4SI' 与来源库 'JLC-MCP-Crystals' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 Y_RP2040 [X322512MSB4SI]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 2.8702
+                            },
+                            "uuid": "978888f9-dd4d-4f41-83a5-de83e39e45b4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_XTAL1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 3.1496
+                            },
+                            "uuid": "6d2523e4-aaa7-4bf6-9cf3-a2198f142bde"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'CC0603KRX7R9BB104' 与来源库 'JLC-MCP-Capacitors' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_XTAL2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 3.429
+                            },
+                            "uuid": "758b62f9-a201-4172-92ce-37efb86da9f1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_SWD_SWDIO'",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.683
+                            },
+                            "uuid": "07565e5f-b9de-4d32-8477-faef26c0ff20"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_SWD_SWCLK'",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.7084
+                            },
+                            "uuid": "a4a3ae0f-0d46-4d01-8ae3-a2250d1152c6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "符号 'Conn_01x03' 与来源库 'Connector_Generic' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 TP_RP_SWD [Conn_01x03]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 3.7084
+                            },
+                            "uuid": "9d4c68f3-8eb7-465c-be99-d95d13cf399c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                }
+            ]
+        },
+        {
+            "path": "/01_input_power/",
+            "uuid_path": "/b50ab33b-bea9-4ac6-8cdb-a63ef5c041e6/d2e29221-38e3-4b2d-a40b-c1c9c3014b23",
+            "violations": []
+        },
+        {
+            "path": "/04_isolation_io/",
+            "uuid_path": "/b50ab33b-bea9-4ac6-8cdb-a63ef5c041e6/c9b7a953-1ad3-4e5c-8e4c-5c2f40958c34",
+            "violations": []
+        },
+        {
+            "path": "/02_esp32/",
+            "uuid_path": "/b50ab33b-bea9-4ac6-8cdb-a63ef5c041e6/3d30d502-a5bd-46c8-b121-db85e519cd58",
+            "violations": [
+                {
+                    "description": "GND_HOST 和 ESP_XTAL_P 都连接到同一项上; 将使用 GND_HOST 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 'GND_HOST'",
+                            "pos": {
+                                "x": 1.4859,
+                                "y": 0.508
+                            },
+                            "uuid": "7e8f98b2-1a8d-4710-b798-087ff0433d36"
+                        },
+                        {
+                            "description": "标签 'ESP_XTAL_P'",
+                            "pos": {
+                                "x": 0.4699,
+                                "y": 1.7526
+                            },
+                            "uuid": "ff9ef931-934a-4938-bb39-47749ee96a86"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 10 [MTDI, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.4445,
+                                "y": 2.2987
+                            },
+                            "uuid": "48dba76b-8f99-4f95-8869-7eef5ddffe38"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "+3V3_MAIN 和 ESP_SPI_SCLK 都连接到同一项上; 将使用 +3V3_MAIN 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 '+3V3_MAIN'",
+                            "pos": {
+                                "x": 0.4953,
+                                "y": 1.7526
+                            },
+                            "uuid": "3e4234f3-94a0-4857-abe7-a6f72c4e430d"
+                        },
+                        {
+                            "description": "全局标签 'ESP_SPI_SCLK'",
+                            "pos": {
+                                "x": 0.4445,
+                                "y": 2.3114
+                            },
+                            "uuid": "de45460e-351a-471f-a35e-126fc6a6518c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "ESP_CHIP_EN 和 ESP_GPIO8 都连接到同一项上; 将使用 ESP_CHIP_EN 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "标签 'ESP_CHIP_EN'",
+                            "pos": {
+                                "x": 1.3589,
+                                "y": 0.508
+                            },
+                            "uuid": "5cbeb996-5d97-447f-8cbf-ff0c577147af"
+                        },
+                        {
+                            "description": "标签 'ESP_GPIO8'",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 2.3114
+                            },
+                            "uuid": "72064ca4-b43d-4779-a02b-003dba0c82cb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                }
+            ]
+        },
+        {
+            "path": "/05_indicator/",
+            "uuid_path": "/b50ab33b-bea9-4ac6-8cdb-a63ef5c041e6/bc4ae664-e761-42eb-b600-b8ec2faac40d",
+            "violations": []
+        },
+        {
+            "path": "/03_rp2040/",
+            "uuid_path": "/b50ab33b-bea9-4ac6-8cdb-a63ef5c041e6/df620364-8aa8-4fe9-beb6-4d5818a9a9d5",
+            "violations": [
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 50 [DVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.4478,
+                                "y": 1.4986
+                            },
+                            "uuid": "4c5d7adb-a611-4935-a4db-792069485744"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 23 [DVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.4732,
+                                "y": 1.4986
+                            },
+                            "uuid": "311b76ed-a019-4a88-8c87-c6272b83bb30"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 45 [VREG_VOUT, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.524,
+                                "y": 1.4986
+                            },
+                            "uuid": "79c3578d-32be-4a3a-8591-3f53a1e02156"
+                        },
+                        {
+                            "description": "Symbol #FLG102 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2954
+                            },
+                            "uuid": "5af59c68-b35d-4cb2-a1ce-a36e2c8d3a85"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 44 [VREG_IN, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.5621,
+                                "y": 1.4986
+                            },
+                            "uuid": "d4f1c22f-22af-47fb-95ec-46e4b78ac783"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 49 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.6129,
+                                "y": 1.4986
+                            },
+                            "uuid": "f9a72593-8b9d-4d66-a0f4-d74d36bfd519"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 42 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.6383,
+                                "y": 1.4986
+                            },
+                            "uuid": "a8c5e120-2be3-4953-8563-5c60bcb870b7"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 33 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.6637,
+                                "y": 1.4986
+                            },
+                            "uuid": "9461db7a-2b5d-432f-b1fd-587d1e4af499"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 22 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.6891,
+                                "y": 1.4986
+                            },
+                            "uuid": "91aa9038-4b2d-4fb1-9f93-865ded125f4f"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 10 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.7145,
+                                "y": 1.4986
+                            },
+                            "uuid": "44a58117-7052-49f2-a442-067f014b142c"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 1 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 1.4986
+                            },
+                            "uuid": "48bf4eee-1679-4b8d-b32c-f4ed9c141fc7"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 48 [USB_VDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 1.4986
+                            },
+                            "uuid": "b2b2c277-3806-42f3-a123-50fe513b7814"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 43 [ADC_AVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.8161,
+                                "y": 1.4986
+                            },
+                            "uuid": "c0bc5b25-0ad1-48e5-b3d5-5dfa892ccd12"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "4fdd4316-6f46-4bb1-8608-bd085343cbdc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "GND_HOST 和 RP_XIN 都连接到同一项上; 将使用 GND_HOST 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 'GND_HOST'",
+                            "pos": {
+                                "x": 1.524,
+                                "y": 2.5273
+                            },
+                            "uuid": "c75a7d37-11f8-47ae-a37c-86d6546989f9"
+                        },
+                        {
+                            "description": "标签 'RP_XIN'",
+                            "pos": {
+                                "x": 1.3208,
+                                "y": 2.032
+                            },
+                            "uuid": "ae78ec9f-d883-4d9e-8cea-f43ace707466"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 57 [GND, Bidirectional, Line]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 2.5146
+                            },
+                            "uuid": "9adbe845-5dff-4744-a6e4-73045501ed35"
+                        },
+                        {
+                            "description": "Symbol #FLG102 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2954
+                            },
+                            "uuid": "5af59c68-b35d-4cb2-a1ce-a36e2c8d3a85"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        }
+    ],
+    "source": "nexdap_dual_chip_cmsis_dap.kicad_sch"
+}

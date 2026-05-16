@@ -1,0 +1,3171 @@
+{
+  "schema_version": "kicad-execution-plan.v1",
+  "request_id": "nexdap-dual-chip-cmsis-dap-002",
+  "target": {
+    "project_name": "nexdap_dual_chip_cmsis_dap",
+    "output_dir": ".where\\nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap\\kicad-output-v13\\nexdap_dual_chip_cmsis_dap",
+    "schematic_file": ".where\\nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap\\kicad-output-v13\\nexdap_dual_chip_cmsis_dap\\nexdap_dual_chip_cmsis_dap.kicad_sch",
+    "project_file": ".where\\nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap\\kicad-output-v13\\nexdap_dual_chip_cmsis_dap\\nexdap_dual_chip_cmsis_dap.kicad_pro"
+  },
+  "symbols": [
+    {
+      "ref": "J1",
+      "role": "usb_c_input",
+      "value": "USB-C_16PIN",
+      "lib_id": "Connector_Generic:Conn_02x03",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical",
+      "at": {
+        "x": 45.72,
+        "y": 38.1,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_VBUS"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "USB_DM"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "USB_DP"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "USB_CC1"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "USB_CC2"
+        }
+      ],
+      "notes": [
+        "NexDAP: USB-C connector mapped to 2x3 (6-pin: VBUS, DM, DP, CC1, CC2, GND). Replace with Connector:USB_C_Receptacle_USB2.0 for production."
+      ],
+      "lcsc": "C393939",
+      "mpn": "TYPE-C16PIN",
+      "manufacturer": "SHOU HAN"
+    },
+    {
+      "ref": "R_CC1",
+      "role": "usb_cc1_pulldown",
+      "value": "5.1k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 45.72,
+        "y": 66.04,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_CC1"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "C22356228",
+      "mpn": "RCA025K1JLF",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_CC2",
+      "role": "usb_cc2_pulldown",
+      "value": "5.1k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 45.72,
+        "y": 93.98,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_CC2"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "C22356228",
+      "mpn": "RCA025K1JLF",
+      "manufacturer": ""
+    },
+    {
+      "ref": "D_USB_ESD",
+      "role": "usb_esd_protection",
+      "value": "USBLC6-2SC6",
+      "lib_id": "JLC-MCP-Diodes:USBLC6-2SC6_C2827654",
+      "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "at": {
+        "x": 45.72,
+        "y": 121.92,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_DP"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "USB_DM"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "+5V_USB_PROTECTED"
+        }
+      ],
+      "notes": [
+        "NexDAP: USBLC6-2SC6 USB ESD protection with JLC-MCP SOT-23-6 footprint"
+      ],
+      "lcsc": "C2827654",
+      "mpn": "USBLC6-2SC6",
+      "manufacturer": ""
+    },
+    {
+      "ref": "F1",
+      "role": "usb_vbus_efuse",
+      "value": "MNCP380 500mA",
+      "lib_id": "JLC-MCP-Misc:MNCP380HSN05AAT1G",
+      "footprint": "JLC-MCP:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR",
+      "at": {
+        "x": 45.72,
+        "y": 149.86,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_VBUS"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "+5V_USB_PROTECTED"
+        }
+      ],
+      "notes": [
+        "NexDAP: MNCP380HSN05AAT1G USB eFuse with JLC-MCP SOT-23-5 footprint"
+      ],
+      "lcsc": "C42403123",
+      "mpn": "MNCP380HSN05AAT1G",
+      "manufacturer": "MSKSEMI"
+    },
+    {
+      "ref": "U_BUCK",
+      "role": "main_3v3_buck",
+      "value": "SY8089A1AAC",
+      "lib_id": "JLC-MCP-Power:SY8089A1AAC",
+      "footprint": "JLC-MCP:TSOT-23-5_L2.9-W1.6-P0.95-LS2.8-BR",
+      "at": {
+        "x": 208.28,
+        "y": 114.3,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "L_BUCK_SW"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "+5V_USB_PROTECTED"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "BUCK_FB"
+        }
+      ],
+      "notes": [
+        "NexDAP: SY8089A1AAC 2A sync buck with JLC-MCP SOT-23-5 footprint"
+      ],
+      "lcsc": "C479074",
+      "mpn": "SY8089A1AAC",
+      "manufacturer": "Silergy Corp"
+    },
+    {
+      "ref": "L_BUCK",
+      "role": "buck_power_inductor",
+      "value": "2.2uH",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 208.28,
+        "y": 142.24,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "L_BUCK_SW"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "+3V3_MAIN"
+        }
+      ],
+      "notes": [
+        "JLC-MCP inductor placeholder (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_BUCK_IN",
+      "role": "buck_input_capacitor",
+      "value": "10uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 208.28,
+        "y": 170.18,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+5V_USB_PROTECTED"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_BUCK_OUT",
+      "role": "buck_output_capacitor",
+      "value": "22uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 208.28,
+        "y": 198.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_BUCK_FB1",
+      "role": "buck_feedback_resistor_top",
+      "value": "100k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 208.28,
+        "y": 226.06,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "BUCK_FB"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_BUCK_FB2",
+      "role": "buck_feedback_resistor_bottom",
+      "value": "49.9k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 208.28,
+        "y": 254.0,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "BUCK_FB"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "U_ESP32",
+      "role": "esp32c3_transaction_manager",
+      "value": "ESP32-C3",
+      "lib_id": "JLC-MCP-MCUs:ESP32-C3",
+      "footprint": "JLC-MCP:QFN-32_L5.0-W5.0-P0.50-TL-EP3.7",
+      "at": {
+        "x": 60.96,
+        "y": 190.5,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RF_LNA"
+        },
+        {
+          "number": "10",
+          "name": "",
+          "net": "ESP_SPI_SCLK"
+        },
+        {
+          "number": "11",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "12",
+          "name": "",
+          "net": "ESP_SPI_MISO"
+        },
+        {
+          "number": "13",
+          "name": "",
+          "net": "ESP_RP_RUN_CTRL"
+        },
+        {
+          "number": "14",
+          "name": "",
+          "net": "ESP_GPIO8"
+        },
+        {
+          "number": "15",
+          "name": "",
+          "net": "ESP_GPIO9_BOOT"
+        },
+        {
+          "number": "16",
+          "name": "",
+          "net": "ESP_SPI_CS"
+        },
+        {
+          "number": "17",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "25",
+          "name": "",
+          "net": "ESP_TO_RP_IRQ"
+        },
+        {
+          "number": "26",
+          "name": "",
+          "net": "RP_TO_ESP_IRQ"
+        },
+        {
+          "number": "27",
+          "name": "",
+          "net": "ESP_TGT_PWR_EN"
+        },
+        {
+          "number": "28",
+          "name": "",
+          "net": "ESP_UART0_TX"
+        },
+        {
+          "number": "29",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "30",
+          "name": "",
+          "net": "ESP_XTAL_P"
+        },
+        {
+          "number": "31",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "32",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "33",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "ESP_UART1_TX"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "ESP_UART1_RX"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "ESP_GPIO2"
+        },
+        {
+          "number": "7",
+          "name": "",
+          "net": "ESP_CHIP_EN"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "ESP_RP_BOOTSEL_CTRL"
+        },
+        {
+          "number": "9",
+          "name": "",
+          "net": "ESP_SPI_MOSI"
+        }
+      ],
+      "notes": [
+        "NexDAP: ESP32-C3 bare chip with JLC-MCP QFN-32 footprint"
+      ],
+      "lcsc": "C2838500",
+      "mpn": "ESP32-C3",
+      "manufacturer": "Espressif Systems"
+    },
+    {
+      "ref": "R_ESP_EN",
+      "role": "esp_chip_en_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 60.96,
+        "y": 218.44,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_CHIP_EN"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_ESP_EN",
+      "role": "esp_en_reset_capacitor",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 60.96,
+        "y": 246.38,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_CHIP_EN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "SW_ESP_RST",
+      "role": "esp_reset_button",
+      "value": "ESP_RST",
+      "lib_id": "Switch:SW_Push",
+      "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
+      "at": {
+        "x": 152.4,
+        "y": 38.1,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_CHIP_EN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_ESP_BOOT",
+      "role": "esp_gpio9_boot_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 60.96,
+        "y": 274.32,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_GPIO9_BOOT"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_ESP_GPIO8",
+      "role": "esp_gpio8_strap_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 60.96,
+        "y": 302.26,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_GPIO8"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_ESP_GPIO2",
+      "role": "esp_gpio2_strap_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 60.96,
+        "y": 330.2,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_GPIO2"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "Y_ESP32",
+      "role": "esp32_40mhz_crystal",
+      "value": "40MHz",
+      "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
+      "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
+      "at": {
+        "x": 60.96,
+        "y": 358.14,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_XTAL_P"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_XTAL_N"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: RP2040 12MHz crystal (LCSC C9002, 3225 4P, 4/4 pin/pad match)"
+      ],
+      "lcsc": "C5265885",
+      "mpn": "HY40MSMD3225GB1R30",
+      "manufacturer": "Huiyuan Crystal"
+    },
+    {
+      "ref": "C_ESP_XTAL1",
+      "role": "esp_xtal_load_cap_1",
+      "value": "15pF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 60.96,
+        "y": 386.08,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_XTAL_P"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_ESP_XTAL2",
+      "role": "esp_xtal_load_cap_2",
+      "value": "15pF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 60.96,
+        "y": 414.02,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_XTAL_N"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "L_RF",
+      "role": "rf_series_matching_inductor",
+      "value": "RF_2.0nH",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 205.74,
+        "y": 38.1,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RF_LNA"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "RF_ANT"
+        }
+      ],
+      "notes": [
+        "JLC-MCP inductor placeholder (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_RF_SHUNT",
+      "role": "rf_shunt_matching_cap",
+      "value": "RF_1.5pF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 45.72,
+        "y": 177.8,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RF_ANT"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "ANT1",
+      "role": "chip_antenna_2g4",
+      "value": "2.4GHz_ANT",
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "at": {
+        "x": 45.72,
+        "y": 205.74,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RF_ANT"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: chip antenna - using LED pad as placeholder, replace with actual 2450AT18A100E symbol"
+      ],
+      "lcsc": "C89334",
+      "mpn": "2450AT18A100E",
+      "manufacturer": "Johanson Dielectrics"
+    },
+    {
+      "ref": "C_ESP_VDDA",
+      "role": "esp_vdda_decoupling",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 38.1,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_ESP_DEC1",
+      "role": "esp_vdd3p3_decoupling_1",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 66.04,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_ESP_DEC2",
+      "role": "esp_vdd3p3_decoupling_2",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 93.98,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_ESP_BULK",
+      "role": "esp_vdd3p3_bulk",
+      "value": "10uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 121.92,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "U_RP2040",
+      "role": "rp2040_cmsis_dap_engine",
+      "value": "RP2040",
+      "lib_id": "JLC-MCP-MCUs:RP2040",
+      "footprint": "JLC-MCP:LQFN-56_L7.0-W7.0-P0.4-EP",
+      "at": {
+        "x": 160.02,
+        "y": 190.5,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "10",
+          "name": "",
+          "net": "ESP_SPI_SCLK"
+        },
+        {
+          "number": "11",
+          "name": "",
+          "net": "ESP_SPI_CS"
+        },
+        {
+          "number": "12",
+          "name": "",
+          "net": "ESP_TO_RP_IRQ"
+        },
+        {
+          "number": "13",
+          "name": "",
+          "net": "RP_TO_ESP_IRQ"
+        },
+        {
+          "number": "14",
+          "name": "",
+          "net": "ESP_SPI_MOSI"
+        },
+        {
+          "number": "15",
+          "name": "",
+          "net": "ESP_SPI_MISO"
+        },
+        {
+          "number": "16",
+          "name": "",
+          "net": "HOST_SWO_IN"
+        },
+        {
+          "number": "17",
+          "name": "",
+          "net": "HOST_nRESET_CTRL"
+        },
+        {
+          "number": "18",
+          "name": "",
+          "net": "HOST_SWDIO_DIR"
+        },
+        {
+          "number": "19",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_UART1_RX"
+        },
+        {
+          "number": "20",
+          "name": "",
+          "net": "RP_XIN"
+        },
+        {
+          "number": "21",
+          "name": "",
+          "net": "RP_XOUT"
+        },
+        {
+          "number": "22",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "23",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "24",
+          "name": "",
+          "net": "DAP_ACTIVITY"
+        },
+        {
+          "number": "26",
+          "name": "",
+          "net": "ESP_RP_RUN_CTRL"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "ESP_UART1_TX"
+        },
+        {
+          "number": "33",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "HOST_SWDIO"
+        },
+        {
+          "number": "42",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "43",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "44",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "45",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "48",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "49",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "HOST_SWCLK"
+        },
+        {
+          "number": "50",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "51",
+          "name": "",
+          "net": "QSPI_SD3"
+        },
+        {
+          "number": "52",
+          "name": "",
+          "net": "QSPI_SCLK"
+        },
+        {
+          "number": "53",
+          "name": "",
+          "net": "QSPI_SD0"
+        },
+        {
+          "number": "54",
+          "name": "",
+          "net": "QSPI_SD2"
+        },
+        {
+          "number": "55",
+          "name": "",
+          "net": "QSPI_SD1"
+        },
+        {
+          "number": "56",
+          "name": "",
+          "net": "ESP_RP_BOOTSEL_CTRL"
+        },
+        {
+          "number": "57",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: RP2040 with JLC-MCP LQFN-56 footprint (57-pin)"
+      ],
+      "lcsc": "C2040",
+      "mpn": "RP2040",
+      "manufacturer": "Raspberry Pi"
+    },
+    {
+      "ref": "U_FLASH",
+      "role": "rp2040_qspi_flash",
+      "value": "GD25Q16E",
+      "lib_id": "JLC-MCP-Memory:GD25Q16ETIGR",
+      "footprint": "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL",
+      "at": {
+        "x": 160.02,
+        "y": 223.52,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_RP_BOOTSEL_CTRL"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "QSPI_SD1"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "QSPI_SD3"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "QSPI_SD0"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "QSPI_SCLK"
+        },
+        {
+          "number": "7",
+          "name": "",
+          "net": "QSPI_SD2"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "+3V3_MAIN"
+        }
+      ],
+      "notes": [
+        "NexDAP: GD25Q16E 16Mbit QSPI flash with JLC-MCP SOP-8 footprint"
+      ],
+      "lcsc": "C2904431",
+      "mpn": "GD25Q16ETIGR",
+      "manufacturer": "GigaDevice"
+    },
+    {
+      "ref": "R_RP_RUN",
+      "role": "rp2040_run_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 160.02,
+        "y": 246.38,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_RP_RUN_CTRL"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "SW_RP_RST",
+      "role": "rp_reset_button",
+      "value": "RP_RST",
+      "lib_id": "Switch:SW_Push",
+      "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
+      "at": {
+        "x": 259.08,
+        "y": 38.1,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_RP_RUN_CTRL"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "SW_RP_BOOT",
+      "role": "rp_boot_button",
+      "value": "RP_BOOTSEL",
+      "lib_id": "Switch:SW_Push",
+      "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
+      "at": {
+        "x": 45.72,
+        "y": 114.3,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_RP_BOOTSEL_CTRL"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "Y_RP2040",
+      "role": "rp2040_12mhz_crystal",
+      "value": "12MHz",
+      "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
+      "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
+      "at": {
+        "x": 160.02,
+        "y": 274.32,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RP_XIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "RP_XOUT"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: RP2040 12MHz crystal (LCSC C9002, 3225 4P, 4/4 pin/pad match)"
+      ],
+      "lcsc": "C7275086",
+      "mpn": "HY12MSMD3225EB1R30",
+      "manufacturer": "Huiyuan Crystal"
+    },
+    {
+      "ref": "C_RP_XTAL1",
+      "role": "rp_xtal_load_cap_1",
+      "value": "18pF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 160.02,
+        "y": 302.26,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RP_XIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_RP_XTAL2",
+      "role": "rp_xtal_load_cap_2",
+      "value": "18pF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 160.02,
+        "y": 330.2,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RP_XOUT"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_RP_DEC1",
+      "role": "rp_vdd_decoupling_1",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 149.86,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_RP_DEC2",
+      "role": "rp_dvdd_decoupling",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 177.8,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_RP_BULK",
+      "role": "rp_vdd_bulk",
+      "value": "10uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 205.74,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "U_ISO",
+      "role": "digital_isolation_barrier",
+      "value": "CA-IS3742HW",
+      "lib_id": "JLC-MCP-ICs:CA-IS3742HW",
+      "footprint": "JLC-MCP:SOIC-16_L10.3-W7.5-P1.27-LS10.3-BL",
+      "at": {
+        "x": 256.54,
+        "y": 190.5,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "10",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "11",
+          "name": "",
+          "net": "ISO_SWDIO_IN"
+        },
+        {
+          "number": "12",
+          "name": "",
+          "net": "ISO_SWO_TGT"
+        },
+        {
+          "number": "13",
+          "name": "",
+          "net": "ISO_SWCLK_TGT"
+        },
+        {
+          "number": "14",
+          "name": "",
+          "net": "HOST_SWO_IN"
+        },
+        {
+          "number": "15",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        },
+        {
+          "number": "16",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "HOST_SWCLK"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "HOST_nRESET_CTRL"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "ISO_SWDIO_OUT"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "ISO_nRESET_TGT"
+        },
+        {
+          "number": "7",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: CA-IS3742HW 4ch digital isolator (2fwd+2rev) 150Mbps"
+      ],
+      "lcsc": "C528654",
+      "mpn": "CA-IS3742HW",
+      "manufacturer": "Chipanalog"
+    },
+    {
+      "ref": "U_ISO_BUF",
+      "role": "swdio_direction_buffer",
+      "value": "SN74LVC1G125",
+      "lib_id": "Device:Buffer_Line_Driver",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "at": {
+        "x": 256.54,
+        "y": 218.44,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "HOST_SWDIO"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ISO_SWDIO_OUT"
+        }
+      ],
+      "notes": [
+        "NexDAP: SN74LVC1G125 tri-state buffer for SWDIO direction control"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "U_ISO_DCDC",
+      "role": "isolated_dcdc_converter",
+      "value": "B0505S-1WR3",
+      "lib_id": "JLC-MCP-Misc:B0505S-1WR3_C7465178",
+      "footprint": "JLC-MCP:PWRM-TH_B0505S-1WR3",
+      "at": {
+        "x": 256.54,
+        "y": 246.38,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ISO_5V_IN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "ISO_5V_OUT"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "NexDAP: B0505S-1WR3 1W isolated DC-DC with JLC-MCP SIP-4 footprint"
+      ],
+      "lcsc": "C7465178",
+      "mpn": "B0505S-1WR3",
+      "manufacturer": "EVISUN"
+    },
+    {
+      "ref": "U_TGT_LDO",
+      "role": "target_side_ldo_3v3",
+      "value": "XC6206P332MR",
+      "lib_id": "JLC-MCP-Power:XC6206P332MR_C347376",
+      "footprint": "JLC-MCP:SOT-23-3_L3.0-W1.7-P0.95-LS2.9-BR",
+      "at": {
+        "x": 256.54,
+        "y": 274.32,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ISO_3V3_TARGET"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "ISO_5V_OUT"
+        }
+      ],
+      "notes": [
+        "NexDAP: XC6206P332MR 3.3V LDO with JLC-MCP SOT-23 footprint"
+      ],
+      "lcsc": "C347376",
+      "mpn": "XC6206P332MR",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_ISO_IN",
+      "role": "iso_dcdc_input_cap",
+      "value": "10uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 256.54,
+        "y": 302.26,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ISO_5V_IN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_ISO_OUT",
+      "role": "iso_dcdc_output_cap",
+      "value": "10uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 256.54,
+        "y": 330.2,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ISO_5V_OUT"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_TGT_LDO_OUT",
+      "role": "target_ldo_output_cap",
+      "value": "10uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 256.54,
+        "y": 358.14,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ISO_3V3_TARGET"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "U_TGT_SW",
+      "role": "target_power_switch",
+      "value": "TPS22918DBVR",
+      "lib_id": "JLC-MCP-Power:TPS22918DBVR",
+      "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR",
+      "at": {
+        "x": 256.54,
+        "y": 386.08,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ISO_3V3_TARGET"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "ESP_TGT_PWR_EN"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "TARGET_3V3_OUT"
+        }
+      ],
+      "notes": [
+        "NexDAP: TPS22918DBVR load switch with JLC-MCP SOT-23-6 footprint"
+      ],
+      "lcsc": "C131941",
+      "mpn": "TPS22918DBVR",
+      "manufacturer": "Texas Instruments"
+    },
+    {
+      "ref": "R_TGT_EN",
+      "role": "target_pwr_en_pulldown",
+      "value": "100k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 256.54,
+        "y": 414.02,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_TGT_PWR_EN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_VTREF_DIV1",
+      "role": "vtref_adc_divider_top",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 96.52,
+        "y": 114.3,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VTREF_TARGET"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "VTREF_ADC"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_VTREF_DIV2",
+      "role": "vtref_adc_divider_bottom",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 96.52,
+        "y": 142.24,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VTREF_ADC"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_VTREF",
+      "role": "vtref_adc_filter_cap",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 170.18,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VTREF_ADC"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "Q_NRST",
+      "role": "nreset_open_drain_nmos",
+      "value": "2N7002",
+      "lib_id": "Device:Q_NMOS_GDS",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "at": {
+        "x": 256.54,
+        "y": 441.96,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ISO_nRESET_TGT"
+        }
+      ],
+      "notes": [
+        "NexDAP: 2N7002 N-MOSFET for nRESET open-drain driver"
+      ],
+      "lcsc": "C113152",
+      "mpn": "2N7002",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_NRST_PU",
+      "role": "nreset_target_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 256.54,
+        "y": 469.90000000000003,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ISO_nRESET_TGT"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "D_TGT_ESD",
+      "role": "target_esd_protection",
+      "value": "SRV05-4",
+      "lib_id": "JLC-MCP-Diodes:SRV05-4_C2836319",
+      "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "at": {
+        "x": 256.54,
+        "y": 497.84000000000003,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "TARGET_SWDIO"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ISO_nRESET_TGT"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "ISO_SWCLK_TGT"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "ISO_SWO_TGT"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "ISO_3V3_TARGET"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "NexDAP: SRV05-4 4ch target ESD protection with JLC-MCP SOT-23-6 footprint"
+      ],
+      "lcsc": "C2836319",
+      "mpn": "SRV05-4",
+      "manufacturer": "MSKSEMI"
+    },
+    {
+      "ref": "J_TGT_ARM10",
+      "role": "target_swd_connector_arm10",
+      "value": "ARM10_1.27mm",
+      "lib_id": "Connector_Generic:Conn_02x05",
+      "footprint": "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical_SMD",
+      "at": {
+        "x": 96.52,
+        "y": 198.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VTREF_TARGET"
+        },
+        {
+          "number": "10",
+          "name": "",
+          "net": "TARGET_nRESET"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "TARGET_SWDIO"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "ISO_SWCLK_TGT"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "ISO_SWO_TGT"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "TARGET_UART_RX"
+        },
+        {
+          "number": "9",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "NexDAP: ARM Cortex 10-pin 1.27mm debug connector (2x5)"
+      ],
+      "lcsc": "C41376037",
+      "mpn": "HX PZ1.27-2x5P TP",
+      "manufacturer": "Hanxia"
+    },
+    {
+      "ref": "J_TGT_254",
+      "role": "target_diy_header_2p54",
+      "value": "HEADER_1x9",
+      "lib_id": "Connector_Generic:Conn_01x09",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x09_P2.54mm_Vertical",
+      "at": {
+        "x": 96.52,
+        "y": 246.38,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "TARGET_3V3_OUT"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "VTREF_TARGET"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "TARGET_SWDIO"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "ISO_SWCLK_TGT"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "TARGET_nRESET"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "ISO_SWO_TGT"
+        },
+        {
+          "number": "7",
+          "name": "",
+          "net": "TARGET_UART_TX"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "TARGET_UART_RX"
+        },
+        {
+          "number": "9",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "NexDAP: 1x9P 2.54mm DIY header"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "LED_PWR",
+      "role": "power_indicator_led",
+      "value": "LED_BLUE",
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "at": {
+        "x": 152.4,
+        "y": 114.3,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "LED_PWR_A"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "+3V3_MAIN"
+        }
+      ],
+      "notes": [
+        "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+      ],
+      "lcsc": "C99290",
+      "mpn": "LTST-C191TBKT",
+      "manufacturer": "Lite-On"
+    },
+    {
+      "ref": "R_LED_PWR",
+      "role": "power_led_resistor",
+      "value": "330R",
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "at": {
+        "x": 152.4,
+        "y": 142.24,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "LED_PWR_A"
+        }
+      ],
+      "notes": [
+        "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "LED_DAP",
+      "role": "dap_activity_led",
+      "value": "LED_GREEN",
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "at": {
+        "x": 152.4,
+        "y": 170.18,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "LED_DAP_A"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_LED_DAP",
+      "role": "dap_led_resistor",
+      "value": "330R",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 152.4,
+        "y": 198.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "DAP_ACTIVITY"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "LED_DAP_A"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "LED_TGT",
+      "role": "target_power_led",
+      "value": "LED_RED",
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "at": {
+        "x": 152.4,
+        "y": 226.06,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "LED_TGT_K"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_TARGET_ISO"
+        }
+      ],
+      "notes": [
+        "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_LED_TGT",
+      "role": "target_led_resistor",
+      "value": "330R",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 152.4,
+        "y": 254.0,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ISO_3V3_TARGET"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "LED_TGT_K"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_BULK_3V3",
+      "role": "vcc_3v3_bulk_capacitor",
+      "value": "10uF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 96.52,
+        "y": 233.68,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "TP_ESP_UART",
+      "role": "esp_service_uart_testpads",
+      "value": "TP_3P",
+      "lib_id": "Connector_Generic:Conn_01x03",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+      "at": {
+        "x": 60.96,
+        "y": 441.96,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_UART0_TX"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_UART0_RX"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: 3-pin debug header (symbol Conn_01x03 compat)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "TP_RP_SWD",
+      "role": "rp2040_swd_debug_testpads",
+      "value": "TP_3P",
+      "lib_id": "Connector_Generic:Conn_01x03",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
+      "at": {
+        "x": 160.02,
+        "y": 358.14,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RP_SWD_SWDIO"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "RP_SWD_SWCLK"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: 3-pin debug header (symbol Conn_01x03 compat)"
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    }
+  ],
+  "nets": [
+    {
+      "name": "USB_VBUS",
+      "kind": "signal",
+      "members": [
+        "J1.1",
+        "F1.1"
+      ]
+    },
+    {
+      "name": "+5V_USB_PROTECTED",
+      "kind": "power",
+      "members": [
+        "F1.2",
+        "D_USB_ESD.5",
+        "U_BUCK.4",
+        "C_BUCK_IN.1"
+      ]
+    },
+    {
+      "name": "+3V3_MAIN",
+      "kind": "power",
+      "members": [
+        "L_BUCK.2",
+        "C_BUCK_OUT.1",
+        "C_BULK_3V3.1",
+        "U_ESP32.2",
+        "U_ESP32.3",
+        "U_ESP32.11",
+        "U_ESP32.17",
+        "U_ESP32.29",
+        "U_ESP32.31",
+        "U_ESP32.32",
+        "C_ESP_DEC1.1",
+        "C_ESP_DEC2.1",
+        "C_ESP_BULK.1",
+        "C_ESP_VDDA.1",
+        "U_RP2040.1",
+        "U_RP2040.22",
+        "U_RP2040.23",
+        "U_RP2040.33",
+        "U_RP2040.42",
+        "U_RP2040.43",
+        "U_RP2040.48",
+        "U_RP2040.49",
+        "U_RP2040.50",
+        "C_RP_DEC1.1",
+        "C_RP_DEC2.1",
+        "C_RP_BULK.1",
+        "R_RP_RUN.1",
+        "R_ESP_EN.1",
+        "R_ESP_BOOT.1",
+        "R_ESP_GPIO8.1",
+        "R_ESP_GPIO2.1",
+        "R_BUCK_FB1.1",
+        "U_FLASH.8",
+        "U_ISO.1",
+        "LED_PWR.2",
+        "R_LED_PWR.1",
+        "U_RP2040.44",
+        "U_ISO.16"
+      ]
+    },
+    {
+      "name": "L_BUCK_SW",
+      "kind": "signal",
+      "members": [
+        "U_BUCK.3",
+        "L_BUCK.1"
+      ]
+    },
+    {
+      "name": "BUCK_FB",
+      "kind": "signal",
+      "members": [
+        "U_BUCK.5",
+        "R_BUCK_FB1.2",
+        "R_BUCK_FB2.1"
+      ]
+    },
+    {
+      "name": "GND_HOST",
+      "kind": "signal",
+      "members": [
+        "J1.4",
+        "D_USB_ESD.2",
+        "U_BUCK.2",
+        "C_BUCK_IN.2",
+        "C_BUCK_OUT.2",
+        "R_BUCK_FB2.2",
+        "C_BULK_3V3.2",
+        "U_ESP32.33",
+        "C_ESP_DEC1.2",
+        "C_ESP_DEC2.2",
+        "C_ESP_BULK.2",
+        "C_ESP_VDDA.2",
+        "C_ESP_EN.2",
+        "C_ESP_XTAL1.2",
+        "C_ESP_XTAL2.2",
+        "SW_ESP_RST.2",
+        "ANT1.2",
+        "U_RP2040.45",
+        "U_RP2040.57",
+        "C_RP_DEC1.2",
+        "C_RP_DEC2.2",
+        "C_RP_BULK.2",
+        "U_FLASH.4",
+        "C_RP_XTAL1.2",
+        "C_RP_XTAL2.2",
+        "SW_RP_RST.2",
+        "SW_RP_BOOT.2",
+        "LED_DAP.2",
+        "U_ISO.2",
+        "U_ISO_DCDC.2",
+        "C_ISO_IN.2",
+        "Q_NRST.1",
+        "R_TGT_EN.2",
+        "C_RF_SHUNT.2",
+        "R_CC1.2",
+        "R_CC2.2",
+        "TP_ESP_UART.3",
+        "TP_RP_SWD.3",
+        "U_RP2040.19",
+        "U_ISO.8",
+        "U_ISO.7",
+        "U_ISO.10",
+        "Y_ESP32.3",
+        "Y_ESP32.4",
+        "Y_RP2040.3",
+        "Y_RP2040.4"
+      ]
+    },
+    {
+      "name": "USB_DM",
+      "kind": "signal",
+      "members": [
+        "J1.2",
+        "D_USB_ESD.3"
+      ]
+    },
+    {
+      "name": "USB_DP",
+      "kind": "signal",
+      "members": [
+        "J1.3",
+        "D_USB_ESD.1"
+      ]
+    },
+    {
+      "name": "USB_CC1",
+      "kind": "signal",
+      "members": [
+        "J1.5",
+        "R_CC1.1"
+      ]
+    },
+    {
+      "name": "USB_CC2",
+      "kind": "signal",
+      "members": [
+        "J1.6",
+        "R_CC2.1"
+      ]
+    },
+    {
+      "name": "ESP_CHIP_EN",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.7",
+        "R_ESP_EN.2",
+        "C_ESP_EN.1",
+        "SW_ESP_RST.1"
+      ]
+    },
+    {
+      "name": "ESP_GPIO9_BOOT",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.15",
+        "R_ESP_BOOT.2"
+      ]
+    },
+    {
+      "name": "ESP_GPIO8",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.14",
+        "R_ESP_GPIO8.2"
+      ]
+    },
+    {
+      "name": "ESP_GPIO2",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.6",
+        "R_ESP_GPIO2.2"
+      ]
+    },
+    {
+      "name": "ESP_XTAL_P",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.30",
+        "Y_ESP32.1",
+        "C_ESP_XTAL1.1"
+      ]
+    },
+    {
+      "name": "ESP_XTAL_N",
+      "kind": "signal",
+      "members": [
+        "Y_ESP32.2",
+        "C_ESP_XTAL2.1"
+      ]
+    },
+    {
+      "name": "RF_LNA",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.1",
+        "L_RF.1"
+      ]
+    },
+    {
+      "name": "RF_ANT",
+      "kind": "signal",
+      "members": [
+        "L_RF.2",
+        "C_RF_SHUNT.1",
+        "ANT1.1"
+      ]
+    },
+    {
+      "name": "ESP_UART0_TX",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.28",
+        "TP_ESP_UART.1"
+      ]
+    },
+    {
+      "name": "ESP_UART0_RX",
+      "kind": "signal",
+      "members": [
+        "TP_ESP_UART.2"
+      ]
+    },
+    {
+      "name": "ESP_SPI_SCLK",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.10",
+        "U_RP2040.10"
+      ]
+    },
+    {
+      "name": "ESP_SPI_MOSI",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.9",
+        "U_RP2040.14"
+      ]
+    },
+    {
+      "name": "ESP_SPI_MISO",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.12",
+        "U_RP2040.15"
+      ]
+    },
+    {
+      "name": "ESP_SPI_CS",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.16",
+        "U_RP2040.11"
+      ]
+    },
+    {
+      "name": "ESP_TO_RP_IRQ",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.25",
+        "U_RP2040.12"
+      ]
+    },
+    {
+      "name": "RP_TO_ESP_IRQ",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.26",
+        "U_RP2040.13"
+      ]
+    },
+    {
+      "name": "ESP_UART1_TX",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.4",
+        "U_RP2040.3"
+      ]
+    },
+    {
+      "name": "ESP_UART1_RX",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.5",
+        "U_RP2040.2"
+      ]
+    },
+    {
+      "name": "ESP_RP_RUN_CTRL",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.13",
+        "U_RP2040.26",
+        "R_RP_RUN.2",
+        "SW_RP_RST.1"
+      ]
+    },
+    {
+      "name": "ESP_RP_BOOTSEL_CTRL",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.8",
+        "U_RP2040.56",
+        "U_FLASH.1",
+        "SW_RP_BOOT.1"
+      ]
+    },
+    {
+      "name": "ESP_TGT_PWR_EN",
+      "kind": "power",
+      "members": [
+        "U_ESP32.27",
+        "U_TGT_SW.4",
+        "R_TGT_EN.1"
+      ]
+    },
+    {
+      "name": "QSPI_SCLK",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.52",
+        "U_FLASH.6"
+      ]
+    },
+    {
+      "name": "QSPI_SD0",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.53",
+        "U_FLASH.5"
+      ]
+    },
+    {
+      "name": "QSPI_SD1",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.55",
+        "U_FLASH.2"
+      ]
+    },
+    {
+      "name": "QSPI_SD2",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.54",
+        "U_FLASH.7"
+      ]
+    },
+    {
+      "name": "QSPI_SD3",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.51",
+        "U_FLASH.3"
+      ]
+    },
+    {
+      "name": "RP_XIN",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.20",
+        "Y_RP2040.1",
+        "C_RP_XTAL1.1"
+      ]
+    },
+    {
+      "name": "RP_XOUT",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.21",
+        "Y_RP2040.2",
+        "C_RP_XTAL2.1"
+      ]
+    },
+    {
+      "name": "HOST_SWDIO",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.4",
+        "U_ISO_BUF.1"
+      ]
+    },
+    {
+      "name": "HOST_SWCLK",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.5",
+        "U_ISO.3"
+      ]
+    },
+    {
+      "name": "HOST_nRESET_CTRL",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.17",
+        "U_ISO.4"
+      ]
+    },
+    {
+      "name": "HOST_SWO_IN",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.16",
+        "U_ISO.14"
+      ]
+    },
+    {
+      "name": "HOST_SWDIO_DIR",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.18"
+      ]
+    },
+    {
+      "name": "ISO_SWDIO_OUT",
+      "kind": "signal",
+      "members": [
+        "U_ISO.5",
+        "U_ISO_BUF.2"
+      ]
+    },
+    {
+      "name": "ISO_SWDIO_IN",
+      "kind": "signal",
+      "members": [
+        "U_ISO.11"
+      ]
+    },
+    {
+      "name": "ISO_SWCLK_TGT",
+      "kind": "signal",
+      "members": [
+        "U_ISO.13",
+        "D_TGT_ESD.3",
+        "J_TGT_ARM10.4",
+        "J_TGT_254.4"
+      ]
+    },
+    {
+      "name": "ISO_nRESET_TGT",
+      "kind": "signal",
+      "members": [
+        "U_ISO.6",
+        "Q_NRST.2",
+        "D_TGT_ESD.2",
+        "R_NRST_PU.1"
+      ]
+    },
+    {
+      "name": "TARGET_nRESET",
+      "kind": "signal",
+      "members": [
+        "J_TGT_ARM10.10",
+        "J_TGT_254.5"
+      ]
+    },
+    {
+      "name": "ISO_SWO_TGT",
+      "kind": "signal",
+      "members": [
+        "J_TGT_ARM10.6",
+        "J_TGT_254.6",
+        "D_TGT_ESD.4",
+        "U_ISO.12"
+      ]
+    },
+    {
+      "name": "TARGET_SWDIO",
+      "kind": "signal",
+      "members": [
+        "D_TGT_ESD.1",
+        "J_TGT_ARM10.2",
+        "J_TGT_254.3"
+      ]
+    },
+    {
+      "name": "TARGET_UART_TX",
+      "kind": "signal",
+      "members": [
+        "J_TGT_254.7"
+      ]
+    },
+    {
+      "name": "TARGET_UART_RX",
+      "kind": "signal",
+      "members": [
+        "J_TGT_ARM10.8",
+        "J_TGT_254.8"
+      ]
+    },
+    {
+      "name": "ISO_5V_IN",
+      "kind": "signal",
+      "members": [
+        "U_ISO_DCDC.1",
+        "C_ISO_IN.1"
+      ]
+    },
+    {
+      "name": "ISO_5V_OUT",
+      "kind": "signal",
+      "members": [
+        "U_ISO_DCDC.3",
+        "C_ISO_OUT.1",
+        "U_TGT_LDO.3"
+      ]
+    },
+    {
+      "name": "ISO_3V3_TARGET",
+      "kind": "signal",
+      "members": [
+        "U_TGT_LDO.2",
+        "C_TGT_LDO_OUT.1",
+        "U_TGT_SW.1",
+        "D_TGT_ESD.5",
+        "R_LED_TGT.1"
+      ]
+    },
+    {
+      "name": "TARGET_3V3_OUT",
+      "kind": "signal",
+      "members": [
+        "U_TGT_SW.5",
+        "J_TGT_254.1"
+      ]
+    },
+    {
+      "name": "VTREF_TARGET",
+      "kind": "signal",
+      "members": [
+        "J_TGT_ARM10.1",
+        "J_TGT_254.2",
+        "R_VTREF_DIV1.1"
+      ]
+    },
+    {
+      "name": "VTREF_ADC",
+      "kind": "signal",
+      "members": [
+        "R_VTREF_DIV1.2",
+        "R_VTREF_DIV2.1",
+        "C_VTREF.1"
+      ]
+    },
+    {
+      "name": "GND_TARGET_ISO",
+      "kind": "signal",
+      "members": [
+        "U_ISO.15",
+        "U_ISO_DCDC.4",
+        "C_ISO_OUT.2",
+        "U_TGT_LDO.1",
+        "C_TGT_LDO_OUT.2",
+        "U_TGT_SW.2",
+        "D_TGT_ESD.6",
+        "R_VTREF_DIV2.2",
+        "C_VTREF.2",
+        "R_NRST_PU.2",
+        "J_TGT_ARM10.3",
+        "J_TGT_ARM10.5",
+        "J_TGT_ARM10.9",
+        "J_TGT_254.9",
+        "LED_TGT.2"
+      ]
+    },
+    {
+      "name": "DAP_ACTIVITY",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.24",
+        "R_LED_DAP.1"
+      ]
+    },
+    {
+      "name": "LED_DAP_A",
+      "kind": "signal",
+      "members": [
+        "LED_DAP.1",
+        "R_LED_DAP.2"
+      ]
+    },
+    {
+      "name": "LED_PWR_A",
+      "kind": "power",
+      "members": [
+        "LED_PWR.1",
+        "R_LED_PWR.2"
+      ]
+    },
+    {
+      "name": "LED_TGT_A",
+      "kind": "signal",
+      "members": []
+    },
+    {
+      "name": "LED_TGT_K",
+      "kind": "signal",
+      "members": [
+        "R_LED_TGT.2",
+        "LED_TGT.1"
+      ]
+    },
+    {
+      "name": "RP_SWD_SWDIO",
+      "kind": "signal",
+      "members": [
+        "TP_RP_SWD.1"
+      ]
+    },
+    {
+      "name": "RP_SWD_SWCLK",
+      "kind": "signal",
+      "members": [
+        "TP_RP_SWD.2"
+      ]
+    }
+  ],
+  "diagnostics": {
+    "warnings": [],
+    "unsupported": []
+  }
+}

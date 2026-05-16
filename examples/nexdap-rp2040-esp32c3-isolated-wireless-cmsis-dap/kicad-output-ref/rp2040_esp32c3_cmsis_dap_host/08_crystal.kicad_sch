@@ -1,0 +1,302 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "9d31f0ee-979a-436b-bc1d-79d6acb1c6ff")
+  (paper "A4")
+  (lib_symbols
+    (symbol "Device:Crystal"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 1.016)
+    			(hide yes)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(in_pos_files yes)
+    		(duplicate_pin_numbers_are_jumpers no)
+    		(property "Reference" "Y"
+    			(at 0 3.81 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "Crystal"
+    			(at 0 -3.81 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Datasheet" ""
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Description" "Two pin crystal"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_keywords" "quartz ceramic resonator oscillator"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_fp_filters" "Crystal*"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "Crystal_0_1"
+    			(polyline
+    				(pts
+    					(xy -2.54 0) (xy -1.905 0)
+    				)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy -1.905 -1.27) (xy -1.905 1.27)
+    				)
+    				(stroke
+    					(width 0.508)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(rectangle
+    				(start -1.143 2.54)
+    				(end 1.143 -2.54)
+    				(stroke
+    					(width 0.3048)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy 1.905 -1.27) (xy 1.905 1.27)
+    				)
+    				(stroke
+    					(width 0.508)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy 2.54 0) (xy 1.905 0)
+    				)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(symbol "Crystal_1_1"
+    			(pin passive line
+    				(at -3.81 0 0)
+    				(length 1.27)
+    				(name "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 3.81 0 180)
+    				(length 1.27)
+    				(name "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+  )
+  (symbol
+    (lib_id "Device:Crystal")
+    (at 50.8 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "d229a1b6-eaaf-4f22-b331-1f337032d328")
+    (property "Reference" "Y1" (at 50.8 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "40MHz" (at 50.8 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" (at 50.8 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "ee795e0c-de98-42eb-869f-66ea2051f46a"))
+      (pin "2" (uuid "3e417073-d61e-400b-9ff3-cfac1228201a"))
+    (instances
+      (project "rp2040_esp32c3_cmsis_dap_host"
+        (path "/bb29eca3-de04-4918-9ba7-92179336693c"
+          (reference "Y1")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "Device:Crystal")
+    (at 50.8 78.74 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "41deb09a-692f-429a-a64c-3b7fc9b64b34")
+    (property "Reference" "Y2" (at 50.8 73.66 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "12MHz" (at 50.8 83.82 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm" (at 50.8 78.74 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "c6c1ebe7-b772-4665-a86d-342a3444b234"))
+      (pin "2" (uuid "c6769803-b5e8-497d-a903-78f9390c0212"))
+    (instances
+      (project "rp2040_esp32c3_cmsis_dap_host"
+        (path "/bb29eca3-de04-4918-9ba7-92179336693c"
+          (reference "Y2")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 46.99 50.8) (xy 43.18 50.8))
+    (stroke (width 0) (type default))
+    (uuid "6c5b9bd5-f676-4057-a181-a137d19db6b1")
+  )
+  (hierarchical_label "ESP_XTAL_P" (shape bidirectional) (at 43.18 50.8 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "a53acab7-a1e0-4368-844d-e83d2c1bdb19")
+  )
+  (wire (pts (xy 54.61 50.8) (xy 58.42 50.8))
+    (stroke (width 0) (type default))
+    (uuid "56219836-d2a8-4f25-ab39-acad115f30a5")
+  )
+  (hierarchical_label "ESP_XTAL_N" (shape bidirectional) (at 58.42 50.8 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "46b27736-3e54-4c16-8554-6956d3b830f1")
+  )
+  (wire (pts (xy 46.99 78.74) (xy 43.18 78.74))
+    (stroke (width 0) (type default))
+    (uuid "acc8d3a6-c195-4326-bf40-bdaa267136b7")
+  )
+  (hierarchical_label "RP_XIN" (shape bidirectional) (at 43.18 78.74 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "f8eeab0d-2ed9-4888-944f-e819d9b86a1e")
+  )
+  (wire (pts (xy 54.61 78.74) (xy 58.42 78.74))
+    (stroke (width 0) (type default))
+    (uuid "54f3b633-4d1e-4ffb-9f81-49bc3cd57262")
+  )
+  (hierarchical_label "RP_XOUT" (shape bidirectional) (at 58.42 78.74 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "2dcdaa20-22e7-4d60-b014-1d91bf176368")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/80a26ed7-8343-4f48-a4ed-2fd8f109305f" (page "2"))
+    (path "/3f587689-9144-47fc-a50f-48a5787165ad" (page "3"))
+    (path "/7ca008a1-05da-4090-9da5-3dfa5f3fb3b8" (page "4"))
+    (path "/f77aa31a-1761-4f81-ba69-1990fa7da03c" (page "5"))
+    (path "/36321e1e-5472-45b5-a4f3-5346de7a24c6" (page "6"))
+    (path "/48399dd0-c547-465e-b781-927ec710916f" (page "7"))
+    (path "/f482c7a4-f6fe-4967-b887-b96744020dc9" (page "8"))
+    (path "/bb29eca3-de04-4918-9ba7-92179336693c" (page "9"))
+    (path "/3b68ff7a-cb35-40c0-a2bf-565cf96f8639" (page "10"))
+  )
+)

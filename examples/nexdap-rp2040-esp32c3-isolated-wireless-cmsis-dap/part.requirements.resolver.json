@@ -1,0 +1,151 @@
+{
+  "project": "nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap",
+  "schema_version": "part-requirements-resolver.v1",
+  "requirements": [
+    {
+      "id": "rp2040_mcu",
+      "function": "RP2040 microcontroller dual core Cortex-M0+ 133MHz 30 I/O QFN-56 CMSIS-DAP SWD timing engine",
+      "preferred_mpn": ["RP2040"],
+      "package_preferred": ["QFN-56", "LQFN-56"],
+      "assembly": "JLCPCB",
+      "price_max": 2.0,
+      "voltage_min": 1.8,
+      "current_min": 0.1
+    },
+    {
+      "id": "esp32c3_mcu",
+      "function": "ESP32-C3 WiFi BLE RISC-V microcontroller built-in flash QFN-32 bare chip",
+      "preferred_mpn": ["ESP32-C3FN4", "ESP32-C3FH4", "ESP32-C3"],
+      "package_preferred": ["QFN-32"],
+      "assembly": "JLCPCB",
+      "price_max": 3.0,
+      "voltage_min": 3.0,
+      "current_min": 0.3
+    },
+    {
+      "id": "rp2040_flash_qspi",
+      "function": "QSPI NOR flash 16Mbit 32Mbit 3.3V for RP2040 external boot",
+      "preferred_mpn": ["W25Q16JVSSIQ", "W25Q32JVSSIQ", "GD25Q16ETIGR", "GD25Q32E"],
+      "package_preferred": ["SOIC-8", "USON-8", "SOP-8"],
+      "assembly": "JLCPCB",
+      "price_max": 0.8
+    },
+    {
+      "id": "main_buck_3v3",
+      "function": "5V to 3.3V synchronous buck converter >=1A output for main system rail",
+      "preferred_mpn": ["TPS62162", "MPM3610", "SY8089A", "RT8059"],
+      "package_preferred": ["SOT-23", "SOT-23-5", "SOT-23-6", "DFN", "QFN"],
+      "output_voltage": 3.3,
+      "current_min": 1.0,
+      "voltage_min": 5.0,
+      "assembly": "JLCPCB",
+      "price_max": 2.0
+    },
+    {
+      "id": "target_power_switch",
+      "function": "3.3V power switch load switch with enable current limit reverse current blocking default off",
+      "preferred_mpn": ["TPS22918", "TPS22919", "AP2331", "SY6280"],
+      "package_preferred": ["SOT-23", "SOT-23-5", "SOT-23-6", "WSON"],
+      "current_min": 0.3,
+      "assembly": "JLCPCB",
+      "price_max": 1.0
+    },
+    {
+      "id": "input_efuse",
+      "function": "USB 5V input eFuse overvoltage overcurrent protection 500mA-1A",
+      "preferred_mpn": ["TPS25200", "NCP380", "AP2151"],
+      "package_preferred": ["SOT-23", "SOT-23-5", "SOT-23-6", "WSON"],
+      "voltage_min": 5.0,
+      "current_min": 0.5,
+      "assembly": "JLCPCB",
+      "price_max": 1.5
+    },
+    {
+      "id": "digital_isolator",
+      "function": "high speed digital isolator 4-6 channels bidirectional capable >=50Mbps 3.3V for SWD isolation",
+      "preferred_mpn": ["ISO7741", "ISO7742", "CA-IS3741", "CA-IS3742", "ADuM1401", "ADuM1402"],
+      "package_preferred": ["SOIC-16", "SSOP-16", "QSOP-16"],
+      "assembly": "JLCPCB",
+      "price_max": 5.0
+    },
+    {
+      "id": "isolated_dcdc",
+      "function": "isolated DC-DC converter 5V to 5V or 5V to 3.3V 1W-2W for target side isolated power",
+      "preferred_mpn": ["B0505S-1WR3", "IB0505S-1W", "B0503S-1W", "F0505S-1W"],
+      "package_preferred": ["SIP-4", "SIP", "DIP", "SMD"],
+      "output_voltage": 5.0,
+      "current_min": 0.2,
+      "assembly": "JLCPCB",
+      "price_max": 5.0
+    },
+    {
+      "id": "target_ldo_3v3",
+      "function": "3.3V LDO regulator 300mA low noise for target side isolated power clean up isolated DC-DC ripple",
+      "preferred_mpn": ["ME6211C33", "XC6206P332MR", "AMS1117-3.3", "RT9013-33"],
+      "package_preferred": ["SOT-23-5", "SOT-23", "SOT-89", "SOT-223"],
+      "output_voltage": 3.3,
+      "current_min": 0.3,
+      "assembly": "JLCPCB",
+      "price_max": 0.5
+    },
+    {
+      "id": "usb_esd",
+      "function": "USB 2.0 ESD protection diode array D+ D- VBUS",
+      "preferred_mpn": ["USBLC6-2SC6", "SRV05-4", "ESD9M5V"],
+      "package_preferred": ["SOT-23-6", "SOT-23", "SOT-23-5"],
+      "assembly": "JLCPCB",
+      "price_max": 0.5
+    },
+    {
+      "id": "usb_c_receptacle",
+      "function": "USB-C receptacle USB 2.0 data 5V power through hole or SMD",
+      "package_preferred": ["USB-C", "SMD", "through-hole"],
+      "assembly": "JLCPCB",
+      "price_max": 1.0
+    },
+    {
+      "id": "rp2040_crystal",
+      "function": "12MHz crystal 3225 or 5032 SMD for RP2040 clock source",
+      "package_preferred": ["3225", "5032", "SMD-3225", "SMD-5032"],
+      "assembly": "JLCPCB",
+      "price_max": 0.5
+    },
+    {
+      "id": "esp32c3_crystal",
+      "function": "40MHz crystal 3225 SMD for ESP32-C3 WiFi clock source",
+      "package_preferred": ["3225", "SMD-3225"],
+      "assembly": "JLCPCB",
+      "price_max": 0.5
+    },
+    {
+      "id": "target_esd",
+      "function": "ESD protection diode array for target SWD interface signals 4-6 channels",
+      "preferred_mpn": ["SRV05-4", "TPD4E05U06", "ESD9M5V"],
+      "package_preferred": ["SOT-23-6", "SOT-23-5", "SC-70"],
+      "assembly": "JLCPCB",
+      "price_max": 0.5
+    },
+    {
+      "id": "power_led",
+      "function": "LED indicator 0603 or 0805 for power status 3.3V operation",
+      "package_preferred": ["0603", "0805"],
+      "assembly": "JLCPCB",
+      "price_max": 0.1
+    },
+    {
+      "id": "target_connector_arm10",
+      "function": "ARM Cortex 10-pin debug connector 1.27mm pitch male header or box header",
+      "package_preferred": ["1.27mm", "SMD", "through-hole"],
+      "assembly": "JLCPCB",
+      "price_max": 1.5
+    },
+    {
+      "id": "usb_cc_resistor",
+      "function": "5.1k ohm chip resistor 0603 or 0402 for USB-C CC pull-down",
+      "preferred_mpn": [],
+      "package_preferred": ["0603", "0402"],
+      "assembly": "JLCPCB",
+      "price_max": 0.01
+    }
+  ]
+}

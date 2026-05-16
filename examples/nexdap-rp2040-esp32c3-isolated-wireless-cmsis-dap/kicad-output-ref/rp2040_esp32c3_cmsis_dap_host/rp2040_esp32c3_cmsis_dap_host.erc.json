@@ -1,0 +1,2640 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-16T17:17:34",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.1",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a",
+            "violations": [
+                {
+                    "description": "ESP_BOOT 和 USB_VBUS_RAW 都连接到同一项上; 将使用 ESP_BOOT 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 'ESP_BOOT'",
+                            "pos": {
+                                "x": 1.4478,
+                                "y": 0.4064
+                            },
+                            "uuid": "7010050c-899a-4441-a36e-e96aa63c7675"
+                        },
+                        {
+                            "description": "全局标签 'USB_VBUS_RAW'",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 0.5588
+                            },
+                            "uuid": "4b085b03-06be-4393-a1bf-bef60e64ee61"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "+5V_USB 和 ESP_XTAL_P 都连接到同一项上; 将使用 +5V_USB 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 '+5V_USB'",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 0.4064
+                            },
+                            "uuid": "4e27f4cc-28cf-4003-aae1-e672516fbfdb"
+                        },
+                        {
+                            "description": "全局标签 'ESP_XTAL_P'",
+                            "pos": {
+                                "x": 1.4478,
+                                "y": 0.8636
+                            },
+                            "uuid": "3ac01d9b-baf3-47e3-9f3e-bba0f6a3471c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "ESP_CHIP_EN 和 GND 都连接到同一项上; 将使用 ESP_CHIP_EN 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 'ESP_CHIP_EN'",
+                            "pos": {
+                                "x": 1.4478,
+                                "y": 0.4826
+                            },
+                            "uuid": "3d89881a-97bf-4d1f-8738-f1aa902b223e"
+                        },
+                        {
+                            "description": "全局标签 'GND'",
+                            "pos": {
+                                "x": 1.4478,
+                                "y": 0.9398
+                            },
+                            "uuid": "652d7a3b-bdf7-465c-8152-fafaef66d42f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "+3V3 和 USB_DP 都连接到同一项上; 将使用 +3V3 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 '+3V3'",
+                            "pos": {
+                                "x": 2.1082,
+                                "y": 0.3302
+                            },
+                            "uuid": "a83b486e-428d-4a93-8a00-802e85f32202"
+                        },
+                        {
+                            "description": "全局标签 'USB_DP'",
+                            "pos": {
+                                "x": 1.4478,
+                                "y": 1.1684
+                            },
+                            "uuid": "4dd1108d-daee-4d6e-8ddc-55555fff56e3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "在库 'Connector_USB' 中找不到封装 'USB_A_PCB_traces_small'",
+                    "items": [
+                        {
+                            "description": "符号 J1 [Conn_01x06]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "ee1d870c-f92a-4114-84f9-6d1778bbe5a6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "符号 'Conn_01x06' 与来源库 'Connector_Generic' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 J1 [Conn_01x06]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "ee1d870c-f92a-4114-84f9-6d1778bbe5a6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'Conn_01x04' 与来源库 'Connector_Generic' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 J2 [Conn_01x04]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.7874
+                            },
+                            "uuid": "8e457a7f-0f30-4ef4-b3a6-2c92092e4979"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'LED' 与来源库 'Device' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 LED1 [LED]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 0.7874
+                            },
+                            "uuid": "1f426f73-70fd-442c-af74-bc6239b42c75"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'SW_Push' 与来源库 'Switch' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 SW1 [SW_Push]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.7526
+                            },
+                            "uuid": "282a936b-adae-4778-b52a-01c80055ce4f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'SW_Push' 与来源库 'Switch' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 SW2 [SW_Push]",
+                            "pos": {
+                                "x": 1.016,
+                                "y": 1.7526
+                            },
+                            "uuid": "d86023ff-393e-4da3-9f95-fccb14501b44"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "当前配置不包含符号库 'AIAgent'",
+                    "items": [
+                        {
+                            "description": "符号 U2 [ESP32_C3_Module]",
+                            "pos": {
+                                "x": 2.6162,
+                                "y": 0.508
+                            },
+                            "uuid": "0b8bfdd9-a546-4d4a-adec-28173a39f483"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "未连接的连线端点",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.667,
+                                "y": 0.508
+                            },
+                            "uuid": "c0118023-3f55-4756-9e9c-774ea29a6f9c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "unconnected_wire_endpoint"
+                },
+                {
+                    "description": "符号 'Antenna' 与来源库 'Device' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 ANT1 [Antenna]",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 2.032
+                            },
+                            "uuid": "1d8a3254-2810-45aa-b4a8-50b5e396bd00"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "未连接的连线端点",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.032,
+                                "y": 2.032
+                            },
+                            "uuid": "7299bb0b-f6f1-4aba-8eb5-1fe58a88bcaa"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "unconnected_wire_endpoint"
+                },
+                {
+                    "description": "当前配置不包含符号库 'AIAgent'",
+                    "items": [
+                        {
+                            "description": "符号 U1 [RP2040_QFN56]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "6e75e51b-49ab-414e-80de-1a4e8504dcac"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "符号 'Crystal' 与来源库 'Device' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 Y1 [Crystal]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "d229a1b6-eaaf-4f22-b331-1f337032d328"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "符号 'Crystal' 与来源库 'Device' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 Y2 [Crystal]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.7874
+                            },
+                            "uuid": "41deb09a-692f-429a-a64c-3b7fc9b64b34"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "当前配置不包含符号库 'AIAgent'",
+                    "items": [
+                        {
+                            "description": "符号 U3 [RP2040_QFN56]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "5a683ead-7cbb-49a3-a4d6-87b05a5b4103"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "符号 'SW_Push' 与来源库 'Switch' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 SW3 [SW_Push]",
+                            "pos": {
+                                "x": 1.3208,
+                                "y": 0.7874
+                            },
+                            "uuid": "c3ad8b42-1516-47ee-8686-549e2d5e9d2f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                },
+                {
+                    "description": "当前配置不包含符号库 'AIAgent'",
+                    "items": [
+                        {
+                            "description": "符号 U4 [RP2040_QFN56]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.7526
+                            },
+                            "uuid": "3b6791dc-bed8-41aa-a01f-f1b279a6ade3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "符号 'SW_Push' 与来源库 'Switch' 中的符号存在差异",
+                    "items": [
+                        {
+                            "description": "符号 SW4 [SW_Push]",
+                            "pos": {
+                                "x": 1.8542,
+                                "y": 0.508
+                            },
+                            "uuid": "8730d656-50d7-4e7c-a9d5-6435d2f2e48a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_mismatch"
+                }
+            ]
+        },
+        {
+            "path": "/power_input/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/80a26ed7-8343-4f48-a4ed-2fd8f109305f",
+            "violations": []
+        },
+        {
+            "path": "/debug_io/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/f77aa31a-1761-4f81-ba69-1990fa7da03c",
+            "violations": [
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 5 [Pin_5, Passive, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.5588
+                            },
+                            "uuid": "1621322c-16d1-4b3e-83bc-49b1b5a1d5b9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 6 [Pin_6, Passive, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.5842
+                            },
+                            "uuid": "a4c47bac-bf10-4399-b100-0637676bc67a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                }
+            ]
+        },
+        {
+            "path": "/boot/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/f482c7a4-f6fe-4967-b887-b96744020dc9",
+            "violations": []
+        },
+        {
+            "path": "/esp32c3_host/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/3f587689-9144-47fc-a50f-48a5787165ad",
+            "violations": [
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 3V3 [3V3, Power input, Line]",
+                            "pos": {
+                                "x": 2.4638,
+                                "y": 0.4064
+                            },
+                            "uuid": "3e0893d8-e001-4068-a11f-5373089f615d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 EN [EN, Input, Line]",
+                            "pos": {
+                                "x": 2.4638,
+                                "y": 0.4572
+                            },
+                            "uuid": "a77e6338-d59d-446a-b947-c050480055e6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 GPIO9 [GPIO9/BOOT, Bidirectional, Line]",
+                            "pos": {
+                                "x": 2.4638,
+                                "y": 0.508
+                            },
+                            "uuid": "7f390272-4c75-4150-b358-ae592531d1d6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 GND [GND, Power input, Line]",
+                            "pos": {
+                                "x": 2.6162,
+                                "y": 0.6985
+                            },
+                            "uuid": "f2c24913-9e5a-4ae9-b735-21442c8bccc1"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 TXD [TXD, Output, Line]",
+                            "pos": {
+                                "x": 2.7686,
+                                "y": 0.4572
+                            },
+                            "uuid": "081b3156-4460-4620-ba60-5cc1979be1f3"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 RXD [RXD, Input, Line]",
+                            "pos": {
+                                "x": 2.7686,
+                                "y": 0.508
+                            },
+                            "uuid": "70ce7a84-5351-48c4-8416-fd201bdbc020"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol ANT1 引脚 1 [A, Input, Line]",
+                            "pos": {
+                                "x": 1.9812,
+                                "y": 2.0828
+                            },
+                            "uuid": "aa9c1703-ad1b-47d5-87b5-2b4c238c2b7f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "RF_LNA 和 +3V3 都连接到同一项上; 将使用 RF_LNA 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "标签 'RF_LNA'",
+                            "pos": {
+                                "x": 2.5273,
+                                "y": 0.508
+                            },
+                            "uuid": "85d988cb-f068-4f6c-bf85-ef36e8f4a88d"
+                        },
+                        {
+                            "description": "层次标签 '+3V3'",
+                            "pos": {
+                                "x": 2.5273,
+                                "y": 0.508
+                            },
+                            "uuid": "b4e35b91-769f-4d69-b9e0-45c06625e788"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                }
+            ]
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/36321e1e-5472-45b5-a4f3-5346de7a24c6",
+            "violations": [
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 49 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.2159
+                            },
+                            "uuid": "94e8a28b-8339-4119-ab38-0204043408a6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 42 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.2286
+                            },
+                            "uuid": "b79c6c8c-df2a-4acd-afd9-15e24b5b48a2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 33 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.2413
+                            },
+                            "uuid": "9ad95434-0860-4700-9ec8-f363252fecc7"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 22 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.254
+                            },
+                            "uuid": "f62e6b0d-abd2-4a22-b504-6e5cdd3e7391"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 10 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.2667
+                            },
+                            "uuid": "aa7367fc-ac76-40e1-9ee4-b9201a77a954"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 50 [DVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.2921
+                            },
+                            "uuid": "1afb584f-50de-410c-8fc7-2d6ef4462764"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 23 [DVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.3048
+                            },
+                            "uuid": "19bb9b6a-fbe9-479e-8d63-4fe24958e322"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 43 [ADC_AVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.3302
+                            },
+                            "uuid": "fe25f3c2-ead2-430b-b0af-ae2e7c4e368a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 48 [USB_VDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.3556
+                            },
+                            "uuid": "1deaaf6f-a8ee-45c8-bf44-2e3d150e59ca"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 44 [VREG_IN, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.381
+                            },
+                            "uuid": "fd34d060-08ec-4240-8c7d-228061fb7222"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 45 [VREG_VOUT, Output, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.4064
+                            },
+                            "uuid": "c59990e7-a8f3-40bc-b94f-929cccc99af9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 26 [RUN, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.4572
+                            },
+                            "uuid": "222752c6-af4c-45b9-bbfd-3b083b9ef4cb"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 46 [USB_DM, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.508
+                            },
+                            "uuid": "113d5b54-165d-4225-ac8a-3117378dca33"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 47 [USB_DP, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.5334
+                            },
+                            "uuid": "197ab1f7-409f-4259-b171-c12ecb8dfa80"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 19 [TESTEN, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.5588
+                            },
+                            "uuid": "a25bf396-04f2-4fe1-8e8b-a7e7c5d25ffd"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 24 [SWCLK, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.5842
+                            },
+                            "uuid": "c424afc1-d898-4ab0-ac26-d7360d24952a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 25 [SWD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.6096
+                            },
+                            "uuid": "49199c3c-769a-4d83-ac1b-09b067e46a95"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 56 [QSPI_SS, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.3302
+                            },
+                            "uuid": "e0f864f3-d111-4613-9c36-2246f553e407"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 52 [QSPI_SCLK, Output, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.3556
+                            },
+                            "uuid": "b74a37d3-3d96-4dcd-a4c6-f1a4ad5c5bf7"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 53 [QSPI_SD0, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.381
+                            },
+                            "uuid": "8e1a2622-ad9f-4fed-bda1-67cc0346c213"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 55 [QSPI_SD1, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.4064
+                            },
+                            "uuid": "fe4b99c5-1dbb-484e-a5a8-7921c287b9a4"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 54 [QSPI_SD2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.4318
+                            },
+                            "uuid": "8839da1b-8a85-4a7f-beee-45d3f89aac8e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 51 [QSPI_SD3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.4572
+                            },
+                            "uuid": "c1bb4fcd-306d-4958-9522-cd3fc490cc56"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 27 [GPIO16, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.4826
+                            },
+                            "uuid": "b7502398-ec45-4944-bf36-277ffa7536ec"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 28 [GPIO17, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.508
+                            },
+                            "uuid": "97e3cab3-68b8-4b7a-a10f-db43c05d1394"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 29 [GPIO18, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.5334
+                            },
+                            "uuid": "aa51b384-3229-4005-9139-483939ceb195"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 20 [XIN, Input, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.8255
+                            },
+                            "uuid": "a78b32c1-e9e1-48a4-8ba6-f83874d050df"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 57 [GND, Power input, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.8255
+                            },
+                            "uuid": "8a7d4981-59b8-40aa-a500-1b04ba91ccb2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 37 [GPIO25, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.6096
+                            },
+                            "uuid": "55304ef1-b3e5-495e-b740-9e45b6feb02d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 4 [GPIO2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.635
+                            },
+                            "uuid": "cdee85b5-8a58-4084-b7d0-fe14b8afb359"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 21 [XOUT, Output, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.8255
+                            },
+                            "uuid": "f3f2acac-c5d0-4279-be30-268c354251a2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 5 [GPIO3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.6604
+                            },
+                            "uuid": "f450543d-ab8c-4293-a99c-434eadbe087a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 6 [GPIO4, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.6858
+                            },
+                            "uuid": "ad19ec90-3928-4a1b-bc10-e5266f9c72df"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 7 [GPIO5, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.7112
+                            },
+                            "uuid": "6dfaf9f8-5d51-479f-bf54-b509d7eaeefd"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 8 [GPIO6, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.7366
+                            },
+                            "uuid": "c620ba7c-4db4-4fbb-9f6d-46cb2c6ebfed"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 9 [GPIO7, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.762
+                            },
+                            "uuid": "0688fe79-fd2f-406a-90dd-651a07bf5de8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 11 [GPIO8, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.7874
+                            },
+                            "uuid": "57aaeaa4-1e42-4fd4-bb44-665693089ba7"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 12 [GPIO9, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.8128
+                            },
+                            "uuid": "240ca396-fca9-48e3-961a-b0a68e0393e4"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 13 [GPIO10, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.8382
+                            },
+                            "uuid": "c2643601-e355-4607-ac08-e97efb4e092d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 14 [GPIO11, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.8636
+                            },
+                            "uuid": "0eada637-2ceb-467e-92f1-a5f26f26b2aa"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 15 [GPIO12, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.889
+                            },
+                            "uuid": "8e7532da-1fae-4390-a450-d5a2eb225fd4"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 16 [GPIO13, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9144
+                            },
+                            "uuid": "657077c6-4d53-426d-b3a8-2180e82e7a09"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 17 [GPIO14, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9398
+                            },
+                            "uuid": "0771150e-d0a5-4de4-8f74-75482685b474"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 18 [GPIO15, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9652
+                            },
+                            "uuid": "7441bef5-7366-4c9f-8c31-2906a99fdf85"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 30 [GPIO19, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9906
+                            },
+                            "uuid": "b22669f9-d408-4e3e-8331-4ff611050730"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 31 [GPIO20, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.016
+                            },
+                            "uuid": "d3963580-23a0-4972-8e22-3dba2943c4e6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 32 [GPIO21, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.0414
+                            },
+                            "uuid": "f237703e-71d0-4c04-ba13-00ac3d701ce4"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 34 [GPIO22, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.0668
+                            },
+                            "uuid": "3d08b2d1-593f-4ce6-a622-cda7fa07b9b1"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 35 [GPIO23, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.0922
+                            },
+                            "uuid": "bb2ddc80-8cf7-4027-b756-22d1c6fdda42"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 36 [GPIO24, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.1176
+                            },
+                            "uuid": "15990679-d620-4696-b17c-5fc3dbcd7b4a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 38 [GPIO26_ADC0, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.143
+                            },
+                            "uuid": "38f80b19-88dc-4b03-8189-5eafde354e94"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 39 [GPIO27_ADC1, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.1684
+                            },
+                            "uuid": "e842ce0d-5fc7-4edf-82a2-5e4183eccaf8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 40 [GPIO28_ADC2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.1938
+                            },
+                            "uuid": "c0a6df11-3c4c-4291-841d-3c225328ebd2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 41 [GPIO29_ADC3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.2192
+                            },
+                            "uuid": "972b084d-0d5a-4336-a0ad-d52cb51cda79"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "引脚 GND 未连接到接地网络",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 57 [GND, Power input, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.8255
+                            },
+                            "uuid": "8a7d4981-59b8-40aa-a500-1b04ba91ccb2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "ground_pin_not_ground"
+                }
+            ]
+        },
+        {
+            "path": "/crystal/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/bb29eca3-de04-4918-9ba7-92179336693c",
+            "violations": []
+        },
+        {
+            "path": "/rp2040_dap/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/7ca008a1-05da-4090-9da5-3dfa5f3fb3b8",
+            "violations": [
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 44 [VREG_IN, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.381
+                            },
+                            "uuid": "bea48df9-9fbf-40d4-bb8d-f7598191d1ad"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 46 [USB_DM, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.508
+                            },
+                            "uuid": "91608fe5-b68b-41b1-ad9e-d146c533aa4b"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 47 [USB_DP, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.5334
+                            },
+                            "uuid": "266ef8e4-3696-47f0-8605-d25dca348b06"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 19 [TESTEN, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.5588
+                            },
+                            "uuid": "aff46f88-131d-419a-adaf-3cb22830af6a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 24 [SWCLK, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.5842
+                            },
+                            "uuid": "f51ee631-ab0c-4bbf-986c-30914ba585de"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 25 [SWD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 0.6096
+                            },
+                            "uuid": "c311cf6f-0d04-44d8-a474-0896706fd8e4"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 27 [GPIO16, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.4826
+                            },
+                            "uuid": "733d26f5-e5ac-452d-874b-84d442b54d80"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 28 [GPIO17, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.508
+                            },
+                            "uuid": "8660bf7a-c3e7-4647-9795-778f91c6fce7"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 29 [GPIO18, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.5334
+                            },
+                            "uuid": "37ce1c7c-6305-45dc-9a4c-b2a71b4dc6cb"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 6 [GPIO4, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.6858
+                            },
+                            "uuid": "acb21229-a186-4ce0-908e-a2c5e569b485"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 7 [GPIO5, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.7112
+                            },
+                            "uuid": "c486fb25-8c59-48a6-82dd-040362e5ff03"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 8 [GPIO6, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.7366
+                            },
+                            "uuid": "a1a6c74e-9e3f-48a2-9176-de95fdcc01f3"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 9 [GPIO7, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.762
+                            },
+                            "uuid": "89dd00f3-b9df-4782-995d-f917e982e011"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 11 [GPIO8, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.7874
+                            },
+                            "uuid": "2cef3ea0-d790-46f1-9c09-c5143c23e1b2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 12 [GPIO9, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.8128
+                            },
+                            "uuid": "817bb167-2cd4-40d0-8cda-d09698d5cdb0"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 13 [GPIO10, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.8382
+                            },
+                            "uuid": "a4db0cfe-4e9c-4591-96c4-ffce4106f55c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 14 [GPIO11, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.8636
+                            },
+                            "uuid": "2cae7b34-91df-4d7b-821d-1ed098311623"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 15 [GPIO12, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.889
+                            },
+                            "uuid": "a76cff13-a3c3-4179-b005-f2931894e3e9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 16 [GPIO13, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9144
+                            },
+                            "uuid": "10961b76-4a61-42ca-aad1-8336155334e8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 17 [GPIO14, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9398
+                            },
+                            "uuid": "fd7395e2-ba2e-4bc1-832b-1d5bf6268fcc"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 18 [GPIO15, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9652
+                            },
+                            "uuid": "4f39a541-74f8-4c7a-8fe7-d347a57061c6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 30 [GPIO19, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 0.9906
+                            },
+                            "uuid": "be3d1193-eaeb-4e4f-ae18-4badfd4c7894"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 31 [GPIO20, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.016
+                            },
+                            "uuid": "ab68f56f-988b-4086-b5ab-0ef9d67446d6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 32 [GPIO21, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.0414
+                            },
+                            "uuid": "a7b7962c-496b-4147-a51c-9436dda8b4ac"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 34 [GPIO22, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.0668
+                            },
+                            "uuid": "0fecc660-896f-4c24-8392-9b0a6fdc4c3d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 35 [GPIO23, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.0922
+                            },
+                            "uuid": "0e2e8d66-e470-41f5-bac2-1234b9b41a78"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 36 [GPIO24, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.1176
+                            },
+                            "uuid": "c3dd1674-2b42-4607-88da-83014810ecf0"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 38 [GPIO26_ADC0, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.143
+                            },
+                            "uuid": "87f8ec47-2670-4698-b5a2-1ab451239a2b"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 39 [GPIO27_ADC1, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.1684
+                            },
+                            "uuid": "d02aaf17-0109-4a8e-9f18-4673499467b0"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 40 [GPIO28_ADC2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.1938
+                            },
+                            "uuid": "d076249e-c8f8-4dbe-8c24-29bb1c3c2f58"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U3 引脚 41 [GPIO29_ADC3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.2192
+                            },
+                            "uuid": "4f257cd4-329c-41aa-8aae-df2dd42d7bd8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 49 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.4605
+                            },
+                            "uuid": "4762c954-f51e-4b2c-ae3a-f3a646959eb6"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 42 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.4732
+                            },
+                            "uuid": "e5f0d5c3-efa9-4a6e-b72b-cd9b03d78a8d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 33 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.4859
+                            },
+                            "uuid": "f87d46db-5be9-48b2-b28d-1c2d634fae9c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 22 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.4986
+                            },
+                            "uuid": "51ca1d63-4869-47fd-bdf9-d08ea915168f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 10 [IOVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.5113
+                            },
+                            "uuid": "f26cd2e6-dbc0-48db-8f49-71a984189393"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 50 [DVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.5367
+                            },
+                            "uuid": "2f1659a1-9ba0-437f-872b-3ec4a62c0a27"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 23 [DVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.5494
+                            },
+                            "uuid": "f54cc82d-0c5d-44ef-9275-b5ac395395c3"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 43 [ADC_AVDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.5748
+                            },
+                            "uuid": "35a84c67-853f-4b16-b9de-77f148fb0dca"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 48 [USB_VDD, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.6002
+                            },
+                            "uuid": "b4668ba1-e0db-4366-963b-857c81668d60"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 44 [VREG_IN, Power input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.6256
+                            },
+                            "uuid": "9006c05d-ce78-4431-9e9b-3a369e565e96"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 45 [VREG_VOUT, Output, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.651
+                            },
+                            "uuid": "336d36df-acb6-4347-92cf-03fd369d372d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 26 [RUN, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.7018
+                            },
+                            "uuid": "a9237739-1c6c-420a-8a75-eaa4d106dbdb"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 56 [QSPI_SS, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.5748
+                            },
+                            "uuid": "1a42653a-0315-4d34-b54d-b328b6ef625b"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 46 [USB_DM, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.7526
+                            },
+                            "uuid": "6d9638cf-5f23-473f-9ced-dd8ffd8731cf"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 52 [QSPI_SCLK, Output, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.6002
+                            },
+                            "uuid": "7c32cd98-5901-411b-b0e5-5f7bc9dbe812"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 53 [QSPI_SD0, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.6256
+                            },
+                            "uuid": "be670b7f-776f-428c-8f07-705bdf87593b"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 47 [USB_DP, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.778
+                            },
+                            "uuid": "cafdaced-06c0-4ebb-a9cb-883ff5df6f7e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 55 [QSPI_SD1, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.651
+                            },
+                            "uuid": "d9ef49d1-622c-4dfb-8b4e-ab138ed87aba"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 19 [TESTEN, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.8034
+                            },
+                            "uuid": "257a803b-6401-41ae-b7ec-cd0a7512a894"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 54 [QSPI_SD2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.6764
+                            },
+                            "uuid": "caa7329f-a6be-4102-a2e6-1be959491f02"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 24 [SWCLK, Input, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.8288
+                            },
+                            "uuid": "7e27e28c-8017-41b5-8ed2-ac85405d3023"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 51 [QSPI_SD3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.7018
+                            },
+                            "uuid": "bd012d41-9a0f-43ed-8d89-fd341d83b9ee"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 25 [SWD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.254,
+                                "y": 1.8542
+                            },
+                            "uuid": "cb401fd0-94cc-447b-a12d-b1f2b8abef51"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 27 [GPIO16, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.7272
+                            },
+                            "uuid": "bf423637-fa3c-4955-98ba-2f724d5c3e9f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 28 [GPIO17, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.7526
+                            },
+                            "uuid": "945ee6f4-e865-442b-bd30-82a74c04650d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 29 [GPIO18, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.778
+                            },
+                            "uuid": "ddd57bd7-eba4-4cb0-a97a-0af1d5afe2a5"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 37 [GPIO25, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 1.8542
+                            },
+                            "uuid": "7df37e2e-7b10-4cce-bffe-439631cfeeea"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 20 [XIN, Input, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 2.0701
+                            },
+                            "uuid": "57fdd35c-0fc9-47ca-af0e-624e72d55ff5"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 57 [GND, Power input, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.0701
+                            },
+                            "uuid": "3df70616-5021-4c6d-a0dc-a131036fa333"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 21 [XOUT, Output, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 2.0701
+                            },
+                            "uuid": "0cee346e-ddf2-4a6a-9420-de62e40994a2"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 9 [GPIO7, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.0066
+                            },
+                            "uuid": "5f1c8599-3210-40e1-ace4-8fa5a7cd31f8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 11 [GPIO8, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.032
+                            },
+                            "uuid": "54f99b9c-21dc-46e3-8049-91e71f73f970"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 12 [GPIO9, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.0574
+                            },
+                            "uuid": "63e811c5-cee5-41b1-9111-f6cd7eb260b0"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 13 [GPIO10, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.0828
+                            },
+                            "uuid": "b2dcfa85-ab62-442b-9438-886b3500751f"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 14 [GPIO11, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.1082
+                            },
+                            "uuid": "89cc91f6-a575-4b62-9617-773205462df5"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 15 [GPIO12, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.1336
+                            },
+                            "uuid": "a1dab8fa-7756-4e22-9925-60fd5a3d6813"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 16 [GPIO13, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.159
+                            },
+                            "uuid": "ed338e6b-56c3-4d1b-a19f-d1a49363a903"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 17 [GPIO14, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.1844
+                            },
+                            "uuid": "c8b33d1a-0431-473d-a6e7-2c9dc061d296"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 18 [GPIO15, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.2098
+                            },
+                            "uuid": "6067ef4b-c70e-4c73-bf9d-c6468831115b"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 30 [GPIO19, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.2352
+                            },
+                            "uuid": "4c600418-13b4-4117-a1ea-3352306bc823"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 31 [GPIO20, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.2606
+                            },
+                            "uuid": "a22a5543-3e73-4f76-b29e-8ef0d4905214"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 32 [GPIO21, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.286
+                            },
+                            "uuid": "436434c2-945a-438c-ac35-9649d367284d"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 34 [GPIO22, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.3114
+                            },
+                            "uuid": "494cc6f0-09a0-4a71-8895-ac00d8ce5948"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 35 [GPIO23, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.3368
+                            },
+                            "uuid": "9598ae2f-cd89-4800-bae2-23b143f8adcb"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 36 [GPIO24, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.3622
+                            },
+                            "uuid": "63c4eb38-cf23-4fa5-8f22-225950159b58"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 38 [GPIO26_ADC0, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.3876
+                            },
+                            "uuid": "43cffe38-83bd-4f22-99f9-3e32d0cc2be1"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 39 [GPIO27_ADC1, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.413
+                            },
+                            "uuid": "c61a1538-7ce2-4e2f-80b6-d380596a909a"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 40 [GPIO28_ADC2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.4384
+                            },
+                            "uuid": "ce09e2ea-916b-405d-ad4a-2713cf9f4546"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                },
+                {
+                    "description": "Pin not connected",
+                    "items": [
+                        {
+                            "description": "Symbol U4 引脚 41 [GPIO29_ADC3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.762,
+                                "y": 2.4638
+                            },
+                            "uuid": "52996239-16fb-42eb-be3b-4376f6effada"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_connected"
+                }
+            ]
+        },
+        {
+            "path": "/reset/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/48399dd0-c547-465e-b781-927ec710916f",
+            "violations": [
+                {
+                    "description": "+3V3 和 ESP_CHIP_EN 都连接到同一项上; 将使用 +3V3 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "层次标签 '+3V3'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.5842
+                            },
+                            "uuid": "49062e17-0898-43b0-b949-2a525a72444e"
+                        },
+                        {
+                            "description": "层次标签 'ESP_CHIP_EN'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.4318
+                            },
+                            "uuid": "006b06cf-201d-4454-9393-ea7d8e0b1368"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                }
+            ]
+        },
+        {
+            "path": "/strap/",
+            "uuid_path": "/7bb010ed-4324-4c36-a753-7ffec9c4831a/3b68ff7a-cb35-40c0-a2bf-565cf96f8639",
+            "violations": []
+        }
+    ],
+    "source": "rp2040_esp32c3_cmsis_dap_host.kicad_sch"
+}

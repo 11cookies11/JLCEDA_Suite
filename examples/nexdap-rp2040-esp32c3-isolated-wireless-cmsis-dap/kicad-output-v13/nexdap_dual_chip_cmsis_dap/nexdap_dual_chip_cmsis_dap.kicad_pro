@@ -1,0 +1,42 @@
+{
+  "board": {
+    "design_settings": {
+      "defaults": {},
+      "rules": {}
+    }
+  },
+  "meta": {
+    "version": 1
+  },
+  "net_settings": {
+    "classes": [],
+    "meta": {
+      "version": 3
+    }
+  },
+  "schematic": {
+    "drawing": {},
+    "legacy_lib_dir": "",
+    "legacy_lib_list": []
+  },
+  "libraries": {
+    "pinned_footprint_libs": [
+      {
+        "name": "jlc_footprints",
+        "type": "KiCad",
+        "uri": "${KIPRJMOD}/../../libraries/footprints/JLC-MCP.pretty",
+        "options": "",
+        "description": "JLC/LCSC imported footprints"
+      }
+    ],
+    "pinned_symbol_libs": [
+      {
+        "name": "jlc_symbols",
+        "type": "KiCad",
+        "uri": "${KIPRJMOD}/../../libraries/symbols/EasyEDA-local.kicad_sym",
+        "options": "",
+        "description": "JLC/LCSC imported symbols"
+      }
+    ]
+  }
+}

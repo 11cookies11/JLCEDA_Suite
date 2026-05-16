@@ -1,0 +1,882 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "889ccac9-1c48-4064-8d8b-42889eeda9e9")
+  (paper "A4")
+  (lib_symbols
+    (symbol "JLC-MCP-Inductors:LTST-C191TBKT"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 0)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(property "Reference" "LED"
+    			(at 2.54 0 90)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "LTST-C191TBKT"
+    			(at -1.778 0 90)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" "JLC-MCP:LED0603-RD"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2410121622_Lite-On-LTST-C191TBKT_C99290.pdf"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Product Page" "https://lcsc.com/product-detail/Light-Emitting-Diodes-LED_blue_C99290.html"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Description" "104mcd 130° 20mA 3.3V 465nm~475nm 468nm 75mW Blue Discrete Diode Water Clear 0603 LED Indication - Discrete ROHS"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "LCSC" "C99290"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Manufacturer" "LITEON(光宝)"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "ki_keywords" "C99290"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Stock" "2880"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Price" "0.0551USD"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Process" "SMT"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Minimum Qty" "10"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Attrition Qty" "0"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Class" "Extended Part"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Part" "LTST-C191TBKT"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Wavelength - Dominant" "465nm~475nm"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Operating Temperature" "-20℃~+80℃"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Viewing Angle" "130°"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Forward Current" "20mA"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Luminous Intensity" "104mcd"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Power(Watts)" "75mW"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Diode Configuration" "Discrete Diode"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Illumination Color" "Blue"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Lens Color" "Water Clear"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Peak Wavelength" "468nm"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Voltage - Forward(Vf)" "3.3V"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(symbol "LTST-C191TBKT_0_1"
+    			(arc
+    				(start 0 2.54)
+    				(mid 0.635 1.905)
+    				(end 0 1.27)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(arc
+    				(start 0 1.27)
+    				(mid 0.635 0.635)
+    				(end 0 0)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(arc
+    				(start 0 0)
+    				(mid 0.635 -0.635)
+    				(end 0 -1.27)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(arc
+    				(start 0 -1.27)
+    				(mid 0.635 -1.905)
+    				(end 0 -2.54)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(symbol "LTST-C191TBKT_1_1"
+    			(pin passive line
+    				(at 0 3.81 270)
+    				(length 2.54)
+    				(name "+"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 0 -3.81 90)
+    				(length 2.54)
+    				(name "-"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+    (symbol "JLC-MCP-Resistors:0603WAF1002T5E"
+      (pin_names (offset 0.254))
+      (exclude_from_sim no)
+      (in_bom yes)
+      (on_board yes)
+      (duplicate_pin_numbers_are_jumpers no)
+      (property "Reference" "R" (at 0 3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" "0603WAF1002T5E" (at 0 -3.81 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "JLC-MCP:R0603" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (symbol "0603WAF1002T5E_0_1"
+        (rectangle (start -2.54 1.27) (end 2.54 -1.27)
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+        (pin passive line (at -5.08 0 0) (length 2.54)
+          (name "1" (effects (font (size 1.27 1.27))))
+          (number "1" (effects (font (size 1.27 1.27))))
+        )
+        (pin passive line (at 5.08 0 180) (length 2.54)
+          (name "2" (effects (font (size 1.27 1.27))))
+          (number "2" (effects (font (size 1.27 1.27))))
+        )
+      )
+      (embedded_fonts no)
+    )
+    (symbol "power:PWR_FLAG"
+    		(power global)
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 0)
+    			(hide yes)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(in_pos_files yes)
+    		(duplicate_pin_numbers_are_jumpers no)
+    		(property "Reference" "#FLG"
+    			(at 0 1.905 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "PWR_FLAG"
+    			(at 0 3.81 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" ""
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Datasheet" ""
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Description" "Special symbol for telling ERC where power comes from"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_keywords" "flag power"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "PWR_FLAG_0_0"
+    			(pin power_out line
+    				(at 0 0 90)
+    				(length 0)
+    				(name ""
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(symbol "PWR_FLAG_0_1"
+    			(polyline
+    				(pts
+    					(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+    				)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+  )
+  (symbol
+    (lib_id "JLC-MCP-Inductors:LTST-C191TBKT")
+    (at 50.8 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "b597a8a2-fa80-4abb-bcda-79710219245a")
+    (property "Reference" "LED_PWR" (at 50.8 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "LED_BLUE" (at 50.8 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:LED0603-RD" (at 50.8 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C99290" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "MPN" "LTST-C191TBKT" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Manufacturer" "Lite-On" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "4337a9f9-4c63-43df-86af-0de4470463da"))
+      (pin "2" (uuid "89982314-0a07-49a6-9268-d4ef60a1581c"))
+    (instances
+      (project "nexdap_dual_chip_cmsis_dap"
+        (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d"
+          (reference "LED_PWR")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Inductors:LTST-C191TBKT")
+    (at 50.8 78.74 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "2100c454-5ca4-4db7-a341-2413eb294d16")
+    (property "Reference" "R_LED_PWR" (at 50.8 73.66 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "330R" (at 50.8 83.82 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:LED0603-RD" (at 50.8 78.74 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "a449b821-ebd5-4e71-8a23-1ea1669a3771"))
+      (pin "2" (uuid "76f6b4be-143d-4bd5-a4a0-f2cb1d6a25e1"))
+    (instances
+      (project "nexdap_dual_chip_cmsis_dap"
+        (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d"
+          (reference "R_LED_PWR")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Inductors:LTST-C191TBKT")
+    (at 50.8 106.68 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fb21fc45-6b95-4d67-8842-366e05025b86")
+    (property "Reference" "LED_DAP" (at 50.8 101.6 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "LED_GREEN" (at 50.8 111.76 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:LED0603-RD" (at 50.8 106.68 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "00e1796e-0ac1-4ba1-9742-9d057e60e621"))
+      (pin "2" (uuid "9b74aac7-8609-4b56-9996-3acbf0eed7fd"))
+    (instances
+      (project "nexdap_dual_chip_cmsis_dap"
+        (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d"
+          (reference "LED_DAP")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
+    (at 50.8 134.62 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "e75fc84a-7abd-4283-b273-5212a143322a")
+    (property "Reference" "R_LED_DAP" (at 50.8 129.54 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "330R" (at 50.8 139.7 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:R0603" (at 50.8 134.62 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "f1f1afcf-1c4d-4959-8c03-4dfda12e41f3"))
+      (pin "2" (uuid "a03992e6-8c25-4f27-b285-829ffa24fc8b"))
+    (instances
+      (project "nexdap_dual_chip_cmsis_dap"
+        (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d"
+          (reference "R_LED_DAP")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Inductors:LTST-C191TBKT")
+    (at 50.8 162.56 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "54086682-bc45-40b4-87ca-ad243719cafc")
+    (property "Reference" "LED_TGT" (at 50.8 157.48 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "LED_RED" (at 50.8 167.64 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:LED0603-RD" (at 50.8 162.56 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "e82a7b60-f2d7-4402-9b75-b8b52c3ce08d"))
+      (pin "2" (uuid "8e856a16-2726-4a3b-ac78-0de0faa8fc74"))
+    (instances
+      (project "nexdap_dual_chip_cmsis_dap"
+        (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d"
+          (reference "LED_TGT")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
+    (at 50.8 190.5 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "4373cd21-61ed-4376-8585-14cc6afe4add")
+    (property "Reference" "R_LED_TGT" (at 50.8 185.42 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "330R" (at 50.8 195.58 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:R0603" (at 50.8 190.5 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "85247b06-6b45-44ad-b5d8-5a215756414f"))
+      (pin "2" (uuid "2df28399-1638-4970-aad5-c337235a3f0c"))
+    (instances
+      (project "nexdap_dual_chip_cmsis_dap"
+        (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d"
+          (reference "R_LED_TGT")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "power:PWR_FLAG")
+    (at 30.48 114.3 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "16742e4e-2af0-4bb4-b277-251621098696")
+    (property "Reference" "#FLG500" (at 30.48 109.22 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "PWR_FLAG" (at 30.48 119.38 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 30.48 114.3 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "aba79923-9ede-4b05-81fe-0dc4fabd4a39"))
+    (instances
+      (project "nexdap_dual_chip_cmsis_dap"
+        (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d"
+          (reference "#FLG500")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 50.8 54.61) (xy 50.8 52.07))
+    (stroke (width 0) (type default))
+    (uuid "a8aada04-b4f8-4584-b41b-4185f28c37b4")
+  )
+  (wire (pts (xy 50.8 52.07) (xy 50.8 55.88))
+    (stroke (width 0) (type default))
+    (uuid "a74f3960-363b-43ec-9284-b463aa9ccbf8")
+  )
+  (global_label "LED_PWR_A" (shape input) (at 50.8 55.88 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "57c91437-4b10-4c0d-8037-e2c81de8c910")
+  )
+  (wire (pts (xy 50.8 46.99) (xy 50.8 49.53))
+    (stroke (width 0) (type default))
+    (uuid "bcc4f53b-6d7f-4aa7-a7f6-00457d72a436")
+  )
+  (wire (pts (xy 50.8 49.53) (xy 50.8 45.72))
+    (stroke (width 0) (type default))
+    (uuid "0cfc476b-e353-4a13-ae94-d4dfb43e4cc1")
+  )
+  (global_label "+3V3_MAIN" (shape input) (at 50.8 45.72 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "589d0c1b-39e5-4bcf-8b95-c1ee8a930586")
+  )
+  (wire (pts (xy 50.8 82.55) (xy 50.8 80.01))
+    (stroke (width 0) (type default))
+    (uuid "1ea80a5b-79c0-4215-9c3f-5745cd6d5ebf")
+  )
+  (wire (pts (xy 50.8 80.01) (xy 50.8 83.82))
+    (stroke (width 0) (type default))
+    (uuid "80bc7109-9866-4cc3-92a2-64868cd15554")
+  )
+  (global_label "+3V3_MAIN" (shape input) (at 50.8 83.82 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "99fa19c2-1b90-4a9e-bd18-2b304454c302")
+  )
+  (wire (pts (xy 50.8 74.93) (xy 50.8 77.47))
+    (stroke (width 0) (type default))
+    (uuid "9c13bae1-acc3-4a8f-9a87-8385f383d189")
+  )
+  (wire (pts (xy 50.8 77.47) (xy 50.8 73.66))
+    (stroke (width 0) (type default))
+    (uuid "a742dde3-9f54-4556-99ec-c5e7a4cfbe31")
+  )
+  (global_label "LED_PWR_A" (shape input) (at 50.8 73.66 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "d8ea7028-0b57-4ca3-ac4d-7270f6bd21fd")
+  )
+  (wire (pts (xy 50.8 110.49) (xy 50.8 107.95))
+    (stroke (width 0) (type default))
+    (uuid "991bead0-8d0b-47e0-a595-bb182f57228b")
+  )
+  (wire (pts (xy 50.8 107.95) (xy 50.8 111.76))
+    (stroke (width 0) (type default))
+    (uuid "a9d74ae8-a18e-404d-96f2-7d3d7d5ed5e2")
+  )
+  (label "LED_DAP_A" (at 50.8 111.76 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "65787c73-458e-491d-a994-8d376b4cdb7e")
+  )
+  (wire (pts (xy 50.8 102.87) (xy 50.8 105.41))
+    (stroke (width 0) (type default))
+    (uuid "40ebc285-681e-4d88-8f36-e8c68e680634")
+  )
+  (wire (pts (xy 50.8 105.41) (xy 50.8 101.6))
+    (stroke (width 0) (type default))
+    (uuid "843b5dea-3435-46ea-849b-56bff4c6aff0")
+  )
+  (global_label "GND_HOST" (shape input) (at 50.8 101.6 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "00557613-ce3b-4478-af85-07c921ee646e")
+  )
+  (wire (pts (xy 45.72 134.62) (xy 48.26 134.62))
+    (stroke (width 0) (type default))
+    (uuid "16e9ccc1-2202-4bd5-8497-eabbc25233ee")
+  )
+  (wire (pts (xy 48.26 134.62) (xy 44.45 134.62))
+    (stroke (width 0) (type default))
+    (uuid "7eebe3f6-d3e0-4fb0-9501-87d647c6890a")
+  )
+  (global_label "DAP_ACTIVITY" (shape bidirectional) (at 44.45 134.62 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "91822942-9f16-442e-b836-1dbcc6b14c22")
+  )
+  (wire (pts (xy 55.88 134.62) (xy 53.34 134.62))
+    (stroke (width 0) (type default))
+    (uuid "55988609-f936-4d63-8371-91ff33ddab59")
+  )
+  (wire (pts (xy 53.34 134.62) (xy 57.15 134.62))
+    (stroke (width 0) (type default))
+    (uuid "56a2b8d3-968c-4bb5-a461-a47e86a6231c")
+  )
+  (label "LED_DAP_A" (at 57.15 134.62 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "2f900ed8-6387-4fc9-9de1-208566c341f0")
+  )
+  (wire (pts (xy 50.8 166.37) (xy 50.8 163.83))
+    (stroke (width 0) (type default))
+    (uuid "a5618e0b-0f4d-4503-97a8-f6129ad806d4")
+  )
+  (wire (pts (xy 50.8 163.83) (xy 50.8 167.64))
+    (stroke (width 0) (type default))
+    (uuid "55372307-41e6-43f6-9aa8-32779a3c4fb1")
+  )
+  (label "LED_TGT_K" (at 50.8 167.64 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "b438ca86-f02a-40b1-916a-83e94ffd447e")
+  )
+  (wire (pts (xy 50.8 158.75) (xy 50.8 161.29))
+    (stroke (width 0) (type default))
+    (uuid "cfefca2d-909f-4592-b86d-ac68ca854195")
+  )
+  (wire (pts (xy 50.8 161.29) (xy 50.8 157.48))
+    (stroke (width 0) (type default))
+    (uuid "6291b465-15c4-486c-8140-85537f26d813")
+  )
+  (global_label "GND_TARGET_ISO" (shape input) (at 50.8 157.48 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "3141fd67-4b37-445f-a401-ab4d56164e75")
+  )
+  (wire (pts (xy 45.72 190.5) (xy 48.26 190.5))
+    (stroke (width 0) (type default))
+    (uuid "33a0ee19-b84e-442f-8a9b-ef9a489fd0c7")
+  )
+  (wire (pts (xy 48.26 190.5) (xy 44.45 190.5))
+    (stroke (width 0) (type default))
+    (uuid "f7e6b9a9-6517-415c-8286-fe68b31c0222")
+  )
+  (global_label "ISO_3V3_TARGET" (shape input) (at 44.45 190.5 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "2dff08d6-a1e1-4a59-a059-bb27d0e16a90")
+  )
+  (wire (pts (xy 55.88 190.5) (xy 53.34 190.5))
+    (stroke (width 0) (type default))
+    (uuid "3c50ae85-7f44-4111-af2b-3062056a1fb3")
+  )
+  (wire (pts (xy 53.34 190.5) (xy 57.15 190.5))
+    (stroke (width 0) (type default))
+    (uuid "958a9121-1043-4b45-9271-c1e52cbbd0b5")
+  )
+  (label "LED_TGT_K" (at 57.15 190.5 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "52cab2d5-f765-41dc-81ba-e14748cfa55d")
+  )
+  (wire (pts (xy 30.48 114.3) (xy 30.48 111.76))
+    (stroke (width 0) (type default))
+    (uuid "4767a1aa-c01e-4be2-a38f-db03d1cd51ab")
+  )
+  (wire (pts (xy 30.48 111.76) (xy 30.48 115.57))
+    (stroke (width 0) (type default))
+    (uuid "45debf67-da85-47a3-a006-b6b2812013b2")
+  )
+  (global_label "LED_PWR_A" (shape input) (at 30.48 115.57 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "9d32e01c-419e-416a-bd0d-61b7ec694a49")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/d2e29221-38e3-4b2d-a40b-c1c9c3014b23" (page "2"))
+    (path "/3d30d502-a5bd-46c8-b121-db85e519cd58" (page "3"))
+    (path "/df620364-8aa8-4fe9-beb6-4d5818a9a9d5" (page "4"))
+    (path "/c9b7a953-1ad3-4e5c-8e4c-5c2f40958c34" (page "5"))
+    (path "/bc4ae664-e761-42eb-b600-b8ec2faac40d" (page "6"))
+  )
+)
