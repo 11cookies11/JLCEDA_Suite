@@ -1,0 +1,32 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "parts-review-request",
+  "project_id": "parts-review-demo",
+  "topology": "parts-review-led",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "regulator",
+      "value": "3.3V LDO",
+      "selected_part": {
+        "part_id": "P1",
+        "display_name": "AMS1117-3.3",
+        "lcsc_id": "",
+        "mpn": "AMS1117-3.3",
+        "manufacturer": "AMS",
+        "package": "SOT-223",
+        "pin_count": 3
+      },
+      "availability_status": "ready"
+    }
+  ],
+  "nets": [
+    {"name": "VIN", "members": ["J1.1", "U1.1"]},
+    {"name": "GND", "members": ["J1.2", "U1.2"]},
+    {"name": "VOUT", "members": ["U1.3"]}
+  ],
+  "design_decisions": [
+    "Parts review fixture forces a missing LCSC ID to keep the result in review."
+  ],
+  "risks": []
+}

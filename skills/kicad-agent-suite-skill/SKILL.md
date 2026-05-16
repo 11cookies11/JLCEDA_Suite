@@ -97,6 +97,48 @@ PartRequirement → LCSC Resolver → ResolverResult (candidates)
 | `LCSC_MCP_BASE_URL` | Optional legacy local MCP HTTP backend exposing `/api/search` |
 
 Prefer the `kas` entrypoint when possible. Use environment variables for configuration, not for choosing which stage to run.
+Treat `src/kicad_suite/run_pipeline.py` and `src/kicad_suite/parts_pipeline.py` as compatibility wrappers only; prefer `kas` and the newer module paths for new automation.
+Treat `scripts/kas.py` and `src/kicad_suite/cli.py` as the stable command surface; older top-level wrappers are just transition paths.
+Treat run summaries as the main compatibility surface. Prefer the stable `files`, `counts`, `erc`, `diagnostics`, `postprocess`, and `warnings` fields, while keeping compatibility with older `output_files` and direct file-path fields when present.
+If a breaking summary change is unavoidable, bump `schema_version`, keep the previous readable form for a transition window, and treat top-level `warnings` as "completed with fallback and needs review" rather than as free-form log noise.
+
+### Compatibility Policy
+
+- Prefer stable entrypoints for new work.
+- Use wrappers only as transition paths for older scripts and compatibility tests.
+- Keep additive summary changes when possible.
+- If you must break a summary shape, bump the schema version and add regression coverage for both the old and new forms.
+- Treat compatibility warnings as actionable review signals, not optional chatter.
+
+### Wrapper Retirement Timeline
+
+- Now: keep wrappers as forwarding shims for older scripts.
+- Next: mark a wrapper deprecated in docs/tests once the stable module path fully covers it.
+- Later: after one transition window with regression coverage, reduce the wrapper to the smallest possible shim.
+
+### Canonical Schema Versions
+
+These versions are the repo's shared contract names and should stay aligned with the code:
+
+- `requirement-spec.v1`
+- `circuit-model.v1`
+- `netlist.v1`
+- `spice-netlist.v1`
+- `ngspice-execution.v1`
+- `ngspice-feedback.v1`
+- `kicad-execution-plan.v1`
+- `kicad-project-write-result.v1`
+- `kicad-erc-result.v1`
+- `text-to-kicad-summary.v1`
+- `part-lock.v1`
+
+### Field-Level Contracts
+
+- Run summary: stable fields are `files`, `counts`, `erc`, `diagnostics`, `postprocess`, and `warnings`.
+- ERC result: stable fields are `enabled`, `attempted`, `success`, `finding_count`, `summary_file`, `output_file`, `error`, and `warnings`.
+- Execution plan: stable fields are `request_id`, `target`, `symbols`, `nets`, and `diagnostics`.
+- Part lock: stable fields are `project`, `generated_at`, and `parts`.
+- Compatibility fields may still appear, but new code should target the stable fields first.
 
 ### Online LCSC Resolver
 

@@ -1,0 +1,11 @@
+{
+  "name": "erc-missing-cli",
+  "schematic_file": "demo.kicad_sch",
+  "expected": {
+    "enabled": false,
+    "attempted": false,
+    "success": false,
+    "error": "KICAD_CLI_NOT_FOUND",
+    "warning_contains": "kicad-cli was not found"
+  }
+}

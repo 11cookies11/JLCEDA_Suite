@@ -71,7 +71,30 @@ Run the default KiCad pipeline:
 npm run pipeline
 ```
 
-The underlying local entrypoint is `python scripts/kas.py ...`, which keeps the Python-side workflow on one command surface. You can also call `python -m kicad_suite ...` if you prefer the module form.
+The stable local entrypoint is `python scripts/kas.py ...`, which keeps the Python-side workflow on one command surface. You can also call `python -m kicad_suite ...` if you prefer the module form.
+
+Compatibility wrappers such as `src/kicad_suite/run_pipeline.py` and `src/kicad_suite/parts_pipeline.py` stay available for older scripts, but they are transition paths only. Prefer `kas` and the newer module layout for fresh work. In other words:
+
+- stable: `scripts/kas.py`, `src/kicad_suite/cli.py`, and the new submodules
+- compatibility: the legacy top-level wrappers that forward into the new layout
+
+Wrapper retirement timeline:
+
+- now: wrappers stay in place and forward to the real modules
+- next: when a stable module path covers a legacy entrypoint, mark the wrapper as deprecated in docs/tests first
+- later: after at least one transition window with regression coverage, wrappers can shrink to the smallest possible shim
+
+## Compatibility Policy
+
+The repository keeps compatibility wrappers and compatibility fields on purpose, but they are not the preferred surface for new automation.
+
+- stable entrypoints: `scripts/kas.py`, `src/kicad_suite/cli.py`, and the current submodules
+- transition wrappers: `src/kicad_suite/run_pipeline.py`, `src/kicad_suite/parts_pipeline.py`, and other thin legacy shims
+- stable summary fields: `files`, `counts`, `erc`, `diagnostics`, `postprocess`, and `warnings`
+- compatibility summary fields: `output_files`, direct file-path fields, and older nested shapes when present
+- breaking schema changes: bump `schema_version`, keep the previous readable form alive for a transition window, and add a regression fixture for the old shape
+
+Treat wrappers as a convenience for older scripts, not as the place to add new behavior. If a change needs to land in a wrapper, mirror it into the real module path first.
 
 Useful aliases:
 
@@ -148,6 +171,60 @@ npm run erc
 Set `KICAD_RUN_ERC=true` to let the full pipeline attempt ERC after writing the schematic. If `kicad-cli` is not installed, the runner returns a structured diagnostic instead of blocking file generation.
 
 The run summary surfaces these conditions through structured `warnings` rather than hiding them. That keeps compatibility with older flows while making fallback paths visible to validators and agents.
+
+## Summary Contract
+
+The run summary is the main compatibility surface between pipeline stages, validators, and agent workflows.
+
+Stable fields:
+
+- `files`
+- `counts`
+- `erc`
+- `diagnostics`
+- `postprocess`
+- `warnings`
+
+Compatibility fields:
+
+- `output_files`
+- `kicad_erc_summary`
+- `kicad_erc_report`
+- `execution_plan`
+- `project_file`
+- `schematic_file`
+
+When the summary shape changes, prefer additive updates and keep the validator reading the previous stable form when feasible. Treat top-level warnings as machine-readable fallback signals, not as throwaway log text.
+If a change would break the stable shape, bump `schema_version` and keep the previous readable form available for a transition window. In practice, `warnings` means "completed with fallback and needs review", while validation `errors` means "hard failure".
+
+## Schema Versions
+
+The main schema versions are centralized in the codebase and should be treated as the canonical names:
+
+- `requirement-spec.v1`
+- `circuit-model.v1`
+- `netlist.v1`
+- `spice-netlist.v1`
+- `ngspice-execution.v1`
+- `ngspice-feedback.v1`
+- `kicad-execution-plan.v1`
+- `kicad-project-write-result.v1`
+- `kicad-erc-result.v1`
+- `text-to-kicad-summary.v1`
+- `part-lock.v1`
+
+When adding a new schema version, update the shared constants, update this list, and add at least one regression fixture that covers the old and new shapes if the change is breaking.
+
+## Field-Level Contracts
+
+The version alone is not enough; each major schema also has a small field contract.
+
+- run summary: `files`, `counts`, `erc`, `diagnostics`, `postprocess`, `warnings`
+- ERC result: `enabled`, `attempted`, `success`, `finding_count`, `summary_file`, `output_file`, `error`, `warnings`
+- execution plan: `request_id`, `target`, `symbols`, `nets`, `diagnostics`
+- part lock: `project`, `generated_at`, `parts`
+
+Compatibility fields may exist alongside the stable ones, but the stable fields are the ones new code should rely on.
 
 ## Online LCSC Search
 

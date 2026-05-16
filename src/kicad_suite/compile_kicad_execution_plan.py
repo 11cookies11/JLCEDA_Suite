@@ -10,11 +10,11 @@ from pathlib import Path
 from typing import Any
 
 from .env_utils import env, to_int_env
-
-
-MODEL_SCHEMA_VERSION = 'circuit-model.v1'
-NETLIST_SCHEMA_VERSION = 'netlist.v1'
-KICAD_PLAN_SCHEMA_VERSION = 'kicad-execution-plan.v1'
+from .schema_versions import (
+    CIRCUIT_MODEL_SCHEMA_VERSION,
+    KICAD_EXECUTION_PLAN_SCHEMA_VERSION,
+    NETLIST_SCHEMA_VERSION,
+)
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SYMBOL_MAP_CACHE: dict[str, Any] | None = None
 LAYOUT_PROFILES_CACHE: dict[str, Any] | None = None
@@ -524,7 +524,7 @@ def role_aware_position(
 def load_inputs() -> tuple[dict[str, Any], dict[str, Any]]:
     model = load_json_from_env('BRIDGE_CIRCUIT_MODEL_JSON', 'BRIDGE_CIRCUIT_MODEL_FILE')
     schema_version = str(model.get('schema_version', ''))
-    if schema_version != MODEL_SCHEMA_VERSION:
+    if schema_version != CIRCUIT_MODEL_SCHEMA_VERSION:
         raise ValueError(f'Unsupported circuit schema_version: {schema_version}')
 
     try:
@@ -643,7 +643,7 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
     ]
 
     return KiCadExecutionPlan(
-        schema_version=KICAD_PLAN_SCHEMA_VERSION,
+        schema_version=KICAD_EXECUTION_PLAN_SCHEMA_VERSION,
         request_id=request_id,
         target=KiCadTarget(
             project_name=project_name,

@@ -1,0 +1,45 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "fixture-request",
+  "project_id": "fixture-demo",
+  "topology": "fixture-led-supply",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "regulator",
+      "value": "3.3V LDO",
+      "selected_part": {
+        "part_id": "P1",
+        "display_name": "AMS1117-3.3",
+        "lcsc_id": "C2040",
+        "mpn": "AMS1117-3.3",
+        "manufacturer": "AMS",
+        "package": "SOT-223",
+        "pin_count": 3
+      },
+      "availability_status": "ready"
+    }
+  ],
+  "nets": [
+    {
+      "name": "VIN",
+      "members": ["J1.1", "U1.1"]
+    },
+    {
+      "name": "GND",
+      "members": ["J1.2", "U1.2", "C1.2"]
+    },
+    {
+      "name": "VOUT",
+      "members": ["U1.3", "C1.1"]
+    },
+    {
+      "name": "ENABLE",
+      "members": []
+    }
+  ],
+  "design_decisions": [
+    "Use a simple three-pin LDO to keep the fixture small and readable."
+  ],
+  "risks": []
+}

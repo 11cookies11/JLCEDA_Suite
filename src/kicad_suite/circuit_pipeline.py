@@ -15,13 +15,14 @@ from pathlib import Path
 from typing import Any
 
 from .env_utils import env, parse_json_env, is_truthy_env, to_float, normalize_text
-
-REQ_SCHEMA_VERSION = 'requirement-spec.v1'
-MODEL_SCHEMA_VERSION = 'circuit-model.v1'
-NETLIST_SCHEMA_VERSION = 'netlist.v1'
-SPICE_NETLIST_SCHEMA_VERSION = 'spice-netlist.v1'
-NGSPICE_EXECUTION_SCHEMA_VERSION = 'ngspice-execution.v1'
-NGSPICE_FEEDBACK_SCHEMA_VERSION = 'ngspice-feedback.v1'
+from .schema_versions import (
+    CIRCUIT_MODEL_SCHEMA_VERSION,
+    NGSPICE_EXECUTION_SCHEMA_VERSION,
+    NGSPICE_FEEDBACK_SCHEMA_VERSION,
+    NETLIST_SCHEMA_VERSION,
+    REQUIREMENT_SPEC_SCHEMA_VERSION,
+    SPICE_NETLIST_SCHEMA_VERSION,
+)
 
 # --- data models ---
 
@@ -303,7 +304,7 @@ def load_part_catalog() -> dict[str, list[PartCandidate]]:
 
 def build_default_requirement() -> RequirementSpec:
     return RequirementSpec(
-        schema_version=REQ_SCHEMA_VERSION,
+        schema_version=REQUIREMENT_SPEC_SCHEMA_VERSION,
         request_id='default-001',
         project_id='default-001',
         goal='5V to 3.3V buck converter, 2A output',
@@ -320,7 +321,7 @@ def requirement_from_env() -> RequirementSpec:
     raw = parse_json_env('BRIDGE_REQUIREMENT_SPEC_JSON', {})
     if isinstance(raw, dict) and raw.get('goal'):
         req = raw
-        schema_ver = str(req.get('schema_version', REQ_SCHEMA_VERSION))
+        schema_ver = str(req.get('schema_version', REQUIREMENT_SPEC_SCHEMA_VERSION))
         targets = req.get('electrical_targets', req.get('electricalTargets', {}))
         if not isinstance(targets, dict):
             targets = {}
@@ -346,7 +347,7 @@ def requirement_from_env() -> RequirementSpec:
     text = env('BRIDGE_REQUIREMENT_TEXT')
     if text:
         return RequirementSpec(
-            schema_version=REQ_SCHEMA_VERSION,
+            schema_version=REQUIREMENT_SPEC_SCHEMA_VERSION,
             request_id='text-001',
             project_id='text-001',
             goal=text.strip(),
@@ -449,7 +450,7 @@ def synthesize_led_indicator_model(spec: RequirementSpec, catalog: dict[str, lis
             risks.append(f'{component.ref} selected part is currently marked unavailable.')
 
     return CircuitModel(
-        schema_version=MODEL_SCHEMA_VERSION,
+        schema_version=CIRCUIT_MODEL_SCHEMA_VERSION,
         request_id=spec.request_id,
         project_id=spec.project_id,
         topology='led_indicator',
@@ -554,7 +555,7 @@ def synthesize_circuit_model(spec: RequirementSpec, catalog: dict[str, list[Part
     ]
 
     return CircuitModel(
-        schema_version=MODEL_SCHEMA_VERSION,
+        schema_version=CIRCUIT_MODEL_SCHEMA_VERSION,
         request_id=spec.request_id,
         project_id=spec.project_id,
         topology=str(spec.preferences.get('topology', 'buck')),

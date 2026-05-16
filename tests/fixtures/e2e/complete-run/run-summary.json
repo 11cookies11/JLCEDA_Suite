@@ -1,0 +1,74 @@
+{
+  "schema_version": "kicad-project-write-result.v1",
+  "project_name": "fixture-demo",
+  "output_dir": "tests/fixtures/e2e/complete-run/project",
+  "files": {
+    "circuit_model": "model/circuit-model.json",
+    "project": "project/fixture-demo.kicad_pro",
+    "schematic": "project/fixture-demo.kicad_sch",
+    "summary": "project/kicad-write-summary.json",
+    "execution_plan": "project/kicad-execution-plan.json",
+    "kicad_erc_summary": "project/kicad-erc.summary.json",
+    "kicad_erc_report": "project/kicad-erc.json",
+    "part_lock": "project/part.lock.yaml",
+    "part_risk_report": "project/part-risk-report.md"
+  },
+  "output_files": {
+    "circuit_model": "model/circuit-model.json",
+    "project": "project/fixture-demo.kicad_pro",
+    "schematic": "project/fixture-demo.kicad_sch",
+    "summary": "project/kicad-write-summary.json",
+    "execution_plan": "project/kicad-execution-plan.json",
+    "kicad_erc_summary": "project/kicad-erc.summary.json",
+    "kicad_erc_report": "project/kicad-erc.json",
+    "part_lock": "project/part.lock.yaml",
+    "part_risk_report": "project/part-risk-report.md"
+  },
+  "project_file": "project/fixture-demo.kicad_pro",
+  "schematic_file": "project/fixture-demo.kicad_sch",
+  "summary_file": "project/kicad-write-summary.json",
+  "execution_plan": "project/kicad-execution-plan.json",
+  "counts": {
+    "symbols": 3,
+    "nets": 4
+  },
+  "erc": {
+    "schema_version": "kicad-erc-result.v1",
+    "enabled": true,
+    "attempted": true,
+    "success": true,
+    "return_code": 0,
+    "finding_count": 0,
+    "summary_file": "project/kicad-erc.summary.json",
+    "output_file": "project/kicad-erc.json",
+    "warnings": []
+  },
+  "diagnostics": {
+    "warnings": [],
+    "kicad_erc": {
+      "schema_version": "kicad-erc-result.v1",
+      "enabled": true,
+      "attempted": true,
+      "success": true,
+      "return_code": 0,
+      "finding_count": 0,
+      "summary_file": "project/kicad-erc.summary.json",
+      "output_file": "project/kicad-erc.json",
+      "execution_plan": "project/kicad-execution-plan.json",
+      "warnings": []
+    }
+  },
+  "postprocess": {
+    "symbols_injected": true,
+    "library_registration": {
+      "attempted": true,
+      "success": true,
+      "stderr": ""
+    }
+  },
+  "hierarchical_sheets": {
+    "root_schematic_file": "project/fixture-demo.kicad_sch",
+    "sheet_files": ["project/fixture-demo.kicad_sch"]
+  },
+  "warnings": []
+}

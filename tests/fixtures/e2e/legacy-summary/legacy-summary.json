@@ -1,0 +1,39 @@
+{
+  "schema_version": "kicad-project-write-result.v1",
+  "project_name": "legacy-demo",
+  "output_dir": "tests/fixtures/e2e/legacy-summary/project",
+  "output_files": {
+    "project": "project/legacy-demo.kicad_pro",
+    "schematic": "project/legacy-demo.kicad_sch",
+    "execution_plan": "project/legacy-plan.json",
+    "kicad_erc_summary": "project/legacy-erc.summary.json",
+    "kicad_erc_report": "project/legacy-erc.json"
+  },
+  "project_file": "project/legacy-demo.kicad_pro",
+  "schematic_file": "project/legacy-demo.kicad_sch",
+  "summary_file": "project/legacy-write-summary.json",
+  "execution_plan": "project/legacy-plan.json",
+  "counts": {
+    "symbols": 1,
+    "nets": 2
+  },
+  "erc": {
+    "schema_version": "kicad-erc-result.v1",
+    "enabled": true,
+    "attempted": true,
+    "success": true,
+    "return_code": 0,
+    "finding_count": 0,
+    "summary_file": "project/legacy-erc.summary.json",
+    "output_file": "project/legacy-erc.json"
+  },
+  "hierarchical_sheets": {
+    "root_schematic_file": "project/legacy-demo.kicad_sch",
+    "sheet_files": ["project/legacy-demo.kicad_sch"]
+  },
+  "diagnostics": {
+    "kicad_erc": {
+      "execution_plan": "project/legacy-plan.json"
+    }
+  }
+}

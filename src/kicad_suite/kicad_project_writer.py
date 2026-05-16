@@ -10,10 +10,8 @@ from pathlib import Path
 from typing import Any
 
 from .env_utils import env
+from .schema_versions import KICAD_EXECUTION_PLAN_SCHEMA_VERSION, KICAD_PROJECT_WRITE_RESULT_SCHEMA_VERSION
 from .schematic_layout_rules import BlockLayoutRule, build_default_layout_rules, _resolve_wiring_block
-
-
-KICAD_PLAN_SCHEMA_VERSION = 'kicad-execution-plan.v1'
 KICAD_SCHEMATIC_FILE_VERSION = '20250114'
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SYMBOL_PIN_CACHE: dict[str, dict[str, dict[str, float]]] = {}
@@ -35,7 +33,7 @@ def load_plan() -> dict[str, Any]:
             payload = json.load(file)
     if not isinstance(payload, dict):
         raise ValueError('KiCad execution plan must be a JSON object.')
-    if str(payload.get('schema_version', '')) != KICAD_PLAN_SCHEMA_VERSION:
+    if str(payload.get('schema_version', '')) != KICAD_EXECUTION_PLAN_SCHEMA_VERSION:
         raise ValueError(f'Unsupported KiCad plan schema_version: {payload.get("schema_version", "")}')
     return payload
 
@@ -1198,7 +1196,7 @@ def write_project(plan: dict[str, Any]) -> dict[str, Any]:
         schematic_file.write_text(render_schematic(plan) + '\n', encoding='utf-8')
 
     summary = {
-        'schema_version': 'kicad-project-write-result.v1',
+        'schema_version': KICAD_PROJECT_WRITE_RESULT_SCHEMA_VERSION,
         'request_id': str(plan.get('request_id', '')),
         'project_file': str(project_file),
         'schematic_file': str(schematic_file),

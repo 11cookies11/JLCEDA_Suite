@@ -23,8 +23,6 @@ from .circuit_pipeline import (
     NetlistPin,
     NetlistSourceModel,
     PartCandidate,
-    REQ_SCHEMA_VERSION,
-    MODEL_SCHEMA_VERSION,
     NETLIST_SCHEMA_VERSION,
     NGSPICE_EXECUTION_SCHEMA_VERSION,
     SPICE_NETLIST_SCHEMA_VERSION,
@@ -33,6 +31,7 @@ from .circuit_pipeline import (
     build_spice_netlist_from_netlist,
     parse_ngspice_log,
 )
+from .schema_versions import CIRCUIT_MODEL_SCHEMA_VERSION, REQUIREMENT_SPEC_SCHEMA_VERSION
 
 
 def load_samples() -> dict[str, Any]:
@@ -73,7 +72,7 @@ def build_netlist(sample: dict[str, Any]) -> NetlistModel:
         schema_version=NETLIST_SCHEMA_VERSION,
         request_id='regression-rc-lowpass',
         project_id='fixture-project',
-        source_model=NetlistSourceModel(schema_version=MODEL_SCHEMA_VERSION, request_id='regression-rc-lowpass'),
+        source_model=NetlistSourceModel(schema_version=CIRCUIT_MODEL_SCHEMA_VERSION, request_id='regression-rc-lowpass'),
         components=components,
         nets=nets,
     )
@@ -99,7 +98,7 @@ def build_circuit_model(netlist: NetlistModel) -> CircuitModel:
         for net in netlist.nets
     ]
     return CircuitModel(
-        schema_version=MODEL_SCHEMA_VERSION,
+        schema_version=CIRCUIT_MODEL_SCHEMA_VERSION,
         request_id=netlist.request_id,
         project_id=netlist.project_id,
         topology='rc_lowpass',
@@ -118,7 +117,7 @@ def build_circuit_model(netlist: NetlistModel) -> CircuitModel:
 
 def build_requirement(request_id: str) -> RequirementSpec:
     return RequirementSpec(
-        schema_version=REQ_SCHEMA_VERSION,
+        schema_version=REQUIREMENT_SPEC_SCHEMA_VERSION,
         request_id=request_id,
         project_id='fixture-project',
         goal='Regression sample for ngspice feedback',

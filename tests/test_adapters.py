@@ -7,6 +7,7 @@ import os
 import sys
 import tempfile
 import unittest
+import subprocess
 from pathlib import Path
 from types import SimpleNamespace
 from unittest.mock import patch
@@ -59,6 +60,32 @@ class TestJlcMcpAdapter(unittest.TestCase):
             with patch("kicad_suite.adapters.jlc_mcp.subprocess.run", return_value=fake_proc):
                 results = run_bridge_search(query="R", bridge_script=script)
         self.assertEqual(results, [{"lcsc_id": "C1"}])
+
+    def test_run_bridge_search_returns_empty_for_missing_script(self):
+        self.assertEqual(run_bridge_search(query="R", bridge_script=Path("does-not-exist.mjs")), [])
+
+    def test_run_bridge_search_returns_empty_on_timeout(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            script = Path(tmpdir) / "bridge.mjs"
+            script.write_text("// stub", encoding="utf-8")
+            with patch("kicad_suite.adapters.jlc_mcp.subprocess.run", side_effect=subprocess.TimeoutExpired(cmd=["node"], timeout=1.0)):
+                self.assertEqual(run_bridge_search(query="R", bridge_script=script), [])
+
+    def test_run_bridge_search_returns_empty_on_bad_json(self):
+        fake_proc = SimpleNamespace(returncode=0, stdout="not-json")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            script = Path(tmpdir) / "bridge.mjs"
+            script.write_text("// stub", encoding="utf-8")
+            with patch("kicad_suite.adapters.jlc_mcp.subprocess.run", return_value=fake_proc):
+                self.assertEqual(run_bridge_search(query="R", bridge_script=script), [])
+
+    def test_run_bridge_search_returns_empty_on_nonzero_exit(self):
+        fake_proc = SimpleNamespace(returncode=1, stdout=json.dumps({"result": {"results": [{"lcsc_id": "C1"}]}}))
+        with tempfile.TemporaryDirectory() as tmpdir:
+            script = Path(tmpdir) / "bridge.mjs"
+            script.write_text("// stub", encoding="utf-8")
+            with patch("kicad_suite.adapters.jlc_mcp.subprocess.run", return_value=fake_proc):
+                self.assertEqual(run_bridge_search(query="R", bridge_script=script), [])
 
     def test_is_http_backend_reachable_false_on_error(self):
         with patch("kicad_suite.adapters.jlc_mcp.urllib.request.urlopen", side_effect=OSError("boom")):

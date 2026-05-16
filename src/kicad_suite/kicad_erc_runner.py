@@ -9,6 +9,7 @@ from typing import Any
 
 from .adapters.kicad_cli import count_findings, resolve_kicad_cli, resolve_schematic_file
 from .env_utils import env, is_truthy_env, to_int_env
+from .schema_versions import KICAD_ERC_RESULT_SCHEMA_VERSION
 
 
 def emit_summary(summary: dict[str, Any], enabled: bool) -> None:
@@ -25,7 +26,7 @@ def run(emit: bool = True) -> dict[str, Any]:
     executable = resolve_kicad_cli()
     if not executable:
         summary = {
-            'schema_version': 'kicad-erc-result.v1',
+            'schema_version': KICAD_ERC_RESULT_SCHEMA_VERSION,
             'enabled': False,
             'attempted': False,
             'success': False,
@@ -87,7 +88,7 @@ def run(emit: bool = True) -> dict[str, Any]:
         success = False
 
     summary = {
-        'schema_version': 'kicad-erc-result.v1',
+        'schema_version': KICAD_ERC_RESULT_SCHEMA_VERSION,
         'enabled': True,
         'attempted': True,
         'success': success,

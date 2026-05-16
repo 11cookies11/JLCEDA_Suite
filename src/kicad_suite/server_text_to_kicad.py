@@ -22,6 +22,7 @@ from .compile_kicad_execution_plan import compile_plan, write_output
 from .env_utils import is_truthy_env, env
 from .kicad_erc_runner import run as run_kicad_erc
 from .kicad_project_writer import write_project
+from .schema_versions import TEXT_TO_KICAD_SUMMARY_SCHEMA_VERSION
 from .parts.workflow import run_parts_pipeline
 
 
@@ -85,7 +86,7 @@ def run() -> None:
     write_json(feedback_file, asdict(ngspice_feedback))
 
     summary = {
-        'schema_version': 'text-to-kicad-summary.v1',
+        'schema_version': TEXT_TO_KICAD_SUMMARY_SCHEMA_VERSION,
         'request_id': spec.request_id,
         'topology': model.topology,
         'output_files': {

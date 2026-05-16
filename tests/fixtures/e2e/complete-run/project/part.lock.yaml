@@ -1,0 +1,30 @@
+schema_version: part-lock.v1
+project: fixture-demo
+generated_at: "2026-05-16T00:00:00Z"
+parts:
+  - ref: U1
+    role: regulator
+    mpn: AMS1117-3.3
+    value: 3.3V LDO
+    lcsc_id: C2040
+    package: SOT-223
+    source: jlcpcb_parts
+    kicad_symbol: ""
+    kicad_footprint: ""
+    risk: low
+    note: stable linear regulator
+    price: 0.18
+    status: locked
+  - ref: R1
+    role: sense_resistor
+    mpn: RC0603FR-0710KL
+    value: 10k
+    lcsc_id: C25804
+    package: 0603
+    source: jlcpcb_parts
+    kicad_symbol: ""
+    kicad_footprint: ""
+    risk: low
+    note: basic resistor
+    price: 0.01
+    status: locked

@@ -1,0 +1,60 @@
+{
+  "schema_version": "kicad-execution-plan.v1",
+  "request_id": "fixture-request",
+  "project_name": "fixture-demo",
+  "target": {
+    "project_name": "fixture-demo",
+    "output_dir": "tests/fixtures/e2e/complete-run/project",
+    "schematic_file": "project/fixture-demo.kicad_sch",
+    "project_file": "project/fixture-demo.kicad_pro"
+  },
+  "symbols": [
+    {
+      "ref": "U1",
+      "role": "regulator",
+      "value": "3.3V LDO",
+      "lib_id": "AIAgent:Regulator_3Pin",
+      "footprint": "Regulator:SOT-223",
+      "at": {"x": 0.0, "y": 0.0, "rotation": 0.0},
+      "pins": [
+        {"number": "1", "net": "VIN"},
+        {"number": "2", "net": "GND"},
+        {"number": "3", "net": "VOUT"}
+      ]
+    },
+    {
+      "ref": "J1",
+      "role": "input_connector",
+      "value": "VIN",
+      "lib_id": "AIAgent:Conn_2Pin",
+      "footprint": "Connector:Conn_02x01",
+      "at": {"x": 10.0, "y": 0.0, "rotation": 0.0},
+      "pins": [
+        {"number": "1", "net": "VIN"},
+        {"number": "2", "net": "GND"}
+      ]
+    },
+    {
+      "ref": "C1",
+      "role": "bulk_cap",
+      "value": "10uF",
+      "lib_id": "AIAgent:Capacitor_2Pin",
+      "footprint": "Capacitor_SMD:C_0603",
+      "at": {"x": 20.0, "y": 0.0, "rotation": 0.0},
+      "pins": [
+        {"number": "1", "net": "VOUT"},
+        {"number": "2", "net": "GND"}
+      ]
+    }
+  ],
+  "nets": [
+    {"name": "VIN", "kind": "power", "members": ["J1.1", "U1.1"]},
+    {"name": "GND", "kind": "ground", "members": ["J1.2", "U1.2", "C1.2"]},
+    {"name": "VOUT", "kind": "power", "members": ["U1.3", "C1.1"]},
+    {"name": "ENABLE", "kind": "signal", "members": []}
+  ],
+  "diagnostics": {
+    "warnings": [],
+    "unsupported": []
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "schema_version": "kicad-project-write-result.v1",
+  "project_name": "erc-findings",
+  "output_dir": "tests/fixtures/e2e/erc-findings/project",
+  "files": {
+    "project": "project/erc-findings.kicad_pro",
+    "schematic": "project/erc-findings.kicad_sch",
+    "execution_plan": "project/erc-plan.json",
+    "kicad_erc_summary": "project/erc-findings.summary.json",
+    "kicad_erc_report": "project/erc-findings.json"
+  },
+  "project_file": "project/erc-findings.kicad_pro",
+  "schematic_file": "project/erc-findings.kicad_sch",
+  "summary_file": "project/erc-findings.summary.json",
+  "execution_plan": "project/erc-plan.json",
+  "counts": {
+    "symbols": 1,
+    "nets": 2
+  },
+  "erc": {
+    "schema_version": "kicad-erc-result.v1",
+    "enabled": true,
+    "attempted": true,
+    "success": true,
+    "return_code": 0,
+    "finding_count": 2,
+    "summary_file": "project/erc-findings.summary.json",
+    "output_file": "project/erc-findings.json",
+    "warnings": []
+  },
+  "diagnostics": {
+    "kicad_erc": {
+      "execution_plan": "project/erc-plan.json"
+    }
+  },
+  "warnings": []
+}
