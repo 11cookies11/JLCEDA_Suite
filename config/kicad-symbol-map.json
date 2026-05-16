@@ -147,15 +147,21 @@
     },
     {
       "match": {
-        "role_contains": [
-          "rp2040_12mhz_crystal",
-          "esp32_40mhz_crystal"
-        ],
+        "role_contains": ["rp2040_12mhz_crystal"],
         "ref_prefix": "Y"
       },
-      "lib_id": "Device:Crystal",
-      "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
-      "note": "NexDAP: Crystal (12MHz or 40MHz) with 3225 SMD footprint"
+      "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
+      "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
+      "note": "NexDAP: RP2040 12MHz crystal (LCSC C9002, 3225 4P, 4/4 pin/pad match)"
+    },
+    {
+      "match": {
+        "role_contains": ["esp32_40mhz_crystal"],
+        "ref_prefix": "Y"
+      },
+      "lib_id": "JLC-MCP-Crystals:X322540MPB4SI",
+      "footprint": "JLC-MCP:OSC-SMD_4P-L3.2-W2.5-BL_SIT8008BI",
+      "note": "NexDAP: ESP32-C3 40MHz crystal (LCSC C9010, 3225 4P, 4/4 pin/pad match)"
     },
     {
       "match": {
