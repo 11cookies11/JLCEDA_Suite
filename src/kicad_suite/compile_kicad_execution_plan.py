@@ -233,9 +233,12 @@ def normalize_footprint(footprint: str) -> str:
         if mapped is not None:
             return str(mapped)
 
-    # Pattern-based JLC-MCP -> KiCad built-in remapping
+    # JLC-MCP footprints are installed by the JLC MCP bridge into
+    # the project-local JLC-MCP.pretty library. Keep them as-is to
+    # ensure symbol, footprint, and 3D model all come from the
+    # same EasyEDA source, eliminating symbol-footprint mismatches.
     if footprint.startswith('JLC-MCP:'):
-        return _remap_jlc_footprint(footprint)
+        return footprint
 
     return footprint
 
@@ -253,7 +256,7 @@ def _remap_jlc_footprint(fp: str) -> str:
         size = name[1:]
         return f'Capacitor_SMD:C_{size}_{"1005" if size == "0402" else "1608" if size == "0603" else "2012" if size == "0805" else "3216" if size == "1206" else "6332"}Metric'
     if name.startswith('LED0') or name.startswith('LED1'):
-        size = name[3:] if name.startswith('LED') else name[1:]
+        size = name[3:7] if name.startswith('LED') else name[1:5]
         return f'LED_SMD:LED_{size}_{"1005" if size == "0402" else "1608" if size == "0603" else "2012" if size == "0805" else "3216"}Metric'
     if name.startswith('L0') or name.startswith('L1'):
         size = name[1:]
