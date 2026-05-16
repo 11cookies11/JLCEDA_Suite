@@ -340,17 +340,32 @@ def kicad_footprint_roots() -> list[Path]:
     repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
     if repo_fp.exists():
         roots.append(repo_fp)
+    source_project = env('KICAD_SOURCE_PROJECT_DIR', '')
+    if source_project:
+        source_fp = Path(source_project) / 'libraries' / 'footprints'
+        if source_fp.exists():
+            roots.append(source_fp)
     # Check project-local libs directory (for EasyEDA imported footprints)
     output_root = env('KICAD_OUTPUT_DIR', '')
     if output_root:
         project_libs = Path(output_root) / 'libs'
         if project_libs.exists():
             roots.append(project_libs)
+        try:
+            for project_dir in Path(output_root).iterdir():
+                candidate = project_dir / 'libraries' / 'footprints'
+                if candidate.exists():
+                    roots.append(candidate)
+        except OSError:
+            pass
     output_project = env('KICAD_OUTPUT_PROJECT_DIR', '')
     if output_project:
         parent_libs = Path(output_project).parent / 'libs'
         if parent_libs.exists():
             roots.append(parent_libs)
+        project_fp = Path(output_project) / 'libraries' / 'footprints'
+        if project_fp.exists():
+            roots.append(project_fp)
     for base in (Path('D:/Program Files/KiCad'), Path('C:/Program Files/KiCad')):
         if base.exists():
             roots.extend(path / 'share' / 'kicad' / 'footprints' for path in sorted(base.glob('*'), reverse=True))

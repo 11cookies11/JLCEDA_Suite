@@ -12,9 +12,11 @@ from typing import Any
 from .env_utils import env
 from .schema_versions import KICAD_EXECUTION_PLAN_SCHEMA_VERSION, KICAD_PROJECT_WRITE_RESULT_SCHEMA_VERSION
 from .schematic_layout_rules import BlockLayoutRule, build_default_layout_rules, _resolve_wiring_block
+
 KICAD_SCHEMATIC_FILE_VERSION = '20250114'
 REPO_ROOT = Path(__file__).resolve().parents[2]
-SYMBOL_PIN_CACHE: dict[str, dict[str, dict[str, float]]] = {}
+SYMBOL_PIN_CACHE: dict[str, dict[str, dict[str, Any]]] = {}
+PIN_LEN = 2.54  # standard KiCad pin line length, mm
 
 
 def new_uuid() -> str:
@@ -78,6 +80,11 @@ def kicad_symbol_roots() -> list[Path]:
     extra = env('KICAD_EXTRA_SYMBOL_DIR')
     if extra:
         roots.extend(Path(item) for item in extra.split(';') if item.strip())
+    source_project = env('KICAD_SOURCE_PROJECT_DIR', '')
+    if source_project:
+        source_symbols = Path(source_project) / 'libraries' / 'symbols'
+        if source_symbols.exists():
+            roots.append(source_symbols)
     # Check project-local libs directory (for custom generated symbols, e.g. JLC-MCP)
     output_root = env('KICAD_OUTPUT_DIR', '')
     project_name = env('KICAD_PROJECT_NAME', '')
@@ -239,6 +246,14 @@ def symbol_block_for_lib_id(lib_id: str) -> str:
         installed = load_installed_symbol(library, symbol_name)
         if installed:
             return installed
+        system_block = installed_symbol_block(library, symbol_name)
+        if system_block:
+            normalized = normalize_embedded_symbol_name(system_block, library, symbol_name)
+            return '\n'.join(f'    {line}' if line.strip() else line for line in normalized.splitlines())
+
+    connector = local_connector_symbol(lib_id)
+    if connector:
+        return connector
 
     fallback_prefixes = {
         'Connector_Generic:Conn_01x04': 'J',
@@ -292,7 +307,7 @@ def symbol_block_with_default_footprint(block: str, footprint: str) -> str:
     return '\n'.join(result)
 
 
-def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, float]]:
+def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, Any]]:
     if lib_id in SYMBOL_PIN_CACHE:
         return SYMBOL_PIN_CACHE[lib_id]
     if ':' not in lib_id:
@@ -326,6 +341,7 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, float]]:
                         'y': float(at_data[2]),
                         'rotation': float(at_data[3]),
                         'length': float(length_data[1]) if isinstance(length_data, list) and len(length_data) >= 2 else 0.0,
+                        'electrical_type': str(node[1]) if len(node) >= 2 else '',
                     }
                 except (TypeError, ValueError):
                     pass
@@ -340,6 +356,50 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, float]]:
             pins.update(parent_pins)
     SYMBOL_PIN_CACHE[lib_id] = pins
     return pins
+
+
+def effective_net_kind(name: str, declared_kind: str = 'signal') -> str:
+    normalized = name.strip().upper()
+    if normalized == 'GND' or normalized.startswith('GND_') or normalized.endswith('_GND') or '_GND_' in normalized:
+        return 'ground'
+    voltage_pattern = r'(^|\+|_)(\d+V\d*|VCC|VDD|VBUS|VIN|VOUT)(_|$)'
+    if normalized.startswith('+') or re.search(voltage_pattern, normalized):
+        return 'power'
+    if normalized.endswith('_EN') or normalized.endswith('_CTRL'):
+        return 'signal'
+    if declared_kind in {'power', 'ground'}:
+        return declared_kind
+    return 'signal'
+
+
+def power_flag_net_names(net_names: set[str], kind_map: dict[str, str]) -> set[str]:
+    return {
+        name
+        for name in net_names
+        if effective_net_kind(name, kind_map.get(name, 'signal')) in {'power', 'ground'}
+    }
+
+
+def power_output_net_names(symbols: list[dict[str, Any]]) -> set[str]:
+    driven: set[str] = set()
+    for symbol in symbols:
+        lib_id = str(symbol.get('lib_id', '')).strip()
+        if not lib_id:
+            continue
+        try:
+            pin_map = parse_symbol_pin_map(lib_id)
+        except Exception:
+            pin_map = {}
+        for pin in symbol.get('pins', []):
+            if not isinstance(pin, dict):
+                continue
+            pin_number = str(pin.get('number', '')).strip()
+            net_name = str(pin.get('net', '')).strip()
+            pin_data = pin_map.get(pin_number) or pin_map.get(pin_number.upper())
+            electrical_type = str(pin_data.get('electrical_type', '') if isinstance(pin_data, dict) else '')
+            if net_name and electrical_type == 'power_out':
+                driven.add(net_name)
+    return driven
 
 
 def endpoint_from_pin(pin_data: dict[str, float], origin_x: float, origin_y: float, symbol_rotation: float = 0.0) -> tuple[float, float, float]:
@@ -364,6 +424,23 @@ def endpoint_from_pin(pin_data: dict[str, float], origin_x: float, origin_y: flo
     if direction == 270.0:
         return x, y, 270.0
     return x, y, 180.0
+
+
+def _pin_length(symbol: dict[str, Any], pin_number: str) -> float:
+    """Return the pin line length (mm) for a symbol's pin, default PIN_LEN."""
+    lib_id = str(symbol.get('lib_id', ''))
+    if not lib_id:
+        return PIN_LEN
+    pin = str(pin_number).strip().upper()
+    pin_map = parse_symbol_pin_map(lib_id)
+    pin_data = pin_map.get(pin_number) or pin_map.get(pin)
+    if not pin_data:
+        return PIN_LEN
+    try:
+        length = float(pin_data.get('length', PIN_LEN))
+    except (TypeError, ValueError):
+        return PIN_LEN
+    return length if length > 0 else PIN_LEN
 
 
 def local_two_pin_symbol(lib_id: str, reference_prefix: str) -> str:
@@ -397,6 +474,65 @@ def local_two_pin_symbol(lib_id: str, reference_prefix: str) -> str:
           (name "2" (effects (font (size 1.27 1.27))))
           (number "2" (effects (font (size 1.27 1.27))))
         )
+      )
+      (embedded_fonts no)
+    )'''
+
+
+def local_connector_symbol(lib_id: str) -> str:
+    match = re.fullmatch(r'Connector_Generic:Conn_(\d{2})x(\d{2})', lib_id)
+    if not match:
+        return ''
+    columns = int(match.group(1))
+    rows = int(match.group(2))
+    if columns not in {1, 2} or rows < 1:
+        return ''
+    symbol_name = lib_id.split(':', 1)[-1]
+    half_height = max(1.27, (rows - 1) * 2.54 / 2 + 1.27)
+    pins: list[str] = []
+    if columns == 1:
+        for row in range(rows):
+            number = str(row + 1)
+            y = (rows - 1) * 1.27 - row * 2.54
+            pins.append(f'''        (pin passive line (at -5.08 {fmt(y)} 0) (length 2.54)
+          (name {q(number)} (effects (font (size 1.27 1.27))))
+          (number {q(number)} (effects (font (size 1.27 1.27))))
+        )''')
+    else:
+        for row in range(rows):
+            y = (rows - 1) * 1.27 - row * 2.54
+            left_number = str(row * 2 + 1)
+            right_number = str(row * 2 + 2)
+            pins.append(f'''        (pin passive line (at -5.08 {fmt(y)} 0) (length 2.54)
+          (name {q(left_number)} (effects (font (size 1.27 1.27))))
+          (number {q(left_number)} (effects (font (size 1.27 1.27))))
+        )''')
+            pins.append(f'''        (pin passive line (at 5.08 {fmt(y)} 180) (length 2.54)
+          (name {q(right_number)} (effects (font (size 1.27 1.27))))
+          (number {q(right_number)} (effects (font (size 1.27 1.27))))
+        )''')
+    return f'''    (symbol {q(lib_id)}
+      (pin_names (offset 0.254))
+      (exclude_from_sim no)
+      (in_bom yes)
+      (on_board yes)
+      (duplicate_pin_numbers_are_jumpers no)
+      (property "Reference" "J" (at 0 {fmt(half_height + 2.54)} 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" {q(symbol_name)} (at 0 {fmt(-half_height - 2.54)} 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (symbol "{symbol_name}_0_1"
+        (rectangle (start -2.54 {fmt(half_height)}) (end 2.54 {fmt(-half_height)})
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+{chr(10).join(pins)}
       )
       (embedded_fonts no)
     )'''
@@ -507,26 +643,34 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
   )'''
 
 
-def automatic_power_flags(plan: dict[str, Any]) -> list[dict[str, Any]]:
+def automatic_power_flags_for_net_names(
+    net_names: set[str],
+    kind_map: dict[str, str],
+    start_index: int = 1,
+) -> list[dict[str, Any]]:
     flags: list[dict[str, Any]] = []
-    for index, net in enumerate(plan.get('nets', []), start=1):
-        if not isinstance(net, dict):
+    for position_index, name in enumerate(sorted(net_names), start=1):
+        kind = effective_net_kind(name, kind_map.get(name, '').strip())
+        if kind not in {'power', 'ground'} or not name:
             continue
-        name = str(net.get('name', '')).strip()
-        kind = str(net.get('kind', '')).strip()
-        if kind != 'ground' or not name:
-            continue
+        ref_index = start_index + position_index - 1
         flags.append(
             {
-                'ref': f'#FLG{index:02d}',
+                'ref': f'#FLG{ref_index:03d}',
                 'value': 'PWR_FLAG',
                 'lib_id': 'power:PWR_FLAG',
                 'footprint': '',
-                'at': {'x': 30.48, 'y': 106.68 + index * 7.62, 'rotation': 0.0},
+                'at': {'x': 30.48, 'y': 106.68 + position_index * 7.62, 'rotation': 0.0},
                 'pins': [{'number': '1', 'net': name}],
             }
         )
     return flags
+
+
+def automatic_power_flags(plan: dict[str, Any]) -> list[dict[str, Any]]:
+    kind_map = net_kind_by_name(plan)
+    net_names = {str(net.get('name', '')).strip() for net in plan.get('nets', []) if isinstance(net, dict)}
+    return automatic_power_flags_for_net_names(net_names, kind_map)
 
 
 def symbol_by_ref(symbols: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -594,6 +738,11 @@ def _route_intra_block(
         return []
     points = [ep for _, _, ep in ref_pins]
     return _route_bus(points)
+
+
+def direct_intra_module_wiring_enabled() -> bool:
+    value = env('KICAD_DIRECT_INTRA_MODULE_WIRING', '').strip().lower()
+    return value in {'1', 'true', 'yes', 'on'}
 
 
 def intra_module_wiring(
@@ -672,8 +821,10 @@ def render_connectivity(
     if force_global_nets is None:
         force_global_nets = set()
     nets = plan.get('nets', [])
-    direct_blocks, suppress_labels = intra_module_wiring(symbols, nets)
-    blocks.extend(direct_blocks)
+    suppress_labels: set[tuple[str, str]] = set()
+    if direct_intra_module_wiring_enabled():
+        direct_blocks, suppress_labels = intra_module_wiring(symbols, nets)
+        blocks.extend(direct_blocks)
     rendered_labels: set[tuple[str, str, float, float]] = set()
     for symbol in symbols:
         ref = str(symbol.get('ref', '')).upper()
@@ -687,26 +838,39 @@ def render_connectivity(
             pin_number = str(pin.get('number', '')).strip()
             if not net_name or not pin_number:
                 continue
+            x, y, direction = pin_endpoint(symbol, pin_number)
+            pin_len = _pin_length(symbol, pin_number)
+            ex, ey = x, y
+            if direction == 0.0:
+                ex -= pin_len
+            elif direction == 180.0:
+                ex += pin_len
+            elif direction == 90.0:
+                ey -= pin_len
+            elif direction == 270.0:
+                ey += pin_len
+            if (ex, ey) != (x, y):
+                blocks.append(f'''  (wire (pts (xy {fmt(x)} {fmt(y)}) (xy {fmt(ex)} {fmt(ey)}))
+    (stroke (width 0) (type default))
+    (uuid {q(new_uuid())})
+  )''')
             if (ref, pin_number) in suppress_labels and net_name not in force_global_nets:
                 continue
-            x, y, direction = pin_endpoint(symbol, pin_number)
             stub = 3.81
-            label_x = x - stub if direction == 180.0 else x + stub if direction == 0.0 else x
-            label_y = y + stub if direction == 90.0 else y - stub if direction == 270.0 else y
+            label_x = ex - stub if direction == 180.0 else ex + stub if direction == 0.0 else ex
+            label_y = ey + stub if direction == 90.0 else ey - stub if direction == 270.0 else ey
             label_key = (net_name, round(label_x, 3), round(label_y, 3))
-            kind = kind_map.get(net_name, 'signal')
+            kind = effective_net_kind(net_name, kind_map.get(net_name, 'signal'))
             justify = 'right' if direction == 180.0 else 'left' if direction == 0.0 else 'center'
             justify_effect = f' (justify {justify})' if justify != 'center' else ''
-            blocks.append(f'''  (wire (pts (xy {fmt(x)} {fmt(y)}) (xy {fmt(label_x)} {fmt(label_y)}))
+            blocks.append(f'''  (wire (pts (xy {fmt(ex)} {fmt(ey)}) (xy {fmt(label_x)} {fmt(label_y)}))
     (stroke (width 0) (type default))
     (uuid {q(new_uuid())})
   )''')
             if label_key in rendered_labels:
                 continue
             rendered_labels.add(label_key)
-            if net_name in force_global_nets:
-                blocks.append(render_hierarchical_label(net_name, kind, label_x, label_y, 0.0, justify=justify))
-            elif kind in {'ground', 'power'}:
+            if net_name in force_global_nets or kind in {'ground', 'power'}:
                 blocks.append(f'''  (global_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(label_x)} {fmt(label_y)} 0)
     (effects (font (size 1.27 1.27)){justify_effect})
     (uuid {q(new_uuid())})
@@ -716,13 +880,19 @@ def render_connectivity(
     (effects (font (size 1.27 1.27)){justify_effect})
     (uuid {q(new_uuid())})
   )''')
-        if str(symbol.get('lib_id', '')) == 'MCU_Espressif:ESP32-C3':
+        lib_id_str = str(symbol.get('lib_id', ''))
+        if lib_id_str:
             connected_pins = {str(pin.get('number', '')).strip() for pin in pins if isinstance(pin, dict)}
-            for pin_number in sorted(parse_symbol_pin_map('MCU_Espressif:ESP32-C3'), key=lambda value: int(value) if value.isdigit() else value):
-                if pin_number in connected_pins:
-                    continue
-                x, y, _direction = pin_endpoint(symbol, pin_number)
-                blocks.append(f'''  (no_connect (at {fmt(x)} {fmt(y)})
+            try:
+                pin_map = parse_symbol_pin_map(lib_id_str)
+            except Exception:
+                pin_map = {}
+            if len(pin_map) > 2:
+                for pin_number in sorted(pin_map, key=lambda value: int(value) if value.isdigit() else value):
+                    if pin_number in connected_pins:
+                        continue
+                    x, y, _direction = pin_endpoint(symbol, pin_number)
+                    blocks.append(f'''  (no_connect (at {fmt(x)} {fmt(y)})
     (uuid {q(new_uuid())})
   )''')
     return '\n'.join(blocks)
@@ -892,18 +1062,6 @@ def render_root_sheet(page: dict[str, Any], kind_map: dict[str, str]) -> str:
     y = float(page['y'])
     w = float(page['w'])
     h = float(page['h'])
-    pins = []
-    root_labels = []
-    for index, net_name in enumerate(page['pins']):
-        pin_y = y + 7.62 + index * 7.62
-        pin_x = x + w
-        kind = kind_map.get(net_name, 'signal')
-        pins.append(render_sheet_pin(net_name, kind, pin_x, pin_y, 0.0))
-        root_labels.append(wire_segment((pin_x, pin_y), (pin_x + 5.08, pin_y)))
-        root_labels.append(f'''  (global_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(pin_x + 5.08)} {fmt(pin_y)} 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid {q(new_uuid())})
-  )''')
     return f'''  (sheet
     (at {fmt(x)} {fmt(y)})
     (size {fmt(w)} {fmt(h)})
@@ -916,9 +1074,7 @@ def render_root_sheet(page: dict[str, Any], kind_map: dict[str, str]) -> str:
     (property "Sheetfile" {q(page['file'])} (at {fmt(x)} {fmt(y + h + 1.27)} 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
-{chr(10).join(pins)}
-  )
-{chr(10).join(root_labels)}'''
+  )'''
 
 
 def render_root_schematic(plan: dict[str, Any], sheet_pages: list[dict[str, Any]]) -> str:
@@ -942,10 +1098,24 @@ def render_child_schematic(
     symbols: list[dict[str, Any]],
     sheet_pages: list[dict[str, Any]],
     cross_nets: set[str],
+    power_flag_nets: set[str] | None = None,
 ) -> str:
     target = plan.get('target', {})
     project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
     page_symbols = shifted_symbols_for_page(symbols)
+    page_net_names = {
+        str(pin.get('net', '')).strip()
+        for symbol in page_symbols
+        for pin in symbol.get('pins', [])
+        if isinstance(pin, dict) and str(pin.get('net', '')).strip()
+    }
+    try:
+        page_index = int(str(page.get('file', '0')).split('_', 1)[0])
+    except ValueError:
+        page_index = 1
+    if power_flag_nets is None:
+        power_flag_nets = power_flag_net_names(page_net_names, net_kind_by_name(plan))
+    page_symbols.extend(automatic_power_flags_for_net_names(power_flag_nets, net_kind_by_name(plan), start_index=page_index * 100))
     instances = '\n'.join(render_symbol_instance_at_path(symbol, project_name, page['path']) for symbol in page_symbols)
     connectivity = render_connectivity(plan, page_symbols, force_global_nets=cross_nets)
     return f'''(kicad_sch
@@ -970,14 +1140,14 @@ def write_hierarchical_project(plan: dict[str, Any], output_dir: Path, schematic
     cross_net_pages = page_cross_nets(plan, ref_to_sheet)
 
     # Collect power/ground nets that are entirely local to a single sheet.
-    # These need sheet pins so EasyEDA can map global labels through the hierarchy.
+    # They should still use global power labels inside that sheet.
     net_kind_lookup = {str(net.get('name', '')): str(net.get('kind', 'signal')) for net in plan.get('nets', []) if isinstance(net, dict)}
     local_power_nets: dict[str, set[str]] = {}
     for net in plan.get('nets', []):
         if not isinstance(net, dict):
             continue
         net_name = str(net.get('name', '')).strip()
-        kind = str(net.get('kind', 'signal'))
+        kind = effective_net_kind(net_name, str(net.get('kind', 'signal')))
         if kind not in ('power', 'ground') or net_name in cross_net_pages:
             continue
         sheet_members: set[str] = set()
@@ -1020,9 +1190,22 @@ def write_hierarchical_project(plan: dict[str, Any], output_dir: Path, schematic
         )
         cursor_x += 66.04
 
+    driven_power_nets = power_output_net_names(base_symbols)
+    flag_page_by_net: dict[str, str] = {}
+    for page in sheet_pages:
+        for net_name in power_flag_net_names(set(page.get('pins', [])), net_kind_lookup):
+            if net_name in driven_power_nets:
+                continue
+            flag_page_by_net.setdefault(net_name, str(page['name']))
+
     schematic_file.write_text(render_root_schematic(plan, sheet_pages) + '\n', encoding='utf-8')
     for page in sheet_pages:
         child_path = schematic_file.parent / page['file']
+        page_power_flags = {
+            net_name
+            for net_name, page_name in flag_page_by_net.items()
+            if page_name == str(page['name'])
+        }
         child_path.write_text(
             render_child_schematic(
                 plan=plan,
@@ -1030,6 +1213,7 @@ def write_hierarchical_project(plan: dict[str, Any], output_dir: Path, schematic
                 symbols=page['symbols'],
                 sheet_pages=sheet_pages,
                 cross_nets=set(page['pins']),
+                power_flag_nets=page_power_flags,
             ) + '\n',
             encoding='utf-8',
         )
@@ -1114,8 +1298,10 @@ def render_project(output_dir: str | Path | None = None) -> str:
 def _find_jlc_lib_dir(output_dir: Path) -> Path | None:
     """Find the JLC footprint library directory relative to the project."""
     for candidate in [
+        output_dir / 'libraries' / 'footprints' / 'JLC-MCP.pretty',
         output_dir / 'libs' / 'jlc_footprints.pretty',
         output_dir.parent / 'libs' / 'jlc_footprints.pretty',
+        Path(env('KICAD_SOURCE_PROJECT_DIR', '')) / 'libraries' / 'footprints' / 'JLC-MCP.pretty',
     ]:
         if candidate.exists():
             return candidate
@@ -1125,8 +1311,10 @@ def _find_jlc_lib_dir(output_dir: Path) -> Path | None:
 def _find_jlc_sym_file(output_dir: Path) -> Path | None:
     """Find the JLC symbol library file relative to the project."""
     for candidate in [
+        output_dir / 'libraries' / 'symbols' / 'EasyEDA-local.kicad_sym',
         output_dir / 'libs' / 'jlc_symbols.kicad_sym',
         output_dir.parent / 'libs' / 'jlc_symbols.kicad_sym',
+        Path(env('KICAD_SOURCE_PROJECT_DIR', '')) / 'libraries' / 'symbols' / 'EasyEDA-local.kicad_sym',
     ]:
         if candidate.exists():
             return candidate

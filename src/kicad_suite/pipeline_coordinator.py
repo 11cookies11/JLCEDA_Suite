@@ -81,10 +81,12 @@ def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
 def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     model = load_json(model_path)
     project_name = model.get("topology", model.get("request_id", "kicad_project"))
+    source_project_dir = Path(model_path).resolve().parent
     output = Path(output_dir)
     output.mkdir(parents=True, exist_ok=True)
     os.environ["KICAD_PROJECT_NAME"] = project_name
     os.environ["KICAD_OUTPUT_DIR"] = str(output)
+    os.environ["KICAD_SOURCE_PROJECT_DIR"] = str(source_project_dir)
     os.environ["KICAD_TOPOLOGY"] = model.get("topology", "")
 
     netlist = build_netlist(model)

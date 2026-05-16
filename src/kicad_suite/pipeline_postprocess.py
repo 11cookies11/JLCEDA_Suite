@@ -5,8 +5,14 @@ from __future__ import annotations
 
 import subprocess
 import sys
+import shutil
+import re
 from pathlib import Path
 from typing import Any
+
+from .env_utils import env
+
+REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def inject_jlc_symbols(schematic_path: Path) -> bool:
@@ -127,8 +133,67 @@ def register_jlc_libraries(project_dir: Path) -> dict[str, Any]:
         }
 
 
+def sync_source_libraries(project_dir: Path) -> dict[str, Any]:
+    """Copy pre-imported EasyEDA/JLC assets from the source project into output."""
+    source_project = env("KICAD_SOURCE_PROJECT_DIR", "")
+    if not source_project:
+        return {"attempted": False, "reason": "KICAD_SOURCE_PROJECT_DIR not set"}
+    source_libraries = Path(source_project) / "libraries"
+    if not source_libraries.exists():
+        return {"attempted": True, "copied": False, "reason": "source libraries missing", "source": str(source_libraries)}
+    target_libraries = project_dir / "libraries"
+    target_libraries.mkdir(parents=True, exist_ok=True)
+    counts: dict[str, int] = {}
+    for name in ("symbols", "footprints", "3dmodels"):
+        source = source_libraries / name
+        target = target_libraries / name
+        if source.exists():
+            shutil.copytree(source, target, dirs_exist_ok=True)
+            counts[name] = len([path for path in target.rglob("*") if path.is_file()])
+    supplemental = REPO_ROOT / "resources" / "kicad" / "footprints" / "JLC-MCP.pretty"
+    if supplemental.exists():
+        target = target_libraries / "footprints" / "JLC-MCP.pretty"
+        target.mkdir(parents=True, exist_ok=True)
+        for footprint in supplemental.glob("*.kicad_mod"):
+            shutil.copy2(footprint, target / footprint.name)
+        counts["supplemental_footprints"] = len(list(supplemental.glob("*.kicad_mod")))
+        counts["footprints"] = len([path for path in (target_libraries / "footprints").rglob("*") if path.is_file()])
+    return {"attempted": True, "copied": True, "source": str(source_libraries), "target": str(target_libraries), "counts": counts}
+
+
+def patch_known_jlc_symbol_pin_types(project_dir: Path) -> dict[str, Any]:
+    """Apply narrow ERC pin-type corrections for known EasyEDA/JLC symbol issues."""
+    patched_files: list[str] = []
+    memory_symbol = project_dir / "libraries" / "symbols" / "JLC-MCP-Memory.kicad_sym"
+    mcu_symbol = project_dir / "libraries" / "symbols" / "JLC-MCP-MCUs.kicad_sym"
+    schematic_files = list(project_dir.glob("*.kicad_sch"))
+    for path in [memory_symbol, mcu_symbol, *schematic_files]:
+        if not path.exists():
+            continue
+        text = path.read_text(encoding="utf-8")
+        patched = re.sub(
+            r'(\(pin\s+)output(\s+line(?:(?!\(pin\s).)*?\(name\s+"SCLK")',
+            r'\1input\2',
+            text,
+            count=0,
+            flags=re.DOTALL,
+        )
+        patched = re.sub(
+            r'(\(pin\s+)input(\s+line(?:(?!\(pin\s).)*?\(name\s+"U0RXD")',
+            r'\1bidirectional\2',
+            patched,
+            count=0,
+            flags=re.DOTALL,
+        )
+        if patched != text:
+            path.write_text(patched, encoding="utf-8")
+            patched_files.append(str(path))
+    return {"patched_files": patched_files, "count": len(patched_files)}
+
+
 def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]:
     """Run post-processing after KiCad file generation."""
+    library_sync = sync_source_libraries(project_dir)
     symbols_injected = False
     inject_error = ""
     if schematic_file.exists():
@@ -137,8 +202,11 @@ def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]
         except Exception as exc:  # noqa: BLE001
             inject_error = str(exc)
 
+    pin_type_patches = patch_known_jlc_symbol_pin_types(project_dir)
     registration = register_jlc_libraries(project_dir)
     return {
+        "library_sync": library_sync,
+        "pin_type_patches": pin_type_patches,
         "symbols_injected": symbols_injected,
         "symbol_injection_error": inject_error,
         "library_registration": registration,
