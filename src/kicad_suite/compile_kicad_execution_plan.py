@@ -221,10 +221,87 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
 
 
 def normalize_footprint(footprint: str) -> str:
+    """Resolve footprint aliases and remap JLC-MCP to KiCad built-in equivalents.
+
+    JLC-MCP (EasyEDA-origin) footprints use path variables that KiCad 10.0
+    does not resolve.  Map them to the closest KiCad system-library footprint
+    so that projects open without external library configuration.
+    """
     aliases = load_symbol_map().get('footprint_aliases', {})
     if isinstance(aliases, dict):
-        return str(aliases.get(footprint, footprint))
+        mapped = aliases.get(footprint)
+        if mapped is not None:
+            return str(mapped)
+
+    # Pattern-based JLC-MCP -> KiCad built-in remapping
+    if footprint.startswith('JLC-MCP:'):
+        return _remap_jlc_footprint(footprint)
+
     return footprint
+
+
+def _remap_jlc_footprint(fp: str) -> str:
+    """Map a JLC-MCP footprint name to the closest KiCad system-library footprint."""
+    name = fp.split(':', 1)[1] if ':' in fp else fp
+
+    # Package patterns: match footprint geometry to KiCad library
+    if name.startswith('R0') or name.startswith('R1'):
+        # Resistor: e.g. R0603, R0402, R0805, R1206, R2512
+        size = name[1:]  # e.g. "0603" from "R0603"
+        return f'Resistor_SMD:R_{size}_{"1005" if size == "0402" else "1608" if size == "0603" else "2012" if size == "0805" else "3216" if size == "1206" else "6332"}Metric'
+    if name.startswith('C0') or name.startswith('C1'):
+        size = name[1:]
+        return f'Capacitor_SMD:C_{size}_{"1005" if size == "0402" else "1608" if size == "0603" else "2012" if size == "0805" else "3216" if size == "1206" else "6332"}Metric'
+    if name.startswith('LED0') or name.startswith('LED1'):
+        size = name[3:] if name.startswith('LED') else name[1:]
+        return f'LED_SMD:LED_{size}_{"1005" if size == "0402" else "1608" if size == "0603" else "2012" if size == "0805" else "3216"}Metric'
+    if name.startswith('L0') or name.startswith('L1'):
+        size = name[1:]
+        return f'Inductor_SMD:L_{size}_{"1005" if size == "0402" else "1608" if size == "0603" else "2012" if size == "0805" else "3216"}Metric'
+
+    # IC package patterns
+    if 'QFN-32' in name or 'QFN32' in name:
+        return 'Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.3x3.3mm'
+    if 'QFN-56' in name or 'LQFN-56' in name or 'QFN56' in name:
+        return 'Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm'
+    if 'QFN-20' in name or 'QFN20' in name:
+        return 'Package_DFN_QFN:QFN-20-1EP_3x5mm_P0.5mm_EP1.45x2.9mm'
+
+    if 'SOT-23-6' in name or 'SOT23-6' in name:
+        return 'Package_TO_SOT_SMD:SOT-23-6'
+    if 'SOT-23-5' in name or 'TSOT-23-5' in name or 'SOT23-5' in name:
+        return 'Package_TO_SOT_SMD:SOT-23-5'
+    if 'SOT-23-3' in name or 'SOT-23_L' in name or 'SOT23-3' in name:
+        return 'Package_TO_SOT_SMD:SOT-23'
+    if 'SOT-223' in name:
+        return 'Package_TO_SOT_SMD:SOT-223-3_TabPin2'
+
+    if 'SOIC-16' in name and 'W' in name:
+        return 'Package_SO:SOIC-16W_7.5x10.3mm_P1.27mm'
+    if 'SOIC-16' in name:
+        return 'Package_SO:SOIC-16_3.9x9.9mm_P1.27mm'
+    if 'SOIC-8' in name or 'SOP-8' in name:
+        return 'Package_SO:SOIC-8_5.3x5.3mm_P1.27mm'
+    if 'SOIC-14' in name or 'SOP-14' in name:
+        return 'Package_SO:SOIC-14_3.9x8.7mm_P1.27mm'
+
+    if 'SMB_' in name or 'SMB_L' in name:
+        return 'Diode_SMD:D_SMB'
+
+    if 'TO-252' in name:
+        return 'Package_TO_SOT_SMD:TO-252-2'
+
+    if 'USB-C' in name or 'TYPE-C' in name:
+        return 'Connector_USB:USB_C_Receptacle_Amphenol_12401548E4-2A'
+
+    if 'PWRM-TH' in name or 'SIP' in name and 'TH' in name:
+        return 'Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical'
+
+    if 'CRYSTAL' in name:
+        return 'Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm'
+
+    # Fallback: return original — caller should still report it via diagnostics
+    return fp
 
 
 def _has_library_prefix(footprint: str) -> bool:
@@ -233,11 +310,13 @@ def _has_library_prefix(footprint: str) -> bool:
 
 
 def resolve_footprint(component_package: str, mapping_footprint: str) -> str:
-    """Resolve footprint: prefer component package if it has library prefix, else use mapping.
+    """Resolve footprint: prefer mapping footprint (JLC-MCP) over component package.
 
     KiCad requires the full 'Library:FootprintName' format. Short names like '0603'
     cause warnings and failures in KiCad.
     """
+    if mapping_footprint and _has_library_prefix(mapping_footprint):
+        return normalize_footprint(mapping_footprint)
     if component_package and _has_library_prefix(component_package):
         return normalize_footprint(component_package)
     if mapping_footprint:

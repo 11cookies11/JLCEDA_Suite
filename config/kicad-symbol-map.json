@@ -4,6 +4,183 @@
     {
       "match": {
         "role_contains": [
+          "esp32c3_transaction_manager",
+          "esp32c3_wireless_host",
+          "esp32_c3_bare_host_mcu"
+        ]
+      },
+      "lib_id": "JLC-MCP-MCUs:ESP32-C3",
+      "footprint": "JLC-MCP:QFN-32_L5.0-W5.0-P0.50-TL-EP3.7",
+      "note": "NexDAP: ESP32-C3 bare chip with JLC-MCP QFN-32 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "rp2040_cmsis_dap_engine",
+          "rp2040_dap_mcu"
+        ]
+      },
+      "lib_id": "JLC-MCP-MCUs:RP2040",
+      "footprint": "JLC-MCP:LQFN-56_L7.0-W7.0-P0.4-EP",
+      "note": "NexDAP: RP2040 with JLC-MCP LQFN-56 footprint (57-pin)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "main_3v3_buck",
+          "main_5v_to_3v3_regulator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:SY8089A1AAC",
+      "footprint": "JLC-MCP:TSOT-23-5_L2.9-W1.6-P0.95-LS2.8-BR",
+      "note": "NexDAP: SY8089A1AAC 2A sync buck with JLC-MCP SOT-23-5 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "rp2040_external_flash",
+          "rp2040_qspi_flash"
+        ]
+      },
+      "lib_id": "JLC-MCP-Memory:GD25Q16ETIGR",
+      "footprint": "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL",
+      "note": "NexDAP: GD25Q16E 16Mbit QSPI flash with JLC-MCP SOP-8 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "digital_isolation_barrier",
+          "target_interface_digital_isolation"
+        ]
+      },
+      "lib_id": "JLC-MCP-ICs:CA-IS3742HW",
+      "footprint": "JLC-MCP:SOIC-16_L10.3-W7.5-P1.27-LS10.3-BL",
+      "note": "NexDAP: CA-IS3742HW 4ch digital isolator (2fwd+2rev) 150Mbps"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "isolated_dcdc_converter",
+          "isolated_target_side_power"
+        ]
+      },
+      "lib_id": "JLC-MCP-Misc:B0505S-1WR3_C7465178",
+      "footprint": "JLC-MCP:PWRM-TH_B0505S-1WR3",
+      "note": "NexDAP: B0505S-1WR3 1W isolated DC-DC with JLC-MCP SIP-4 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "target_side_ldo_3v3",
+          "target_ldo_3v3"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:XC6206P332MR_C347376",
+      "footprint": "JLC-MCP:SOT-23-3_L3.0-W1.7-P0.95-LS2.9-BR",
+      "note": "NexDAP: XC6206P332MR 3.3V LDO with JLC-MCP SOT-23 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "target_3v3_power_switch",
+          "target_power_switch"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:TPS22918DBVR",
+      "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR",
+      "note": "NexDAP: TPS22918DBVR load switch with JLC-MCP SOT-23-6 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_esd_protection"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:USBLC6-2SC6_C2827654",
+      "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "note": "NexDAP: USBLC6-2SC6 USB ESD protection with JLC-MCP SOT-23-6 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "target_esd_protection"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:SRV05-4_C2836319",
+      "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "note": "NexDAP: SRV05-4 4ch target ESD protection with JLC-MCP SOT-23-6 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "input_efuse",
+          "usb_vbus_efuse"
+        ]
+      },
+      "lib_id": "JLC-MCP-Misc:MNCP380HSN05AAT1G",
+      "footprint": "JLC-MCP:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR",
+      "note": "NexDAP: MNCP380HSN05AAT1G USB eFuse with JLC-MCP SOT-23-5 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "chip_antenna_2g4"
+        ]
+      },
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "note": "NexDAP: chip antenna - using LED pad as placeholder, replace with actual 2450AT18A100E symbol"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "power_indicator_led",
+          "power_led",
+          "dap_activity_led",
+          "target_power_led",
+          "status_led"
+        ]
+      },
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "note": "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "rp2040_12mhz_crystal",
+          "esp32_40mhz_crystal"
+        ],
+        "ref_prefix": "Y"
+      },
+      "lib_id": "Device:Crystal",
+      "footprint": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
+      "note": "NexDAP: Crystal (12MHz or 40MHz) with 3225 SMD footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "nreset_open_drain_nmos",
+          "open_drain_buffer"
+        ]
+      },
+      "lib_id": "Device:Q_NMOS_GDS",
+      "footprint": "Package_TO_SOT_SMD:SOT-23",
+      "note": "NexDAP: 2N7002 N-MOSFET for nRESET open-drain driver"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "swdio_direction_buffer"
+        ]
+      },
+      "lib_id": "Device:Buffer_Line_Driver",
+      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
+      "note": "NexDAP: SN74LVC1G125 tri-state buffer for SWDIO direction control"
+    },
+    {
+      "match": {
+        "role_contains": [
           "step_dir_enable_input_header",
           "uart_debug_header"
         ]
@@ -288,12 +465,54 @@
     {
       "match": {
         "role_contains": [
+          "usb_c_input"
+        ]
+      },
+      "lib_id": "Connector_Generic:Conn_02x03",
+      "footprint": "",
+      "note": "NexDAP: USB-C connector mapped to 2x3 (6-pin: VBUS, DM, DP, CC1, CC2, GND). Replace with Connector:USB_C_Receptacle_USB2.0 for production."
+    },
+    {
+      "match": {
+        "role_contains": [
           "usb"
         ]
       },
-      "lib_id": "Connector_Generic:Conn_01x04",
-      "footprint": "AIAgent:USB_A_PCB_traces_small",
-      "note": "PCB-edge USB-A male plug, from KiCad stickhub demo."
+      "lib_id": "Connector_Generic:Conn_01x06",
+      "footprint": "Connector_USB:USB_A_PCB_traces_small",
+      "note": "Generic USB connector 6-pin (VBUS, D-, D+, ID, GND, Shield)."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "testpad",
+          "test_pad",
+          "test_point"
+        ]
+      },
+      "lib_id": "Connector_Generic:Conn_01x03",
+      "footprint": "TestPoint:TestPoint_Pad_D1.5mm",
+      "note": "NexDAP: 3-pin test point header"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "target_swd_connector_arm10"
+        ]
+      },
+      "lib_id": "Connector_Generic:Conn_02x05",
+      "footprint": "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical_SMD",
+      "note": "NexDAP: ARM Cortex 10-pin 1.27mm debug connector (2x5)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "target_diy_header_2p54"
+        ]
+      },
+      "lib_id": "Connector_Generic:Conn_01x09",
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x09_P2.54mm_Vertical",
+      "note": "NexDAP: 1x9P 2.54mm DIY header"
     },
     {
       "match": {
@@ -304,7 +523,8 @@
         ]
       },
       "lib_id": "Connector_Generic:Conn_01x04",
-      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical"
+      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x04_P2.54mm_Vertical",
+      "note": "Generic UART/SWD/programming header 4-pin."
     },
     {
       "match": {
@@ -392,7 +612,8 @@
         ],
         "value_contains": [
           "rp2040"
-        ]
+        ],
+        "ref_prefix": "U"
       },
       "lib_id": "AIAgent:RP2040_QFN56",
       "footprint": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
@@ -513,7 +734,8 @@
         ],
         "value_contains": [
           "esp32"
-        ]
+        ],
+        "ref_prefix": "U"
       },
       "lib_id": "AIAgent:ESP32_C3_Module",
       "footprint": "",
@@ -591,6 +813,50 @@
     "MCU_Espressif:ESP32-C3": [
       50.8,
       55.88
+    ],
+    "JLC-MCP-MCUs:RP2040": [
+      76.2,
+      106.68
+    ],
+    "JLC-MCP-MCUs:ESP32-C3": [
+      50.8,
+      55.88
+    ],
+    "JLC-MCP-Power:SY8089A1AAC": [
+      22.86,
+      17.78
+    ],
+    "JLC-MCP-Memory:GD25Q16ETIGR": [
+      25.4,
+      27.94
+    ],
+    "JLC-MCP-ICs:CA-IS3742HW": [
+      45.72,
+      40.64
+    ],
+    "JLC-MCP-Misc:B0505S-1WR3_C7465178": [
+      25.4,
+      20.32
+    ],
+    "JLC-MCP-Power:XC6206P332MR_C347376": [
+      17.78,
+      12.7
+    ],
+    "JLC-MCP-Power:TPS22918DBVR": [
+      22.86,
+      17.78
+    ],
+    "JLC-MCP-Diodes:USBLC6-2SC6_C2827654": [
+      17.78,
+      12.7
+    ],
+    "JLC-MCP-Diodes:SRV05-4_C2836319": [
+      17.78,
+      12.7
+    ],
+    "JLC-MCP-Misc:MNCP380HSN05AAT1G": [
+      17.78,
+      12.7
     ],
     "Connector:USB_C_Receptacle": [
       20.32,

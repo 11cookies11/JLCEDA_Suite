@@ -12,7 +12,7 @@ from typing import Any
 
 
 def resolve_bridge_script(bridge_script: str | Path | None = None) -> Path:
-    repo_root = Path(__file__).resolve().parents[2]
+    repo_root = Path(__file__).resolve().parents[3]
     return Path(bridge_script) if bridge_script else repo_root / "scripts" / "jlc_mcp_bridge.mjs"
 
 
