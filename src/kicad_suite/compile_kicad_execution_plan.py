@@ -661,6 +661,54 @@ def load_inputs() -> tuple[dict[str, Any], dict[str, Any]]:
     return model, netlist
 
 
+def _validate_symbol_libraries(preflight: list[tuple[str, str, str, str, list[str]]]) -> None:
+    """Pre-flight check: verify all symbol libraries can be found on disk.
+
+    If a library file is missing, symbol_block_for_lib_id falls back to a
+    hardcoded 2-pin placeholder with pins at ±5.08mm, which silently breaks
+    all wire-to-pin connections.  This catches that early.
+    """
+    from .kicad_project_writer import installed_symbol_block, kicad_symbol_roots
+
+    checked: set[str] = set()
+    missing_libs: dict[str, list[str]] = {}  # library → [refs]
+
+    for ref, _role, lib_id, _footprint, _notes in preflight:
+        if lib_id in checked:
+            continue
+        if ':' not in lib_id:
+            continue
+        library, symbol_name = lib_id.split(':', 1)
+        # Only check JLC-MCP libraries — KiCad built-in libs use 'extends'
+        # which installed_symbol_block doesn't resolve.
+        if not library.startswith('JLC-MCP-'):
+            continue
+        if library in checked:
+            continue
+        checked.add(library)
+        if installed_symbol_block(library, symbol_name):
+            continue
+        missing_libs.setdefault(library, []).append(ref)
+
+    if not missing_libs:
+        return
+
+    roots = kicad_symbol_roots()
+    root_lines = '\n'.join(f'    - {r}' for r in roots)
+    missing_lines = '\n'.join(
+        f'    {lib}.kicad_sym (needed by: {", ".join(refs[:5])}{"..." if len(refs) > 5 else ""})'
+        for lib, refs in missing_libs.items()
+    )
+    raise RuntimeError(
+        f'{len(missing_libs)} symbol library file(s) not found.\n'
+        f'These will fall back to fake 2-pin symbols (±5.08mm),\n'
+        f'breaking all wire-to-pin connections.\n\n'
+        f'Missing libraries:\n{missing_lines}\n\n'
+        f'Search paths (kicad_symbol_roots):\n{root_lines}\n\n'
+        f'Fix: ensure the required .kicad_sym files exist in one of the search paths above.'
+    )
+
+
 def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecutionPlan:
     request_id = str(model.get('request_id') or netlist.get('request_id') or uuid.uuid4())
     project_name = slugify_project_name(env('KICAD_PROJECT_NAME', str(model.get('topology', '') or request_id)))
@@ -694,6 +742,9 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
         role = str(component.get('role', ''))
         preflight.append((ref, role, lib_id, footprint, notes))
         component['_lib_id'] = lib_id  # stash for role_aware_position
+
+    # Pre-flight symbol library validation: catch missing JLC-MCP libs early
+    _validate_symbol_libraries(preflight)
 
     # Compute block layout from real symbol dimensions
     comp_info = [(ref, role, lib_id) for ref, role, lib_id, _fp, _n in preflight]
