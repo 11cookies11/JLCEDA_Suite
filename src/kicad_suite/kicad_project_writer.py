@@ -1366,30 +1366,49 @@ def _find_jlc_sym_file(output_dir: Path) -> Path | None:
 
 
 def write_fp_lib_table(output_dir: Path) -> None:
+    """Write fp-lib-table and sym-lib-table with project-relative paths.
+
+    Uses bare relative paths (no ${KIPRJMOD}) so the project is portable
+    across machines. KiCad resolves bare relative URIs against the
+    directory containing the .kicad_pro file.
+    """
+    output_resolved = output_dir.resolve()
     lines = ['(fp_lib_table', '  (version 7)']
 
-    # Repo AIAgent footprints — use absolute paths (${KIPRJMOD} broken on Windows)
+    # Repo AIAgent footprints
     repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
     if repo_fp.exists():
         for pretty_dir in sorted(repo_fp.glob('*.pretty')):
             lib_name = pretty_dir.name.rsplit('.', 1)[0]
-            uri = str(pretty_dir.resolve()).replace('\\', '/')
+            try:
+                rel = Path(os.path.relpath(str(pretty_dir.resolve()), str(output_resolved)))
+            except ValueError:
+                rel = pretty_dir
+            uri = str(rel).replace('\\', '/')
             lines.append(f'  (lib (name "{lib_name}")(type "KiCad")(uri "{uri}")(options "")(descr "AIAgent custom footprints"))')
 
-    # JLC/LCSC imported footprints — absolute paths
+    # JLC/LCSC imported footprints
     jlc_fp = _find_jlc_lib_dir(output_dir)
     if jlc_fp:
-        uri = str(jlc_fp.resolve()).replace('\\', '/')
+        try:
+            rel = Path(os.path.relpath(str(jlc_fp.resolve()), str(output_resolved)))
+        except ValueError:
+            rel = jlc_fp
+        uri = str(rel).replace('\\', '/')
         lines.append(f'  (lib (name "jlc_footprints")(type "KiCad")(uri "{uri}")(options "")(descr "JLC/LCSC imported footprints"))')
 
     lines.append(')\n')
     content = '\n'.join(lines)
     (output_dir / 'fp-lib-table').write_text(content, encoding='utf-8')
 
-    # Also write sym-lib-table for JLC symbols — absolute paths
+    # Also write sym-lib-table for JLC symbols
     jlc_sym = _find_jlc_sym_file(output_dir)
     if jlc_sym:
-        uri = str(jlc_sym.resolve()).replace('\\', '/')
+        try:
+            rel = Path(os.path.relpath(str(jlc_sym.resolve()), str(output_resolved)))
+        except ValueError:
+            rel = jlc_sym
+        uri = str(rel).replace('\\', '/')
         sym_content = f'(sym_lib_table\n  (version 7)\n  (lib (name "jlc_symbols")(type "KiCad")(uri "{uri}")(options "")(descr "JLC/LCSC imported symbols"))\n)\n'
         (output_dir / 'sym-lib-table').write_text(sym_content, encoding='utf-8')
 
