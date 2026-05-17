@@ -453,7 +453,11 @@ def _resolve_block(role: str) -> str:
 
 
 def _estimate_symbol_size(lib_id: str) -> tuple[float, float]:
-    """Estimate symbol width/height in mm from real KiCad pin positions."""
+    """Estimate symbol size in mm including label stubs on each side.
+
+    Returns (width, height) where width covers pin tips + labels on left/right,
+    and height covers pin tips + labels on top/bottom.
+    """
     configured = load_symbol_map().get('symbol_sizes', {}).get(lib_id)
     if isinstance(configured, list) and len(configured) >= 2:
         return float(configured[0]), float(configured[1])
@@ -466,8 +470,25 @@ def _estimate_symbol_size(lib_id: str) -> tuple[float, float]:
     ys = [p['y'] for p in pins.values()]
     if not xs:
         return 12.7, 10.16
-    w = max(xs) - min(xs) + 7.62
-    h = max(ys) - min(ys) + 7.62
+
+    # Label extends from pin tip outward by pin_len + stub ≈ 6.35mm,
+    # plus ~5mm for typical label text.  Total ~12mm per side with labels.
+    _LABEL_EXTENSION = 12.0  # mm beyond pin tip for label + stub
+    _BODY_PAD = 3.81  # mm padding for symbol body edge
+
+    # Determine which sides have labels (based on pin exit direction)
+    has_left_labels = any(p['rotation'] == 0 for p in pins.values())
+    has_right_labels = any(p['rotation'] == 180 for p in pins.values())
+    has_top_labels = any(p['rotation'] == 270 for p in pins.values())
+    has_bottom_labels = any(p['rotation'] == 90 for p in pins.values())
+
+    left_margin = _LABEL_EXTENSION if has_left_labels else _BODY_PAD
+    right_margin = _LABEL_EXTENSION if has_right_labels else _BODY_PAD
+    top_margin = _LABEL_EXTENSION if has_top_labels else _BODY_PAD
+    bottom_margin = _LABEL_EXTENSION if has_bottom_labels else _BODY_PAD
+
+    w = (max(xs) - min(xs)) + left_margin + right_margin
+    h = (max(ys) - min(ys)) + top_margin + bottom_margin
     return max(w, 10.0), max(h, 8.0)
 
 
@@ -575,15 +596,21 @@ def configured_topology_position(topology: str, ref: str) -> KiCadPoint | None:
 def _auto_position(
     ref: str, role: str, lib_id: str,
     block_x: dict[str, float], block_y: dict[str, float], block_slot: dict[str, int],
+    block_cursor_y: dict[str, float] | None = None,
 ) -> KiCadPoint:
     block = _resolve_block(role)
     x = block_x.get(block, layout_numeric_setting('origin_x', _LAYOUT_ORIGIN_X))
     base_y = block_y.get(block, layout_numeric_setting('origin_y', _LAYOUT_ORIGIN_Y))
-    slot = block_slot.get(block, 0)
-    block_slot[block] = slot + 1
     _, h = _estimate_symbol_size(lib_id)
-    slot_pitch = layout_numeric_setting('slot_pitch', _VSLOT_PITCH)
-    y = _snap(base_y + slot * max(slot_pitch, h + 5.0))
+    min_pitch = layout_numeric_setting('slot_pitch', _VSLOT_PITCH)
+    gap = 5.0
+    if block_cursor_y is not None:
+        y = _snap(block_cursor_y.get(block, base_y))
+        block_cursor_y[block] = y + max(min_pitch, h + gap)
+    else:
+        slot = block_slot.get(block, 0)
+        block_slot[block] = slot + 1
+        y = _snap(base_y + slot * max(min_pitch, h + gap))
     rotation = configured_role_rotation(role)
     return KiCadPoint(x=x, y=y, rotation=rotation)
 
@@ -600,6 +627,7 @@ def role_aware_position(
     block_x: dict[str, float] | None = None,
     block_y: dict[str, float] | None = None,
     block_slot: dict[str, int] | None = None,
+    block_cursor_y: dict[str, float] | None = None,
 ) -> KiCadPoint:
     ref = str(component.get('ref', '')).strip().upper()
     role = str(component.get('role', '')).strip().lower()
@@ -611,7 +639,7 @@ def role_aware_position(
         return configured_position
 
     if block_x is not None and block_y is not None and block_slot is not None:
-        return _auto_position(ref, role, lib_id, block_x, block_y, block_slot)
+        return _auto_position(ref, role, lib_id, block_x, block_y, block_slot, block_cursor_y)
 
     col = index % columns
     row = index // columns
@@ -673,6 +701,7 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
     block_x = {b: x for b, (x, _y) in block_layout.items()}
     block_y = {b: y for b, (_x, y) in block_layout.items()}
     block_slot: dict[str, int] = {}
+    block_cursor_y = dict(block_y)  # cumulative Y tracker per block for area-aware spacing
 
     # Pass 2: create symbols with auto positions
     symbols: list[KiCadSymbol] = []
@@ -711,6 +740,7 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
             block_x=block_x,
             block_y=block_y,
             block_slot=block_slot,
+            block_cursor_y=block_cursor_y,
         )
         sp = component.get('selected_part', {}) if isinstance(component.get('selected_part'), dict) else {}
         symbols.append(
