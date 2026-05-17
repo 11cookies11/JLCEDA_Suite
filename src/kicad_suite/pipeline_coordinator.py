@@ -15,7 +15,7 @@ from .circuit_pipeline import (
     CircuitModel,
     CircuitNet,
     PartCandidate,
-    build_netlist_from_circuit_model,
+    build_netlist_from_circuit_model as _build_netlist_from_model,
 )
 from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, write_output
 from .env_utils import is_truthy_env
@@ -32,57 +32,54 @@ def load_json(path: str) -> dict[str, Any]:
 
 
 def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
-    components = []
-    for component in model.get("components", []):
-        selected_part = component.get("selected_part", {})
-        components.append(
-            CircuitComponent(
-                ref=str(component.get("ref", "")),
-                role=str(component.get("role", "")),
-                value=str(component.get("value", "")),
-                selected_part=PartCandidate(
-                    part_id=str(selected_part.get("part_id", "")),
-                    display_name=str(selected_part.get("display_name", "")),
-                    package=str(selected_part.get("package", "")),
-                    pin_count=int(selected_part.get("pin_count", 0)),
-                    named_pin_count=int(selected_part.get("named_pin_count", 0)),
-                    availability_status=str(selected_part.get("availability_status", "unknown")),
-                ),
-                candidate_parts=[],
-                availability_status=str(component.get("availability_status", "unknown")),
-            )
-        )
+    """Build a netlist dict from the circuit model's nets and components.
 
-    nets = []
+    Inverts net→members into component→pins for compile_plan.
+    """
+    from collections import defaultdict
+    pin_by_ref: dict[str, list[dict[str, str]]] = defaultdict(list)
     for net in model.get("nets", []):
-        nets.append(
-            CircuitNet(
-                name=str(net.get("name", "")),
-                members=[str(member) for member in net.get("members", [])],
-                notes=[str(note) for note in net.get("notes", [])],
-            )
-        )
-
-    circuit = CircuitModel(
-        schema_version=str(model.get("schema_version", "circuit-model.v1")),
-        request_id=str(model.get("request_id", "test")),
-        project_id=str(model.get("project_id", "test")),
-        topology=str(model.get("topology", "test")),
-        components=components,
-        nets=nets,
-        calculations=[],
-        design_decisions=[],
-        risks=[],
-    )
-    netlist_obj = build_netlist_from_circuit_model(circuit)
-    return asdict(netlist_obj)
+        net_name = str(net.get("name", ""))
+        for member in net.get("members", []):
+            member_str = str(member).strip()
+            if "." in member_str:
+                ref, pin = member_str.rsplit(".", 1)
+                if ref and pin:
+                    pin_by_ref[ref].append({"pin": pin, "pin_name": "", "net": net_name})
+    return {
+        "components": [
+            {"ref": ref, "pins": pins} for ref, pins in pin_by_ref.items()
+        ]
+    }
 
 
 def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
+    """Run full pipeline: model → netlist → plan → KiCad output → postprocess → ERC.
+
+    If KICAD_WORKSPACE is set, libraries and output are derived from workspace:
+        $KICAD_WORKSPACE/libraries/symbols/   ← symbol libs
+        $KICAD_WORKSPACE/libraries/footprints/ ← footprint libs
+        $KICAD_WORKSPACE/output/              ← generated output
+    Otherwise falls back to KICAD_OUTPUT_DIR and related env vars.
+    """
     model = load_json(model_path)
     project_name = model.get("topology", model.get("request_id", "kicad_project"))
     source_project_dir = Path(model_path).resolve().parent
-    output = Path(output_dir)
+
+    # Workspace mode: single root, auto-derive all paths
+    workspace = os.environ.get("KICAD_WORKSPACE", "")
+    if not workspace:
+        # Derive workspace from model path parent (if it has libraries/)
+        candidate = source_project_dir
+        if (candidate / "libraries" / "symbols").exists():
+            workspace = str(candidate)
+            os.environ["KICAD_WORKSPACE"] = workspace
+
+    if workspace:
+        output = Path(workspace) / "output"
+    else:
+        output = Path(output_dir)
+
     output.mkdir(parents=True, exist_ok=True)
     os.environ["KICAD_PROJECT_NAME"] = project_name
     os.environ["KICAD_OUTPUT_DIR"] = str(output)

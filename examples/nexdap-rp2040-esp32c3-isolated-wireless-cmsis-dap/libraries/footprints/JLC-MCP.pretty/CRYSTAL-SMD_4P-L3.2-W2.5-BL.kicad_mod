@@ -1,11 +1,11 @@
-(footprint "SOT-23-3_L3.0-W1.7-P0.95-LS2.9-BR"
+(footprint "CRYSTAL-SMD_4P-L3.2-W2.5-BL"
 	(version 20241209)
 	(generator "ai-eda-jlc-mcp")
 	(layer "F.Cu")
-	(descr "@(Ta) 1 240mV@(50mA) 250mA 3.3V 40dB@(1kHz) 7uA 8V Fixed Over Current Protection、Short Circuit Protection Positive SOT-23 Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROHS")
+	(descr "12MHz 20pF Crystal Oscillator ±10ppm ±20ppm SMD3225-4P Crystals ROHS")
 	(tags "component")
 	(property "Reference" "REF**"
-		(at 0 -3.28 0)
+		(at 0 -3.43 0)
 		(layer "F.SilkS")
 		(effects
 			(font
@@ -14,8 +14,8 @@
 			)
 		)
 	)
-	(property "Value" "XC6206P332MR_C347376"
-		(at 0 3.28 0)
+	(property "Value" "X322512MSB4SI"
+		(at 0 3.66 0)
 		(layer "F.Fab")
 		(effects
 			(font
@@ -24,7 +24,7 @@
 			)
 		)
 	)
-	(property "Description" "@(Ta) 1 240mV@(50mA) 250mA 3.3V 40dB@(1kHz) 7uA 8V Fixed Over Current Protection、Short Circuit Protection Positive SOT-23 Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROHS"
+	(property "Description" "12MHz 20pF Crystal Oscillator ±10ppm ±20ppm SMD3225-4P Crystals ROHS"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -35,7 +35,7 @@
 			)
 		)
 	)
-	(property "LCSC" "C347376"
+	(property "LCSC" "C9002"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -46,7 +46,7 @@
 			)
 		)
 	)
-	(property "Manufacturer" "UMW(友台半导体)"
+	(property "Manufacturer" "YXC(扬兴晶振)"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -57,7 +57,7 @@
 			)
 		)
 	)
-	(property "Power Supply Rejection Ratio (PSRR)" "40dB@(1kHz)"
+	(property "Load Capacitance" "20pF"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -68,7 +68,7 @@
 			)
 		)
 	)
-	(property "Operating Temperature" "-25℃~+80℃@(Ta)"
+	(property "Operating Temperature" "-40℃~+85℃"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -79,7 +79,7 @@
 			)
 		)
 	)
-	(property "standby current" "7uA"
+	(property "Type" "Crystal Oscillator"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -90,7 +90,7 @@
 			)
 		)
 	)
-	(property "Voltage - Supply" "8V"
+	(property "Normal temperature Frequency Tolerance" "±10ppm"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -101,7 +101,7 @@
 			)
 		)
 	)
-	(property "Output Type" "Fixed"
+	(property "Frequency Stability" "±20ppm"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -112,62 +112,7 @@
 			)
 		)
 	)
-	(property "Output Current" "250mA"
-		(at 0 0 0)
-		(layer "F.Fab")
-		hide
-		(effects
-			(font
-				(size 1.27 1.27)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Output Configuration" "Positive"
-		(at 0 0 0)
-		(layer "F.Fab")
-		hide
-		(effects
-			(font
-				(size 1.27 1.27)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Features" "Over Current Protection、Short Circuit Protection"
-		(at 0 0 0)
-		(layer "F.Fab")
-		hide
-		(effects
-			(font
-				(size 1.27 1.27)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Output Voltage" "3.3V"
-		(at 0 0 0)
-		(layer "F.Fab")
-		hide
-		(effects
-			(font
-				(size 1.27 1.27)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Voltage Dropout" "240mV@(50mA)"
-		(at 0 0 0)
-		(layer "F.Fab")
-		hide
-		(effects
-			(font
-				(size 1.27 1.27)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Number of Outputs" "1"
+	(property "Frequency" "12MHz"
 		(at 0 0 0)
 		(layer "F.Fab")
 		hide
@@ -180,26 +125,32 @@
 	)
 	(attr smd)
 	(pad "1" smd roundrect
-		(at 1.1013 0.95)
-		(size 1.0375 0.532)
+		(at -1.1001 0.85)
+		(size 1.4 1.2)
 		(layers "F.Cu" "F.Paste" "F.Mask")
 		(roundrect_rratio 0.25)
 	)
 	(pad "2" smd roundrect
-		(at 1.1013 -0.95)
-		(size 1.0375 0.532)
+		(at 1.1001 0.85)
+		(size 1.4 1.2)
 		(layers "F.Cu" "F.Paste" "F.Mask")
 		(roundrect_rratio 0.25)
 	)
 	(pad "3" smd roundrect
-		(at -1.1013 0)
-		(size 1.0375 0.532)
+		(at 1.1001 -0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Paste" "F.Mask")
+		(roundrect_rratio 0.25)
+	)
+	(pad "4" smd roundrect
+		(at -1.1001 -0.85)
+		(size 1.4 1.2)
 		(layers "F.Cu" "F.Paste" "F.Mask")
 		(roundrect_rratio 0.25)
 	)
 	(fp_line
-		(start 0.8587 -1.5262)
-		(end -0.8587 -1.5262)
+		(start -2.0286 1.6785)
+		(end -2.0286 -1.6787)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -207,8 +158,8 @@
 		(layer "F.SilkS")
 	)
 	(fp_line
-		(start -0.8587 -1.5262)
-		(end -0.8587 -0.4946)
+		(start -2.0286 -1.6787)
+		(end 2.0286 -1.6787)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -216,8 +167,8 @@
 		(layer "F.SilkS")
 	)
 	(fp_line
-		(start 0.8587 1.5262)
-		(end -0.8587 1.5262)
+		(start 2.0286 -1.6787)
+		(end 2.0286 1.6785)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -225,8 +176,8 @@
 		(layer "F.SilkS")
 	)
 	(fp_line
-		(start -0.8587 1.5262)
-		(end -0.8587 0.4946)
+		(start 2.0286 1.6785)
+		(end -2.0286 1.6785)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -234,8 +185,17 @@
 		(layer "F.SilkS")
 	)
 	(fp_line
-		(start 0.8587 -0.4554)
-		(end 0.8587 0.4554)
+		(start -2.2572 0.2499)
+		(end -2.2572 1.9071)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+	)
+	(fp_line
+		(start -2.2572 1.9071)
+		(end -0.4 1.9071)
 		(stroke
 			(width 0.15)
 			(type solid)
@@ -243,8 +203,8 @@
 		(layer "F.SilkS")
 	)
 	(fp_circle
-		(center 1.4249 1.4999)
-		(end 1.4549 1.4999)
+		(center -1.5999 1.2498)
+		(end -1.5699 1.2498)
 		(stroke
 			(width 0.06)
 			(type solid)
@@ -252,10 +212,10 @@
 		(layer "F.Fab")
 	)
 	(fp_circle
-		(center 1.65 0.95)
-		(end 1.7501 0.95)
+		(center -1.27 0.8891)
+		(end -1.143 0.8891)
 		(stroke
-			(width 0.2)
+			(width 0.25)
 			(type solid)
 		)
 		(layer "Cmts.User")
@@ -271,8 +231,8 @@
 		)
 	)
 	(fp_line
-		(start -1.87 -1.78)
-		(end 2 -1.78)
+		(start -2.51 -1.93)
+		(end 2.28 -1.93)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -280,8 +240,8 @@
 		(layer "F.CrtYd")
 	)
 	(fp_line
-		(start 2 -1.78)
-		(end 2 1.78)
+		(start 2.28 -1.93)
+		(end 2.28 2.16)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -289,8 +249,8 @@
 		(layer "F.CrtYd")
 	)
 	(fp_line
-		(start 2 1.78)
-		(end -1.87 1.78)
+		(start 2.28 2.16)
+		(end -2.51 2.16)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -298,8 +258,8 @@
 		(layer "F.CrtYd")
 	)
 	(fp_line
-		(start -1.87 1.78)
-		(end -1.87 -1.78)
+		(start -2.51 2.16)
+		(end -2.51 -1.93)
 		(stroke
 			(width 0.05)
 			(type solid)
@@ -307,15 +267,18 @@
 		(layer "F.CrtYd")
 	)
 	(embedded_fonts no)
-	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap/kicad-output-v19/nexdap_dual_chip_cmsis_dap/libraries/3dmodels/JLC-MCP.3dshapes/XC6206P332MR_C347376.step"
-		(offset
-			(xyz 0 0 0)
+	
 		)
 		(scale
 			(xyz 1 1 1)
 		)
 		(rotate
-			(xyz 0 0 270)
+			(xyz 0 0 0)
 		)
 	)
+    (model "D:/Program Files/KiCad/10.0/share/kicad/3dmodels/Crystal.3dshapes/Crystal_SMD_3225-4Pin_3.2x2.5mm.step"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
 )

@@ -712,7 +712,11 @@ def _validate_symbol_libraries(preflight: list[tuple[str, str, str, str, list[st
 def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecutionPlan:
     request_id = str(model.get('request_id') or netlist.get('request_id') or uuid.uuid4())
     project_name = slugify_project_name(env('KICAD_PROJECT_NAME', str(model.get('topology', '') or request_id)))
-    output_root = Path(env('KICAD_OUTPUT_DIR', 'tmp'))
+    workspace = env('KICAD_WORKSPACE', '')
+    if workspace:
+        output_root = Path(workspace) / 'output'
+    else:
+        output_root = Path(env('KICAD_OUTPUT_DIR', 'tmp'))
     output_dir = output_root / project_name
 
     origin_x = to_float_env('KICAD_SCH_ORIGIN_X_MM', 38.1)
