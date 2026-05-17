@@ -105,6 +105,18 @@ def kicad_symbol_roots() -> list[Path]:
         for candidate in candidates:
             if candidate.exists() and candidate not in roots:
                 roots.append(candidate)
+    # Search from current working directory upward for project-local symbol libs
+    try:
+        cwd = Path.cwd()
+        for parent in [cwd] + list(cwd.parents)[:4]:
+            for candidate in [
+                parent / 'libraries' / 'symbols',
+                parent / 'libs',
+            ]:
+                if candidate.exists() and candidate not in roots:
+                    roots.append(candidate)
+    except OSError:
+        pass
     for base in (Path('D:/Program Files/KiCad'), Path('C:/Program Files/KiCad')):
         if base.exists():
             roots.extend(path / 'share' / 'kicad' / 'symbols' for path in sorted(base.glob('*'), reverse=True))
@@ -403,6 +415,11 @@ def power_output_net_names(symbols: list[dict[str, Any]]) -> set[str]:
 
 
 def endpoint_from_pin(pin_data: dict[str, float], origin_x: float, origin_y: float, symbol_rotation: float = 0.0) -> tuple[float, float, float]:
+    """Return (tip_x, tip_y, direction).
+
+    (tip_x, tip_y) = pin tip absolute position (the electrical connection point).
+    direction = 0/90/180/270, the direction the wire exits the pin.
+    """
     import math
     lx = float(pin_data.get('x', 0.0))
     ly = float(pin_data.get('y', 0.0))
@@ -839,34 +856,19 @@ def render_connectivity(
             if not net_name or not pin_number:
                 continue
             x, y, direction = pin_endpoint(symbol, pin_number)
-            pin_len = _pin_length(symbol, pin_number)
-            ex, ey = x, y
-            if direction == 0.0:
-                ex -= pin_len
-            elif direction == 180.0:
-                ex += pin_len
-            elif direction == 90.0:
-                ey -= pin_len
-            elif direction == 270.0:
-                ey += pin_len
-            if (ex, ey) != (x, y):
-                blocks.append(f'''  (wire (pts (xy {fmt(x)} {fmt(y)}) (xy {fmt(ex)} {fmt(ey)}))
-    (stroke (width 0) (type default))
-    (uuid {q(new_uuid())})
-  )''')
             if (ref, pin_number) in suppress_labels and net_name not in force_global_nets:
                 continue
             stub = 3.81
-            label_x = ex - stub if direction == 180.0 else ex + stub if direction == 0.0 else ex
-            label_y = ey + stub if direction == 90.0 else ey - stub if direction == 270.0 else ey
+            label_x = x - stub if direction == 180.0 else x + stub if direction == 0.0 else x
+            label_y = y + stub if direction == 90.0 else y - stub if direction == 270.0 else y
+            blocks.append(f'''  (wire (pts (xy {fmt(x)} {fmt(y)}) (xy {fmt(label_x)} {fmt(label_y)}))
+    (stroke (width 0) (type default))
+    (uuid {q(new_uuid())})
+  )''')
             label_key = (net_name, round(label_x, 3), round(label_y, 3))
             kind = effective_net_kind(net_name, kind_map.get(net_name, 'signal'))
             justify = 'right' if direction == 180.0 else 'left' if direction == 0.0 else 'center'
             justify_effect = f' (justify {justify})' if justify != 'center' else ''
-            blocks.append(f'''  (wire (pts (xy {fmt(ex)} {fmt(ey)}) (xy {fmt(label_x)} {fmt(label_y)}))
-    (stroke (width 0) (type default))
-    (uuid {q(new_uuid())})
-  )''')
             if label_key in rendered_labels:
                 continue
             rendered_labels.add(label_key)
