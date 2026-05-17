@@ -4,6 +4,50 @@
     {
       "match": {
         "role_contains": [
+          "current_sense_amp",
+          "ina180"
+        ]
+      },
+      "lib_id": "JLC-MCP-Sensors:INA180A2IDBVT",
+      "footprint": "JLC-MCP:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR",
+      "note": "INA180A2 current sense amplifier, SOT-23-5, 50V/V"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "half_bridge_driver",
+          "gate_driver"
+        ]
+      },
+      "lib_id": "JLC-MCP-Transistors:IR2104STRPBF",
+      "footprint": "JLC-MCP:SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL",
+      "note": "IR2104S half-bridge gate driver, SOIC-8"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "hbridge",
+          "nmosfet",
+          "ao3400"
+        ]
+      },
+      "lib_id": "JLC-MCP-Transistors:AO3400A",
+      "footprint": "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR",
+      "note": "AO3400A N-MOSFET, SOT-23"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "bootstrap_diode"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:SS34_C8678",
+      "footprint": "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD",
+      "note": "Bootstrap diode (SS34 Schottky)"
+    },
+    {
+      "match": {
+        "role_contains": [
           "esp32c3_transaction_manager",
           "esp32c3_wireless_host",
           "esp32_c3_bare_host_mcu"
@@ -147,7 +191,9 @@
     },
     {
       "match": {
-        "role_contains": ["rp2040_12mhz_crystal"],
+        "role_contains": [
+          "rp2040_12mhz_crystal"
+        ],
         "ref_prefix": "Y"
       },
       "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
@@ -156,7 +202,9 @@
     },
     {
       "match": {
-        "role_contains": ["esp32_40mhz_crystal"],
+        "role_contains": [
+          "esp32_40mhz_crystal"
+        ],
         "ref_prefix": "Y"
       },
       "lib_id": "JLC-MCP-Crystals:X322540MPB4SI",
@@ -332,6 +380,30 @@
     },
     {
       "match": {
+        "role_contains": [
+          "reverse_protection",
+          "reverse_polarity",
+          "schottky_diode"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:SS34_C8678",
+      "footprint": "JLC-MCP:SMA_L4.3-W2.6-LS5.2-RD",
+      "note": "SS34 Schottky diode for reverse protection, SMA"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_esd",
+          "usb_esd_dp",
+          "usb_esd_dm"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:USBLC6-2SC6_C2827654",
+      "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "note": "USBLC6-2SC6 USB ESD protection, SOT-23-6"
+    },
+    {
+      "match": {
         "ref_prefix": "D",
         "role_contains": [
           "diode"
@@ -428,26 +500,6 @@
     },
     {
       "match": {
-        "ref_prefix": "R",
-        "role_contains": [
-          "resistor"
-        ]
-      },
-      "lib_id": "Device:R",
-      "footprint": "Resistor_SMD:R_0603_1608Metric"
-    },
-    {
-      "match": {
-        "ref_prefix": "C",
-        "role_contains": [
-          "capacitor"
-        ]
-      },
-      "lib_id": "Device:C",
-      "footprint": "Capacitor_SMD:C_0603_1608Metric"
-    },
-    {
-      "match": {
         "ref_prefix": "F",
         "role_contains": [
           "fuse",
@@ -465,8 +517,20 @@
           "esd"
         ]
       },
-      "lib_id": "Device:D_TVS",
-      "footprint": "Diode_SMD:D_SOD-523"
+      "lib_id": "Device:TVS",
+      "footprint": "Diode_SMD:D_SMA",
+      "note": "Generic TVS diode placeholder"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "tvs_input",
+          "tvs_protection"
+        ]
+      },
+      "lib_id": "Device:TVS",
+      "footprint": "Diode_SMD:D_SMA",
+      "note": "Specific TVS input protection diode"
     },
     {
       "match": {
@@ -558,39 +622,6 @@
     {
       "match": {
         "role_contains": [
-          "mosfet",
-          "h_bridge_switch"
-        ]
-      },
-      "lib_id": "Device:Q_NMOS_GDS",
-      "footprint": "Package_TO_SOT_SMD:TO-252-2",
-      "note": "Power MOSFET placeholder mapping; verify thermal pad footprint manually."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "current_sense_amplifier",
-          "op_amp"
-        ]
-      },
-      "lib_id": "Amplifier_Operational:LMV321",
-      "footprint": "Package_TO_SOT_SMD:SOT-23-5",
-      "note": "Current-sense amplifier placeholder mapping; select final common-mode range and gain."
-    },
-    {
-      "match": {
-        "role_contains": [
-          "comparator",
-          "overcurrent"
-        ]
-      },
-      "lib_id": "Comparator:LM393",
-      "footprint": "Package_SO:SOIC-8_3.9x4.9mm_P1.27mm",
-      "note": "Hardware overcurrent comparator placeholder mapping."
-    },
-    {
-      "match": {
-        "role_contains": [
           "terminal",
           "motor_output"
         ]
@@ -598,6 +629,42 @@
       "lib_id": "Connector_Generic:Conn_01x04",
       "footprint": "TerminalBlock:TerminalBlock_bornier-4_P5.08mm",
       "note": "High-current terminal placeholder; verify actual terminal current and creepage."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "gd32f1_mcu",
+          "gd32f150_mcu",
+          "gd32_mcu"
+        ]
+      },
+      "lib_id": "JLC-MCP-MCUs:GD32F150C8T6",
+      "footprint": "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL",
+      "note": "GD32F150C8T6 Cortex-M3 MCU, LQFP-48"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "stepper_driver",
+          "drv8834",
+          "stepper_motor_driver"
+        ]
+      },
+      "lib_id": "JLC-MCP-ICs:DRV8834PWPR",
+      "footprint": "JLC-MCP:HTSSOP-24_L7.8-W4.4-P0.65-BL-EP",
+      "note": "DRV8834PWPR stepper motor driver, HTSSOP-24"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "ldo_3v3",
+          "ldo_3.3v",
+          "ldo_regulator"
+        ]
+      },
+      "lib_id": "JLC-MCP-Power:AMS1117-3_3",
+      "footprint": "JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR",
+      "note": "AMS1117-3.3 LDO, SOT-223"
     },
     {
       "match": {
@@ -684,6 +751,17 @@
     {
       "match": {
         "role_contains": [
+          "ptc_fuse",
+          "resettable_fuse"
+        ]
+      },
+      "lib_id": "Device:Polyfuse",
+      "footprint": "Fuse:Fuse_1206_3216Metric",
+      "note": "Generic PTC resettable fuse"
+    },
+    {
+      "match": {
+        "role_contains": [
           "chip_antenna"
         ]
       },
@@ -725,16 +803,6 @@
     },
     {
       "match": {
-        "ref_prefix": "D",
-        "role_contains": [
-          "diode"
-        ]
-      },
-      "lib_id": "Device:D",
-      "footprint": "Diode_SMD:D_SOD-523"
-    },
-    {
-      "match": {
         "role_contains": [
           "esp32"
         ],
@@ -773,7 +841,14 @@
   },
   "footprint_aliases": {
     "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP5.4x5.4mm": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
-    "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm"
+    "Package_SO:SOIC-8_5.23x5.23mm_P1.27mm": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
+    "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical": "JLC-MCP:USB-C-SMD_TYPE-C16PIN",
+    "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical": "JLC-MCP:HDR-TH_3P-P2.54-V-M-1",
+    "Connector_PinHeader_2.54mm:PinHeader_1x09_P2.54mm_Vertical": "JLC-MCP:HDR-TH_9P-P2.54-V-M",
+    "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical_SMD": "JLC-MCP:HDR-SMD_10P-P1.27-V-M-R2-C5-LS5.5_1",
+    "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2": "JLC-MCP:SW-SMD_TK-6580S-2",
+    "Package_TO_SOT_SMD:SOT-23": "JLC-MCP:SOT-23-3_L3.0-W1.7-P0.95-LS2.9-BR",
+    "Package_TO_SOT_SMD:SOT-23-5": "JLC-MCP:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR"
   },
   "symbol_sizes": {
     "AIAgent:ESP32_C3_Module": [
