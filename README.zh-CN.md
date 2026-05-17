@@ -43,6 +43,112 @@ kas
 
 核心原则很简单：每个阶段都有明确输入、明确输出，以及进入下一阶段前的验证点。
 
+## 完整工作流
+
+一个硬件项目从需求到 KiCad 输出，经历六个阶段：
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                      WORKSPACE（工作空间）                        │
+│  my-project/                                                    │
+│  ├── circuit-model.json       ← 阶段 2：电路模型                  │
+│  ├── part-selection-results.json ← 阶段 3：选型结果               │
+│  ├── libraries/               ← 阶段 4 前：统一存放 JLC 资源       │
+│  │   ├── symbols/      (.kicad_sym)                             │
+│  │   ├── footprints/   (.pretty/)                               │
+│  │   └── 3dmodels/     (.step)                                  │
+│  └── output/                  ← 最终输出目录（自动创建）            │
+│      └── {project_name}/                                         │
+│          ├── *.kicad_pro / *.kicad_sch / *.kicad_pcb              │
+│          ├── libraries/       ← 从 workspace 自动复制              │
+│          └── kicad-erc.json                                      │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+### 阶段 1：需求分析（人工 / Agent）
+- 输入：设计目标（"做一个双芯片 CMSIS-DAP 调试器"）
+- 输出：结构化需求规格 `requirement-spec.json`
+- 产出内容：功能列表、接口定义、电源规划、元件角色清单
+
+### 阶段 2：电路建模（人工 / Agent → JSON）
+- 输入：需求规格
+- 输出：`circuit-model.json`
+- 内容：所有元件（`components`，含 `ref`、`role`、`value`）、
+  所有网络（`nets`，含 `name`、`kind`、`members` 列表）
+
+```json
+{
+  "components": [
+    { "ref": "U3", "role": "rp2040_cmsis_dap_engine", "value": "RP2040" }
+  ],
+  "nets": [
+    { "name": "+3V3_MAIN", "kind": "power", "members": ["U3.49", "C1.1"] }
+  ]
+}
+```
+
+### 阶段 3：元件选型（可自动化）
+- 输入：`circuit-model.json` + `part.requirements.resolver.json`
+- 命令：
+  ```bash
+  python scripts/resolve_parts.py --json part.requirements.resolver.json
+  python scripts/select_parts.py --json part.requirements.resolver.json
+  ```
+- 输出：`part-selection-results.json`（LCSC 料号、封装、引脚数）
+- JLC-MCP 库安装（首次或选型变更后运行）：
+  ```bash
+  python scripts/install_jlc_mcp_parts.py --selections part-selection-results.json --project-dir workspace/
+  ```
+- 结果：`workspace/libraries/` 下自动生成符号、封装、3D 模型
+
+### 阶段 4：KiCad 工程生成（全自动）
+- 输入：`circuit-model.json` + workspace 库
+- 设置 workspace：
+  ```powershell
+  $env:KICAD_WORKSPACE = "D:/my-project"
+  ```
+  或不设环境变量——pipeline 会自动检测 `circuit-model.json` 所在目录。
+- 运行：
+  ```bash
+  python -m kicad_suite.pipeline_coordinator circuit-model.json output/
+  ```
+- 内部流程：
+  1. **编译执行计划** `compile_plan()`
+     - 元件角色 → lib_id（通过 `kicad-symbol-map.json`）
+     - 面积感知自动布局（根据标签方向计算包围盒）
+     - **库文件预检查**（缺失 JLC 库立即报错）
+  2. **写入 KiCad 文件** `write_project()`
+     - 生成 `.kicad_sch`（原理图，单页或层次化）
+     - 生成 `.kicad_pro`（工程文件）
+     - 生成 `.kicad_pcb`（PCB 文件）
+     - 导线从 pin 尖端画到标签（不含冗余 pin_len 延伸）
+  3. **后处理** `apply_postprocess()`
+     - 从 workspace 复制 JLC 库到输出目录
+     - 注入 JLC 符号定义、修正 pin 类型
+     - 注册库表（sym-lib-table, fp-lib-table）
+     - NaN 清洗
+  4. **ERC 验证** `kicad-cli sch erc`
+
+### 阶段 5：人工检查与微调
+- 用 KiCad GUI 打开 `output/{project}/{project}.kicad_pro`
+- 检查原理图布局、标签位置、网络连接
+- 必要时拖拽调整元件位置
+- 重新运行 ERC 确认
+
+### 阶段 6：导出与生产
+- BOM 导出（KiCad → CSV）
+- Gerber 导出（PCB 厂商）
+- 坐标文件（贴片厂）
+
+### 工作空间 vs 传统模式
+
+| | 传统模式 | Workspace 模式 |
+|------|----------|---------------|
+| 库位置 | 需要设 `KICAD_SYMBOL_DIR`、`KICAD_OUTPUT_DIR` 等 | 统一在 `workspace/libraries/`，自动发现 |
+| 路径问题 | 经常 `.where/` vs `examples/` 混乱 | 全相对路径，单根目录 |
+| 库完整性 | 运行时报错或不报错（静默回退假 2-pin） | 启动时预检查，缺库立即报错 |
+| 输出位置 | 环境变量指定 | `workspace/output/` 自动创建 |
+
 ## 当前能力
 
 当前 KiCad 路径已经包含：

@@ -11,21 +11,93 @@ Use this skill when the user wants an AI agent to use repository resources to pr
 
 The active implementation target is KiCad, but the skill's purpose is broader: use structured requirements, circuit models, netlists, reusable component knowledge, simulation feedback, symbol resources, layout profiles, and validation tools as a hardware-development workspace.
 
-The current workflow is:
+## Workspace Mode (preferred — single root, no path confusion)
 
-- clarify electrical requirements before synthesis
-- convert requirements into a typed `RequirementSpec`
-- synthesize a `CircuitModel`
-- derive connection truth as `Netlist`
-- export a SPICE netlist and collect ngspice feedback
-- **run LCSC Resolver → Part Selector to choose real components**
-- **use the repository's parts pipeline to resolve, select, and import JLC assets when needed**
-- **generate part.lock.yaml and part-risk-report.md**
-- compile a `KiCadExecutionPlan`
-- write `.kicad_pro` and `.kicad_sch` files (with LCSC/MPN/Manufacturer fields)
-- optionally run `kicad-cli` ERC
+Set `KICAD_WORKSPACE` to the project root. All paths derive from it automatically:
 
-The old EasyEDA/JLCEDA live-session bridge flows have been removed and should not be reintroduced for new work.
+```
+my-project/                     ← $env:KICAD_WORKSPACE
+├── circuit-model.json
+├── part-selection-results.json
+├── libraries/                  ← put JLC-MCP assets here
+│   ├── symbols/    (.kicad_sym)
+│   ├── footprints/ (.pretty/)
+│   └── 3dmodels/   (.step)
+└── output/                     ← auto-generated
+    └── {project_name}/
+        ├── *.kicad_{pro,sch,pcb}
+        └── libraries/          ← auto-copied from workspace
+```
+
+If `KICAD_WORKSPACE` is not set, the pipeline auto-detects it from `circuit-model.json`'s parent directory (when it contains `libraries/symbols/`).
+
+**Do NOT scatter files across `.where/` and `examples/` with different paths.** This was the root cause of v13's library resolution failures.
+
+## Current pipeline workflow (non-linear, iterative)
+
+```
+circuit-model.json + JLC libs → compile_plan() → write_project() → postprocess → ERC
+                       ↑                            │
+                       └── feedback loops ──────────┘
+```
+
+Each stage produces versioned JSON. Changes to earlier stages just re-run the pipeline.
+
+1. **Clarify requirements** — electrical constraints, interfaces, power
+2. **Build circuit-model.json** — components (ref, role, value) + nets (name, kind, members)
+3. **Part selection** — LCSC Resolver → Part Selector → JLC MCP install
+4. **Compile execution plan** — symbol mapping, area-aware layout, library validation
+5. **Write KiCad files** — schematic (wire from pin tip to label), PCB, project
+6. **Post-process** — copy JLC libraries, inject symbols, fix pin types, register lib tables
+7. **ERC validation** — kicad-cli, check for pin_not_connected=0
+
+## Critical gotchas (cost weeks to debug)
+
+### Fake 2-pin fallback (silent pin_not_connected disaster)
+If `kicad_symbol_roots()` cannot find a JLC library file, `symbol_block_for_lib_id()` silently returns a fake 2-pin symbol with pins at ±5.08mm from body center. For a 57-pin RP2040, this means ALL wires go to wrong positions → `pin_not_connected` × 274.
+
+**Pre-flight check**: `_validate_symbol_libraries()` in `compile_kicad_execution_plan.py` now catches this BEFORE generation and raises a clear RuntimeError listing which `.kicad_sym` files are missing and which components need them.
+
+**To debug**: run `parse_symbol_pin_map(lib_id)` — if it returns ≤2 pins for a JLC-MCP symbol, the library file is not found.
+
+### NaN arcs in JLC-MCP symbols
+Some JLC-MCP `.kicad_sym` files contain `<arc (mid NaN NaN)>`. This crashes KiCad GUI when loading the schematic. `sanitize_symbol_block()` removes them. If you see `NaN` in any `.kicad_sym` or `.kicad_sch` file, run it through that function or regex-remove the arc block.
+
+### sym-lib-table / fp-lib-table path mismatch
+The original v13 had `.where/` paths that didn't exist. In workspace mode, tables are auto-generated with correct absolute paths. If KiCad still can't find libraries, verify:
+1. `libraries/symbols/` has the actual `.kicad_sym` files
+2. `sym-lib-table` entries point to those files with absolute paths
+3. KiCad restarted after table changes
+
+### Don't reuse old execution plans
+v13 → v17 → v19 showed that reusing pre-compiled JSON plans bypasses all layout and mapping improvements. Always regenerate from `circuit-model.json` using `compile_plan()`.
+
+### Pin endpoint coordinate system
+`pin_endpoint(symbol, pin_number)` returns the **pin tip absolute position** (electrical connection point). Wire must start EXACTLY here. `endpoint_from_pin()` applies rotation transform. The returned `direction` is the wire exit convention (0=left, 180=right, 90=up, 270=down).
+
+### CLI vs GUI ERC discrepancy
+The CLI may produce different ERC results than the GUI (v19: CLI=100, GUI=718). The CLI is the authoritative source. Use `--format json` for machine-readable output.
+
+## ERC diagnostic mapping
+
+| ERC type | Cause | Fix |
+|----------|-------|-----|
+| `pin_not_connected` × many | JLC lib not found → fake 2-pin symbols | Check workspace, verify `libraries/symbols/` |
+| `multiple_net_names` | Different labels shorted by single wire | Check circuit-model.json net members |
+| `pin_to_pin` (bidirectional↔power_out) | Power pins typed wrong in library | Pin type fix in pipeline_postprocess |
+| `lib_symbol_mismatch` × many | Embedded symbols out of sync | "Update Symbols from Library" in KiCad GUI |
+| `label_dangling` | Label not connected to net | Usually cascading from pin_not_connected |
+
+## Running the pipeline
+
+```powershell
+# From workspace
+$env:KICAD_WORKSPACE = "D:/path/to/project"
+python -m kicad_suite.pipeline_coordinator circuit-model.json output/
+
+# Standalone ERC
+& "D:/Program Files/KiCad/10.0/bin/kicad-cli.exe" sch erc --format json --output erc.json project.kicad_sch
+```
 
 ## Agent Quick Start
 
