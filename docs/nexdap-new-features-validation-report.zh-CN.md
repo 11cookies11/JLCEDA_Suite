@@ -3,6 +3,7 @@
 本文记录在 `examples/nexdap-fresh` 上对新增仿真能力与时间线日志的验证结果。重点不是重新验证 NEXDAP 是否能生成 KiCad 项目，而是确认以下新能力已经挂入现有流水线：
 
 - `simulation-plan.json` 自动产出
+- `simulation-task-plan.json` 自动产出
 - `pipeline-events.jsonl` 按时间记录
 - `ngspice` 执行结果和反馈文件落盘
 - `text-to-kicad` 与 `pipeline` 两条入口都能携带这些输出
@@ -26,6 +27,7 @@ python .\scripts\kas.py pipeline examples\nexdap-fresh\circuit-model.json .where
 
 - `simulation-profile.json` 生成成功
 - `simulation-plan.json` 生成成功
+- `simulation-task-plan.json` 生成成功
 - `pipeline-events.jsonl` 生成成功
 - `KiCadExecutionPlan` 和 `kicad-write-summary.json` 生成成功
 - `ERC` 成功完成
@@ -48,6 +50,7 @@ python .\scripts\kas.py pipeline examples\nexdap-fresh\circuit-model.json .where
 
 - `.where\nexdap-nexdap-test\pipeline-events.jsonl`
 - `.where\nexdap-nexdap-test\simulation-plan.json`
+- `.where\nexdap-nexdap-test\simulation-task-plan.json`
 - `.where\nexdap-nexdap-test\simulation-profile.json`
 
 ## 验证 2: text-to-kicad
@@ -64,6 +67,7 @@ python .\scripts\kas.py text-to-kicad
 - `circuit-model.json` 生成成功
 - `netlist.json` 生成成功
 - `simulation-profile.json` 和 `simulation-plan.json` 生成成功
+- `simulation-task-plan.json` 生成成功
 - `pipeline-events.jsonl` 生成成功
 - `spice-netlist.cir` 生成成功
 - `ngspice-execution.json` 生成成功，且 `success=true`
@@ -86,6 +90,7 @@ python .\scripts\kas.py text-to-kicad
 输出目录：
 
 - `.where\text-to-kicad-nexdap-test\nexdap-text-001\pipeline-events.jsonl`
+- `.where\text-to-kicad-nexdap-test\nexdap-text-001\simulation-task-plan.json`
 - `.where\text-to-kicad-nexdap-test\nexdap-text-001\ngspice-execution.json`
 - `.where\text-to-kicad-nexdap-test\nexdap-text-001\ngspice-feedback.json`
 - `.where\text-to-kicad-nexdap-test\nexdap-text-001\text-to-kicad-summary.json`
@@ -108,6 +113,8 @@ python .\scripts\kas.py text-to-kicad
 - 目标电源路径
 - 指示灯电流
 - 接口偏置与耦合
+
+同时还生成了 `simulation-task-plan.json`，它把每个场景展开成一条可执行的 ngspice 任务记录，包含命令、输出路径和状态位。
 
 ## 当前已知限制
 

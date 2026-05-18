@@ -315,6 +315,81 @@ def _is_two_pin_virtual_role(role: str) -> bool:
     return role in TWO_PIN_VIRTUAL_PIN_ROLES
 
 
+def _role_has_any(role: str, *needles: str) -> bool:
+    lowered = role.lower()
+    return any(needle.lower() in lowered for needle in needles)
+
+
+def _net_pairs(component: NetlistComponent, nodes: list[str]) -> list[tuple[str, str]]:
+    return [
+        (pin.net, node)
+        for pin, node in zip(component.pins, nodes, strict=False)
+        if pin.net and node
+    ]
+
+
+def _select_node_by_tokens(
+    net_pairs: list[tuple[str, str]],
+    *tokens: str,
+) -> tuple[str, str] | tuple[None, None]:
+    lowered_tokens = [token.lower() for token in tokens]
+    for raw_net, mapped_node in net_pairs:
+        lowered = raw_net.lower()
+        if any(token in lowered for token in lowered_tokens):
+            return raw_net, mapped_node
+    return None, None
+
+
+def _first_power_node(net_pairs: list[tuple[str, str]]) -> tuple[str, str] | tuple[None, None]:
+    for raw_net, mapped_node in net_pairs:
+        if _normalize_net_kind(raw_net) == 'power':
+            return raw_net, mapped_node
+    return None, None
+
+
+def _first_ground_node(net_pairs: list[tuple[str, str]]) -> tuple[str, str] | tuple[None, None]:
+    return _select_node_by_tokens(net_pairs, 'gnd', 'ground', 'agnd', 'dgnd', 'pgnd', 'sgnd')
+
+
+def _pick_role_resistance(role: str, default_ohm: float = 10000.0) -> float:
+    lowered = role.lower()
+    if 'controller' in lowered or 'coprocessor' in lowered:
+        return 4700.0
+    if 'flash' in lowered:
+        return 10000.0
+    if 'battery' in lowered or 'sensor' in lowered:
+        return 22000.0
+    if 'crystal' in lowered or 'antenna' in lowered:
+        return 1000000.0
+    return default_ohm
+
+
+def _diode_model_for_role(role: str) -> tuple[str, str]:
+    lowered = role.lower()
+    if 'led' in lowered or 'indicator' in lowered:
+        return (
+            'DLED_EQ',
+            '.model DLED_EQ D(IS=1e-18 N=2.0 RS=8 CJO=2p)',
+        )
+    if 'tvs' in lowered or 'esd' in lowered or 'clamp' in lowered or 'protection' in lowered:
+        return (
+            'DTVS_EQ',
+            '.model DTVS_EQ D(IS=1e-15 N=1.1 RS=0.5 BV=5.6 IBV=1m CJO=20p)',
+        )
+    return (
+        'DGEN_EQ',
+        '.model DGEN_EQ D(IS=1e-15 N=1.0 RS=1 CJO=1p)',
+    )
+
+
+def _ensure_node_mapping(node_map: dict[str, str], raw_name: str) -> str:
+    mapped = node_map.get(raw_name)
+    if not mapped:
+        mapped = _sanitize_spice_node_name(raw_name)
+        node_map[raw_name] = mapped
+    return mapped
+
+
 # --- requirement / catalog ---
 
 
@@ -686,6 +761,31 @@ def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel
     spice_lines: list[SpiceNetlistLine] = []
     node_map: dict[str, str] = {}
     ref_counter: dict[str, int] = defaultdict(int)
+    model_definitions: dict[str, str] = {}
+    equivalent_count = 0
+    all_net_names = [net.name for net in netlist.nets if net.name]
+
+    def register_model(model_name: str, model_definition: str) -> None:
+        model_definitions.setdefault(model_name, model_definition)
+
+    def add_equivalent_line(
+        ref: str,
+        kind: str,
+        line: str,
+        *,
+        notes: list[str] | None = None,
+    ) -> None:
+        nonlocal equivalent_count
+        equivalent_count += 1
+        spice_lines.append(
+            SpiceNetlistLine(
+                ref=ref,
+                kind=kind,
+                line=line,
+                supported=True,
+                notes=notes or [],
+            )
+        )
 
     for component in netlist.components:
         kind = _netlist_component_kind(component)
@@ -694,6 +794,18 @@ def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel
         index = ref_counter[kind]
         pins = component.pins
         if not pins:
+            role = component.role.lower()
+            if _role_has_any(role, 'connector', 'usb_c_input', 'target_swd_connector', 'test_point', 'antenna', 'crystal', 'button', 'switch'):
+                spice_lines.append(
+                    SpiceNetlistLine(
+                        ref=f'{prefix}{index}',
+                        kind=kind,
+                        line=f'* {prefix}{index} ({component.value}) omitted in equivalent model',
+                        supported=True,
+                        notes=['Package or user-interaction element omitted from the electrical equivalent.'],
+                    )
+                )
+                continue
             spice_lines.append(
                 SpiceNetlistLine(
                     ref=f'{prefix}{index}',
@@ -729,6 +841,7 @@ def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel
             )
             continue
 
+        role = component.role.lower()
         if kind == 'R':
             if len(nodes) >= 2:
                 spice_lines.append(
@@ -794,12 +907,17 @@ def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel
 
         elif kind == 'D':
             if len(nodes) >= 2:
+                model_name, model_definition = _diode_model_for_role(role)
+                register_model(model_name, model_definition)
                 spice_lines.append(
                     SpiceNetlistLine(
                         ref=f'{prefix}{index}',
                         kind=kind,
-                        line=f'{prefix}{index} {nodes[0]} {nodes[1]} LED',
+                        line=f'{prefix}{index} {nodes[0]} {nodes[1]} {model_name}',
                         supported=True,
+                        notes=[
+                            'Equivalent LED model used.' if 'led' in role or 'indicator' in role else 'Equivalent clamp diode model used.',
+                        ],
                     )
                 )
             else:
@@ -814,6 +932,123 @@ def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel
                 )
 
         else:
+            net_pairs = _net_pairs(component, nodes)
+            gnd_raw, gnd_node = _first_ground_node(net_pairs)
+            power_raw, power_node = _first_power_node(net_pairs)
+            vout_raw, vout_node = _select_node_by_tokens(net_pairs, '3v3', 'vout', 'vcc', 'vdd', 'out')
+            vin_raw, vin_node = _select_node_by_tokens(net_pairs, 'vin', 'vbus', 'usb', '5v', 'input')
+
+            if role == 'main_3v3_buck':
+                output_raw_name = next(
+                    (name for name in all_net_names if _role_has_any(name.lower(), '3v3', 'vout', 'vcc', 'vdd', 'out')),
+                    None,
+                )
+                input_raw_name = next(
+                    (name for name in all_net_names if _role_has_any(name.lower(), 'vin', 'vbus', 'usb', '5v', 'input')),
+                    None,
+                )
+                ground_raw_name = next(
+                    (name for name in all_net_names if _role_has_any(name.lower(), 'gnd', 'ground', 'agnd', 'dgnd', 'pgnd', 'sgnd')),
+                    None,
+                )
+                output_node = (
+                    _ensure_node_mapping(node_map, output_raw_name)
+                    if output_raw_name
+                    else vout_node or power_node or (nodes[0] if nodes else None)
+                )
+                ground_node = (
+                    _ensure_node_mapping(node_map, ground_raw_name)
+                    if ground_raw_name
+                    else gnd_node or (nodes[-1] if nodes else None)
+                )
+                input_node = (
+                    _ensure_node_mapping(node_map, input_raw_name)
+                    if input_raw_name
+                    else vin_node or next(
+                        (mapped for raw, mapped in net_pairs if mapped not in {output_node, ground_node} and _normalize_net_kind(raw) == 'power'),
+                        None,
+                    )
+                )
+                if output_node and ground_node:
+                    add_equivalent_line(
+                        ref=f'{prefix}{index}_REG',
+                        kind='V',
+                        line=f'V{prefix}{index}_REG {output_node} {ground_node} DC 3.3',
+                        notes=['Idealized regulator output used as an equivalent model.'],
+                    )
+                    if input_node and input_node != output_node:
+                        add_equivalent_line(
+                            ref=f'{prefix}{index}_IN',
+                            kind='R',
+                            line=f'R{prefix}{index}_IN {input_node} {output_node} 0.25',
+                            notes=['Small series resistance approximates input current draw.'],
+                        )
+                    continue
+
+            if _role_has_any(role, 'ptc_fuse', 'fuse', 'jumper', 'link', '0r', '0ohm'):
+                if len(nodes) >= 2:
+                    resistance = 0.01 if 'jumper' in role or 'link' in role or '0r' in role or '0ohm' in role else 0.25
+                    add_equivalent_line(
+                        ref=f'{prefix}{index}',
+                        kind='R',
+                        line=f'{prefix}{index} {nodes[0]} {nodes[1]} {resistance}',
+                        notes=['Equivalent series resistance used for a protection or jumper element.'],
+                    )
+                    continue
+
+            if _role_has_any(role, 'esd', 'clamp'):
+                if len(nodes) >= 2:
+                    model_name, model_definition = _diode_model_for_role(role)
+                    register_model(model_name, model_definition)
+                    add_equivalent_line(
+                        ref=f'{prefix}{index}_A',
+                        kind='D',
+                        line=f'D{prefix}{index}_A {nodes[0]} {nodes[1]} {model_name}',
+                        notes=['Equivalent clamp model used for ESD protection.'],
+                    )
+                    add_equivalent_line(
+                        ref=f'{prefix}{index}_B',
+                        kind='D',
+                        line=f'D{prefix}{index}_B {nodes[1]} {nodes[0]} {model_name}',
+                        notes=['Equivalent clamp model used for ESD protection.'],
+                    )
+                    continue
+
+            if _role_has_any(role, 'controller', 'coprocessor', 'flash'):
+                if power_node and gnd_node:
+                    resistance = _pick_role_resistance(role)
+                    add_equivalent_line(
+                        ref=f'{prefix}{index}_LOAD',
+                        kind='R',
+                        line=f'R{prefix}{index}_LOAD {power_node} {gnd_node} {resistance}',
+                        notes=['Equivalent static load used for an active IC without a vendor SPICE model.'],
+                    )
+                    continue
+
+            if _role_has_any(role, 'connector', 'usb_c_input', 'target_swd_connector', 'test_point', 'antenna', 'crystal', 'button'):
+                spice_lines.append(
+                    SpiceNetlistLine(
+                        ref=f'{prefix}{index}',
+                        kind=kind,
+                        line=f'* {prefix}{index} ({component.value}) omitted in equivalent model',
+                        supported=True,
+                        notes=['Package or user-interaction element omitted from the electrical equivalent.'],
+                    )
+                )
+                continue
+
+            if _role_has_any(role, 'nmos', 'pmos', 'mosfet', 'switch'):
+                spice_lines.append(
+                    SpiceNetlistLine(
+                        ref=f'{prefix}{index}',
+                        kind=kind,
+                        line=f'* {prefix}{index} ({component.value}) modeled as an omitted ideal switch in the equivalent netlist',
+                        supported=True,
+                        notes=['Open-drain or switch behavior is approximated elsewhere in the task plan.'],
+                    )
+                )
+                continue
+
             spice_lines.append(
                 SpiceNetlistLine(
                     ref=f'{prefix}{index}',
@@ -835,6 +1070,16 @@ def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel
         ),
     )
 
+    for model_name, model_definition in sorted(model_definitions.items(), key=lambda item: item[0]):
+        spice_lines.append(
+            SpiceNetlistLine(
+                ref=model_name,
+                kind='model',
+                line=model_definition,
+                supported=True,
+            )
+        )
+
     # Analysis
     spice_lines.append(
         SpiceNetlistLine(
@@ -854,6 +1099,8 @@ def build_spice_netlist_from_netlist(netlist: NetlistModel) -> SpiceNetlistModel
     )
 
     warnings: list[str] = []
+    if equivalent_count:
+        warnings.append(f'{equivalent_count} equivalent SPICE components were inserted.')
     unsupported_count = sum(1 for item in spice_lines if not item.supported)
     if unsupported_count:
         warnings.append(f'{unsupported_count} spice lines are not fully supported.')
@@ -982,6 +1229,10 @@ def build_ngspice_feedback(
         summary_parts.append(f'{len(unsupported)} spice lines are not supported; simulation may be incomplete.')
         recommendations.append('Consider replacing unsupported components with SPICE-compatible equivalents.')
         recommendations.append('Resolve unsupported SPICE exports or provide richer component models.')
+    equivalent_warnings = [warning for warning in spice_netlist.warnings if 'equivalent' in warning.lower()]
+    if equivalent_warnings:
+        summary_parts.append(f'{len(equivalent_warnings)} equivalent-model warning(s) recorded.')
+        recommendations.append('Equivalent SPICE models were used; validate critical rails with vendor models when available.')
 
     return NgspiceFeedbackModel(
         schema_version=NGSPICE_FEEDBACK_SCHEMA_VERSION,

@@ -9,6 +9,7 @@ from .schema_versions import (
     PART_LOCK_SCHEMA_VERSION,
     SIMULATION_PLAN_SCHEMA_VERSION,
     SIMULATION_PROFILE_SCHEMA_VERSION,
+    SIMULATION_TASK_PLAN_SCHEMA_VERSION,
     TEXT_TO_KICAD_SUMMARY_SCHEMA_VERSION,
 )
 
@@ -51,6 +52,10 @@ SCHEMA_FIELD_CONTRACTS = {
     },
     SIMULATION_PLAN_SCHEMA_VERSION: {
         "stable": ("request_id", "project_id", "project_name", "topology", "source_profile", "scenarios", "summary", "recommendations"),
+        "compat": ("schema_version",),
+    },
+    SIMULATION_TASK_PLAN_SCHEMA_VERSION: {
+        "stable": ("request_id", "project_id", "project_name", "topology", "source_plan", "tasks", "summary", "recommendations"),
         "compat": ("schema_version",),
     },
 }

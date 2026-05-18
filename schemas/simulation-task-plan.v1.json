@@ -1,0 +1,74 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "simulation-task-plan.v1.json",
+  "title": "SimulationTaskPlan",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "request_id",
+    "project_id",
+    "project_name",
+    "topology",
+    "source_plan",
+    "tasks",
+    "summary",
+    "recommendations"
+  ],
+  "properties": {
+    "schema_version": { "const": "simulation-task-plan.v1" },
+    "request_id": { "type": "string" },
+    "project_id": { "type": "string" },
+    "project_name": { "type": "string" },
+    "topology": { "type": "string" },
+    "source_plan": {
+      "type": "object",
+      "required": ["schema_version", "request_id"],
+      "properties": {
+        "schema_version": { "type": "string" },
+        "request_id": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "tasks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "task_id",
+          "scenario_id",
+          "title",
+          "backend",
+          "analysis_kind",
+          "command",
+          "netlist_path",
+          "log_path",
+          "execution_file",
+          "feedback_file",
+          "status"
+        ],
+        "properties": {
+          "task_id": { "type": "string" },
+          "scenario_id": { "type": "string" },
+          "title": { "type": "string" },
+          "backend": { "type": "string" },
+          "analysis_kind": { "type": "string" },
+          "command": { "type": "array", "items": { "type": "string" } },
+          "netlist_path": { "type": "string" },
+          "log_path": { "type": "string" },
+          "execution_file": { "type": "string" },
+          "feedback_file": { "type": "string" },
+          "focus_components": { "type": "array", "items": { "type": "string" } },
+          "focus_nets": { "type": "array", "items": { "type": "string" } },
+          "stimuli": { "type": "array", "items": { "type": "string" } },
+          "success_criteria": { "type": "array", "items": { "type": "string" } },
+          "notes": { "type": "array", "items": { "type": "string" } },
+          "status": { "type": "string" }
+        },
+        "additionalProperties": true
+      }
+    },
+    "summary": { "type": "object" },
+    "recommendations": { "type": "array", "items": { "type": "string" } }
+  },
+  "additionalProperties": true
+}

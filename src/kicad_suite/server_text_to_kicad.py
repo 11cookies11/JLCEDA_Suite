@@ -61,6 +61,7 @@ def run() -> None:
         {
             "profile_file": sim_result.get("profile_file", ""),
             "plan_file": sim_result.get("plan_file", ""),
+            "task_plan_file": sim_result.get("task_plan_file", ""),
             "scenario_count": sim_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
         },
     )
@@ -152,6 +153,7 @@ def run() -> None:
             "netlist": str(netlist_file),
             "simulation_profile": sim_result.get("profile_file", ""),
             "simulation_plan": sim_result.get("plan_file", ""),
+            "simulation_task_plan": sim_result.get("task_plan_file", ""),
             "event_log": str(event_log),
             "spice_netlist": str(spice_file),
             "ngspice_execution": str(ngspice_file),

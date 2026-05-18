@@ -31,6 +31,7 @@ class TestSchemaVersions(unittest.TestCase):
             "part-lock.v1",
             "simulation-profile.v1",
             "simulation-plan.v1",
+            "simulation-task-plan.v1",
         }
         self.assertEqual(set(CANONICAL_SCHEMA_VERSIONS), expected)
 

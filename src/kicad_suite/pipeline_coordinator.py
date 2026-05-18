@@ -200,6 +200,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         {
             "profile_file": simulation_result.get("profile_file", ""),
             "plan_file": simulation_result.get("plan_file", ""),
+            "task_plan_file": simulation_result.get("task_plan_file", ""),
             "scenario_count": simulation_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
         },
     )

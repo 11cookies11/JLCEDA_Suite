@@ -8,7 +8,7 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.simulation_planner import build_simulation_plan, default_simulation_profile
+from kicad_suite.simulation_planner import build_ngspice_task_plan, build_simulation_plan, default_simulation_profile
 
 
 class TestSimulationPlanner(unittest.TestCase):
@@ -41,6 +41,7 @@ class TestSimulationPlanner(unittest.TestCase):
         }
         profile = default_simulation_profile(model)
         plan = build_simulation_plan(model, profile)
+        task_plan = build_ngspice_task_plan(model, profile=profile, plan=plan)
         scenario_ids = {scenario.scenario_id for scenario in plan.scenarios}
         self.assertIn("power-startup", scenario_ids)
         self.assertIn("usb-input-protection", scenario_ids)
@@ -50,3 +51,6 @@ class TestSimulationPlanner(unittest.TestCase):
         self.assertIn("indicator-current", scenario_ids)
         self.assertIn("interface-bias", scenario_ids)
         self.assertGreaterEqual(plan.summary["scenario_count"], 7)
+        self.assertEqual(task_plan.summary["task_count"], plan.summary["scenario_count"])
+        self.assertEqual(task_plan.tasks[0].backend, "ngspice")
+        self.assertIn("ngspice", task_plan.tasks[0].command[0])

@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 from .schema_versions import SIMULATION_PLAN_SCHEMA_VERSION, SIMULATION_PROFILE_SCHEMA_VERSION
+from .schema_versions import SIMULATION_TASK_PLAN_SCHEMA_VERSION
 
 
 @dataclass
@@ -64,6 +65,45 @@ class SimulationPlan:
     topology: str
     source_profile: SimulationProfileSource
     scenarios: list[SimulationScenario]
+    summary: dict[str, Any] = field(default_factory=dict)
+    recommendations: list[str] = field(default_factory=list)
+
+
+@dataclass
+class NgspiceTaskSourcePlan:
+    schema_version: str
+    request_id: str
+
+
+@dataclass
+class NgspiceTask:
+    task_id: str
+    scenario_id: str
+    title: str
+    backend: str
+    analysis_kind: str
+    command: list[str]
+    netlist_path: str
+    log_path: str
+    execution_file: str
+    feedback_file: str
+    focus_components: list[str] = field(default_factory=list)
+    focus_nets: list[str] = field(default_factory=list)
+    stimuli: list[str] = field(default_factory=list)
+    success_criteria: list[str] = field(default_factory=list)
+    notes: list[str] = field(default_factory=list)
+    status: str = "pending"
+
+
+@dataclass
+class NgspiceTaskPlan:
+    schema_version: str
+    request_id: str
+    project_id: str
+    project_name: str
+    topology: str
+    source_plan: NgspiceTaskSourcePlan
+    tasks: list[NgspiceTask]
     summary: dict[str, Any] = field(default_factory=dict)
     recommendations: list[str] = field(default_factory=list)
 
@@ -447,11 +487,76 @@ def build_simulation_plan(model: dict[str, Any], profile: SimulationProfile | No
     return plan
 
 
+def _scenario_to_task(plan: SimulationPlan, scenario: SimulationScenario, output_dir: Path) -> NgspiceTask:
+    task_root = output_dir / "ngspice-tasks" / scenario.scenario_id
+    netlist_path = task_root / "netlist.cir"
+    log_path = task_root / "ngspice.log"
+    execution_file = task_root / "ngspice-execution.json"
+    feedback_file = task_root / "ngspice-feedback.json"
+    command = ["ngspice", "-b", str(netlist_path), "-o", str(log_path)]
+    return NgspiceTask(
+        task_id=f"{plan.request_id}:{scenario.scenario_id}",
+        scenario_id=scenario.scenario_id,
+        title=scenario.title,
+        backend=scenario.backend,
+        analysis_kind=scenario.analysis_kind,
+        command=command,
+        netlist_path=str(netlist_path),
+        log_path=str(log_path),
+        execution_file=str(execution_file),
+        feedback_file=str(feedback_file),
+        focus_components=list(scenario.focus_components),
+        focus_nets=list(scenario.focus_nets),
+        stimuli=list(scenario.stimuli),
+        success_criteria=list(scenario.success_criteria),
+        notes=list(scenario.notes),
+    )
+
+
+def build_ngspice_task_plan(
+    model: dict[str, Any],
+    *,
+    profile: SimulationProfile | None = None,
+    plan: SimulationPlan | None = None,
+    output_dir: Path | None = None,
+) -> NgspiceTaskPlan:
+    active_profile = profile or default_simulation_profile(model)
+    active_plan = plan or build_simulation_plan(model, active_profile)
+    task_output_dir = output_dir or Path(".")
+    tasks = [_scenario_to_task(active_plan, scenario, task_output_dir) for scenario in active_plan.scenarios]
+    return NgspiceTaskPlan(
+        schema_version=SIMULATION_TASK_PLAN_SCHEMA_VERSION,
+        request_id=active_plan.request_id,
+        project_id=active_plan.project_id,
+        project_name=active_plan.project_name,
+        topology=active_plan.topology,
+        source_plan=NgspiceTaskSourcePlan(
+            schema_version=active_plan.schema_version,
+            request_id=active_plan.request_id,
+        ),
+        tasks=tasks,
+        summary={
+            "task_count": len(tasks),
+            "scenario_count": len(active_plan.scenarios),
+            "analysis_kinds": sorted({task.analysis_kind for task in tasks}),
+            "backends": sorted({task.backend for task in tasks}),
+        },
+        recommendations=[
+            "Execute startup and power-path tasks first.",
+            "Use op tasks to validate bias before transient-driven startup checks.",
+        ],
+    )
+
+
 def simulation_profile_to_dict(profile: SimulationProfile) -> dict[str, Any]:
     return asdict(profile)
 
 
 def simulation_plan_to_dict(plan: SimulationPlan) -> dict[str, Any]:
+    return asdict(plan)
+
+
+def ngspice_task_plan_to_dict(plan: NgspiceTaskPlan) -> dict[str, Any]:
     return asdict(plan)
 
 
@@ -463,15 +568,20 @@ def write_json(path: Path, payload: Any) -> None:
 def write_simulation_artifacts(model: dict[str, Any], output_dir: Path, profile: SimulationProfile | None = None) -> dict[str, Any]:
     active_profile = profile or default_simulation_profile(model)
     plan = build_simulation_plan(model, active_profile)
+    task_plan = build_ngspice_task_plan(model, profile=active_profile, plan=plan, output_dir=output_dir)
     profile_file = output_dir / "simulation-profile.json"
     plan_file = output_dir / "simulation-plan.json"
+    task_plan_file = output_dir / "simulation-task-plan.json"
     write_json(profile_file, simulation_profile_to_dict(active_profile))
     write_json(plan_file, simulation_plan_to_dict(plan))
+    write_json(task_plan_file, ngspice_task_plan_to_dict(task_plan))
     return {
         "profile_file": str(profile_file),
         "plan_file": str(plan_file),
+        "task_plan_file": str(task_plan_file),
         "profile": simulation_profile_to_dict(active_profile),
         "plan": simulation_plan_to_dict(plan),
+        "task_plan": ngspice_task_plan_to_dict(task_plan),
     }
 
 

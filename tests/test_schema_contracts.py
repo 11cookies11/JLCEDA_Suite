@@ -30,8 +30,10 @@ class TestSchemaContracts(unittest.TestCase):
     def test_simulation_contracts_are_present(self) -> None:
         self.assertIn("simulation-profile.v1", SCHEMA_FIELD_CONTRACTS)
         self.assertIn("simulation-plan.v1", SCHEMA_FIELD_CONTRACTS)
+        self.assertIn("simulation-task-plan.v1", SCHEMA_FIELD_CONTRACTS)
         self.assertIn("preferred_analyses", SCHEMA_FIELD_CONTRACTS["simulation-profile.v1"]["stable"])
         self.assertIn("scenarios", SCHEMA_FIELD_CONTRACTS["simulation-plan.v1"]["stable"])
+        self.assertIn("tasks", SCHEMA_FIELD_CONTRACTS["simulation-task-plan.v1"]["stable"])
 
 
 if __name__ == "__main__":
