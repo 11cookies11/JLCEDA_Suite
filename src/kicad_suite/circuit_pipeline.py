@@ -238,6 +238,55 @@ def _sanitize_spice_node_name(name: str) -> str:
     return sanitized or 'UNNAMED'
 
 
+def _dedupe_paths(paths: list[Path]) -> list[Path]:
+    seen: set[str] = set()
+    unique: list[Path] = []
+    for path in paths:
+        key = str(path)
+        if key not in seen:
+            seen.add(key)
+            unique.append(path)
+    return unique
+
+
+def _discover_ngspice_candidates() -> list[Path]:
+    candidates: list[Path] = []
+
+    repo_root = Path(__file__).resolve().parents[2]
+    local_bundle = repo_root / 'tools' / 'ngspice-46_64' / 'Spice64' / 'bin' / 'ngspice.exe'
+    candidates.append(local_bundle)
+
+    explicit_bin = env('NGSPICE_BIN')
+    if explicit_bin:
+        explicit_path = Path(explicit_bin)
+        candidates.append(explicit_path)
+        if explicit_path.suffix.lower() != '.exe':
+            candidates.append(explicit_path.with_name(explicit_path.name + '.exe'))
+
+    for env_name in ('KICAD_BIN_DIR', 'KICAD_INSTALL_DIR', 'KICAD_PATH'):
+        raw = env(env_name)
+        if not raw:
+            continue
+        root = Path(raw)
+        candidates.extend(
+            [
+                root / 'ngspice.exe',
+                root / 'ngspice',
+                root / 'bin' / 'ngspice.exe',
+                root / 'bin' / 'ngspice',
+            ]
+        )
+
+    for root in (Path('C:/Program Files/KiCad'), Path('C:/Program Files (x86)/KiCad')):
+        if root.exists():
+            candidates.extend(root.glob('*/bin/ngspice.exe'))
+            candidates.extend(root.glob('*/bin/ngspice'))
+            candidates.extend(root.glob('**/ngspice.exe'))
+            candidates.extend(root.glob('**/ngspice'))
+
+    return _dedupe_paths(candidates)
+
+
 def _netlist_component_kind(component: NetlistComponent) -> str:
     role = component.role.lower()
     if role.endswith('_capacitor') or 'capacitor' in role:
@@ -956,17 +1005,46 @@ def resolve_ngspice_executable() -> str | None:
     explicit = env('NGSPICE_BIN')
     if explicit:
         return explicit
+    for candidate in _discover_ngspice_candidates():
+        if candidate.exists():
+            return str(candidate)
     located = shutil.which('ngspice') or shutil.which('ngspice.exe')
     if located:
         return located
-    candidates = [
-        Path('C:/Program Files/ngspice/bin/ngspice.exe'),
-        Path('C:/Program Files (x86)/ngspice/bin/ngspice.exe'),
-    ]
-    for candidate in candidates:
-        if candidate.exists():
-            return str(candidate)
     return None
+
+
+def diagnose_ngspice_environment() -> dict[str, Any]:
+    executable = resolve_ngspice_executable()
+    candidates = _discover_ngspice_candidates()
+    env_settings = {
+        'NGSPICE_BIN': env('NGSPICE_BIN'),
+        'NGSPICE_ENABLED': env('NGSPICE_ENABLED', 'true'),
+        'NGSPICE_OUTPUT_DIR': env('NGSPICE_OUTPUT_DIR'),
+        'KICAD_BIN_DIR': env('KICAD_BIN_DIR'),
+        'KICAD_INSTALL_DIR': env('KICAD_INSTALL_DIR'),
+        'KICAD_PATH': env('KICAD_PATH'),
+    }
+    recommendations: list[str] = []
+    if executable:
+        recommendations.append(f'ngspice executable resolved to {executable}.')
+    else:
+        recommendations.extend(
+            [
+                'Install ngspice or use the ngspice bundled with KiCad.',
+                'Set NGSPICE_BIN to the full path of ngspice.exe.',
+                'Or set KICAD_BIN_DIR / KICAD_INSTALL_DIR to the KiCad bin directory.',
+            ]
+        )
+    return {
+        'schema_version': NGSPICE_EXECUTION_SCHEMA_VERSION,
+        'enabled': is_truthy_env('NGSPICE_ENABLED', 'true'),
+        'executable': executable or '',
+        'found': bool(executable),
+        'candidates_checked': [str(path) for path in candidates],
+        'environment': env_settings,
+        'recommendations': recommendations,
+    }
 
 
 def execute_ngspice_netlist(spice_netlist: SpiceNetlistModel) -> NgspiceExecutionModel:

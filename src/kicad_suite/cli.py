@@ -14,6 +14,7 @@ from .server_eda_target import run as run_eda_target
 from .server_text_to_kicad import run as run_text_to_kicad
 from .artifact_validator import main as validate_artifacts_main
 from .compile_kicad_execution_plan import run as run_compile_plan
+from .circuit_pipeline import diagnose_ngspice_environment
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import run as run_write_project
 
@@ -63,6 +64,10 @@ def _validate_artifacts_handler(args: argparse.Namespace) -> int:
     return validate_artifacts_main(forwarded)
 
 
+def _ngspice_doctor_handler(args: argparse.Namespace) -> int:
+    return _print_json(diagnose_ngspice_environment())
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="kas", description=__doc__)
     subparsers = parser.add_subparsers(dest="command")
@@ -93,6 +98,9 @@ def build_parser() -> argparse.ArgumentParser:
     validate_artifacts.add_argument("--require-erc", action="store_true")
     validate_artifacts.add_argument("--json", action="store_true")
     validate_artifacts.set_defaults(handler=_validate_artifacts_handler)
+
+    ngspice_doctor = subparsers.add_parser("ngspice-doctor", help="Inspect ngspice availability and configuration.")
+    ngspice_doctor.set_defaults(handler=_ngspice_doctor_handler)
     return parser
 
 

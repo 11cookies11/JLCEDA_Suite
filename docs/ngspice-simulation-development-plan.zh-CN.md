@@ -144,6 +144,29 @@ RequirementSpec
 
 优先采用命令行模式，先稳定再考虑更深的库级集成。
 
+### 环境接入
+
+为了减少本地配置摩擦，CLI 已增加 `ngspice-doctor` 入口，用来检查：
+
+- `NGSPICE_BIN`
+- `KICAD_BIN_DIR`
+- `KICAD_INSTALL_DIR`
+- `KICAD_PATH`
+
+如果机器上已经安装 KiCad 或单独安装了 ngspice，但软件找不到可执行文件，先运行：
+
+```bash
+python3 ./scripts/kas.py ngspice-doctor
+```
+
+或者直接把 `NGSPICE_BIN` 指向 `ngspice.exe` 的完整路径。
+
+仓库内也保留了一份本地 bundle，默认优先路径是：
+
+```text
+tools/ngspice-46_64/Spice64/bin/ngspice.exe
+```
+
 ### Phase 4: 结果回写
 
 回写层已落地到 `src/kicad_suite/circuit_pipeline.py` 中的 `build_ngspice_feedback()`，并将结果写回：

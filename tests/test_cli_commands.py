@@ -21,6 +21,7 @@ class TestCliParser(unittest.TestCase):
         self.assertIn("pipeline", subparsers)
         self.assertIn("validate-artifacts", subparsers)
         self.assertIn("erc", subparsers)
+        self.assertIn("ngspice-doctor", subparsers)
 
     def test_main_without_args_prints_help(self):
         buffer = io.StringIO()
@@ -45,3 +46,12 @@ class TestCliDispatch(unittest.TestCase):
         forwarded = validate.call_args.args[0]
         self.assertEqual(forwarded, ["--summary", "summary.json", "--strict", "--require-erc", "--json"])
 
+    def test_ngspice_doctor_prints_environment_report(self):
+        report = {"found": False, "recommendations": ["install ngspice"]}
+        with patch("kicad_suite.cli.diagnose_ngspice_environment", return_value=report) as diagnose:
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["ngspice-doctor"])
+        self.assertEqual(code, 0)
+        diagnose.assert_called_once()
+        self.assertIn("install ngspice", buffer.getvalue())
