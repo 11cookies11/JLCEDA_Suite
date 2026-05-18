@@ -4,6 +4,61 @@
     {
       "match": {
         "role_contains": [
+          "buck_feedback_resistor_top"
+        ],
+        "value_contains": [
+          "453k"
+        ],
+        "ref_prefix": "R"
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF4533T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "NexDAP: 453k 0603 buck feedback top resistor."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "buck_feedback_resistor_bottom"
+        ],
+        "value_contains": [
+          "100k"
+        ],
+        "ref_prefix": "R"
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1003T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "NexDAP: 100k 0603 buck feedback bottom resistor."
+    },
+    {
+      "match": {
+        "ref_prefix": "R"
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+    },
+    {
+      "match": {
+        "ref_prefix": "C"
+      },
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "note": "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "esp32_40mhz_crystal"
+        ],
+        "ref_prefix": "Y"
+      },
+      "lib_id": "JLC-MCP-Crystals:X322540MPB4SI",
+      "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
+      "note": "NexDAP: ESP32-C3 40MHz crystal with available local JLC-MCP 3225 footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
           "reset_button",
           "boot_button",
           "user_button",
@@ -19,7 +74,8 @@
         "role_contains": [
           "nreset_open_drain_nmos",
           "target_power_npn_ctrl",
-          "2n7002"
+          "2n7002",
+          "open_drain"
         ]
       },
       "lib_id": "JLC-MCP-Transistors:2N7002",
@@ -75,7 +131,8 @@
         "role_contains": [
           "esp32c3_transaction_manager",
           "esp32c3_wireless_host",
-          "esp32_c3_bare_host_mcu"
+          "esp32_c3_bare_host_mcu",
+          "esp32c3_host_controller"
         ]
       },
       "lib_id": "JLC-MCP-MCUs:ESP32-C3",
@@ -86,7 +143,9 @@
       "match": {
         "role_contains": [
           "rp2040_cmsis_dap_engine",
-          "rp2040_dap_mcu"
+          "rp2040_dap_mcu",
+          "rp2040_swd_timing_coprocessor",
+          "rp2040_target_swd_uart_coprocessor"
         ]
       },
       "lib_id": "JLC-MCP-MCUs:RP2040",
@@ -233,6 +292,18 @@
       "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
       "footprint": "JLC-MCP:LED0603-RD",
       "note": "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "jumper",
+          "target_power_enable"
+        ],
+        "ref_prefix": "JP"
+      },
+      "lib_id": "JLC-MCP-Connectors:HDR-1X2-2.54",
+      "footprint": "JLC-MCP:HDR-TH_2P-P2.54-V-M",
+      "note": "NexDAP: 2-pin 2.54mm target power jumper with local JLC-MCP footprint."
     },
     {
       "match": {
@@ -391,6 +462,34 @@
     {
       "match": {
         "role_contains": [
+          "buck_feedback_resistor_top"
+        ],
+        "value_contains": [
+          "453k"
+        ],
+        "ref_prefix": "R"
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF4533T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "NexDAP: 453k 0603 buck feedback top resistor."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "buck_feedback_resistor_bottom"
+        ],
+        "value_contains": [
+          "100k"
+        ],
+        "ref_prefix": "R"
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1003T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "NexDAP: 100k 0603 buck feedback bottom resistor."
+    },
+    {
+      "match": {
+        "role_contains": [
           "resistor"
         ],
         "ref_prefix": "R"
@@ -446,6 +545,26 @@
       "lib_id": "JLC-MCP-Diodes:USBLC6-2SC6_C2827654",
       "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
       "note": "USBLC6-2SC6 USB ESD protection, SOT-23-6"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_vbus_ptc_fuse"
+        ]
+      },
+      "lib_id": "JLC-MCP-Misc:POLYFUSE_2P",
+      "footprint": "JLC-MCP:SMD1206-050-33",
+      "note": "NexDAP: SMD1206-050-33 USB input PTC from validated power block."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "usb_vbus_tvs_diode"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:SMBJ58A_C353350",
+      "footprint": "JLC-MCP:SMF5.0A",
+      "note": "NexDAP: SMF5.0A VBUS TVS from validated power block."
     },
     {
       "match": {
@@ -618,6 +737,19 @@
       "lib_id": "Connector_Generic:Conn_01x03",
       "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
       "note": "NexDAP: 3-pin debug header (symbol Conn_01x03 compat)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "target_swd_connector"
+        ],
+        "value_contains": [
+          "2x5"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:HDR-2X5-2.54",
+      "footprint": "JLC-MCP:HDR-TH_10P-P2.54-V-M-2X5",
+      "note": "NexDAP: 2x5 2.54mm target SWD/UART/VTREF header with local JLC-MCP footprint."
     },
     {
       "match": {

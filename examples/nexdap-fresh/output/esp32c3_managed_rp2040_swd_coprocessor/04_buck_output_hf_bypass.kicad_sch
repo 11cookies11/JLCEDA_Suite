@@ -1,0 +1,319 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "984b3999-73db-4e47-8c98-4b2cf5b94200")
+  (paper "A4")
+  (lib_symbols
+    (symbol "JLC-MCP-Capacitors:CC0603KRX7R9BB104"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 0)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(property "Reference" "C"
+    			(at 2.54 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "CC0603KRX7R9BB104"
+    			(at -2.54 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" "JLC-MCP:C0603"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2211101700_YAGEO-CC0603KRX7R9BB104_C14663.pdf"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Product Page" "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_100nF-104-10-50V_C14663.html"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Description" "100nF 50V X7R ±10% 0603 Multilayer Ceramic Capacitors MLCC - SMD/SMT ROHS"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "LCSC" "C14663"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Manufacturer" "YAGEO(国巨)"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "ki_keywords" "C14663"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Stock" "0"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Price" "0.004USD"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Process" "SMT"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Minimum Qty" "50"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Attrition Qty" "0"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Class" "Basic Part"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Part" "CC0603KRX7R9BB104"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Voltage Rating" "50V"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Tolerance" "±10%"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Capacitance" "100nF"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Temperature Coefficient" "X7R"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(symbol "CC0603KRX7R9BB104_0_1"
+    			(polyline
+    				(pts
+    					(xy -1.27 0.635)
+    					(xy 1.27 0.635)
+    				)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy -1.27 -0.635)
+    					(xy 1.27 -0.635)
+    				)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(symbol "CC0603KRX7R9BB104_1_1"
+    			(pin passive line
+    				(at 0 2.54 270)
+    				(length 2.54)
+    				(name "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 0 -2.54 90)
+    				(length 2.54)
+    				(name "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+  )
+  (symbol
+    (lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+    (at 50.8 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "785a8d3e-8396-4a6d-bc5f-b5f37e7427de")
+    (property "Reference" "C_BUCK_OUT_HF" (at 50.8 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100nF" (at 50.8 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:C0603" (at 50.8 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "38f5f8be-4fa9-431d-90e6-d5cf6fc114e3"))
+      (pin "2" (uuid "77cf8889-3f94-418f-85fd-70a1cec72cf3"))
+    (instances
+      (project "esp32c3_managed_rp2040_swd_coprocessor"
+        (path "/b583f100-e712-45ad-a3a6-7f849998a87f"
+          (reference "C_BUCK_OUT_HF")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 50.8 48.26) (xy 50.8 44.45))
+    (stroke (width 0) (type default))
+    (uuid "a1c21d34-a42f-4922-9b1f-0f4ec6cbb18e")
+  )
+  (global_label "+3V3_MAIN" (shape input) (at 50.8 44.45 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "1857687f-07b8-4be0-a985-4f3b804c4e00")
+  )
+  (wire (pts (xy 50.8 53.34) (xy 50.8 57.15))
+    (stroke (width 0) (type default))
+    (uuid "e961a346-e310-487e-b10c-7c742959aabe")
+  )
+  (global_label "GND_HOST" (shape input) (at 50.8 57.15 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "35e7d727-b957-40ff-a9de-64ac19df6994")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/e8968e84-7918-493d-8013-2abbe4ae8e6b" (page "2"))
+    (path "/bf355c88-dd71-4d4f-833a-02001a8d6b83" (page "3"))
+    (path "/163e60c3-bdd5-4f3c-8906-7051d7c0e884" (page "4"))
+    (path "/b583f100-e712-45ad-a3a6-7f849998a87f" (page "5"))
+    (path "/e48a6d6c-b650-4d36-b51e-a7bed990138f" (page "6"))
+  )
+)

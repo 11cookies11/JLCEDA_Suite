@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-05-18T17:47:14",
+    "date": "2026-05-18T21:08:58",
     "ignored_checks": [
         {
             "description": "Global label only appears once in the schematic",
@@ -28,18 +28,78 @@
     "sheets": [
         {
             "path": "/",
-            "uuid_path": "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13",
+            "uuid_path": "/c5740606-62e4-4133-b325-b7f77e6140c3",
             "violations": [
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 F1 [POLYFUSE_2P]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 0.508
+                            },
+                            "uuid": "72d1cabc-cea0-4cd1-b07e-7dc8f3c16c6a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Misc.kicad_sym' 中找不到符号库 'JLC-MCP-Misc'",
+                    "items": [
+                        {
+                            "description": "符号 F1 [POLYFUSE_2P]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 0.508
+                            },
+                            "uuid": "72d1cabc-cea0-4cd1-b07e-7dc8f3c16c6a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 D_VBUS_TVS [SMBJ58A_C353350]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 0.7874
+                            },
+                            "uuid": "26b347cb-7d7c-4118-b66b-777c9213779b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Diodes.kicad_sym' 中找不到符号库 'JLC-MCP-Diodes'",
+                    "items": [
+                        {
+                            "description": "符号 D_VBUS_TVS [SMBJ58A_C353350]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 0.7874
+                            },
+                            "uuid": "26b347cb-7d7c-4118-b66b-777c9213779b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
                 {
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
                             "description": "符号 J1 [TYPE-C16PIN]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 0.508
                             },
-                            "uuid": "0442cdc5-d7ca-4b97-8525-9c06fefeb6c7"
+                            "uuid": "dcf4a72c-7863-443f-a630-e7dc4f3c7953"
                         }
                     ],
                     "severity": "warning",
@@ -51,10 +111,10 @@
                         {
                             "description": "符号 J1 [TYPE-C16PIN]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 0.508
                             },
-                            "uuid": "0442cdc5-d7ca-4b97-8525-9c06fefeb6c7"
+                            "uuid": "dcf4a72c-7863-443f-a630-e7dc4f3c7953"
                         }
                     ],
                     "severity": "warning",
@@ -66,10 +126,10 @@
                         {
                             "description": "符号 R_CC1 [0603WAF1002T5E]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 1.0922
                             },
-                            "uuid": "3289d5b4-a63a-49d2-8a35-73edf7fb7781"
+                            "uuid": "e3c9a352-958e-4761-8b4e-0720dfb518a7"
                         }
                     ],
                     "severity": "warning",
@@ -81,55 +141,10 @@
                         {
                             "description": "符号 R_CC1 [0603WAF1002T5E]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 1.0922
                             },
-                            "uuid": "3289d5b4-a63a-49d2-8a35-73edf7fb7781"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "Label connected to only one pin",
-                    "items": [
-                        {
-                            "description": "标签 'ESP_RF_OUT'",
-                            "pos": {
-                                "x": 1.1557,
-                                "y": 0.508
-                            },
-                            "uuid": "d46a5ea7-7810-4534-bd01-0d9a8115f21c"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "isolated_pin_label"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 L_RF [CS0402-3N9G-S]",
-                            "pos": {
-                                "x": 1.2446,
-                                "y": 0.508
-                            },
-                            "uuid": "3fef3eab-47e6-457e-a21c-c7555bc8b608"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Imported.kicad_sym' 中找不到符号库 'JLC-MCP-Imported'",
-                    "items": [
-                        {
-                            "description": "符号 L_RF [CS0402-3N9G-S]",
-                            "pos": {
-                                "x": 1.2446,
-                                "y": 0.508
-                            },
-                            "uuid": "3fef3eab-47e6-457e-a21c-c7555bc8b608"
+                            "uuid": "e3c9a352-958e-4761-8b4e-0720dfb518a7"
                         }
                     ],
                     "severity": "warning",
@@ -141,10 +156,10 @@
                         {
                             "description": "符号 R_CC2 [0603WAF1002T5E]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 1.6002
                             },
-                            "uuid": "8ccb3c1a-0b4f-439c-bbc2-4a4ee10acf82"
+                            "uuid": "b61b1494-e200-4ebd-b9c1-aff1908f3789"
                         }
                     ],
                     "severity": "warning",
@@ -156,10 +171,10 @@
                         {
                             "description": "符号 R_CC2 [0603WAF1002T5E]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 1.6002
                             },
-                            "uuid": "8ccb3c1a-0b4f-439c-bbc2-4a4ee10acf82"
+                            "uuid": "b61b1494-e200-4ebd-b9c1-aff1908f3789"
                         }
                     ],
                     "severity": "warning",
@@ -171,10 +186,10 @@
                         {
                             "description": "符号 D_USB_ESD [USBLC6-2SC6_C2827654]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 1.9558
                             },
-                            "uuid": "c20fe69b-ff15-422b-a17b-8784e3e0eae6"
+                            "uuid": "e4ee40eb-a4df-4831-bc57-d30becec7f97"
                         }
                     ],
                     "severity": "warning",
@@ -186,40 +201,10 @@
                         {
                             "description": "符号 D_USB_ESD [USBLC6-2SC6_C2827654]",
                             "pos": {
-                                "x": 0.508,
+                                "x": 1.3716,
                                 "y": 1.9558
                             },
-                            "uuid": "c20fe69b-ff15-422b-a17b-8784e3e0eae6"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 F1 [MNCP380HSN05AAT1G]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 2.2352
-                            },
-                            "uuid": "f024ef4a-62e0-4f0a-82e3-911f7b1742b6"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Misc.kicad_sym' 中找不到符号库 'JLC-MCP-Misc'",
-                    "items": [
-                        {
-                            "description": "符号 F1 [MNCP380HSN05AAT1G]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 2.2352
-                            },
-                            "uuid": "f024ef4a-62e0-4f0a-82e3-911f7b1742b6"
+                            "uuid": "e4ee40eb-a4df-4831-bc57-d30becec7f97"
                         }
                     ],
                     "severity": "warning",
@@ -231,10 +216,10 @@
                         {
                             "description": "符号 U_BUCK [SY8089A1AAC]",
                             "pos": {
-                                "x": 0.508,
-                                "y": 2.5146
+                                "x": 1.3716,
+                                "y": 2.2352
                             },
-                            "uuid": "1af6e7d6-40b1-443b-9c75-52199757d892"
+                            "uuid": "d26128bb-59b5-4317-b29a-3254b5a606be"
                         }
                     ],
                     "severity": "warning",
@@ -246,115 +231,610 @@
                         {
                             "description": "符号 U_BUCK [SY8089A1AAC]",
                             "pos": {
+                                "x": 1.3716,
+                                "y": 2.2352
+                            },
+                            "uuid": "d26128bb-59b5-4317-b29a-3254b5a606be"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_IN_HF [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.6924
+                            },
+                            "uuid": "05bfe195-87e5-4de9-9186-60e0ee056e97"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_IN_HF [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.6924
+                            },
+                            "uuid": "05bfe195-87e5-4de9-9186-60e0ee056e97"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_OUT_HF [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.9652,
+                                "y": 2.6924
+                            },
+                            "uuid": "264fc6ec-5ea1-4f2d-85d1-317f63644b6c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_OUT_HF [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.9652,
+                                "y": 2.6924
+                            },
+                            "uuid": "264fc6ec-5ea1-4f2d-85d1-317f63644b6c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 L_BUCK [APH201208C2R2MP03]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 2.54
+                            },
+                            "uuid": "a4765918-f2b6-4936-8553-791a4710bb54"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Imported.kicad_sym' 中找不到符号库 'JLC-MCP-Imported'",
+                    "items": [
+                        {
+                            "description": "符号 L_BUCK [APH201208C2R2MP03]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 2.54
+                            },
+                            "uuid": "a4765918-f2b6-4936-8553-791a4710bb54"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_IN [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 2.921
+                            },
+                            "uuid": "2b02c480-9030-4e22-ae37-2e0ea681667b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_IN [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 2.921
+                            },
+                            "uuid": "2b02c480-9030-4e22-ae37-2e0ea681667b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_OUT [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 3.4036
+                            },
+                            "uuid": "9eca08ff-aa9f-48f6-9d93-524ac76ba95b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_BUCK_OUT [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 3.4036
+                            },
+                            "uuid": "9eca08ff-aa9f-48f6-9d93-524ac76ba95b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_BUCK_FB1 [0603WAF4533T5E]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 3.8862
+                            },
+                            "uuid": "08ae8abd-52a3-410d-baf9-a0d049638647"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_BUCK_FB1 [0603WAF4533T5E]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 3.8862
+                            },
+                            "uuid": "08ae8abd-52a3-410d-baf9-a0d049638647"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_BUCK_FB2 [0603WAF1003T5E]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 4.3942
+                            },
+                            "uuid": "dc4704a2-dd73-4251-a46b-40b8d09b339e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_BUCK_FB2 [0603WAF1003T5E]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 4.3942
+                            },
+                            "uuid": "dc4704a2-dd73-4251-a46b-40b8d09b339e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_BULK_3V3 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 4.8768
+                            },
+                            "uuid": "ed40c714-10ac-4993-9750-586715e3c446"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_BULK_3V3 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 4.8768
+                            },
+                            "uuid": "ed40c714-10ac-4993-9750-586715e3c446"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_VDDA [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 5.3594
+                            },
+                            "uuid": "c5ee61a3-5478-4f3f-b335-3bb13cac7bb3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_VDDA [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 5.3594
+                            },
+                            "uuid": "c5ee61a3-5478-4f3f-b335-3bb13cac7bb3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_DEC1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 5.842
+                            },
+                            "uuid": "515b9f71-36a1-4adc-a8c7-8d5301cedafc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_DEC1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 5.842
+                            },
+                            "uuid": "515b9f71-36a1-4adc-a8c7-8d5301cedafc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_DEC2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 6.3246
+                            },
+                            "uuid": "929dc02c-1382-419d-9314-f26c602e99cf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_DEC2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 6.3246
+                            },
+                            "uuid": "929dc02c-1382-419d-9314-f26c602e99cf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_BULK [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 6.8072
+                            },
+                            "uuid": "0dd2ea88-20c8-4f23-a4d7-9a1d78fc842c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_ESP_BULK [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 6.8072
+                            },
+                            "uuid": "0dd2ea88-20c8-4f23-a4d7-9a1d78fc842c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_DEC1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 7.2898
+                            },
+                            "uuid": "73d0c7f4-210e-4154-8f3b-4a4b16317487"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_DEC1 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 7.2898
+                            },
+                            "uuid": "73d0c7f4-210e-4154-8f3b-4a4b16317487"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_DEC2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 7.7724
+                            },
+                            "uuid": "80e54725-e911-40eb-8186-32a735fe14aa"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_DEC2 [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 7.7724
+                            },
+                            "uuid": "80e54725-e911-40eb-8186-32a735fe14aa"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_BULK [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 8.255
+                            },
+                            "uuid": "26147ffb-b21d-45a9-a0b3-81ed39cac503"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_RP_BULK [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 1.3716,
+                                "y": 8.255
+                            },
+                            "uuid": "26147ffb-b21d-45a9-a0b3-81ed39cac503"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C_VTREF [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "ad70430c-702f-4281-9208-4c782fba605d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "items": [
+                        {
+                            "description": "符号 C_VTREF [CC0603KRX7R9BB104]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "ad70430c-702f-4281-9208-4c782fba605d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_VTREF_DIV1 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.9906
+                            },
+                            "uuid": "673ff483-9c19-4276-919f-923ce1477a6c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_VTREF_DIV1 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.9906
+                            },
+                            "uuid": "673ff483-9c19-4276-919f-923ce1477a6c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_VTREF_DIV2 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.4986
+                            },
+                            "uuid": "fd5843c1-4af5-4b79-a9c2-9621f3e7c0f1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_VTREF_DIV2 [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.4986
+                            },
+                            "uuid": "fd5843c1-4af5-4b79-a9c2-9621f3e7c0f1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'HOST_nRESET_CTRL'",
+                            "pos": {
+                                "x": 0.4191,
+                                "y": 2.0066
+                            },
+                            "uuid": "f170c24d-3267-4a54-9226-38ec0199c16f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 Q_NRST [2N7002]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.0066
+                            },
+                            "uuid": "183f2736-a98e-444c-9f99-2b0e393f85da"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Transistors.kicad_sym' 中找不到符号库 'JLC-MCP-Transistors'",
+                    "items": [
+                        {
+                            "description": "符号 Q_NRST [2N7002]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.0066
+                            },
+                            "uuid": "183f2736-a98e-444c-9f99-2b0e393f85da"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_NRST_PU [0603WAF1002T5E]",
+                            "pos": {
                                 "x": 0.508,
                                 "y": 2.5146
                             },
-                            "uuid": "1af6e7d6-40b1-443b-9c75-52199757d892"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 L_BUCK [APH201208C2R2MP03]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 2.8194
-                            },
-                            "uuid": "1146721e-a850-4be5-843b-3ed25845c10d"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Imported.kicad_sym' 中找不到符号库 'JLC-MCP-Imported'",
-                    "items": [
-                        {
-                            "description": "符号 L_BUCK [APH201208C2R2MP03]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 2.8194
-                            },
-                            "uuid": "1146721e-a850-4be5-843b-3ed25845c10d"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 C_BUCK_IN [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.2004
-                            },
-                            "uuid": "8aca738a-b294-4472-8cb8-27836360b55f"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
-                    "items": [
-                        {
-                            "description": "符号 C_BUCK_IN [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.2004
-                            },
-                            "uuid": "8aca738a-b294-4472-8cb8-27836360b55f"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 C_BUCK_OUT [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.683
-                            },
-                            "uuid": "7a1d009f-9a1e-4993-abc8-17886bfa7a02"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
-                    "items": [
-                        {
-                            "description": "符号 C_BUCK_OUT [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.683
-                            },
-                            "uuid": "7a1d009f-9a1e-4993-abc8-17886bfa7a02"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_BUCK_FB1 [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.1656
-                            },
-                            "uuid": "09f55b6c-cd59-4e46-82d8-e17d64783fe5"
+                            "uuid": "00040768-a1f1-4d5e-874c-93ee71ded02e"
                         }
                     ],
                     "severity": "warning",
@@ -364,12 +844,12 @@
                     "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
                     "items": [
                         {
-                            "description": "符号 R_BUCK_FB1 [0603WAF1002T5E]",
+                            "description": "符号 R_NRST_PU [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 4.1656
+                                "y": 2.5146
                             },
-                            "uuid": "09f55b6c-cd59-4e46-82d8-e17d64783fe5"
+                            "uuid": "00040768-a1f1-4d5e-874c-93ee71ded02e"
                         }
                     ],
                     "severity": "warning",
@@ -379,12 +859,12 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 R_BUCK_FB2 [0603WAF1002T5E]",
+                            "description": "符号 R_SWDIO [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 4.6736
+                                "y": 3.0226
                             },
-                            "uuid": "738abc45-ee10-4a2c-a7ea-d44313536318"
+                            "uuid": "df26acc0-886e-4331-9612-f5af32821770"
                         }
                     ],
                     "severity": "warning",
@@ -394,72 +874,147 @@
                     "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
                     "items": [
                         {
-                            "description": "符号 R_BUCK_FB2 [0603WAF1002T5E]",
+                            "description": "符号 R_SWDIO [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 4.6736
+                                "y": 3.0226
                             },
-                            "uuid": "738abc45-ee10-4a2c-a7ea-d44313536318"
+                            "uuid": "df26acc0-886e-4331-9612-f5af32821770"
                         }
                     ],
                     "severity": "warning",
                     "type": "lib_symbol_issues"
                 },
                 {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_TGT_SWDIO'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 3.0988
+                            },
+                            "uuid": "8f9d16c7-791d-4815-a0df-80c30c06a955"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 C_BULK_3V3 [CC0603KRX7R9BB104]",
+                            "description": "符号 R_SWCLK [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 5.1562
+                                "y": 3.5306
                             },
-                            "uuid": "75337afd-74ae-4ae4-85cd-4a2bbba7f8aa"
+                            "uuid": "f37620ee-75b3-47cf-a60d-c0a087487e67"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
                     "items": [
                         {
-                            "description": "符号 C_BULK_3V3 [CC0603KRX7R9BB104]",
+                            "description": "符号 R_SWCLK [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 5.1562
+                                "y": 3.5306
                             },
-                            "uuid": "75337afd-74ae-4ae4-85cd-4a2bbba7f8aa"
+                            "uuid": "f37620ee-75b3-47cf-a60d-c0a087487e67"
                         }
                     ],
                     "severity": "warning",
                     "type": "lib_symbol_issues"
                 },
                 {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_TGT_SWCLK'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 3.6068
+                            },
+                            "uuid": "aac9fea0-de76-4ed2-8bdd-24e17d95678f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 C_RF_SHUNT [CC0603KRX7R9BB104]",
+                            "description": "符号 R_SWO [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 5.6388
+                                "y": 4.0386
                             },
-                            "uuid": "7c37f22c-ed54-45b7-b03c-3a0433f7f4ad"
+                            "uuid": "dc5bbd23-36b2-4b02-bead-9c07052638a7"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
                     "items": [
                         {
-                            "description": "符号 C_RF_SHUNT [CC0603KRX7R9BB104]",
+                            "description": "符号 R_SWO [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 5.6388
+                                "y": 4.0386
                             },
-                            "uuid": "7c37f22c-ed54-45b7-b03c-3a0433f7f4ad"
+                            "uuid": "dc5bbd23-36b2-4b02-bead-9c07052638a7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'TGT_SWO_IN'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.1148
+                            },
+                            "uuid": "be983cfc-5118-430e-880a-3f4614cf38e9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_nRESET [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.5466
+                            },
+                            "uuid": "df4f5442-d915-44b9-8c19-264a3da70144"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_nRESET [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.5466
+                            },
+                            "uuid": "df4f5442-d915-44b9-8c19-264a3da70144"
                         }
                     ],
                     "severity": "warning",
@@ -469,12 +1024,102 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 ANT1 [2450AT18A100E]",
+                            "description": "符号 R_TGT_UART_TX [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 6.1468
+                                "y": 5.0546
                             },
-                            "uuid": "55f084d5-8945-4afb-ad77-8c792ff7c93a"
+                            "uuid": "d2367fae-964f-43fc-8432-51d86e7c25e8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_TGT_UART_TX [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 5.0546
+                            },
+                            "uuid": "d2367fae-964f-43fc-8432-51d86e7c25e8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_TGT_UART_TX'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 5.1308
+                            },
+                            "uuid": "1c4303f8-461c-464b-a590-28d6ac0b5677"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_TGT_UART_RX'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 5.4864
+                            },
+                            "uuid": "7f6e1484-3c65-4e0b-82f9-f830ce500d54"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_TGT_UART_RX [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 5.5626
+                            },
+                            "uuid": "a62e9add-37e3-43b1-9018-cf16047ed8d0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_TGT_UART_RX [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 5.5626
+                            },
+                            "uuid": "a62e9add-37e3-43b1-9018-cf16047ed8d0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 F_TGT [0805L020_30XR]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 5.9436
+                            },
+                            "uuid": "2c022a03-df10-4919-b25e-56a77384957b"
                         }
                     ],
                     "severity": "warning",
@@ -484,12 +1129,12 @@
                     "description": "在 'libraries/symbols/JLC-MCP-Imported.kicad_sym' 中找不到符号库 'JLC-MCP-Imported'",
                     "items": [
                         {
-                            "description": "符号 ANT1 [2450AT18A100E]",
+                            "description": "符号 F_TGT [0805L020_30XR]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 6.1468
+                                "y": 5.9436
                             },
-                            "uuid": "55f084d5-8945-4afb-ad77-8c792ff7c93a"
+                            "uuid": "2c022a03-df10-4919-b25e-56a77384957b"
                         }
                     ],
                     "severity": "warning",
@@ -499,27 +1144,57 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_VDDA [CC0603KRX7R9BB104]",
+                            "description": "符号 JP_TGT_PWR [HDR-1X2-2.54]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 6.223
+                            },
+                            "uuid": "ab53297b-503d-4ee4-b961-d6d9167e3b91"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Connectors.kicad_sym' 中找不到符号库 'JLC-MCP-Connectors'",
+                    "items": [
+                        {
+                            "description": "符号 JP_TGT_PWR [HDR-1X2-2.54]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 6.223
+                            },
+                            "uuid": "ab53297b-503d-4ee4-b961-d6d9167e3b91"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 D_TGT_ESD [SRV05-4_C2836319]",
                             "pos": {
                                 "x": 0.508,
                                 "y": 6.604
                             },
-                            "uuid": "9f6c79ba-5e73-4dc8-ad17-d76d6df59c43"
+                            "uuid": "1d18866c-d322-4c6c-bfe6-ac41e2c5856a"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Diodes.kicad_sym' 中找不到符号库 'JLC-MCP-Diodes'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_VDDA [CC0603KRX7R9BB104]",
+                            "description": "符号 D_TGT_ESD [SRV05-4_C2836319]",
                             "pos": {
                                 "x": 0.508,
                                 "y": 6.604
                             },
-                            "uuid": "9f6c79ba-5e73-4dc8-ad17-d76d6df59c43"
+                            "uuid": "1d18866c-d322-4c6c-bfe6-ac41e2c5856a"
                         }
                     ],
                     "severity": "warning",
@@ -529,27 +1204,27 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_DEC1 [CC0603KRX7R9BB104]",
+                            "description": "符号 J_TGT [HDR-2X5-2.54]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 7.0866
+                                "y": 7.0358
                             },
-                            "uuid": "122d8556-2a49-4e61-806d-76ae3d6f8a5c"
+                            "uuid": "a5d38dcc-8de7-4e86-bacc-3cf4f0b83303"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Connectors.kicad_sym' 中找不到符号库 'JLC-MCP-Connectors'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_DEC1 [CC0603KRX7R9BB104]",
+                            "description": "符号 J_TGT [HDR-2X5-2.54]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 7.0866
+                                "y": 7.0358
                             },
-                            "uuid": "122d8556-2a49-4e61-806d-76ae3d6f8a5c"
+                            "uuid": "a5d38dcc-8de7-4e86-bacc-3cf4f0b83303"
                         }
                     ],
                     "severity": "warning",
@@ -559,27 +1234,27 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_DEC2 [CC0603KRX7R9BB104]",
+                            "description": "符号 TP1 [TESTPOINT_1P]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 7.5692
+                                "y": 7.366
                             },
-                            "uuid": "f8807ef2-a31e-496b-a3fe-1a07b91fc602"
+                            "uuid": "ee202345-031d-4f08-8420-99367d36300a"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Misc.kicad_sym' 中找不到符号库 'JLC-MCP-Misc'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_DEC2 [CC0603KRX7R9BB104]",
+                            "description": "符号 TP1 [TESTPOINT_1P]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 7.5692
+                                "y": 7.366
                             },
-                            "uuid": "f8807ef2-a31e-496b-a3fe-1a07b91fc602"
+                            "uuid": "ee202345-031d-4f08-8420-99367d36300a"
                         }
                     ],
                     "severity": "warning",
@@ -589,117 +1264,27 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_BULK [CC0603KRX7R9BB104]",
+                            "description": "符号 TP2 [TESTPOINT_1P]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 8.0518
+                                "y": 7.6454
                             },
-                            "uuid": "c502a8a2-4663-4a32-9348-8eae4e25fc1a"
+                            "uuid": "9e1f2ffb-80df-4532-b27f-74697530eb05"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Misc.kicad_sym' 中找不到符号库 'JLC-MCP-Misc'",
                     "items": [
                         {
-                            "description": "符号 C_ESP_BULK [CC0603KRX7R9BB104]",
+                            "description": "符号 TP2 [TESTPOINT_1P]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 8.0518
+                                "y": 7.6454
                             },
-                            "uuid": "c502a8a2-4663-4a32-9348-8eae4e25fc1a"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 C_RP_DEC1 [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 8.5344
-                            },
-                            "uuid": "f5737082-4e7e-487f-93bc-129263ab13d3"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
-                    "items": [
-                        {
-                            "description": "符号 C_RP_DEC1 [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 8.5344
-                            },
-                            "uuid": "f5737082-4e7e-487f-93bc-129263ab13d3"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 C_RP_DEC2 [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 9.017
-                            },
-                            "uuid": "62f3ec55-9af6-44e8-9ddb-690d7aa8fe27"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
-                    "items": [
-                        {
-                            "description": "符号 C_RP_DEC2 [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 9.017
-                            },
-                            "uuid": "62f3ec55-9af6-44e8-9ddb-690d7aa8fe27"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 C_RP_BULK [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 9.4996
-                            },
-                            "uuid": "05193c06-ca48-4dde-95fe-69943c3c64fd"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
-                    "items": [
-                        {
-                            "description": "符号 C_RP_BULK [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 9.4996
-                            },
-                            "uuid": "05193c06-ca48-4dde-95fe-69943c3c64fd"
+                            "uuid": "9e1f2ffb-80df-4532-b27f-74697530eb05"
                         }
                     ],
                     "severity": "warning",
@@ -714,7 +1299,7 @@
                                 "x": 0.254,
                                 "y": 0.4191
                             },
-                            "uuid": "12b3c19f-5a53-4a5d-97de-61c93045ff38"
+                            "uuid": "8b4d9703-39b2-426b-af32-5c1bd3da11ea"
                         }
                     ],
                     "severity": "warning",
@@ -729,7 +1314,7 @@
                                 "x": 0.5715,
                                 "y": 0.2032
                             },
-                            "uuid": "e372f10d-1cfa-46eb-a6f2-27b8626001fe"
+                            "uuid": "f56506bd-c216-4450-abc7-f88ffd133d24"
                         }
                     ],
                     "severity": "warning",
@@ -744,7 +1329,7 @@
                                 "x": 0.5969,
                                 "y": 0.2032
                             },
-                            "uuid": "8d9cbf15-16be-4f58-bed0-af5bac4c83cc"
+                            "uuid": "541986d5-37ce-4399-8807-6a62ad9ef823"
                         }
                     ],
                     "severity": "warning",
@@ -759,7 +1344,7 @@
                                 "x": 0.508,
                                 "y": 0.508
                             },
-                            "uuid": "be3fd12a-0e14-4e1f-b520-4233914ad614"
+                            "uuid": "3ce5160f-4ff6-4bb0-9c14-00373f6b2e69"
                         }
                     ],
                     "severity": "warning",
@@ -774,7 +1359,7 @@
                                 "x": 0.508,
                                 "y": 0.508
                             },
-                            "uuid": "be3fd12a-0e14-4e1f-b520-4233914ad614"
+                            "uuid": "3ce5160f-4ff6-4bb0-9c14-00373f6b2e69"
                         }
                     ],
                     "severity": "warning",
@@ -789,7 +1374,7 @@
                                 "x": 0.508,
                                 "y": 1.397
                             },
-                            "uuid": "1f417795-bcc5-4abb-880c-3b22d274e86d"
+                            "uuid": "c065601a-f462-47f5-9d4b-93c63525a424"
                         }
                     ],
                     "severity": "warning",
@@ -804,7 +1389,7 @@
                                 "x": 0.508,
                                 "y": 1.397
                             },
-                            "uuid": "1f417795-bcc5-4abb-880c-3b22d274e86d"
+                            "uuid": "c065601a-f462-47f5-9d4b-93c63525a424"
                         }
                     ],
                     "severity": "warning",
@@ -819,7 +1404,7 @@
                                 "x": 0.508,
                                 "y": 1.8288
                             },
-                            "uuid": "00883e73-a9d4-41c2-aee5-a183a6d77c6a"
+                            "uuid": "4d7f09a1-4c1c-42f4-ad66-ed3f26112880"
                         }
                     ],
                     "severity": "warning",
@@ -834,7 +1419,7 @@
                                 "x": 0.508,
                                 "y": 1.8288
                             },
-                            "uuid": "00883e73-a9d4-41c2-aee5-a183a6d77c6a"
+                            "uuid": "4d7f09a1-4c1c-42f4-ad66-ed3f26112880"
                         }
                     ],
                     "severity": "warning",
@@ -849,7 +1434,7 @@
                                 "x": 0.508,
                                 "y": 2.3114
                             },
-                            "uuid": "7a5e8a89-c76b-4c6f-9bf8-e95b4c7a5597"
+                            "uuid": "b1b06390-48b6-48a4-985f-083d1f9551e3"
                         }
                     ],
                     "severity": "warning",
@@ -864,7 +1449,7 @@
                                 "x": 0.508,
                                 "y": 2.3114
                             },
-                            "uuid": "7a5e8a89-c76b-4c6f-9bf8-e95b4c7a5597"
+                            "uuid": "b1b06390-48b6-48a4-985f-083d1f9551e3"
                         }
                     ],
                     "severity": "warning",
@@ -879,7 +1464,7 @@
                                 "x": 0.508,
                                 "y": 2.8194
                             },
-                            "uuid": "7d0de4b1-7a9e-44e8-bb19-fb7ffa8ba7ae"
+                            "uuid": "2eaac666-d601-43a2-8233-0f6ccbf9c7fb"
                         }
                     ],
                     "severity": "warning",
@@ -894,7 +1479,7 @@
                                 "x": 0.508,
                                 "y": 2.8194
                             },
-                            "uuid": "7d0de4b1-7a9e-44e8-bb19-fb7ffa8ba7ae"
+                            "uuid": "2eaac666-d601-43a2-8233-0f6ccbf9c7fb"
                         }
                     ],
                     "severity": "warning",
@@ -909,7 +1494,7 @@
                                 "x": 0.508,
                                 "y": 3.3274
                             },
-                            "uuid": "e215599c-f02f-44e9-aa4d-14102a48042b"
+                            "uuid": "ab6f8726-f335-4a9f-b163-cf6dd90e3348"
                         }
                     ],
                     "severity": "warning",
@@ -924,7 +1509,7 @@
                                 "x": 0.508,
                                 "y": 3.3274
                             },
-                            "uuid": "e215599c-f02f-44e9-aa4d-14102a48042b"
+                            "uuid": "ab6f8726-f335-4a9f-b163-cf6dd90e3348"
                         }
                     ],
                     "severity": "warning",
@@ -939,7 +1524,7 @@
                                 "x": 0.508,
                                 "y": 3.7338
                             },
-                            "uuid": "2de56205-5bc4-43f5-b72f-2da67f3e7ff9"
+                            "uuid": "aa4ac8de-47f0-498c-a37f-0873c27addf3"
                         }
                     ],
                     "severity": "warning",
@@ -954,7 +1539,7 @@
                                 "x": 0.508,
                                 "y": 3.7338
                             },
-                            "uuid": "2de56205-5bc4-43f5-b72f-2da67f3e7ff9"
+                            "uuid": "aa4ac8de-47f0-498c-a37f-0873c27addf3"
                         }
                     ],
                     "severity": "warning",
@@ -969,7 +1554,7 @@
                                 "x": 0.508,
                                 "y": 4.0386
                             },
-                            "uuid": "685c727b-85c7-416f-9f63-d2226b2c1da7"
+                            "uuid": "870fc95d-f34e-48bc-98ad-7e0d14fd2846"
                         }
                     ],
                     "severity": "warning",
@@ -984,7 +1569,7 @@
                                 "x": 0.508,
                                 "y": 4.0386
                             },
-                            "uuid": "685c727b-85c7-416f-9f63-d2226b2c1da7"
+                            "uuid": "870fc95d-f34e-48bc-98ad-7e0d14fd2846"
                         }
                     ],
                     "severity": "warning",
@@ -994,12 +1579,12 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 Y_ESP32 [X322512MSB4SI]",
+                            "description": "符号 Y_ESP32 [X322540MPB4SI]",
                             "pos": {
                                 "x": 0.508,
                                 "y": 4.3434
                             },
-                            "uuid": "5e8cb3c6-3a25-46ea-b57e-afd9e45c382f"
+                            "uuid": "aca4f1b7-7878-4c2c-9cbd-e5b3f0e9434a"
                         }
                     ],
                     "severity": "warning",
@@ -1009,12 +1594,12 @@
                     "description": "在 'libraries/symbols/JLC-MCP-Crystals.kicad_sym' 中找不到符号库 'JLC-MCP-Crystals'",
                     "items": [
                         {
-                            "description": "符号 Y_ESP32 [X322512MSB4SI]",
+                            "description": "符号 Y_ESP32 [X322540MPB4SI]",
                             "pos": {
                                 "x": 0.508,
                                 "y": 4.3434
                             },
-                            "uuid": "5e8cb3c6-3a25-46ea-b57e-afd9e45c382f"
+                            "uuid": "aca4f1b7-7878-4c2c-9cbd-e5b3f0e9434a"
                         }
                     ],
                     "severity": "warning",
@@ -1029,7 +1614,7 @@
                                 "x": 0.508,
                                 "y": 4.7498
                             },
-                            "uuid": "a92c56bb-9f17-4a1d-99f4-10400b2e3e2e"
+                            "uuid": "8166fd6b-1cdb-446b-aba7-7e559003ca41"
                         }
                     ],
                     "severity": "warning",
@@ -1044,7 +1629,7 @@
                                 "x": 0.508,
                                 "y": 4.7498
                             },
-                            "uuid": "a92c56bb-9f17-4a1d-99f4-10400b2e3e2e"
+                            "uuid": "8166fd6b-1cdb-446b-aba7-7e559003ca41"
                         }
                     ],
                     "severity": "warning",
@@ -1059,7 +1644,7 @@
                                 "x": 0.508,
                                 "y": 5.2324
                             },
-                            "uuid": "5e6398d7-ca99-497a-9a3c-bd0e32b4e7d3"
+                            "uuid": "04e65351-130c-408f-95cc-558aa5e17c92"
                         }
                     ],
                     "severity": "warning",
@@ -1074,7 +1659,7 @@
                                 "x": 0.508,
                                 "y": 5.2324
                             },
-                            "uuid": "5e6398d7-ca99-497a-9a3c-bd0e32b4e7d3"
+                            "uuid": "04e65351-130c-408f-95cc-558aa5e17c92"
                         }
                     ],
                     "severity": "warning",
@@ -1084,12 +1669,72 @@
                     "description": "Label connected to only one pin",
                     "items": [
                         {
-                            "description": "标签 'HOST_SWO_IN'",
+                            "description": "标签 'RP_TGT_SWCLK'",
                             "pos": {
                                 "x": 0.8636,
-                                "y": 5.8928
+                                "y": 5.7912
                             },
-                            "uuid": "074f6f0a-4790-431f-aafa-b76dade3ceee"
+                            "uuid": "1505a6dd-121f-4be6-96f2-81b641e35322"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_TGT_SWDIO'",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 5.8166
+                            },
+                            "uuid": "3340bf5a-9c26-4d2d-8b54-bc3d938345c6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'TGT_SWO_IN'",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 5.9182
+                            },
+                            "uuid": "c4020598-5313-4bd9-ab34-f9c6689ead97"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_TGT_UART_TX'",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 5.9436
+                            },
+                            "uuid": "96d46afd-dc20-4d33-8438-53de1bbe9423"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'RP_TGT_UART_RX'",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 5.969
+                            },
+                            "uuid": "2f45beaf-f274-4032-9bb1-dc529522d94b"
                         }
                     ],
                     "severity": "warning",
@@ -1104,7 +1749,7 @@
                                 "x": 0.8636,
                                 "y": 6.096
                             },
-                            "uuid": "755c43e2-eabe-4964-847c-8cc04e3a427c"
+                            "uuid": "bb9592f5-ec53-441f-b594-5554d65f2f62"
                         }
                     ],
                     "severity": "warning",
@@ -1119,7 +1764,7 @@
                                 "x": 0.508,
                                 "y": 6.1468
                             },
-                            "uuid": "583f83f7-f13b-4b94-a0a0-3685ab522ca2"
+                            "uuid": "f981bebc-6fa7-4468-9efb-da97efd4a5b8"
                         }
                     ],
                     "severity": "warning",
@@ -1134,11 +1779,41 @@
                                 "x": 0.508,
                                 "y": 6.1468
                             },
-                            "uuid": "583f83f7-f13b-4b94-a0a0-3685ab522ca2"
+                            "uuid": "f981bebc-6fa7-4468-9efb-da97efd4a5b8"
                         }
                     ],
                     "severity": "warning",
                     "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'DAP_ACTIVITY'",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 6.1468
+                            },
+                            "uuid": "e4fcc2c8-c3ee-4173-9b9f-2458ce03f110"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
+                },
+                {
+                    "description": "Label connected to only one pin",
+                    "items": [
+                        {
+                            "description": "标签 'VTREF_ADC'",
+                            "pos": {
+                                "x": 0.8636,
+                                "y": 6.477
+                            },
+                            "uuid": "ab620cbf-3763-4a7e-a18e-dce37326ae58"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "isolated_pin_label"
                 },
                 {
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
@@ -1149,7 +1824,7 @@
                                 "x": 0.508,
                                 "y": 7.112
                             },
-                            "uuid": "e3f423ba-59af-48e5-add8-cfb53e4238e6"
+                            "uuid": "892229ca-9f8c-44a3-a1b6-272a5cdd2fa8"
                         }
                     ],
                     "severity": "warning",
@@ -1164,7 +1839,7 @@
                                 "x": 0.508,
                                 "y": 7.112
                             },
-                            "uuid": "e3f423ba-59af-48e5-add8-cfb53e4238e6"
+                            "uuid": "892229ca-9f8c-44a3-a1b6-272a5cdd2fa8"
                         }
                     ],
                     "severity": "warning",
@@ -1179,7 +1854,7 @@
                                 "x": 0.508,
                                 "y": 7.5946
                             },
-                            "uuid": "d3b62a9a-d6d9-4099-a4d4-50e9358851e7"
+                            "uuid": "7e1fad35-5873-40bc-94a1-c1d6145fdf9c"
                         }
                     ],
                     "severity": "warning",
@@ -1194,7 +1869,7 @@
                                 "x": 0.508,
                                 "y": 7.5946
                             },
-                            "uuid": "d3b62a9a-d6d9-4099-a4d4-50e9358851e7"
+                            "uuid": "7e1fad35-5873-40bc-94a1-c1d6145fdf9c"
                         }
                     ],
                     "severity": "warning",
@@ -1209,7 +1884,7 @@
                                 "x": 0.508,
                                 "y": 8.001
                             },
-                            "uuid": "fea33dd4-7891-4c84-9ac6-e409b81ce5e5"
+                            "uuid": "e076dbe9-ea61-4681-a649-73f7da57d827"
                         }
                     ],
                     "severity": "warning",
@@ -1224,7 +1899,7 @@
                                 "x": 0.508,
                                 "y": 8.001
                             },
-                            "uuid": "fea33dd4-7891-4c84-9ac6-e409b81ce5e5"
+                            "uuid": "e076dbe9-ea61-4681-a649-73f7da57d827"
                         }
                     ],
                     "severity": "warning",
@@ -1239,7 +1914,7 @@
                                 "x": 0.508,
                                 "y": 8.4074
                             },
-                            "uuid": "c9f28ab1-a31e-40eb-8263-11496eedebf4"
+                            "uuid": "1a43cd64-88c3-46cc-8eb5-edfe2f746c40"
                         }
                     ],
                     "severity": "warning",
@@ -1254,7 +1929,7 @@
                                 "x": 0.508,
                                 "y": 8.4074
                             },
-                            "uuid": "c9f28ab1-a31e-40eb-8263-11496eedebf4"
+                            "uuid": "1a43cd64-88c3-46cc-8eb5-edfe2f746c40"
                         }
                     ],
                     "severity": "warning",
@@ -1269,7 +1944,7 @@
                                 "x": 0.508,
                                 "y": 8.89
                             },
-                            "uuid": "e2535505-382c-4ae6-b087-9f267407d6f1"
+                            "uuid": "1664730a-5dbb-40ed-a44c-155b73d3e1ae"
                         }
                     ],
                     "severity": "warning",
@@ -1284,7 +1959,7 @@
                                 "x": 0.508,
                                 "y": 8.89
                             },
-                            "uuid": "e2535505-382c-4ae6-b087-9f267407d6f1"
+                            "uuid": "1664730a-5dbb-40ed-a44c-155b73d3e1ae"
                         }
                     ],
                     "severity": "warning",
@@ -1299,7 +1974,7 @@
                                 "x": 0.508,
                                 "y": 9.398
                             },
-                            "uuid": "08d613bd-6d92-4b40-b252-eda7f9fced19"
+                            "uuid": "390f97be-734a-402b-a1ef-0ea8da8d48bc"
                         }
                     ],
                     "severity": "warning",
@@ -1314,7 +1989,7 @@
                                 "x": 0.508,
                                 "y": 9.398
                             },
-                            "uuid": "08d613bd-6d92-4b40-b252-eda7f9fced19"
+                            "uuid": "390f97be-734a-402b-a1ef-0ea8da8d48bc"
                         }
                     ],
                     "severity": "warning",
@@ -1329,7 +2004,7 @@
                                 "x": 0.508,
                                 "y": 9.906
                             },
-                            "uuid": "5edec5bc-1cdc-4e5b-990b-2d94115e1ce2"
+                            "uuid": "e9e3e657-9921-4c64-976d-e4da137f906b"
                         }
                     ],
                     "severity": "warning",
@@ -1344,7 +2019,127 @@
                                 "x": 0.508,
                                 "y": 9.906
                             },
-                            "uuid": "5edec5bc-1cdc-4e5b-990b-2d94115e1ce2"
+                            "uuid": "e9e3e657-9921-4c64-976d-e4da137f906b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_RP_BOOTSEL_PD [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 10.414
+                            },
+                            "uuid": "2c70f128-7918-4977-a31c-300abaa30ae7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_RP_BOOTSEL_PD [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 10.414
+                            },
+                            "uuid": "2c70f128-7918-4977-a31c-300abaa30ae7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 LED_PWR [LTST-C191TBKT]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "8c4e5931-2a24-4ff0-9ab7-6b3d35d0cd57"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Inductors.kicad_sym' 中找不到符号库 'JLC-MCP-Inductors'",
+                    "items": [
+                        {
+                            "description": "符号 LED_PWR [LTST-C191TBKT]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.508
+                            },
+                            "uuid": "8c4e5931-2a24-4ff0-9ab7-6b3d35d0cd57"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R_LED_PWR [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.016
+                            },
+                            "uuid": "ed05f26d-b4f6-4bcd-9930-7005c4e43f70"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
+                    "items": [
+                        {
+                            "description": "符号 R_LED_PWR [0603WAF1002T5E]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.016
+                            },
+                            "uuid": "ed05f26d-b4f6-4bcd-9930-7005c4e43f70"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 LED_DAP [LTST-C191TBKT]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.524
+                            },
+                            "uuid": "f501691c-2c03-44ae-be90-20e1bfa88f20"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP-Inductors.kicad_sym' 中找不到符号库 'JLC-MCP-Inductors'",
+                    "items": [
+                        {
+                            "description": "符号 LED_DAP [LTST-C191TBKT]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.524
+                            },
+                            "uuid": "f501691c-2c03-44ae-be90-20e1bfa88f20"
                         }
                     ],
                     "severity": "warning",
@@ -1354,12 +2149,12 @@
                     "description": "Label connected to only one pin",
                     "items": [
                         {
-                            "description": "标签 'ESP_RP_BOOTSEL_CTRL'",
+                            "description": "标签 'DAP_ACTIVITY'",
                             "pos": {
                                 "x": 0.508,
-                                "y": 9.9822
+                                "y": 1.6002
                             },
-                            "uuid": "d0727475-ff31-4a31-8fac-954e32d39e14"
+                            "uuid": "5bfd4c30-581b-4309-9a90-c0cc2af43ea2"
                         }
                     ],
                     "severity": "warning",
@@ -1369,132 +2164,12 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 R_RP_BOOTSEL_PD [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 10.414
-                            },
-                            "uuid": "70f62811-52af-4cb0-b923-6ba0f03d3702"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_RP_BOOTSEL_PD [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 10.414
-                            },
-                            "uuid": "70f62811-52af-4cb0-b923-6ba0f03d3702"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 LED_PWR [LTST-C191TBKT]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 10.922
-                            },
-                            "uuid": "2088efa3-cb6e-435c-be71-7122fd611f11"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Inductors.kicad_sym' 中找不到符号库 'JLC-MCP-Inductors'",
-                    "items": [
-                        {
-                            "description": "符号 LED_PWR [LTST-C191TBKT]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 10.922
-                            },
-                            "uuid": "2088efa3-cb6e-435c-be71-7122fd611f11"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_LED_PWR [LTST-C191TBKT]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 11.43
-                            },
-                            "uuid": "343fb52f-248b-45cd-9c06-35d33e7123a0"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Inductors.kicad_sym' 中找不到符号库 'JLC-MCP-Inductors'",
-                    "items": [
-                        {
-                            "description": "符号 R_LED_PWR [LTST-C191TBKT]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 11.43
-                            },
-                            "uuid": "343fb52f-248b-45cd-9c06-35d33e7123a0"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 LED_DAP [LTST-C191TBKT]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 11.938
-                            },
-                            "uuid": "1b18d2be-3cd5-4035-848f-8d3ef2b8afa8"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Inductors.kicad_sym' 中找不到符号库 'JLC-MCP-Inductors'",
-                    "items": [
-                        {
-                            "description": "符号 LED_DAP [LTST-C191TBKT]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 11.938
-                            },
-                            "uuid": "1b18d2be-3cd5-4035-848f-8d3ef2b8afa8"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
                             "description": "符号 R_LED_DAP [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 12.446
+                                "y": 2.032
                             },
-                            "uuid": "bb52e824-ed93-4da3-a2b3-59cfdbca8445"
+                            "uuid": "f007a815-fa04-4eed-b94b-60b3d6392beb"
                         }
                     ],
                     "severity": "warning",
@@ -1507,9 +2182,9 @@
                             "description": "符号 R_LED_DAP [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 12.446
+                                "y": 2.032
                             },
-                            "uuid": "bb52e824-ed93-4da3-a2b3-59cfdbca8445"
+                            "uuid": "f007a815-fa04-4eed-b94b-60b3d6392beb"
                         }
                     ],
                     "severity": "warning",
@@ -1522,9 +2197,9 @@
                             "description": "符号 LED_TGT [LTST-C191TBKT]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 12.954
+                                "y": 2.54
                             },
-                            "uuid": "0842fd36-65db-4833-92dd-14057a8b72eb"
+                            "uuid": "f5bf0444-2dc7-4077-9d55-41da8632f219"
                         }
                     ],
                     "severity": "warning",
@@ -1537,9 +2212,9 @@
                             "description": "符号 LED_TGT [LTST-C191TBKT]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 12.954
+                                "y": 2.54
                             },
-                            "uuid": "0842fd36-65db-4833-92dd-14057a8b72eb"
+                            "uuid": "f5bf0444-2dc7-4077-9d55-41da8632f219"
                         }
                     ],
                     "severity": "warning",
@@ -1552,9 +2227,9 @@
                             "description": "符号 R_LED_TGT [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 13.462
+                                "y": 3.048
                             },
-                            "uuid": "970b02f7-0309-4b6d-bd32-bc4b6f3acd79"
+                            "uuid": "55de4c6b-e2ce-4bd3-8b8e-0eabc17b586a"
                         }
                     ],
                     "severity": "warning",
@@ -1567,99 +2242,9 @@
                             "description": "符号 R_LED_TGT [0603WAF1002T5E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 13.462
+                                "y": 3.048
                             },
-                            "uuid": "970b02f7-0309-4b6d-bd32-bc4b6f3acd79"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 C_VTREF [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 0.508
-                            },
-                            "uuid": "27b7b8c1-e474-45c8-b2dd-fd27ff50f81b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
-                    "items": [
-                        {
-                            "description": "符号 C_VTREF [CC0603KRX7R9BB104]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 0.508
-                            },
-                            "uuid": "27b7b8c1-e474-45c8-b2dd-fd27ff50f81b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_VTREF_DIV1 [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 0.9906
-                            },
-                            "uuid": "e1e90d57-b6b2-4bee-a659-86be9d0d0a3b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_VTREF_DIV1 [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 0.9906
-                            },
-                            "uuid": "e1e90d57-b6b2-4bee-a659-86be9d0d0a3b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_VTREF_DIV2 [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 1.4986
-                            },
-                            "uuid": "4d0433ec-8411-4fa8-ac04-8ec413053209"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_VTREF_DIV2 [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 1.4986
-                            },
-                            "uuid": "4d0433ec-8411-4fa8-ac04-8ec413053209"
+                            "uuid": "55de4c6b-e2ce-4bd3-8b8e-0eabc17b586a"
                         }
                     ],
                     "severity": "warning",
@@ -1669,12 +2254,12 @@
                     "description": "Label connected to only one pin",
                     "items": [
                         {
-                            "description": "标签 'HOST_nRESET_CTRL'",
+                            "description": "标签 'ESP_RF_OUT'",
                             "pos": {
                                 "x": 0.4191,
-                                "y": 2.0066
+                                "y": 0.508
                             },
-                            "uuid": "44a8cac7-f436-45cd-a6c4-523a274fe48e"
+                            "uuid": "ee9a8f3a-1673-47ef-8bc4-0df8fef9fd01"
                         }
                     ],
                     "severity": "warning",
@@ -1684,237 +2269,12 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 Q_NRST [2N7002]",
+                            "description": "符号 L_RF [CS0402-3N9G-S]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 2.0066
+                                "y": 0.508
                             },
-                            "uuid": "737937c7-4ef4-4d04-896e-64c070ba930b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Transistors.kicad_sym' 中找不到符号库 'JLC-MCP-Transistors'",
-                    "items": [
-                        {
-                            "description": "符号 Q_NRST [2N7002]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 2.0066
-                            },
-                            "uuid": "737937c7-4ef4-4d04-896e-64c070ba930b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_NRST_PU [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 2.5146
-                            },
-                            "uuid": "368846e3-eaa4-4acc-8f49-218f3275e469"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_NRST_PU [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 2.5146
-                            },
-                            "uuid": "368846e3-eaa4-4acc-8f49-218f3275e469"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_SWDIO [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.0226
-                            },
-                            "uuid": "677094ac-3fda-4347-871d-21101a9fb5ea"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_SWDIO [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.0226
-                            },
-                            "uuid": "677094ac-3fda-4347-871d-21101a9fb5ea"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "Label connected to only one pin",
-                    "items": [
-                        {
-                            "description": "标签 'ESP_RP_SWDIO'",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.0988
-                            },
-                            "uuid": "d38b304b-6811-4092-bf13-7ff01ad90f58"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "isolated_pin_label"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_SWCLK [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.5306
-                            },
-                            "uuid": "129f34a6-fac2-4f08-a3f8-ce46dcc90b9b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_SWCLK [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.5306
-                            },
-                            "uuid": "129f34a6-fac2-4f08-a3f8-ce46dcc90b9b"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "Label connected to only one pin",
-                    "items": [
-                        {
-                            "description": "标签 'ESP_RP_SWCLK'",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 3.6068
-                            },
-                            "uuid": "aee56ae2-be78-4d28-9b39-c9d9873f0ed3"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "isolated_pin_label"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_SWO [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.0386
-                            },
-                            "uuid": "b7edb637-ef19-4449-a66c-df7c1b90228f"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_SWO [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.0386
-                            },
-                            "uuid": "b7edb637-ef19-4449-a66c-df7c1b90228f"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "Label connected to only one pin",
-                    "items": [
-                        {
-                            "description": "标签 'HOST_SWO_IN'",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.1148
-                            },
-                            "uuid": "f0a8b0dc-348b-4e20-9e37-02e41e5c1fd9"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "isolated_pin_label"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 R_nRESET [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.5466
-                            },
-                            "uuid": "be6ef6d0-6a17-4044-b73e-4a671b581801"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Resistors.kicad_sym' 中找不到符号库 'JLC-MCP-Resistors'",
-                    "items": [
-                        {
-                            "description": "符号 R_nRESET [0603WAF1002T5E]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.5466
-                            },
-                            "uuid": "be6ef6d0-6a17-4044-b73e-4a671b581801"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 F_TGT [0805L020_30XR]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.9022
-                            },
-                            "uuid": "b602042e-0cea-4df0-bd61-fd2f53fcf2ac"
+                            "uuid": "dec32e0f-3333-41e7-9f9f-99d2d250b1ce"
                         }
                     ],
                     "severity": "warning",
@@ -1924,57 +2284,12 @@
                     "description": "在 'libraries/symbols/JLC-MCP-Imported.kicad_sym' 中找不到符号库 'JLC-MCP-Imported'",
                     "items": [
                         {
-                            "description": "符号 F_TGT [0805L020_30XR]",
+                            "description": "符号 L_RF [CS0402-3N9G-S]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 4.9022
+                                "y": 0.508
                             },
-                            "uuid": "b602042e-0cea-4df0-bd61-fd2f53fcf2ac"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "符号 'Conn_01x02' 与来源库 'Connector_Generic' 中的符号存在差异",
-                    "items": [
-                        {
-                            "description": "符号 JP_TGT_PWR [Conn_01x02]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 5.1816
-                            },
-                            "uuid": "4503cd57-9556-427c-a974-7fb12bff266d"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_mismatch"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 D_TGT_ESD [SRV05-4_C2836319]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 5.5626
-                            },
-                            "uuid": "b27a06ae-f670-4187-8a8e-23e308f8e6f2"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Diodes.kicad_sym' 中找不到符号库 'JLC-MCP-Diodes'",
-                    "items": [
-                        {
-                            "description": "符号 D_TGT_ESD [SRV05-4_C2836319]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 5.5626
-                            },
-                            "uuid": "b27a06ae-f670-4187-8a8e-23e308f8e6f2"
+                            "uuid": "dec32e0f-3333-41e7-9f9f-99d2d250b1ce"
                         }
                     ],
                     "severity": "warning",
@@ -1984,27 +2299,27 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 J_TGT [HDR-2X4-2.54]",
+                            "description": "符号 C_RF_SHUNT [CC0603KRX7R9BB104]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 5.969
+                                "y": 0.889
                             },
-                            "uuid": "ae1afbde-c2e2-4f77-a244-4ee2ae7b21f9"
+                            "uuid": "de92b415-e2e8-49cc-9033-8742bcee935f"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Connectors.kicad_sym' 中找不到符号库 'JLC-MCP-Connectors'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Capacitors.kicad_sym' 中找不到符号库 'JLC-MCP-Capacitors'",
                     "items": [
                         {
-                            "description": "符号 J_TGT [HDR-2X4-2.54]",
+                            "description": "符号 C_RF_SHUNT [CC0603KRX7R9BB104]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 5.969
+                                "y": 0.889
                             },
-                            "uuid": "ae1afbde-c2e2-4f77-a244-4ee2ae7b21f9"
+                            "uuid": "de92b415-e2e8-49cc-9033-8742bcee935f"
                         }
                     ],
                     "severity": "warning",
@@ -2014,57 +2329,27 @@
                     "description": "当前配置中不包含封装库 'JLC-MCP'",
                     "items": [
                         {
-                            "description": "符号 TP1 [TESTPOINT_1P]",
+                            "description": "符号 ANT1 [2450AT18A100E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 6.223
+                                "y": 1.397
                             },
-                            "uuid": "2c7cab70-46a2-48cc-9eb8-b7bf041fe90d"
+                            "uuid": "d72142de-c716-4fb8-8ad1-421d60453edd"
                         }
                     ],
                     "severity": "warning",
                     "type": "footprint_link_issues"
                 },
                 {
-                    "description": "在 'libraries/symbols/JLC-MCP-Misc.kicad_sym' 中找不到符号库 'JLC-MCP-Misc'",
+                    "description": "在 'libraries/symbols/JLC-MCP-Imported.kicad_sym' 中找不到符号库 'JLC-MCP-Imported'",
                     "items": [
                         {
-                            "description": "符号 TP1 [TESTPOINT_1P]",
+                            "description": "符号 ANT1 [2450AT18A100E]",
                             "pos": {
                                 "x": 0.508,
-                                "y": 6.223
+                                "y": 1.397
                             },
-                            "uuid": "2c7cab70-46a2-48cc-9eb8-b7bf041fe90d"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "lib_symbol_issues"
-                },
-                {
-                    "description": "当前配置中不包含封装库 'JLC-MCP'",
-                    "items": [
-                        {
-                            "description": "符号 TP2 [TESTPOINT_1P]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 6.5024
-                            },
-                            "uuid": "d3afee30-48d8-4580-afd1-0cb277b3c340"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "footprint_link_issues"
-                },
-                {
-                    "description": "在 'libraries/symbols/JLC-MCP-Misc.kicad_sym' 中找不到符号库 'JLC-MCP-Misc'",
-                    "items": [
-                        {
-                            "description": "符号 TP2 [TESTPOINT_1P]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 6.5024
-                            },
-                            "uuid": "d3afee30-48d8-4580-afd1-0cb277b3c340"
+                            "uuid": "d72142de-c716-4fb8-8ad1-421d60453edd"
                         }
                     ],
                     "severity": "warning",
@@ -2074,41 +2359,26 @@
         },
         {
             "path": "/01_power/",
-            "uuid_path": "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51",
+            "uuid_path": "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8",
             "violations": [
-                {
-                    "description": "Input Power pin not driven by any Output Power pins",
-                    "items": [
-                        {
-                            "description": "Symbol D_USB_ESD 引脚 5 [VBUS, Power input, Line]",
-                            "pos": {
-                                "x": 0.6096,
-                                "y": 1.9558
-                            },
-                            "uuid": "08e9b3a7-0ff3-4f45-8cce-7f69f068b8b7"
-                        }
-                    ],
-                    "severity": "error",
-                    "type": "power_pin_not_driven"
-                },
                 {
                     "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                     "items": [
                         {
                             "description": "Symbol J1 引脚 A7 [DN1, Unspecified, Line]",
                             "pos": {
-                                "x": 0.4191,
+                                "x": 1.2827,
                                 "y": 0.4191
                             },
-                            "uuid": "9a1453b3-7d3f-48a8-8232-7ae0e343acf4"
+                            "uuid": "e86c0861-18b6-4769-ba0e-d01c8fc46b1c"
                         },
                         {
                             "description": "Symbol J1 引脚 B7 [DN2, Unspecified, Line]",
                             "pos": {
-                                "x": 0.4191,
+                                "x": 1.2827,
                                 "y": 0.5207
                             },
-                            "uuid": "11364a18-7e1f-4d36-b650-714bcaa8ea62"
+                            "uuid": "fd2e487e-636e-4e0f-972a-c12d11004f1f"
                         }
                     ],
                     "severity": "warning",
@@ -2120,41 +2390,18 @@
                         {
                             "description": "Symbol J1 引脚 B7 [DN2, Unspecified, Line]",
                             "pos": {
-                                "x": 0.4191,
+                                "x": 1.2827,
                                 "y": 0.5207
                             },
-                            "uuid": "11364a18-7e1f-4d36-b650-714bcaa8ea62"
+                            "uuid": "fd2e487e-636e-4e0f-972a-c12d11004f1f"
                         },
                         {
                             "description": "Symbol D_USB_ESD 引脚 3 [IO2, Bidirectional, Line]",
                             "pos": {
-                                "x": 0.4064,
+                                "x": 1.27,
                                 "y": 1.9812
                             },
-                            "uuid": "ab2e80cb-4f43-42ed-ab56-32a46bf8b58a"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol L_RF 引脚 2 [2, Unspecified, Line]",
-                            "pos": {
-                                "x": 1.2954,
-                                "y": 0.508
-                            },
-                            "uuid": "2aa088c0-e597-46be-bf48-a22d2f30c94f"
-                        },
-                        {
-                            "description": "Symbol C_RF_SHUNT 引脚 1 [1, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 5.6134
-                            },
-                            "uuid": "cb4c0e9c-0ae4-4082-b2cb-b63f45668969"
+                            "uuid": "8794ca9f-32b2-46d6-a606-2315f616ed20"
                         }
                     ],
                     "severity": "warning",
@@ -2166,87 +2413,41 @@
                         {
                             "description": "Symbol L_BUCK 引脚 1 [1, Unspecified, Line]",
                             "pos": {
-                                "x": 0.4572,
-                                "y": 2.8194
+                                "x": 1.3208,
+                                "y": 2.54
                             },
-                            "uuid": "cf014d36-88f5-4a89-a51e-dc9eb5319b44"
+                            "uuid": "2d7e7209-047e-4cde-801b-28158acac04a"
                         },
                         {
                             "description": "Symbol U_BUCK 引脚 3 [LX, Output, Line]",
                             "pos": {
-                                "x": 0.4191,
-                                "y": 2.54
+                                "x": 1.2827,
+                                "y": 2.2606
                             },
-                            "uuid": "7d65cba8-cd6e-4e6c-b42f-8f570f047e73"
+                            "uuid": "1945cc17-8abb-4522-976c-5931aaf7fce2"
                         }
                     ],
                     "severity": "warning",
                     "type": "pin_to_pin"
                 },
                 {
-                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                     "items": [
                         {
                             "description": "Symbol L_BUCK 引脚 2 [2, Unspecified, Line]",
                             "pos": {
-                                "x": 0.5588,
-                                "y": 2.8194
+                                "x": 1.4224,
+                                "y": 2.54
                             },
-                            "uuid": "0686a377-2db9-4e2b-97bd-01c18683fe12"
+                            "uuid": "4a999167-be4a-4dd4-bbe4-e6a8e7fdcebc"
                         },
                         {
-                            "description": "Symbol U_BUCK 引脚 1 [EN, Input, Line]",
+                            "description": "Symbol C_BUCK_OUT_HF 引脚 1 [1, Passive, Line]",
                             "pos": {
-                                "x": 0.4191,
-                                "y": 2.4892
+                                "x": 0.9652,
+                                "y": 2.667
                             },
-                            "uuid": "f4df22d4-b0c0-40c7-8b5a-c13e91d70693"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol ANT1 引脚 2 [2, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 6.1087
-                            },
-                            "uuid": "e2119ed5-909a-4e89-8d51-037100613071"
-                        },
-                        {
-                            "description": "Symbol C_RF_SHUNT 引脚 1 [1, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 5.6134
-                            },
-                            "uuid": "cb4c0e9c-0ae4-4082-b2cb-b63f45668969"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol ANT1 引脚 1 [ANT, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 6.1976
-                            },
-                            "uuid": "bb4de59e-bc4d-4657-b4e0-92829d81449e"
-                        },
-                        {
-                            "description": "Symbol C_ESP_VDDA 引脚 2 [2, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 6.6294
-                            },
-                            "uuid": "5b048886-a8d2-48ae-b0d9-9abeabbf60f0"
+                            "uuid": "bd8f1333-7552-4ea3-9e4a-579720b63bfa"
                         }
                     ],
                     "severity": "warning",
@@ -2255,229 +2456,9 @@
             ]
         },
         {
-            "path": "/02_mcu/",
-            "uuid_path": "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/f96d90cd-06b7-4dc4-8fe2-bbc59600bb17",
+            "path": "/04_target/",
+            "uuid_path": "/c5740606-62e4-4133-b325-b7f77e6140c3/2773f375-0ef5-4752-8ed4-8bdc8cd78163",
             "violations": [
-                {
-                    "description": "ESP_RP_SWDIO 和 VTREF_TARGET 都连接到同一项上; 将使用 ESP_RP_SWDIO 作为网表中的网络名称",
-                    "items": [
-                        {
-                            "description": "标签 'ESP_RP_SWDIO'",
-                            "pos": {
-                                "x": 0.254,
-                                "y": 0.5461
-                            },
-                            "uuid": "b0e87cc6-4204-4a3a-9bf3-8db22b48aae1"
-                        },
-                        {
-                            "description": "标签 'VTREF_TARGET'",
-                            "pos": {
-                                "x": 0.254,
-                                "y": 0.5461
-                            },
-                            "uuid": "76c0c6ee-8d1c-43c5-84ac-b7e47b6d06bd"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "multiple_net_names"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol Y_ESP32 引脚 1 [OSC1, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.4318,
-                                "y": 4.3688
-                            },
-                            "uuid": "f659b0ea-efdf-4222-ada1-45c8df722d40"
-                        },
-                        {
-                            "description": "Symbol C_ESP_XTAL1 引脚 1 [1, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 4.7244
-                            },
-                            "uuid": "113b6c8c-e9e1-48e7-9530-601c596eceed"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol Y_ESP32 引脚 2 [GND, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.5842,
-                                "y": 4.3688
-                            },
-                            "uuid": "32f2708e-0d75-430b-b8b5-a0e1d1b0464d"
-                        },
-                        {
-                            "description": "Symbol C_ESP_XTAL2 引脚 1 [1, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 5.207
-                            },
-                            "uuid": "8ca08b7d-6b94-479f-84df-70c4262b4bc2"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol Y_RP2040 引脚 1 [OSC1, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.4318,
-                                "y": 8.0264
-                            },
-                            "uuid": "2f9d4999-b0a9-4cfd-aed2-f814bfea4133"
-                        },
-                        {
-                            "description": "Symbol C_RP_XTAL1 引脚 1 [1, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 8.382
-                            },
-                            "uuid": "3e37d6bd-785c-42bb-b010-ef8d16a371b3"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol Y_RP2040 引脚 2 [GND, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.5842,
-                                "y": 8.0264
-                            },
-                            "uuid": "c8e1d129-e7ca-4aed-9bc2-b25abd3e1fc4"
-                        },
-                        {
-                            "description": "Symbol C_RP_XTAL2 引脚 1 [1, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 8.8646
-                            },
-                            "uuid": "971f3f4c-f763-4d22-b953-d485a1f57b91"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Output 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol Q_RP_BOOTSEL 引脚 3 [D, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.5334,
-                                "y": 9.3472
-                            },
-                            "uuid": "0f411f48-3766-436a-8835-773f0fbf6c49"
-                        },
-                        {
-                            "description": "Symbol U_FLASH 引脚 1 [CS#, Output, Line]",
-                            "pos": {
-                                "x": 0.3048,
-                                "y": 7.0739
-                            },
-                            "uuid": "aa7ddd48-589a-4c2f-b9fd-9cfa1626c210"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol Q_RP_BOOTSEL 引脚 1 [G, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.4572,
-                                "y": 9.398
-                            },
-                            "uuid": "6430f486-5be2-49c7-82f1-4d321d372d84"
-                        },
-                        {
-                            "description": "Symbol R_RP_BOOTSEL_GATE 引脚 2 [2, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 9.8679
-                            },
-                            "uuid": "a76e080c-12ce-48ab-a873-fd03a0b495a2"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                },
-                {
-                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                    "items": [
-                        {
-                            "description": "Symbol Q_RP_BOOTSEL 引脚 2 [S, Unspecified, Line]",
-                            "pos": {
-                                "x": 0.5334,
-                                "y": 9.4488
-                            },
-                            "uuid": "62d22727-5ee5-4df5-ac4d-2084120d004d"
-                        },
-                        {
-                            "description": "Symbol C_RP_XTAL2 引脚 2 [2, Passive, Line]",
-                            "pos": {
-                                "x": 0.508,
-                                "y": 8.9154
-                            },
-                            "uuid": "c433e10e-5107-40be-9b32-610f9161ac58"
-                        }
-                    ],
-                    "severity": "warning",
-                    "type": "pin_to_pin"
-                }
-            ]
-        },
-        {
-            "path": "/03_target/",
-            "uuid_path": "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/be331636-ff70-4cc4-9c64-22905e285697",
-            "violations": [
-                {
-                    "description": "Input Power pin not driven by any Output Power pins",
-                    "items": [
-                        {
-                            "description": "Symbol D_TGT_ESD 引脚 5 [5, Input, Line]",
-                            "pos": {
-                                "x": 0.3429,
-                                "y": 5.5626
-                            },
-                            "uuid": "f7d7b8b2-268d-4d69-b71f-c8baf01d211b"
-                        }
-                    ],
-                    "severity": "error",
-                    "type": "power_pin_not_driven"
-                },
-                {
-                    "description": "Input Power pin not driven by any Output Power pins",
-                    "items": [
-                        {
-                            "description": "Symbol D_TGT_ESD 引脚 2 [2, Input, Line]",
-                            "pos": {
-                                "x": 0.6731,
-                                "y": 5.5626
-                            },
-                            "uuid": "9cbcf4b9-d19f-470d-8ce9-33086dbe39b0"
-                        }
-                    ],
-                    "severity": "error",
-                    "type": "power_pin_not_driven"
-                },
                 {
                     "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                     "items": [
@@ -2487,7 +2468,7 @@
                                 "x": 0.5334,
                                 "y": 1.9558
                             },
-                            "uuid": "43a956c1-faa8-4773-94c5-17f604a0b9e7"
+                            "uuid": "81959ccc-813d-4f6a-b229-fd273a2fb00c"
                         },
                         {
                             "description": "Symbol R_NRST_PU 引脚 2 [2, Passive, Line]",
@@ -2495,7 +2476,7 @@
                                 "x": 0.508,
                                 "y": 2.4765
                             },
-                            "uuid": "9d1684af-06cb-4dd6-ba0e-deb7b73f3edb"
+                            "uuid": "d9c522d0-2e14-41aa-ae3d-9cd3749aa612"
                         }
                     ],
                     "severity": "warning",
@@ -2510,7 +2491,7 @@
                                 "x": 0.5334,
                                 "y": 2.0574
                             },
-                            "uuid": "12bb27b3-4c87-4383-877f-046073114edf"
+                            "uuid": "ee44ddea-7d2b-470f-9e43-93a10a694555"
                         },
                         {
                             "description": "Symbol R_VTREF_DIV2 引脚 2 [2, Passive, Line]",
@@ -2518,7 +2499,7 @@
                                 "x": 0.508,
                                 "y": 1.4605
                             },
-                            "uuid": "5e064775-db77-4384-a596-31a54929e344"
+                            "uuid": "f324a751-df30-439a-bb70-bc479e2a0fee"
                         }
                     ],
                     "severity": "warning",
@@ -2531,17 +2512,17 @@
                             "description": "Symbol F_TGT 引脚 1 [1, Unspecified, Line]",
                             "pos": {
                                 "x": 0.4572,
-                                "y": 4.9022
+                                "y": 5.9436
                             },
-                            "uuid": "b2fd844d-281d-46de-b11f-2ac52d37c8d4"
+                            "uuid": "583674c9-5650-47ac-b6e8-11b1d089fe06"
                         },
                         {
                             "description": "Symbol U_BUCK 引脚 4 [IN, Input, Line]",
                             "pos": {
-                                "x": 0.5969,
-                                "y": 2.54
+                                "x": 1.4605,
+                                "y": 2.2606
                             },
-                            "uuid": "1a3bc8cf-2dbf-4857-af59-1d786156473a"
+                            "uuid": "d2a4e6f5-dfcd-4a28-8a90-2d2fdbde91c6"
                         }
                     ],
                     "severity": "warning",
@@ -2554,17 +2535,563 @@
                             "description": "Symbol F_TGT 引脚 2 [2, Unspecified, Line]",
                             "pos": {
                                 "x": 0.5588,
-                                "y": 4.9022
+                                "y": 5.9436
                             },
-                            "uuid": "41e8aa2e-3850-44e6-bbfd-ee3187941577"
+                            "uuid": "3016507b-f368-4e40-ad21-6c2f3ddeea3e"
                         },
                         {
-                            "description": "Symbol JP_TGT_PWR 引脚 1 [Pin_1, Passive, Line]",
+                            "description": "Symbol JP_TGT_PWR 引脚 1 [1, Passive, Line]",
                             "pos": {
                                 "x": 0.4572,
-                                "y": 5.1816
+                                "y": 6.2103
                             },
-                            "uuid": "eb0c84da-9c4d-4eed-931d-07652ee39e7d"
+                            "uuid": "85127d1d-7708-4e23-8d4a-737cfa3d9577"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/02_mcu/",
+            "uuid_path": "/c5740606-62e4-4133-b325-b7f77e6140c3/a0766543-4026-4e36-b15c-bc9c2c9744ae",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Y_ESP32 引脚 1 [OSC1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4318,
+                                "y": 4.3688
+                            },
+                            "uuid": "6dc00763-9edf-4f02-890f-b35ccad3953a"
+                        },
+                        {
+                            "description": "Symbol C_ESP_XTAL1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.7244
+                            },
+                            "uuid": "ae10e7d7-9a74-4ab4-9a2d-f4b5980599f0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Y_ESP32 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.3688
+                            },
+                            "uuid": "2857b8db-0600-446e-8d12-6479d3399f09"
+                        },
+                        {
+                            "description": "Symbol C_ESP_XTAL2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 5.207
+                            },
+                            "uuid": "2d2c0fb9-cf2f-4a16-9938-32b042af9a7e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 50 [DVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 5.6134
+                            },
+                            "uuid": "6b65cb98-70a2-4dfe-bdb9-841efe611af7"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "62246bec-fe6a-4506-90ea-8c9c5453e273"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 23 [DVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.3302,
+                                "y": 5.6134
+                            },
+                            "uuid": "d7368c10-e014-45d0-a606-2c93b89a9307"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "62246bec-fe6a-4506-90ea-8c9c5453e273"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 45 [VREG_VOUT, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.381,
+                                "y": 5.6134
+                            },
+                            "uuid": "e620fac0-b0d3-405c-806b-72fcfb4fa3a6"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "62246bec-fe6a-4506-90ea-8c9c5453e273"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 44 [VREG_IN, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.4191,
+                                "y": 5.6134
+                            },
+                            "uuid": "15702464-ed3c-4acf-ba32-91d61265d6c3"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 49 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.4699,
+                                "y": 5.6134
+                            },
+                            "uuid": "1ac7d6bd-b9d5-4f0a-8746-116388dec104"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 42 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.4953,
+                                "y": 5.6134
+                            },
+                            "uuid": "c370b1f7-f58a-4a47-9a1c-72807d57ba72"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 33 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 5.6134
+                            },
+                            "uuid": "bfc4a72b-d312-47ad-b964-55e1b78168b5"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 22 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 5.6134
+                            },
+                            "uuid": "9198375f-9d3a-44e1-ac56-1ee66f25b777"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 10 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.5715,
+                                "y": 5.6134
+                            },
+                            "uuid": "2b01c6ef-3f4d-4f7a-bd9a-bd0e1972bbcc"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 1 [IOVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 5.6134
+                            },
+                            "uuid": "262102bb-bb80-46a3-a2af-9e184eb2e0af"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 48 [USB_VDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 5.6134
+                            },
+                            "uuid": "8c55e323-cee3-488a-a1b6-2c9e716cb6dd"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 43 [ADC_AVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.6731,
+                                "y": 5.6134
+                            },
+                            "uuid": "bb8d03c2-d4ca-4a2b-84c2-ba31f4e31502"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "c1a0ff0d-daf9-425c-8c03-ad144f044a52"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 57 [GND, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 6.6294
+                            },
+                            "uuid": "2babe674-c275-4db7-9641-3fe24043f3e9"
+                        },
+                        {
+                            "description": "Symbol #FLG103 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.3716
+                            },
+                            "uuid": "daf62e3d-c98b-4f05-b805-efbcbe54856c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Y_RP2040 引脚 1 [OSC1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4318,
+                                "y": 8.0264
+                            },
+                            "uuid": "11c91e51-8a0b-4db9-8980-6dbbe0cec6b2"
+                        },
+                        {
+                            "description": "Symbol C_RP_XTAL1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 8.382
+                            },
+                            "uuid": "c1a79b6d-89bf-47be-a3fa-e3fd0fad82b7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Y_RP2040 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 8.0264
+                            },
+                            "uuid": "fa44fa0c-9aa8-46ea-8aa6-9abe1784c9c0"
+                        },
+                        {
+                            "description": "Symbol C_RP_XTAL2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 8.8646
+                            },
+                            "uuid": "eb14c287-46ba-43ea-a1e9-52a792c53f7a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_RP_BOOTSEL 引脚 3 [D, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 9.3472
+                            },
+                            "uuid": "2f674a2b-2b05-45ab-ac5b-3e2bfab8b38f"
+                        },
+                        {
+                            "description": "Symbol U_FLASH 引脚 1 [CS#, Output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 7.0739
+                            },
+                            "uuid": "3b54e9a7-058d-426d-8073-65fc85ad7ef3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_RP_BOOTSEL 引脚 1 [G, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 9.398
+                            },
+                            "uuid": "c15164aa-d492-4642-93bc-07ef854d20dd"
+                        },
+                        {
+                            "description": "Symbol R_RP_BOOTSEL_GATE 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 9.8679
+                            },
+                            "uuid": "f0b95931-0309-41b8-bcc7-62292ae2972e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_RP_BOOTSEL 引脚 2 [S, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 9.4488
+                            },
+                            "uuid": "7dc6df1c-ab15-4f28-a088-6fd2098c1a50"
+                        },
+                        {
+                            "description": "Symbol C_RP_XTAL2 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 8.9154
+                            },
+                            "uuid": "682c0062-1178-413f-883b-e404e08003e5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/05_indicator/",
+            "uuid_path": "/c5740606-62e4-4133-b325-b7f77e6140c3/83f751fa-392f-4f49-a380-087c905ad705",
+            "violations": []
+        },
+        {
+            "path": "/03_rf/",
+            "uuid_path": "/c5740606-62e4-4133-b325-b7f77e6140c3/0a6e3d98-6efa-46b3-9d74-83b4ddda7ad4",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol L_RF 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.508
+                            },
+                            "uuid": "12973f69-e758-43ec-935c-7a5db57cfa15"
+                        },
+                        {
+                            "description": "Symbol C_RF_SHUNT 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.8636
+                            },
+                            "uuid": "e33a0a98-310b-4c0a-a886-343c152eb1fb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol ANT1 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.3589
+                            },
+                            "uuid": "0350d485-0c00-4b67-a1a3-82490c76910e"
+                        },
+                        {
+                            "description": "Symbol C_RF_SHUNT 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.8636
+                            },
+                            "uuid": "e33a0a98-310b-4c0a-a886-343c152eb1fb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol ANT1 引脚 1 [ANT, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.4478
+                            },
+                            "uuid": "0b99d824-075d-4074-bab7-e2185422a9fb"
+                        },
+                        {
+                            "description": "Symbol C_RF_SHUNT 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.9144
+                            },
+                            "uuid": "72d68e56-0ab0-4ba4-bc39-ff562a850ded"
                         }
                     ],
                     "severity": "warning",

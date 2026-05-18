@@ -186,7 +186,7 @@ def mapping_matches(match: dict[str, Any], ref: str, role: str, value: str) -> b
         checks.append(any(token.lower() in role_lower for token in _as_list(match['role_contains'])))
     if 'value_contains' in match:
         checks.append(any(token.lower() in value_lower for token in _as_list(match['value_contains'])))
-    return any(checks) if checks else False
+    return all(checks) if checks else False
 
 
 def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:

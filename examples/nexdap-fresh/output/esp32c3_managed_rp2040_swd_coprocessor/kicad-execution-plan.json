@@ -1,11 +1,11 @@
 {
   "schema_version": "kicad-execution-plan.v1",
-  "request_id": "nexdap-esp32c3-managed-rp2040-swd-coprocessor-v1",
+  "request_id": "nexdap-esp32c3-managed-rp2040-swd-coprocessor-v2",
   "target": {
     "project_name": "esp32c3_managed_rp2040_swd_coprocessor",
-    "output_dir": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\nexdap-fresh\\output\\esp32c3_managed_rp2040_swd_coprocessor",
-    "schematic_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\nexdap-fresh\\output\\esp32c3_managed_rp2040_swd_coprocessor\\esp32c3_managed_rp2040_swd_coprocessor.kicad_sch",
-    "project_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\nexdap-fresh\\output\\esp32c3_managed_rp2040_swd_coprocessor\\esp32c3_managed_rp2040_swd_coprocessor.kicad_pro"
+    "output_dir": "examples\\nexdap-fresh\\output\\esp32c3_managed_rp2040_swd_coprocessor",
+    "schematic_file": "examples\\nexdap-fresh\\output\\esp32c3_managed_rp2040_swd_coprocessor\\esp32c3_managed_rp2040_swd_coprocessor.kicad_sch",
+    "project_file": "examples\\nexdap-fresh\\output\\esp32c3_managed_rp2040_swd_coprocessor\\esp32c3_managed_rp2040_swd_coprocessor.kicad_pro"
   },
   "symbols": [
     {
@@ -15,7 +15,7 @@
       "lib_id": "JLC-MCP-Connectors:TYPE-C16PIN",
       "footprint": "JLC-MCP:USB-C-SMD_TYPE-C16PIN",
       "at": {
-        "x": 58.42,
+        "x": 127.0,
         "y": 38.1,
         "rotation": 0.0
       },
@@ -85,7 +85,7 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 58.42,
+        "x": 127.0,
         "y": 96.52,
         "rotation": 0.0
       },
@@ -102,7 +102,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -115,7 +115,7 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 58.42,
+        "x": 127.0,
         "y": 147.32,
         "rotation": 0.0
       },
@@ -132,7 +132,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -145,7 +145,7 @@
       "lib_id": "JLC-MCP-Diodes:USBLC6-2SC6_C2827654",
       "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
       "at": {
-        "x": 58.42,
+        "x": 127.0,
         "y": 182.88,
         "rotation": 0.0
       },
@@ -180,13 +180,13 @@
     },
     {
       "ref": "F1",
-      "role": "usb_vbus_efuse",
-      "value": "MNCP380HSN05AAT1G",
-      "lib_id": "JLC-MCP-Misc:MNCP380HSN05AAT1G",
-      "footprint": "JLC-MCP:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR",
+      "role": "usb_vbus_ptc_fuse",
+      "value": "SMD1206-050-33",
+      "lib_id": "JLC-MCP-Misc:POLYFUSE_2P",
+      "footprint": "JLC-MCP:SMD1206-050-33",
       "at": {
-        "x": 58.42,
-        "y": 210.82,
+        "x": 53.34,
+        "y": 38.1,
         "rotation": 0.0
       },
       "pins": [
@@ -202,7 +202,37 @@
         }
       ],
       "notes": [
-        "NexDAP: MNCP380HSN05AAT1G USB eFuse with JLC-MCP SOT-23-5 footprint"
+        "NexDAP: SMD1206-050-33 USB input PTC from validated power block."
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "D_VBUS_TVS",
+      "role": "usb_vbus_tvs_diode",
+      "value": "SMF5.0A",
+      "lib_id": "JLC-MCP-Diodes:SMBJ58A_C353350",
+      "footprint": "JLC-MCP:SMF5.0A",
+      "at": {
+        "x": 53.34,
+        "y": 66.04,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_VBUS"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "NexDAP: SMF5.0A VBUS TVS from validated power block."
       ],
       "lcsc": "",
       "mpn": "",
@@ -215,8 +245,8 @@
       "lib_id": "JLC-MCP-Power:SY8089A1AAC",
       "footprint": "JLC-MCP:TSOT-23-5_L2.9-W1.6-P0.95-LS2.8-BR",
       "at": {
-        "x": 58.42,
-        "y": 238.76,
+        "x": 127.0,
+        "y": 210.82,
         "rotation": 0.0
       },
       "pins": [
@@ -228,7 +258,7 @@
         {
           "number": "1",
           "name": "",
-          "net": "+3V3_MAIN"
+          "net": "+5V_USB_PROTECTED"
         },
         {
           "number": "2",
@@ -260,8 +290,8 @@
       "lib_id": "JLC-MCP-Imported:APH201208C2R2MP03",
       "footprint": "JLC-MCP:L0805",
       "at": {
-        "x": 58.42,
-        "y": 269.24,
+        "x": 127.0,
+        "y": 241.3,
         "rotation": 0.0
       },
       "pins": [
@@ -286,12 +316,12 @@
     {
       "ref": "C_BUCK_IN",
       "role": "buck_input_capacitor",
-      "value": "10uF",
+      "value": "22uF",
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 307.34000000000003,
+        "x": 127.0,
+        "y": 279.4,
         "rotation": 0.0
       },
       "pins": [
@@ -307,7 +337,37 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_BUCK_IN_HF",
+      "role": "buck_input_hf_bypass_capacitor",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 40.64,
+        "y": 256.54,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+5V_USB_PROTECTED"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -320,8 +380,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 355.6,
+        "x": 127.0,
+        "y": 327.66,
         "rotation": 0.0
       },
       "pins": [
@@ -337,7 +397,37 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "C_BUCK_OUT_HF",
+      "role": "buck_output_hf_bypass_capacitor",
+      "value": "100nF",
+      "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
+      "footprint": "JLC-MCP:C0603",
+      "at": {
+        "x": 86.36,
+        "y": 256.54,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND_HOST"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -346,12 +436,12 @@
     {
       "ref": "R_BUCK_FB1",
       "role": "buck_feedback_resistor_top",
-      "value": "100k",
-      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "value": "453k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF4533T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 58.42,
-        "y": 403.86,
+        "x": 127.0,
+        "y": 375.92,
         "rotation": 0.0
       },
       "pins": [
@@ -367,7 +457,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "NexDAP: 453k 0603 buck feedback top resistor."
       ],
       "lcsc": "",
       "mpn": "",
@@ -376,12 +466,12 @@
     {
       "ref": "R_BUCK_FB2",
       "role": "buck_feedback_resistor_bottom",
-      "value": "33k",
-      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "value": "100k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1003T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 58.42,
-        "y": 454.66,
+        "x": 127.0,
+        "y": 426.72,
         "rotation": 0.0
       },
       "pins": [
@@ -397,7 +487,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "NexDAP: 100k 0603 buck feedback bottom resistor."
       ],
       "lcsc": "",
       "mpn": "",
@@ -406,12 +496,12 @@
     {
       "ref": "C_BULK_3V3",
       "role": "vcc_3v3_bulk_capacitor",
-      "value": "10uF",
+      "value": "22uF",
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 502.92,
+        "x": 127.0,
+        "y": 474.98,
         "rotation": 0.0
       },
       "pins": [
@@ -427,7 +517,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -440,8 +530,8 @@
       "lib_id": "JLC-MCP-MCUs:ESP32-C3",
       "footprint": "JLC-MCP:QFN-32_L5.0-W5.0-P0.50-TL-EP3.7",
       "at": {
-        "x": 226.06,
-        "y": 38.1,
+        "x": 78.74,
+        "y": 114.3,
         "rotation": 0.0
       },
       "pins": [
@@ -474,6 +564,11 @@
           "number": "31",
           "name": "",
           "net": "+3V3_MAIN"
+        },
+        {
+          "number": "27",
+          "name": "",
+          "net": "ESP_RP_BOOTSEL_CTRL"
         },
         {
           "number": "33",
@@ -541,11 +636,6 @@
           "net": "ESP_SPI_CS"
         },
         {
-          "number": "27",
-          "name": "",
-          "net": "ESP_TO_RP_IRQ"
-        },
-        {
           "number": "28",
           "name": "",
           "net": "RP_TO_ESP_IRQ"
@@ -564,11 +654,6 @@
           "number": "6",
           "name": "",
           "net": "ESP_RP_SWDIO"
-        },
-        {
-          "number": "6",
-          "name": "",
-          "net": "VTREF_TARGET"
         }
       ],
       "notes": [
@@ -585,8 +670,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 127.0,
+        "x": 78.74,
+        "y": 203.2,
         "rotation": 0.0
       },
       "pins": [
@@ -602,7 +687,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -615,8 +700,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 226.06,
-        "y": 170.18,
+        "x": 78.74,
+        "y": 246.38,
         "rotation": 0.0
       },
       "pins": [
@@ -632,7 +717,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -645,8 +730,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 218.44,
+        "x": 78.74,
+        "y": 294.64,
         "rotation": 0.0
       },
       "pins": [
@@ -662,7 +747,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -675,8 +760,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 269.24,
+        "x": 78.74,
+        "y": 345.44,
         "rotation": 0.0
       },
       "pins": [
@@ -692,7 +777,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -705,8 +790,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 320.04,
+        "x": 78.74,
+        "y": 396.24,
         "rotation": 0.0
       },
       "pins": [
@@ -722,7 +807,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -735,8 +820,8 @@
       "lib_id": "JLC-MCP-Misc:TK-6580S-2",
       "footprint": "JLC-MCP:SW-SMD_TK-6580S-2",
       "at": {
-        "x": 226.06,
-        "y": 360.68,
+        "x": 78.74,
+        "y": 436.88,
         "rotation": 0.0
       },
       "pins": [
@@ -785,8 +870,8 @@
       "lib_id": "JLC-MCP-Misc:TK-6580S-2",
       "footprint": "JLC-MCP:SW-SMD_TK-6580S-2",
       "at": {
-        "x": 226.06,
-        "y": 391.16,
+        "x": 78.74,
+        "y": 467.36,
         "rotation": 0.0
       },
       "pins": [
@@ -832,11 +917,11 @@
       "ref": "Y_ESP32",
       "role": "esp32_40mhz_crystal",
       "value": "40MHz",
-      "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
+      "lib_id": "JLC-MCP-Crystals:X322540MPB4SI",
       "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
       "at": {
-        "x": 226.06,
-        "y": 421.64,
+        "x": 78.74,
+        "y": 497.84000000000003,
         "rotation": 0.0
       },
       "pins": [
@@ -852,7 +937,7 @@
         }
       ],
       "notes": [
-        "NexDAP: RP2040 12MHz crystal (LCSC C9002, 3225 4P, 4/4 pin/pad match)"
+        "NexDAP: ESP32-C3 40MHz crystal with available local JLC-MCP 3225 footprint."
       ],
       "lcsc": "",
       "mpn": "",
@@ -865,8 +950,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 226.06,
-        "y": 462.28000000000003,
+        "x": 78.74,
+        "y": 538.48,
         "rotation": 0.0
       },
       "pins": [
@@ -882,7 +967,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -895,8 +980,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 226.06,
-        "y": 510.54,
+        "x": 78.74,
+        "y": 586.74,
         "rotation": 0.0
       },
       "pins": [
@@ -912,7 +997,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -925,7 +1010,7 @@
       "lib_id": "JLC-MCP-Imported:CS0402-3N9G-S",
       "footprint": "JLC-MCP:IND-SMD_L1.2-W0.7",
       "at": {
-        "x": 132.08,
+        "x": 200.66,
         "y": 38.1,
         "rotation": 0.0
       },
@@ -955,8 +1040,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 551.1800000000001,
+        "x": 200.66,
+        "y": 76.2,
         "rotation": 0.0
       },
       "pins": [
@@ -972,7 +1057,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -985,8 +1070,8 @@
       "lib_id": "JLC-MCP-Imported:2450AT18A100E",
       "footprint": "JLC-MCP:ANT-SMD_L3.2-W1.6",
       "at": {
-        "x": 58.42,
-        "y": 601.98,
+        "x": 200.66,
+        "y": 127.0,
         "rotation": 0.0
       },
       "pins": [
@@ -1015,8 +1100,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 647.7,
+        "x": 127.0,
+        "y": 523.24,
         "rotation": 0.0
       },
       "pins": [
@@ -1032,7 +1117,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1045,8 +1130,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 695.96,
+        "x": 127.0,
+        "y": 571.5,
         "rotation": 0.0
       },
       "pins": [
@@ -1062,7 +1147,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1075,8 +1160,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 744.22,
+        "x": 127.0,
+        "y": 619.76,
         "rotation": 0.0
       },
       "pins": [
@@ -1092,7 +1177,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1105,8 +1190,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 792.48,
+        "x": 127.0,
+        "y": 668.02,
         "rotation": 0.0
       },
       "pins": [
@@ -1122,7 +1207,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1130,13 +1215,13 @@
     },
     {
       "ref": "U_RP2040",
-      "role": "rp2040_swd_timing_coprocessor",
+      "role": "rp2040_target_swd_uart_coprocessor",
       "value": "RP2040",
       "lib_id": "JLC-MCP-MCUs:RP2040",
       "footprint": "JLC-MCP:LQFN-56_L7.0-W7.0-P0.4-EP",
       "at": {
-        "x": 226.06,
-        "y": 601.98,
+        "x": 78.74,
+        "y": 678.1800000000001,
         "rotation": 0.0
       },
       "pins": [
@@ -1181,7 +1266,17 @@
           "net": "+3V3_MAIN"
         },
         {
+          "number": "43",
+          "name": "",
+          "net": "+3V3_MAIN"
+        },
+        {
           "number": "57",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "19",
           "name": "",
           "net": "GND_HOST"
         },
@@ -1221,11 +1316,6 @@
           "net": "ESP_SPI_CS"
         },
         {
-          "number": "13",
-          "name": "",
-          "net": "ESP_TO_RP_IRQ"
-        },
-        {
           "number": "14",
           "name": "",
           "net": "RP_TO_ESP_IRQ"
@@ -1234,6 +1324,16 @@
           "number": "26",
           "name": "",
           "net": "ESP_RP_RUN_CTRL"
+        },
+        {
+          "number": "24",
+          "name": "",
+          "net": "ESP_RP_SWCLK"
+        },
+        {
+          "number": "25",
+          "name": "",
+          "net": "ESP_RP_SWDIO"
         },
         {
           "number": "56",
@@ -1276,19 +1376,19 @@
           "net": "RP_XOUT"
         },
         {
-          "number": "24",
+          "number": "2",
           "name": "",
-          "net": "ESP_RP_SWCLK"
+          "net": "RP_TGT_SWCLK"
         },
         {
-          "number": "25",
+          "number": "3",
           "name": "",
-          "net": "ESP_RP_SWDIO"
+          "net": "RP_TGT_SWDIO"
         },
         {
-          "number": "6",
+          "number": "7",
           "name": "",
-          "net": "HOST_SWO_IN"
+          "net": "TGT_SWO_IN"
         },
         {
           "number": "15",
@@ -1296,9 +1396,24 @@
           "net": "HOST_nRESET_CTRL"
         },
         {
+          "number": "8",
+          "name": "",
+          "net": "RP_TGT_UART_TX"
+        },
+        {
+          "number": "9",
+          "name": "",
+          "net": "RP_TGT_UART_RX"
+        },
+        {
           "number": "17",
           "name": "",
           "net": "DAP_ACTIVITY"
+        },
+        {
+          "number": "38",
+          "name": "",
+          "net": "VTREF_ADC"
         }
       ],
       "notes": [
@@ -1315,8 +1430,8 @@
       "lib_id": "JLC-MCP-Memory:GD25Q16ETIGR",
       "footprint": "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL",
       "at": {
-        "x": 226.06,
-        "y": 698.5,
+        "x": 78.74,
+        "y": 774.7,
         "rotation": 0.0
       },
       "pins": [
@@ -1375,8 +1490,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 746.76,
+        "x": 78.74,
+        "y": 822.96,
         "rotation": 0.0
       },
       "pins": [
@@ -1392,7 +1507,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1405,8 +1520,8 @@
       "lib_id": "JLC-MCP-Crystals:X322512MSB4SI",
       "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
       "at": {
-        "x": 226.06,
-        "y": 787.4,
+        "x": 78.74,
+        "y": 863.6,
         "rotation": 0.0
       },
       "pins": [
@@ -1435,8 +1550,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 226.06,
-        "y": 828.04,
+        "x": 78.74,
+        "y": 904.24,
         "rotation": 0.0
       },
       "pins": [
@@ -1452,7 +1567,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1465,8 +1580,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 226.06,
-        "y": 876.3000000000001,
+        "x": 78.74,
+        "y": 952.5,
         "rotation": 0.0
       },
       "pins": [
@@ -1482,7 +1597,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1495,8 +1610,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 840.74,
+        "x": 127.0,
+        "y": 716.28,
         "rotation": 0.0
       },
       "pins": [
@@ -1512,7 +1627,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1525,8 +1640,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 889.0,
+        "x": 127.0,
+        "y": 764.54,
         "rotation": 0.0
       },
       "pins": [
@@ -1542,7 +1657,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1555,8 +1670,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 58.42,
-        "y": 937.26,
+        "x": 127.0,
+        "y": 812.8,
         "rotation": 0.0
       },
       "pins": [
@@ -1572,7 +1687,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1585,8 +1700,8 @@
       "lib_id": "JLC-MCP-Capacitors:CC0603KRX7R9BB104",
       "footprint": "JLC-MCP:C0603",
       "at": {
-        "x": 63.5,
-        "y": 180.34,
+        "x": 231.14000000000001,
+        "y": 114.3,
         "rotation": 0.0
       },
       "pins": [
@@ -1598,11 +1713,11 @@
         {
           "number": "1",
           "name": "",
-          "net": "VTREF_TARGET"
+          "net": "VTREF_ADC"
         }
       ],
       "notes": [
-        "JLC-MCP 0603 capacitor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 capacitor for capacitor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1615,24 +1730,24 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 63.5,
-        "y": 228.6,
+        "x": 231.14000000000001,
+        "y": 162.56,
         "rotation": 0.0
       },
       "pins": [
         {
           "number": "1",
           "name": "",
-          "net": "+3V3_MAIN"
+          "net": "VTREF_TARGET"
         },
         {
           "number": "2",
           "name": "",
-          "net": "VTREF_TARGET"
+          "net": "VTREF_ADC"
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1645,8 +1760,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 63.5,
-        "y": 279.4,
+        "x": 231.14000000000001,
+        "y": 213.36,
         "rotation": 0.0
       },
       "pins": [
@@ -1658,11 +1773,11 @@
         {
           "number": "1",
           "name": "",
-          "net": "VTREF_TARGET"
+          "net": "VTREF_ADC"
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1675,8 +1790,8 @@
       "lib_id": "JLC-MCP-Transistors:2N7002",
       "footprint": "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR",
       "at": {
-        "x": 63.5,
-        "y": 330.2,
+        "x": 231.14000000000001,
+        "y": 264.16,
         "rotation": 0.0
       },
       "pins": [
@@ -1710,8 +1825,8 @@
       "lib_id": "JLC-MCP-Transistors:2N7002",
       "footprint": "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR",
       "at": {
-        "x": 226.06,
-        "y": 927.1,
+        "x": 78.74,
+        "y": 1003.3000000000001,
         "rotation": 0.0
       },
       "pins": [
@@ -1745,8 +1860,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 977.9,
+        "x": 78.74,
+        "y": 1054.1,
         "rotation": 0.0
       },
       "pins": [
@@ -1762,7 +1877,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1775,8 +1890,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 1028.7,
+        "x": 78.74,
+        "y": 1104.9,
         "rotation": 0.0
       },
       "pins": [
@@ -1792,7 +1907,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1805,24 +1920,24 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 63.5,
-        "y": 381.0,
+        "x": 231.14000000000001,
+        "y": 314.96,
         "rotation": 0.0
       },
       "pins": [
         {
-          "number": "1",
-          "name": "",
-          "net": "+3V3_MAIN"
-        },
-        {
           "number": "2",
           "name": "",
           "net": "TGT_nRESET_DRV"
+        },
+        {
+          "number": "1",
+          "name": "",
+          "net": "VTREF_TARGET"
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1835,15 +1950,15 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 63.5,
-        "y": 431.8,
+        "x": 231.14000000000001,
+        "y": 365.76,
         "rotation": 0.0
       },
       "pins": [
         {
           "number": "1",
           "name": "",
-          "net": "ESP_RP_SWDIO"
+          "net": "RP_TGT_SWDIO"
         },
         {
           "number": "2",
@@ -1852,7 +1967,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1865,15 +1980,15 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 63.5,
-        "y": 482.6,
+        "x": 231.14000000000001,
+        "y": 416.56,
         "rotation": 0.0
       },
       "pins": [
         {
           "number": "1",
           "name": "",
-          "net": "ESP_RP_SWCLK"
+          "net": "RP_TGT_SWCLK"
         },
         {
           "number": "2",
@@ -1882,7 +1997,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1895,15 +2010,15 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 63.5,
-        "y": 533.4,
+        "x": 231.14000000000001,
+        "y": 467.36,
         "rotation": 0.0
       },
       "pins": [
         {
           "number": "1",
           "name": "",
-          "net": "HOST_SWO_IN"
+          "net": "TGT_SWO_IN"
         },
         {
           "number": "2",
@@ -1912,7 +2027,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1925,8 +2040,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 63.5,
-        "y": 584.2,
+        "x": 231.14000000000001,
+        "y": 518.16,
         "rotation": 0.0
       },
       "pins": [
@@ -1942,7 +2057,67 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_TGT_UART_TX",
+      "role": "tgt_uart_tx_series_resistor",
+      "value": "22R",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 231.14000000000001,
+        "y": 568.96,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RP_TGT_UART_TX"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "TGT_UART_TX"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R_TGT_UART_RX",
+      "role": "tgt_uart_rx_series_resistor",
+      "value": "22R",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 231.14000000000001,
+        "y": 619.76,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "TGT_UART_RX"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "RP_TGT_UART_RX"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -1955,8 +2130,8 @@
       "lib_id": "JLC-MCP-Imported:0805L020_30XR",
       "footprint": "JLC-MCP:F0805",
       "at": {
-        "x": 63.5,
-        "y": 619.76,
+        "x": 231.14000000000001,
+        "y": 657.86,
         "rotation": 0.0
       },
       "pins": [
@@ -1968,7 +2143,7 @@
         {
           "number": "2",
           "name": "",
-          "net": "+5V_SW_TGT"
+          "net": "+5V_TGT_FUSED"
         }
       ],
       "notes": [
@@ -1982,18 +2157,18 @@
       "ref": "JP_TGT_PWR",
       "role": "target_power_enable_jumper",
       "value": "2P-Jumper",
-      "lib_id": "Connector_Generic:Conn_01x02",
-      "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x02_P2.54mm_Vertical",
+      "lib_id": "JLC-MCP-Connectors:HDR-1X2-2.54",
+      "footprint": "JLC-MCP:HDR-TH_2P-P2.54-V-M",
       "at": {
-        "x": 63.5,
-        "y": 647.7,
+        "x": 231.14000000000001,
+        "y": 685.8,
         "rotation": 0.0
       },
       "pins": [
         {
           "number": "1",
           "name": "",
-          "net": "+5V_SW_TGT"
+          "net": "+5V_TGT_FUSED"
         },
         {
           "number": "2",
@@ -2002,7 +2177,7 @@
         }
       ],
       "notes": [
-        "2-pin jumper for power enable/configuration"
+        "NexDAP: 2-pin 2.54mm target power jumper with local JLC-MCP footprint."
       ],
       "lcsc": "",
       "mpn": "",
@@ -2015,16 +2190,11 @@
       "lib_id": "JLC-MCP-Diodes:SRV05-4_C2836319",
       "footprint": "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
       "at": {
-        "x": 63.5,
-        "y": 685.8,
+        "x": 231.14000000000001,
+        "y": 723.9,
         "rotation": 0.0
       },
       "pins": [
-        {
-          "number": "5",
-          "name": "",
-          "net": "+3V3_MAIN"
-        },
         {
           "number": "2",
           "name": "",
@@ -2049,6 +2219,11 @@
           "number": "4",
           "name": "",
           "net": "TGT_nRESET"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "VTREF_TARGET"
         }
       ],
       "notes": [
@@ -2061,17 +2236,27 @@
     {
       "ref": "J_TGT",
       "role": "target_swd_connector",
-      "value": "Header-2.54-2x4P",
-      "lib_id": "JLC-MCP-Connectors:HDR-2X4-2.54",
-      "footprint": "JLC-MCP:HDR-TH_8P-P2.54-V-M-2X4",
+      "value": "Header-2.54-2x5P",
+      "lib_id": "JLC-MCP-Connectors:HDR-2X5-2.54",
+      "footprint": "JLC-MCP:HDR-TH_10P-P2.54-V-M-2X5",
       "at": {
-        "x": 63.5,
-        "y": 726.44,
+        "x": 231.14000000000001,
+        "y": 767.08,
         "rotation": 0.0
       },
       "pins": [
         {
+          "number": "9",
+          "name": "",
+          "net": "+5V_SW_TGT"
+        },
+        {
           "number": "6",
+          "name": "",
+          "net": "GND_HOST"
+        },
+        {
+          "number": "10",
           "name": "",
           "net": "GND_HOST"
         },
@@ -2096,13 +2281,23 @@
           "net": "TGT_nRESET"
         },
         {
+          "number": "7",
+          "name": "",
+          "net": "TGT_UART_TX"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "TGT_UART_RX"
+        },
+        {
           "number": "1",
           "name": "",
-          "net": "+5V_SW_TGT"
+          "net": "VTREF_TARGET"
         }
       ],
       "notes": [
-        "NexDAP: 2x4 2.54mm target SWD/UART header; generated local JLC-MCP-compatible footprint pending exact EasyEDA lock."
+        "NexDAP: 2x5 2.54mm target SWD/UART/VTREF header with local JLC-MCP footprint."
       ],
       "lcsc": "",
       "mpn": "",
@@ -2115,8 +2310,8 @@
       "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
       "footprint": "JLC-MCP:LED0603-RD",
       "at": {
-        "x": 226.06,
-        "y": 1079.5,
+        "x": 162.56,
+        "y": 114.3,
         "rotation": 0.0
       },
       "pins": [
@@ -2142,11 +2337,11 @@
       "ref": "R_LED_PWR",
       "role": "power_led_resistor",
       "value": "330R",
-      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
-      "footprint": "JLC-MCP:LED0603-RD",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 1130.3,
+        "x": 162.56,
+        "y": 165.1,
         "rotation": 0.0
       },
       "pins": [
@@ -2162,7 +2357,7 @@
         }
       ],
       "notes": [
-        "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -2175,8 +2370,8 @@
       "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
       "footprint": "JLC-MCP:LED0603-RD",
       "at": {
-        "x": 226.06,
-        "y": 1181.1,
+        "x": 162.56,
+        "y": 215.9,
         "rotation": 0.0
       },
       "pins": [
@@ -2205,8 +2400,8 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 1231.9,
+        "x": 162.56,
+        "y": 266.7,
         "rotation": 0.0
       },
       "pins": [
@@ -2222,7 +2417,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -2235,8 +2430,8 @@
       "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
       "footprint": "JLC-MCP:LED0603-RD",
       "at": {
-        "x": 226.06,
-        "y": 1282.7,
+        "x": 162.56,
+        "y": 317.5,
         "rotation": 0.0
       },
       "pins": [
@@ -2265,15 +2460,15 @@
       "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
       "footprint": "JLC-MCP:R0603",
       "at": {
-        "x": 226.06,
-        "y": 1333.5,
+        "x": 162.56,
+        "y": 368.3,
         "rotation": 0.0
       },
       "pins": [
         {
           "number": "1",
           "name": "",
-          "net": "+3V3_MAIN"
+          "net": "+5V_SW_TGT"
         },
         {
           "number": "2",
@@ -2282,7 +2477,7 @@
         }
       ],
       "notes": [
-        "JLC-MCP 0603 resistor symbol (EasyEDA origin)"
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
       ],
       "lcsc": "",
       "mpn": "",
@@ -2295,8 +2490,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 63.5,
-        "y": 751.84,
+        "x": 231.14000000000001,
+        "y": 800.1,
         "rotation": 0.0
       },
       "pins": [
@@ -2320,8 +2515,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 63.5,
-        "y": 779.78,
+        "x": 231.14000000000001,
+        "y": 828.04,
         "rotation": 0.0
       },
       "pins": [
@@ -2342,7 +2537,7 @@
   "nets": [],
   "diagnostics": {
     "warnings": [
-      "Auto schematic layout resolved 100 symbol overlap(s)."
+      "Auto schematic layout resolved 97 symbol overlap(s)."
     ],
     "unsupported": []
   }

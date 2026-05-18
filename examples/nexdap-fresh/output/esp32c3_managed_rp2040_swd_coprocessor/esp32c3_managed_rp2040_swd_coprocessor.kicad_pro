@@ -629,28 +629,36 @@
       {
         "filename": "esp32c3_managed_rp2040_swd_coprocessor.kicad_sch",
         "name": "esp32c3_managed_rp2040_swd_coprocessor",
-        "uuid": "fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13"
+        "uuid": "c5740606-62e4-4133-b325-b7f77e6140c3"
       }
     ],
-    "used_designators": "C_VTREF1,C_ESP_BULK1,C_RP_BULK1,C_BUCK_IN1,C_BUCK_OUT1,C_ESP_VDDA1,C_ESP_EN1,R_RP_BOOTSEL_PD1,C_RF_SHUNT1,R_SWCLK1,D_TGT_ESD1,D_USB_ESD1,SW_ESP_BOOT1,F_TGT1,J_TGT1,R_SWO1,JP_TGT_PWR1,L_BUCK1,L_RF1,LED_DAP1,Q_RP_BOOTSEL1,LED_PWR1,LED_TGT1,Q_NRST1,R_ESP_BOOT1,R_ESP_EN1,R_LED_DAP1,R_LED_PWR1,R_LED_TGT1,R_nRESET1,U_FLASH1,R_NRST_PU1,R_RP_BOOTSEL_GATE1,R_RP_RUN1,R_SWDIO1,SW_ESP_RST1,U_BUCK1",
+    "used_designators": "C_RP_BULK1,C_ESP_BULK1,C_BUCK_IN1,C_BUCK_IN_HF1,C_BUCK_OUT1,C_ESP_VDDA1,U_BUCK1,C_BUCK_OUT_HF1,C_ESP_EN1,R_RP_BOOTSEL_PD1,C_RF_SHUNT1,C_VTREF1,R_SWCLK1,D_TGT_ESD1,D_USB_ESD1,L_RF1,D_VBUS_TVS1,SW_ESP_BOOT1,F_TGT1,J_TGT1,R_SWO1,JP_TGT_PWR1,L_BUCK1,LED_DAP1,Q_RP_BOOTSEL1,LED_PWR1,LED_TGT1,Q_NRST1,R_ESP_BOOT1,R_ESP_EN1,R_LED_DAP1,R_LED_PWR1,R_LED_TGT1,R_nRESET1,U_FLASH1,R_TGT_UART_RX1,R_NRST_PU1,R_RP_BOOTSEL_GATE1,R_RP_RUN1,R_SWDIO1,R_TGT_UART_TX1,SW_ESP_RST1",
     "variants": []
   },
   "sheets": [
     [
-      "fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13",
+      "c5740606-62e4-4133-b325-b7f77e6140c3",
       "esp32c3_managed_rp2040_swd_coprocessor"
     ],
     [
-      "5d8516cd-1ea6-430f-ae0d-3e00461e2f51",
+      "8db7f367-c850-480b-97e2-46985d12a6d8",
       "01_power"
     ],
     [
-      "f96d90cd-06b7-4dc4-8fe2-bbc59600bb17",
+      "2773f375-0ef5-4752-8ed4-8bdc8cd78163",
+      "04_target"
+    ],
+    [
+      "a0766543-4026-4e36-b15c-bc9c2c9744ae",
       "02_mcu"
     ],
     [
-      "be331636-ff70-4cc4-9c64-22905e285697",
-      "03_target"
+      "83f751fa-392f-4f49-a380-087c905ad705",
+      "05_indicator"
+    ],
+    [
+      "0a6e3d98-6efa-46b3-9d74-83b4ddda7ad4",
+      "03_rf"
     ]
   ],
   "text_variables": {},

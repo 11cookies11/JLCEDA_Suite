@@ -995,9 +995,10 @@ def group_symbols_by_sheet(symbols: list[dict[str, Any]], topology: str = '') ->
         for block in blocks:
             if str(block):
                 block_to_sheet[str(block)] = name
+    single_sheet_name = sheet_order[0] if len(sheet_order) == 1 else ''
     for symbol in symbols:
         block = symbol_block(symbol)
-        sheet = block_to_sheet.get(block, block)
+        sheet = block_to_sheet.get(block, single_sheet_name or block)
         pages.setdefault(sheet, []).append(symbol)
     if sheet_order:
         for sheet in pages:
@@ -1234,12 +1235,16 @@ def write_hierarchical_project(plan: dict[str, Any], output_dir: Path, schematic
         )
         cursor_x += 66.04
 
-    driven_power_nets = power_output_net_names(base_symbols)
     flag_page_by_net: dict[str, str] = {}
     for page in sheet_pages:
-        for net_name in power_flag_net_names(set(page.get('pins', [])), net_kind_lookup):
-            if net_name in driven_power_nets:
-                continue
+        page_net_names = {
+            str(pin.get('net', '')).strip()
+            for symbol in page.get('symbols', [])
+            if isinstance(symbol, dict)
+            for pin in symbol.get('pins', [])
+            if isinstance(pin, dict) and str(pin.get('net', '')).strip()
+        }
+        for net_name in power_flag_net_names(page_net_names, net_kind_lookup):
             flag_page_by_net.setdefault(net_name, str(page['name']))
 
     schematic_file.write_text(render_root_schematic(plan, sheet_pages) + '\n', encoding='utf-8')
@@ -1382,6 +1387,7 @@ def write_fp_lib_table(output_dir: Path) -> None:
     (output_dir / 'fp-lib-table').write_text(content, encoding='utf-8')
 
     # Also write sym-lib-table for JLC symbols
+    output_resolved = output_dir.resolve()
     jlc_sym = _find_jlc_sym_file(output_dir)
     if jlc_sym:
         try:

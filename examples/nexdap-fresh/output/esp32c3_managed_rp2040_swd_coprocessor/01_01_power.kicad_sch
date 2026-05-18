@@ -2,7 +2,7 @@
 	(version 20260306)
 	(generator "eeschema")
 	(generator_version "10.0")
-	(uuid "0e43fcb8-1bf8-4b01-875d-71b9e5b2730c")
+	(uuid "c069ef05-a0c3-40d2-9839-846f4e01bdd4")
 	(paper "A4")
 	(lib_symbols
 		(symbol "JLC-MCP-Capacitors:CC0603KRX7R9BB104"
@@ -907,6 +907,119 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "JLC-MCP-Diodes:SMBJ58A_C353350"
+			(pin_names
+				(offset 0.254)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 0 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "SMBJ58A_C353350"
+				(at 0 -3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "JLC-MCP:SMF5.0A"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "SMBJ58A_C353350_0_1"
+				(rectangle
+					(start -2.54 1.27)
+					(end 2.54 -1.27)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(pin passive line
+					(at -5.08 0 0)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 5.08 0 180)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 		(symbol "JLC-MCP-Diodes:USBLC6-2SC6_C2827654"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1311,197 +1424,6 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "JLC-MCP-Imported:2450AT18A100E"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "AE"
-				(at 0 8.89 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "2450AT18A100E"
-				(at 0 -10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "JLC-MCP:ANT-SMD_L3.2-W1.6"
-				(at 0 -12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://lcsc.com/product-detail/RF-Antenna_JOHANSON_2450AT18A100E_2450AT18A100E_C89334.html"
-				(at 0 -15.24 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "Mini 2.45 GHz Antenna, Johanson Technology"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Manufacturer" "JOHANSON(绾︾堪閫?"
-				(at 0 -17.78 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "MPN" "2450AT18A100E"
-				(at 0 -20.32 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "LCSC Part" "C89334"
-				(at 0 -22.86 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "Antennas"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "2450AT18A100E_0_1"
-				(polyline
-					(pts
-						(xy 0 0) (xy -2.54 2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 3.81)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 0 0) (xy 0 -2.54)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(polyline
-					(pts
-						(xy 2.54 2.54) (xy 0 0)
-					)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin unspecified line
-					(at 0 -5.08 90)
-					(length 2.54)
-					(name "ANT"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at 0 3.81 270)
-					(length 2.54)
-					(name "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
 		(symbol "JLC-MCP-Imported:APH201208C2R2MP03"
 			(exclude_from_sim no)
 			(in_bom yes)
@@ -1682,14 +1604,17 @@
 			)
 			(embedded_fonts no)
 		)
-		(symbol "JLC-MCP-Imported:CS0402-3N9G-S"
+		(symbol "JLC-MCP-Misc:POLYFUSE_2P"
+			(pin_names
+				(offset 0.254)
+			)
 			(exclude_from_sim no)
 			(in_bom yes)
 			(on_board yes)
 			(in_pos_files yes)
 			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "L"
-				(at 0 5.08 0)
+			(property "Reference" "F"
+				(at 0 3.81 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -1698,8 +1623,8 @@
 					)
 				)
 			)
-			(property "Value" "CS0402-3N9G-S"
-				(at 0 -5.08 0)
+			(property "Value" "POLYFUSE_2P"
+				(at 0 -3.81 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(effects
@@ -1708,8 +1633,8 @@
 					)
 				)
 			)
-			(property "Footprint" "JLC-MCP:IND-SMD_L1.2-W0.7"
-				(at 0 -7.62 0)
+			(property "Footprint" "JLC-MCP:SMD1206-050-33"
+				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1719,8 +1644,8 @@
 					)
 				)
 			)
-			(property "Datasheet" "https://lcsc.com/product-detail/Inductors-SMD_Chilisin-Elec-CS0402-3N9G-S_C285959.html"
-				(at 0 -10.16 0)
+			(property "Datasheet" ""
+				(at 0 0 0)
 				(show_name no)
 				(do_not_autoplace no)
 				(hide yes)
@@ -1741,470 +1666,49 @@
 					)
 				)
 			)
-			(property "Manufacturer" "chilisin(濂囧姏鏂?"
-				(at 0 -12.7 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "MPN" "CS0402-3N9G-S"
-				(at 0 -15.24 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "LCSC Part" "C285959"
-				(at 0 -17.78 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "Inductors/Coils/Transformers"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "CS0402-3N9G-S_0_1"
-				(arc
-					(start -4.29 0.02)
-					(mid -3.28 1.11)
-					(end -2.27 0.02)
+			(symbol "POLYFUSE_2P_0_1"
+				(rectangle
+					(start -2.54 1.27)
+					(end 2.54 -1.27)
 					(stroke
-						(width 0)
+						(width 0.254)
 						(type default)
 					)
 					(fill
 						(type none)
 					)
 				)
-				(arc
-					(start -2.13 0.02)
-					(mid -1.12 1.11)
-					(end -0.11 0.02)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 0.02 0.02)
-					(mid 1.03 1.11)
-					(end 2.04 0.02)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(arc
-					(start 2.21 0.02)
-					(mid 3.22 1.09)
-					(end 4.23 0.02)
-					(stroke
-						(width 0)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-				(pin unspecified line
+			)
+			(symbol "POLYFUSE_2P_1_1"
+				(pin passive line
 					(at -5.08 0 0)
-					(length 1.27)
+					(length 2.54)
 					(name "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 1 1)
 							)
 						)
 					)
 					(number "1"
 						(effects
 							(font
-								(size 1.27 1.27)
+								(size 1 1)
 							)
 						)
 					)
 				)
-				(pin unspecified line
+				(pin passive line
 					(at 5.08 0 180)
-					(length 1.27)
+					(length 2.54)
 					(name "2"
 						(effects
 							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-					(number "2"
-						(effects
-							(font
-								(size 1.27 1.27)
-							)
-						)
-					)
-				)
-			)
-			(embedded_fonts no)
-		)
-		(symbol "JLC-MCP-Misc:MNCP380HSN05AAT1G"
-			(exclude_from_sim no)
-			(in_bom yes)
-			(on_board yes)
-			(in_pos_files yes)
-			(duplicate_pin_numbers_are_jumpers no)
-			(property "Reference" "U"
-				(at 0 10.16 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Value" "MNCP380HSN05AAT1G"
-				(at 0 7.62 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Footprint" "JLC-MCP:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR"
-				(at -1.778 0 90)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Datasheet" "https://www.lcsc.com/datasheet/C42403123.pdf"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Description" "SOT-23-5 Power Distribution Switches ROHS"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "LCSC" "C42403123"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Manufacturer" "MSKSEMI(美森科)"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Process" "SMT"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Attrition Qty" "0"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Class" "Extended Part"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Part" "MNCP380HSN05AAT1G"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Type" "Load Switch"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Number of Channels" "1"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Voltage - Supply" "2.4V~5.5V"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Operating Temperature	-" "-40℃~+85℃"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Maximum Continuous Current" "2A"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Features" "Soft-start、Under-voltage lockout、Overcurrent Protection、Over temperature protection、Short-Circuit  Protection、Reverse current blocking"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "RDS(on)" "80mΩ"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "Control Input Logic" "Active High"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(property "ki_keywords" "C42403123"
-				(at 0 0 0)
-				(show_name no)
-				(do_not_autoplace no)
-				(hide yes)
-				(effects
-					(font
-						(size 1.27 1.27)
-					)
-				)
-			)
-			(symbol "MNCP380HSN05AAT1G_0_1"
-				(rectangle
-					(start -7.62 5.08)
-					(end 7.62 -5.08)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type background)
-					)
-				)
-				(circle
-					(center -6.35 3.81)
-					(radius 0.381)
-					(stroke
-						(width 0.254)
-						(type default)
-					)
-					(fill
-						(type none)
-					)
-				)
-			)
-			(symbol "MNCP380HSN05AAT1G_1_1"
-				(pin power_out line
-					(at -10.16 2.54 0)
-					(length 2.54)
-					(name "VOUT"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-					(number "1"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at -10.16 -2.54 0)
-					(length 2.54)
-					(name "GND"
-						(effects
-							(font
 								(size 1 1)
 							)
 						)
 					)
 					(number "2"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-				)
-				(pin unspecified line
-					(at -10.16 0 0)
-					(length 2.54)
-					(name "SET"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-					(number "3"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-				)
-				(pin input line
-					(at 10.16 -2.54 180)
-					(length 2.54)
-					(name "EN"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-					(number "4"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-				)
-				(pin power_in line
-					(at 10.16 2.54 180)
-					(length 2.54)
-					(name "VIN"
-						(effects
-							(font
-								(size 1 1)
-							)
-						)
-					)
-					(number "5"
 						(effects
 							(font
 								(size 1 1)
@@ -2961,816 +2465,1387 @@
 			)
 			(embedded_fonts no)
 		)
+		(symbol "JLC-MCP-Resistors:0603WAF1003T5E"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.54 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "0603WAF1003T5E"
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "JLC-MCP:R0603"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1003T5E_C25803.pdf"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "100kΩ 100mW 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Product Page" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_100KR-1003-1_C25803.html"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "LCSC" "C25803"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Manufacturer" "UNI-ROYAL(厚声)"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Stock" "1342"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Price" "0.0017USD"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Process" "SMT"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Minimum Qty" "100"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Attrition Qty" "0"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Class" "Basic Part"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Part" "0603WAF1003T5E"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Resistance" "100kΩ"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Operating Temperature" "-55℃~+155℃"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Power(Watts)" "100mW"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Type" "Thick Film Resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Voltage-Supply(Max)" "75V"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Tolerance" "±1%"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Temperature Coefficient" "±100ppm/℃"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "C25803"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "0603WAF1003T5E_0_1"
+				(rectangle
+					(start -1.016 2.54)
+					(end 1.016 -2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "0603WAF1003T5E_1_1"
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "JLC-MCP-Resistors:0603WAF4533T5E"
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "R"
+				(at 2.54 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "0603WAF4533T5E"
+				(at -1.778 0 90)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" "JLC-MCP:R0603"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "453k 0603 chip resistor"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Part" "0603WAF4533T5E"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Resistance" "453k"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "0603WAF4533T5E_0_1"
+				(rectangle
+					(start -1.016 2.54)
+					(end 1.016 -2.54)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type background)
+					)
+				)
+			)
+			(symbol "0603WAF4533T5E_1_1"
+				(pin passive line
+					(at 0 -3.81 90)
+					(length 2.54)
+					(name "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 0 3.81 270)
+					(length 2.54)
+					(name "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
+		(symbol "power:PWR_FLAG"
+			(power global)
+			(pin_numbers
+				(hide yes)
+			)
+			(pin_names
+				(offset 0)
+				(hide yes)
+			)
+			(exclude_from_sim no)
+			(in_bom yes)
+			(on_board yes)
+			(in_pos_files yes)
+			(duplicate_pin_numbers_are_jumpers no)
+			(property "Reference" "#FLG"
+				(at 0 1.905 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Value" "PWR_FLAG"
+				(at 0 3.81 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Footprint" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Datasheet" ""
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "Description" "Special symbol for telling ERC where power comes from"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(property "ki_keywords" "flag power"
+				(at 0 0 0)
+				(show_name no)
+				(do_not_autoplace no)
+				(hide yes)
+				(effects
+					(font
+						(size 1.27 1.27)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_0"
+				(pin power_out line
+					(at 0 0 90)
+					(length 0)
+					(name ""
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+			)
+			(symbol "PWR_FLAG_0_1"
+				(polyline
+					(pts
+						(xy 0 0) (xy 0 1.27) (xy -1.016 1.905) (xy 0 2.54) (xy 1.016 1.905) (xy 0 1.27)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+			)
+			(embedded_fonts no)
+		)
 	)
 	(no_connect
-		(at 41.91 62.23)
-		(uuid "0b184c06-7ca0-4697-868d-b6cc726400c4")
+		(at 128.27 54.61)
+		(uuid "45fc5808-b71f-40a9-bc98-631ea34dc360")
 	)
 	(no_connect
-		(at 41.91 67.31)
-		(uuid "17f8d4c0-5569-4f08-8eeb-98096567f429")
+		(at 147.32 198.12)
+		(uuid "84a0a3dc-9503-4811-9eca-b5aceb110c85")
 	)
 	(no_connect
-		(at 41.91 69.85)
-		(uuid "19d9ad63-9220-4e93-b396-7b0fe9e31794")
+		(at 128.27 64.77)
+		(uuid "a56171eb-7f43-4085-b9f3-1c8e8ac90d4a")
 	)
 	(no_connect
-		(at 60.96 220.98)
-		(uuid "2067b6ee-731a-4a5b-892f-babe62dd3894")
+		(at 128.27 62.23)
+		(uuid "bc5220db-b0e9-4e85-9c1f-87bb2e57b7b7")
 	)
 	(no_connect
-		(at 60.96 193.04)
-		(uuid "2705093e-993b-4b6e-8f2e-4f18b07ed093")
+		(at 128.27 44.45)
+		(uuid "bea4fc6d-179a-443b-9c33-dd3f19abc3e6")
 	)
 	(no_connect
-		(at 41.91 54.61)
-		(uuid "4be8ed52-ee6e-4fbe-bfa6-baaeb3eb4d65")
+		(at 128.27 69.85)
+		(uuid "c08267c8-5d7a-4e92-bf8c-49c09eb736be")
 	)
 	(no_connect
-		(at 41.91 64.77)
-		(uuid "749bbc12-2299-4399-8a1f-c8ae942623cc")
+		(at 147.32 193.04)
+		(uuid "d9493b3d-c7ae-41b1-a352-767ea1e6f65e")
 	)
 	(no_connect
-		(at 40.64 223.52)
-		(uuid "a696cf26-89ac-4196-8c27-72f65573ed8a")
-	)
-	(no_connect
-		(at 41.91 44.45)
-		(uuid "b84613f3-ab3e-48bc-89d9-a15c3fb45aec")
-	)
-	(no_connect
-		(at 60.96 226.06)
-		(uuid "c80b796b-eb1e-46ab-9e09-b72cbe6b91d8")
-	)
-	(no_connect
-		(at 60.96 198.12)
-		(uuid "f3e83fc9-a580-47c3-a78e-e773d008c705")
+		(at 128.27 67.31)
+		(uuid "daeffe3e-8888-42a5-a19c-b7e49b02945a")
 	)
 	(wire
 		(pts
-			(xy 50.8 904.24) (xy 50.8 908.05)
+			(xy 128.27 226.06) (xy 124.46 226.06)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0458356e-90de-4fe4-85b1-edbbfb7866cc")
+		(uuid "052cad5a-3c2a-4cc7-87a4-a28a21eba613")
 	)
 	(wire
 		(pts
-			(xy 40.64 226.06) (xy 36.83 226.06)
+			(xy 128.27 46.99) (xy 124.46 46.99)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0859e356-b3e0-474c-b001-c8d388446381")
+		(uuid "0727010b-4832-44ae-897b-a2973d82d039")
 	)
 	(wire
 		(pts
-			(xy 50.8 619.76) (xy 50.8 623.57)
+			(xy 137.16 774.7) (xy 137.16 770.89)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0a3dd6a7-bb92-436e-b04b-b6dcd4fa0a58")
+		(uuid "18a5ae89-3256-49a1-aa1b-45ac385bf1f0")
 	)
 	(wire
 		(pts
-			(xy 41.91 46.99) (xy 38.1 46.99)
+			(xy 137.16 342.9) (xy 137.16 346.71)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "0cd35957-05ac-457b-a79f-ce41062e370c")
+		(uuid "18b02f43-0e73-4221-a8da-4f645009046d")
 	)
 	(wire
 		(pts
-			(xy 50.8 706.12) (xy 50.8 702.31)
+			(xy 137.16 726.44) (xy 137.16 722.63)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "11b3d088-2061-4c36-a49d-a8570b9ebc6b")
+		(uuid "1c3903e8-3606-4104-9b26-b47e58224e14")
 	)
 	(wire
 		(pts
-			(xy 41.91 248.92) (xy 38.1 248.92)
+			(xy 137.16 490.22) (xy 137.16 494.03)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "13e73f14-2c4b-4aa7-b8b3-1354b0cc9c55")
+		(uuid "1ce2086d-2e77-4e9a-9c05-ac1093df4fe1")
 	)
 	(wire
 		(pts
-			(xy 50.8 463.55) (xy 50.8 459.74)
+			(xy 137.16 678.18) (xy 137.16 674.37)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "196ee8d1-eb80-4c41-b582-d7ff363ba6d0")
+		(uuid "1fca748a-4075-4371-86a6-8e21ee28febc")
 	)
 	(wire
 		(pts
-			(xy 41.91 49.53) (xy 38.1 49.53)
+			(xy 128.27 59.69) (xy 124.46 59.69)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "21e3f516-91ff-4e88-8dc8-b366a304a442")
+		(uuid "1ffcb7cb-7926-4090-ae03-c9bd08f56f1b")
 	)
 	(wire
 		(pts
-			(xy 129.54 50.8) (xy 133.35 50.8)
+			(xy 137.16 533.4) (xy 137.16 529.59)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "2fa87b8e-cf6d-4531-b34f-e555e78aa531")
+		(uuid "20816176-a659-4021-b7ec-929efc853b20")
 	)
 	(wire
 		(pts
-			(xy 50.8 899.16) (xy 50.8 895.35)
+			(xy 137.16 538.48) (xy 137.16 542.29)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "369e9867-4c42-4dd3-b9b8-289e69b275e8")
+		(uuid "24a01154-3844-4a8b-b83d-d0faf956b7c9")
 	)
 	(wire
 		(pts
-			(xy 50.8 952.5) (xy 50.8 956.31)
+			(xy 146.05 220.98) (xy 149.86 220.98)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "380504fb-2637-4d3b-b40c-e879cc4cdd2e")
+		(uuid "2ac5c861-33fe-48c1-972f-259736084dac")
 	)
 	(wire
 		(pts
-			(xy 50.8 561.34) (xy 50.8 557.53)
+			(xy 30.48 129.54) (xy 30.48 133.35)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "3d022d34-5c8b-49bf-b5b7-6629e629b592")
+		(uuid "2bcb2542-7978-401c-98e8-2df045fbf06b")
 	)
 	(wire
 		(pts
-			(xy 50.8 610.87) (xy 50.8 607.06)
+			(xy 132.08 254) (xy 128.27 254)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "40a19378-3d75-469c-b6d7-e7bff4757187")
+		(uuid "308c03cd-bcc7-447d-92ee-308571a826a5")
 	)
 	(wire
 		(pts
-			(xy 50.8 317.5) (xy 50.8 313.69)
+			(xy 128.27 36.83) (xy 124.46 36.83)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "441c8745-df95-40c2-b95f-f03aaf129006")
+		(uuid "358fb0d7-f851-4b2f-8d4d-e558d9f0ce2d")
 	)
 	(wire
 		(pts
-			(xy 41.91 34.29) (xy 38.1 34.29)
+			(xy 137.16 294.64) (xy 137.16 298.45)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "46560b10-abb6-4bd5-8986-b5db38f74494")
+		(uuid "382f9df8-982e-481c-9728-cf4ac6da612a")
 	)
 	(wire
 		(pts
-			(xy 50.8 759.46) (xy 50.8 763.27)
+			(xy 50.8 271.78) (xy 50.8 275.59)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4d6dcf97-05b3-4d1f-bde7-8c0543a39727")
+		(uuid "402ab871-d462-4acf-bca7-2c84505ef309")
 	)
 	(wire
 		(pts
-			(xy 50.8 163.83) (xy 50.8 167.64)
+			(xy 137.16 105.41) (xy 137.16 101.6)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "4ebf516a-2af1-4576-aab5-e6ceb9cb6156")
+		(uuid "46b40190-bd73-4340-854d-63367a580137")
 	)
 	(wire
 		(pts
-			(xy 50.8 113.03) (xy 50.8 116.84)
+			(xy 137.16 384.81) (xy 137.16 381)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "5549efac-1e2b-449a-aac3-af48b51feec9")
+		(uuid "48884ca9-55ec-4b14-aaba-31eaa2633fdd")
 	)
 	(wire
 		(pts
-			(xy 50.8 322.58) (xy 50.8 326.39)
+			(xy 137.16 635) (xy 137.16 638.81)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "686a95a2-0d1e-494a-ae7f-51559e243852")
+		(uuid "4b498e4b-2fe1-4596-8631-1f7e8ff3a2de")
 	)
 	(wire
 		(pts
-			(xy 41.91 31.75) (xy 38.1 31.75)
+			(xy 137.16 731.52) (xy 137.16 735.33)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6b8bbb8f-e491-4786-ac8b-841525648336")
+		(uuid "50cf24a9-c59d-4d47-9aa1-66236971a88c")
 	)
 	(wire
 		(pts
-			(xy 40.64 220.98) (xy 36.83 220.98)
+			(xy 128.27 52.07) (xy 124.46 52.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6c522166-4b6a-4df7-a30e-990958caf9b7")
+		(uuid "511de7c0-8b31-41e6-a15e-3a84ae3df8a5")
 	)
 	(wire
 		(pts
-			(xy 50.8 156.21) (xy 50.8 152.4)
+			(xy 137.16 779.78) (xy 137.16 783.59)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6e5ddb63-3947-483f-a2aa-ea2154f0c844")
+		(uuid "5c231fca-1ba5-49c2-a325-6cbe0bd986ff")
 	)
 	(wire
 		(pts
-			(xy 59.69 248.92) (xy 63.5 248.92)
+			(xy 137.16 822.96) (xy 137.16 819.15)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6e69383e-da09-41d1-a36a-68e244834759")
+		(uuid "5eac8292-9dd3-419f-a4ef-16028680951f")
 	)
 	(wire
 		(pts
-			(xy 40.64 198.12) (xy 36.83 198.12)
+			(xy 30.48 121.92) (xy 30.48 125.73)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "6fc35870-bc8c-4ca0-a39f-e093a8366c50")
+		(uuid "60d6f7ad-21bf-40f9-a1a0-b2c28331c431")
 	)
 	(wire
 		(pts
-			(xy 60.96 195.58) (xy 64.77 195.58)
+			(xy 128.27 34.29) (xy 124.46 34.29)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "74e3c388-f42d-4bfa-b422-018ed8cb0a10")
+		(uuid "61eae628-3d21-4d77-86fd-b71dd383519f")
 	)
 	(wire
 		(pts
-			(xy 59.69 254) (xy 63.5 254)
+			(xy 137.16 163.83) (xy 137.16 167.64)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "76e17852-f464-4e54-a14a-cf1ab473a906")
+		(uuid "687d9f21-1799-4efa-86e1-2694e0650e90")
 	)
 	(wire
 		(pts
-			(xy 50.8 513.08) (xy 50.8 509.27)
+			(xy 127 198.12) (xy 123.19 198.12)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "78d3922d-18a7-4132-b8e5-73eedc15bf89")
+		(uuid "6aa07980-1d70-40f1-bc2f-053f2bd885ab")
 	)
 	(wire
 		(pts
-			(xy 41.91 254) (xy 38.1 254)
+			(xy 137.16 581.66) (xy 137.16 577.85)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "80d8d80e-30a0-4dc5-af8c-44fb0abf9297")
+		(uuid "6c20a213-a761-49eb-83ae-c5cb2257619f")
 	)
 	(wire
 		(pts
-			(xy 50.8 754.38) (xy 50.8 750.57)
+			(xy 128.27 223.52) (xy 124.46 223.52)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "89ecbf50-461c-447e-baf8-9c48aadd38b1")
+		(uuid "7da1ba9e-dc46-45f9-bda9-8c0971aac546")
 	)
 	(wire
 		(pts
-			(xy 41.91 39.37) (xy 38.1 39.37)
+			(xy 30.48 114.3) (xy 30.48 118.11)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "93759973-cfb3-4741-b92d-fd177f22a96e")
+		(uuid "7f2f026b-a183-4572-b057-cd51e1e4a2e4")
 	)
 	(wire
 		(pts
-			(xy 50.8 802.64) (xy 50.8 798.83)
+			(xy 137.16 586.74) (xy 137.16 590.55)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "991d7a4a-c82f-42bc-9e12-57b43c820e5b")
+		(uuid "82800d0e-3afc-4f65-8af0-fece6f5e6001")
 	)
 	(wire
 		(pts
-			(xy 119.38 50.8) (xy 115.57 50.8)
+			(xy 137.16 392.43) (xy 137.16 396.24)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "992165f6-ce5c-4d5a-a2ca-b5205da3953c")
+		(uuid "8da67726-bdd5-4228-b149-f4a9cc64eee5")
 	)
 	(wire
 		(pts
-			(xy 50.8 657.86) (xy 50.8 654.05)
+			(xy 68.58 50.8) (xy 72.39 50.8)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "9f9146c5-411d-4c90-be54-91349ad7d874")
+		(uuid "8e38ab96-87ab-4f64-92b9-0d520a898f33")
 	)
 	(wire
 		(pts
-			(xy 41.91 251.46) (xy 38.1 251.46)
+			(xy 137.16 289.56) (xy 137.16 285.75)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a12836f7-8d1d-4cfb-b4cc-45d4014bf4fd")
+		(uuid "8e77d5c5-508a-4c02-8e14-ddd9facafc23")
 	)
 	(wire
 		(pts
-			(xy 50.8 662.94) (xy 50.8 666.75)
+			(xy 142.24 254) (xy 146.05 254)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a2e4a37a-52ed-411d-a6aa-50801ce988db")
+		(uuid "9248c73c-e4a6-4db4-8c2c-135a0ffcd2d1")
 	)
 	(wire
 		(pts
-			(xy 50.8 471.17) (xy 50.8 474.98)
+			(xy 127 193.04) (xy 123.19 193.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a549b97f-62ba-4dd5-aa01-88112c130ba5")
+		(uuid "9355ef4b-55ed-4079-b2a3-77c54714ce41")
 	)
 	(wire
 		(pts
-			(xy 41.91 41.91) (xy 38.1 41.91)
+			(xy 128.27 31.75) (xy 124.46 31.75)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "a59af41a-6ba0-4cf0-8cc7-56133e5f8da7")
+		(uuid "9624644c-d465-421a-b69c-5f38323c82fd")
 	)
 	(wire
 		(pts
-			(xy 50.8 947.42) (xy 50.8 943.61)
+			(xy 137.16 629.92) (xy 137.16 626.11)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ad4d63c5-d91d-40f7-8e06-5bc65e574734")
+		(uuid "96ad59f0-40cd-4a55-af67-d1621b922c75")
 	)
 	(wire
 		(pts
-			(xy 40.64 195.58) (xy 36.83 195.58)
+			(xy 137.16 485.14) (xy 137.16 481.33)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b23f87bc-411d-4bfb-a8fc-202cfa379020")
+		(uuid "9a6964d8-c34b-4232-9ee2-5c396424640f")
 	)
 	(wire
 		(pts
-			(xy 45.72 281.94) (xy 41.91 281.94)
+			(xy 137.16 156.21) (xy 137.16 152.4)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "b4788f9b-5c23-484a-8669-28f5a10b65eb")
+		(uuid "a38a2e3d-2910-4e51-a966-d390ddbf5fa5")
 	)
 	(wire
 		(pts
-			(xy 55.88 281.94) (xy 59.69 281.94)
+			(xy 58.42 78.74) (xy 54.61 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c41708ae-2b9f-496b-a147-4c4a3fd7e6bc")
+		(uuid "a91ddd53-1aa9-4830-8736-e8bb989ac954")
 	)
 	(wire
 		(pts
-			(xy 50.8 420.37) (xy 50.8 424.18)
+			(xy 50.8 266.7) (xy 50.8 262.89)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c4941a3f-3f82-4387-94d2-bfc25b622926")
+		(uuid "b2c363fc-c6b8-464b-8874-44e05823f351")
 	)
 	(wire
 		(pts
-			(xy 50.8 807.72) (xy 50.8 811.53)
+			(xy 128.27 39.37) (xy 124.46 39.37)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c5ee63de-3fcd-4e5f-a445-e6201e3dcfca")
+		(uuid "ba39ac5a-29ec-4b8b-984e-0e6c33586b04")
 	)
 	(wire
 		(pts
-			(xy 50.8 855.98) (xy 50.8 859.79)
+			(xy 146.05 226.06) (xy 149.86 226.06)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "c6f42b2f-2ab0-4b76-8120-5a46c7cc6fe6")
+		(uuid "be5dc0b0-8572-49b0-b48b-05b5f93ffa3d")
 	)
 	(wire
 		(pts
-			(xy 50.8 711.2) (xy 50.8 715.01)
+			(xy 137.16 828.04) (xy 137.16 831.85)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ca037e2a-9e2f-4652-a6a5-3f2ab2e42675")
+		(uuid "c2a955bb-915d-46e0-b1c1-9a9bef6458a7")
 	)
 	(wire
 		(pts
-			(xy 41.91 36.83) (xy 38.1 36.83)
+			(xy 147.32 195.58) (xy 151.13 195.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cadd39e1-f04e-45fc-89d2-ddfe7589e336")
+		(uuid "c81480f8-5b83-4753-afd4-a78de4aaa766")
 	)
 	(wire
 		(pts
-			(xy 41.91 57.15) (xy 38.1 57.15)
+			(xy 30.48 144.78) (xy 30.48 148.59)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "cae95c50-8b16-4bd1-a68b-0fa9937b0717")
+		(uuid "ca776205-3daf-49a3-8141-b3cdf19a78fb")
 	)
 	(wire
 		(pts
-			(xy 50.8 365.76) (xy 50.8 361.95)
+			(xy 137.16 443.23) (xy 137.16 447.04)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ced88bae-7cbf-4e2b-9f19-954915858fd4")
+		(uuid "d80e5534-360f-4642-9c77-15cecf22bb98")
 	)
 	(wire
 		(pts
-			(xy 50.8 518.16) (xy 50.8 521.97)
+			(xy 96.52 266.7) (xy 96.52 262.89)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "d87e9f90-1777-478c-b401-a8c2f827f915")
+		(uuid "dbe8c602-c619-4850-9ae3-585771b0c9bc")
 	)
 	(wire
 		(pts
-			(xy 50.8 566.42) (xy 50.8 570.23)
+			(xy 30.48 137.16) (xy 30.48 140.97)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "dbb49352-493a-4ebb-ac3e-8bdb7fda1d72")
+		(uuid "dbff5fb1-3c6f-453d-8689-c1603f73049c")
 	)
 	(wire
 		(pts
-			(xy 40.64 193.04) (xy 36.83 193.04)
+			(xy 128.27 57.15) (xy 124.46 57.15)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e007f2ce-0d14-454a-bb09-b64fc4235a0e")
+		(uuid "de34fb4e-d2a2-4b3d-bbac-fc7a512ecd01")
 	)
 	(wire
 		(pts
-			(xy 50.8 850.9) (xy 50.8 847.09)
+			(xy 127 195.58) (xy 123.19 195.58)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e61162bc-a25b-4e68-8171-397ec3a9e6ba")
+		(uuid "df273c98-7a06-4592-b8c4-d57bc3cabcf9")
 	)
 	(wire
 		(pts
-			(xy 41.91 59.69) (xy 38.1 59.69)
+			(xy 137.16 337.82) (xy 137.16 334.01)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "e939c54b-25e1-473e-912e-4cb6fda4e70b")
+		(uuid "e17e37ed-06c9-4cf3-a324-096ee6dd7fa6")
 	)
 	(wire
 		(pts
-			(xy 50.8 105.41) (xy 50.8 101.6)
+			(xy 137.16 113.03) (xy 137.16 116.84)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "ec618f0d-c9b7-48d3-a9f4-554af3cd6424")
+		(uuid "e1ac487f-de09-4de8-84c1-95345667d2b5")
 	)
 	(wire
 		(pts
-			(xy 50.8 370.84) (xy 50.8 374.65)
+			(xy 128.27 49.53) (xy 124.46 49.53)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f00af444-a76e-48d5-9b6b-54b2812e800c")
+		(uuid "e354dbf7-51b2-4d84-b77a-997d43c722c7")
 	)
 	(wire
 		(pts
-			(xy 41.91 52.07) (xy 38.1 52.07)
+			(xy 137.16 683.26) (xy 137.16 687.07)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f3ee2e89-e660-4084-96c0-13b629575cce")
+		(uuid "e5215f3b-658e-47b1-a1f1-4c0feead91a7")
 	)
 	(wire
 		(pts
-			(xy 50.8 412.75) (xy 50.8 408.94)
+			(xy 68.58 78.74) (xy 72.39 78.74)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "f53cca53-8cdf-48c8-bf4c-9d6e754fb018")
+		(uuid "ed42617d-6fb0-4bf5-80d2-4304c189d1ed")
+	)
+	(wire
+		(pts
+			(xy 137.16 435.61) (xy 137.16 431.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f326315d-61eb-448b-ae1b-84a2eb82fee7")
+	)
+	(wire
+		(pts
+			(xy 58.42 50.8) (xy 54.61 50.8)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f386f1e4-ed06-4f3a-8f7f-6e2b5bc3ff12")
+	)
+	(wire
+		(pts
+			(xy 128.27 220.98) (xy 124.46 220.98)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f5cdcd40-2374-4097-8000-03507b3f0904")
+	)
+	(wire
+		(pts
+			(xy 128.27 41.91) (xy 124.46 41.91)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "f867570e-8a42-4f85-85bd-b50ea80e0a6e")
+	)
+	(wire
+		(pts
+			(xy 96.52 271.78) (xy 96.52 275.59)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "fa0caac3-64f0-4f51-8b77-9555f9b5c399")
 	)
 	(label "USB_CC1"
-		(at 50.8 116.84 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "1e910ec2-4450-4968-9a8b-45a75f5d5020")
-	)
-	(label "USB_DP"
-		(at 38.1 49.53 180)
+		(at 124.46 36.83 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "299326ac-6718-48cb-91c7-fce162eb4772")
-	)
-	(label "BUCK_FB"
-		(at 50.8 408.94 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "2dbfaa86-9263-446c-a99a-c4b9cb3d3190")
-	)
-	(label "L_BUCK_SW"
-		(at 41.91 281.94 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "31e65517-06ab-47ea-b518-f7e7dee5e0f6")
-	)
-	(label "USB_CC2"
-		(at 50.8 167.64 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "3331bd60-d1e4-43f1-9fc5-3ac47f2a7f6a")
-	)
-	(label "USB_DP"
-		(at 36.83 193.04 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "40342bfb-84da-4453-bb58-a8bad595bdf2")
-	)
-	(label "RF_ANT"
-		(at 50.8 607.06 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "5046da19-90a6-4897-bccd-1d48686842af")
-	)
-	(label "USB_DM"
-		(at 38.1 41.91 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "635e72f4-cce8-4e25-9563-3f52b124ab8d")
-	)
-	(label "USB_DM"
-		(at 38.1 52.07 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "73f6f553-ce90-4ef7-bd62-64a5c5433d6e")
+		(uuid "1040f4c2-d89e-4a25-a44b-a39c88e30018")
 	)
 	(label "USB_CC1"
-		(at 38.1 36.83 180)
+		(at 137.16 116.84 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
-			(justify right)
 		)
-		(uuid "8130389d-cd71-46a9-af57-ff0c33338eec")
-	)
-	(label "L_BUCK_SW"
-		(at 38.1 254 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "986363a0-7412-4865-aa8c-010684da0df6")
-	)
-	(label "USB_CC2"
-		(at 38.1 46.99 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "98e325f8-9e8d-49f8-8e56-3ef03c4358e2")
+		(uuid "14b96492-457b-496e-9360-7c1521bba7b0")
 	)
 	(label "BUCK_FB"
-		(at 63.5 248.92 0)
+		(at 137.16 447.04 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "36f191bf-5828-4ded-adaa-78a80903e3c2")
+	)
+	(label "USB_DP"
+		(at 123.19 193.04 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "5033dc42-ed7e-4fe4-a0c1-49ec160e2837")
+	)
+	(label "USB_CC2"
+		(at 137.16 167.64 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "50c8411a-4dc5-4a7f-9a2a-25f0a1f12efa")
+	)
+	(label "USB_CC2"
+		(at 124.46 46.99 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "8003650c-4e85-44a1-a96d-4c750c9d7b2a")
+	)
+	(label "USB_DM"
+		(at 124.46 52.07 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "82423f22-3e9e-4a7e-b12c-34bfddf976ed")
+	)
+	(label "BUCK_FB"
+		(at 149.86 220.98 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "a817cfcd-ae62-4e76-b497-2fcb5c1e100b")
-	)
-	(label "RF_ANT"
-		(at 50.8 557.53 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "c04a95ef-e3b2-49ac-9cc3-32517f218e45")
-	)
-	(label "ESP_RF_OUT"
-		(at 115.57 50.8 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "d46a5ea7-7810-4534-bd01-0d9a8115f21c")
-	)
-	(label "RF_ANT"
-		(at 133.35 50.8 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "d8316823-d040-4f73-812f-3a6e0e6cc2dd")
-	)
-	(label "BUCK_FB"
-		(at 50.8 474.98 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "dc5f6a44-2d34-4441-ab25-d283812c4bba")
-	)
-	(label "USB_DP"
-		(at 38.1 39.37 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "eaf018fc-cb92-464d-9ac2-1edc9c5edb05")
+		(uuid "b1a60b9e-f409-439c-a64f-7c8f182466de")
 	)
 	(label "USB_DM"
-		(at 36.83 198.12 180)
+		(at 124.46 41.91 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "f0a7599d-9fa0-4efd-84a7-cf0afadb4dd3")
+		(uuid "b2b093c4-66dd-4b0c-918e-a9c3325160a2")
+	)
+	(label "L_BUCK_SW"
+		(at 128.27 254 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "b52b3dbf-4864-4fa5-b42a-489478560123")
+	)
+	(label "USB_DP"
+		(at 124.46 39.37 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "c963831a-aa29-4b8e-b132-34a7290a89df")
+	)
+	(label "L_BUCK_SW"
+		(at 124.46 226.06 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "d3289ab6-a8d2-4694-b0a9-f59d2f27521a")
+	)
+	(label "USB_DP"
+		(at 124.46 49.53 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e0145c72-494a-4e3b-894c-d264b5cdc3a3")
+	)
+	(label "USB_DM"
+		(at 123.19 198.12 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "e14b911c-e5c7-4442-8059-0dfabf7bfec6")
+	)
+	(label "BUCK_FB"
+		(at 137.16 381 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "f6261b18-2e23-4608-abc4-ac06b3318de4")
 	)
 	(global_label "GND_HOST"
 		(shape input)
-		(at 50.8 521.97 0)
+		(at 96.52 275.59 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "06004dfd-43cb-4366-badc-e5f4350b9329")
+		(uuid "019bb2f7-9511-4445-85ca-bfe0100ad062")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 521.97 0)
+			(at 96.52 275.59 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3783,187 +3858,15 @@
 	)
 	(global_label "+3V3_MAIN"
 		(shape input)
-		(at 50.8 424.18 0)
+		(at 137.16 481.33 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "0bd7bb9e-1802-47bd-94de-c814edd290f3")
+		(uuid "054ea5a0-4ea6-44bb-8686-dc3fe4cad06e")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 424.18 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 374.65 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "0d518ee1-ea8a-4c19-8ddb-ad1318dede29")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 374.65 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 38.1 251.46 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "10e4949f-3e8c-46d3-81ab-20565daa14e9")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 38.1 251.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 459.74 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "11800fdd-a41e-4e23-aa9e-0ef02f316293")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 459.74 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 38.1 59.69 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "15e0b9b3-6d14-4257-ab3a-c572683faa34")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 38.1 59.69 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 326.39 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "1d181d9d-9f9a-486c-aaf4-26d1a2541591")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 326.39 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "USB_VBUS"
-		(shape input)
-		(at 38.1 57.15 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "2f7150a5-1b5e-4c32-b66c-03133335a284")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 38.1 57.15 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 908.05 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "38420053-1705-4bc9-9ab2-5e38cceec4dd")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 908.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 38.1 248.92 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "45da34e4-f279-44f2-9629-4b9f34c15455")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 38.1 248.92 0)
+			(at 137.16 481.33 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -3976,80 +3879,79 @@
 	)
 	(global_label "+5V_USB_PROTECTED"
 		(shape input)
-		(at 63.5 254 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "4f2f4328-e7df-4c11-959e-2cd0257f5b0b")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 63.5 254 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 50.8 654.05 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "541689ec-6148-414c-8a44-87aba8380a64")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 654.05 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 50.8 702.31 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "5f072543-8335-4136-aaa8-adf3618db775")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 702.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "USB_VBUS"
-		(shape input)
-		(at 38.1 34.29 180)
+		(at 124.46 220.98 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "6314b838-d2c2-407c-a07c-eb33cd51480a")
+		(uuid "176fa936-8887-4928-a818-ed84e166bc19")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 38.1 34.29 0)
+			(at 124.46 220.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 137.16 722.63 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "1bd5f993-a8b0-423a-b769-a9d567f0ee15")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 722.63 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_USB_PROTECTED"
+		(shape input)
+		(at 50.8 262.89 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "221ecf4d-c242-408a-8d2f-865a4eeec3bb")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 262.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 137.16 626.11 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "25bf57f1-d3bd-4ff2-a412-0e56a6564bd6")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 626.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4062,16 +3964,547 @@
 	)
 	(global_label "GND_HOST"
 		(shape input)
-		(at 36.83 195.58 180)
+		(at 137.16 735.33 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2696008d-036f-417b-82fb-bc4f07e14e94")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 735.33 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_VBUS"
+		(shape input)
+		(at 124.46 34.29 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "64dc1e6f-2e4d-4262-8a70-35c800c2d4da")
+		(uuid "2795ee5d-11a6-47cd-814b-c5bd5490608c")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 36.83 195.58 0)
+			(at 124.46 34.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_USB_PROTECTED"
+		(shape input)
+		(at 149.86 226.06 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "296bcf1c-ca42-415e-ad40-4840849475c8")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 149.86 226.06 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 431.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "2bc2f2c3-2d4a-41a5-bbdb-b24fa4d1083f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 431.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 298.45 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "384d9a37-e63c-4588-b893-13a8a8abcbe0")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 298.45 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 137.16 674.37 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3f886d8f-3400-4263-81b2-3a56325b2f0d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 674.37 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 30.48 125.73 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "402dde05-5338-4fb6-85c6-a3fd498fa381")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 125.73 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_USB_PROTECTED"
+		(shape input)
+		(at 151.13 195.58 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "4679cbff-7f7f-43b3-85ff-039d03abdb3d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 151.13 195.58 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 72.39 78.74 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "47fb68f3-17da-48e7-bd49-63b181201f74")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 72.39 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 783.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "571b6dc7-26de-4b07-91e1-12b425c13547")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 783.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 96.52 262.89 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "5ca491a8-7baa-44c4-ad49-876eadfb7329")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 96.52 262.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_VBUS"
+		(shape input)
+		(at 124.46 57.15 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "60640564-f9ae-47d1-ac35-6812b084e80c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 57.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 831.85 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "618055f8-7661-4df1-b992-58dcf53520ae")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 831.85 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 137.16 529.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "628fdd29-5e21-4f89-a85a-a3d6d7bc25e3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 529.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 101.6 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "63169063-b6ca-4246-8a34-cf2b43ae20e9")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 101.6 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 137.16 819.15 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6655fe85-44a2-4596-902d-7d52df015938")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 819.15 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_USB_PROTECTED"
+		(shape input)
+		(at 30.48 133.35 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6679e2da-dccf-4ce0-b038-dd0eb7192197")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 133.35 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 137.16 396.24 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "699edb8b-bc9f-4784-9a67-0da3879ac880")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 396.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 590.55 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "6dcb46e1-c135-4076-8084-586d77f0e02f")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 590.55 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "USB_VBUS"
+		(shape input)
+		(at 30.48 148.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "72c3f83a-f4e1-4e76-ba20-a300115ffd0c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 148.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 50.8 275.59 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "79ba0fc8-cf86-4e8a-b334-cd177cbbe899")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 50.8 275.59 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 124.46 31.75 180)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right)
+		)
+		(uuid "7caeddbe-edf6-40ac-b538-fa23508c8611")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 124.46 31.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+5V_USB_PROTECTED"
+		(shape input)
+		(at 72.39 50.8 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left)
+		)
+		(uuid "85f8c6b0-0c29-4bcf-bcc8-6c8bd68b4e63")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 72.39 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+3V3_MAIN"
+		(shape input)
+		(at 137.16 334.01 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "86cbd9ac-4201-49d9-9088-829a23d30cb3")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 334.01 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 494.03 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "8a481ea4-be1f-40a0-9ea4-c20d37aa354c")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 494.03 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 346.71 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "90857843-8759-4b58-bb3e-dd7a053cc669")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 346.71 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4084,100 +4517,15 @@
 	)
 	(global_label "+1V1"
 		(shape input)
-		(at 50.8 895.35 0)
+		(at 30.48 118.11 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "6729a2e3-8ccf-43d7-a486-e4dc675f2e5f")
+		(uuid "9ecb9065-a0ee-4d9d-8a1a-564b7ee6ba3a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 895.35 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 715.01 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "6e0e41a3-2315-41a3-8099-e70b7986416c")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 715.01 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 570.23 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "7048865d-5c81-495d-a719-f2f08e72031d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 570.23 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V_USB_PROTECTED"
-		(shape input)
-		(at 64.77 195.58 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left)
-		)
-		(uuid "81a14891-f025-4603-b764-73400acfc2bf")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 64.77 195.58 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+5V_USB_PROTECTED"
-		(shape input)
-		(at 50.8 313.69 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "854ab768-94ad-4756-bf63-2663f35348c8")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 313.69 0)
+			(at 30.48 118.11 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4190,16 +4538,16 @@
 	)
 	(global_label "+3V3_MAIN"
 		(shape input)
-		(at 59.69 281.94 0)
+		(at 146.05 254 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify left)
 		)
-		(uuid "870d3a0c-3cbf-4604-b272-03dd5a61f20b")
+		(uuid "a11b43a7-82ec-445a-88ca-e2fd518be90f")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 59.69 281.94 0)
+			(at 146.05 254 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4212,57 +4560,16 @@
 	)
 	(global_label "GND_HOST"
 		(shape input)
-		(at 50.8 101.6 0)
+		(at 123.19 195.58 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
+			(justify right)
 		)
-		(uuid "89a9ead2-1616-4c75-aeec-f15ef9c2fdf4")
+		(uuid "a149029c-6d3f-4931-9efd-6b5deef7ee2a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 101.6 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 50.8 847.09 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "89f3d64d-ec62-4a50-84cd-9c338a8b35f1")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 847.09 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 666.75 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "8bbdf505-ca89-4d85-8962-4ac8f4628252")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 666.75 0)
+			(at 123.19 195.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4275,16 +4582,37 @@
 	)
 	(global_label "USB_VBUS"
 		(shape input)
-		(at 36.83 220.98 180)
+		(at 54.61 78.74 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "96b0fcf2-034f-474f-89b5-5e0ca07dfd3a")
+		(uuid "a279de79-f2bc-42df-8340-987493a56a08")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 36.83 220.98 0)
+			(at 54.61 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 30.48 140.97 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "b3475d5a-46bc-4703-af65-84a0988cb5ec")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 30.48 140.97 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4297,15 +4625,15 @@
 	)
 	(global_label "+3V3_MAIN"
 		(shape input)
-		(at 50.8 943.61 0)
+		(at 137.16 577.85 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "9ba5952c-e8bf-42fa-8e5f-adf2a1e96cb4")
+		(uuid "bb83198f-2d56-4e4f-bc86-2b9a4f5cc7b4")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 943.61 0)
+			(at 137.16 577.85 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4318,163 +4646,15 @@
 	)
 	(global_label "GND_HOST"
 		(shape input)
-		(at 38.1 31.75 180)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right)
-		)
-		(uuid "9c95a9f7-86eb-4c31-af1f-a6bb8849c788")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 38.1 31.75 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 50.8 509.27 0)
+		(at 137.16 152.4 0)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 		)
-		(uuid "a9c0eaa6-7f7a-433c-9b35-a7b12cfeb212")
+		(uuid "c22e9619-d8b5-49de-869a-a6e81ef66128")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 509.27 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 152.4 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "b7c37785-085f-4442-ad5e-f294501142aa")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 152.4 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 50.8 798.83 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "c6618154-ce4d-4f85-b9f8-55d7bd7c5634")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 798.83 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 50.8 361.95 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "c9ee4933-6de7-474b-8e3f-2bca831d19aa")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 361.95 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 956.31 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "e7cb60f6-1186-438e-aa0f-48910d092967")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 956.31 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 623.57 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "e8af5c0d-7557-49a0-8e73-0ab9d8518e6d")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 623.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "GND_HOST"
-		(shape input)
-		(at 50.8 859.79 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "f0619d23-5598-406d-b033-1af3ba92817c")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 859.79 0)
+			(at 137.16 152.4 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4487,16 +4667,121 @@
 	)
 	(global_label "+5V_USB_PROTECTED"
 		(shape input)
-		(at 36.83 226.06 180)
+		(at 137.16 285.75 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "c26493ea-1269-43c3-870b-84d2777f5512")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 285.75 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 638.81 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "ce0e46e5-eee7-4d14-8017-3af60f937e56")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 638.81 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 542.29 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d0f33004-4aed-4926-b378-21f3d57a8d7e")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 542.29 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "+1V1"
+		(shape input)
+		(at 137.16 770.89 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d68f99af-99e8-4c5b-a2a6-4afdf355c056")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 770.89 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 137.16 687.07 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "d692a0bf-3b77-465b-96c6-8d8b2a0d919d")
+		(property "Intersheetrefs" "${INTERSHEET_REFS}"
+			(at 137.16 687.07 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+	)
+	(global_label "GND_HOST"
+		(shape input)
+		(at 124.46 223.52 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
 			(justify right)
 		)
-		(uuid "f107ff3d-7b74-402a-a72b-407ccc371fce")
+		(uuid "e484c399-700a-45cb-a07d-035d7eef6732")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 36.83 226.06 0)
+			(at 124.46 223.52 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4509,15 +4794,16 @@
 	)
 	(global_label "GND_HOST"
 		(shape input)
-		(at 50.8 763.27 0)
+		(at 124.46 59.69 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
+			(justify right)
 		)
-		(uuid "f3231724-d691-4f58-bb32-6e91fe9b5560")
+		(uuid "f0c8b3f1-d8fd-405a-b5d9-a144e4755c0a")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 763.27 0)
+			(at 124.46 59.69 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4528,170 +4814,31 @@
 			)
 		)
 	)
-	(global_label "GND_HOST"
+	(global_label "USB_VBUS"
 		(shape input)
-		(at 50.8 811.53 0)
+		(at 54.61 50.8 180)
 		(effects
 			(font
 				(size 1.27 1.27)
 			)
+			(justify right)
 		)
-		(uuid "fc296424-297b-40ea-9def-52ba32747692")
+		(uuid "f962060a-d7f8-439a-9b40-252b97710c60")
 		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 811.53 0)
+			(at 54.61 50.8 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
 				(font
 					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(global_label "+3V3_MAIN"
-		(shape input)
-		(at 50.8 750.57 0)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-		(uuid "feb57c9e-9748-49d0-9272-c114d9c65c10")
-		(property "Intersheetrefs" "${INTERSHEET_REFS}"
-			(at 50.8 750.57 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Connectors:TYPE-C16PIN")
-		(at 50.8 50.8 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "0442cdc5-d7ca-4b97-8525-9c06fefeb6c7")
-		(property "Reference" "J1"
-			(at 50.8 45.72 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "USB-C-16P"
-			(at 50.8 55.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:USB-C-SMD_TYPE-C16PIN"
-			(at 50.8 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 50.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 50.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "A4B9"
-			(uuid "fdf461e2-256f-4210-b1d1-72850962cdbc")
-		)
-		(pin "B4A9"
-			(uuid "b90c033f-3f1f-46e0-aec7-9f52a6654365")
-		)
-		(pin "A1B12"
-			(uuid "652f5b26-db99-4ace-983b-69856762748f")
-		)
-		(pin "B1A12"
-			(uuid "dec10da1-713f-4d8c-8afc-ebccd55e9d13")
-		)
-		(pin "A6"
-			(uuid "9a7d21fe-f81d-4142-be71-c4e0393b0a41")
-		)
-		(pin "B6"
-			(uuid "3fc1315d-9860-4e02-be4e-5cc57783b80a")
-		)
-		(pin "A7"
-			(uuid "9a1453b3-7d3f-48a8-8232-7ae0e343acf4")
-		)
-		(pin "B7"
-			(uuid "11364a18-7e1f-4d36-b650-714bcaa8ea62")
-		)
-		(pin "A5"
-			(uuid "dc37e691-66ec-4bbf-b239-7172fa5ae128")
-		)
-		(pin "B5"
-			(uuid "baa5688c-2a74-426e-9a64-c3b066926d59")
-		)
-		(pin "1"
-			(uuid "92be08f1-59a2-4072-9618-4f6631fa6836")
-		)
-		(pin "4"
-			(uuid "21a967f9-6a76-4232-a809-823c514e5d92")
-		)
-		(pin "2"
-			(uuid "b8f4ce36-46a9-44c7-8135-e7326e505cc6")
-		)
-		(pin "3"
-			(uuid "6ad657c8-0563-4c87-b77b-36b63c6eebd0")
-		)
-		(pin "A8"
-			(uuid "0491fc56-518d-4974-b580-0d599eb44ef8")
-		)
-		(pin "B8"
-			(uuid "bab514b4-5683-4049-8a99-4036988e7d19")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "J1")
-					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
 		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 949.96 0)
+		(at 50.8 269.24 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4699,9 +4846,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "05193c06-ca48-4dde-95fe-69943c3c64fd")
-		(property "Reference" "C_RP_BULK1"
-			(at 50.8 944.88 0)
+		(uuid "05bfe195-87e5-4de9-9186-60e0ee056e97")
+		(property "Reference" "C_BUCK_IN_HF1"
+			(at 50.8 264.16 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4710,8 +4857,8 @@
 				)
 			)
 		)
-		(property "Value" "4.7uF"
-			(at 50.8 955.04 0)
+		(property "Value" "100nF"
+			(at 50.8 274.32 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4721,7 +4868,7 @@
 			)
 		)
 		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 949.96 0)
+			(at 50.8 269.24 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4732,7 +4879,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 949.96 0)
+			(at 50.8 269.24 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4742,7 +4889,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 949.96 0)
+			(at 50.8 269.24 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4752,23 +4899,23 @@
 			)
 		)
 		(pin "1"
-			(uuid "bf935f98-b1bf-40be-82a5-f4e64339e985")
+			(uuid "23d5ee05-a3f0-4240-b8f0-5b4c88773f52")
 		)
 		(pin "2"
-			(uuid "4ed09556-c9eb-48d8-a369-11e19794a351")
+			(uuid "54df3a6c-50b2-4ebd-894c-212550ebf5ad")
 		)
 		(instances
 			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_RP_BULK1")
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_BUCK_IN_HF1")
 					(unit 1)
 				)
 			)
 		)
 	)
 	(symbol
-		(lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
-		(at 50.8 416.56 0)
+		(lib_id "JLC-MCP-Resistors:0603WAF4533T5E")
+		(at 137.16 388.62 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4776,9 +4923,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "09f55b6c-cd59-4e46-82d8-e17d64783fe5")
+		(uuid "08ae8abd-52a3-410d-baf9-a0d049638647")
 		(property "Reference" "R_BUCK_FB1"
-			(at 50.8 411.48 0)
+			(at 137.16 383.54 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4787,8 +4934,8 @@
 				)
 			)
 		)
-		(property "Value" "100k"
-			(at 50.8 421.64 0)
+		(property "Value" "453k"
+			(at 137.16 393.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4798,7 +4945,7 @@
 			)
 		)
 		(property "Footprint" "JLC-MCP:R0603"
-			(at 50.8 416.56 0)
+			(at 137.16 388.62 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4809,7 +4956,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 416.56 0)
+			(at 137.16 388.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4819,7 +4966,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 416.56 0)
+			(at 137.16 388.62 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4829,14 +4976,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "c811b452-680a-47ed-a8f5-0340445e4af3")
+			(uuid "38eb320f-1ef9-433e-90ad-36aa155e38e6")
 		)
 		(pin "2"
-			(uuid "1b4f2212-44f2-44e4-81ea-c6873431c829")
+			(uuid "94424c3a-52ec-4919-aed1-41a5926776a9")
 		)
 		(instances
 			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
 					(reference "R_BUCK_FB1")
 					(unit 1)
 				)
@@ -4844,8 +4991,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLC-MCP-Imported:APH201208C2R2MP03")
-		(at 50.8 281.94 0)
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 680.72 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -4853,9 +5000,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "1146721e-a850-4be5-843b-3ed25845c10d")
-		(property "Reference" "L_BUCK1"
-			(at 50.8 276.86 0)
+		(uuid "0dd2ea88-20c8-4f23-a4d7-9a1d78fc842c")
+		(property "Reference" "C_ESP_BULK1"
+			(at 137.16 675.64 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4864,8 +5011,8 @@
 				)
 			)
 		)
-		(property "Value" "2.2uH"
-			(at 50.8 287.02 0)
+		(property "Value" "4.7uF"
+			(at 137.16 685.8 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4874,8 +5021,8 @@
 				)
 			)
 		)
-		(property "Footprint" "JLC-MCP:L0805"
-			(at 50.8 281.94 0)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 680.72 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -4886,7 +5033,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 281.94 0)
+			(at 137.16 680.72 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4896,7 +5043,1076 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 281.94 0)
+			(at 137.16 680.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ce35cc33-02bb-453d-a9f5-137d11d2bef3")
+		)
+		(pin "2"
+			(uuid "c5f112ba-c16d-4a7c-99ce-98488ce6ce2a")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_ESP_BULK1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 30.48 137.16 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "11774e19-02f9-4860-9038-78f9c3bd1595")
+		(property "Reference" "#FLG103"
+			(at 30.48 132.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 30.48 142.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 30.48 137.16 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 137.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 137.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "daf62e3d-c98b-4f05-b805-efbcbe54856c")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "#FLG103")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 825.5 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "26147ffb-b21d-45a9-a0b3-81ed39cac503")
+		(property "Reference" "C_RP_BULK1"
+			(at 137.16 820.42 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "4.7uF"
+			(at 137.16 830.58 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 825.5 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 825.5 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 825.5 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d04f8cf8-2097-4075-b47d-5087aa2816d4")
+		)
+		(pin "2"
+			(uuid "8e6a7345-11cb-40c3-a47b-d0e452a3f0a7")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_RP_BULK1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 96.52 269.24 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "264fc6ec-5ea1-4f2d-85d1-317f63644b6c")
+		(property "Reference" "C_BUCK_OUT_HF1"
+			(at 96.52 264.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100nF"
+			(at 96.52 274.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 96.52 269.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 96.52 269.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 96.52 269.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "bd8f1333-7552-4ea3-9e4a-579720b63bfa")
+		)
+		(pin "2"
+			(uuid "9c3228c2-eb81-46b0-bbd8-d535b516756d")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_BUCK_OUT_HF1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Diodes:SMBJ58A_C353350")
+		(at 63.5 78.74 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "26b347cb-7d7c-4118-b66b-777c9213779b")
+		(property "Reference" "D_VBUS_TVS1"
+			(at 63.5 73.66 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SMF5.0A"
+			(at 63.5 83.82 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:SMF5.0A"
+			(at 63.5 78.74 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 78.74 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 63.5 78.74 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "fdd911f4-9c23-4100-95cf-02d50c5e6d37")
+		)
+		(pin "2"
+			(uuid "eca286d8-cac0-4e48-9c2d-22ad7c01b8ce")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "D_VBUS_TVS1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 292.1 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "2b02c480-9030-4e22-ae37-2e0ea681667b")
+		(property "Reference" "C_BUCK_IN1"
+			(at 137.16 287.02 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 137.16 297.18 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 292.1 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 292.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 292.1 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "ec701308-8a12-4302-86e8-baefb9f0a429")
+		)
+		(pin "2"
+			(uuid "9be389cc-2597-4f85-a6d2-0dd9b35ec7a7")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_BUCK_IN1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 30.48 114.3 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "2ead50ad-147a-4def-bb3b-993c2547a86f")
+		(property "Reference" "#FLG100"
+			(at 30.48 109.22 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 30.48 119.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 30.48 114.3 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 114.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 114.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "62246bec-fe6a-4506-90ea-8c9c5453e273")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "#FLG100")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "power:PWR_FLAG")
+		(at 30.48 129.54 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "320c5beb-2ad5-4c7a-b562-80af846e3c22")
+		(property "Reference" "#FLG102"
+			(at 30.48 124.46 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 30.48 134.62 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 30.48 129.54 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 129.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "2ccfa589-f04e-4f5b-8a0f-46a7d2d901fc")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "#FLG102")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 584.2 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "515b9f71-36a1-4adc-a8c7-8d5301cedafc")
+		(property "Reference" "C_ESP_DEC1"
+			(at 137.16 579.12 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 137.16 589.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 584.2 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 584.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 584.2 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "060ded27-26dd-4d9c-a646-a06c2a0f22cb")
+		)
+		(pin "2"
+			(uuid "83979240-0177-4917-8172-ec07f9e613c6")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_ESP_DEC1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Misc:POLYFUSE_2P")
+		(at 63.5 50.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "72d1cabc-cea0-4cd1-b07e-7dc8f3c16c6a")
+		(property "Reference" "F1"
+			(at 63.5 45.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SMD1206-050-33"
+			(at 63.5 55.88 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:SMD1206-050-33"
+			(at 63.5 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 63.5 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 63.5 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "a2229475-e2c1-4aae-9a34-23b371d56c5f")
+		)
+		(pin "2"
+			(uuid "1b8c73c8-b426-47e7-8564-332350f1430c")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "F1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 728.98 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "73d0c7f4-210e-4154-8f3b-4a4b16317487")
+		(property "Reference" "C_RP_DEC1"
+			(at 137.16 723.9 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 137.16 734.06 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 728.98 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 728.98 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 728.98 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "be5c89cb-b2ba-4990-981a-19a20ae0acc9")
+		)
+		(pin "2"
+			(uuid "74e300f9-d009-401a-9adf-fcfe296c80af")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_RP_DEC1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 777.24 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "80e54725-e911-40eb-8186-32a735fe14aa")
+		(property "Reference" "C_RP_DEC2"
+			(at 137.16 772.16 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 137.16 782.32 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 777.24 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 777.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 777.24 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "564fd6ce-f2be-4e9b-becb-e207975d8e34")
+		)
+		(pin "1"
+			(uuid "ff3e93c6-e823-4045-8320-28bc31ade000")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_RP_DEC2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 632.46 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "929dc02c-1382-419d-9314-f26c602e99cf")
+		(property "Reference" "C_ESP_DEC2"
+			(at 137.16 627.38 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "0.1uF"
+			(at 137.16 637.54 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 632.46 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 632.46 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 632.46 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "d63d5828-7f43-4183-8d06-99116ad887e4")
+		)
+		(pin "2"
+			(uuid "f2faecf8-6336-4516-a712-f185b0d29846")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_ESP_DEC2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 340.36 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "9eca08ff-aa9f-48f6-9d93-524ac76ba95b")
+		(property "Reference" "C_BUCK_OUT1"
+			(at 137.16 335.28 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 137.16 345.44 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:C0603"
+			(at 137.16 340.36 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 340.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 340.36 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "62e3fb33-ecfe-4e26-917c-6f640b53551b")
+		)
+		(pin "2"
+			(uuid "57b612cd-a643-4722-bf2f-b28cfb6a95a5")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_BUCK_OUT1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Imported:APH201208C2R2MP03")
+		(at 137.16 254 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "a4765918-f2b6-4936-8553-791a4710bb54")
+		(property "Reference" "L_BUCK1"
+			(at 137.16 248.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "2.2uH"
+			(at 137.16 259.08 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:L0805"
+			(at 137.16 254 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 254 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 254 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -4928,14 +6144,14 @@
 			)
 		)
 		(pin "2"
-			(uuid "0686a377-2db9-4e2b-97bd-01c18683fe12")
+			(uuid "4a999167-be4a-4dd4-bbe4-e6a8e7fdcebc")
 		)
 		(pin "1"
-			(uuid "cf014d36-88f5-4a89-a51e-dc9eb5319b44")
+			(uuid "2d7e7209-047e-4cde-801b-28158acac04a")
 		)
 		(instances
 			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
 					(reference "L_BUCK1")
 					(unit 1)
 				)
@@ -4943,171 +6159,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 708.66 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "122d8556-2a49-4e61-806d-76ae3d6f8a5c")
-		(property "Reference" "C_ESP_DEC1"
-			(at 50.8 703.58 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 50.8 713.74 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 708.66 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 708.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 708.66 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "a36eec99-c54c-4e31-9502-6de724412f7f")
-		)
-		(pin "2"
-			(uuid "c78a3278-89ec-487e-ae92-2c8c8e313188")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_ESP_DEC1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Power:SY8089A1AAC")
-		(at 50.8 251.46 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "1af6e7d6-40b1-443b-9c75-52199757d892")
-		(property "Reference" "U_BUCK1"
-			(at 50.8 246.38 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "SY8089A1AAC"
-			(at 50.8 256.54 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:TSOT-23-5_L2.9-W1.6-P0.95-LS2.8-BR"
-			(at 50.8 251.46 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 251.46 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 251.46 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "4"
-			(uuid "1a3bc8cf-2dbf-4857-af59-1d786156473a")
-		)
-		(pin "1"
-			(uuid "f4df22d4-b0c0-40c7-8b5a-c13e91d70693")
-		)
-		(pin "2"
-			(uuid "84224461-534d-4325-bd79-0fd818a8010f")
-		)
-		(pin "5"
-			(uuid "985dd988-980a-4da8-b3a6-769cdc589378")
-		)
-		(pin "3"
-			(uuid "7d65cba8-cd6e-4e6c-b42f-8f570f047e73")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "U_BUCK1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
-		(at 50.8 109.22 0)
+		(at 137.16 160.02 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5115,746 +6168,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "3289d5b4-a63a-49d2-8a35-73edf7fb7781")
-		(property "Reference" "R_CC1"
-			(at 50.8 104.14 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "5.1k"
-			(at 50.8 114.3 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:R0603"
-			(at 50.8 109.22 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 109.22 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 109.22 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "60e3048c-5ca4-4215-a3e4-cc0bff9ba959")
-		)
-		(pin "1"
-			(uuid "5880f425-e8a3-404e-9462-78156b6fd021")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "R_CC1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Imported:CS0402-3N9G-S")
-		(at 124.46 50.8 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "3fef3eab-47e6-457e-a21c-c7555bc8b608")
-		(property "Reference" "L_RF1"
-			(at 124.46 45.72 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "3.9nH"
-			(at 124.46 55.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:IND-SMD_L1.2-W0.7"
-			(at 124.46 50.8 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 124.46 50.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 124.46 50.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C285959"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "CS0402-3N9G-S"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "73a0c8e4-43b9-4517-b0d1-8a67b3b072c9")
-		)
-		(pin "2"
-			(uuid "2aa088c0-e597-46be-bf48-a22d2f30c94f")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "L_RF1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Imported:2450AT18A100E")
-		(at 50.8 614.68 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "55f084d5-8945-4afb-ad77-8c792ff7c93a")
-		(property "Reference" "ANT1"
-			(at 50.8 609.6 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "2450AT18A100E"
-			(at 50.8 619.76 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:ANT-SMD_L3.2-W1.6"
-			(at 50.8 614.68 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 614.68 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 614.68 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "LCSC" "C89334"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "MPN" "2450AT18A100E"
-			(at 0 0 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "bb4de59e-bc4d-4657-b4e0-92829d81449e")
-		)
-		(pin "2"
-			(uuid "e2119ed5-909a-4e89-8d51-037100613071")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "ANT1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 901.7 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "62f3ec55-9af6-44e8-9ddb-690d7aa8fe27")
-		(property "Reference" "C_RP_DEC2"
-			(at 50.8 896.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 50.8 906.78 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 901.7 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 901.7 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 901.7 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "b7dfc2fa-aa09-4c3a-bb72-a7af90494a32")
-		)
-		(pin "1"
-			(uuid "9df01d7e-4f7b-4d34-a705-175b24f956b9")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_RP_DEC2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
-		(at 50.8 467.36 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "738abc45-ee10-4a2c-a7ea-d44313536318")
-		(property "Reference" "R_BUCK_FB2"
-			(at 50.8 462.28 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "33k"
-			(at 50.8 472.44 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:R0603"
-			(at 50.8 467.36 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 467.36 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 467.36 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "b853d3a4-d056-4626-b4fc-4ee6d3644720")
-		)
-		(pin "1"
-			(uuid "ce4935ca-f662-4e7d-a02e-695fa76801fd")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "R_BUCK_FB2")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 515.62 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "75337afd-74ae-4ae4-85cd-4a2bbba7f8aa")
-		(property "Reference" "C_BULK_3V3"
-			(at 50.8 510.54 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10uF"
-			(at 50.8 520.7 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 515.62 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 515.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 515.62 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "54f8e585-db65-4496-8019-6c34a48e2b36")
-		)
-		(pin "2"
-			(uuid "f8da7246-edfc-4121-8152-a6e86b80b7c2")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_BULK_3V3")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 368.3 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7a1d009f-9a1e-4993-abc8-17886bfa7a02")
-		(property "Reference" "C_BUCK_OUT1"
-			(at 50.8 363.22 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "22uF"
-			(at 50.8 373.38 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 368.3 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 368.3 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 368.3 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b4d58640-ef15-4131-82ea-7a9720d03cee")
-		)
-		(pin "2"
-			(uuid "cbee3eab-0cb6-465c-b67b-54454bbe5aa7")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_BUCK_OUT1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 563.88 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "7c37f22c-ed54-45b7-b03c-3a0433f7f4ad")
-		(property "Reference" "C_RF_SHUNT1"
-			(at 50.8 558.8 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "1.2pF"
-			(at 50.8 568.96 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 563.88 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 563.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 563.88 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "2"
-			(uuid "8e505dd0-d581-494b-b436-3bbf46e9cd1b")
-		)
-		(pin "1"
-			(uuid "cb4c0e9c-0ae4-4082-b2cb-b63f45668969")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_RF_SHUNT1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 320.04 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8aca738a-b294-4472-8cb8-27836360b55f")
-		(property "Reference" "C_BUCK_IN1"
-			(at 50.8 314.96 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "10uF"
-			(at 50.8 325.12 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 320.04 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 320.04 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 320.04 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "b7117340-2130-4ec0-9495-1c88c843567f")
-		)
-		(pin "2"
-			(uuid "0cced228-45fa-406e-ae18-2e59bf0f0528")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_BUCK_IN1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
-		(at 50.8 160.02 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "8ccb3c1a-0b4f-439c-bbc2-4a4ee10acf82")
+		(uuid "b61b1494-e200-4ebd-b9c1-aff1908f3789")
 		(property "Reference" "R_CC2"
-			(at 50.8 154.94 0)
+			(at 137.16 154.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5864,7 +6180,7 @@
 			)
 		)
 		(property "Value" "5.1k"
-			(at 50.8 165.1 0)
+			(at 137.16 165.1 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5874,7 +6190,7 @@
 			)
 		)
 		(property "Footprint" "JLC-MCP:R0603"
-			(at 50.8 160.02 0)
+			(at 137.16 160.02 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5885,7 +6201,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 160.02 0)
+			(at 137.16 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5895,7 +6211,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 160.02 0)
+			(at 137.16 160.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5905,14 +6221,14 @@
 			)
 		)
 		(pin "2"
-			(uuid "3e070f34-687d-4dbd-84b4-95a8b9a9605f")
+			(uuid "02f587e6-611a-44fc-b617-e35f9990608c")
 		)
 		(pin "1"
-			(uuid "d99419e6-fee8-4111-9b7e-42f6af43b9d2")
+			(uuid "6871a931-2f7d-4df0-97a2-aa4b9485dc53")
 		)
 		(instances
 			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
 					(reference "R_CC2")
 					(unit 1)
 				)
@@ -5920,8 +6236,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 660.4 0)
+		(lib_id "power:PWR_FLAG")
+		(at 30.48 121.92 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -5929,9 +6245,83 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "9f6c79ba-5e73-4dc8-ad17-d76d6df59c43")
+		(uuid "b7a64bcd-420d-484c-bec9-dffa1ef5de37")
+		(property "Reference" "#FLG101"
+			(at 30.48 116.84 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "PWR_FLAG"
+			(at 30.48 127 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 30.48 121.92 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 121.92 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "c1a0ff0d-daf9-425c-8c03-ad144f044a52")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "#FLG101")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 535.94 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "c5ee61a3-5478-4f3f-b335-3bb13cac7bb3")
 		(property "Reference" "C_ESP_VDDA1"
-			(at 50.8 655.32 0)
+			(at 137.16 530.86 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5941,7 +6331,7 @@
 			)
 		)
 		(property "Value" "1uF"
-			(at 50.8 665.48 0)
+			(at 137.16 541.02 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5951,7 +6341,7 @@
 			)
 		)
 		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 660.4 0)
+			(at 137.16 535.94 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -5962,7 +6352,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 660.4 0)
+			(at 137.16 535.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5972,7 +6362,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 660.4 0)
+			(at 137.16 535.94 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -5982,14 +6372,14 @@
 			)
 		)
 		(pin "1"
-			(uuid "877b298c-f4b1-40a4-80af-970b3e312f96")
+			(uuid "c19a3aa8-831c-4159-bd35-d919d9797988")
 		)
 		(pin "2"
-			(uuid "5b048886-a8d2-48ae-b0d9-9abeabbf60f0")
+			(uuid "b508a24f-f02b-4a61-a4b1-0074e9ca3e3c")
 		)
 		(instances
 			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
 					(reference "C_ESP_VDDA1")
 					(unit 1)
 				)
@@ -5997,8 +6387,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLC-MCP-Diodes:USBLC6-2SC6_C2827654")
-		(at 50.8 195.58 0)
+		(lib_id "JLC-MCP-Power:SY8089A1AAC")
+		(at 137.16 223.52 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6006,9 +6396,368 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "c20fe69b-ff15-422b-a17b-8784e3e0eae6")
+		(uuid "d26128bb-59b5-4317-b29a-3254b5a606be")
+		(property "Reference" "U_BUCK1"
+			(at 137.16 218.44 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "SY8089A1AAC"
+			(at 137.16 228.6 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:TSOT-23-5_L2.9-W1.6-P0.95-LS2.8-BR"
+			(at 137.16 223.52 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 223.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 223.52 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "4"
+			(uuid "d2a4e6f5-dfcd-4a28-8a90-2d2fdbde91c6")
+		)
+		(pin "1"
+			(uuid "120a0b2e-3e8d-438a-bb50-b32a1c6c0e8c")
+		)
+		(pin "2"
+			(uuid "bcd4dcb0-2108-4ac6-9842-3e0aaed42d2a")
+		)
+		(pin "5"
+			(uuid "d0e4b4bd-9bd3-4950-9ab4-2fc703812c64")
+		)
+		(pin "3"
+			(uuid "1945cc17-8abb-4522-976c-5931aaf7fce2")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "U_BUCK1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Resistors:0603WAF1003T5E")
+		(at 137.16 439.42 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "dc4704a2-dd73-4251-a46b-40b8d09b339e")
+		(property "Reference" "R_BUCK_FB2"
+			(at 137.16 434.34 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "100k"
+			(at 137.16 444.5 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:R0603"
+			(at 137.16 439.42 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 439.42 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 439.42 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "f21ecd1c-2c65-4adb-8721-62c9858fab82")
+		)
+		(pin "1"
+			(uuid "61f95089-85d8-42b7-83fd-fdafc09d95cc")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "R_BUCK_FB2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Connectors:TYPE-C16PIN")
+		(at 137.16 50.8 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "dcf4a72c-7863-443f-a630-e7dc4f3c7953")
+		(property "Reference" "J1"
+			(at 137.16 45.72 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "USB-C-16P"
+			(at 137.16 55.88 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:USB-C-SMD_TYPE-C16PIN"
+			(at 137.16 50.8 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 50.8 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "A4B9"
+			(uuid "6fb75955-bbb3-4da6-93f0-f46f4bfa4d0a")
+		)
+		(pin "B4A9"
+			(uuid "d685bb50-95fc-42c3-8e62-7dc49b1edd52")
+		)
+		(pin "A1B12"
+			(uuid "5b01c8e1-1d3c-4c39-9afc-c1d70b2ef89a")
+		)
+		(pin "B1A12"
+			(uuid "8440384b-5e37-4923-b478-ab5058bea657")
+		)
+		(pin "A6"
+			(uuid "b4bfb13d-80bb-4c80-90ae-799f29160bcc")
+		)
+		(pin "B6"
+			(uuid "6239ada0-15b6-445f-99fe-0464057419e9")
+		)
+		(pin "A7"
+			(uuid "e86c0861-18b6-4769-ba0e-d01c8fc46b1c")
+		)
+		(pin "B7"
+			(uuid "fd2e487e-636e-4e0f-972a-c12d11004f1f")
+		)
+		(pin "A5"
+			(uuid "8913c049-7573-4069-ae13-210afe907088")
+		)
+		(pin "B5"
+			(uuid "7f352b61-f5f0-4763-8913-4394af084744")
+		)
+		(pin "1"
+			(uuid "3ab97f54-a288-4fbb-8b48-e27d5624b0da")
+		)
+		(pin "2"
+			(uuid "adcbe3ad-7ae3-49d2-919d-315a83afb4ec")
+		)
+		(pin "3"
+			(uuid "f604c93f-5342-4aa3-940e-778cf822f664")
+		)
+		(pin "4"
+			(uuid "1d6dbd11-71ff-410d-975d-90a6794d58c5")
+		)
+		(pin "B8"
+			(uuid "5bcd9bdd-d402-496c-bf8e-f5cdaf0f3d21")
+		)
+		(pin "A8"
+			(uuid "7346c92b-b892-43f9-ae94-bece09fbfa0d")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "J1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
+		(at 137.16 109.22 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e3c9a352-958e-4761-8b4e-0720dfb518a7")
+		(property "Reference" "R_CC1"
+			(at 137.16 104.14 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "5.1k"
+			(at 137.16 114.3 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:R0603"
+			(at 137.16 109.22 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 137.16 109.22 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 137.16 109.22 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "2"
+			(uuid "2fd01e91-618d-46c6-846a-57ddc81465a0")
+		)
+		(pin "1"
+			(uuid "676ab661-9c21-4031-ac24-f67a163d372d")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "R_CC1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Diodes:USBLC6-2SC6_C2827654")
+		(at 137.16 195.58 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "e4ee40eb-a4df-4831-bc57-d30becec7f97")
 		(property "Reference" "D_USB_ESD1"
-			(at 50.8 190.5 0)
+			(at 137.16 190.5 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6018,7 +6767,7 @@
 			)
 		)
 		(property "Value" "USBLC6-2SC6"
-			(at 50.8 200.66 0)
+			(at 137.16 200.66 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6028,7 +6777,7 @@
 			)
 		)
 		(property "Footprint" "JLC-MCP:SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"
-			(at 50.8 195.58 0)
+			(at 137.16 195.58 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6039,7 +6788,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 195.58 0)
+			(at 137.16 195.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6049,7 +6798,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 195.58 0)
+			(at 137.16 195.58 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6059,26 +6808,26 @@
 			)
 		)
 		(pin "5"
-			(uuid "08e9b3a7-0ff3-4f45-8cce-7f69f068b8b7")
+			(uuid "b95ffedb-e4ce-4dcf-9c24-2014d6a91602")
 		)
 		(pin "2"
-			(uuid "ce1ced73-6d7c-49dd-a160-f2808cb5ea6a")
+			(uuid "2acde60e-4188-4f1d-8d4a-1450ba1be619")
 		)
 		(pin "1"
-			(uuid "50e7d2a3-5d0e-4c6a-8506-e2213891bd80")
+			(uuid "98704ef7-18b5-48f4-aec5-a42f25f81988")
 		)
 		(pin "3"
-			(uuid "ab2e80cb-4f43-42ed-ab56-32a46bf8b58a")
+			(uuid "8794ca9f-32b2-46d6-a606-2315f616ed20")
 		)
 		(pin "4"
-			(uuid "3b049c60-c1aa-4361-93b2-e5c46becc8be")
+			(uuid "1caa9da7-2a1c-4b56-96fd-60a7521df9b4")
 		)
 		(pin "6"
-			(uuid "37af27fd-c8c3-45c2-bca5-2c6649978371")
+			(uuid "90afc1c9-64c4-4891-b668-41b001c5a7ed")
 		)
 		(instances
 			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
 					(reference "D_USB_ESD1")
 					(unit 1)
 				)
@@ -6086,8 +6835,8 @@
 		)
 	)
 	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 805.18 0)
+		(lib_id "power:PWR_FLAG")
+		(at 30.48 144.78 0)
 		(unit 1)
 		(body_style 1)
 		(exclude_from_sim no)
@@ -6095,9 +6844,9 @@
 		(on_board yes)
 		(in_pos_files yes)
 		(dnp no)
-		(uuid "c502a8a2-4663-4a32-9348-8eae4e25fc1a")
-		(property "Reference" "C_ESP_BULK1"
-			(at 50.8 800.1 0)
+		(uuid "ec3c5824-fd36-4c65-b251-be0073068cd1")
+		(property "Reference" "#FLG104"
+			(at 30.48 139.7 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6106,8 +6855,82 @@
 				)
 			)
 		)
-		(property "Value" "4.7uF"
-			(at 50.8 810.26 0)
+		(property "Value" "PWR_FLAG"
+			(at 30.48 149.86 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 30.48 144.78 0)
+			(hide yes)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Datasheet" ""
+			(at 30.48 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Description" ""
+			(at 30.48 144.78 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(pin "1"
+			(uuid "38364856-62d4-404f-97dd-c1addf0111e2")
+		)
+		(instances
+			(project "esp32c3_managed_rp2040_swd_coprocessor"
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "#FLG104")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
+		(at 137.16 487.68 0)
+		(unit 1)
+		(body_style 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(in_pos_files yes)
+		(dnp no)
+		(uuid "ed40c714-10ac-4993-9750-586715e3c446")
+		(property "Reference" "C_BULK_3V3"
+			(at 137.16 482.6 0)
+			(show_name no)
+			(do_not_autoplace no)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "22uF"
+			(at 137.16 492.76 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6117,7 +6940,7 @@
 			)
 		)
 		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 805.18 0)
+			(at 137.16 487.68 0)
 			(hide yes)
 			(show_name no)
 			(do_not_autoplace no)
@@ -6128,7 +6951,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 50.8 805.18 0)
+			(at 137.16 487.68 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6138,7 +6961,7 @@
 			)
 		)
 		(property "Description" ""
-			(at 50.8 805.18 0)
+			(at 137.16 487.68 0)
 			(show_name no)
 			(do_not_autoplace no)
 			(effects
@@ -6148,255 +6971,15 @@
 			)
 		)
 		(pin "1"
-			(uuid "4d0c8149-7add-47e3-8f06-f943fe2e4230")
+			(uuid "6a0ac218-443a-4194-a060-b4199122794c")
 		)
 		(pin "2"
-			(uuid "c26d00bd-27f0-40ad-9aaa-cca123ddb046")
+			(uuid "b539feef-65a7-4d0f-9b50-9967d1761bab")
 		)
 		(instances
 			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_ESP_BULK1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Misc:MNCP380HSN05AAT1G")
-		(at 50.8 223.52 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f024ef4a-62e0-4f0a-82e3-911f7b1742b6")
-		(property "Reference" "F1"
-			(at 50.8 218.44 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "MNCP380HSN05AAT1G"
-			(at 50.8 228.6 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR"
-			(at 50.8 223.52 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 223.52 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 223.52 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "4285816c-5f44-476c-8c72-032c7521667e")
-		)
-		(pin "2"
-			(uuid "ed441f9f-f2b5-4f78-a249-147b9169f49a")
-		)
-		(pin "5"
-			(uuid "9a36d35e-e3d3-47ef-8b9c-fac02a64877b")
-		)
-		(pin "4"
-			(uuid "2d491426-65db-4aef-a700-9822623f964a")
-		)
-		(pin "3"
-			(uuid "3793d6f3-cb9f-4ea9-b654-fbfa8d2e6185")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "F1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 853.44 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f5737082-4e7e-487f-93bc-129263ab13d3")
-		(property "Reference" "C_RP_DEC1"
-			(at 50.8 848.36 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 50.8 858.52 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 853.44 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 853.44 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 853.44 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "e94b171a-eab0-457e-a9c9-002944d9c073")
-		)
-		(pin "2"
-			(uuid "73f3c05c-0370-4e7c-b64e-5b2914c0bf6b")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_RP_DEC1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "JLC-MCP-Capacitors:CC0603KRX7R9BB104")
-		(at 50.8 756.92 0)
-		(unit 1)
-		(body_style 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(in_pos_files yes)
-		(dnp no)
-		(uuid "f8807ef2-a31e-496b-a3fe-1a07b91fc602")
-		(property "Reference" "C_ESP_DEC2"
-			(at 50.8 751.84 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Value" "0.1uF"
-			(at 50.8 762 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" "JLC-MCP:C0603"
-			(at 50.8 756.92 0)
-			(hide yes)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Datasheet" ""
-			(at 50.8 756.92 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Description" ""
-			(at 50.8 756.92 0)
-			(show_name no)
-			(do_not_autoplace no)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(pin "1"
-			(uuid "84f7b3e3-daf0-4a92-ab73-0229d045fdd7")
-		)
-		(pin "2"
-			(uuid "6edd3904-2371-49d0-bf87-7f25efc52d79")
-		)
-		(instances
-			(project "esp32c3_managed_rp2040_swd_coprocessor"
-				(path "/fb962d6e-5f42-4d1a-8aa6-3ce47f0f4b13/5d8516cd-1ea6-430f-ae0d-3e00461e2f51"
-					(reference "C_ESP_DEC2")
+				(path "/c5740606-62e4-4133-b325-b7f77e6140c3/8db7f367-c850-480b-97e2-46985d12a6d8"
+					(reference "C_BULK_3V3")
 					(unit 1)
 				)
 			)
