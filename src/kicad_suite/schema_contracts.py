@@ -7,6 +7,8 @@ from .schema_versions import (
     KICAD_EXECUTION_PLAN_SCHEMA_VERSION,
     KICAD_PROJECT_WRITE_RESULT_SCHEMA_VERSION,
     PART_LOCK_SCHEMA_VERSION,
+    SIMULATION_PLAN_SCHEMA_VERSION,
+    SIMULATION_PROFILE_SCHEMA_VERSION,
     TEXT_TO_KICAD_SUMMARY_SCHEMA_VERSION,
 )
 
@@ -41,6 +43,14 @@ SCHEMA_FIELD_CONTRACTS = {
     },
     PART_LOCK_SCHEMA_VERSION: {
         "stable": ("project", "generated_at", "parts"),
+        "compat": ("schema_version",),
+    },
+    SIMULATION_PROFILE_SCHEMA_VERSION: {
+        "stable": ("profile_id", "project_id", "project_name", "topology", "default_backend", "preferred_analyses", "thresholds", "notes"),
+        "compat": ("schema_version", "tags"),
+    },
+    SIMULATION_PLAN_SCHEMA_VERSION: {
+        "stable": ("request_id", "project_id", "project_name", "topology", "source_profile", "scenarios", "summary", "recommendations"),
         "compat": ("schema_version",),
     },
 }

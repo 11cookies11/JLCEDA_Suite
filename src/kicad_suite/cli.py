@@ -17,6 +17,7 @@ from .compile_kicad_execution_plan import run as run_compile_plan
 from .circuit_pipeline import diagnose_ngspice_environment
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import run as run_write_project
+from .simulation_planner import build_simulation_plan, load_circuit_model, load_simulation_profile, simulation_plan_to_dict
 
 
 def _print_json(payload: Any) -> int:
@@ -68,6 +69,13 @@ def _ngspice_doctor_handler(args: argparse.Namespace) -> int:
     return _print_json(diagnose_ngspice_environment())
 
 
+def _simulation_plan_handler(args: argparse.Namespace) -> int:
+    model = load_circuit_model(args.model_path)
+    profile = load_simulation_profile(args.profile_path) if args.profile_path else None
+    plan = build_simulation_plan(model, profile)
+    return _print_json(simulation_plan_to_dict(plan))
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="kas", description=__doc__)
     subparsers = parser.add_subparsers(dest="command")
@@ -101,6 +109,11 @@ def build_parser() -> argparse.ArgumentParser:
 
     ngspice_doctor = subparsers.add_parser("ngspice-doctor", help="Inspect ngspice availability and configuration.")
     ngspice_doctor.set_defaults(handler=_ngspice_doctor_handler)
+
+    simulation_plan = subparsers.add_parser("simulation-plan", help="Generate a simulation plan from a circuit model.")
+    simulation_plan.add_argument("model_path", type=Path)
+    simulation_plan.add_argument("--profile-path", type=Path, default=None)
+    simulation_plan.set_defaults(handler=_simulation_plan_handler)
     return parser
 
 

@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schema/simulation-profile.v1.json",
+  "title": "SimulationProfile v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "profile_id",
+    "project_id",
+    "project_name",
+    "topology",
+    "default_backend",
+    "preferred_analyses",
+    "thresholds",
+    "notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "simulation-profile.v1"
+    },
+    "profile_id": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "topology": {
+      "type": "string"
+    },
+    "default_backend": {
+      "type": "string"
+    },
+    "preferred_analyses": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "tags": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "thresholds": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vout_min_v",
+        "vout_max_v",
+        "ripple_max_mv",
+        "startup_overshoot_percent",
+        "startup_settle_ms"
+      ],
+      "properties": {
+        "vout_min_v": { "type": "number" },
+        "vout_max_v": { "type": "number" },
+        "ripple_max_mv": { "type": "number" },
+        "startup_overshoot_percent": { "type": "number" },
+        "startup_settle_ms": { "type": "number" }
+      }
+    },
+    "notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

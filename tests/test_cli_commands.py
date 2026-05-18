@@ -22,6 +22,7 @@ class TestCliParser(unittest.TestCase):
         self.assertIn("validate-artifacts", subparsers)
         self.assertIn("erc", subparsers)
         self.assertIn("ngspice-doctor", subparsers)
+        self.assertIn("simulation-plan", subparsers)
 
     def test_main_without_args_prints_help(self):
         buffer = io.StringIO()
@@ -55,3 +56,16 @@ class TestCliDispatch(unittest.TestCase):
         self.assertEqual(code, 0)
         diagnose.assert_called_once()
         self.assertIn("install ngspice", buffer.getvalue())
+
+    def test_simulation_plan_command_delegates(self):
+        model = {"request_id": "r1", "project_id": "p1", "topology": "demo", "components": [], "nets": []}
+        with patch("kicad_suite.cli.load_circuit_model", return_value=model) as load_model:
+            with patch("kicad_suite.cli.build_simulation_plan", return_value={"schema_version": "simulation-plan.v1"}) as build_plan:
+                with patch("kicad_suite.cli.simulation_plan_to_dict", return_value={"schema_version": "simulation-plan.v1"}) as to_dict:
+                    buffer = io.StringIO()
+                    with redirect_stdout(buffer):
+                        code = cli.main(["simulation-plan", "model.json"])
+        self.assertEqual(code, 0)
+        load_model.assert_called_once()
+        build_plan.assert_called_once()
+        to_dict.assert_called_once()

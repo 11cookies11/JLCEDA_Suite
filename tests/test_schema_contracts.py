@@ -27,6 +27,12 @@ class TestSchemaContracts(unittest.TestCase):
         self.assertEqual(len(CANONICAL_FIELD_CONTRACT_SCHEMAS), len(set(CANONICAL_FIELD_CONTRACT_SCHEMAS)))
         self.assertEqual(set(CANONICAL_FIELD_CONTRACT_SCHEMAS), set(SCHEMA_FIELD_CONTRACTS))
 
+    def test_simulation_contracts_are_present(self) -> None:
+        self.assertIn("simulation-profile.v1", SCHEMA_FIELD_CONTRACTS)
+        self.assertIn("simulation-plan.v1", SCHEMA_FIELD_CONTRACTS)
+        self.assertIn("preferred_analyses", SCHEMA_FIELD_CONTRACTS["simulation-profile.v1"]["stable"])
+        self.assertIn("scenarios", SCHEMA_FIELD_CONTRACTS["simulation-plan.v1"]["stable"])
+
 
 if __name__ == "__main__":
     unittest.main()

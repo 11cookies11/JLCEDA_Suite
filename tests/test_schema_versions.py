@@ -29,6 +29,8 @@ class TestSchemaVersions(unittest.TestCase):
             "kicad-erc-result.v1",
             "text-to-kicad-summary.v1",
             "part-lock.v1",
+            "simulation-profile.v1",
+            "simulation-plan.v1",
         }
         self.assertEqual(set(CANONICAL_SCHEMA_VERSIONS), expected)
 

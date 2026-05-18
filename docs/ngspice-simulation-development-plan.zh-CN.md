@@ -167,6 +167,36 @@ python3 ./scripts/kas.py ngspice-doctor
 tools/ngspice-46_64/Spice64/bin/ngspice.exe
 ```
 
+### 仿真项目模板
+
+推荐先准备 `simulation-profile.json`，再根据 `circuit-model.json` 自动生成 `simulation-plan.json`。
+
+最小数据链路建议如下：
+
+```text
+CircuitModel
+  -> SimulationProfile
+  -> SimulationPlan
+  -> ngspice execution
+  -> Simulation feedback
+```
+
+建议的字段分工：
+
+- `SimulationProfile` 保存项目级偏好、默认 backend、阈值和标签
+- `SimulationPlan` 保存自动推导出来的仿真项列表
+- 仿真项描述“测什么、怎么测、通过条件是什么”
+
+对 NEXDAP 这类板子，系统可自动推导出：
+
+- 电源启动检查
+- USB 输入保护检查
+- Boot / strap 状态检查
+- 指示灯电流检查
+- 接口偏置与耦合检查
+
+当项目信息更完整时，仿真计划会更准确；当信息不足时，默认退回到基础 `op` 检查。
+
 ### Phase 4: 结果回写
 
 回写层已落地到 `src/kicad_suite/circuit_pipeline.py` 中的 `build_ngspice_feedback()`，并将结果写回：

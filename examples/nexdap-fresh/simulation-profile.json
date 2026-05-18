@@ -1,0 +1,29 @@
+{
+  "schema_version": "simulation-profile.v1",
+  "profile_id": "nexdap-default",
+  "project_id": "nexdap-esp32c3-managed-rp2040-swd-coprocessor-v2",
+  "project_name": "esp32c3_managed_rp2040_swd_coprocessor",
+  "topology": "esp32c3_managed_rp2040_swd_coprocessor",
+  "default_backend": "ngspice",
+  "preferred_analyses": [
+    "op",
+    "tran"
+  ],
+  "tags": [
+    "nexdap",
+    "usb",
+    "power",
+    "strap"
+  ],
+  "thresholds": {
+    "vout_min_v": 3.135,
+    "vout_max_v": 3.465,
+    "ripple_max_mv": 50.0,
+    "startup_overshoot_percent": 10.0,
+    "startup_settle_ms": 20.0
+  },
+  "notes": [
+    "Use this as a starting profile for NEXDAP-style mixed power and interface boards.",
+    "Tighten thresholds after board-specific measurements are available."
+  ]
+}

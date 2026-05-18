@@ -1,0 +1,108 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schema/simulation-plan.v1.json",
+  "title": "SimulationPlan v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "request_id",
+    "project_id",
+    "project_name",
+    "topology",
+    "source_profile",
+    "scenarios",
+    "summary",
+    "recommendations"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "simulation-plan.v1"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "project_name": {
+      "type": "string"
+    },
+    "topology": {
+      "type": "string"
+    },
+    "source_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "profile_id"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "profile_id": {
+          "type": "string"
+        }
+      }
+    },
+    "scenarios": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "scenario_id",
+          "title",
+          "backend",
+          "analysis_kind",
+          "focus",
+          "focus_components",
+          "focus_nets",
+          "stimuli",
+          "success_criteria",
+          "notes"
+        ],
+        "properties": {
+          "scenario_id": { "type": "string" },
+          "title": { "type": "string" },
+          "backend": { "type": "string" },
+          "analysis_kind": { "type": "string" },
+          "focus": { "type": "string" },
+          "focus_components": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "focus_nets": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "stimuli": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "success_criteria": {
+            "type": "array",
+            "items": { "type": "string" }
+          },
+          "notes": {
+            "type": "array",
+            "items": { "type": "string" }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "recommendations": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -20,6 +20,7 @@
     "validate:artifacts": "python3 ./scripts/kas.py validate-artifacts",
     "server:kicad:erc": "python3 ./scripts/kas.py erc",
     "ngspice:doctor": "python3 ./scripts/kas.py ngspice-doctor",
+    "simulation:plan": "python3 ./scripts/kas.py simulation-plan",
     "ngspice:regression": "python3 ./scripts/ngspice-regression-test.py",
     "jlc:list-tools": "node ./scripts/jlc_mcp_bridge.mjs list-tools",
     "jlc:search": "node ./scripts/jlc_mcp_bridge.mjs search",
