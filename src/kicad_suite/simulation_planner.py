@@ -155,11 +155,34 @@ def _find_refs(model: dict[str, Any], *needles: str) -> list[str]:
     return refs
 
 
+def _find_refs_exact(model: dict[str, Any], *roles: str) -> list[str]:
+    wanted = {role.lower() for role in roles}
+    refs: list[str] = []
+    for component in model.get("components", []):
+        if not isinstance(component, dict):
+            continue
+        role = _normalize_text(component.get("role", "")).lower()
+        ref = _normalize_text(component.get("ref", ""))
+        if ref and role in wanted:
+            refs.append(ref)
+    return refs
+
+
 def _power_net_names(net_names: list[str]) -> list[str]:
     matches: list[str] = []
     for net_name in net_names:
         upper = net_name.upper()
         if upper.startswith("+") or any(token in upper for token in ("VCC", "VDD", "VIN", "VOUT", "VBUS", "3V3", "5V")):
+            matches.append(net_name)
+    return matches
+
+
+def _nets_with_tokens(net_names: list[str], *tokens: str) -> list[str]:
+    matches: list[str] = []
+    lowered_tokens = [token.lower() for token in tokens]
+    for net_name in net_names:
+        lowered = net_name.lower()
+        if any(token in lowered for token in lowered_tokens):
             matches.append(net_name)
     return matches
 
@@ -178,8 +201,8 @@ def infer_simulation_scenarios(model: dict[str, Any], profile: SimulationProfile
                 backend=profile.default_backend,
                 analysis_kind=profile.preferred_analyses[1] if len(profile.preferred_analyses) > 1 else "tran",
                 focus="Validate power rail startup and regulation.",
-                focus_components=_find_refs(model, "buck", "regulator", "ldo", "power"),
-                focus_nets=primary_power_nets[:4],
+                focus_components=_find_refs(model, "main_3v3_buck", "buck_", "vcc_3v3_bulk_capacitor"),
+                focus_nets=primary_power_nets[:6],
                 stimuli=["Input supply sweep", "Load step"],
                 success_criteria=[
                     "Primary rail reaches nominal voltage.",
@@ -198,8 +221,8 @@ def infer_simulation_scenarios(model: dict[str, Any], profile: SimulationProfile
                 backend=profile.default_backend,
                 analysis_kind="op",
                 focus="Confirm VBUS protection and idle biasing.",
-                focus_components=_find_refs(model, "usb", "vbus", "esd", "tvs", "fuse"),
-                focus_nets=[name for name in net_names if "USB" in name.upper() or "VBUS" in name.upper()][:4],
+                focus_components=_find_refs(model, "usb_c_input", "usb_cc1_pulldown", "usb_cc2_pulldown", "usb_esd_protection", "usb_vbus_ptc_fuse", "usb_vbus_tvs_diode"),
+                focus_nets=_nets_with_tokens(net_names, "USB_VBUS", "USB_DP", "USB_DM", "USB_CC"),
                 stimuli=["Apply nominal VBUS", "Observe clamp and fuse behavior"],
                 success_criteria=[
                     "Normal VBUS is not clamped under nominal conditions.",
@@ -209,23 +232,114 @@ def infer_simulation_scenarios(model: dict[str, Any], profile: SimulationProfile
             )
         )
 
-    if _has_role(roles, "reset", "boot", "strap", "enable", "en", "run", "vref"):
+    if _has_role(roles, "esp32", "esp_", "chip_en", "boot", "strap", "xtal"):
         scenarios.append(
             SimulationScenario(
-                scenario_id="boot-and-strap",
-                title="Boot and strap state check",
+                scenario_id="esp32-startup-and-strap",
+                title="ESP32 startup and strap check",
                 backend=profile.default_backend,
                 analysis_kind="op",
-                focus="Check reset, boot, strap, and reference states at power-up.",
-                focus_components=_find_refs(model, "reset", "boot", "strap", "enable", "vref"),
-                focus_nets=[name for name in net_names if any(token in name.upper() for token in ("RESET", "BOOT", "STRAP", "VTREF", "EN"))][:6],
-                stimuli=["Power applied at nominal input", "Observe strap sampling window"],
+                focus="Check ESP32 reset, boot, strap, clock, and supply bias states at power-up.",
+                focus_components=_find_refs(
+                    model,
+                    "esp32c3_host_controller",
+                    "esp_chip_en_pullup",
+                    "esp_en_reset_capacitor",
+                    "esp_gpio9_boot_pullup",
+                    "esp_gpio8_strap_pullup",
+                    "esp_gpio2_strap_pullup",
+                    "esp32_reset_button",
+                    "esp32_boot_button",
+                    "esp32_40mhz_crystal",
+                    "esp_xtal_load_cap_1",
+                    "esp_xtal_load_cap_2",
+                    "esp_vdda_decoupling",
+                    "esp_vdd3p3_decoupling_1",
+                    "esp_vdd3p3_decoupling_2",
+                    "esp_vdd3p3_bulk",
+                ),
+                focus_nets=_nets_with_tokens(net_names, "ESP_CHIP_EN", "ESP_GPIO9_BOOT", "ESP_GPIO8", "ESP_GPIO2", "ESP_XTAL", "+3V3_MAIN"),
+                stimuli=["Power applied at nominal input", "Observe strap sampling window", "Check crystal bias and decoupling"],
                 success_criteria=[
                     "Reset remains asserted long enough during startup.",
-                    "Strap pins settle to the intended logic state.",
-                    "Reference voltage is present before interface use.",
+                    "Boot strap pins settle to the intended logic state.",
+                    "Crystal and decoupling nets bias correctly at startup.",
                 ],
                 notes=["This is a functional check, not a full timing-accuracy proof."],
+            )
+        )
+
+    if _has_role(roles, "rp2040", "rp_", "bootsel", "run_pullup", "qspi", "swd", "uart"):
+        scenarios.append(
+            SimulationScenario(
+                scenario_id="rp2040-debug-and-bootsel",
+                title="RP2040 debug and BOOTSEL check",
+                backend=profile.default_backend,
+                analysis_kind="op",
+                focus="Check RP2040 boot selection, SWD access, and low-speed bias paths.",
+                focus_components=_find_refs(
+                    model,
+                    "rp2040_target_swd_uart_coprocessor",
+                    "rp2040_qspi_flash",
+                    "rp2040_run_pullup",
+                    "rp2040_12mhz_crystal",
+                    "rp_xtal_load_cap_1",
+                    "rp_xtal_load_cap_2",
+                    "rp_vdd_decoupling_1",
+                    "rp_dvdd_decoupling",
+                    "rp_vdd_bulk",
+                    "vtref_adc_filter_cap",
+                    "vtref_adc_divider_top",
+                    "vtref_adc_divider_bottom",
+                    "nreset_open_drain_nmos",
+                    "rp2040_bootsel_open_drain_pulldown",
+                    "rp2040_bootsel_gate_resistor",
+                    "rp2040_bootsel_gate_pulldown",
+                    "nreset_target_pullup",
+                    "swdio_protection_resistor",
+                    "swclk_protection_resistor",
+                    "swo_protection_resistor",
+                    "nreset_protection_resistor",
+                    "tgt_uart_tx_series_resistor",
+                    "tgt_uart_rx_series_resistor",
+                ),
+                focus_nets=_nets_with_tokens(net_names, "RP_BOOTSEL", "SWDIO", "SWCLK", "RUN", "VTREF", "UART", "QSPI"),
+                stimuli=["Power applied at nominal input", "Observe boot selection and SWD bias", "Measure VTREF divider behavior"],
+                success_criteria=[
+                    "BOOTSEL control remains in the intended default state.",
+                    "SWD and reset bias networks settle cleanly.",
+                    "VTREF sensing path produces a stable reference voltage.",
+                ],
+                notes=["This check is aimed at low-speed control and debug paths, not firmware execution."],
+            )
+        )
+
+    if _has_role(roles, "target_power_enable_jumper", "target_vbus_ptc_fuse", "target_power_led", "target_led_resistor", "target_swd_connector", "target_esd_protection"):
+        scenarios.append(
+            SimulationScenario(
+                scenario_id="target-power-path",
+                title="Target power path check",
+                backend=profile.default_backend,
+                analysis_kind="op",
+                focus="Validate target power enable, fuse, and indicator biasing.",
+                focus_components=_find_refs(
+                    model,
+                    "target_power_enable_jumper",
+                    "target_vbus_ptc_fuse",
+                    "target_power_led",
+                    "target_led_resistor",
+                    "target_swd_connector",
+                    "target_esd_protection",
+                    "nreset_target_pullup",
+                ),
+                focus_nets=_nets_with_tokens(net_names, "+5V_TGT", "+5V_SW_TGT", "TGT", "TARGET"),
+                stimuli=["Enable target power", "Apply nominal target load"],
+                success_criteria=[
+                    "Target power switch path delivers the expected rail.",
+                    "Fuse and indicator paths do not disturb the rail at nominal load.",
+                    "Target power can be isolated when the jumper is open.",
+                ],
+                notes=["Useful to detect power-path regressions before full board bring-up."],
             )
         )
 
@@ -237,8 +351,8 @@ def infer_simulation_scenarios(model: dict[str, Any], profile: SimulationProfile
                 backend=profile.default_backend,
                 analysis_kind="op",
                 focus="Verify LED bias current and resistor sizing.",
-                focus_components=_find_refs(model, "led", "indicator", "current_limit_resistor"),
-                focus_nets=[name for name in net_names if "LED" in name.upper() or "PWR" in name.upper()][:4],
+                focus_components=_find_refs(model, "power_indicator_led", "power_led_resistor", "dap_activity_led", "dap_led_resistor", "target_power_led", "target_led_resistor"),
+                focus_nets=_nets_with_tokens(net_names, "LED_PWR", "LED_DAP", "LED_TGT"),
                 stimuli=["DC operating point"],
                 success_criteria=[
                     "LED current stays within the target range.",
@@ -248,20 +362,36 @@ def infer_simulation_scenarios(model: dict[str, Any], profile: SimulationProfile
             )
         )
 
-    if _has_role(roles, "rf", "antenna", "flash", "uart", "swd", "spi", "qspi"):
+    if _has_role(roles, "rf", "antenna", "flash", "uart", "swd", "spi", "qspi", "vtref", "nreset"):
         scenarios.append(
             SimulationScenario(
                 scenario_id="interface-bias",
                 title="Interface bias and coupling check",
                 backend=profile.default_backend,
                 analysis_kind="op",
-                focus="Validate interface biasing and basic connectivity.",
-                focus_components=_find_refs(model, "rf", "antenna", "flash", "uart", "swd", "spi", "qspi"),
-                focus_nets=[name for name in net_names if any(token in name.upper() for token in ("UART", "SWD", "SPI", "QSPI", "RF"))][:6],
+                focus="Validate interface biasing, VTREF sensing, and basic connectivity.",
+                focus_components=_find_refs(
+                    model,
+                    "vtref_adc_filter_cap",
+                    "vtref_adc_divider_top",
+                    "vtref_adc_divider_bottom",
+                    "swdio_protection_resistor",
+                    "swclk_protection_resistor",
+                    "swo_protection_resistor",
+                    "nreset_protection_resistor",
+                    "target_swd_connector",
+                    "tgt_uart_tx_series_resistor",
+                    "tgt_uart_rx_series_resistor",
+                    "rf_series_matching_inductor",
+                    "rf_shunt_matching_cap",
+                    "chip_antenna_2g4",
+                ),
+                focus_nets=_nets_with_tokens(net_names, "VTREF", "SWD", "UART", "SPI", "QSPI", "RF"),
                 stimuli=["DC operating point"],
                 success_criteria=[
                     "Interface bias nets sit at intended levels.",
                     "No obvious floating interface supply is detected.",
+                    "VTREF sensing remains stable across the interface network.",
                 ],
                 notes=["This is a lightweight pre-check, not a high-frequency RF simulation."],
             )

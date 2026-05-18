@@ -23,13 +23,17 @@ class TestSimulationPlanner(unittest.TestCase):
                 {"ref": "F1", "role": "usb_vbus_ptc_fuse", "value": "SMD1206-050-33"},
                 {"ref": "D1", "role": "usb_vbus_tvs_diode", "value": "SMF5.0A"},
                 {"ref": "R1", "role": "esp_chip_en_pullup", "value": "10k"},
-                {"ref": "LED1", "role": "power_led_indicator", "value": "Red"},
+                {"ref": "U2", "role": "rp2040_target_swd_uart_coprocessor", "value": "RP2040"},
+                {"ref": "J1", "role": "target_power_enable_jumper", "value": "Jumper"},
+                {"ref": "LED1", "role": "power_indicator_led", "value": "Green"},
             ],
             "nets": [
                 {"name": "USB_VBUS", "members": ["F1.1"]},
                 {"name": "+3V3_MAIN", "members": ["U1.2"]},
                 {"name": "VTREF_TARGET", "members": ["R1.1"]},
-                {"name": "PWR_LED", "members": ["LED1.1"]},
+                {"name": "RP_BOOTSEL_QSPI_SS", "members": ["U2.1"]},
+                {"name": "+5V_TGT", "members": ["J1.1"]},
+                {"name": "LED_PWR", "members": ["LED1.1"]},
             ],
             "calculations": [],
             "design_decisions": [],
@@ -40,7 +44,9 @@ class TestSimulationPlanner(unittest.TestCase):
         scenario_ids = {scenario.scenario_id for scenario in plan.scenarios}
         self.assertIn("power-startup", scenario_ids)
         self.assertIn("usb-input-protection", scenario_ids)
-        self.assertIn("boot-and-strap", scenario_ids)
+        self.assertIn("esp32-startup-and-strap", scenario_ids)
+        self.assertIn("rp2040-debug-and-bootsel", scenario_ids)
+        self.assertIn("target-power-path", scenario_ids)
         self.assertIn("indicator-current", scenario_ids)
-        self.assertGreaterEqual(plan.summary["scenario_count"], 4)
-
+        self.assertIn("interface-bias", scenario_ids)
+        self.assertGreaterEqual(plan.summary["scenario_count"], 7)
