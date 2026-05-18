@@ -48,11 +48,19 @@ class TestRunPipelineSummary(unittest.TestCase):
                 },
                 plan_diagnostics={"warnings": 1},
                 postprocess={"symbols_injected": True},
+                simulation_result={
+                    "profile_file": "simulation-profile.json",
+                    "plan_file": "simulation-plan.json",
+                    "profile": {"schema_version": "simulation-profile.v1"},
+                    "plan": {"schema_version": "simulation-plan.v1"},
+                },
             )
 
             self.assertEqual(summary["project_name"], "demo")
             self.assertEqual(summary["files"]["project"], "project.kicad_pro")
             self.assertEqual(summary["files"]["part_lock"], "part.lock.yaml")
+            self.assertEqual(summary["files"]["simulation_profile"], "simulation-profile.json")
+            self.assertEqual(summary["files"]["simulation_plan"], "simulation-plan.json")
             self.assertEqual(summary["counts"]["symbols"], 12)
             self.assertEqual(summary["counts"]["nets"], 9)
             self.assertTrue(summary["symbols_injected"])

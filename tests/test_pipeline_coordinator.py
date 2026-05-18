@@ -109,19 +109,22 @@ class TestRunPipeline(unittest.TestCase):
             with patch("kicad_suite.pipeline_coordinator.compile_plan", return_value=fake_plan) as compile_plan:
                 with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json") as write_output:
                     with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result) as write_project:
-                        with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": True}) as postprocess:
-                            with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
-                                with patch("kicad_suite.pipeline_coordinator.is_truthy_env", side_effect=lambda name, default="false": name == "KICAD_PARTS_PIPELINE"):
-                                    with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md"}) as run_parts:
-                                        summary = run_pipeline(str(model_path), tmpdir)
+                        with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "profile": {}, "plan": {}}) as write_simulation_artifacts:
+                            with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": True}) as postprocess:
+                                with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
+                                    with patch("kicad_suite.pipeline_coordinator.is_truthy_env", side_effect=lambda name, default="false": name == "KICAD_PARTS_PIPELINE"):
+                                        with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md"}) as run_parts:
+                                            summary = run_pipeline(str(model_path), tmpdir)
 
         compile_plan.assert_called_once()
         write_output.assert_called_once()
         write_project.assert_called_once()
+        write_simulation_artifacts.assert_called_once()
         postprocess.assert_called_once()
         run_erc.assert_called_once()
         run_parts.assert_called_once()
         self.assertEqual(summary["files"]["part_lock"], "part.lock.yaml")
+        self.assertEqual(summary["files"]["simulation_profile"], "simulation-profile.json")
         self.assertTrue(summary["symbols_injected"])
 
     def test_run_pipeline_skips_parts_when_disabled(self):
@@ -161,12 +164,14 @@ class TestRunPipeline(unittest.TestCase):
             with patch("kicad_suite.pipeline_coordinator.compile_plan", return_value=fake_plan):
                 with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json"):
                     with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result):
-                        with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": False}):
-                            with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}):
-                                with patch("kicad_suite.pipeline_coordinator.is_truthy_env", return_value=False):
-                                    with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline") as run_parts:
-                                        summary = run_pipeline(str(model_path), tmpdir)
+                        with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "profile": {}, "plan": {}}) as write_simulation_artifacts:
+                            with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": False}):
+                                with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}):
+                                    with patch("kicad_suite.pipeline_coordinator.is_truthy_env", return_value=False):
+                                        with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline") as run_parts:
+                                            summary = run_pipeline(str(model_path), tmpdir)
 
         run_parts.assert_not_called()
+        write_simulation_artifacts.assert_called_once()
         self.assertEqual(summary["files"]["part_lock"], "")
         self.assertFalse(summary["symbols_injected"])

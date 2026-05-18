@@ -12,20 +12,14 @@ from pathlib import Path
 from typing import Any
 
 from .adapters.kicad_cli import resolve_kicad_cli
-from .circuit_pipeline import (
-    CircuitComponent,
-    CircuitModel,
-    CircuitNet,
-    PartCandidate,
-    build_netlist_from_circuit_model as _build_netlist_from_model,
-)
-from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, write_output
+from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, normalize_net_kind, write_output
 from .env_utils import is_truthy_env
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import write_project
 from .parts.workflow import run_parts_pipeline
 from .pipeline_postprocess import apply_postprocess, pin_project_libraries
 from .pipeline_summary import build_run_pipeline_summary
+from .simulation_planner import write_simulation_artifacts
 
 
 def _resolve_kicad_python() -> str:
@@ -93,13 +87,15 @@ def load_json(path: str) -> dict[str, Any]:
 
 
 def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
-    """Build a netlist dict from the circuit model's nets and components.
-
-    Inverts net→members into component→pins for compile_plan.
-    """
+    """Build a netlist dict from the circuit model's nets and components."""
     from collections import defaultdict
+
+    request_id = str(model.get("request_id", ""))
+    project_id = str(model.get("project_id", request_id))
     pin_by_ref: dict[str, list[dict[str, str]]] = defaultdict(list)
     for net in model.get("nets", []):
+        if not isinstance(net, dict):
+            continue
         net_name = str(net.get("name", ""))
         for member in net.get("members", []):
             member_str = str(member).strip()
@@ -107,37 +103,75 @@ def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
                 ref, pin = member_str.rsplit(".", 1)
                 if ref and pin:
                     pin_by_ref[ref].append({"pin": pin, "pin_name": "", "net": net_name})
+
+    components: list[dict[str, Any]] = []
+    for component in model.get("components", []):
+        if not isinstance(component, dict):
+            continue
+        ref = str(component.get("ref", "")).strip()
+        if not ref:
+            continue
+        selected_part = component.get("selected_part", {})
+        part = selected_part if isinstance(selected_part, dict) else {}
+        components.append(
+            {
+                "ref": ref,
+                "role": str(component.get("role", "")),
+                "value": str(component.get("value", "")),
+                "part": {
+                    "part_id": str(part.get("part_id", "")),
+                    "display_name": str(part.get("display_name", "")),
+                    "library_uuid": str(part.get("library_uuid", "")),
+                    "symbol_uuid": str(part.get("symbol_uuid", "")),
+                    "pin_count": int(part.get("pin_count", 0) or 0),
+                    "named_pin_count": int(part.get("named_pin_count", 0) or 0),
+                },
+                "pins": sorted(pin_by_ref.get(ref, []), key=lambda item: item.get("pin", "")),
+                "availability_status": str(component.get("availability_status", "unknown")),
+            }
+        )
+
+    nets: list[dict[str, Any]] = []
+    for net in model.get("nets", []):
+        if not isinstance(net, dict):
+            continue
+        net_name = str(net.get("name", "")).strip()
+        if not net_name:
+            continue
+        nets.append(
+            {
+                "name": net_name,
+                "kind": str(net.get("kind", normalize_net_kind(net_name))),
+                "members": [str(member) for member in net.get("members", [])],
+            }
+        )
+
     return {
-        "components": [
-            {"ref": ref, "pins": pins} for ref, pins in pin_by_ref.items()
-        ]
+        "schema_version": "netlist.v1",
+        "request_id": request_id,
+        "project_id": project_id,
+        "source_model": {
+            "schema_version": str(model.get("schema_version", "")),
+            "request_id": request_id,
+        },
+        "components": components,
+        "nets": nets,
     }
 
 
 def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
-    """Run full pipeline: model → netlist → plan → KiCad output → postprocess → ERC.
-
-    If KICAD_WORKSPACE is set, libraries and output are derived from workspace:
-        $KICAD_WORKSPACE/libraries/symbols/   ← symbol libs
-        $KICAD_WORKSPACE/libraries/footprints/ ← footprint libs
-        $KICAD_WORKSPACE/output/              ← generated output
-    Otherwise falls back to KICAD_OUTPUT_DIR and related env vars.
-    """
+    """Run full pipeline: model -> netlist -> plan -> KiCad output -> postprocess -> ERC."""
     model = load_json(model_path)
     project_name = model.get("topology", model.get("request_id", "kicad_project"))
     source_project_dir = Path(model_path).resolve().parent
 
-    # Workspace mode: single root, auto-derive all paths
     explicit_workspace = os.environ.get("KICAD_WORKSPACE", "")
     workspace = explicit_workspace
     if not workspace:
-        # Derive workspace from model path parent (if it has libraries/)
         candidate = source_project_dir
         if (candidate / "libraries" / "symbols").exists():
             workspace = str(candidate)
 
-    # The CLI requires an explicit output_dir; respect it even when the model
-    # lives in a workspace that also contains reusable local libraries.
     output = Path(output_dir)
     if not explicit_workspace:
         os.environ.pop("KICAD_WORKSPACE", None)
@@ -149,6 +183,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     os.environ["KICAD_TOPOLOGY"] = model.get("topology", "")
 
     netlist = build_netlist(model)
+    simulation_result = write_simulation_artifacts(model, output)
     plan: KiCadExecutionPlan = compile_plan(model, netlist)
     plan_file = write_output(plan)
     write_result = write_project(asdict(plan))
@@ -202,6 +237,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         parts_result=parts_result,
         plan_diagnostics=asdict(plan.diagnostics) if hasattr(plan, "diagnostics") else {},
         postprocess=postprocess,
+        simulation_result=simulation_result,
     )
     return summary
 

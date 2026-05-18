@@ -325,6 +325,26 @@ def simulation_plan_to_dict(plan: SimulationPlan) -> dict[str, Any]:
     return asdict(plan)
 
 
+def write_json(path: Path, payload: Any) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def write_simulation_artifacts(model: dict[str, Any], output_dir: Path, profile: SimulationProfile | None = None) -> dict[str, Any]:
+    active_profile = profile or default_simulation_profile(model)
+    plan = build_simulation_plan(model, active_profile)
+    profile_file = output_dir / "simulation-profile.json"
+    plan_file = output_dir / "simulation-plan.json"
+    write_json(profile_file, simulation_profile_to_dict(active_profile))
+    write_json(plan_file, simulation_plan_to_dict(plan))
+    return {
+        "profile_file": str(profile_file),
+        "plan_file": str(plan_file),
+        "profile": simulation_profile_to_dict(active_profile),
+        "plan": simulation_plan_to_dict(plan),
+    }
+
+
 def _print_json(payload: Any) -> int:
     print(json.dumps(payload, ensure_ascii=False, indent=2))
     return 0

@@ -46,6 +46,7 @@ def build_run_pipeline_summary(
     parts_result: dict[str, Any],
     plan_diagnostics: dict[str, Any],
     postprocess: dict[str, Any],
+    simulation_result: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     """Build the canonical summary payload for scripts/run_pipeline.py."""
     warnings = _collect_warnings(erc_result, parts_result, postprocess)
@@ -63,6 +64,8 @@ def build_run_pipeline_summary(
             "kicad_erc_report": erc_result.get("output_file", ""),
             "part_lock": parts_result.get("lock_file", ""),
             "part_risk_report": parts_result.get("risk_report_file", ""),
+            "simulation_profile": (simulation_result or {}).get("profile_file", ""),
+            "simulation_plan": (simulation_result or {}).get("plan_file", ""),
         },
         "counts": {
             "symbols": write_result.get("symbol_count", 0),
@@ -84,6 +87,7 @@ def build_run_pipeline_summary(
         },
         "diagnostics": plan_diagnostics,
         "postprocess": postprocess,
+        "simulation": simulation_result or {},
         "symbols_injected": bool(postprocess.get("symbols_injected", False)),
         "warnings": warnings,
     }
