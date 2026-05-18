@@ -22,6 +22,7 @@ from .compile_kicad_execution_plan import compile_plan, write_output
 from .env_utils import env, is_truthy_env
 from .kicad_erc_runner import run as run_kicad_erc
 from .kicad_project_writer import write_project
+from .pipeline_event_log import append_pipeline_event, pipeline_event_log_path
 from .parts.workflow import run_parts_pipeline
 from .schema_versions import TEXT_TO_KICAD_SUMMARY_SCHEMA_VERSION
 from .simulation_planner import write_simulation_artifacts
@@ -44,7 +45,25 @@ def run() -> None:
     plan_file = write_output(plan)
     write_summary = write_project(asdict(plan))
     output_dir = Path(plan.target.output_dir)
+    event_log = pipeline_event_log_path(output_dir)
+    append_pipeline_event(
+        event_log,
+        "text-to-kicad",
+        "pipeline started",
+        {"request_id": spec.request_id, "topology": model.topology, "output_dir": str(output_dir)},
+    )
     sim_result = write_simulation_artifacts(asdict(model), output_dir)
+    sim_result["event_log_file"] = str(event_log)
+    append_pipeline_event(
+        event_log,
+        "simulation-plan",
+        "simulation artifacts generated",
+        {
+            "profile_file": sim_result.get("profile_file", ""),
+            "plan_file": sim_result.get("plan_file", ""),
+            "scenario_count": sim_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
+        },
+    )
 
     erc_summary: dict[str, Any] = {
         "enabled": False,
@@ -54,10 +73,35 @@ def run() -> None:
     if is_truthy_env("KICAD_RUN_ERC", "false"):
         os.environ["KICAD_EXECUTION_PLAN_FILE"] = plan_file
         erc_summary = run_kicad_erc(emit=False)
+    append_pipeline_event(
+        event_log,
+        "kicad-erc",
+        "ERC completed",
+        {
+            "attempted": erc_summary.get("attempted", False),
+            "enabled": erc_summary.get("enabled", False),
+            "summary_file": erc_summary.get("summary_file", ""),
+            "output_file": erc_summary.get("output_file", ""),
+            "warnings": erc_summary.get("warnings", []),
+        },
+    )
 
     spice_netlist = build_spice_netlist_from_netlist(netlist)
     ngspice_execution = execute_ngspice_netlist(spice_netlist)
     ngspice_feedback = build_ngspice_feedback(spec, model, spice_netlist, ngspice_execution)
+    append_pipeline_event(
+        event_log,
+        "ngspice",
+        "ngspice execution completed",
+        {
+            "enabled": ngspice_execution.enabled,
+            "attempted": ngspice_execution.attempted,
+            "success": ngspice_execution.success,
+            "log_path": ngspice_execution.log_path,
+            "warnings": ngspice_execution.warnings,
+            "error": ngspice_execution.error,
+        },
+    )
 
     # Optional: run Parts Pipeline (LCSC resolve -> select -> part.lock.yaml)
     parts_result: dict[str, Any] = {}
@@ -72,6 +116,16 @@ def run() -> None:
             )
         except Exception as parts_error:  # noqa: BLE001
             parts_result = {"error": str(parts_error)}
+        append_pipeline_event(
+            event_log,
+            "parts-pipeline",
+            "parts pipeline completed",
+            {
+                "lock_file": parts_result.get("lock_file", ""),
+                "risk_report_file": parts_result.get("risk_report_file", ""),
+                "error": parts_result.get("error", ""),
+            },
+        )
 
     requirement_file = output_dir / "requirement-spec.json"
     circuit_file = output_dir / "circuit-model.json"
@@ -98,6 +152,7 @@ def run() -> None:
             "netlist": str(netlist_file),
             "simulation_profile": sim_result.get("profile_file", ""),
             "simulation_plan": sim_result.get("plan_file", ""),
+            "event_log": str(event_log),
             "spice_netlist": str(spice_file),
             "ngspice_execution": str(ngspice_file),
             "ngspice_feedback": str(feedback_file),
@@ -136,6 +191,12 @@ def run() -> None:
     }
     write_json(pipeline_file, summary)
     summary["output_files"]["pipeline_summary"] = str(pipeline_file)
+    append_pipeline_event(
+        event_log,
+        "text-to-kicad",
+        "pipeline finished",
+        {"summary_file": str(pipeline_file), "event_log": str(event_log)},
+    )
     print(json.dumps(summary, ensure_ascii=False, indent=2))
 
 

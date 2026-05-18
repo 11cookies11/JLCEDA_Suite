@@ -17,6 +17,7 @@ from .env_utils import is_truthy_env
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import write_project
 from .parts.workflow import run_parts_pipeline
+from .pipeline_event_log import append_pipeline_event, pipeline_event_log_path
 from .pipeline_postprocess import apply_postprocess, pin_project_libraries
 from .pipeline_summary import build_run_pipeline_summary
 from .simulation_planner import write_simulation_artifacts
@@ -177,16 +178,44 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         os.environ.pop("KICAD_WORKSPACE", None)
 
     output.mkdir(parents=True, exist_ok=True)
+    event_log = pipeline_event_log_path(output)
     os.environ["KICAD_PROJECT_NAME"] = project_name
     os.environ["KICAD_OUTPUT_DIR"] = str(output)
     os.environ["KICAD_SOURCE_PROJECT_DIR"] = str(source_project_dir)
     os.environ["KICAD_TOPOLOGY"] = model.get("topology", "")
+    append_pipeline_event(
+        event_log,
+        "run_pipeline",
+        "pipeline started",
+        {"model_path": model_path, "project_name": project_name, "output_dir": str(output)},
+    )
 
     netlist = build_netlist(model)
     simulation_result = write_simulation_artifacts(model, output)
+    simulation_result["event_log_file"] = str(event_log)
+    append_pipeline_event(
+        event_log,
+        "simulation-plan",
+        "simulation artifacts generated",
+        {
+            "profile_file": simulation_result.get("profile_file", ""),
+            "plan_file": simulation_result.get("plan_file", ""),
+            "scenario_count": simulation_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
+        },
+    )
     plan: KiCadExecutionPlan = compile_plan(model, netlist)
     plan_file = write_output(plan)
     write_result = write_project(asdict(plan))
+    append_pipeline_event(
+        event_log,
+        "kicad-generation",
+        "KiCad execution plan written",
+        {
+            "plan_file": plan_file,
+            "project_file": write_result.get("project_file", ""),
+            "schematic_file": write_result.get("schematic_file", ""),
+        },
+    )
 
     schematic_file = Path(write_result.get("schematic_file", ""))
     project_dir = schematic_file.parent if schematic_file.exists() else output / project_name
@@ -194,6 +223,17 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     board_result = _generate_board_from_plan(str(plan_file), project_dir)
     if board_result.get("attempted"):
         postprocess["board_generation"] = board_result
+        append_pipeline_event(
+            event_log,
+            "kicad-board",
+            "board generation completed",
+            {
+                "attempted": board_result.get("attempted", False),
+                "success": board_result.get("success", False),
+                "board_file": board_result.get("board_file", ""),
+                "warnings": board_result.get("warnings", []),
+            },
+        )
     if board_result.get("success"):
         write_result["board_file"] = board_result.get("board_file", "")
         write_result["board_footprints"] = board_result.get("footprints", 0)
@@ -213,6 +253,18 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             "finding_count": 0,
             "error": str(exc),
         }
+    append_pipeline_event(
+        event_log,
+        "kicad-erc",
+        "ERC completed",
+        {
+            "attempted": erc_result.get("attempted", False),
+            "success": erc_result.get("success", False),
+            "summary_file": erc_result.get("summary_file", ""),
+            "output_file": erc_result.get("output_file", ""),
+            "warnings": erc_result.get("warnings", []),
+        },
+    )
     postprocess["project_library_pins_after_erc"] = pin_project_libraries(project_dir)
 
     parts_result: dict[str, Any] = {}
@@ -226,6 +278,16 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             )
         except Exception as exc:  # noqa: BLE001
             parts_result = {"error": str(exc)}
+        append_pipeline_event(
+            event_log,
+            "parts-pipeline",
+            "parts pipeline completed",
+            {
+                "lock_file": parts_result.get("lock_file", ""),
+                "risk_report_file": parts_result.get("risk_report_file", ""),
+                "error": parts_result.get("error", ""),
+            },
+        )
 
     summary = build_run_pipeline_summary(
         project_name=project_name,
@@ -238,6 +300,15 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         plan_diagnostics=asdict(plan.diagnostics) if hasattr(plan, "diagnostics") else {},
         postprocess=postprocess,
         simulation_result=simulation_result,
+    )
+    append_pipeline_event(
+        event_log,
+        "run_pipeline",
+        "pipeline finished",
+        {
+            "summary_file": summary.get("files", {}).get("summary", ""),
+            "event_log": str(event_log),
+        },
     )
     return summary
 

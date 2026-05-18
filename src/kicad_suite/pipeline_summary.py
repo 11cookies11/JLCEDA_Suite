@@ -66,6 +66,7 @@ def build_run_pipeline_summary(
             "part_risk_report": parts_result.get("risk_report_file", ""),
             "simulation_profile": (simulation_result or {}).get("profile_file", ""),
             "simulation_plan": (simulation_result or {}).get("plan_file", ""),
+            "event_log": (simulation_result or {}).get("event_log_file", ""),
         },
         "counts": {
             "symbols": write_result.get("symbol_count", 0),

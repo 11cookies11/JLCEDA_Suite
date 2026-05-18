@@ -125,6 +125,7 @@ class TestRunPipeline(unittest.TestCase):
         run_parts.assert_called_once()
         self.assertEqual(summary["files"]["part_lock"], "part.lock.yaml")
         self.assertEqual(summary["files"]["simulation_profile"], "simulation-profile.json")
+        self.assertTrue(summary["files"]["event_log"].endswith("pipeline-events.jsonl"))
         self.assertTrue(summary["symbols_injected"])
 
     def test_run_pipeline_skips_parts_when_disabled(self):
@@ -174,4 +175,5 @@ class TestRunPipeline(unittest.TestCase):
         run_parts.assert_not_called()
         write_simulation_artifacts.assert_called_once()
         self.assertEqual(summary["files"]["part_lock"], "")
+        self.assertTrue(summary["files"]["event_log"].endswith("pipeline-events.jsonl"))
         self.assertFalse(summary["symbols_injected"])

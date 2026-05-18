@@ -51,6 +51,7 @@ class TestRunPipelineSummary(unittest.TestCase):
                 simulation_result={
                     "profile_file": "simulation-profile.json",
                     "plan_file": "simulation-plan.json",
+                    "event_log_file": "pipeline-events.jsonl",
                     "profile": {"schema_version": "simulation-profile.v1"},
                     "plan": {"schema_version": "simulation-plan.v1"},
                 },
@@ -61,6 +62,7 @@ class TestRunPipelineSummary(unittest.TestCase):
             self.assertEqual(summary["files"]["part_lock"], "part.lock.yaml")
             self.assertEqual(summary["files"]["simulation_profile"], "simulation-profile.json")
             self.assertEqual(summary["files"]["simulation_plan"], "simulation-plan.json")
+            self.assertEqual(summary["files"]["event_log"], "pipeline-events.jsonl")
             self.assertEqual(summary["counts"]["symbols"], 12)
             self.assertEqual(summary["counts"]["nets"], 9)
             self.assertTrue(summary["symbols_injected"])
