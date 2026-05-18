@@ -1,0 +1,961 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "nexdap-esp32c3-managed-rp2040-swd-coprocessor-v2",
+  "project_id": "nexdap-esp32c3-managed-rp2040-swd-coprocessor",
+  "topology": "esp32c3_managed_rp2040_swd_coprocessor",
+  "components": [
+    {
+      "ref": "J1",
+      "role": "usb_c_input",
+      "value": "USB-C-16P"
+    },
+    {
+      "ref": "R_CC1",
+      "role": "usb_cc1_pulldown",
+      "value": "5.1k"
+    },
+    {
+      "ref": "R_CC2",
+      "role": "usb_cc2_pulldown",
+      "value": "5.1k"
+    },
+    {
+      "ref": "D_USB_ESD",
+      "role": "usb_esd_protection",
+      "value": "USBLC6-2SC6"
+    },
+    {
+      "ref": "F1",
+      "role": "usb_vbus_efuse",
+      "value": "MNCP380HSN05AAT1G"
+    },
+    {
+      "ref": "U_BUCK",
+      "role": "main_3v3_buck",
+      "value": "SY8089A1AAC"
+    },
+    {
+      "ref": "L_BUCK",
+      "role": "buck_power_inductor",
+      "value": "2.2uH",
+      "selected_part": {
+        "mpn": "APH201208C2R2MP03",
+        "lcsc_id": "C42455262",
+        "package": "0805",
+        "source": "easyeda2kicad"
+      }
+    },
+    {
+      "ref": "C_BUCK_IN",
+      "role": "buck_input_capacitor",
+      "value": "10uF"
+    },
+    {
+      "ref": "C_BUCK_OUT",
+      "role": "buck_output_capacitor",
+      "value": "22uF"
+    },
+    {
+      "ref": "R_BUCK_FB1",
+      "role": "buck_feedback_resistor_top",
+      "value": "100k"
+    },
+    {
+      "ref": "R_BUCK_FB2",
+      "role": "buck_feedback_resistor_bottom",
+      "value": "33k"
+    },
+    {
+      "ref": "C_BULK_3V3",
+      "role": "vcc_3v3_bulk_capacitor",
+      "value": "10uF"
+    },
+    {
+      "ref": "U_ESP32",
+      "role": "esp32c3_host_controller",
+      "value": "ESP32-C3FH4X",
+      "notes": "Use exact ESP32-C3FH4X package pinout during schematic generation. Avoid GPIOs reserved for embedded flash and strapping functions. USB uses GPIO18/GPIO19. Host-facing controller only — no direct target-facing signals."
+    },
+    {
+      "ref": "R_ESP_EN",
+      "role": "esp_chip_en_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "C_ESP_EN",
+      "role": "esp_en_reset_capacitor",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "R_ESP_BOOT",
+      "role": "esp_gpio9_boot_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R_ESP_GPIO8",
+      "role": "esp_gpio8_strap_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R_ESP_GPIO2",
+      "role": "esp_gpio2_strap_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "SW_ESP_RST",
+      "role": "esp32_reset_button",
+      "value": "TK-6580S-2"
+    },
+    {
+      "ref": "SW_ESP_BOOT",
+      "role": "esp32_boot_button",
+      "value": "TK-6580S-2"
+    },
+    {
+      "ref": "Y_ESP32",
+      "role": "esp32_40mhz_crystal",
+      "value": "40MHz"
+    },
+    {
+      "ref": "C_ESP_XTAL1",
+      "role": "esp_xtal_load_cap_1",
+      "value": "22pF"
+    },
+    {
+      "ref": "C_ESP_XTAL2",
+      "role": "esp_xtal_load_cap_2",
+      "value": "22pF"
+    },
+    {
+      "ref": "L_RF",
+      "role": "rf_series_matching_inductor",
+      "value": "3.9nH",
+      "selected_part": {
+        "mpn": "CS0402-3N9G-S",
+        "lcsc_id": "C285959",
+        "package": "0402",
+        "source": "easyeda2kicad"
+      }
+    },
+    {
+      "ref": "C_RF_SHUNT",
+      "role": "rf_shunt_matching_cap",
+      "value": "1.2pF"
+    },
+    {
+      "ref": "ANT1",
+      "role": "chip_antenna_2g4",
+      "value": "2450AT18A100E",
+      "selected_part": {
+        "mpn": "2450AT18A100E",
+        "lcsc_id": "C89334",
+        "package": "1206",
+        "source": "easyeda2kicad"
+      }
+    },
+    {
+      "ref": "C_ESP_VDDA",
+      "role": "esp_vdda_decoupling",
+      "value": "1uF"
+    },
+    {
+      "ref": "C_ESP_DEC1",
+      "role": "esp_vdd3p3_decoupling_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_ESP_DEC2",
+      "role": "esp_vdd3p3_decoupling_2",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_ESP_BULK",
+      "role": "esp_vdd3p3_bulk",
+      "value": "4.7uF"
+    },
+    {
+      "ref": "U_RP2040",
+      "role": "rp2040_target_swd_uart_coprocessor",
+      "value": "RP2040",
+      "notes": "Target-facing SWD/UART/VTREF/nRESET timing coprocessor managed by ESP32-C3FH4X. Internal management by ESP32-C3 via SWD (pins 24/25), RUN (pin 26), BOOTSEL control. Communicates over SPI for command/response/stream channels. No direct USB connection to host."
+    },
+    {
+      "ref": "U_FLASH",
+      "role": "rp2040_qspi_flash",
+      "value": "GD25Q16ETIGR"
+    },
+    {
+      "ref": "R_RP_RUN",
+      "role": "rp2040_run_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "Y_RP2040",
+      "role": "rp2040_12mhz_crystal",
+      "value": "12MHz"
+    },
+    {
+      "ref": "C_RP_XTAL1",
+      "role": "rp_xtal_load_cap_1",
+      "value": "22pF"
+    },
+    {
+      "ref": "C_RP_XTAL2",
+      "role": "rp_xtal_load_cap_2",
+      "value": "22pF"
+    },
+    {
+      "ref": "C_RP_DEC1",
+      "role": "rp_vdd_decoupling_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_RP_DEC2",
+      "role": "rp_dvdd_decoupling",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_RP_BULK",
+      "role": "rp_vdd_bulk",
+      "value": "4.7uF"
+    },
+    {
+      "ref": "C_VTREF",
+      "role": "vtref_adc_filter_cap",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "R_VTREF_DIV1",
+      "role": "vtref_adc_divider_top",
+      "value": "10k"
+    },
+    {
+      "ref": "R_VTREF_DIV2",
+      "role": "vtref_adc_divider_bottom",
+      "value": "10k"
+    },
+    {
+      "ref": "Q_NRST",
+      "role": "nreset_open_drain_nmos",
+      "value": "2N7002"
+    },
+    {
+      "ref": "Q_RP_BOOTSEL",
+      "role": "rp2040_bootsel_open_drain_pulldown",
+      "value": "2N7002"
+    },
+    {
+      "ref": "R_RP_BOOTSEL_GATE",
+      "role": "rp2040_bootsel_gate_resistor",
+      "value": "100R"
+    },
+    {
+      "ref": "R_RP_BOOTSEL_PD",
+      "role": "rp2040_bootsel_gate_pulldown",
+      "value": "100k"
+    },
+    {
+      "ref": "R_NRST_PU",
+      "role": "nreset_target_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R_SWDIO",
+      "role": "swdio_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_SWCLK",
+      "role": "swclk_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_SWO",
+      "role": "swo_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_nRESET",
+      "role": "nreset_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_TGT_UART_TX",
+      "role": "tgt_uart_tx_series_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_TGT_UART_RX",
+      "role": "tgt_uart_rx_series_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "F_TGT",
+      "role": "target_vbus_ptc_fuse",
+      "value": "200mA",
+      "selected_part": {
+        "mpn": "0805L020/30XR",
+        "lcsc_id": "C7472560",
+        "package": "0805",
+        "source": "easyeda2kicad"
+      }
+    },
+    {
+      "ref": "JP_TGT_PWR",
+      "role": "target_power_enable_jumper",
+      "value": "2P-Jumper"
+    },
+    {
+      "ref": "D_TGT_ESD",
+      "role": "target_esd_protection",
+      "value": "SRV05-4"
+    },
+    {
+      "ref": "J_TGT",
+      "role": "target_swd_connector",
+      "value": "Header-2.54-2x4P"
+    },
+    {
+      "ref": "LED_PWR",
+      "role": "power_indicator_led",
+      "value": "Green"
+    },
+    {
+      "ref": "R_LED_PWR",
+      "role": "power_led_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "LED_DAP",
+      "role": "dap_activity_led",
+      "value": "Blue"
+    },
+    {
+      "ref": "R_LED_DAP",
+      "role": "dap_led_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "LED_TGT",
+      "role": "target_power_led",
+      "value": "Red"
+    },
+    {
+      "ref": "R_LED_TGT",
+      "role": "target_led_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "TP1",
+      "role": "test_point_swdio",
+      "value": "TP"
+    },
+    {
+      "ref": "TP2",
+      "role": "test_point_swclk",
+      "value": "TP"
+    }
+  ],
+  "nets": [
+    {
+      "name": "USB_VBUS",
+      "kind": "power",
+      "members": [
+        "J1.A4B9",
+        "J1.B4A9",
+        "F1.1"
+      ]
+    },
+    {
+      "name": "+5V_USB_PROTECTED",
+      "kind": "power",
+      "members": [
+        "F1.2",
+        "C_BUCK_IN.1",
+        "D_USB_ESD.5",
+        "U_BUCK.4",
+        "F_TGT.1"
+      ]
+    },
+    {
+      "name": "+3V3_MAIN",
+      "kind": "power",
+      "members": [
+        "U_BUCK.1",
+        "C_BUCK_OUT.1",
+        "C_BULK_3V3.1",
+        "U_ESP32.11",
+        "U_ESP32.17",
+        "U_ESP32.2",
+        "U_ESP32.3",
+        "U_ESP32.32",
+        "U_ESP32.31",
+        "C_ESP_VDDA.1",
+        "C_ESP_DEC1.1",
+        "C_ESP_DEC2.1",
+        "C_ESP_BULK.1",
+        "R_ESP_EN.1",
+        "R_ESP_BOOT.1",
+        "R_ESP_GPIO8.1",
+        "R_ESP_GPIO2.1",
+        "U_RP2040.49",
+        "U_RP2040.42",
+        "U_RP2040.33",
+        "U_RP2040.22",
+        "U_RP2040.10",
+        "U_RP2040.1",
+        "U_RP2040.44",
+        "U_FLASH.8",
+        "C_RP_DEC1.1",
+        "C_RP_BULK.1",
+        "R_RP_RUN.1",
+        "R_VTREF_DIV1.1",
+        "R_NRST_PU.1",
+        "D_TGT_ESD.5",
+        "R_LED_PWR.1",
+        "R_LED_DAP.1",
+        "R_LED_TGT.1",
+        "L_BUCK.2",
+        "R_BUCK_FB1.1",
+        "U_RP2040.48"
+      ]
+    },
+    {
+      "name": "+5V_TGT_FUSED",
+      "kind": "power",
+      "members": [
+        "F_TGT.2",
+        "JP_TGT_PWR.1"
+      ],
+      "_note": "Fused +5V before target power enable jumper. JP_TGT_PWR jumper bridges this to +5V_SW_TGT."
+    },
+    {
+      "name": "+5V_SW_TGT",
+      "kind": "power",
+      "members": [
+        "JP_TGT_PWR.2",
+        "J_TGT.1"
+      ],
+      "_note": "Switchable +5V output to target connector. Enabled only when JP_TGT_PWR jumper is installed."
+    },
+    {
+      "name": "ESP_RP_BOOTSEL_CTRL",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.27",
+        "R_RP_BOOTSEL_GATE.1"
+      ],
+      "_note": "ESP32-C3 actively controls RP2040 BOOTSEL through NMOS open-drain pulldown. Used for recovery and special boot mode."
+    },
+    {
+      "name": "RP_BOOTSEL_GATE",
+      "kind": "signal",
+      "members": [
+        "R_RP_BOOTSEL_GATE.2",
+        "Q_RP_BOOTSEL.1",
+        "R_RP_BOOTSEL_PD.1"
+      ]
+    },
+    {
+      "name": "GND_HOST",
+      "kind": "ground",
+      "members": [
+        "J1.A1B12",
+        "J1.B1A12",
+        "C_BUCK_IN.2",
+        "C_BUCK_OUT.2",
+        "U_BUCK.2",
+        "R_BUCK_FB2.2",
+        "C_BULK_3V3.2",
+        "U_ESP32.33",
+        "C_ESP_VDDA.2",
+        "C_ESP_DEC1.2",
+        "C_ESP_DEC2.2",
+        "C_ESP_BULK.2",
+        "C_ESP_EN.2",
+        "C_ESP_XTAL1.2",
+        "C_ESP_XTAL2.2",
+        "C_RF_SHUNT.2",
+        "U_RP2040.57",
+        "U_FLASH.4",
+        "C_RP_DEC1.2",
+        "C_RP_DEC2.2",
+        "C_RP_BULK.2",
+        "C_RP_XTAL1.2",
+        "C_RP_XTAL2.2",
+        "R_VTREF_DIV2.2",
+        "C_VTREF.2",
+        "Q_NRST.2",
+        "D_TGT_ESD.2",
+        "LED_PWR.1",
+        "LED_TGT.1",
+        "R_CC1.2",
+        "R_CC2.2",
+        "D_USB_ESD.2",
+        "ANT1.1",
+        "J_TGT.6",
+        "Q_RP_BOOTSEL.2",
+        "R_RP_BOOTSEL_PD.2",
+        "SW_ESP_RST.4",
+        "SW_ESP_RST.5",
+        "SW_ESP_RST.6",
+        "SW_ESP_BOOT.4",
+        "SW_ESP_BOOT.5",
+        "SW_ESP_BOOT.6"
+      ]
+    },
+    {
+      "name": "+1V1",
+      "kind": "power",
+      "members": [
+        "U_RP2040.45",
+        "U_RP2040.23",
+        "U_RP2040.50",
+        "C_RP_DEC2.1"
+      ]
+    },
+    {
+      "name": "BUCK_FB",
+      "kind": "signal",
+      "members": [
+        "U_BUCK.5",
+        "R_BUCK_FB1.2",
+        "R_BUCK_FB2.1"
+      ]
+    },
+    {
+      "name": "L_BUCK_SW",
+      "kind": "signal",
+      "members": [
+        "U_BUCK.3",
+        "L_BUCK.1"
+      ]
+    },
+    {
+      "name": "USB_DP",
+      "kind": "signal",
+      "members": [
+        "J1.A6",
+        "J1.B6",
+        "D_USB_ESD.1",
+        "U_ESP32.26"
+      ],
+      "_note": "USB D+ connected to ESP32-C3 GPIO19 (native USB)."
+    },
+    {
+      "name": "USB_DM",
+      "kind": "signal",
+      "members": [
+        "J1.A7",
+        "J1.B7",
+        "D_USB_ESD.3",
+        "U_ESP32.25"
+      ],
+      "_note": "USB D- connected to ESP32-C3 GPIO18 (native USB)."
+    },
+    {
+      "name": "USB_CC1",
+      "kind": "signal",
+      "members": [
+        "J1.A5",
+        "R_CC1.1"
+      ]
+    },
+    {
+      "name": "USB_CC2",
+      "kind": "signal",
+      "members": [
+        "J1.B5",
+        "R_CC2.1"
+      ]
+    },
+    {
+      "name": "ESP_CHIP_EN",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.7",
+        "R_ESP_EN.2",
+        "C_ESP_EN.1",
+        "SW_ESP_RST.1",
+        "SW_ESP_RST.2",
+        "SW_ESP_RST.3"
+      ]
+    },
+    {
+      "name": "ESP_GPIO9_BOOT",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.15",
+        "R_ESP_BOOT.2",
+        "SW_ESP_BOOT.1",
+        "SW_ESP_BOOT.2",
+        "SW_ESP_BOOT.3"
+      ]
+    },
+    {
+      "name": "ESP_GPIO8",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.14",
+        "R_ESP_GPIO8.2"
+      ]
+    },
+    {
+      "name": "ESP_XTAL_P",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.30",
+        "Y_ESP32.1",
+        "C_ESP_XTAL1.1"
+      ]
+    },
+    {
+      "name": "ESP_XTAL_N",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.29",
+        "Y_ESP32.2",
+        "C_ESP_XTAL2.1"
+      ]
+    },
+    {
+      "name": "ESP_RF_OUT",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.1",
+        "L_RF.1"
+      ]
+    },
+    {
+      "name": "RF_ANT",
+      "kind": "signal",
+      "members": [
+        "L_RF.2",
+        "C_RF_SHUNT.1",
+        "ANT1.2"
+      ]
+    },
+    {
+      "name": "ESP_SPI_SCLK",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.10",
+        "U_RP2040.4"
+      ]
+    },
+    {
+      "name": "ESP_SPI_MOSI",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.16",
+        "U_RP2040.5"
+      ]
+    },
+    {
+      "name": "ESP_SPI_MISO",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.13",
+        "U_RP2040.11"
+      ]
+    },
+    {
+      "name": "ESP_SPI_CS",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.12",
+        "U_RP2040.12"
+      ]
+    },
+    {
+      "name": "RP_TO_ESP_IRQ",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.28",
+        "U_RP2040.14"
+      ],
+      "_note": "RP2040-to-ESP32 interrupt line. Only one IRQ required — ESP32 is SPI master and can initiate transfers without ESP_TO_RP_IRQ."
+    },
+    {
+      "name": "ESP_RP_RUN_CTRL",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.8",
+        "U_RP2040.26",
+        "R_RP_RUN.2"
+      ]
+    },
+    {
+      "name": "ESP_RP_SWCLK",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.9",
+        "U_RP2040.24"
+      ],
+      "_note": "ESP32-C3 internal SWD management interface to RP2040 SWCLK (RP2040 pin 24). Used for first-time programming, firmware recovery, and diagnostics. Not connected to target SWD."
+    },
+    {
+      "name": "ESP_RP_SWDIO",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.6",
+        "U_RP2040.25",
+        "R_ESP_GPIO2.2"
+      ],
+      "_note": "ESP32-C3 internal SWD management interface to RP2040 SWDIO (RP2040 pin 25). Used for first-time programming, firmware recovery, and diagnostics. Not connected to target SWD."
+    },
+    {
+      "name": "RP_BOOTSEL_QSPI_SS",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.56",
+        "U_FLASH.1",
+        "Q_RP_BOOTSEL.3"
+      ]
+    },
+    {
+      "name": "QSPI_SCLK",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.52",
+        "U_FLASH.6"
+      ]
+    },
+    {
+      "name": "QSPI_SD0",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.53",
+        "U_FLASH.5"
+      ]
+    },
+    {
+      "name": "QSPI_SD1",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.55",
+        "U_FLASH.2"
+      ]
+    },
+    {
+      "name": "QSPI_SD2",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.54",
+        "U_FLASH.3"
+      ]
+    },
+    {
+      "name": "QSPI_SD3",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.51",
+        "U_FLASH.7"
+      ]
+    },
+    {
+      "name": "RP_XIN",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.20",
+        "Y_RP2040.1",
+        "C_RP_XTAL1.1"
+      ]
+    },
+    {
+      "name": "RP_XOUT",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.21",
+        "Y_RP2040.2",
+        "C_RP_XTAL2.1"
+      ]
+    },
+    {
+      "name": "RP_TGT_SWCLK",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.2",
+        "R_SWCLK.1"
+      ],
+      "_note": "RP2040 GPIO0 drives target SWCLK through 22R protection resistor. Separate from ESP32-C3 internal management SWCLK (RP2040 pin 24)."
+    },
+    {
+      "name": "TGT_SWCLK",
+      "kind": "signal",
+      "members": [
+        "R_SWCLK.2",
+        "J_TGT.3",
+        "D_TGT_ESD.3",
+        "TP2.1"
+      ]
+    },
+    {
+      "name": "RP_TGT_SWDIO",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.3",
+        "R_SWDIO.1"
+      ],
+      "_note": "RP2040 GPIO1 bidirectional target SWDIO through 22R protection resistor. Separate from ESP32-C3 internal management SWDIO (RP2040 pin 25)."
+    },
+    {
+      "name": "TGT_SWDIO",
+      "kind": "signal",
+      "members": [
+        "R_SWDIO.2",
+        "J_TGT.2",
+        "D_TGT_ESD.1",
+        "TP1.1"
+      ]
+    },
+    {
+      "name": "TGT_SWO_IN",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.7",
+        "R_SWO.1"
+      ],
+      "_note": "Target SWO trace input to RP2040 GPIO5 through 22R protection resistor."
+    },
+    {
+      "name": "TGT_SWO_OUT",
+      "kind": "signal",
+      "members": [
+        "R_SWO.2",
+        "J_TGT.4",
+        "D_TGT_ESD.6"
+      ]
+    },
+    {
+      "name": "HOST_nRESET_CTRL",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.15",
+        "Q_NRST.1"
+      ]
+    },
+    {
+      "name": "TGT_nRESET",
+      "kind": "signal",
+      "members": [
+        "R_nRESET.2",
+        "J_TGT.5",
+        "D_TGT_ESD.4"
+      ]
+    },
+    {
+      "name": "TGT_nRESET_DRV",
+      "kind": "signal",
+      "members": [
+        "Q_NRST.3",
+        "R_NRST_PU.2",
+        "R_nRESET.1"
+      ]
+    },
+    {
+      "name": "RP_TGT_UART_TX",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.8",
+        "R_TGT_UART_TX.1"
+      ],
+      "_note": "RP2040 GPIO6 target UART TX through 22R series resistor. RP2040 forwards target UART data to ESP32-C3 over SPI stream channel."
+    },
+    {
+      "name": "TGT_UART_TX",
+      "kind": "signal",
+      "members": [
+        "R_TGT_UART_TX.2",
+        "J_TGT.7"
+      ]
+    },
+    {
+      "name": "TGT_UART_RX",
+      "kind": "signal",
+      "members": [
+        "J_TGT.8",
+        "R_TGT_UART_RX.1"
+      ]
+    },
+    {
+      "name": "RP_TGT_UART_RX",
+      "kind": "signal",
+      "members": [
+        "R_TGT_UART_RX.2",
+        "U_RP2040.9"
+      ],
+      "_note": "RP2040 GPIO7 target UART RX through 22R series resistor. Target UART data forwarded to ESP32-C3 over SPI stream channel."
+    },
+    {
+      "name": "LED_PWR_A",
+      "kind": "signal",
+      "members": [
+        "LED_PWR.2",
+        "R_LED_PWR.2"
+      ]
+    },
+    {
+      "name": "LED_DAP_A",
+      "kind": "signal",
+      "members": [
+        "LED_DAP.2",
+        "R_LED_DAP.2"
+      ]
+    },
+    {
+      "name": "LED_TGT_K",
+      "kind": "signal",
+      "members": [
+        "LED_TGT.2",
+        "R_LED_TGT.2"
+      ]
+    },
+    {
+      "name": "DAP_ACTIVITY",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.17",
+        "LED_DAP.1"
+      ]
+    },
+    {
+      "name": "VTREF_TARGET",
+      "kind": "signal",
+      "members": [
+        "R_VTREF_DIV1.2",
+        "R_VTREF_DIV2.1",
+        "C_VTREF.1",
+        "U_RP2040.28"
+      ],
+      "_note": "VTREF measured by RP2040 ADC (GPIO26/ADC0, pin 28) and reported to ESP32-C3 through SPI. VTREF shall not share the ESP32-C3-to-RP2040 SWDIO line."
+    }
+  ],
+  "design_decisions": [
+    "ESP32-C3FH4X is the only host-facing controller providing USB, Wi-Fi, BLE, TCP, configuration and management services.",
+    "RP2040 does not expose USB directly to the host.",
+    "USB-C D+/D- are connected to ESP32-C3 native USB pins GPIO19/GPIO18 instead of RP2040.",
+    "RP2040 acts as a deterministic target-facing SWD and UART timing coprocessor managed by ESP32-C3.",
+    "SPI is the primary command/response/stream channel between ESP32-C3 and RP2040 during normal operation.",
+    "Only one RP2040-to-ESP32 interrupt line is required. ESP32-C3 is the SPI master and can initiate transfers without ESP_TO_RP_IRQ.",
+    "ESP32-C3 provides an internal SWD maintenance interface to RP2040 using SWDIO (pin 25), SWCLK (pin 24) and RUN (pin 26).",
+    "The internal ESP32-C3-to-RP2040 SWD interface is used for first-time RP2040 programming, firmware recovery and low-level diagnostics.",
+    "RP2040 target-facing SWD (TGT_SWDIO, TGT_SWCLK) uses separate GPIOs (GPIO0, GPIO1) from the internal management SWD pins (24, 25).",
+    "RP2040 BOOTSEL is actively controlled by ESP32-C3 through an NMOS open-drain pulldown circuit (Q_RP_BOOTSEL, 2N7002).",
+    "ESP_RP_BOOTSEL_CTRL must remain inactive during normal RP2040 execution to avoid interfering with the RP2040 external QSPI Flash chip-select line.",
+    "ESP32-C3 shall not directly share or drive the RP2040 external QSPI Flash bus.",
+    "RP2040 manual BOOTSEL and RESET buttons are removed.",
+    "ESP32-C3 has its own BOOT and RESET buttons for host-side maintenance.",
+    "Target UART bridge is implemented by RP2040 instead of ESP32-C3 to save ESP32-C3 GPIOs and keep all target-facing realtime I/O on the RP2040 side.",
+    "RP2040 forwards target UART data to ESP32-C3 over the SPI command/stream channel.",
+    "ESP32-C3 exposes the UART bridge to host through USB CDC, TCP socket, WebSocket, or BLE service.",
+    "VTREF is measured by RP2040 ADC and reported to ESP32-C3 through SPI.",
+    "ESP32-C3 does not directly sample target voltage in V1.",
+    "VTREF shall not share the ESP32-C3-to-RP2040 SWDIO line.",
+    "Target 5V output is enabled through JP_TGT_PWR. Removing the jumper disconnects NexDAP 5V from the target connector to avoid conflict with self-powered target boards.",
+    "All target-facing protection retained: 22R series resistors on SWDIO/SWCLK/SWO/nRESET/UART, SRV05-4 ESD on SWD/SWO/nRESET, and 2N7002 open-drain nRESET.",
+    "Target connector uses a 2x4 2.54mm header; pins 7/8 = Target UART TX/RX.",
+    "200mA PTC fuse on target 5V output prevents short-circuit damage.",
+    "LED indicators: PWR=Green, DAP=Blue, TGT=Red."
+  ]
+}

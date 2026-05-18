@@ -200,13 +200,16 @@ def sync_source_libraries(project_dir: Path) -> dict[str, Any]:
         if source.exists():
             shutil.copytree(source, target, dirs_exist_ok=True)
             counts[name] = len([path for path in target.rglob("*") if path.is_file()])
-    supplemental = REPO_ROOT / "resources" / "kicad" / "footprints" / "JLC-MCP.pretty"
-    if supplemental.exists():
-        target = target_libraries / "footprints" / "JLC-MCP.pretty"
-        target.mkdir(parents=True, exist_ok=True)
-        for footprint in supplemental.glob("*.kicad_mod"):
-            shutil.copy2(footprint, target / footprint.name)
-        counts["supplemental_footprints"] = len(list(supplemental.glob("*.kicad_mod")))
+    supplemental_root = REPO_ROOT / "resources" / "kicad" / "footprints"
+    if supplemental_root.exists():
+        supplemental_total = 0
+        for pretty_dir in sorted(supplemental_root.glob("*.pretty")):
+            target = target_libraries / "footprints" / pretty_dir.name
+            target.mkdir(parents=True, exist_ok=True)
+            for footprint in pretty_dir.glob("*.kicad_mod"):
+                shutil.copy2(footprint, target / footprint.name)
+            supplemental_total += len(list(pretty_dir.glob("*.kicad_mod")))
+        counts["supplemental_footprints"] = supplemental_total
         counts["footprints"] = len([path for path in (target_libraries / "footprints").rglob("*") if path.is_file()])
     return {"attempted": True, "copied": True, "source": str(source_libraries), "target": str(target_libraries), "counts": counts}
 

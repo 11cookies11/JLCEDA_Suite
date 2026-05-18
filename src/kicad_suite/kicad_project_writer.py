@@ -1359,19 +1359,18 @@ def write_fp_lib_table(output_dir: Path) -> None:
     across machines. KiCad resolves bare relative URIs against the
     directory containing the .kicad_pro file.
     """
-    output_resolved = output_dir.resolve()
     lines = ['(fp_lib_table', '  (version 7)']
 
-    # Repo AIAgent footprints
+    # Repo-managed footprints (AIAgent, JLC-MCP, etc.).  Use project-local
+    # paths like "libraries/footprints/<name>.pretty" — postprocess is
+    # responsible for copying the .kicad_mod files into the output directory
+    # before KiCad opens the project.  This avoids fragile repo-relative
+    # "../../.." paths that break when the output tree depth changes.
     repo_fp = REPO_ROOT / 'resources' / 'kicad' / 'footprints'
     if repo_fp.exists():
         for pretty_dir in sorted(repo_fp.glob('*.pretty')):
             lib_name = pretty_dir.name.rsplit('.', 1)[0]
-            try:
-                rel = Path(os.path.relpath(str(pretty_dir.resolve()), str(output_resolved)))
-            except ValueError:
-                rel = pretty_dir
-            uri = str(rel).replace('\\', '/')
+            uri = f'libraries/footprints/{pretty_dir.name}'
             lines.append(f'  (lib (name "{lib_name}")(type "KiCad")(uri "{uri}")(options "")(descr "AIAgent custom footprints"))')
 
     # JLC/LCSC imported footprints. Register the expected project-local path

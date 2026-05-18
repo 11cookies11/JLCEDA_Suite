@@ -1,0 +1,313 @@
+(footprint "CRYSTAL-SMD_4P-L3.2-W2.5-BL"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "12MHz 20pF Crystal Oscillator ±10ppm ±20ppm SMD3225-4P Crystals ROHS")
+	(tags "component")
+	(property "Reference" "REF**"
+		(at 0 -3.43 0)
+		(layer "F.SilkS")
+		(uuid "892758e6-ece8-4fa3-a9ec-bf63e6f67dd4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "X322512MSB4SI"
+		(at 0 3.66 0)
+		(layer "F.Fab")
+		(uuid "1ea40468-6594-4335-866c-577f0e0215c0")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5923672c-2893-4b05-83fa-d677e28198c3")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "12MHz 20pF Crystal Oscillator ±10ppm ±20ppm SMD3225-4P Crystals ROHS"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f43b6d60-59e4-4b1d-8c5c-c5f432dd8751")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC" "C9002"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0e9cba2d-1d8e-4a6d-94e6-1a16c4b78246")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "YXC(扬兴晶振)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "17aa82ab-e3b0-4daf-a944-dd8faab37c80")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Load Capacitance" "20pF"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ed86d5aa-ea18-4748-8905-a16cc8406b34")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Operating Temperature" "-40℃~+85℃"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7db127a0-c76e-4db8-8e30-7a41d3feb34a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Type" "Crystal Oscillator"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "02a475b3-a51a-4f68-aa9b-846ca0dcc10a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Normal temperature Frequency Tolerance" "±10ppm"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1ba10358-3395-4568-8cbd-c4350bce7982")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Frequency Stability" "±20ppm"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a00fa56f-e29f-444e-9f78-3087d37bd8dc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Frequency" "12MHz"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "36b8b2c8-3035-4888-a200-2ad8891c2d6e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -2.2572 0.2499)
+		(end -2.2572 1.9071)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3f2f939d-5f2f-4232-8057-2394bcc8f628")
+	)
+	(fp_line
+		(start -2.2572 1.9071)
+		(end -0.4 1.9071)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "40cd6839-6c87-42c8-bea9-f6c1f7ab1430")
+	)
+	(fp_line
+		(start -2.0286 -1.6787)
+		(end 2.0286 -1.6787)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c295c55e-d6fe-45e1-bbcf-e1c162ae0cf5")
+	)
+	(fp_line
+		(start -2.0286 1.6785)
+		(end -2.0286 -1.6787)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7667ed58-bdd7-48a6-a602-b9412f054a71")
+	)
+	(fp_line
+		(start 2.0286 -1.6787)
+		(end 2.0286 1.6785)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c9239fa7-b3dd-4da8-afea-f2962de0c004")
+	)
+	(fp_line
+		(start 2.0286 1.6785)
+		(end -2.0286 1.6785)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "6989a81b-db75-4c4b-9e45-c2c821758235")
+	)
+	(fp_circle
+		(center -1.27 0.8891)
+		(end -1.143 0.8891)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "7db51330-3c25-4ebe-af64-fd2cec25e978")
+	)
+	(fp_line
+		(start -2.51 -1.93)
+		(end 2.28 -1.93)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "7bd919a3-cc31-499f-8ee4-0050a00af288")
+	)
+	(fp_line
+		(start -2.51 2.16)
+		(end -2.51 -1.93)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "09fd281e-1c65-4441-ae22-163bd63ec371")
+	)
+	(fp_line
+		(start 2.28 -1.93)
+		(end 2.28 2.16)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "4cbb8e0c-80fc-449f-8b1f-aedafd7309bc")
+	)
+	(fp_line
+		(start 2.28 2.16)
+		(end -2.51 2.16)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "3a3f887e-f0f4-437e-b87b-5738659172e6")
+	)
+	(fp_circle
+		(center -1.5999 1.2498)
+		(end -1.5699 1.2498)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "6b93fb58-b9d7-427c-b671-b1796cea2f6a")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "5670050e-1b93-4e6d-8e32-65846b36b46c")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -1.1001 0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "9928e4a3-fe96-4c38-9ee6-5932acc360f6")
+	)
+	(pad "2" smd roundrect
+		(at 1.1001 0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "e93ea700-33ad-4cc5-b1e4-d2fb4b0710ff")
+	)
+	(pad "3" smd roundrect
+		(at 1.1001 -0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "b68c7772-fe75-4e2d-86e7-fd5aaf695b12")
+	)
+	(pad "4" smd roundrect
+		(at -1.1001 -0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "f5bbe506-e5c7-4336-b908-36fd3cd3d64a")
+	)
+	(embedded_fonts no)
+)

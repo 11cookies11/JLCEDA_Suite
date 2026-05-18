@@ -1,0 +1,406 @@
+(footprint "SOP-8_L4.9-W3.9-P1.27-LS6.0-BL"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "100,000 cycles 11uA 133MHz 150ms@(32KB) 16Mbit 2.7V~3.6V 20 Years 400us SPI SOP-8 NOR FLASH ROHS")
+	(tags "component")
+	(property "Reference" "REF**"
+		(at 0 -5.36 0)
+		(layer "F.SilkS")
+		(uuid "afbd31a9-de6f-4bba-b270-e348eca2b2b7")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "GD25Q16ETIGR"
+		(at 0 5.36 0)
+		(layer "F.Fab")
+		(uuid "4347b70b-d1b3-4857-affa-f24db39c05c1")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "982670df-39f9-4a29-a162-60ebe06e56b3")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "100,000 cycles 11uA 133MHz 150ms@(32KB) 16Mbit 2.7V~3.6V 20 Years 400us SPI SOP-8 NOR FLASH ROHS"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "dcafdf12-d5d0-456e-8790-2831d255e94a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC" "C2904431"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "352e236e-c42e-48af-abf4-a5295b36d655")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "GigaDevice(兆易创新)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "035534d0-4794-47ab-98e0-fc87cae96e36")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Data Retention - TDR (Year)" "20 Years"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a682bf09-9152-4490-8135-9cff06cf4fc2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Operating Temperature" "-40℃~+85℃"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "96727d9b-1214-4ece-8852-896793b2e71f")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Clock Frequency" "133MHz"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3745e90d-3777-4c9e-baf0-737ba2c3c3dc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Memory Size" "16Mbit"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "957dc90f-0815-4844-9e62-4a0564e675c4")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Page Programming Time (Tpp)" "400us"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c8884409-0a0f-4941-b51c-4c9599ce38b8")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage - Supply" "2.7V~3.6V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "aa117916-8034-4c7e-8e5b-737eabd4e40b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Block Erase Time(tBE)" "150ms@(32KB)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "58dea758-3943-4757-8ac9-af6a591850c6")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Features" "Hardware write protection、Software write protection、Write enable latch、Absolute write protection"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a4d14d8b-7837-4afa-ad32-7d0973071db9")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Interface" "SPI"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3884a768-2a5c-4cc6-a981-73b4dd209b2a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Standby Supply Current" "11uA"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1b0b1a30-2382-466d-879a-0d4548d0ba23")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Program / Erase Cycles" "100,000 cycles"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "146f983e-d344-4bf0-818b-1fb9911ae987")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -2.5762 -1.5215)
+		(end 2.5761 -1.5215)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "b1684928-7ab3-45f5-abb4-dc7b91f871c4")
+	)
+	(fp_line
+		(start -2.5762 1.5213)
+		(end -2.5762 -1.5215)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c648ec81-5866-4d52-b60a-418686d57890")
+	)
+	(fp_line
+		(start 2.5761 -1.5215)
+		(end 2.5761 1.5213)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "547e7e84-a6c9-4d5c-bba8-e2d6ec50a016")
+	)
+	(fp_line
+		(start 2.5761 1.5213)
+		(end -2.5762 1.5213)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "525f9380-53fd-4c7f-8d9d-ebd422f3ebbb")
+	)
+	(fp_circle
+		(center -2.6724 2.6825)
+		(end -2.5223 2.6825)
+		(stroke
+			(width 0.3)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "6dbe3406-7f3d-42de-a4cd-86e9a18d557b")
+	)
+	(fp_circle
+		(center -1.905 0.7691)
+		(end -1.7549 0.7691)
+		(stroke
+			(width 0.3)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "6730dd58-3d18-441b-b2fa-2ea9a9df7832")
+	)
+	(fp_circle
+		(center -1.905 3.4)
+		(end -1.7549 3.4)
+		(stroke
+			(width 0.3)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "c8075273-82b0-44ff-9eff-c87fd444070c")
+	)
+	(fp_line
+		(start -3.09 -3.86)
+		(end 3.09 -3.86)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "3b5398dc-90f5-402b-8ad6-d117fd21f00e")
+	)
+	(fp_line
+		(start -3.09 3.86)
+		(end -3.09 -3.86)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "d1aeddb6-e413-4ea6-ba4e-002ce180f77c")
+	)
+	(fp_line
+		(start 3.09 -3.86)
+		(end 3.09 3.86)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0e6942fe-1200-4e8a-8b20-c46d072fe0a0")
+	)
+	(fp_line
+		(start 3.09 3.86)
+		(end -3.09 3.86)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "5e817f96-a18d-452b-8434-d6e166465745")
+	)
+	(fp_circle
+		(center -2.45 2.9999)
+		(end -2.42 2.9999)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "95555b60-fa30-4e14-80e8-4267da16ad88")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "66ec0c3e-f6a6-46a2-b09d-0182c88a6182")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd oval
+		(at -1.905 2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "461fe519-5b2a-4abb-8b4a-53e4b924cb1c")
+	)
+	(pad "2" smd oval
+		(at -0.635 2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "6d5c9d78-e613-4db8-a23b-a621b09bdb87")
+	)
+	(pad "3" smd oval
+		(at 0.635 2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "b0a9e3e5-efc1-4912-af09-c96c06982bc4")
+	)
+	(pad "4" smd oval
+		(at 1.905 2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "85125f11-0676-4348-8d98-12895c81258f")
+	)
+	(pad "5" smd oval
+		(at 1.905 -2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "18e38b31-11c7-481f-b90e-bd3bf9aa63ef")
+	)
+	(pad "6" smd oval
+		(at 0.635 -2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "16be711f-5cb6-4a41-a36f-cb911bf5603d")
+	)
+	(pad "7" smd oval
+		(at -0.635 -2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "efb97421-f397-4c19-896c-9e757f952761")
+	)
+	(pad "8" smd oval
+		(at -1.905 -2.6825)
+		(size 0.63 1.865)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "94e05dd9-75d6-432f-9733-90b506300dba")
+	)
+	(embedded_fonts no)
+	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/nexdap-fresh/output/esp32c3_managed_rp2040_swd_coprocessor/libraries/3dmodels/JLC-MCP.3dshapes/GD25Q16ETIGR.step"
+		(offset
+			(xyz -0.01 0.07 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)
