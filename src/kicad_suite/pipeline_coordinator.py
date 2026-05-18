@@ -5,11 +5,13 @@ from __future__ import annotations
 
 import json
 import os
+import subprocess
 import sys
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
+from .adapters.kicad_cli import resolve_kicad_cli
 from .circuit_pipeline import (
     CircuitComponent,
     CircuitModel,
@@ -22,8 +24,67 @@ from .env_utils import is_truthy_env
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import write_project
 from .parts.workflow import run_parts_pipeline
-from .pipeline_postprocess import apply_postprocess
+from .pipeline_postprocess import apply_postprocess, pin_project_libraries
 from .pipeline_summary import build_run_pipeline_summary
+
+
+def _resolve_kicad_python() -> str:
+    explicit = os.environ.get("KICAD_PYTHON_BIN", "")
+    if explicit:
+        return explicit
+    cli = resolve_kicad_cli()
+    if cli:
+        candidate = Path(cli).with_name("python.exe")
+        if candidate.exists():
+            return str(candidate)
+    return ""
+
+
+def _generate_board_from_plan(plan_file: str, project_dir: Path) -> dict[str, Any]:
+    if not is_truthy_env("KICAD_GENERATE_PCB", "true"):
+        return {"attempted": False, "enabled": False}
+    python_bin = _resolve_kicad_python()
+    if not python_bin:
+        return {
+            "attempted": True,
+            "success": False,
+            "warnings": ["KiCad Python was not found; PCB was not generated."],
+        }
+    script = Path(__file__).resolve().parents[2] / "scripts" / "generate_pcb_from_plan.py"
+    board_file = project_dir / f"{project_dir.name}.kicad_pcb"
+    process = subprocess.run(
+        [python_bin, str(script), plan_file, str(board_file)],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        encoding="utf-8",
+        errors="replace",
+        timeout=120,
+        check=False,
+    )
+    payload: dict[str, Any] = {}
+    try:
+        payload = json.loads(process.stdout)
+    except Exception:
+        payload = {}
+    warnings: list[str] = []
+    if process.stderr:
+        warnings.append(process.stderr.strip())
+    if process.returncode != 0:
+        warnings.append(process.stdout.strip() or "PCB generation failed.")
+    if payload.get("skipped"):
+        warnings.extend(str(item) for item in payload.get("skipped", []))
+    return {
+        "attempted": True,
+        "success": process.returncode == 0,
+        "return_code": process.returncode,
+        "python": python_bin,
+        "script": str(script),
+        "board_file": payload.get("board", str(board_file)),
+        "footprints": int(payload.get("footprints", 0) or 0),
+        "nets": int(payload.get("nets", 0) or 0),
+        "warnings": warnings,
+    }
 
 
 def load_json(path: str) -> dict[str, Any]:
@@ -67,18 +128,19 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     source_project_dir = Path(model_path).resolve().parent
 
     # Workspace mode: single root, auto-derive all paths
-    workspace = os.environ.get("KICAD_WORKSPACE", "")
+    explicit_workspace = os.environ.get("KICAD_WORKSPACE", "")
+    workspace = explicit_workspace
     if not workspace:
         # Derive workspace from model path parent (if it has libraries/)
         candidate = source_project_dir
         if (candidate / "libraries" / "symbols").exists():
             workspace = str(candidate)
-            os.environ["KICAD_WORKSPACE"] = workspace
 
-    if workspace:
-        output = Path(workspace) / "output"
-    else:
-        output = Path(output_dir)
+    # The CLI requires an explicit output_dir; respect it even when the model
+    # lives in a workspace that also contains reusable local libraries.
+    output = Path(output_dir)
+    if not explicit_workspace:
+        os.environ.pop("KICAD_WORKSPACE", None)
 
     output.mkdir(parents=True, exist_ok=True)
     os.environ["KICAD_PROJECT_NAME"] = project_name
@@ -94,6 +156,15 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     schematic_file = Path(write_result.get("schematic_file", ""))
     project_dir = schematic_file.parent if schematic_file.exists() else output / project_name
     postprocess = apply_postprocess(schematic_file, project_dir)
+    board_result = _generate_board_from_plan(str(plan_file), project_dir)
+    if board_result.get("attempted"):
+        postprocess["board_generation"] = board_result
+    if board_result.get("success"):
+        write_result["board_file"] = board_result.get("board_file", "")
+        write_result["board_footprints"] = board_result.get("footprints", 0)
+        write_result["net_count"] = board_result.get("nets", 0)
+    elif board_result.get("warnings"):
+        write_result.setdefault("board_warnings", []).extend(board_result.get("warnings", []))
 
     erc_result: dict[str, Any] = {"enabled": False, "attempted": False, "finding_count": 0}
     os.environ["KICAD_SCHEMATIC_FILE"] = str(write_result.get("schematic_file", ""))
@@ -107,6 +178,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             "finding_count": 0,
             "error": str(exc),
         }
+    postprocess["project_library_pins_after_erc"] = pin_project_libraries(project_dir)
 
     parts_result: dict[str, Any] = {}
     if is_truthy_env("KICAD_PARTS_PIPELINE", "false"):

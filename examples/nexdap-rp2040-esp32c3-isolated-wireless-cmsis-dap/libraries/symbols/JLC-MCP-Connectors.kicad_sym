@@ -554,4 +554,115 @@
 		)
 		(embedded_fonts no)
 	)
+	(symbol "HDR-2X4-2.54"
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "J"
+			(at 0 7.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "HDR-2X4-2.54"
+			(at 0 -7.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" "JLC-MCP:HDR-TH_8P-P2.54-V-M-2X4"
+			(at 0 0 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "HDR-2X4-2.54_0_1"
+			(rectangle
+				(start -2.54 5.08)
+				(end 2.54 -5.08)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "HDR-2X4-2.54_1_1"
+			(pin passive line (at -5.08 3.81 0) (length 2.54) (name "1" (effects (font (size 1 1)))) (number "1" (effects (font (size 1 1)))))
+			(pin passive line (at 5.08 3.81 180) (length 2.54) (name "2" (effects (font (size 1 1)))) (number "2" (effects (font (size 1 1)))))
+			(pin passive line (at -5.08 1.27 0) (length 2.54) (name "3" (effects (font (size 1 1)))) (number "3" (effects (font (size 1 1)))))
+			(pin passive line (at 5.08 1.27 180) (length 2.54) (name "4" (effects (font (size 1 1)))) (number "4" (effects (font (size 1 1)))))
+			(pin passive line (at -5.08 -1.27 0) (length 2.54) (name "5" (effects (font (size 1 1)))) (number "5" (effects (font (size 1 1)))))
+			(pin passive line (at 5.08 -1.27 180) (length 2.54) (name "6" (effects (font (size 1 1)))) (number "6" (effects (font (size 1 1)))))
+			(pin passive line (at -5.08 -3.81 0) (length 2.54) (name "7" (effects (font (size 1 1)))) (number "7" (effects (font (size 1 1)))))
+			(pin passive line (at 5.08 -3.81 180) (length 2.54) (name "8" (effects (font (size 1 1)))) (number "8" (effects (font (size 1 1)))))
+		)
+		(embedded_fonts no)
+	)
+	(symbol "ANT-2450AT18A100E"
+		(pin_names
+			(offset 0.254)
+		)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(property "Reference" "ANT"
+			(at 0 5.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Value" "2450AT18A100E"
+			(at 0 -5.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(property "Footprint" ""
+			(at 0 0 0)
+			(hide yes)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+			)
+		)
+		(symbol "ANT-2450AT18A100E_0_1"
+			(polyline
+				(pts
+					(xy -1.27 -1.27)
+					(xy 1.27 1.27)
+					(xy 1.27 -1.27)
+				)
+				(stroke
+					(width 0.254)
+					(type default)
+				)
+				(fill
+					(type none)
+				)
+			)
+		)
+		(symbol "ANT-2450AT18A100E_1_1"
+			(pin passive line (at -5.08 0 0) (length 2.54) (name "GND" (effects (font (size 1 1)))) (number "1" (effects (font (size 1 1)))))
+			(pin passive line (at 5.08 0 180) (length 2.54) (name "FEED" (effects (font (size 1 1)))) (number "2" (effects (font (size 1 1)))))
+		)
+		(embedded_fonts no)
+	)
 )

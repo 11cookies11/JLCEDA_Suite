@@ -3,16 +3,66 @@
 
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import shutil
 import re
+import locale
 from pathlib import Path
 from typing import Any
 
+from .adapters.kicad_cli import resolve_kicad_cli
 from .env_utils import env
+from .kicad_project_writer import sanitize_symbol_block
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
+
+
+def pin_project_libraries(project_dir: Path) -> dict[str, Any]:
+    """Ensure KiCad's project JSON pins the project-local JLC libraries."""
+    project_files = sorted(project_dir.glob("*.kicad_pro"))
+    if not project_files:
+        return {"attempted": True, "success": False, "reason": "no .kicad_pro found"}
+
+    project_file = project_files[0]
+    try:
+        data = json.loads(project_file.read_text(encoding="utf-8"))
+    except Exception as exc:  # noqa: BLE001
+        return {"attempted": True, "success": False, "project": str(project_file), "reason": str(exc)}
+
+    symbols_dir = project_dir / "libraries" / "symbols"
+    symbol_files = sorted(symbols_dir.glob("*.kicad_sym")) if symbols_dir.exists() else []
+    pinned_symbols = [
+        {
+            "name": path.stem,
+            "type": "KiCad",
+            "uri": f"libraries/symbols/{path.name}",
+            "options": "",
+            "description": f"JLC-MCP {path.stem}",
+        }
+        for path in symbol_files
+    ]
+    data["libraries"] = {
+        "pinned_footprint_libs": [
+            {
+                "name": "JLC-MCP",
+                "type": "KiCad",
+                "uri": "libraries/footprints/JLC-MCP.pretty",
+                "options": "",
+                "description": "JLC-MCP footprints",
+            }
+        ],
+        "pinned_symbol_libs": pinned_symbols,
+    }
+    project_file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return {
+        "attempted": True,
+        "success": True,
+        "project": str(project_file),
+        "pinned_footprint_libs": 1,
+        "pinned_symbol_libs": len(pinned_symbols),
+    }
 
 
 def inject_jlc_symbols(schematic_path: Path) -> bool:
@@ -161,6 +211,165 @@ def sync_source_libraries(project_dir: Path) -> dict[str, Any]:
     return {"attempted": True, "copied": True, "source": str(source_libraries), "target": str(target_libraries), "counts": counts}
 
 
+def sanitize_copied_symbol_libraries(project_dir: Path) -> dict[str, Any]:
+    """Remove invalid converter artifacts from project-local symbol libraries."""
+    patched_files: list[str] = []
+    symbols_dir = project_dir / "libraries" / "symbols"
+    if not symbols_dir.exists():
+        return {"patched_files": patched_files, "count": 0}
+    for path in sorted(symbols_dir.glob("*.kicad_sym")):
+        raw = path.read_bytes()
+        had_bom = raw.startswith(b"\xef\xbb\xbf")
+        text = path.read_text(encoding="utf-8-sig")
+        patched = sanitize_symbol_block(text)
+        if had_bom or patched != text:
+            path.write_text(patched, encoding="utf-8")
+            patched_files.append(str(path))
+    return {"patched_files": patched_files, "count": len(patched_files)}
+
+
+def _sanitize_kicad_text_line(line: str) -> str:
+    """Repair one-line KiCad property records damaged by mojibake/truncation."""
+    if "(property " not in line:
+        return line
+    if line.count('"') >= 4:
+        return line
+    match = re.match(r'^(\s*\(property\s+"[^"]+")', line)
+    if not match:
+        return line
+    return f'{match.group(1)} "sanitized"'
+
+
+def sanitize_footprint_libraries(project_dir: Path) -> dict[str, Any]:
+    """Normalize copied footprint files so KiCad GUI can enumerate the library."""
+    patched_files: list[str] = []
+    footprints_dir = project_dir / "libraries" / "footprints"
+    if not footprints_dir.exists():
+        return {"patched_files": patched_files, "count": 0}
+
+    utf8_no_bom = "utf-8"
+    for path in sorted(footprints_dir.glob("*.pretty/*.kicad_mod")):
+        raw = path.read_bytes()
+        had_bom = raw.startswith(b"\xef\xbb\xbf")
+        try:
+            text = raw.decode("utf-8-sig")
+            had_decode_error = False
+        except UnicodeDecodeError:
+            text = raw.decode("utf-8-sig", errors="replace")
+            had_decode_error = True
+
+        patched = text.replace("\ufffd", "")
+        patched = "\n".join(_sanitize_kicad_text_line(line) for line in patched.splitlines())
+        if text.endswith(("\n", "\r\n")):
+            patched += "\n"
+
+        if had_bom or had_decode_error or patched != text:
+            path.write_text(patched, encoding=utf8_no_bom)
+            patched_files.append(str(path))
+
+    return {"patched_files": patched_files, "count": len(patched_files)}
+
+
+def upgrade_footprint_libraries(project_dir: Path) -> dict[str, Any]:
+    """Best-effort KiCad CLI footprint library upgrade for copied local libs."""
+    footprints_dir = project_dir / "libraries" / "footprints"
+    pretty_dirs = sorted(footprints_dir.glob("*.pretty")) if footprints_dir.exists() else []
+    if not pretty_dirs:
+        return {"attempted": False, "reason": "no project-local footprint libraries"}
+
+    executable = resolve_kicad_cli()
+    if not executable:
+        return {
+            "attempted": True,
+            "success": False,
+            "error": "kicad-cli was not found",
+            "libraries": [str(path) for path in pretty_dirs],
+        }
+
+    results: list[dict[str, Any]] = []
+    for pretty_dir in pretty_dirs:
+        process = subprocess.run(
+            [executable, "fp", "upgrade", str(pretty_dir), "--force"],
+            capture_output=True,
+            text=True,
+            encoding=locale.getpreferredencoding(False),
+            errors="ignore",
+            timeout=60,
+            check=False,
+        )
+        stdout = process.stdout.replace("\ufffd", "")
+        stderr = process.stderr.replace("\ufffd", "")
+        results.append(
+            {
+                "library": str(pretty_dir),
+                "success": process.returncode == 0,
+                "return_code": process.returncode,
+                "stdout": stdout,
+                "stderr": stderr,
+            }
+        )
+
+    return {
+        "attempted": True,
+        "success": all(item["success"] for item in results),
+        "executable": executable,
+        "results": results,
+    }
+
+
+def validate_gui_assets(project_dir: Path) -> dict[str, Any]:
+    """Check the assets KiCad GUI needs for update-PCB and 3D viewer workflows."""
+    issues: list[str] = []
+    symbol_bom_files: list[str] = []
+    missing_models: list[str] = []
+
+    symbols_dir = project_dir / "libraries" / "symbols"
+    if symbols_dir.exists():
+        for path in sorted(symbols_dir.glob("*.kicad_sym")):
+            raw = path.read_bytes()
+            if raw.startswith(b"\xef\xbb\xbf"):
+                symbol_bom_files.append(str(path))
+            if raw[:1] != b"(":
+                issues.append(f"symbol library does not start with '(' after sanitization: {path}")
+
+    fp_table = project_dir / "fp-lib-table"
+    if not fp_table.exists():
+        issues.append("missing project fp-lib-table")
+    else:
+        table_text = fp_table.read_text(encoding="utf-8", errors="replace")
+        if 'name "JLC-MCP"' not in table_text:
+            issues.append("project fp-lib-table does not register JLC-MCP")
+
+    footprint_upgrade = upgrade_footprint_libraries(project_dir)
+    if footprint_upgrade.get("attempted") and not footprint_upgrade.get("success", False):
+        issues.append("kicad-cli could not load/upgrade at least one footprint library")
+
+    model_pattern = re.compile(r'\(model\s+"([^"]+)"')
+    for footprint in sorted((project_dir / "libraries" / "footprints").glob("*.pretty/*.kicad_mod")):
+        text = footprint.read_text(encoding="utf-8", errors="replace")
+        for match in model_pattern.finditer(text):
+            model_path = match.group(1)
+            resolved = Path(model_path)
+            if not resolved.is_absolute():
+                resolved = project_dir / model_path
+            if not resolved.exists():
+                missing_models.append(f"{footprint.name}: {model_path}")
+
+    if symbol_bom_files:
+        issues.append(f"symbol libraries still contain UTF-8 BOM: {len(symbol_bom_files)}")
+    if missing_models:
+        issues.append(f"missing 3D model references: {len(missing_models)}")
+
+    return {
+        "attempted": True,
+        "success": not issues,
+        "issues": issues,
+        "symbol_bom_files": symbol_bom_files,
+        "missing_models": missing_models,
+        "footprint_upgrade": footprint_upgrade,
+    }
+
+
 def patch_known_jlc_symbol_pin_types(project_dir: Path) -> dict[str, Any]:
     """Apply narrow ERC pin-type corrections for known EasyEDA/JLC symbol issues."""
     patched_files: list[str] = []
@@ -202,12 +411,22 @@ def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]
         except Exception as exc:  # noqa: BLE001
             inject_error = str(exc)
 
+    symbol_sanitization = sanitize_copied_symbol_libraries(project_dir)
+    footprint_sanitization = sanitize_footprint_libraries(project_dir)
+    footprint_upgrade = upgrade_footprint_libraries(project_dir)
     pin_type_patches = patch_known_jlc_symbol_pin_types(project_dir)
     registration = register_jlc_libraries(project_dir)
+    project_library_pins = pin_project_libraries(project_dir)
+    gui_asset_validation = validate_gui_assets(project_dir)
     return {
         "library_sync": library_sync,
+        "symbol_sanitization": symbol_sanitization,
+        "footprint_sanitization": footprint_sanitization,
+        "footprint_upgrade": footprint_upgrade,
         "pin_type_patches": pin_type_patches,
         "symbols_injected": symbols_injected,
         "symbol_injection_error": inject_error,
         "library_registration": registration,
+        "project_library_pins": project_library_pins,
+        "gui_asset_validation": gui_asset_validation,
     }

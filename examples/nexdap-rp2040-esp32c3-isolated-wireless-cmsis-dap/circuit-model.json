@@ -1,1145 +1,469 @@
 {
   "schema_version": "circuit-model.v1",
-  "request_id": "nexdap-dual-chip-cmsis-dap-002",
+  "request_id": "nexdap-dual-chip-cmsis-dap-v3",
   "project_id": "nexdap-rp2040-esp32c3-isolated-wireless-cmsis-dap",
   "topology": "nexdap_dual_chip_cmsis_dap",
   "components": [
     {
       "ref": "J1",
       "role": "usb_c_input",
-      "value": "USB-C_16PIN",
-      "selected_part": {
-        "part_id": "usb-c-16pin",
-        "display_name": "TYPE-C16PIN USB-C receptacle",
-        "lcsc_id": "C393939",
-        "mpn": "TYPE-C16PIN",
-        "manufacturer": "SHOU HAN",
-        "package": "Connector_PinHeader_2.54mm:PinHeader_1x06_P2.54mm_Vertical",
-        "pin_count": 16,
-        "named_pin_count": 16
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "USB-C 16-pin receptacle. VBUS pins: A4,A9,B4,B9. GND pins: A1,A12,B1,B12. D+: A6. D-: A7. CC1: A5. CC2: B5. Shield: SHLD."
-      ]
+      "value": "USB-C-16P"
     },
     {
       "ref": "R_CC1",
       "role": "usb_cc1_pulldown",
-      "value": "5.1k",
-      "selected_part": {
-        "part_id": "res-5k1-0402",
-        "display_name": "5.1kΩ 0402 CC1 pulldown",
-        "lcsc_id": "C22356228",
-        "mpn": "RCA025K1JLF",
-        "package": "Resistor_SMD:R_0402_1005Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "5.1kΩ from CC1 to GND for USB-C 5V/500mA power delivery."
-      ]
+      "value": "5.1k"
     },
     {
       "ref": "R_CC2",
       "role": "usb_cc2_pulldown",
-      "value": "5.1k",
-      "selected_part": {
-        "part_id": "res-5k1-0402",
-        "display_name": "5.1kΩ 0402 CC2 pulldown",
-        "lcsc_id": "C22356228",
-        "mpn": "RCA025K1JLF",
-        "package": "Resistor_SMD:R_0402_1005Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
+      "value": "5.1k"
     },
     {
       "ref": "D_USB_ESD",
       "role": "usb_esd_protection",
-      "value": "USBLC6-2SC6",
-      "selected_part": {
-        "part_id": "usb-esd-sot23-6",
-        "display_name": "USB ESD protection USBLC6-2SC6",
-        "lcsc_id": "C2827654",
-        "mpn": "USBLC6-2SC6",
-        "package": "Diode_SMD:SOT-23-6",
-        "pin_count": 6,
-        "named_pin_count": 6
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Place close to USB-C connector. Protects D+, D- and VBUS."
-      ]
+      "value": "USBLC6-2SC6"
     },
     {
       "ref": "F1",
       "role": "usb_vbus_efuse",
-      "value": "MNCP380 500mA",
-      "selected_part": {
-        "part_id": "efuse-sot23-5",
-        "display_name": "USB input eFuse MNCP380HSN05AAT1G",
-        "lcsc_id": "C42403123",
-        "mpn": "MNCP380HSN05AAT1G",
-        "manufacturer": "MSKSEMI",
-        "package": "Package_TO_SOT_SMD:SOT-23-5",
-        "pin_count": 5,
-        "named_pin_count": 5
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Overcurrent protection for USB input. Place between VBUS and downstream power."
-      ]
+      "value": "MNCP380HSN05AAT1G"
     },
     {
       "ref": "U_BUCK",
       "role": "main_3v3_buck",
-      "value": "SY8089A1AAC",
-      "selected_part": {
-        "part_id": "buck-sy8089",
-        "display_name": "SY8089A1AAC 5V→3.3V buck 2A",
-        "lcsc_id": "C479074",
-        "mpn": "SY8089A1AAC",
-        "manufacturer": "Silergy Corp",
-        "package": "Package_TO_SOT_SMD:SOT-23-5",
-        "pin_count": 5,
-        "named_pin_count": 5
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "2A sync buck. Pin1=EN, Pin2=GND, Pin3=LX/SW, Pin4=VIN, Pin5=FB. Adjustable output set to 3.3V via Rfb1/Rfb2 divider."
-      ]
+      "value": "SY8089A1AAC"
     },
     {
       "ref": "L_BUCK",
       "role": "buck_power_inductor",
       "value": "2.2uH",
       "selected_part": {
-        "part_id": "ind-2u2-power",
-        "display_name": "2.2uH power inductor",
-        "package": "Inductor_SMD:L_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
+        "mpn": "APH201208C2R2MP03",
+        "lcsc_id": "C42455262",
+        "package": "0805",
+        "source": "easyeda2kicad"
+      }
     },
     {
       "ref": "C_BUCK_IN",
       "role": "buck_input_capacitor",
-      "value": "10uF",
-      "selected_part": {
-        "part_id": "cap-10uf-0805",
-        "display_name": "Buck input 10uF MLCC",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
+      "value": "10uF"
     },
     {
       "ref": "C_BUCK_OUT",
       "role": "buck_output_capacitor",
-      "value": "22uF",
-      "selected_part": {
-        "part_id": "cap-22uf-0805",
-        "display_name": "Buck output 22uF MLCC",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
+      "value": "22uF"
     },
     {
       "ref": "R_BUCK_FB1",
       "role": "buck_feedback_resistor_top",
-      "value": "100k",
-      "selected_part": {
-        "part_id": "res-100k-0603",
-        "display_name": "100kΩ 1% feedback top",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
+      "value": "100k"
     },
     {
       "ref": "R_BUCK_FB2",
       "role": "buck_feedback_resistor_bottom",
-      "value": "49.9k",
-      "selected_part": {
-        "part_id": "res-49k9-0603",
-        "display_name": "49.9kΩ 1% feedback bottom",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "U_ESP32",
-      "role": "esp32c3_transaction_manager",
-      "value": "ESP32-C3",
-      "selected_part": {
-        "part_id": "esp32-c3-bare-qfn32",
-        "display_name": "ESP32-C3 bare chip QFN-32",
-        "lcsc_id": "C2838500",
-        "mpn": "ESP32-C3",
-        "manufacturer": "Espressif Systems",
-        "package": "Package_DFN_QFN:QFN-32-1EP_5x5mm_P0.5mm_EP3.3x3.3mm",
-        "pin_count": 33,
-        "named_pin_count": 33
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Bare ESP32-C3 QFN-32. Built-in 4MB flash.",
-        "Pin 1=LNA_IN(RF), 2-3=VDD3P3_CPU, 4=GPIO0, 5=GPIO1, 6=GPIO2(strap),",
-        "7=CHIP_EN, 8=GPIO8(strap), 9=GPIO9(BOOT strap), 10=VDD_SPI, 11=VDD3P3_RTC,",
-        "12=GPIO4/MTMS, 13=GPIO5/MTDI, 14=GPIO6/MTCK, 15=GPIO7/MTDO,",
-        "16=U0TXD/GPIO21, 17=U0RXD/GPIO20, 18=GPIO18, 19=GPIO19,",
-        "20=GPIO10/FSPICS0, 21=GPIO3, 22-24=NC, 25=USB_DM, 26=USB_DP,",
-        "27=USBPHY_VDD, 28-29=VDD3P3, 29=XTAL_N, 30=XTAL_P, 31-32=VDDA,",
-        "33=EP/GND"
-      ]
-    },
-    {
-      "ref": "R_ESP_EN",
-      "role": "esp_chip_en_pullup",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "ESP32-C3 CHIP_EN pullup",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_ESP_EN",
-      "role": "esp_en_reset_capacitor",
-      "value": "100nF",
-      "selected_part": {
-        "part_id": "cap-100nf-0603",
-        "display_name": "ESP EN reset capacitor",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "SW_ESP_RST",
-      "role": "esp_reset_button",
-      "value": "ESP_RST",
-      "selected_part": {
-        "part_id": "switch-reset-4p",
-        "display_name": "ESP32-C3 reset button",
-        "package": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "R_ESP_BOOT",
-      "role": "esp_gpio9_boot_pullup",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "GPIO9 BOOT pullup",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "GPIO9 HIGH during reset = SPI boot (normal operation)."
-      ]
-    },
-    {
-      "ref": "R_ESP_GPIO8",
-      "role": "esp_gpio8_strap_pullup",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "GPIO8 strap pullup",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "R_ESP_GPIO2",
-      "role": "esp_gpio2_strap_pullup",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "GPIO2 strap pullup",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "Y_ESP32",
-      "role": "esp32_40mhz_crystal",
-      "value": "40MHz",
-      "selected_part": {
-        "part_id": "crystal-40mhz-3225",
-        "display_name": "40MHz crystal 3225",
-        "lcsc_id": "C5265885",
-        "mpn": "HY40MSMD3225GB1R30",
-        "manufacturer": "Huiyuan Crystal",
-        "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
-        "pin_count": 4,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "40MHz for ESP32-C3 WiFi. Pins 2+4 NC to GND. Load caps ~15pF each."
-      ]
-    },
-    {
-      "ref": "C_ESP_XTAL1",
-      "role": "esp_xtal_load_cap_1",
-      "value": "15pF",
-      "selected_part": {
-        "part_id": "cap-15pf-0603",
-        "display_name": "15pF C0G crystal load cap",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_ESP_XTAL2",
-      "role": "esp_xtal_load_cap_2",
-      "value": "15pF",
-      "selected_part": {
-        "part_id": "cap-15pf-0603",
-        "display_name": "15pF C0G crystal load cap",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "L_RF",
-      "role": "rf_series_matching_inductor",
-      "value": "RF_2.0nH",
-      "selected_part": {
-        "part_id": "ind-rf-2n0",
-        "display_name": "RF series matching inductor",
-        "package": "Inductor_SMD:L_0402_1005Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Pi-matching: series L between chip and antenna. Value to be tuned."
-      ]
-    },
-    {
-      "ref": "C_RF_SHUNT",
-      "role": "rf_shunt_matching_cap",
-      "value": "RF_1.5pF",
-      "selected_part": {
-        "part_id": "cap-rf-1p5",
-        "display_name": "RF shunt matching capacitor",
-        "package": "Capacitor_SMD:C_0402_1005Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Shunt C to GND at antenna feed. Value to be tuned."
-      ]
-    },
-    {
-      "ref": "ANT1",
-      "role": "chip_antenna_2g4",
-      "value": "2.4GHz_ANT",
-      "selected_part": {
-        "part_id": "chip-antenna-2g4",
-        "display_name": "Johanson 2450AT18A100E chip antenna",
-        "lcsc_id": "C89334",
-        "mpn": "2450AT18A100E",
-        "manufacturer": "Johanson Dielectrics",
-        "package": "RF_Antenna:Johanson_2450AT18x100",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "1206 SMD ceramic chip antenna. 50Ω. Requires ground clearance around antenna per datasheet."
-      ]
-    },
-    {
-      "ref": "C_ESP_VDDA",
-      "role": "esp_vdda_decoupling",
-      "value": "100nF",
-      "selected_part": {
-        "part_id": "cap-100nf-0603",
-        "display_name": "ESP VDDA decoupling cap",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_ESP_DEC1",
-      "role": "esp_vdd3p3_decoupling_1",
-      "value": "100nF",
-      "selected_part": {
-        "part_id": "cap-100nf-0603",
-        "display_name": "ESP VDD3P3 decoupling",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_ESP_DEC2",
-      "role": "esp_vdd3p3_decoupling_2",
-      "value": "100nF",
-      "selected_part": {
-        "part_id": "cap-100nf-0603",
-        "display_name": "ESP VDD3P3 decoupling",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_ESP_BULK",
-      "role": "esp_vdd3p3_bulk",
-      "value": "10uF",
-      "selected_part": {
-        "part_id": "cap-10uf-0805",
-        "display_name": "ESP bulk decoupling",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "U_RP2040",
-      "role": "rp2040_cmsis_dap_engine",
-      "value": "RP2040",
-      "selected_part": {
-        "part_id": "rp2040",
-        "display_name": "Raspberry Pi RP2040",
-        "lcsc_id": "C2040",
-        "mpn": "RP2040",
-        "manufacturer": "Raspberry Pi",
-        "package": "Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm",
-        "pin_count": 57,
-        "named_pin_count": 57
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "CMSIS-DAP engine + SWD timing executor.",
-        "GPIO2,3 = UART to/from ESP32-C3 (backup link)",
-        "GPIO4,5 = SWDIO, SWCLK to isolator",
-        "GPIO10-13 = SPI from ESP32-C3 (primary link)",
-        "GPIO16 = SWO input from isolator",
-        "GPIO17 = nRESET control to isolator",
-        "GPIO18 = SWDIO direction control",
-        "GPIO24 = DAP activity LED",
-        "GPIO25 = status LED"
-      ]
-    },
-    {
-      "ref": "U_FLASH",
-      "role": "rp2040_qspi_flash",
-      "value": "GD25Q16E",
-      "selected_part": {
-        "part_id": "gd25q16-flash",
-        "display_name": "GD25Q16ETIGR QSPI Flash",
-        "lcsc_id": "C2904431",
-        "mpn": "GD25Q16ETIGR",
-        "manufacturer": "GigaDevice",
-        "package": "Package_SO:SOIC-8_5.3x5.3mm_P1.27mm",
-        "pin_count": 8,
-        "named_pin_count": 8
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "16Mbit QSPI NOR Flash. Pin1=CS, 2=SO, 3=WP, 4=GND, 5=SI, 6=SCLK, 7=HOLD, 8=VCC."
-      ]
-    },
-    {
-      "ref": "R_RP_RUN",
-      "role": "rp2040_run_pullup",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "RP2040 RUN pullup",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "SW_RP_RST",
-      "role": "rp_reset_button",
-      "value": "RP_RST",
-      "selected_part": {
-        "part_id": "switch-reset-4p",
-        "display_name": "RP2040 reset button",
-        "package": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "SW_RP_BOOT",
-      "role": "rp_boot_button",
-      "value": "RP_BOOTSEL",
-      "selected_part": {
-        "part_id": "switch-boot-4p",
-        "display_name": "RP2040 BOOTSEL button",
-        "package": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "Y_RP2040",
-      "role": "rp2040_12mhz_crystal",
-      "value": "12MHz",
-      "selected_part": {
-        "part_id": "crystal-12mhz-3225",
-        "display_name": "12MHz crystal 3225",
-        "lcsc_id": "C7275086",
-        "mpn": "HY12MSMD3225EB1R30",
-        "manufacturer": "Huiyuan Crystal",
-        "package": "Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm",
-        "pin_count": 4,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_RP_XTAL1",
-      "role": "rp_xtal_load_cap_1",
-      "value": "18pF",
-      "selected_part": {
-        "part_id": "cap-18pf-0603",
-        "display_name": "RP2040 crystal load cap",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_RP_XTAL2",
-      "role": "rp_xtal_load_cap_2",
-      "value": "18pF",
-      "selected_part": {
-        "part_id": "cap-18pf-0603",
-        "display_name": "RP2040 crystal load cap",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_RP_DEC1",
-      "role": "rp_vdd_decoupling_1",
-      "value": "100nF",
-      "selected_part": {
-        "part_id": "cap-100nf-0603",
-        "display_name": "RP2040 VDD decoupling",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_RP_DEC2",
-      "role": "rp_dvdd_decoupling",
-      "value": "100nF",
-      "selected_part": {
-        "part_id": "cap-100nf-0603",
-        "display_name": "RP2040 DVDD decoupling",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_RP_BULK",
-      "role": "rp_vdd_bulk",
-      "value": "10uF",
-      "selected_part": {
-        "part_id": "cap-10uf-0805",
-        "display_name": "RP2040 bulk decoupling",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "U_ISO",
-      "role": "digital_isolation_barrier",
-      "value": "CA-IS3742HW",
-      "selected_part": {
-        "part_id": "iso-4ch-ca-is3742",
-        "display_name": "CA-IS3742HW 4ch isolator",
-        "lcsc_id": "C528654",
-        "mpn": "CA-IS3742HW",
-        "manufacturer": "Chipanalog",
-        "package": "Package_SO:SOIC-16W_10.3x7.5mm_P1.27mm",
-        "pin_count": 16,
-        "named_pin_count": 16
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Side A (host): VCCA=VCC_3V3_MAIN, GNDA=GND_HOST",
-        "Side B (target): VCCB=ISO_3V3_TARGET, GNDB=GND_TARGET_ISO",
-        "2 fwd ch: SWCLK(A→B), nRESET(A→B)",
-        "2 rev ch: SWO(B→A), UART_RX(B→A) optional",
-        "SWDIO bidirectional needs external tri-state buffer + GPIO direction control"
-      ]
-    },
-    {
-      "ref": "U_ISO_BUF",
-      "role": "swdio_direction_buffer",
-      "value": "SN74LVC1G125",
-      "selected_part": {
-        "part_id": "tri-state-buffer",
-        "display_name": "SWDIO tri-state direction buffer",
-        "package": "Package_TO_SOT_SMD:SOT-23-5",
-        "pin_count": 5,
-        "named_pin_count": 5
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Tri-state buffer for SWDIO direction control. OE pin driven by RP2040 GPIO. Host-side SWDIO → buffer input → isolator ch1. Isolator ch1 → host-side SWDIO_RX."
-      ]
-    },
-    {
-      "ref": "U_ISO_DCDC",
-      "role": "isolated_dcdc_converter",
-      "value": "B0505S-1WR3",
-      "selected_part": {
-        "part_id": "dc-dc-iso-1w",
-        "display_name": "B0505S-1WR3 isolated DC-DC 1W",
-        "lcsc_id": "C7465178",
-        "mpn": "B0505S-1WR3",
-        "manufacturer": "EVISUN",
-        "package": "Converter_DCDC:SIP-4_THT",
-        "pin_count": 4,
-        "named_pin_count": 4
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "5V→5V isolated DC-DC 1W. Pin1=Vin+,2=Vin-,3=Vout+,4=Vout-. Post-LDO for clean 3.3V on target side."
-      ]
-    },
-    {
-      "ref": "U_TGT_LDO",
-      "role": "target_side_ldo_3v3",
-      "value": "XC6206P332MR",
-      "selected_part": {
-        "part_id": "ldo-tgt-3v3",
-        "display_name": "XC6206P332MR target 3.3V LDO",
-        "lcsc_id": "C347376",
-        "mpn": "XC6206P332MR",
-        "package": "Package_TO_SOT_SMD:SOT-23",
-        "pin_count": 3,
-        "named_pin_count": 3
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Cleans isolated DC-DC output ripple for target-side isolator and reference voltage."
-      ]
-    },
-    {
-      "ref": "C_ISO_IN",
-      "role": "iso_dcdc_input_cap",
-      "value": "10uF",
-      "selected_part": {
-        "part_id": "cap-10uf-0805",
-        "display_name": "Isolated DC-DC input cap",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_ISO_OUT",
-      "role": "iso_dcdc_output_cap",
-      "value": "10uF",
-      "selected_part": {
-        "part_id": "cap-10uf-0805",
-        "display_name": "Isolated DC-DC output cap",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_TGT_LDO_OUT",
-      "role": "target_ldo_output_cap",
-      "value": "10uF",
-      "selected_part": {
-        "part_id": "cap-10uf-0805",
-        "display_name": "Target LDO output cap",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "U_TGT_SW",
-      "role": "target_power_switch",
-      "value": "TPS22918DBVR",
-      "selected_part": {
-        "part_id": "load-switch-sot23-6",
-        "display_name": "TPS22918DBVR load switch",
-        "lcsc_id": "C131941",
-        "mpn": "TPS22918DBVR",
-        "manufacturer": "Texas Instruments",
-        "package": "Package_TO_SOT_SMD:SOT-23-6",
-        "pin_count": 6,
-        "named_pin_count": 6
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Target power switch. EN pin controlled by ESP32-C3 GPIO. Default off (pull-down on EN)."
-      ]
-    },
-    {
-      "ref": "R_TGT_EN",
-      "role": "target_pwr_en_pulldown",
-      "value": "100k",
-      "selected_part": {
-        "part_id": "res-100k-0603",
-        "display_name": "TGT_PWR_EN pulldown",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Ensures target power is off by default (EN=0)."
-      ]
-    },
-    {
-      "ref": "R_VTREF_DIV1",
-      "role": "vtref_adc_divider_top",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "VTREF ADC divider top",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "R_VTREF_DIV2",
-      "role": "vtref_adc_divider_bottom",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "VTREF ADC divider bottom",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "C_VTREF",
-      "role": "vtref_adc_filter_cap",
-      "value": "100nF",
-      "selected_part": {
-        "part_id": "cap-100nf-0603",
-        "display_name": "VTREF ADC filter cap",
-        "package": "Capacitor_SMD:C_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "RC low-pass filter for VTREF ADC input."
-      ]
-    },
-    {
-      "ref": "Q_NRST",
-      "role": "nreset_open_drain_nmos",
-      "value": "2N7002",
-      "selected_part": {
-        "part_id": "nmos-2n7002",
-        "display_name": "2N7002 N-MOSFET open-drain nRESET driver",
-        "lcsc_id": "C113152",
-        "mpn": "2N7002",
-        "package": "Package_TO_SOT_SMD:SOT-23",
-        "pin_count": 3,
-        "named_pin_count": 3
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "Open-drain nRESET driver. Gate driven by RP2040 GPIO. Drain pulled up on target side. Source to GND."
-      ]
-    },
-    {
-      "ref": "R_NRST_PU",
-      "role": "nreset_target_pullup",
-      "value": "10k",
-      "selected_part": {
-        "part_id": "res-10k-0603",
-        "display_name": "nRESET target pullup to VTREF",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "D_TGT_ESD",
-      "role": "target_esd_protection",
-      "value": "SRV05-4",
-      "selected_part": {
-        "part_id": "tgt-esd-sot23-6",
-        "display_name": "SRV05-4 target ESD 4ch",
-        "lcsc_id": "C2836319",
-        "mpn": "SRV05-4",
-        "manufacturer": "MSKSEMI",
-        "package": "Diode_SMD:SOT-23-6",
-        "pin_count": 6,
-        "named_pin_count": 6
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "4ch ESD for SWDIO, SWCLK, SWO, nRESET. Place close to target connector on isolated side."
-      ]
-    },
-    {
-      "ref": "J_TGT_ARM10",
-      "role": "target_swd_connector_arm10",
-      "value": "ARM10_1.27mm",
-      "selected_part": {
-        "part_id": "header-2x5-1p27",
-        "display_name": "2x5P 1.27mm pin header",
-        "lcsc_id": "C41376037",
-        "mpn": "HX PZ1.27-2x5P TP",
-        "manufacturer": "Hanxia",
-        "package": "Connector_PinHeader_1.27mm:PinHeader_2x05_P1.27mm_Vertical_SMD",
-        "pin_count": 10,
-        "named_pin_count": 10
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "ARM Cortex 10-pin debug connector (1.27mm pitch):",
-        "1=VTREF, 2=SWDIO, 3=GND, 4=SWCLK, 5=GND",
-        "6=SWO, 7=KEY(NC), 8=UART_RX(opt), 9=GND, 10=nRESET"
-      ]
-    },
-    {
-      "ref": "J_TGT_254",
-      "role": "target_diy_header_2p54",
-      "value": "HEADER_1x9",
-      "selected_part": {
-        "part_id": "header-1x9-2p54",
-        "display_name": "1x9P 2.54mm pin header",
-        "package": "Connector_PinHeader_2.54mm:PinHeader_1x09_P2.54mm_Vertical",
-        "pin_count": 9,
-        "named_pin_count": 9
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "DIY 2.54mm header:",
-        "1=TARGET_3V3_OUT, 2=VTREF, 3=SWDIO, 4=SWCLK, 5=nRESET",
-        "6=SWO, 7=UART_TX, 8=UART_RX, 9=GND_TARGET_ISO"
-      ]
-    },
-    {
-      "ref": "LED_PWR",
-      "role": "power_indicator_led",
-      "value": "LED_BLUE",
-      "selected_part": {
-        "part_id": "led-blue-0603",
-        "display_name": "Blue power LED",
-        "lcsc_id": "C99290",
-        "mpn": "LTST-C191TBKT",
-        "manufacturer": "Lite-On",
-        "package": "LED_SMD:LED_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "R_LED_PWR",
-      "role": "power_led_resistor",
-      "value": "330R",
-      "selected_part": {
-        "part_id": "res-330r-0603",
-        "display_name": "330Ω power LED resistor",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "LED_DAP",
-      "role": "dap_activity_led",
-      "value": "LED_GREEN",
-      "selected_part": {
-        "part_id": "led-green-0603",
-        "display_name": "Green DAP activity LED",
-        "package": "LED_SMD:LED_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "R_LED_DAP",
-      "role": "dap_led_resistor",
-      "value": "330R",
-      "selected_part": {
-        "part_id": "res-330r-0603",
-        "display_name": "330Ω DAP LED resistor",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "LED_TGT",
-      "role": "target_power_led",
-      "value": "LED_RED",
-      "selected_part": {
-        "part_id": "led-red-0603",
-        "display_name": "Red target power LED",
-        "package": "LED_SMD:LED_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
-    },
-    {
-      "ref": "R_LED_TGT",
-      "role": "target_led_resistor",
-      "value": "330R",
-      "selected_part": {
-        "part_id": "res-330r-0603",
-        "display_name": "330Ω target LED resistor",
-        "package": "Resistor_SMD:R_0603_1608Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
+      "value": "33k"
     },
     {
       "ref": "C_BULK_3V3",
       "role": "vcc_3v3_bulk_capacitor",
-      "value": "10uF",
-      "selected_part": {
-        "part_id": "cap-10uf-0805",
-        "display_name": "3V3 rail bulk cap",
-        "package": "Capacitor_SMD:C_0805_2012Metric",
-        "pin_count": 2,
-        "named_pin_count": 2
-      },
-      "candidate_parts": [],
-      "availability_status": "available"
+      "value": "10uF"
     },
     {
-      "ref": "TP_ESP_UART",
-      "role": "esp_service_uart_testpads",
-      "value": "TP_3P",
-      "selected_part": {
-        "part_id": "testpad-3p",
-        "display_name": "ESP service UART test pads",
-        "package": "TestPoint:TestPoint_Pad_D1.5mm",
-        "pin_count": 1,
-        "named_pin_count": 1
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "ESP32-C3 service UART: RX, TX, GND. For debugging and recovery."
-      ]
+      "ref": "U_ESP32",
+      "role": "esp32c3_transaction_manager",
+      "value": "ESP32-C3"
     },
     {
-      "ref": "TP_RP_SWD",
-      "role": "rp2040_swd_debug_testpads",
-      "value": "TP_3P",
+      "ref": "R_ESP_EN",
+      "role": "esp_chip_en_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "C_ESP_EN",
+      "role": "esp_en_reset_capacitor",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "R_ESP_BOOT",
+      "role": "esp_gpio9_boot_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R_ESP_GPIO8",
+      "role": "esp_gpio8_strap_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R_ESP_GPIO2",
+      "role": "esp_gpio2_strap_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "Y_ESP32",
+      "role": "esp32_40mhz_crystal",
+      "value": "40MHz"
+    },
+    {
+      "ref": "C_ESP_XTAL1",
+      "role": "esp_xtal_load_cap_1",
+      "value": "22pF"
+    },
+    {
+      "ref": "C_ESP_XTAL2",
+      "role": "esp_xtal_load_cap_2",
+      "value": "22pF"
+    },
+    {
+      "ref": "L_RF",
+      "role": "rf_series_matching_inductor",
+      "value": "3.9nH",
       "selected_part": {
-        "part_id": "testpad-3p",
-        "display_name": "RP2040 SWD debug pads",
-        "package": "TestPoint:TestPoint_Pad_D1.5mm",
-        "pin_count": 1,
-        "named_pin_count": 1
-      },
-      "candidate_parts": [],
-      "availability_status": "available",
-      "notes": [
-        "RP2040 SWD debug: SWDIO, SWCLK, GND. For RP2040 firmware development."
-      ]
+        "mpn": "CS0402-3N9G-S",
+        "lcsc_id": "C285959",
+        "package": "0402",
+        "source": "easyeda2kicad"
+      }
+    },
+    {
+      "ref": "C_RF_SHUNT",
+      "role": "rf_shunt_matching_cap",
+      "value": "1.2pF"
+    },
+    {
+      "ref": "ANT1",
+      "role": "chip_antenna_2g4",
+      "value": "2450AT18A100E",
+      "selected_part": {
+        "mpn": "2450AT18A100E",
+        "lcsc_id": "C89334",
+        "package": "1206",
+        "source": "easyeda2kicad"
+      }
+    },
+    {
+      "ref": "C_ESP_VDDA",
+      "role": "esp_vdda_decoupling",
+      "value": "1uF"
+    },
+    {
+      "ref": "C_ESP_DEC1",
+      "role": "esp_vdd3p3_decoupling_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_ESP_DEC2",
+      "role": "esp_vdd3p3_decoupling_2",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_ESP_BULK",
+      "role": "esp_vdd3p3_bulk",
+      "value": "4.7uF"
+    },
+    {
+      "ref": "U_RP2040",
+      "role": "rp2040_cmsis_dap_engine",
+      "value": "RP2040"
+    },
+    {
+      "ref": "U_FLASH",
+      "role": "rp2040_qspi_flash",
+      "value": "GD25Q16ETIGR"
+    },
+    {
+      "ref": "R_RP_RUN",
+      "role": "rp2040_run_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "SW_RP_RST",
+      "role": "rp_reset_button",
+      "value": "TK-6580S-2"
+    },
+    {
+      "ref": "SW_RP_BOOT",
+      "role": "rp_boot_button",
+      "value": "TK-6580S-2"
+    },
+    {
+      "ref": "Y_RP2040",
+      "role": "rp2040_12mhz_crystal",
+      "value": "12MHz"
+    },
+    {
+      "ref": "C_RP_XTAL1",
+      "role": "rp_xtal_load_cap_1",
+      "value": "22pF"
+    },
+    {
+      "ref": "C_RP_XTAL2",
+      "role": "rp_xtal_load_cap_2",
+      "value": "22pF"
+    },
+    {
+      "ref": "C_RP_DEC1",
+      "role": "rp_vdd_decoupling_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_RP_DEC2",
+      "role": "rp_dvdd_decoupling",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C_RP_BULK",
+      "role": "rp_vdd_bulk",
+      "value": "4.7uF"
+    },
+    {
+      "ref": "C_VTREF",
+      "role": "vtref_adc_filter_cap",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "R_VTREF_DIV1",
+      "role": "vtref_adc_divider_top",
+      "value": "10k"
+    },
+    {
+      "ref": "R_VTREF_DIV2",
+      "role": "vtref_adc_divider_bottom",
+      "value": "10k"
+    },
+    {
+      "ref": "Q_NRST",
+      "role": "nreset_open_drain_nmos",
+      "value": "2N7002"
+    },
+    {
+      "ref": "R_NRST_PU",
+      "role": "nreset_target_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R_SWDIO",
+      "role": "swdio_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_SWCLK",
+      "role": "swclk_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_SWO",
+      "role": "swo_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "R_nRESET",
+      "role": "nreset_protection_resistor",
+      "value": "22R"
+    },
+    {
+      "ref": "F_TGT",
+      "role": "target_vbus_ptc_fuse",
+      "value": "200mA",
+      "selected_part": {
+        "mpn": "0805L020/30XR",
+        "lcsc_id": "C7472560",
+        "package": "0805",
+        "source": "easyeda2kicad"
+      }
+    },
+    {
+      "ref": "D_TGT_ESD",
+      "role": "target_esd_protection",
+      "value": "SRV05-4"
+    },
+    {
+      "ref": "J_TGT",
+      "role": "target_swd_connector",
+      "value": "Header-2.54-2x4P"
+    },
+    {
+      "ref": "LED_PWR",
+      "role": "power_indicator_led",
+      "value": "Green"
+    },
+    {
+      "ref": "R_LED_PWR",
+      "role": "power_led_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "LED_DAP",
+      "role": "dap_activity_led",
+      "value": "Blue"
+    },
+    {
+      "ref": "R_LED_DAP",
+      "role": "dap_led_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "LED_TGT",
+      "role": "target_power_led",
+      "value": "Red"
+    },
+    {
+      "ref": "R_LED_TGT",
+      "role": "target_led_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "TP1",
+      "role": "test_point_swdio",
+      "value": "TP"
+    },
+    {
+      "ref": "TP2",
+      "role": "test_point_swclk",
+      "value": "TP"
+    },
+    {
+      "ref": "R_BOOT_PD",
+      "role": "rp_bootsel_pulldown",
+      "value": "100k"
+    },
+    {
+      "ref": "R_TGT_TX",
+      "role": "target_uart_tx_protection",
+      "value": "22R"
+    },
+    {
+      "ref": "R_TGT_RX",
+      "role": "target_uart_rx_protection",
+      "value": "22R"
     }
   ],
   "nets": [
     {
       "name": "USB_VBUS",
+      "kind": "power",
       "members": [
-        "J1.1",
+        "J1.A4B9",
+        "J1.B4A9",
         "F1.1"
       ]
     },
     {
       "name": "+5V_USB_PROTECTED",
+      "kind": "power",
       "members": [
         "F1.2",
+        "C_BUCK_IN.1",
         "D_USB_ESD.5",
         "U_BUCK.4",
-        "C_BUCK_IN.1"
+        "F_TGT.1"
       ]
     },
     {
       "name": "+3V3_MAIN",
+      "kind": "power",
       "members": [
-        "L_BUCK.2",
+        "U_BUCK.1",
         "C_BUCK_OUT.1",
         "C_BULK_3V3.1",
-        "U_ESP32.2",
-        "U_ESP32.3",
         "U_ESP32.11",
         "U_ESP32.17",
-        "U_ESP32.29",
-        "U_ESP32.31",
+        "U_ESP32.2",
+        "U_ESP32.3",
         "U_ESP32.32",
+        "U_ESP32.31",
+        "C_ESP_VDDA.1",
         "C_ESP_DEC1.1",
         "C_ESP_DEC2.1",
         "C_ESP_BULK.1",
-        "C_ESP_VDDA.1",
-        "U_RP2040.1",
-        "U_RP2040.22",
-        "U_RP2040.23",
-        "U_RP2040.33",
-        "U_RP2040.42",
-        "U_RP2040.43",
-        "U_RP2040.48",
-        "U_RP2040.49",
-        "U_RP2040.50",
-        "C_RP_DEC1.1",
-        "C_RP_DEC2.1",
-        "C_RP_BULK.1",
-        "R_RP_RUN.1",
         "R_ESP_EN.1",
         "R_ESP_BOOT.1",
         "R_ESP_GPIO8.1",
         "R_ESP_GPIO2.1",
-        "R_BUCK_FB1.1",
-        "U_FLASH.8",
-        "U_ISO.1",
-        "LED_PWR.2",
-        "R_LED_PWR.1",
+        "U_RP2040.49",
+        "U_RP2040.42",
+        "U_RP2040.33",
+        "U_RP2040.22",
+        "U_RP2040.10",
+        "U_RP2040.1",
         "U_RP2040.44",
-        "U_ISO.16"
+        "U_FLASH.8",
+        "C_RP_DEC1.1",
+        "C_RP_BULK.1",
+        "R_RP_RUN.1",
+        "R_VTREF_DIV1.1",
+        "R_NRST_PU.1",
+        "D_TGT_ESD.5",
+        "R_LED_PWR.1",
+        "R_LED_DAP.1",
+        "R_LED_TGT.1",
+        "L_BUCK.2",
+        "R_BUCK_FB1.1",
+        "U_RP2040.48"
       ]
     },
     {
-      "name": "L_BUCK_SW",
+      "name": "GND_HOST",
+      "kind": "ground",
       "members": [
-        "U_BUCK.3",
-        "L_BUCK.1"
+        "J1.A1B12",
+        "J1.B1A12",
+        "C_BUCK_IN.2",
+        "C_BUCK_OUT.2",
+        "U_BUCK.2",
+        "R_BUCK_FB2.2",
+        "C_BULK_3V3.2",
+        "U_ESP32.33",
+        "C_ESP_VDDA.2",
+        "C_ESP_DEC1.2",
+        "C_ESP_DEC2.2",
+        "C_ESP_BULK.2",
+        "C_ESP_EN.2",
+        "SW_ESP_RST.2",
+        "C_ESP_XTAL1.2",
+        "C_ESP_XTAL2.2",
+        "C_RF_SHUNT.2",
+        "U_RP2040.57",
+        "U_FLASH.4",
+        "C_RP_DEC1.2",
+        "C_RP_DEC2.2",
+        "C_RP_BULK.2",
+        "SW_RP_RST.4",
+        "SW_RP_RST.5",
+        "SW_RP_RST.6",
+        "SW_RP_BOOT.4",
+        "SW_RP_BOOT.5",
+        "SW_RP_BOOT.6",
+        "R_BOOT_PD.2",
+        "C_RP_XTAL1.2",
+        "C_RP_XTAL2.2",
+        "R_VTREF_DIV2.2",
+        "C_VTREF.2",
+        "Q_NRST.2",
+        "D_TGT_ESD.2",
+        "LED_PWR.1",
+        "LED_TGT.1",
+        "R_CC1.2",
+        "R_CC2.2",
+        "D_USB_ESD.2",
+        "ANT1.1",
+        "J_TGT.6"
+      ]
+    },
+    {
+      "name": "+1V1",
+      "kind": "power",
+      "members": [
+        "U_RP2040.45",
+        "U_RP2040.23",
+        "U_RP2040.50",
+        "C_RP_DEC2.1"
       ]
     },
     {
       "name": "BUCK_FB",
+      "kind": "signal",
       "members": [
         "U_BUCK.5",
         "R_BUCK_FB1.2",
@@ -1147,95 +471,61 @@
       ]
     },
     {
-      "name": "GND_HOST",
+      "name": "L_BUCK_SW",
+      "kind": "signal",
       "members": [
-        "J1.4",
-        "D_USB_ESD.2",
-        "U_BUCK.2",
-        "C_BUCK_IN.2",
-        "C_BUCK_OUT.2",
-        "R_BUCK_FB2.2",
-        "C_BULK_3V3.2",
-        "U_ESP32.33",
-        "C_ESP_DEC1.2",
-        "C_ESP_DEC2.2",
-        "C_ESP_BULK.2",
-        "C_ESP_VDDA.2",
-        "C_ESP_EN.2",
-        "C_ESP_XTAL1.2",
-        "C_ESP_XTAL2.2",
-        "SW_ESP_RST.2",
-        "ANT1.2",
-        "U_RP2040.45",
-        "U_RP2040.57",
-        "C_RP_DEC1.2",
-        "C_RP_DEC2.2",
-        "C_RP_BULK.2",
-        "U_FLASH.4",
-        "C_RP_XTAL1.2",
-        "C_RP_XTAL2.2",
-        "SW_RP_RST.2",
-        "SW_RP_BOOT.2",
-        "LED_DAP.2",
-        "U_ISO.2",
-        "U_ISO_DCDC.2",
-        "C_ISO_IN.2",
-        "Q_NRST.1",
-        "R_TGT_EN.2",
-        "C_RF_SHUNT.2",
-        "R_CC1.2",
-        "R_CC2.2",
-        "TP_ESP_UART.3",
-        "TP_RP_SWD.3",
-        "U_RP2040.19",
-        "U_ISO.8",
-        "U_ISO.7",
-        "U_ISO.10",
-        "Y_ESP32.3",
-        "Y_ESP32.4",
-        "Y_RP2040.3",
-        "Y_RP2040.4"
-      ]
-    },
-    {
-      "name": "USB_DM",
-      "members": [
-        "J1.2",
-        "D_USB_ESD.3"
+        "U_BUCK.3",
+        "L_BUCK.1"
       ]
     },
     {
       "name": "USB_DP",
+      "kind": "signal",
       "members": [
-        "J1.3",
-        "D_USB_ESD.1"
+        "J1.A6",
+        "J1.B6",
+        "D_USB_ESD.1",
+        "U_RP2040.46"
+      ]
+    },
+    {
+      "name": "USB_DM",
+      "kind": "signal",
+      "members": [
+        "J1.A7",
+        "J1.B7",
+        "D_USB_ESD.3",
+        "U_RP2040.47"
       ]
     },
     {
       "name": "USB_CC1",
+      "kind": "signal",
       "members": [
-        "J1.5",
+        "J1.A5",
         "R_CC1.1"
       ]
     },
     {
       "name": "USB_CC2",
+      "kind": "signal",
       "members": [
-        "J1.6",
+        "J1.B5",
         "R_CC2.1"
       ]
     },
     {
       "name": "ESP_CHIP_EN",
+      "kind": "signal",
       "members": [
         "U_ESP32.7",
         "R_ESP_EN.2",
-        "C_ESP_EN.1",
-        "SW_ESP_RST.1"
+        "C_ESP_EN.1"
       ]
     },
     {
       "name": "ESP_GPIO9_BOOT",
+      "kind": "signal",
       "members": [
         "U_ESP32.15",
         "R_ESP_BOOT.2"
@@ -1243,6 +533,7 @@
     },
     {
       "name": "ESP_GPIO8",
+      "kind": "signal",
       "members": [
         "U_ESP32.14",
         "R_ESP_GPIO8.2"
@@ -1250,6 +541,7 @@
     },
     {
       "name": "ESP_GPIO2",
+      "kind": "signal",
       "members": [
         "U_ESP32.6",
         "R_ESP_GPIO2.2"
@@ -1257,6 +549,7 @@
     },
     {
       "name": "ESP_XTAL_P",
+      "kind": "signal",
       "members": [
         "U_ESP32.30",
         "Y_ESP32.1",
@@ -1265,13 +558,16 @@
     },
     {
       "name": "ESP_XTAL_N",
+      "kind": "signal",
       "members": [
+        "U_ESP32.29",
         "Y_ESP32.2",
         "C_ESP_XTAL2.1"
       ]
     },
     {
-      "name": "RF_LNA",
+      "name": "ESP_RF_OUT",
+      "kind": "signal",
       "members": [
         "U_ESP32.1",
         "L_RF.1"
@@ -1279,109 +575,104 @@
     },
     {
       "name": "RF_ANT",
+      "kind": "signal",
       "members": [
         "L_RF.2",
         "C_RF_SHUNT.1",
-        "ANT1.1"
-      ]
-    },
-    {
-      "name": "ESP_UART0_TX",
-      "members": [
-        "U_ESP32.28",
-        "TP_ESP_UART.1"
-      ]
-    },
-    {
-      "name": "ESP_UART0_RX",
-      "members": [
-        "TP_ESP_UART.2"
-      ]
-    },
-    {
-      "name": "ESP_SPI_SCLK",
-      "members": [
-        "U_ESP32.10",
-        "U_RP2040.10"
-      ]
-    },
-    {
-      "name": "ESP_SPI_MOSI",
-      "members": [
-        "U_ESP32.9",
-        "U_RP2040.14"
-      ]
-    },
-    {
-      "name": "ESP_SPI_MISO",
-      "members": [
-        "U_ESP32.12",
-        "U_RP2040.15"
-      ]
-    },
-    {
-      "name": "ESP_SPI_CS",
-      "members": [
-        "U_ESP32.16",
-        "U_RP2040.11"
-      ]
-    },
-    {
-      "name": "ESP_TO_RP_IRQ",
-      "members": [
-        "U_ESP32.25",
-        "U_RP2040.12"
-      ]
-    },
-    {
-      "name": "RP_TO_ESP_IRQ",
-      "members": [
-        "U_ESP32.26",
-        "U_RP2040.13"
+        "ANT1.2"
       ]
     },
     {
       "name": "ESP_UART1_TX",
+      "kind": "signal",
       "members": [
-        "U_ESP32.4",
-        "U_RP2040.3"
-      ]
-    },
-    {
-      "name": "ESP_UART1_RX",
-      "members": [
-        "U_ESP32.5",
+        "U_ESP32.28",
         "U_RP2040.2"
       ]
     },
     {
-      "name": "ESP_RP_RUN_CTRL",
-      "members": [
-        "U_ESP32.13",
-        "U_RP2040.26",
-        "R_RP_RUN.2",
-        "SW_RP_RST.1"
-      ]
-    },
-    {
-      "name": "ESP_RP_BOOTSEL_CTRL",
-      "members": [
-        "U_ESP32.8",
-        "U_RP2040.56",
-        "U_FLASH.1",
-        "SW_RP_BOOT.1"
-      ]
-    },
-    {
-      "name": "ESP_TGT_PWR_EN",
+      "name": "ESP_UART1_RX",
+      "kind": "signal",
       "members": [
         "U_ESP32.27",
-        "U_TGT_SW.4",
-        "R_TGT_EN.1"
+        "U_RP2040.3"
+      ]
+    },
+    {
+      "name": "ESP_SPI_SCLK",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.10",
+        "U_RP2040.4"
+      ]
+    },
+    {
+      "name": "ESP_SPI_MOSI",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.16",
+        "U_RP2040.5"
+      ]
+    },
+    {
+      "name": "ESP_SPI_MISO",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.13",
+        "U_RP2040.11"
+      ]
+    },
+    {
+      "name": "ESP_SPI_CS",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.12",
+        "U_RP2040.12"
+      ]
+    },
+    {
+      "name": "ESP_TO_RP_IRQ",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.25",
+        "U_RP2040.13"
+      ]
+    },
+    {
+      "name": "RP_TO_ESP_IRQ",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.26",
+        "U_RP2040.14"
+      ]
+    },
+    {
+      "name": "ESP_RP_RUN_CTRL",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.8",
+        "U_RP2040.26",
+        "R_RP_RUN.2",
+        "SW_RP_RST.1",
+        "SW_RP_RST.2",
+        "SW_RP_RST.3"
+      ]
+    },
+    {
+      "name": "RP_BOOTSEL_QSPI_SS",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.56",
+        "SW_RP_BOOT.1",
+        "SW_RP_BOOT.2",
+        "SW_RP_BOOT.3",
+        "U_FLASH.1",
+        "R_BOOT_PD.1"
       ]
     },
     {
       "name": "QSPI_SCLK",
+      "kind": "signal",
       "members": [
         "U_RP2040.52",
         "U_FLASH.6"
@@ -1389,6 +680,7 @@
     },
     {
       "name": "QSPI_SD0",
+      "kind": "signal",
       "members": [
         "U_RP2040.53",
         "U_FLASH.5"
@@ -1396,6 +688,7 @@
     },
     {
       "name": "QSPI_SD1",
+      "kind": "signal",
       "members": [
         "U_RP2040.55",
         "U_FLASH.2"
@@ -1403,20 +696,23 @@
     },
     {
       "name": "QSPI_SD2",
+      "kind": "signal",
       "members": [
         "U_RP2040.54",
-        "U_FLASH.7"
-      ]
-    },
-    {
-      "name": "QSPI_SD3",
-      "members": [
-        "U_RP2040.51",
         "U_FLASH.3"
       ]
     },
     {
+      "name": "QSPI_SD3",
+      "kind": "signal",
+      "members": [
+        "U_RP2040.51",
+        "U_FLASH.7"
+      ]
+    },
+    {
       "name": "RP_XIN",
+      "kind": "signal",
       "members": [
         "U_RP2040.20",
         "Y_RP2040.1",
@@ -1425,6 +721,7 @@
     },
     {
       "name": "RP_XOUT",
+      "kind": "signal",
       "members": [
         "U_RP2040.21",
         "Y_RP2040.2",
@@ -1432,278 +729,179 @@
       ]
     },
     {
-      "name": "HOST_SWDIO",
-      "members": [
-        "U_RP2040.4",
-        "U_ISO_BUF.1"
-      ]
-    },
-    {
       "name": "HOST_SWCLK",
+      "kind": "signal",
       "members": [
-        "U_RP2040.5",
-        "U_ISO.3"
+        "U_RP2040.24",
+        "R_SWCLK.1"
       ]
     },
     {
-      "name": "HOST_nRESET_CTRL",
+      "name": "HOST_SWDIO",
+      "kind": "signal",
       "members": [
-        "U_RP2040.17",
-        "U_ISO.4"
+        "U_RP2040.25",
+        "R_SWDIO.1"
       ]
     },
     {
       "name": "HOST_SWO_IN",
+      "kind": "signal",
       "members": [
-        "U_RP2040.16",
-        "U_ISO.14"
+        "U_RP2040.6",
+        "R_SWO.1"
       ]
     },
     {
-      "name": "HOST_SWDIO_DIR",
+      "name": "HOST_nRESET_CTRL",
+      "kind": "signal",
       "members": [
-        "U_RP2040.18"
+        "U_RP2040.15",
+        "Q_NRST.1"
       ]
     },
     {
-      "name": "ISO_SWDIO_OUT",
+      "name": "TGT_SWCLK",
+      "kind": "signal",
       "members": [
-        "U_ISO.5",
-        "U_ISO_BUF.2"
-      ]
-    },
-    {
-      "name": "ISO_SWDIO_IN",
-      "members": [
-        "U_ISO.11"
-      ]
-    },
-    {
-      "name": "ISO_SWCLK_TGT",
-      "members": [
-        "U_ISO.13",
+        "R_SWCLK.2",
+        "J_TGT.3",
         "D_TGT_ESD.3",
-        "J_TGT_ARM10.4",
-        "J_TGT_254.4"
+        "TP2.1"
       ]
     },
     {
-      "name": "ISO_nRESET_TGT",
+      "name": "TGT_SWDIO",
+      "kind": "signal",
       "members": [
-        "U_ISO.6",
-        "Q_NRST.2",
-        "D_TGT_ESD.2",
-        "R_NRST_PU.1"
-      ]
-    },
-    {
-      "name": "TARGET_nRESET",
-      "members": [
-        "J_TGT_ARM10.10",
-        "J_TGT_254.5"
-      ]
-    },
-    {
-      "name": "ISO_SWO_TGT",
-      "members": [
-        "J_TGT_ARM10.6",
-        "J_TGT_254.6",
-        "D_TGT_ESD.4",
-        "U_ISO.12"
-      ]
-    },
-    {
-      "name": "TARGET_SWDIO",
-      "members": [
+        "R_SWDIO.2",
+        "J_TGT.2",
         "D_TGT_ESD.1",
-        "J_TGT_ARM10.2",
-        "J_TGT_254.3"
+        "TP1.1"
       ]
     },
     {
-      "name": "TARGET_UART_TX",
+      "name": "TGT_SWO_OUT",
+      "kind": "signal",
       "members": [
-        "J_TGT_254.7"
+        "R_SWO.2",
+        "J_TGT.4",
+        "D_TGT_ESD.6"
       ]
     },
     {
-      "name": "TARGET_UART_RX",
+      "name": "TGT_nRESET",
+      "kind": "signal",
       "members": [
-        "J_TGT_ARM10.8",
-        "J_TGT_254.8"
+        "R_nRESET.2",
+        "J_TGT.5",
+        "D_TGT_ESD.4"
       ]
     },
     {
-      "name": "ISO_5V_IN",
+      "name": "TGT_nRESET_DRV",
+      "kind": "signal",
       "members": [
-        "U_ISO_DCDC.1",
-        "C_ISO_IN.1"
-      ]
-    },
-    {
-      "name": "ISO_5V_OUT",
-      "members": [
-        "U_ISO_DCDC.3",
-        "C_ISO_OUT.1",
-        "U_TGT_LDO.3"
-      ]
-    },
-    {
-      "name": "ISO_3V3_TARGET",
-      "members": [
-        "U_TGT_LDO.2",
-        "C_TGT_LDO_OUT.1",
-        "U_TGT_SW.1",
-        "D_TGT_ESD.5",
-        "R_LED_TGT.1"
-      ]
-    },
-    {
-      "name": "TARGET_3V3_OUT",
-      "members": [
-        "U_TGT_SW.5",
-        "J_TGT_254.1"
-      ]
-    },
-    {
-      "name": "VTREF_TARGET",
-      "members": [
-        "J_TGT_ARM10.1",
-        "J_TGT_254.2",
-        "R_VTREF_DIV1.1"
-      ]
-    },
-    {
-      "name": "VTREF_ADC",
-      "members": [
-        "R_VTREF_DIV1.2",
-        "R_VTREF_DIV2.1",
-        "C_VTREF.1"
-      ]
-    },
-    {
-      "name": "GND_TARGET_ISO",
-      "members": [
-        "U_ISO.15",
-        "U_ISO_DCDC.4",
-        "C_ISO_OUT.2",
-        "U_TGT_LDO.1",
-        "C_TGT_LDO_OUT.2",
-        "U_TGT_SW.2",
-        "D_TGT_ESD.6",
-        "R_VTREF_DIV2.2",
-        "C_VTREF.2",
+        "Q_NRST.3",
         "R_NRST_PU.2",
-        "J_TGT_ARM10.3",
-        "J_TGT_ARM10.5",
-        "J_TGT_ARM10.9",
-        "J_TGT_254.9",
-        "LED_TGT.2"
-      ]
-    },
-    {
-      "name": "DAP_ACTIVITY",
-      "members": [
-        "U_RP2040.24",
-        "R_LED_DAP.1"
-      ]
-    },
-    {
-      "name": "LED_DAP_A",
-      "members": [
-        "LED_DAP.1",
-        "R_LED_DAP.2"
+        "R_nRESET.1"
       ]
     },
     {
       "name": "LED_PWR_A",
+      "kind": "signal",
       "members": [
-        "LED_PWR.1",
+        "LED_PWR.2",
         "R_LED_PWR.2"
       ]
     },
     {
-      "name": "LED_TGT_A",
-      "members": []
+      "name": "LED_DAP_A",
+      "kind": "signal",
+      "members": [
+        "LED_DAP.2",
+        "R_LED_DAP.2"
+      ]
     },
     {
       "name": "LED_TGT_K",
+      "kind": "signal",
       "members": [
-        "R_LED_TGT.2",
-        "LED_TGT.1"
+        "LED_TGT.2",
+        "R_LED_TGT.2"
       ]
     },
     {
-      "name": "RP_SWD_SWDIO",
+      "name": "DAP_ACTIVITY",
+      "kind": "signal",
       "members": [
-        "TP_RP_SWD.1"
+        "U_RP2040.17",
+        "LED_DAP.1"
       ]
     },
     {
-      "name": "RP_SWD_SWCLK",
+      "name": "VTREF_TARGET",
+      "kind": "signal",
       "members": [
-        "TP_RP_SWD.2"
+        "R_VTREF_DIV1.2",
+        "R_VTREF_DIV2.1",
+        "C_VTREF.1",
+        "U_RP2040.43"
+      ]
+    },
+    {
+      "name": "+5V_SW_TGT",
+      "kind": "power",
+      "members": [
+        "F_TGT.2",
+        "J_TGT.1"
+      ]
+    },
+    {
+      "name": "TGT_UART_TX",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.24",
+        "R_TGT_TX.1"
+      ]
+    },
+    {
+      "name": "TGT_UART_RX",
+      "kind": "signal",
+      "members": [
+        "U_ESP32.19",
+        "R_TGT_RX.1"
+      ]
+    },
+    {
+      "name": "TGT_UART_TX_OUT",
+      "kind": "signal",
+      "members": [
+        "R_TGT_TX.2",
+        "J_TGT.7"
+      ]
+    },
+    {
+      "name": "TGT_UART_RX_OUT",
+      "kind": "signal",
+      "members": [
+        "R_TGT_RX.2",
+        "J_TGT.8"
       ]
     }
   ],
   "design_decisions": [
-    {
-      "title": "USB data wired to ESP32-C3",
-      "rationale": "ESP32-C3 acts as primary host interface; RP2040 USB is not connected in v1. Wired CMSIS-DAP fallback is through ESP32-C3→SPI→RP2040 path, not direct RP2040 USB.",
-      "impact": "USB D+/D- route to ESP32-C3. RP2040 USB_DM/USB_DP pins (36, 37) left unconnected."
-    },
-    {
-      "title": "SPI as primary ESP-RP link, UART as backup",
-      "rationale": "SPI provides higher throughput and lower latency for debug transactions. UART retained for recovery and early bring-up.",
-      "impact": "ESP32-C3 GPIO4/5/6/10 connected as SPI to RP2040 GPIO10/14/15/11. ESP32-C3 GPIO0/1 wired as UART1 backup to RP2040 GPIO2/3."
-    },
-    {
-      "title": "ESP32-C3 GPIO15 controls RP2040 RUN",
-      "rationale": "ESP32-C3 must recover RP2040 without manual intervention. GPIO15 (MTDO) is a non-strap GPIO.",
-      "impact": "GPIO15 can pull RP2040 RUN low to reset."
-    },
-    {
-      "title": "ESP32-C3 GPIO21 controls RP2040 BOOTSEL",
-      "rationale": "GPIO21 (U0TXD alternate function) used when not needed for serial boot.",
-      "impact": "GPIO21 drives RP2040 QSPI_SS/BOOTSEL during reset for flash recovery."
-    },
-    {
-      "title": "RP2040 GPIO4-GPIO5 are SWD lines to target",
-      "rationale": "GPIO4/GPIO5 are available after UART is on GPIO2/3.",
-      "impact": "SWDIO/SWCLK routed through digital isolator to target connector."
-    },
-    {
-      "title": "ESP32-C3 GPIO17 controls TARGET_PWR_EN",
-      "rationale": "GPIO17 (U0RXD) shared — default output low ensures target power off at boot.",
-      "impact": "100kΩ pulldown ensures off state before ESP32-C3 configures GPIO."
-    },
-    {
-      "title": "ESP32-C3 strap pins externally biased for SPI boot",
-      "rationale": "GPIO2/GPIO8/GPIO9 sampled at CHIP_EN de-assertion. External 10k pull-ups ensure SPI boot (normal).",
-      "impact": "GPIO2=RP2040 RUN pullup path provides implicit high. GPIO8=10k pullup. GPIO9=10k pullup (BOOT=1 = normal boot)."
-    },
-    {
-      "title": "SWDIO bidirectional handling via tri-state buffer",
-      "rationale": "CA-IS3742HW has fixed-direction channels. SWDIO needs bidirectional path.",
-      "impact": "SN74LVC1G125 buffer with RP2040 GPIO18 direction control. Host_SWDIO→buffer→isolator ch1(fwd). Isolator ch4(rev)→host_SWDIO_RX."
-    },
-    {
-      "title": "nRESET uses open-drain NMOS driver",
-      "rationale": "Target nRESET may be pulled to different voltage (VTREF). Open-drain allows level-translation.",
-      "impact": "2N7002 NMOS: gate from RP2040 GPIO17, drain to target nRESET (pulled up to VTREF on target side), source to GND_HOST."
-    },
-    {
-      "title": "VTREF sensed by ESP32-C3 ADC on GPIO4",
-      "rationale": "Before enabling target power or driving SWD, VTREF must be measured.",
-      "impact": "10k+10k divider from VTREF to ADC pin. 100nF filter cap for stable reading."
-    }
-  ],
-  "risks": [
-    "JLC MCP pin numbers must be verified against the actual installed symbols before netlist generation.",
-    "Pin assignments for SPI/UART/GPIO are tentative — verify pin muxing compatibility with RP2040 and ESP32-C3 datasheets.",
-    "SWDIO bidirectional isolation with tri-state buffer needs timing validation at target SWD speeds.",
-    "Isolated DC-DC 1W power budget: verify total target-side current (isolator + LDO + target 300mA) doesn't exceed 200mA at 5V.",
-    "USB data routing to ESP32-C3 means no direct RP2040 USB CMSIS-DAP fallback in v1. Wireless/wired CMSIS-DAP goes through ESP32-C3→SPI→RP2040.",
-    "Chip antenna matching network values (L_RF, C_RF_SHUNT) need tuning based on actual PCB layout."
+    "V3: Removed isolation barrier (CA-IS3742HW + B0505S + buffer + target LDO + power switch) for simplicity and cost reduction.",
+    "Protection: 22R series resistors on SWDIO/SWCLK/SWO for current limiting in fault conditions.",
+    "200mA PTC fuse on 5V target output prevents short-circuit damage to host.",
+    "SRV05-4 provides 4-channel ESD/TVS protection on target-facing signals.",
+    "nRESET open-drain NMOS (2N7002) retained for bidirectional level-safe reset.",
+    "VTREF ADC divider remains for target voltage monitoring.",
+    "Target connector uses a 2x4 2.54mm header carrying VCC, SWDIO, SWCLK, GND, nRESET/SWO, and UART TX/RX; pin 6 is tied to GND.",
+    "RP2040 BOOTSEL/QSPI_SS is local to RP2040, flash, button, and pull network; ESP32 does not directly drive the QSPI chip-select net.",
+    "Reset and BOOTSEL use top-actuated SMD tactile switches (TK-6580S-2); pads 1/2/3 are tied to the signal side and pads 4/5/6 to GND.",
+    "RF matching is split into ESP_RF_OUT and RF_ANT so the series inductor is electrically in series with the antenna path.",
+    "SRV05-4 channels are assigned to target-side SWDIO, SWCLK, nRESET, and SWO nets; verify the exact TVS pinout before PCB layout sign-off.",
+    "LED indicators: PWR=Green, DAP=Blue, TGT=Red."
   ]
 }

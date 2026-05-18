@@ -22,6 +22,10 @@ def _collect_warnings(*sources: dict[str, Any]) -> list[str]:
         if isinstance(registration, dict) and registration.get("attempted") and not registration.get("success", False):
             stderr = registration.get("stderr", "")
             warnings.append(f"library registration failed: {stderr or 'unknown error'}")
+        gui_assets = source.get("gui_asset_validation")
+        if isinstance(gui_assets, dict) and gui_assets.get("attempted") and not gui_assets.get("success", False):
+            for issue in gui_assets.get("issues", []):
+                warnings.append(f"GUI asset validation failed: {issue}")
     seen: set[str] = set()
     unique: list[str] = []
     for item in warnings:
@@ -53,6 +57,7 @@ def build_run_pipeline_summary(
             "execution_plan": plan_file,
             "project": write_result.get("project_file"),
             "schematic": write_result.get("schematic_file"),
+            "board": write_result.get("board_file", ""),
             "summary": write_result.get("summary_file"),
             "kicad_erc_summary": erc_result.get("summary_file", ""),
             "kicad_erc_report": erc_result.get("output_file", ""),
@@ -62,6 +67,8 @@ def build_run_pipeline_summary(
         "counts": {
             "symbols": write_result.get("symbol_count", 0),
             "nets": write_result.get("net_count", 0),
+            "board_footprints": write_result.get("board_footprints", 0),
+            "board_warnings": len(write_result.get("board_warnings", [])),
         },
         "erc": {
             "schema_version": erc_result.get("schema_version", ""),

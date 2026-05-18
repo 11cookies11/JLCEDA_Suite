@@ -932,7 +932,7 @@ def render_connectivity(
             except Exception:
                 pin_map = {}
             if len(pin_map) > 2:
-                for pin_number in sorted(pin_map, key=lambda value: int(value) if value.isdigit() else value):
+                for pin_number in sorted(pin_map, key=lambda value: (0, int(value)) if str(value).isdigit() else (1, str(value))):
                     if pin_number in connected_pins:
                         continue
                     x, y, _direction = pin_endpoint(symbol, pin_number)
@@ -1293,48 +1293,35 @@ def render_project(output_dir: str | Path | None = None) -> str:
         },
     }
 
-    # Add project-local JLC libraries if they exist
+    # Pin the project-local JLC libraries KiCad will need after postprocess.
+    # The library sync step runs after the project file is first written, so
+    # these expected paths must not depend on files already existing.
     if output_dir:
         output_path = Path(output_dir)
-        pinned_fp: list[dict[str, str]] = []
         pinned_sym: list[dict[str, str]] = []
+        pinned_fp: list[dict[str, str]] = [{
+            "name": "JLC-MCP",
+            "type": "KiCad",
+            "uri": "libraries/footprints/JLC-MCP.pretty",
+            "options": "",
+            "description": "JLC-MCP footprints",
+        }]
 
-        jlc_fp_dir = _find_jlc_lib_dir(output_path)
-        jlc_sym_file = _find_jlc_sym_file(output_path)
-
-        if jlc_fp_dir:
-            try:
-                rel = Path(os.path.relpath(str(jlc_fp_dir), str(output_path.resolve())))
-            except ValueError:
-                rel = jlc_fp_dir
-            uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
-            pinned_fp.append({
-                "name": "jlc_footprints",
-                "type": "KiCad",
-                "uri": uri,
-                "options": "",
-                "description": "JLC/LCSC imported footprints",
-            })
-
-        if jlc_sym_file:
-            try:
-                rel = Path(os.path.relpath(str(jlc_sym_file), str(output_path.resolve())))
-            except ValueError:
-                rel = jlc_sym_file
-            uri = '${KIPRJMOD}/' + str(rel).replace('\\', '/')
+        symbols_dir = output_path / 'libraries' / 'symbols'
+        symbol_files = sorted(symbols_dir.glob('*.kicad_sym')) if symbols_dir.exists() else []
+        for symbol_file in symbol_files:
             pinned_sym.append({
-                "name": "jlc_symbols",
+                "name": symbol_file.stem,
                 "type": "KiCad",
-                "uri": uri,
+                "uri": f"libraries/symbols/{symbol_file.name}",
                 "options": "",
-                "description": "JLC/LCSC imported symbols",
+                "description": f"JLC-MCP {symbol_file.stem}",
             })
 
-        if pinned_fp or pinned_sym:
-            project_json['libraries'] = {
-                'pinned_footprint_libs': pinned_fp,
-                'pinned_symbol_libs': pinned_sym,
-            }
+        project_json['libraries'] = {
+            'pinned_footprint_libs': pinned_fp,
+            'pinned_symbol_libs': pinned_sym,
+        }
 
     return json.dumps(project_json, ensure_ascii=False, indent=2) + '\n'
 
@@ -1387,15 +1374,9 @@ def write_fp_lib_table(output_dir: Path) -> None:
             uri = str(rel).replace('\\', '/')
             lines.append(f'  (lib (name "{lib_name}")(type "KiCad")(uri "{uri}")(options "")(descr "AIAgent custom footprints"))')
 
-    # JLC/LCSC imported footprints
-    jlc_fp = _find_jlc_lib_dir(output_dir)
-    if jlc_fp:
-        try:
-            rel = Path(os.path.relpath(str(jlc_fp.resolve()), str(output_resolved)))
-        except ValueError:
-            rel = jlc_fp
-        uri = str(rel).replace('\\', '/')
-        lines.append(f'  (lib (name "jlc_footprints")(type "KiCad")(uri "{uri}")(options "")(descr "JLC/LCSC imported footprints"))')
+    # JLC/LCSC imported footprints. Register the expected project-local path
+    # even before postprocess copies the library into the output directory.
+    lines.append('  (lib (name "JLC-MCP")(type "KiCad")(uri "libraries/footprints/JLC-MCP.pretty")(options "")(descr "JLC-MCP footprints"))')
 
     lines.append(')\n')
     content = '\n'.join(lines)

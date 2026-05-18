@@ -449,10 +449,11 @@ def build_netlist_from_circuit_model(model: dict[str, Any]) -> dict[str, Any]:
 
 def _resolve_block(role: str) -> str:
     from .schematic_layout_rules import build_default_layout_rules, _resolve_wiring_block
-    return _resolve_wiring_block(role, build_default_layout_rules().block_layout)
+    topology = env('KICAD_TOPOLOGY', '')
+    return _resolve_wiring_block(role, build_default_layout_rules(topology).block_layout)
 
 
-def _estimate_symbol_size(lib_id: str) -> tuple[float, float]:
+def _legacy_estimate_symbol_size(lib_id: str) -> tuple[float, float]:
     """Estimate symbol size in mm including label stubs on each side.
 
     Returns (width, height) where width covers pin tips + labels on left/right,
@@ -492,19 +493,70 @@ def _estimate_symbol_size(lib_id: str) -> tuple[float, float]:
     return max(w, 10.0), max(h, 8.0)
 
 
+def _estimate_symbol_size_from_pins(lib_id: str) -> tuple[float, float] | None:
+    from .kicad_project_writer import parse_symbol_pin_map
+    pins = parse_symbol_pin_map(lib_id)
+    if not pins:
+        return None
+    xs = [p['x'] for p in pins.values()]
+    ys = [p['y'] for p in pins.values()]
+    if not xs:
+        return None
+
+    label_extension = 12.0
+    body_pad = 3.81
+    has_left_labels = any(p['rotation'] == 0 for p in pins.values())
+    has_right_labels = any(p['rotation'] == 180 for p in pins.values())
+    has_top_labels = any(p['rotation'] == 270 for p in pins.values())
+    has_bottom_labels = any(p['rotation'] == 90 for p in pins.values())
+    left_margin = label_extension if has_left_labels else body_pad
+    right_margin = label_extension if has_right_labels else body_pad
+    top_margin = label_extension if has_top_labels else body_pad
+    bottom_margin = label_extension if has_bottom_labels else body_pad
+    width = (max(xs) - min(xs)) + left_margin + right_margin
+    height = (max(ys) - min(ys)) + top_margin + bottom_margin
+    return max(width, 10.0), max(height, 8.0)
+
+
+def _configured_symbol_size(lib_id: str) -> tuple[float, float] | None:
+    configured = load_symbol_map().get('symbol_sizes', {}).get(lib_id)
+    if isinstance(configured, list) and len(configured) >= 2:
+        return float(configured[0]), float(configured[1])
+    return None
+
+
+def _estimate_symbol_size(lib_id: str) -> tuple[float, float]:
+    """Estimate symbol envelope from configured and real library geometry."""
+    configured_size = _configured_symbol_size(lib_id)
+    pin_size = _estimate_symbol_size_from_pins(lib_id)
+    if configured_size and pin_size:
+        return max(configured_size[0], pin_size[0]), max(configured_size[1], pin_size[1])
+    if configured_size:
+        return configured_size
+    if pin_size:
+        return pin_size
+    return 12.7, 10.16
+
+
 _GRID = 2.54
 
 def _snap(value: float) -> float:
     return round(value / _GRID) * _GRID
 
 
-_BLOCK_GAP = 20.32
+_BLOCK_GAP = 30.48
 _VSLOT_PITCH = 17.78
 _LAYOUT_ORIGIN_X = 35.56
 _LAYOUT_ORIGIN_Y = 38.1
 
 
 def configured_block_order() -> list[str]:
+    topology = env('KICAD_TOPOLOGY', '')
+    if topology:
+        from .schematic_layout_rules import build_default_layout_rules
+        order = build_default_layout_rules(topology).block_layout.block_order
+        if order:
+            return [str(item) for item in order if str(item)]
     order = layout_defaults().get('block_order', [])
     if isinstance(order, list):
         return [str(item) for item in order if str(item)]
@@ -603,7 +655,7 @@ def _auto_position(
     base_y = block_y.get(block, layout_numeric_setting('origin_y', _LAYOUT_ORIGIN_Y))
     _, h = _estimate_symbol_size(lib_id)
     min_pitch = layout_numeric_setting('slot_pitch', _VSLOT_PITCH)
-    gap = 5.0
+    gap = 12.0
     if block_cursor_y is not None:
         y = _snap(block_cursor_y.get(block, base_y))
         block_cursor_y[block] = y + max(min_pitch, h + gap)
@@ -613,6 +665,83 @@ def _auto_position(
         y = _snap(base_y + slot * max(min_pitch, h + gap))
     rotation = configured_role_rotation(role)
     return KiCadPoint(x=x, y=y, rotation=rotation)
+
+
+def _symbol_bounds(symbol: KiCadSymbol, padding: float) -> tuple[float, float, float, float]:
+    width, height = _estimate_symbol_size(symbol.lib_id)
+    rotation = round(float(symbol.at.rotation or 0.0)) % 180
+    if rotation == 90:
+        width, height = height, width
+    half_width = width / 2.0 + padding
+    half_height = height / 2.0 + padding
+    return (
+        symbol.at.x - half_width,
+        symbol.at.y - half_height,
+        symbol.at.x + half_width,
+        symbol.at.y + half_height,
+    )
+
+
+def _bounds_overlap(
+    first: tuple[float, float, float, float],
+    second: tuple[float, float, float, float],
+) -> tuple[float, float] | None:
+    overlap_x = min(first[2], second[2]) - max(first[0], second[0])
+    overlap_y = min(first[3], second[3]) - max(first[1], second[1])
+    if overlap_x <= 0 or overlap_y <= 0:
+        return None
+    return overlap_x, overlap_y
+
+
+def _symbol_sheet_name(symbol: KiCadSymbol, topology: str = '') -> str:
+    from .schematic_layout_rules import build_default_layout_rules, _resolve_wiring_block
+    block = _resolve_wiring_block(symbol.role, build_default_layout_rules(topology).block_layout)
+    profiles = load_layout_profiles().get('profiles', {})
+    profile = profiles.get(topology, {}) if isinstance(profiles, dict) else {}
+    groups = profile.get('sheet_groups', []) if isinstance(profile, dict) else []
+    if isinstance(groups, list):
+        for group in groups:
+            if not isinstance(group, dict):
+                continue
+            blocks = group.get('blocks', [])
+            if isinstance(blocks, list) and block in {str(item) for item in blocks}:
+                return str(group.get('name', '') or block)
+    return block
+
+
+def _resolve_symbol_overlaps_for_group(symbols: list[KiCadSymbol], padding: float, max_passes: int) -> int:
+    moves = 0
+    ordered = sorted(symbols, key=lambda symbol: (symbol.at.y, symbol.at.x, symbol.ref))
+    for _pass_index in range(max_passes):
+        changed = False
+        for index, current in enumerate(ordered):
+            current_bounds = _symbol_bounds(current, padding)
+            for later in ordered[index + 1:]:
+                later_bounds = _symbol_bounds(later, padding)
+                overlap = _bounds_overlap(current_bounds, later_bounds)
+                if overlap is None:
+                    continue
+                _overlap_x, overlap_y = overlap
+                later.at.y = _snap(later.at.y + overlap_y + padding)
+                changed = True
+                moves += 1
+        if not changed:
+            break
+        ordered = sorted(ordered, key=lambda symbol: (symbol.at.y, symbol.at.x, symbol.ref))
+    return moves
+
+
+def resolve_symbol_overlaps(symbols: list[KiCadSymbol], diagnostics: KiCadDiagnostics, topology: str = '') -> None:
+    padding = layout_numeric_setting('symbol_padding', 6.35)
+    max_passes = max(1, to_int_env('KICAD_SCH_OVERLAP_PASSES', 24))
+    moves = 0
+    by_sheet: dict[str, list[KiCadSymbol]] = {}
+    for symbol in symbols:
+        by_sheet.setdefault(_symbol_sheet_name(symbol, topology), []).append(symbol)
+    for group_symbols in by_sheet.values():
+        moves += _resolve_symbol_overlaps_for_group(group_symbols, padding, max_passes)
+    if moves:
+        diagnostics.warnings.append(f'Auto schematic layout resolved {moves} symbol overlap(s).')
 
 
 def role_aware_position(
@@ -823,6 +952,8 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
         for net in netlist.get('nets', [])
         if isinstance(net, dict)
     ]
+
+    resolve_symbol_overlaps(symbols, diagnostics, str(model.get('topology', '') or project_name))
 
     return KiCadExecutionPlan(
         schema_version=KICAD_EXECUTION_PLAN_SCHEMA_VERSION,

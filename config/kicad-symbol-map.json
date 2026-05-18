@@ -4,6 +4,31 @@
     {
       "match": {
         "role_contains": [
+          "reset_button",
+          "boot_button",
+          "user_button",
+          "tactile_switch"
+        ]
+      },
+      "lib_id": "JLC-MCP-Misc:TK-6580S-2",
+      "footprint": "JLC-MCP:SW-SMD_TK-6580S-2",
+      "note": "TK-6580S-2 top-actuated SMD tactile switch, 6-pad SPST"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "nreset_open_drain_nmos",
+          "target_power_npn_ctrl",
+          "2n7002"
+        ]
+      },
+      "lib_id": "JLC-MCP-Transistors:2N7002",
+      "footprint": "JLC-MCP:SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR",
+      "note": "2N7002 N-MOSFET, SOT-23, 60V/115mA"
+    },
+    {
+      "match": {
+        "role_contains": [
           "current_sense_amp",
           "ina180"
         ]
@@ -168,12 +193,32 @@
     {
       "match": {
         "role_contains": [
+          "buck_power_inductor"
+        ]
+      },
+      "lib_id": "JLC-MCP-Imported:APH201208C2R2MP03",
+      "footprint": "JLC-MCP:L0805",
+      "note": "NexDAP: APH201208C2R2MP03 2.2uH buck power inductor imported from EasyEDA/LCSC C42455262."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "rf_series_matching_inductor"
+        ]
+      },
+      "lib_id": "JLC-MCP-Imported:CS0402-3N9G-S",
+      "footprint": "JLC-MCP:IND-SMD_L1.2-W0.7",
+      "note": "NexDAP: CS0402-3N9G-S 3.9nH RF matching inductor imported from EasyEDA/LCSC C285959."
+    },
+    {
+      "match": {
+        "role_contains": [
           "chip_antenna_2g4"
         ]
       },
-      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
-      "footprint": "JLC-MCP:LED0603-RD",
-      "note": "NexDAP: chip antenna - using LED pad as placeholder, replace with actual 2450AT18A100E symbol"
+      "lib_id": "JLC-MCP-Imported:2450AT18A100E",
+      "footprint": "JLC-MCP:ANT-SMD_L3.2-W1.6",
+      "note": "NexDAP: Johanson 2450AT18A100E chip antenna imported from EasyEDA/LCSC C89334."
     },
     {
       "match": {
@@ -269,9 +314,9 @@
           "test_point"
         ]
       },
-      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
-      "footprint": "JLC-MCP:R0603",
-      "note": "Test point using 0603 resistor pad as placeholder"
+      "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
+      "footprint": "JLC-MCP:TP-SMD_1P",
+      "note": "Single-pad SMD test point; do not substitute a resistor footprint."
     },
     {
       "match": {
@@ -416,12 +461,22 @@
     {
       "match": {
         "role_contains": [
+          "target_vbus_ptc_fuse"
+        ]
+      },
+      "lib_id": "JLC-MCP-Imported:0805L020_30XR",
+      "footprint": "JLC-MCP:F0805",
+      "note": "NexDAP: 0805L020/30XR 200mA resettable PTC imported from EasyEDA/LCSC C7472560."
+    },
+    {
+      "match": {
+        "role_contains": [
           "fuse"
         ]
       },
-      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
-      "footprint": "JLC-MCP:R0603",
-      "note": "JLC-MCP fuse placeholder (EasyEDA origin)"
+      "lib_id": "JLC-MCP-Misc:POLYFUSE_2P",
+      "footprint": "",
+      "note": "Fuse/PTC symbol only; do not substitute a resistor footprint. Import and lock the exact EasyEDA/JLC fuse footprint."
     },
     {
       "match": {
@@ -430,9 +485,9 @@
           "ferrite"
         ]
       },
-      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
-      "footprint": "JLC-MCP:R0603",
-      "note": "JLC-MCP inductor placeholder (EasyEDA origin)"
+      "lib_id": "JLC-MCP-Inductors:INDUCTOR_2P",
+      "footprint": "",
+      "note": "Inductor symbol only; do not substitute a resistor footprint. Import and lock the exact EasyEDA/JLC inductor footprint."
     },
     {
       "match": {
@@ -538,9 +593,9 @@
           "usb_c_input"
         ]
       },
-      "lib_id": "Connector_Generic:Conn_02x03",
-      "footprint": "",
-      "note": "NexDAP: USB-C connector mapped to 2x3 (6-pin: VBUS, DM, DP, CC1, CC2, GND). Replace with Connector:USB_C_Receptacle_USB2.0 for production."
+      "lib_id": "JLC-MCP-Connectors:TYPE-C16PIN",
+      "footprint": "JLC-MCP:USB-C-SMD_TYPE-C16PIN",
+      "note": "NexDAP: TYPE-C16PIN EasyEDA/JLC USB-C receptacle; model nets use merged A/B USB2 pins."
     },
     {
       "match": {
@@ -563,6 +618,19 @@
       "lib_id": "Connector_Generic:Conn_01x03",
       "footprint": "Connector_PinHeader_2.54mm:PinHeader_1x03_P2.54mm_Vertical",
       "note": "NexDAP: 3-pin debug header (symbol Conn_01x03 compat)"
+    },
+    {
+      "match": {
+        "role_contains": [
+          "target_swd_connector"
+        ],
+        "value_contains": [
+          "2x4"
+        ]
+      },
+      "lib_id": "JLC-MCP-Connectors:HDR-2X4-2.54",
+      "footprint": "JLC-MCP:HDR-TH_8P-P2.54-V-M-2X4",
+      "note": "NexDAP: 2x4 2.54mm target SWD/UART header; generated local JLC-MCP-compatible footprint pending exact EasyEDA lock."
     },
     {
       "match": {

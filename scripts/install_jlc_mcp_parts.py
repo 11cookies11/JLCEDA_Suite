@@ -15,6 +15,14 @@ from pathlib import Path
 from typing import Any
 
 
+def _insert_before_table_end(content: str, entry: str) -> str:
+    """Insert a KiCad library-table entry before the table's final closing paren."""
+    index = content.rfind(")")
+    if index < 0:
+        return content.rstrip() + "\n" + entry + ")\n"
+    return content[:index].rstrip() + "\n" + entry + content[index:]
+
+
 def _arg_value(name: str) -> str:
     for idx, arg in enumerate(sys.argv):
         if arg == name and idx + 1 < len(sys.argv):
@@ -138,8 +146,12 @@ def _installed_asset_exists(project_dir: Path, lcsc_id: str) -> bool:
 
 
 def _project_uri(project_dir: Path, target: Path) -> str:
-    """Return absolute URI — KiCad 10.0 does not resolve ${KIPRJMOD} reliably."""
-    return target.resolve().as_posix()
+    """Return a project-relative URI for portable KiCad project library tables."""
+    try:
+        relative = target.resolve().relative_to(project_dir.resolve())
+        return relative.as_posix()
+    except ValueError:
+        return target.resolve().as_posix()
 
 
 def _write_project_lib_tables(project_dir: Path) -> dict[str, Any]:
@@ -160,14 +172,14 @@ def _write_project_lib_tables(project_dir: Path) -> dict[str, Any]:
         (project_dir / "sym-lib-table").write_text("\n".join(sym_lines) + "\n", encoding="utf-8")
 
     fp_entries = [
-        '  (lib (name "AIAgent")(type "KiCad")(uri "${KIPRJMOD}/../../../resources/kicad/footprints/AIAgent.pretty")(options "")(descr "AIAgent custom footprints"))'
+        '  (lib (name "AIAgent")(type "KiCad")(uri "../../../resources/kicad/footprints/AIAgent.pretty")(options "")(descr "AIAgent custom footprints"))'
     ]
     if footprints_dir.exists():
         uri = _project_uri(project_dir, footprints_dir)
         fp_entries.append(
             f'  (lib (name "JLC-MCP")(type "KiCad")(uri "{uri}")(options "")(descr "JLC-MCP footprints"))'
         )
-    fp_lines = ["(fp_lib_table", *fp_entries, ")"]
+    fp_lines = ["(fp_lib_table", "  (version 7)", *fp_entries, ")"]
     (project_dir / "fp-lib-table").write_text("\n".join(fp_lines) + "\n", encoding="utf-8")
 
     return {
@@ -180,11 +192,12 @@ def _write_project_lib_tables(project_dir: Path) -> dict[str, Any]:
 
 
 def _fix_3d_model_paths(project_dir: Path) -> dict[str, Any]:
-    """Replace ${KICAD9_3RD_PARTY} variable with absolute paths in all .kicad_mod files.
+    """Normalize JLC MCP 3D model paths in copied footprints.
 
-    JLC MCP generates footprints referencing ${KICAD9_3RD_PARTY}/jlc_mcp/3dmodels/...
-    which does not exist in KiCad 10.0. Replace with absolute paths to the project's
-    3dmodels directory.
+    The generator may leave footprints pointing at old absolute paths, temporary
+    easyeda2kicad folders, or legacy KiCad 9 third-party variables. Rewrite any
+    .3dshapes reference to the current project's 3dmodels directory so KiCad 10
+    can resolve them reliably.
     """
     import re
     model_dir = (project_dir / "libraries" / "3dmodels" / "JLC-MCP.3dshapes").resolve()
@@ -192,13 +205,19 @@ def _fix_3d_model_paths(project_dir: Path) -> dict[str, Any]:
     if not fp_dir.exists():
         return {"fixed": 0, "footprint_dir_missing": True}
 
-    old_prefix = "${KICAD9_3RD_PARTY}/jlc_mcp/3dmodels/JLC-MCP.3dshapes/"
     new_prefix = model_dir.as_posix() + "/"
     fixed = 0
     for fp_file in fp_dir.glob("*.kicad_mod"):
-        content = fp_file.read_text(encoding="utf-8")
-        if old_prefix in content:
-            fp_file.write_text(content.replace(old_prefix, new_prefix), encoding="utf-8")
+        content = fp_file.read_text(encoding="utf-8", errors="replace")
+        patched = re.sub(
+            r'(\(model\s+")([^"]*?[\\/][^"\\/]+\.3dshapes[\\/])([^"\\]+)(")',
+            rf'\1{new_prefix}\3\4',
+            content,
+            flags=re.DOTALL,
+        )
+        patched = patched.replace("${KICAD9_3RD_PARTY}/jlc_mcp/3dmodels/JLC-MCP.3dshapes/", new_prefix)
+        if patched != content:
+            fp_file.write_text(patched, encoding="utf-8")
             fixed += 1
 
     return {"fixed": fixed, "model_dir": str(model_dir)}
@@ -253,7 +272,7 @@ def _register_global_libraries(project_dir: Path) -> dict[str, Any]:
             uri = sym_file.resolve().as_posix()
             entry = f'  (lib (name "{name}")(type "KiCad")(uri "{uri}")(options "")(descr "JLC-MCP {name}"))\n'
             if name not in content:
-                content = content.replace(")", entry + ")", 1)
+                content = _insert_before_table_end(content, entry)
         sym_table_path.write_text(content, encoding="utf-8")
         result["sym_table_updated"] = True
 
@@ -264,7 +283,7 @@ def _register_global_libraries(project_dir: Path) -> dict[str, Any]:
         if "JLC-MCP" not in content:
             uri = (global_libs / "JLC-MCP.pretty").resolve().as_posix()
             entry = f'  (lib (name "JLC-MCP")(type "KiCad")(uri "{uri}")(options "")(descr "JLC-MCP footprints (EasyEDA origin)"))\n'
-            content = content.replace(")", entry + ")", 1)
+            content = _insert_before_table_end(content, entry)
             fp_table_path.write_text(content, encoding="utf-8")
         result["fp_table_updated"] = True
 
