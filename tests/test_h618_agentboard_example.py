@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 
 
@@ -210,3 +211,28 @@ def test_h618_kicad_schematic_is_grouped_into_reviewable_sheets():
         "display_expansion",
     ]
     assert len(sheet_groups) == 8
+
+
+def test_h618_lpddr4_multi_unit_instances_keep_distinct_units():
+    schematic_path = Path(
+        "examples/h618-agentboard-v1/output/v1/"
+        "h618_agentboard_v1_initial/03_memory_ddr.kicad_sch"
+    )
+    schematic = schematic_path.read_text(encoding="utf-8")
+
+    assert re.search(
+        r'\(lib_id "jlc_symbols:H9HCNNNBKUMLXR-NEE"\).*?'
+        r'\(unit 2\).*?'
+        r'\(reference "U3"\)\s*'
+        r'\(unit 2\)',
+        schematic,
+        flags=re.S,
+    )
+    assert not re.search(
+        r'\(lib_id "jlc_symbols:H9HCNNNBKUMLXR-NEE"\).*?'
+        r'\(unit 2\).*?'
+        r'\(reference "U3"\)\s*'
+        r'\(unit 1\)',
+        schematic,
+        flags=re.S,
+    )

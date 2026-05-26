@@ -1028,7 +1028,7 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
       (project {q(project_name)}
         (path {q(sheet_path)}
           (reference {q(ref)})
-          (unit 1)
+          (unit {unit})
         )
       )
     )
