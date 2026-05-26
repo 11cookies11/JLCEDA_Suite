@@ -1,0 +1,400 @@
+(footprint "SOT-23-5_L3.0-W1.7-P0.95-LS2.8-BR"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "SOT-23-5 Power Distribution Switches ROHS")
+	(tags "component")
+	(property "Reference" "REF**"
+		(at 0 -3.3 0)
+		(layer "F.SilkS")
+		(uuid "ff916e03-6416-4e02-8438-9352ba60da42")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "MNCP380HSN05AAT1G"
+		(at 0 3.3 0)
+		(layer "F.Fab")
+		(uuid "3228d9b5-ade4-4db5-8200-ef5688ec65ce")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a66f0eb8-eac5-444e-9dbb-58299e8c5d3d")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "SOT-23-5 Power Distribution Switches ROHS"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "acc8143b-b5ed-4a0e-83bb-0b2034f463d4")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC" "C42403123"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0110429d-3ec5-4577-b821-a11d6cce25a9")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "MSKSEMI(美森科)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b715d0b0-ca60-435f-97bd-b0e31ab2f8d6")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Type" "Load Switch"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1569d4d5-02d0-40c8-8fcc-2c471ae27609")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Number of Channels" "1"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0d6c03c7-c674-42d2-b618-138d2d268aba")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage - Supply" "2.4V~5.5V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2f7722b5-4039-44bd-b07d-aa9e485e0b1b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Operating Temperature	-" "-40℃~+85℃"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7b8d79b4-6558-4f4e-8ac5-3897f37d70b7")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Maximum Continuous Current" "2A"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b9d94946-d0cf-4073-9945-6f8318435c1f")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Features" "Soft-start、Under-voltage lockout、Overcurrent Protection、Over temperature protection、Short-Circuit  Protection、Reverse current blocking"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c06f9f10-c274-4512-ab47-f4e7db8942f4")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "RDS(on)" "80mΩ"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5d82f2db-f2b0-4b24-83a9-c412eaa95a30")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Control Input Logic" "Active High"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e60631bd-ded1-4555-bd25-cef9114d9f2a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.9 -1.55)
+		(end -0.9 -1.4041)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "fe9bc910-b518-4834-bcdb-4c2db4405e45")
+	)
+	(fp_line
+		(start -0.9 -1.55)
+		(end 0.9 -1.55)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "b02fe59b-98fc-40e5-b641-a481fedba2ab")
+	)
+	(fp_line
+		(start -0.9 -0.4958)
+		(end -0.9 0.4958)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "bbb599d1-d55b-4221-835b-bf3e283db31b")
+	)
+	(fp_line
+		(start -0.9 1.4041)
+		(end -0.9 1.5501)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "d76e9ce7-3dc2-4351-be7d-0313e00de1e5")
+	)
+	(fp_line
+		(start -0.9 1.5501)
+		(end 0.9 1.5501)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "fc821156-c913-47f0-aeeb-1da463e8e9eb")
+	)
+	(fp_line
+		(start 0.9 -1.55)
+		(end 0.9 -1.4041)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a6e7ed16-60ae-42a7-8ba4-ea3b2bce2b2e")
+	)
+	(fp_line
+		(start 0.9 -0.4958)
+		(end 0.9 -0.4542)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3f781525-d9e8-4a4f-b067-f44edb9d8b17")
+	)
+	(fp_line
+		(start 0.9 0.4541)
+		(end 0.9 0.4958)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "75677e29-10b8-4838-94bb-c28fecbc8623")
+	)
+	(fp_line
+		(start 0.9 1.4041)
+		(end 0.9 1.5501)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "9eeb4228-f2d0-454b-808c-845d9b695f67")
+	)
+	(fp_poly
+		(pts
+			(xy 0.204 1.016) (xy 0.2141 0.9549) (xy 0.2447 0.901) (xy 0.2919 0.8609) (xy 0.35 0.8396) (xy 0.412 0.8396)
+			(xy 0.4701 0.8609) (xy 0.5174 0.901) (xy 0.5479 0.9549) (xy 0.558 1.016) (xy 0.5479 1.0771) (xy 0.5174 1.131)
+			(xy 0.4701 1.1711) (xy 0.412 1.1924) (xy 0.35 1.1924) (xy 0.2919 1.1711) (xy 0.2447 1.131) (xy 0.2141 1.0771)
+			(xy 0.204 1.016)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "4feb7859-b904-4b3e-a4f5-4ffbd8cda15c")
+	)
+	(fp_circle
+		(center 1.3971 1.016)
+		(end 1.597 1.016)
+		(stroke
+			(width 0.4)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "21d81c64-bc4d-4cff-ad30-8cc85419f9a5")
+	)
+	(fp_line
+		(start -2.1 -1.8)
+		(end 2.1 -1.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "28f848e9-f017-489f-92e7-ccc6b5fce6e8")
+	)
+	(fp_line
+		(start -2.1 1.8)
+		(end -2.1 -1.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "b0abaa70-521c-4379-898a-73df78be371c")
+	)
+	(fp_line
+		(start 2.1 -1.8)
+		(end 2.1 1.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "74dd97f4-c3ac-47be-9c0a-5f190261462c")
+	)
+	(fp_line
+		(start 2.1 1.8)
+		(end -2.1 1.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "2a1a4de4-4fc1-49c4-8884-c047fbeebaef")
+	)
+	(fp_circle
+		(center 1.3999 1.4501)
+		(end 1.4299 1.4501)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "e90dc22f-fa8f-497f-8e21-b48f7acd1994")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "323a9d51-3fc4-4efa-b87d-4b062f030a20")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at 1.3001 0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "b51cf8a7-255c-490e-985a-a072df756e11")
+	)
+	(pad "2" smd roundrect
+		(at 1.3001 0)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "caff812d-a2f8-4ab2-8a23-a586a44c1cdc")
+	)
+	(pad "3" smd roundrect
+		(at 1.3001 -0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "baa4e827-d5fa-4d9c-b2c6-e53aec3cca27")
+	)
+	(pad "4" smd roundrect
+		(at -1.3001 -0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "e253c34d-0245-4ed2-a5e5-f4e959e40943")
+	)
+	(pad "5" smd roundrect
+		(at -1.3001 0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "d8d048db-ad81-41cb-a4e3-26664ab552ef")
+	)
+	(embedded_fonts no)
+	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/h618-agentboard-v1/output/v1/h618_agentboard_v1_initial/libraries/3dmodels/JLC-MCP.3dshapes/MNCP380HSN05AAT1G.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 180)
+		)
+	)
+)

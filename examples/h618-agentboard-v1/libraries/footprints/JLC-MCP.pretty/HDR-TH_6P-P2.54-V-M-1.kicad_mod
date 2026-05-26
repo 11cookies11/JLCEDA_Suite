@@ -1,4 +1,4 @@
-(module easyeda2kicad:HDR-TH_6P-P2.54-V-M-1 (layer F.Cu) (tedit 5DC5F6A4)
+﻿(module easyeda2kicad:HDR-TH_6P-P2.54-V-M-1 (layer F.Cu) (tedit 5DC5F6A4)
 	(descr "2.54mm 1x6")
 	(attr through_hole)
 	(fp_text reference REF** (at 0.000 -4.000) (layer F.SilkS)
@@ -27,7 +27,7 @@
 	(fp_line (start 7.62 -1.25) (end 7.62 1.25) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 7.62 1.25) (end -7.62 1.25) (layer F.CrtYd) (width 0.05))
 	(fp_line (start -7.62 1.25) (end -7.62 -1.25) (layer F.CrtYd) (width 0.05))
-	(model "examples/h618-agentboard-v1/hardware/schematic/initial/h618_agentboard_v1_initial/libs/jlc_symbols.3dshapes/HDR2.54-M-LI-1X6P.wrl"
+	(model "examples/h618-agentboard-v1/libraries/3dmodels/jlc_symbols.3dshapes/HDR2.54-M-LI-1X6P.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 0))

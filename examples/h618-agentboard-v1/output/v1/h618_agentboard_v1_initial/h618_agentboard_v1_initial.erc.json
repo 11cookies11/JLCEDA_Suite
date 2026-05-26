@@ -1,0 +1,76 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-27T02:22:24",
+    "ignored_checks": [
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.1",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0",
+            "violations": []
+        },
+        {
+            "path": "/power_entry_pmic/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/19269c68-5185-4d49-a8ad-07d19533390e",
+            "violations": []
+        },
+        {
+            "path": "/boot_storage/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/766911d4-bfa0-40e4-92e9-38b2009e91d0",
+            "violations": []
+        },
+        {
+            "path": "/usb/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/4c4de6e3-99a6-4bc6-bdbe-87c0b8624456",
+            "violations": []
+        },
+        {
+            "path": "/soc_boot_clock/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/c0803569-d8f8-4bed-b7a4-354b40441190",
+            "violations": []
+        },
+        {
+            "path": "/debug_control/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/40fdf52b-8d49-42d5-826b-5a0c94faf755",
+            "violations": []
+        },
+        {
+            "path": "/display_expansion/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/9910813f-0806-4b5a-8ecb-69de7694d7ee",
+            "violations": []
+        },
+        {
+            "path": "/memory_ddr/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/b260d0bf-fcee-441d-b56e-2c0622c87da3",
+            "violations": []
+        },
+        {
+            "path": "/network/",
+            "uuid_path": "/9eebb121-60b7-4f43-96a1-f6a5e1836ce0/c110f4e0-0893-41e3-9540-998db00210f0",
+            "violations": []
+        }
+    ],
+    "source": "h618_agentboard_v1_initial.kicad_sch"
+}

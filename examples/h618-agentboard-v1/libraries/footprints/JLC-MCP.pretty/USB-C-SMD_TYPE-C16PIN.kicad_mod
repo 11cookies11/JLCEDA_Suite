@@ -1,4 +1,4 @@
-(module easyeda2kicad:USB-C-SMD_TYPE-C16PIN (layer F.Cu) (tedit 5DC5F6A4)
+﻿(module easyeda2kicad:USB-C-SMD_TYPE-C16PIN (layer F.Cu) (tedit 5DC5F6A4)
 	(attr smd)
 	(fp_text reference REF** (at 0.000 -6.362) (layer F.SilkS)
 		(effects (font (size 1 1) (thickness 0.15)))
@@ -40,7 +40,7 @@
 	(fp_line (start -4.47 -2.34) (end 4.47 -2.34) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 4.47 -2.34) (end 4.47 5.01) (layer F.CrtYd) (width 0.05))
 	(fp_line (start 4.47 5.01) (end -4.47 5.01) (layer F.CrtYd) (width 0.05))
-	(model "examples/h618-agentboard-v1/hardware/schematic/initial/h618_agentboard_v1_initial/libs/jlc_symbols.3dshapes/USB-C-SMD_TYPE-C16PIN.wrl"
+	(model "examples/h618-agentboard-v1/libraries/3dmodels/jlc_symbols.3dshapes/USB-C-SMD_TYPE-C16PIN.wrl"
 		(offset (xyz 0.000 0.000 0.000))
 		(scale (xyz 1 1 1))
 		(rotate (xyz 0 0 180))

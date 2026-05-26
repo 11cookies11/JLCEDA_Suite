@@ -37,12 +37,12 @@
 - [原理图分图元件与网络清单](examples/h618-agentboard-v1/docs/19_schematic_sheet_parts_nets.md)
 - [原理图捕获顺序](examples/h618-agentboard-v1/docs/20_schematic_capture_order.md)
 - [原理图捕获模板](examples/h618-agentboard-v1/docs/21_schematic_capture_templates.md)
-- [初版原理图工程](examples/h618-agentboard-v1/hardware/schematic/initial/README.md)
+- [初版原理图工程](examples/h618-agentboard-v1/output/v1/h618_agentboard_v1_initial/)
 
 ## 常用命令
 
 - `npm run scaffold:example -- demo-board --title "Demo Board"`
-- `python scripts/kas.py pipeline examples/h618-agentboard-v1/circuit-model.json .where/h618-agentboard-v1`
+- `python scripts/kas.py pipeline examples/h618-agentboard-v1/circuit-model.json examples/h618-agentboard-v1/output/v1`
 
 ## 进度跟踪
 
