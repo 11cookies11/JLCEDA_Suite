@@ -96,7 +96,7 @@ def import_parts_from_model(model_path: str, project_dir: str, delay: float = 2.
 
     # Rename footprint and 3d directories to our standard names
     default_fp = lib_dir / "jlc_symbols.pretty"
-    target_fp = lib_dir / "jlc_footprints.pretty"
+    target_fp = lib_dir / "JLC-MCP.pretty"
     if default_fp.exists() and default_fp != target_fp:
         if target_fp.exists():
             # Merge: copy new footprints into existing
@@ -120,7 +120,7 @@ def import_parts_from_model(model_path: str, project_dir: str, delay: float = 2.
     fp_table = project / "fp-lib-table"
     fp_table.write_text(
         f'(fp_lib_table\n'
-        f'  (lib (name "jlc_footprints")(type "KiCad")(uri "${{KIPRJMOD}}/../libs/jlc_footprints.pretty")(options "")(descr "JLC/LCSC imported footprints"))\n'
+        f'  (lib (name "JLC-MCP")(type "KiCad")(uri "${{KIPRJMOD}}/../libs/JLC-MCP.pretty")(options "")(descr "JLC/LCSC imported footprints"))\n'
         f')\n',
         encoding="utf-8",
     )

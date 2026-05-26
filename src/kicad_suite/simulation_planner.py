@@ -261,8 +261,8 @@ def infer_simulation_scenarios(model: dict[str, Any], profile: SimulationProfile
                 backend=profile.default_backend,
                 analysis_kind="op",
                 focus="Confirm VBUS protection and idle biasing.",
-                focus_components=_find_refs(model, "usb_c_input", "usb_cc1_pulldown", "usb_cc2_pulldown", "usb_esd_protection", "usb_vbus_ptc_fuse", "usb_vbus_tvs_diode"),
-                focus_nets=_nets_with_tokens(net_names, "USB_VBUS", "USB_DP", "USB_DM", "USB_CC"),
+                focus_components=_find_refs(model, "usb_c_input", "usb_c_cc1_sink_rd", "usb_c_cc2_sink_rd", "usb_cc1_pulldown", "usb_cc2_pulldown", "usb_esd_protection", "usb_vbus_ptc_fuse", "usb_vbus_tvs_diode"),
+                focus_nets=_nets_with_tokens(net_names, "USB_VBUS", "USB_DP", "USB_DM", "USB_CC", "USB_C_CC"),
                 stimuli=["Apply nominal VBUS", "Observe clamp and fuse behavior"],
                 success_criteria=[
                     "Normal VBUS is not clamped under nominal conditions.",

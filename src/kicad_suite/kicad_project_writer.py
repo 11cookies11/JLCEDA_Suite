@@ -16,7 +16,154 @@ from .schematic_layout_rules import BlockLayoutRule, build_default_layout_rules,
 KICAD_SCHEMATIC_FILE_VERSION = '20250114'
 REPO_ROOT = Path(__file__).resolve().parents[2]
 SYMBOL_PIN_CACHE: dict[str, dict[str, dict[str, Any]]] = {}
+SYMBOL_UNIT_CACHE: dict[str, list[int]] = {}
 PIN_LEN = 2.54  # standard KiCad pin line length, mm
+
+DEFAULT_ERC_PIN_MAP: list[list[int]] = [
+    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2],
+    [0, 2, 0, 1, 0, 0, 1, 0, 2, 2, 2, 2],
+    [0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 1, 2],
+    [0, 1, 0, 0, 0, 0, 1, 1, 2, 1, 1, 2],
+    [0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 2],
+    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2],
+    [1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 2],
+    [0, 0, 0, 1, 0, 0, 1, 0, 0, 0, 0, 2],
+    [0, 2, 1, 2, 0, 0, 1, 0, 2, 2, 2, 2],
+    [0, 2, 0, 1, 0, 0, 1, 0, 2, 0, 0, 2],
+    [0, 2, 1, 1, 0, 0, 1, 0, 2, 0, 0, 2],
+    [2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2],
+]
+
+DEFAULT_ERC_RULE_SEVERITIES: dict[str, str] = {
+    "bus_definition_conflict": "error",
+    "bus_entry_needed": "error",
+    "bus_to_bus_conflict": "error",
+    "bus_to_net_conflict": "error",
+    "different_unit_footprint": "error",
+    "different_unit_net": "error",
+    "duplicate_reference": "error",
+    "duplicate_sheet_names": "error",
+    "endpoint_off_grid": "warning",
+    "extra_units": "error",
+    "field_name_whitespace": "warning",
+    "footprint_filter": "ignore",
+    "footprint_link_issues": "warning",
+    "four_way_junction": "ignore",
+    "ground_pin_not_ground": "warning",
+    "hier_label_mismatch": "error",
+    "isolated_pin_label": "warning",
+    "label_dangling": "error",
+    "label_multiple_wires": "warning",
+    "lib_symbol_issues": "warning",
+    "lib_symbol_mismatch": "ignore",
+    "missing_bidi_pin": "warning",
+    "missing_input_pin": "warning",
+    "missing_power_pin": "error",
+    "missing_unit": "warning",
+    "multiple_net_names": "warning",
+    "net_not_bus_member": "warning",
+    "no_connect_connected": "warning",
+    "no_connect_dangling": "warning",
+    "pin_not_connected": "error",
+    "pin_not_driven": "error",
+    "pin_to_pin": "warning",
+    "power_pin_not_driven": "error",
+    "same_local_global_label": "warning",
+    "similar_label_and_power": "warning",
+    "similar_labels": "warning",
+    "similar_power": "warning",
+    "simulation_model_issue": "ignore",
+    "single_global_label": "ignore",
+    "stacked_pin_name": "warning",
+    "unannotated": "error",
+    "unconnected_wire_endpoint": "warning",
+    "undefined_netclass": "error",
+    "unit_value_mismatch": "error",
+    "unresolved_variable": "error",
+    "wire_dangling": "error",
+}
+
+H618_MINIMAL_PINS: tuple[str, ...] = (
+    "GND",
+    "VDD1",
+    "VDD2",
+    "VDDQ",
+    "PMIC_SCL",
+    "PMIC_SDA",
+    "PMIC_INT_N",
+    "XIN",
+    "XOUT",
+    "RTC_XIN",
+    "RTC_XOUT",
+    "PH0",
+    "PH1",
+    "RESET_N",
+    "BOOT0",
+    "SD_CLK",
+    "SD_CMD",
+    "SD_D0",
+    "SD_D1",
+    "SD_D2",
+    "SD_D3",
+    "SPI0_CLK",
+    "SPI0_MOSI",
+    "SPI0_MISO",
+    "SPI0_CS0",
+    "RGMII_MDC",
+    "RGMII_MDIO",
+    "RGMII_TXD0",
+    "RGMII_TXD1",
+    "RGMII_TXD2",
+    "RGMII_TXD3",
+    "RGMII_RXD0",
+    "RGMII_RXD1",
+    "RGMII_RXD2",
+    "RGMII_RXD3",
+    "RGMII_TXC",
+    "RGMII_RXC",
+    "RGMII_TXCTL",
+    "RGMII_RXCTL",
+    "RGMII_RESET_N",
+    "USB0_DM",
+    "USB0_DP",
+    "USB_HUB_RESET_N",
+    "HDMI_TX0_P",
+    "HDMI_TX0_N",
+    "HDMI_TX1_P",
+    "HDMI_TX1_N",
+    "HDMI_TX2_P",
+    "HDMI_TX2_N",
+    "HDMI_CLK_P",
+    "HDMI_CLK_N",
+    "PH5",
+    "PH4",
+    "PC9",
+    "PH2",
+    "PH3",
+    "PC6",
+    "PC11",
+    "PC5",
+    "PC8",
+    "PC15",
+    "PC14",
+    "PH7",
+    "PH8",
+    "PH6",
+    "PH9",
+    "PC7",
+    "PC10",
+    "DQ0",
+    "DQ1",
+    "DQ2",
+    "DQ3",
+    "DQ4",
+    "DQ5",
+    "DQ6",
+    "DQ7",
+    "DQS0_P",
+    "DQS0_N",
+    "CKE",
+)
 
 
 def new_uuid() -> str:
@@ -298,11 +445,16 @@ def symbol_block_for_lib_id(lib_id: str) -> str:
     if ':' in lib_id:
         library, symbol_name = lib_id.split(':', 1)
         installed = load_installed_symbol(library, symbol_name)
+        if installed and symbol_name == 'ALLWINNERH618' and '(pin ' not in installed:
+            return local_h618_minimal_symbol(lib_id)
         if installed:
-            return installed
+            return normalize_connector_pin_types(installed, symbol_name)
         system_block = installed_symbol_block(library, symbol_name)
         if system_block:
+            if symbol_name == 'ALLWINNERH618' and '(pin ' not in system_block:
+                return local_h618_minimal_symbol(lib_id)
             normalized = normalize_embedded_symbol_name(system_block, library, symbol_name)
+            normalized = normalize_connector_pin_types(normalized, symbol_name)
             return '\n'.join(f'    {line}' if line.strip() else line for line in normalized.splitlines())
 
     connector = local_connector_symbol(lib_id)
@@ -322,6 +474,82 @@ def symbol_block_for_lib_id(lib_id: str) -> str:
         'power:PWR_FLAG': '#FLG',
     }
     return local_two_pin_symbol(lib_id, fallback_prefixes.get(lib_id, 'R'))
+
+
+def normalize_connector_pin_types(block: str, symbol_name: str) -> str:
+    upper_name = symbol_name.upper()
+    if upper_name in {
+        'USB2514B-AEZC-TR',
+        'AXP313A_C5365290',
+        'GD25Q16ETIGR',
+        'RTL8211F-CG',
+        '322524M12PF10PPM',
+        'H9HCNNNBKUMLXR-NEE',
+    }:
+        return re.sub(r'\(pin\s+unspecified\s+line', '(pin passive line', block)
+    connector_tokens = (
+        'HEADER',
+        'HDR-',
+        'CONN_',
+        'PINHEADER',
+        'XKTF',
+        'TF-',
+        'MICROSD',
+        'SDCARD',
+        'USB-',
+        'USB_',
+        'TYPE-C',
+        'RJ45',
+        'HDMI',
+        '467650301',
+        'DS1021',
+    )
+    if not any(token in upper_name for token in connector_tokens):
+        return block
+    return re.sub(r'\(pin\s+(input|output|bidirectional|tri_state|passive|power_in|power_out|open_collector|open_emitter|unspecified)\s+line', '(pin passive line', block)
+
+
+def local_h618_minimal_symbol(lib_id: str) -> str:
+    """Minimal schematic symbol for the EasyEDA H618 entry when it has no pins."""
+    symbol_name = lib_id.split(':', 1)[-1]
+    half_count = (len(H618_MINIMAL_PINS) + 1) // 2
+    half_height = max(10.16, half_count * 1.27 + 2.54)
+    pins: list[str] = []
+    for index, pin_name in enumerate(H618_MINIMAL_PINS):
+        left = index < half_count
+        row = index if left else index - half_count
+        y = (half_count - 1) * 1.27 - row * 2.54
+        x = -22.86 if left else 22.86
+        rotation = 0 if left else 180
+        pins.append(f'''        (pin passive line (at {fmt(x)} {fmt(y)} {rotation}) (length 2.54)
+          (name {q(pin_name)} (effects (font (size 1.27 1.27))))
+          (number {q(pin_name)} (effects (font (size 1.27 1.27))))
+        )''')
+    return f'''    (symbol {q(lib_id)}
+      (pin_names (offset 0.254))
+      (exclude_from_sim no)
+      (in_bom yes)
+      (on_board yes)
+      (duplicate_pin_numbers_are_jumpers no)
+      (property "Reference" "U" (at 0 {fmt(half_height + 2.54)} 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Value" {q(symbol_name)} (at 0 {fmt(-half_height - 2.54)} 0)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Footprint" "" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (symbol "{symbol_name}_0_1"
+        (rectangle (start -17.78 {fmt(half_height)}) (end 17.78 {fmt(-half_height)})
+          (stroke (width 0.254) (type default))
+          (fill (type none))
+        )
+{chr(10).join(pins)}
+      )
+      (embedded_fonts no)
+    )'''
 
 
 def symbol_block_with_default_footprint(block: str, footprint: str) -> str:
@@ -368,7 +596,11 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, Any]]:
         SYMBOL_PIN_CACHE[lib_id] = {}
         return {}
     library, symbol_name = lib_id.split(':', 1)
-    block = installed_symbol_block(library, symbol_name) or symbol_block_for_lib_id(lib_id)
+    # Use the same symbol resolution path as schematic generation.  Some
+    # imported EasyEDA symbols (notably ALLWINNERH618) can be present but empty,
+    # so resolving installed symbols first would collapse all generated labels
+    # onto the same fallback coordinate.
+    block = symbol_block_for_lib_id(lib_id) or installed_symbol_block(library, symbol_name)
     if not block:
         SYMBOL_PIN_CACHE[lib_id] = {}
         return {}
@@ -378,29 +610,69 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, Any]]:
         SYMBOL_PIN_CACHE[lib_id] = {}
         return {}
 
-    pins: dict[str, dict[str, float]] = {}
+    pins: dict[str, dict[str, Any]] = {}
 
-    def visit(node: Any) -> None:
+    def pin_aliases(number: str, name: str) -> set[str]:
+        aliases = {number, number.upper()}
+        clean_name = name.strip()
+        if clean_name:
+            name_upper = clean_name.upper()
+            aliases.add(clean_name)
+            aliases.add(name_upper)
+            normalized = re.sub(r'[^A-Z0-9]+', '_', name_upper).strip('_')
+            if normalized:
+                aliases.add(normalized)
+                aliases.add(normalized.replace('_T', '_P').replace('_C', '_N'))
+                match = re.fullmatch(r'(.+?)[AB]', normalized)
+                if match:
+                    aliases.add(match.group(1))
+                match = re.fullmatch(r'(CKE\d+)[AB]', normalized)
+                if match:
+                    aliases.add(match.group(1))
+                    aliases.add(match.group(1).replace('0', '', 1))
+                match = re.fullmatch(r'(DQ\d+)[AB]', normalized)
+                if match:
+                    aliases.add(match.group(1))
+                match = re.fullmatch(r'(DQS\d+)_[TC][AB]', normalized)
+                if match:
+                    aliases.add(match.group(1))
+        return {alias for alias in aliases if alias}
+
+    def visit(node: Any, current_unit: int = 1) -> None:
         if not isinstance(node, list) or not node:
             return
+        node_unit = current_unit
+        if sexpr_head(node) == 'symbol' and len(node) >= 2 and isinstance(node[1], str):
+            unit_match = re.fullmatch(rf'{re.escape(symbol_name)}_(\d+)_\d+', node[1])
+            if unit_match:
+                parsed_unit = int(unit_match.group(1))
+                if parsed_unit > 0:
+                    node_unit = parsed_unit
         if sexpr_head(node) == 'pin':
             at_data = next((child for child in node if sexpr_head(child) == 'at'), None)
             length_data = next((child for child in node if sexpr_head(child) == 'length'), None)
             number_data = next((child for child in node if sexpr_head(child) == 'number'), None)
+            name_data = next((child for child in node if sexpr_head(child) == 'name'), None)
             if isinstance(at_data, list) and len(at_data) >= 4 and isinstance(number_data, list) and len(number_data) >= 2:
                 try:
                     number = str(number_data[1])
-                    pins[number] = {
+                    name = str(name_data[1]) if isinstance(name_data, list) and len(name_data) >= 2 else ''
+                    pin_info = {
                         'x': float(at_data[1]),
                         'y': float(at_data[2]),
                         'rotation': float(at_data[3]),
                         'length': float(length_data[1]) if isinstance(length_data, list) and len(length_data) >= 2 else 0.0,
                         'electrical_type': str(node[1]) if len(node) >= 2 else '',
+                        'name': name,
+                        'number': number,
+                        'unit': node_unit,
                     }
+                    for alias in pin_aliases(number, name):
+                        pins.setdefault(alias, pin_info)
                 except (TypeError, ValueError):
                     pass
         for child in node:
-            visit(child)
+            visit(child, node_unit)
 
     visit(tree)
     if not pins:
@@ -410,6 +682,45 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, Any]]:
             pins.update(parent_pins)
     SYMBOL_PIN_CACHE[lib_id] = pins
     return pins
+
+
+def symbol_unit_numbers(lib_id: str) -> list[int]:
+    if lib_id in SYMBOL_UNIT_CACHE:
+        return SYMBOL_UNIT_CACHE[lib_id]
+    if ':' not in lib_id:
+        SYMBOL_UNIT_CACHE[lib_id] = [1]
+        return [1]
+    symbol_name = lib_id.split(':', 1)[1]
+    block = symbol_block_for_lib_id(lib_id)
+    units = sorted({int(match.group(1)) for match in re.finditer(rf'\(symbol "{re.escape(symbol_name)}_(\d+)_', block)})
+    if not units:
+        units = [1]
+    SYMBOL_UNIT_CACHE[lib_id] = units
+    return units
+
+
+def symbol_real_pin_numbers(lib_id: str, unit: int | None = None) -> list[str]:
+    real_pins: dict[str, dict[str, Any]] = {}
+    for alias, pin_info in parse_symbol_pin_map(lib_id).items():
+        number = str(pin_info.get('number', alias)).strip()
+        if not number:
+            continue
+        if unit is not None and int(pin_info.get('unit', 1) or 1) != unit:
+            continue
+        real_pins.setdefault(number, pin_info)
+    return sorted(real_pins, key=lambda value: (0, int(value)) if str(value).isdigit() else (1, str(value)))
+
+
+def symbol_pin_unit(lib_id: str, pin_number: str) -> int:
+    raw = str(pin_number).strip()
+    pin_map = parse_symbol_pin_map(lib_id)
+    pin_info = pin_map.get(raw) or pin_map.get(raw.upper())
+    if isinstance(pin_info, dict):
+        try:
+            return int(pin_info.get('unit', 1) or 1)
+        except (TypeError, ValueError):
+            return 1
+    return 1
 
 
 def effective_net_kind(name: str, declared_kind: str = 'signal') -> str:
@@ -615,6 +926,20 @@ def pin_endpoint(symbol: dict[str, Any], pin_number: str) -> tuple[float, float,
     return x - 5.08, y, 180.0
 
 
+def resolve_symbol_pin_number(lib_id: str, pin_number: str) -> str:
+    """Return the real symbol pin number when a semantic alias is used."""
+    raw = str(pin_number).strip()
+    if not raw:
+        return ''
+    pin_map = parse_symbol_pin_map(lib_id)
+    pin_data = pin_map.get(raw) or pin_map.get(raw.upper())
+    if isinstance(pin_data, dict):
+        resolved = str(pin_data.get('number', '')).strip()
+        if resolved:
+            return resolved
+    return raw
+
+
 def label_shape(kind: str) -> str:
     if kind == 'ground':
         return 'input'
@@ -644,6 +969,7 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
     x = float(at.get('x', 0.0))
     y = float(at.get('y', 0.0))
     rotation = float(at.get('rotation', 0.0))
+    unit = int(symbol.get('unit', 1) or 1)
     ref = str(symbol.get('ref', 'U?'))
     lib_id = str(symbol.get('lib_id', 'AIAgent:Generic_2Pin'))
     value = str(symbol.get('value', ''))
@@ -653,9 +979,16 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
         pins = []
 
     pin_lines = []
-    pin_numbers = [str(pin.get('number', '')) for pin in pins if isinstance(pin, dict) and str(pin.get('number', ''))]
-    if not pin_numbers:
-        pin_numbers = list(parse_symbol_pin_map(lib_id)) or ['1', '2']
+    pin_numbers = [
+        resolve_symbol_pin_number(lib_id, str(pin.get('number', '')))
+        for pin in pins
+        if isinstance(pin, dict) and str(pin.get('number', ''))
+    ]
+    if not symbol.get('unit_placeholder'):
+        for real_pin in symbol_real_pin_numbers(lib_id, unit=unit):
+            pin_numbers.append(real_pin)
+    if not pin_numbers and not symbol.get('unit_placeholder'):
+        pin_numbers = ['1', '2']
     for pin_number in dict.fromkeys(pin_numbers):
         pin_lines.append(f'      (pin {q(pin_number)} (uuid {q(new_uuid())}))')
 
@@ -674,7 +1007,7 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
     return f'''  (symbol
     (lib_id {q(lib_id)})
     (at {fmt(x)} {fmt(y)} {fmt(rotation)})
-    (unit 1)
+    (unit {unit})
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
@@ -926,16 +1259,48 @@ def render_connectivity(
   )''')
         lib_id_str = str(symbol.get('lib_id', ''))
         if lib_id_str:
+            if symbol.get('unit_placeholder') and symbol.get('suppress_no_connect'):
+                continue
             connected_pins = {str(pin.get('number', '')).strip() for pin in pins if isinstance(pin, dict)}
+            connected_pin_coords: set[tuple[float, float]] = set()
+            for connected_pin in connected_pins:
+                if not connected_pin:
+                    continue
+                cx, cy, _ = pin_endpoint(symbol, connected_pin)
+                connected_pin_coords.add((round(cx, 3), round(cy, 3)))
+            connected_pin_aliases: set[str] = set()
+            for connected_pin in connected_pins:
+                if not connected_pin:
+                    continue
+                connected_pin_aliases.add(connected_pin)
+                connected_pin_aliases.add(connected_pin.upper())
+                resolved_pin = resolve_symbol_pin_number(lib_id_str, connected_pin)
+                if resolved_pin:
+                    connected_pin_aliases.add(resolved_pin)
+                    connected_pin_aliases.add(resolved_pin.upper())
+                normalized_pin = re.sub(r'[^A-Z0-9]+', '_', connected_pin.upper()).strip('_')
+                if normalized_pin:
+                    connected_pin_aliases.add(normalized_pin)
             try:
                 pin_map = parse_symbol_pin_map(lib_id_str)
             except Exception:
                 pin_map = {}
             if len(pin_map) > 2:
-                for pin_number in sorted(pin_map, key=lambda value: (0, int(value)) if str(value).isdigit() else (1, str(value))):
-                    if pin_number in connected_pins:
+                real_pins: dict[str, dict[str, Any]] = {}
+                connected_real_pins: set[str] = set()
+                for alias, pin_info in pin_map.items():
+                    real_pin_number = str(pin_info.get('number', alias)).strip()
+                    if not real_pin_number:
+                        continue
+                    real_pins.setdefault(real_pin_number, pin_info)
+                    if alias in connected_pin_aliases or real_pin_number in connected_pin_aliases or real_pin_number.upper() in connected_pin_aliases:
+                        connected_real_pins.add(real_pin_number)
+                for pin_number in sorted(real_pins, key=lambda value: (0, int(value)) if str(value).isdigit() else (1, str(value))):
+                    if pin_number in connected_real_pins:
                         continue
                     x, y, _direction = pin_endpoint(symbol, pin_number)
+                    if (round(x, 3), round(y, 3)) in connected_pin_coords:
+                        continue
                     blocks.append(f'''  (no_connect (at {fmt(x)} {fmt(y)})
     (uuid {q(new_uuid())})
   )''')
@@ -1057,6 +1422,55 @@ def shifted_symbols_for_page(symbols: list[dict[str, Any]], origin_x: float = 50
     return shifted
 
 
+def add_missing_unit_placeholders(symbols: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    expanded: list[dict[str, Any]] = []
+    placed_units = {
+        (str(symbol.get('ref', '')), int(symbol.get('unit', 1) or 1))
+        for symbol in symbols
+        if isinstance(symbol, dict) and str(symbol.get('ref', '')).strip()
+    }
+    for symbol in symbols:
+        if not isinstance(symbol, dict):
+            continue
+        ref = str(symbol.get('ref', '')).strip()
+        lib_id = str(symbol.get('lib_id', '')).strip()
+        if not ref or not lib_id:
+            expanded.append(symbol)
+            continue
+        units = symbol_unit_numbers(lib_id)
+        if len(units) <= 1:
+            expanded.append(symbol)
+            continue
+        base_unit = int(symbol.get('unit', 1) or 1)
+        original_pins = [pin for pin in symbol.get('pins', []) if isinstance(pin, dict)]
+        base_symbol = dict(symbol)
+        base_symbol['pins'] = [
+            pin for pin in original_pins
+            if symbol_pin_unit(lib_id, str(pin.get('number', ''))) == base_unit
+        ]
+        expanded.append(base_symbol)
+        at = dict(symbol.get('at', {})) if isinstance(symbol.get('at', {}), dict) else {}
+        base_x = float(at.get('x', 50.8))
+        base_y = float(at.get('y', 50.8))
+        for unit in units:
+            if unit <= 1 or (ref, unit) in placed_units:
+                continue
+            placeholder = dict(symbol)
+            placeholder['unit'] = unit
+            placeholder['unit_placeholder'] = True
+            placeholder['pins'] = [
+                pin for pin in original_pins
+                if symbol_pin_unit(lib_id, str(pin.get('number', ''))) == unit
+            ]
+            placeholder_at = dict(at)
+            placeholder_at['x'] = base_x + 35.56 * (unit - 1)
+            placeholder_at['y'] = base_y
+            placeholder['at'] = placeholder_at
+            expanded.append(placeholder)
+            placed_units.add((ref, unit))
+    return expanded
+
+
 def render_sheet_instances(sheet_pages: list[dict[str, Any]]) -> str:
     lines = ['  (sheet_instances', '    (path "/" (page "1"))']
     for index, page in enumerate(sheet_pages, start=2):
@@ -1066,7 +1480,7 @@ def render_sheet_instances(sheet_pages: list[dict[str, Any]]) -> str:
 
 
 def render_schematic(plan: dict[str, Any]) -> str:
-    symbols = [symbol for symbol in plan.get('symbols', []) if isinstance(symbol, dict)]
+    symbols = add_missing_unit_placeholders([symbol for symbol in plan.get('symbols', []) if isinstance(symbol, dict)])
     symbols.extend(automatic_power_flags(plan))
     target = plan.get('target', {})
     project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
@@ -1147,7 +1561,7 @@ def render_child_schematic(
 ) -> str:
     target = plan.get('target', {})
     project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
-    page_symbols = shifted_symbols_for_page(symbols)
+    page_symbols = add_missing_unit_placeholders(shifted_symbols_for_page(symbols))
     page_net_names = {
         str(pin.get('net', '')).strip()
         for symbol in page_symbols
@@ -1282,6 +1696,14 @@ def render_project(output_dir: str | Path | None = None) -> str:
                 'rules': {},
             }
         },
+        'erc': {
+            'erc_exclusions': [],
+            'meta': {
+                'version': 0,
+            },
+            'pin_map': DEFAULT_ERC_PIN_MAP,
+            'rule_severities': DEFAULT_ERC_RULE_SEVERITIES,
+        },
         'meta': {
             'version': 1,
         },
@@ -1335,8 +1757,8 @@ def _find_jlc_lib_dir(output_dir: Path) -> Path | None:
     """Find the JLC footprint library directory relative to the project."""
     for candidate in [
         output_dir / 'libraries' / 'footprints' / 'JLC-MCP.pretty',
-        output_dir / 'libs' / 'jlc_footprints.pretty',
-        output_dir.parent / 'libs' / 'jlc_footprints.pretty',
+        output_dir / 'libs' / 'JLC-MCP.pretty',
+        output_dir.parent / 'libs' / 'JLC-MCP.pretty',
         Path(env('KICAD_SOURCE_PROJECT_DIR', '')) / 'libraries' / 'footprints' / 'JLC-MCP.pretty',
     ]:
         if candidate.exists():

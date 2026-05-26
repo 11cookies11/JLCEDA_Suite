@@ -417,7 +417,7 @@ def import_parts(
         project/
           libs/
             jlc_symbols.kicad_sym
-            jlc_footprints.pretty/
+            JLC-MCP.pretty/
             3dmodels/
           part.lock.yaml
           part-risk-report.md
@@ -437,7 +437,7 @@ def import_parts(
     lib_path = Path(lib_dir) if lib_dir else (project_path / "libs")
 
     # Target subdirectories
-    fp_dir = lib_path / "jlc_footprints.pretty"
+    fp_dir = lib_path / "JLC-MCP.pretty"
     model_dir = lib_path / "3dmodels"
     sym_file = lib_path / "jlc_symbols.kicad_sym"
 

@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import json
 import os
+import shutil
 import subprocess
 import sys
 from dataclasses import asdict
@@ -21,6 +22,15 @@ from .pipeline_event_log import append_pipeline_event, pipeline_event_log_path
 from .pipeline_postprocess import apply_postprocess, pin_project_libraries
 from .pipeline_summary import build_run_pipeline_summary
 from .simulation_planner import write_simulation_artifacts
+
+
+def _clean_project_output_dir(output: Path, project_name: str) -> Path:
+    """Remove stale generated KiCad project files before a fresh pipeline run."""
+    project_dir = output / project_name
+    if project_dir.exists():
+        shutil.rmtree(project_dir)
+    project_dir.mkdir(parents=True, exist_ok=True)
+    return project_dir
 
 
 def _resolve_kicad_python() -> str:
@@ -178,6 +188,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         os.environ.pop("KICAD_WORKSPACE", None)
 
     output.mkdir(parents=True, exist_ok=True)
+    project_output_dir = _clean_project_output_dir(output, project_name)
     event_log = pipeline_event_log_path(output)
     os.environ["KICAD_PROJECT_NAME"] = project_name
     os.environ["KICAD_OUTPUT_DIR"] = str(output)
@@ -187,7 +198,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         event_log,
         "run_pipeline",
         "pipeline started",
-        {"model_path": model_path, "project_name": project_name, "output_dir": str(output)},
+        {"model_path": model_path, "project_name": project_name, "output_dir": str(output), "project_output_dir": str(project_output_dir)},
     )
 
     netlist = build_netlist(model)

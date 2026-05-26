@@ -4,6 +4,187 @@
     {
       "match": {
         "role_contains": [
+          "h618_24mhz_xtal_load_capacitor",
+          "h618_32k_xtal_load_capacitor",
+          "h618_pmic_input_bulk_capacitor",
+          "h618_3v3_bulk_capacitor",
+          "h618_1v8_bulk_capacitor",
+          "h618_core_bulk_capacitor"
+        ]
+      },
+      "lib_id": "Device:C",
+      "footprint": "JLC-MCP:C0603",
+      "note": "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "h618_pmic_i2c_pullup_scl",
+          "h618_pmic_i2c_pullup_sda"
+        ]
+      },
+      "lib_id": "Device:R",
+      "footprint": "JLC-MCP:R0603",
+      "note": "H618 board I2C pullup resistor mapped to EasyEDA/JLC 0603 footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "h618_pmic_pwron_pullup"
+        ]
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "H618 PWRON pullup mapped to EasyEDA/JLC 10k 0603 resistor."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "power_indicator_resistor"
+        ]
+      },
+      "lib_id": "JLC-MCP-Resistors:0603WAF1001T5E",
+      "footprint": "JLC-MCP:R0603",
+      "note": "H618 power LED resistor mapped to EasyEDA/JLC 1k 0603 resistor."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "test_point"
+        ]
+      },
+      "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
+      "footprint": "JLC-MCP:TP-SMD_1P",
+      "note": "Generic test point mapped to EasyEDA/JLC single-pad symbol and footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "h618_usb_power_polyfuse"
+        ]
+      },
+      "lib_id": "JLC-MCP-Misc:POLYFUSE_2P",
+      "footprint": "JLC-MCP:F0805",
+      "note": "H618 USB-C input resettable fuse mapped to EasyEDA/JLC footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "h618_usb_vbus_tvs"
+        ]
+      },
+      "lib_id": "JLC-MCP-Diodes:SRV05-4_C2836319",
+      "footprint": "JLC-MCP:SMF5.0A",
+      "note": "H618 USB-C input TVS clamp mapped to EasyEDA/JLC footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "power_indicator"
+        ],
+        "ref_prefix": "LED"
+      },
+      "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
+      "footprint": "JLC-MCP:LED0603-RD",
+      "note": "H618 power indicator LED mapped to EasyEDA/JLC symbol and footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "h618_24mhz_xtal"
+        ],
+        "ref_prefix": "Y"
+      },
+      "lib_id": "jlc_symbols:322524M12PF10PPM",
+      "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
+      "note": "H618 24MHz crystal mapped to EasyEDA/JLC symbol and footprint."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "h618_32k_xtal"
+        ],
+        "ref_prefix": "Y"
+      },
+      "lib_id": "Device:Crystal",
+      "footprint": "JLC-MCP:CRYSTAL-SMD_3215-2P-L3.2-W1.5",
+      "note": "H618 32.768kHz crystal mapped to a local JLC-compatible alias footprint."
+    },
+    {
+      "match": {
+        "ref": "J1"
+      },
+      "lib_id": "jlc_symbols:TYPE-C16PIN",
+      "footprint": "JLC-MCP:USB-C-SMD_TYPE-C16PIN",
+      "note": "EasyEDA/JLC USB-C power entry connector."
+    },
+    {
+      "match": {
+        "ref": "J2"
+      },
+      "lib_id": "jlc_symbols:XKTF-001A",
+      "footprint": "JLC-MCP:TF-SMD_XKTF-001A",
+      "note": "EasyEDA/JLC MicroSD socket."
+    },
+    {
+      "match": {
+        "ref": "J3"
+      },
+      "lib_id": "jlc_symbols:DS1021-1X4SF11-B",
+      "footprint": "JLC-MCP:HDR-TH_4P-P2.54-V-M-1",
+      "note": "EasyEDA/JLC debug UART header."
+    },
+    {
+      "match": {
+        "ref": "J4"
+      },
+      "lib_id": "jlc_symbols:DS1021-2X13SF11-B",
+      "footprint": "JLC-MCP:HDR-TH_26P-P2.54-V-M-R2-C13-S2.54",
+      "note": "EasyEDA/JLC 26-pin expansion header."
+    },
+    {
+      "match": {
+        "ref": "J5"
+      },
+      "lib_id": "jlc_symbols:Header-Male-2.54_1x6",
+      "footprint": "JLC-MCP:HDR-TH_6P-P2.54-V-M-1",
+      "note": "EasyEDA/JLC co-processor reserve header."
+    },
+    {
+      "match": {
+        "ref": "J6"
+      },
+      "lib_id": "jlc_symbols:HC-RJ45-511Q-1-2",
+      "footprint": "JLC-MCP:RJ45-SMD_HC-RJ45-511Q-1-2",
+      "note": "EasyEDA/JLC gigabit RJ45 magjack."
+    },
+    {
+      "match": {
+        "ref": "J7"
+      },
+      "lib_id": "jlc_symbols:USB-A1VSB6",
+      "footprint": "JLC-MCP:USB-A-TH_USB-A1VSB6",
+      "note": "EasyEDA/JLC USB-A host port."
+    },
+    {
+      "match": {
+        "ref": "J8"
+      },
+      "lib_id": "jlc_symbols:USB-A1VSB6",
+      "footprint": "JLC-MCP:USB-A-TH_USB-A1VSB6",
+      "note": "EasyEDA/JLC USB-A host port."
+    },
+    {
+      "match": {
+        "ref": "J9"
+      },
+      "lib_id": "jlc_symbols:467650301",
+      "footprint": "JLC-MCP:TEPE-C-SMD_19P-P0.40",
+      "note": "EasyEDA/JLC micro HDMI connector."
+    },
+    {
+      "match": {
+        "role_contains": [
           "buck_feedback_resistor_top"
         ],
         "value_contains": [
@@ -47,14 +228,70 @@
     },
     {
       "match": {
-        "role_contains": [
-          "esp32_40mhz_crystal"
-        ],
-        "ref_prefix": "Y"
+        "ref": "Y1"
       },
-      "lib_id": "JLC-MCP-Crystals:X322540MPB4SI",
+      "lib_id": "jlc_symbols:3225 24M 12PF 10PPM",
       "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
-      "note": "NexDAP: ESP32-C3 40MHz crystal with available local JLC-MCP 3225 footprint."
+      "note": "EasyEDA/JLC 24MHz crystal imported from LCSC."
+    },
+    {
+      "match": {
+        "ref": "U1"
+      },
+      "lib_id": "jlc_symbols:AXP313A_C5365290",
+      "footprint": "JLC-MCP:QFN-20_L3.0-W3.0-P0.40-BL-EP1.7",
+      "note": "EasyEDA/JLC PMIC import."
+    },
+    {
+      "match": {
+        "ref": "U2"
+      },
+      "lib_id": "jlc_symbols:ALLWINNERH618",
+      "footprint": "JLC-MCP:BGA-284_L14.0-W12.0-P0.65-TL",
+      "note": "EasyEDA/JLC ALLWINNER H618 import."
+    },
+    {
+      "match": {
+        "ref": "U4"
+      },
+      "lib_id": "jlc_symbols:GD25Q16ETIGR",
+      "footprint": "JLC-MCP:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL",
+      "note": "EasyEDA/JLC SPI NOR import."
+    },
+    {
+      "match": {
+        "ref": "U5"
+      },
+      "lib_id": "jlc_symbols:RTL8211F-CG",
+      "footprint": "JLC-MCP:WQFN-40_L5.0-W5.0-P0.4-BL-EP",
+      "note": "EasyEDA/JLC gigabit PHY import."
+    },
+    {
+      "match": {
+        "ref": "U6"
+      },
+      "lib_id": "jlc_symbols:USB2514B-AEZC-TR",
+      "footprint": "JLC-MCP:VQFN-36_L6.0-W6.0-P0.50-BL-EP",
+      "note": "EasyEDA/JLC USB hub import."
+    },
+    {
+      "match": {
+        "ref": "U3"
+      },
+      "lib_id": "jlc_symbols:H9HCNNNBKUMLXR-NEE",
+      "footprint": "JLC-MCP:FBGA-200_L15.0-W10.0-BL_H9HCNNNBKUMLXR",
+      "note": "EasyEDA/JLC LPDDR4 import."
+    },
+    {
+      "match": {
+        "role_contains": [
+          "h618_reset_key",
+          "h618_fel_key"
+        ]
+      },
+      "lib_id": "Switch:SW_Push",
+      "footprint": "Button_Switch_SMD:SW_Push_1P1T_NO_CK_KMR2",
+      "note": "H618 board reset / FEL tact switch."
     },
     {
       "match": {
@@ -291,7 +528,7 @@
       },
       "lib_id": "JLC-MCP-Inductors:LTST-C191TBKT",
       "footprint": "JLC-MCP:LED0603-RD",
-      "note": "NexDAP: LED indicator with JLC-MCP 0603 footprint"
+      "note": "LED indicator with JLC-MCP 0603 footprint"
     },
     {
       "match": {
@@ -876,7 +1113,7 @@
       },
       "lib_id": "MCU_ST_STM32F1:STM32F103C8Tx",
       "footprint": "Package_QFP:LQFP-48_7x7mm_P0.5mm",
-      "note": "STM32F103C8Tx — ARM Cortex-M3, 64KB Flash, LQFP-48"
+      "note": "STM32F103C8Tx 鈥?ARM Cortex-M3, 64KB Flash, LQFP-48"
     },
     {
       "match": {
@@ -1145,3 +1382,4 @@
     ]
   }
 }
+

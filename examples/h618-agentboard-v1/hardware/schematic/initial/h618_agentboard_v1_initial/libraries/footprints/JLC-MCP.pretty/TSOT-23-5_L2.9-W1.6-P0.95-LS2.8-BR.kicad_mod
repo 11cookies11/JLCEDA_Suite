@@ -1,0 +1,384 @@
+(footprint "TSOT-23-5_L2.9-W1.6-P0.95-LS2.8-BR"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "@(TA/TJ) 1 1.5MHz 2.5V~5.5V 2A 50uA Adjustable Buck Buck Built-in Yes SOT-23-5 DC-DC Converters ROHS")
+	(tags "component")
+	(property "Reference" "REF**"
+		(at 0 -3.36 0)
+		(layer "F.SilkS")
+		(uuid "0cbe2fc5-0b81-4eac-9228-56911004d666")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SY8089A1AAC"
+		(at 0 3.45 0)
+		(layer "F.Fab")
+		(uuid "434297af-4561-483d-a1fe-b1289cc233b4")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "687e803b-f009-415d-85b2-65a6537f2dc3")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "@(TA/TJ) 1 1.5MHz 2.5V~5.5V 2A 50uA Adjustable Buck Buck Built-in Yes SOT-23-5 DC-DC Converters ROHS"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a86a9899-f1b0-46d3-a87f-326f75639418")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC" "C479074"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c0e43665-175b-431e-aeb8-2f55d1de8107")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "Silergy(矽力杰)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "32180023-0438-4973-aa8e-15b887706f7b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Operating Temperature" "-40℃~+125℃@(TA/TJ)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "59d08841-3997-43e8-8f70-7a65fb2f84ed")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Function" "Step-down type"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c4f90ed0-9a5c-4ad6-8492-57d090102a53")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Synchronous Rectifier" "Yes"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "73db0972-7680-4844-8818-07d18ce77325")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Frequency - Switching" "1.5MHz"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2a602494-c48b-4b82-80ff-049b06953b5d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Output Type" "Adjustable"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8863f0c1-c8f9-4200-94e4-21afdd54d707")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage - Supply" "2.5V~5.5V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1b343e73-1d85-44ee-8505-f88c3ac257ae")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Output Current" "2A"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4c23e962-5a1f-4af5-ab86-551b76a9e744")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Quiescent Current" "50uA"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "35b62d6d-6edb-491b-824c-01d783f6bfc4")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Features" "Output discharge、Hiccup current limiting"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "81083e99-97ed-45f8-9c8d-677b065f725b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Switch tube (built-in/external)" "Built-in"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6d8028f7-4be8-4bc6-93d4-f533892d05a9")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Topology" "Buck"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d2bd95bf-0862-4570-ab13-404e86da0bf7")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Number of Outputs" "1"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1fe76ccc-e015-4bc0-8c71-9aa7d312cdeb")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.9659 0.4329)
+		(end -0.9659 -0.4509)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e4ac1f26-f45d-48ee-abd2-2c6daf8837ad")
+	)
+	(fp_line
+		(start -0.8059 -1.6091)
+		(end 0.7941 -1.609)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "74944c03-4fbd-4a26-9639-740ac6990898")
+	)
+	(fp_line
+		(start -0.7659 1.6089)
+		(end 0.7741 1.6089)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7f929db9-31f9-4681-9a23-1699bd76dc77")
+	)
+	(fp_circle
+		(center 1.4561 1.589)
+		(end 1.5201 1.589)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "dc78ee09-836d-40c2-accb-d39f1e22c84b")
+	)
+	(fp_circle
+		(center 1.3801 1.5799)
+		(end 1.5051 1.5799)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "b02c3ea0-355e-4add-8bf0-9b19a0a9461f")
+	)
+	(fp_line
+		(start -2.09 -1.86)
+		(end 2.09 -1.86)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "18f3e076-7f74-45bc-8ae3-471e89ccdea5")
+	)
+	(fp_line
+		(start -2.09 1.95)
+		(end -2.09 -1.86)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "a84b529e-a4f5-4704-8901-2f1d9124504c")
+	)
+	(fp_line
+		(start 2.09 -1.86)
+		(end 2.09 1.95)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "7ecd40df-a340-41b1-b997-a0d389bff216")
+	)
+	(fp_line
+		(start 2.09 1.95)
+		(end -2.09 1.95)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "6d7be39b-eb64-4de7-a4f9-6afe1d8fd799")
+	)
+	(fp_circle
+		(center 1.3999 1.4498)
+		(end 1.4299 1.4498)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "33637b52-70c3-4eb3-a355-0089c094f386")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "b09fb229-699c-490d-8b61-785f1661fbc1")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at 1.294 0.951)
+		(size 1.1 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "a45e9d1f-e286-47f4-90b1-04571dddf515")
+	)
+	(pad "2" smd roundrect
+		(at 1.294 0.001)
+		(size 1.1 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "86a76970-a7d5-401d-b2ea-f25618616958")
+	)
+	(pad "3" smd roundrect
+		(at 1.294 -0.951)
+		(size 1.1 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "1e621eaa-dd8d-4617-b9a1-a9b659893f6f")
+	)
+	(pad "4" smd roundrect
+		(at -1.294 -0.951 180)
+		(size 1.1 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "0af181cf-0c81-4ad6-9ca3-e6f6275aa371")
+	)
+	(pad "5" smd roundrect
+		(at -1.294 0.9489 180)
+		(size 1.1 0.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "4d22396d-99c9-4982-88fc-987ce27922df")
+	)
+	(embedded_fonts no)
+	(model "D:/GitRepository/AI/KiCadAgentSuite/.where/h618-agentboard-v1/h618_agentboard_v1_initial/libraries/3dmodels/JLC-MCP.3dshapes/SY8089A1AAC.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 180)
+		)
+	)
+)

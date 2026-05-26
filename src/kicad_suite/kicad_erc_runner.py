@@ -54,6 +54,8 @@ def run(emit: bool = True) -> dict[str, Any]:
     )
     version_text = (version_process.stdout or version_process.stderr or '').strip()
 
+    schematic_file_abs = schematic_file.resolve()
+    output_file_abs = output_file.resolve()
     command = [
         executable,
         'sch',
@@ -61,8 +63,8 @@ def run(emit: bool = True) -> dict[str, Any]:
         '--format',
         env('KICAD_ERC_FORMAT', 'json'),
         '--output',
-        str(output_file),
-        str(schematic_file),
+        str(output_file_abs),
+        str(schematic_file_abs),
     ]
     process = subprocess.run(
         command,
@@ -72,6 +74,7 @@ def run(emit: bool = True) -> dict[str, Any]:
         encoding='utf-8',
         errors='replace',
         timeout=to_int_env('KICAD_CLI_TIMEOUT_SEC', 60),
+        cwd=str(schematic_file_abs.parent),
         check=False,
     )
 

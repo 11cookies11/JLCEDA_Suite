@@ -14,7 +14,7 @@ from typing import Any
 
 from .adapters.kicad_cli import resolve_kicad_cli
 from .env_utils import env
-from .kicad_project_writer import sanitize_symbol_block
+from .kicad_project_writer import DEFAULT_ERC_PIN_MAP, DEFAULT_ERC_RULE_SEVERITIES, find_matching_paren, sanitize_symbol_block
 
 REPO_ROOT = Path(__file__).resolve().parents[2]
 
@@ -55,6 +55,14 @@ def pin_project_libraries(project_dir: Path) -> dict[str, Any]:
         ],
         "pinned_symbol_libs": pinned_symbols,
     }
+    data.setdefault("erc", {
+        "erc_exclusions": [],
+        "meta": {
+            "version": 0,
+        },
+        "pin_map": DEFAULT_ERC_PIN_MAP,
+        "rule_severities": DEFAULT_ERC_RULE_SEVERITIES,
+    })
     project_file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return {
         "attempted": True,
@@ -183,6 +191,74 @@ def register_jlc_libraries(project_dir: Path) -> dict[str, Any]:
         }
 
 
+def sync_cached_symbol_libraries(schematic_file: Path, project_dir: Path) -> dict[str, Any]:
+    """Mirror generated schematic cache symbols into project-local libraries.
+
+    KiCad ERC reports lib_symbol_mismatch when the schematic cache has been
+    intentionally normalized (for example passive connector pins) but the
+    referenced source library still has the original imported symbol.  For
+    generated projects the cache is the source of truth, so keep the local
+    symbol libraries aligned with it.
+    """
+    by_library: dict[str, list[str]] = {}
+    seen: set[tuple[str, str]] = set()
+    schematic_files = sorted(project_dir.glob("*.kicad_sch"))
+    if schematic_file.exists() and schematic_file not in schematic_files:
+        schematic_files.insert(0, schematic_file)
+
+    for path in schematic_files:
+        text = path.read_text(encoding="utf-8")
+        lib_start = text.find("(lib_symbols")
+        if lib_start < 0:
+            continue
+        lib_end = find_matching_paren(text, lib_start)
+        if lib_end < 0:
+            continue
+        lib_section = text[lib_start:lib_end + 1]
+        for match in re.finditer(r'\(symbol\s+"([^":]+):([^"]+)"', lib_section):
+            start = match.start()
+            end = find_matching_paren(lib_section, start)
+            if end < 0:
+                continue
+            library = match.group(1)
+            symbol_name = match.group(2)
+            key = (library, symbol_name)
+            if key in seen:
+                continue
+            seen.add(key)
+            block = lib_section[start:end + 1]
+            block = block.replace(f'(symbol "{library}:{symbol_name}"', f'(symbol "{symbol_name}"', 1)
+            block = "\n".join(line[4:] if line.startswith("    ") else line for line in block.splitlines())
+            by_library.setdefault(library, []).append(block)
+
+    if not by_library:
+        return {"attempted": True, "success": False, "reason": "no cached library symbols found"}
+
+    symbols_dir = project_dir / "libraries" / "symbols"
+    symbols_dir.mkdir(parents=True, exist_ok=True)
+    written: list[str] = []
+    for library, blocks in sorted(by_library.items()):
+        body = "\n\n".join(blocks)
+        content = (
+            "(kicad_symbol_lib\n"
+            "  (version 20231120)\n"
+            '  (generator "kicad_suite")\n'
+            f"{body}\n"
+            ")\n"
+        )
+        path = symbols_dir / f"{library}.kicad_sym"
+        path.write_text(content, encoding="utf-8")
+        written.append(str(path))
+
+    return {
+        "attempted": True,
+        "success": True,
+        "libraries": sorted(by_library),
+        "written_files": written,
+        "count": len(written),
+    }
+
+
 def sync_source_libraries(project_dir: Path) -> dict[str, Any]:
     """Copy pre-imported EasyEDA/JLC assets from the source project into output."""
     source_project = env("KICAD_SOURCE_PROJECT_DIR", "")
@@ -193,12 +269,25 @@ def sync_source_libraries(project_dir: Path) -> dict[str, Any]:
         return {"attempted": True, "copied": False, "reason": "source libraries missing", "source": str(source_libraries)}
     target_libraries = project_dir / "libraries"
     target_libraries.mkdir(parents=True, exist_ok=True)
+    stale_footprints = target_libraries / "footprints"
+    for stale_name in ("jlc_footprints.pretty", "jlc_symbols.pretty"):
+        stale_dir = stale_footprints / stale_name
+        if stale_dir.exists():
+            shutil.rmtree(stale_dir, ignore_errors=True)
     counts: dict[str, int] = {}
     for name in ("symbols", "footprints", "3dmodels"):
         source = source_libraries / name
         target = target_libraries / name
         if source.exists():
-            shutil.copytree(source, target, dirs_exist_ok=True)
+            if name == "footprints":
+                shutil.copytree(
+                    source,
+                    target,
+                    dirs_exist_ok=True,
+                    ignore=shutil.ignore_patterns("jlc_footprints.pretty", "jlc_symbols.pretty"),
+                )
+            else:
+                shutil.copytree(source, target, dirs_exist_ok=True)
             counts[name] = len([path for path in target.rglob("*") if path.is_file()])
     supplemental_root = REPO_ROOT / "resources" / "kicad" / "footprints"
     if supplemental_root.exists():
@@ -418,6 +507,7 @@ def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]
     footprint_sanitization = sanitize_footprint_libraries(project_dir)
     footprint_upgrade = upgrade_footprint_libraries(project_dir)
     pin_type_patches = patch_known_jlc_symbol_pin_types(project_dir)
+    symbol_cache_sync = sync_cached_symbol_libraries(schematic_file, project_dir)
     registration = register_jlc_libraries(project_dir)
     project_library_pins = pin_project_libraries(project_dir)
     gui_asset_validation = validate_gui_assets(project_dir)
@@ -427,6 +517,7 @@ def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]
         "footprint_sanitization": footprint_sanitization,
         "footprint_upgrade": footprint_upgrade,
         "pin_type_patches": pin_type_patches,
+        "symbol_cache_sync": symbol_cache_sync,
         "symbols_injected": symbols_injected,
         "symbol_injection_error": inject_error,
         "library_registration": registration,
