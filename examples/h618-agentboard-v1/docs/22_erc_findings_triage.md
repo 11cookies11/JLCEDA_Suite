@@ -38,6 +38,12 @@
 - USB-C 电源入口已补入 CC1/CC2 独立 5.1k Rd 下拉，明确把 J1 配置为默认电流 Sink 输入。
 - USB-C 电源入口已修正为 `J1 VBUS -> +5V_IN -> F1 -> +5V_SYS`，`D1` TVS 接在原始 VBUS 与 GND 之间，避免保险丝输出端误接地。
 
+## 阶段 4 追踪
+
+- `RGMII / USB Hub / HDMI / USB-C` 现在都处于参考捕获和边界落实阶段。
+- 这几个接口的后续展开应直接对照 [高速接口参考设计采集清单](15_high_speed_reference_capture_checklist.md)。
+- 只要清单还没收齐，就不要把接口细节写成“已经完全定版”。
+
 ## 库缓存一致性收口
 
 - pipeline 会从生成后的各分图提取缓存符号，并同步到本地 `libraries/symbols/*.kicad_sym`。

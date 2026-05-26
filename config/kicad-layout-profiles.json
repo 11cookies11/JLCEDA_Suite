@@ -410,6 +410,90 @@
         }
       ]
     },
+    "h618_agentboard_v1_initial": {
+      "sheet_groups": [
+        {
+          "name": "power_entry_pmic",
+          "blocks": [
+            "input",
+            "usb_type_c_power_input",
+            "usb_c_cc1_sink_rd",
+            "usb_c_cc2_sink_rd",
+            "pmic_axp313a",
+            "h618_pmic_input",
+            "h618_3v3",
+            "h618_1v8",
+            "h618_core",
+            "h618_pmic_i2c_pullup_scl",
+            "h618_pmic_i2c_pullup_sda",
+            "h618_pmic_pwron_pullup"
+          ]
+        },
+        {
+          "name": "soc_boot_clock",
+          "blocks": [
+            "h618_soc_bga",
+            "h618_24mhz_xtal",
+            "h618_32k_xtal"
+          ]
+        },
+        {
+          "name": "memory_ddr",
+          "blocks": [
+            "lpddr4_2gb_memory"
+          ]
+        },
+        {
+          "name": "boot_storage",
+          "blocks": [
+            "micro_sd_boot_socket",
+            "micro_sd_cmd_pullup",
+            "micro_sd_dat0_pullup",
+            "micro_sd_dat1_pullup",
+            "micro_sd_dat2_pullup",
+            "micro_sd_dat3_pullup",
+            "spi_nor_16mb_flash",
+            "spi_nor_wp_pullup",
+            "spi_nor_hold_pullup"
+          ]
+        },
+        {
+          "name": "debug_control",
+          "blocks": [
+            "io",
+            "reset",
+            "h618_reset_key",
+            "h618_fel_key",
+            "h618_fel_boot_pullup",
+            "test_point"
+          ]
+        },
+        {
+          "name": "network",
+          "blocks": [
+            "rgmii_gigabit_phy",
+            "ethernet_magjack"
+          ]
+        },
+        {
+          "name": "usb",
+          "blocks": [
+            "usb2_hub",
+            "usb_host_port_1",
+            "usb_host_port_2"
+          ]
+        },
+        {
+          "name": "display_expansion",
+          "blocks": [
+            "micro_hdmi_output",
+            "h618_gpio",
+            "coprocessor_reserve",
+            "indicator"
+          ]
+        }
+      ]
+    },
     "nema23_industrial_stepper_driver_v0_1": {
       "role_match_rules": [
         {

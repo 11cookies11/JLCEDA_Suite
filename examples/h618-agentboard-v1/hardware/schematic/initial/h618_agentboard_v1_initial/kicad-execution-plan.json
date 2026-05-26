@@ -16,7 +16,7 @@
       "footprint": "JLC-MCP:USB-C-SMD_TYPE-C16PIN",
       "at": {
         "x": 43.18,
-        "y": 114.3,
+        "y": 132.08,
         "rotation": 0.0
       },
       "pins": [
@@ -104,9 +104,9 @@
       "notes": [
         "H618 USB-C input resettable fuse mapped to EasyEDA/JLC footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C91409",
+      "mpn": "SMD1206P050TF",
+      "manufacturer": "BHFUSE"
     },
     {
       "ref": "D1",
@@ -134,9 +134,9 @@
       "notes": [
         "H618 USB-C input TVS clamp mapped to EasyEDA/JLC footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C918847",
+      "mpn": "PTVSUC3D5VB",
+      "manufacturer": "Shanghai Prisemi Elec"
     },
     {
       "ref": "U1",
@@ -146,7 +146,7 @@
       "footprint": "JLC-MCP:QFN-20_L3.0-W3.0-P0.40-BL-EP1.7",
       "at": {
         "x": 111.76,
-        "y": 114.3,
+        "y": 127.0,
         "rotation": 0.0
       },
       "pins": [
@@ -678,7 +678,7 @@
         {
           "number": "3",
           "name": "",
-          "net": "+3V3"
+          "net": "H618_SPI0_WP_N"
         },
         {
           "number": "4",
@@ -698,7 +698,7 @@
         {
           "number": "7",
           "name": "",
-          "net": "+3V3"
+          "net": "H618_SPI0_HOLD_N"
         },
         {
           "number": "8",
@@ -794,6 +794,156 @@
       "manufacturer": ""
     },
     {
+      "ref": "R11",
+      "role": "micro_sd_cmd_pullup",
+      "value": "47k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 40.64,
+        "y": 388.62,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "H618_SD_CMD"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "C25819",
+      "mpn": "0603WAF4702T5E",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R12",
+      "role": "micro_sd_dat0_pullup",
+      "value": "47k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 86.36,
+        "y": 388.62,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "H618_SD_D0"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "C25819",
+      "mpn": "0603WAF4702T5E",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R13",
+      "role": "micro_sd_dat1_pullup",
+      "value": "47k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 132.08,
+        "y": 388.62,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "H618_SD_D1"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "C25819",
+      "mpn": "0603WAF4702T5E",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R14",
+      "role": "micro_sd_dat2_pullup",
+      "value": "47k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 177.8,
+        "y": 388.62,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "H618_SD_D2"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "C25819",
+      "mpn": "0603WAF4702T5E",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R15",
+      "role": "micro_sd_dat3_pullup",
+      "value": "47k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 223.52,
+        "y": 388.62,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "H618_SD_D3"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "C25819",
+      "mpn": "0603WAF4702T5E",
+      "manufacturer": ""
+    },
+    {
       "ref": "U5",
       "role": "rgmii_gigabit_phy",
       "value": "Gigabit PHY",
@@ -801,7 +951,7 @@
       "footprint": "JLC-MCP:WQFN-40_L5.0-W5.0-P0.4-BL-EP",
       "at": {
         "x": 71.12,
-        "y": 388.62,
+        "y": 464.82,
         "rotation": 0.0
       },
       "pins": [
@@ -916,7 +1066,7 @@
       "footprint": "JLC-MCP:VQFN-36_L6.0-W6.0-P0.50-BL-EP",
       "at": {
         "x": 200.66,
-        "y": 388.62,
+        "y": 464.82,
         "rotation": 0.0
       },
       "pins": [
@@ -1046,7 +1196,7 @@
       "footprint": "JLC-MCP:HDR-TH_26P-P2.54-V-M-R2-C13-S2.54",
       "at": {
         "x": 55.88,
-        "y": 464.82,
+        "y": 541.02,
         "rotation": 0.0
       },
       "pins": [
@@ -1196,7 +1346,7 @@
       "footprint": "JLC-MCP:SW-SMD_TK-6580S-2",
       "at": {
         "x": 127.0,
-        "y": 464.82,
+        "y": 541.02,
         "rotation": 0.0
       },
       "pins": [
@@ -1214,9 +1364,9 @@
       "notes": [
         "H618 board reset / FEL tact switch."
       ],
-      "lcsc": "",
+      "lcsc": "C528775",
       "mpn": "",
-      "manufacturer": ""
+      "manufacturer": "JXTCONN"
     },
     {
       "ref": "SW2",
@@ -1226,7 +1376,7 @@
       "footprint": "JLC-MCP:SW-SMD_TK-6580S-2",
       "at": {
         "x": 195.58,
-        "y": 464.82,
+        "y": 541.02,
         "rotation": 0.0
       },
       "pins": [
@@ -1244,9 +1394,9 @@
       "notes": [
         "H618 board reset / FEL tact switch."
       ],
-      "lcsc": "",
+      "lcsc": "C528775",
       "mpn": "",
-      "manufacturer": ""
+      "manufacturer": "JXTCONN"
     },
     {
       "ref": "J5",
@@ -1256,7 +1406,7 @@
       "footprint": "JLC-MCP:HDR-TH_6P-P2.54-V-M-1",
       "at": {
         "x": 254.0,
-        "y": 464.82,
+        "y": 541.02,
         "rotation": 0.0
       },
       "pins": [
@@ -1296,7 +1446,7 @@
       "footprint": "JLC-MCP:CRYSTAL-SMD_4P-L3.2-W2.5-BL",
       "at": {
         "x": 55.88,
-        "y": 541.02,
+        "y": 617.22,
         "rotation": 0.0
       },
       "pins": [
@@ -1336,7 +1486,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 55.88,
-        "y": 581.66,
+        "y": 657.86,
         "rotation": 0.0
       },
       "pins": [
@@ -1354,9 +1504,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C49326300",
+      "mpn": "0603C0G180J500NT",
+      "manufacturer": "AIDE CAPACITOR"
     },
     {
       "ref": "C2",
@@ -1366,7 +1516,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 55.88,
-        "y": 632.46,
+        "y": 708.66,
         "rotation": 0.0
       },
       "pins": [
@@ -1384,9 +1534,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C49326300",
+      "mpn": "0603C0G180J500NT",
+      "manufacturer": "AIDE CAPACITOR"
     },
     {
       "ref": "Y2",
@@ -1396,7 +1546,7 @@
       "footprint": "JLC-MCP:CRYSTAL-SMD_3215-2P-L3.2-W1.5",
       "at": {
         "x": 124.46000000000001,
-        "y": 541.02,
+        "y": 617.22,
         "rotation": 0.0
       },
       "pins": [
@@ -1426,7 +1576,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 124.46000000000001,
-        "y": 579.12,
+        "y": 655.32,
         "rotation": 0.0
       },
       "pins": [
@@ -1444,9 +1594,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C1575",
+      "mpn": "CC0603JRNPO9BN120",
+      "manufacturer": "Yageo"
     },
     {
       "ref": "C4",
@@ -1456,7 +1606,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 124.46000000000001,
-        "y": 629.92,
+        "y": 706.12,
         "rotation": 0.0
       },
       "pins": [
@@ -1474,9 +1624,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C1575",
+      "mpn": "CC0603JRNPO9BN120",
+      "manufacturer": "Yageo"
     },
     {
       "ref": "R1",
@@ -1486,7 +1636,7 @@
       "footprint": "JLC-MCP:R0603",
       "at": {
         "x": 180.34,
-        "y": 541.02,
+        "y": 617.22,
         "rotation": 0.0
       },
       "pins": [
@@ -1516,7 +1666,7 @@
       "footprint": "JLC-MCP:R0603",
       "at": {
         "x": 226.06,
-        "y": 541.02,
+        "y": 617.22,
         "rotation": 0.0
       },
       "pins": [
@@ -1546,7 +1696,7 @@
       "footprint": "JLC-MCP:R0603",
       "at": {
         "x": 271.78000000000003,
-        "y": 541.02,
+        "y": 617.22,
         "rotation": 0.0
       },
       "pins": [
@@ -1576,7 +1726,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 40.64,
-        "y": 617.22,
+        "y": 693.42,
         "rotation": 0.0
       },
       "pins": [
@@ -1594,9 +1744,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C2179526",
+      "mpn": "CC1210KKX5R8BB226",
+      "manufacturer": "YAGEO"
     },
     {
       "ref": "C6",
@@ -1606,7 +1756,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 86.36,
-        "y": 617.22,
+        "y": 693.42,
         "rotation": 0.0
       },
       "pins": [
@@ -1624,9 +1774,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C2179526",
+      "mpn": "CC1210KKX5R8BB226",
+      "manufacturer": "YAGEO"
     },
     {
       "ref": "C7",
@@ -1636,7 +1786,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 132.08,
-        "y": 617.22,
+        "y": 693.42,
         "rotation": 0.0
       },
       "pins": [
@@ -1654,9 +1804,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C2179526",
+      "mpn": "CC1210KKX5R8BB226",
+      "manufacturer": "YAGEO"
     },
     {
       "ref": "C8",
@@ -1666,7 +1816,7 @@
       "footprint": "JLC-MCP:C0603",
       "at": {
         "x": 177.8,
-        "y": 617.22,
+        "y": 693.42,
         "rotation": 0.0
       },
       "pins": [
@@ -1684,9 +1834,9 @@
       "notes": [
         "H618 board capacitor mapped to EasyEDA/JLC 0603 footprint."
       ],
-      "lcsc": "",
-      "mpn": "",
-      "manufacturer": ""
+      "lcsc": "C49326689",
+      "mpn": "0805X5R476M100NT",
+      "manufacturer": "AIDE CAPACITOR"
     },
     {
       "ref": "LED1",
@@ -1756,7 +1906,7 @@
       "footprint": "JLC-MCP:R0603",
       "at": {
         "x": 223.52,
-        "y": 617.22,
+        "y": 693.42,
         "rotation": 0.0
       },
       "pins": [
@@ -1786,7 +1936,7 @@
       "footprint": "JLC-MCP:R0603",
       "at": {
         "x": 269.24,
-        "y": 617.22,
+        "y": 693.42,
         "rotation": 0.0
       },
       "pins": [
@@ -1846,7 +1996,7 @@
       "footprint": "JLC-MCP:R0603",
       "at": {
         "x": 40.64,
-        "y": 693.42,
+        "y": 769.62,
         "rotation": 0.0
       },
       "pins": [
@@ -1869,14 +2019,74 @@
       "manufacturer": ""
     },
     {
+      "ref": "R9",
+      "role": "spi_nor_wp_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 86.36,
+        "y": 769.62,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "H618_SPI0_WP_N"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "C25804",
+      "mpn": "0603WAF1002T5E",
+      "manufacturer": ""
+    },
+    {
+      "ref": "R10",
+      "role": "spi_nor_hold_pullup",
+      "value": "10k",
+      "lib_id": "JLC-MCP-Resistors:0603WAF1002T5E",
+      "footprint": "JLC-MCP:R0603",
+      "at": {
+        "x": 132.08,
+        "y": 769.62,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "H618_SPI0_HOLD_N"
+        }
+      ],
+      "notes": [
+        "Default JLC-MCP 0603 resistor for resistor-prefixed parts."
+      ],
+      "lcsc": "C25804",
+      "mpn": "0603WAF1002T5E",
+      "manufacturer": ""
+    },
+    {
       "ref": "J6",
       "role": "ethernet_magjack",
       "value": "RJ45 with magnetics",
       "lib_id": "jlc_symbols:HC-RJ45-511Q-1-2",
       "footprint": "JLC-MCP:RJ45-SMD_HC-RJ45-511Q-1-2",
       "at": {
-        "x": 109.22,
-        "y": 693.42,
+        "x": 200.66,
+        "y": 769.62,
         "rotation": 0.0
       },
       "pins": [
@@ -1900,8 +2110,8 @@
       "lib_id": "jlc_symbols:USB-A1VSB6",
       "footprint": "JLC-MCP:USB-A-TH_USB-A1VSB6",
       "at": {
-        "x": 193.04,
-        "y": 693.42,
+        "x": 55.88,
+        "y": 845.82,
         "rotation": 0.0
       },
       "pins": [
@@ -1935,8 +2145,8 @@
       "lib_id": "jlc_symbols:USB-A1VSB6",
       "footprint": "JLC-MCP:USB-A-TH_USB-A1VSB6",
       "at": {
-        "x": 55.88,
-        "y": 769.62,
+        "x": 134.62,
+        "y": 845.82,
         "rotation": 0.0
       },
       "pins": [
@@ -1970,8 +2180,8 @@
       "lib_id": "jlc_symbols:467650301",
       "footprint": "JLC-MCP:TEPE-C-SMD_19P-P0.40",
       "at": {
-        "x": 134.62,
-        "y": 769.62,
+        "x": 213.36,
+        "y": 845.82,
         "rotation": 0.0
       },
       "pins": [
@@ -2030,8 +2240,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 769.62,
+        "x": 43.18,
+        "y": 922.02,
         "rotation": 0.0
       },
       "pins": [
@@ -2055,8 +2265,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 797.5600000000001,
+        "x": 43.18,
+        "y": 949.96,
         "rotation": 0.0
       },
       "pins": [
@@ -2080,8 +2290,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 825.5,
+        "x": 43.18,
+        "y": 977.9,
         "rotation": 0.0
       },
       "pins": [
@@ -2105,8 +2315,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 853.44,
+        "x": 43.18,
+        "y": 1005.84,
         "rotation": 0.0
       },
       "pins": [
@@ -2130,8 +2340,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 881.38,
+        "x": 43.18,
+        "y": 1033.78,
         "rotation": 0.0
       },
       "pins": [
@@ -2155,8 +2365,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 909.32,
+        "x": 43.18,
+        "y": 1061.72,
         "rotation": 0.0
       },
       "pins": [
@@ -2180,8 +2390,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 937.26,
+        "x": 43.18,
+        "y": 1089.66,
         "rotation": 0.0
       },
       "pins": [
@@ -2205,8 +2415,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 965.2,
+        "x": 43.18,
+        "y": 1117.6,
         "rotation": 0.0
       },
       "pins": [
@@ -2230,8 +2440,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 993.14,
+        "x": 43.18,
+        "y": 1145.54,
         "rotation": 0.0
       },
       "pins": [
@@ -2255,8 +2465,8 @@
       "lib_id": "JLC-MCP-Misc:TESTPOINT_1P",
       "footprint": "JLC-MCP:TP-SMD_1P",
       "at": {
-        "x": 195.58,
-        "y": 1021.08,
+        "x": 43.18,
+        "y": 1173.48,
         "rotation": 0.0
       },
       "pins": [
@@ -2367,9 +2577,14 @@
         "R3.1",
         "R7.1",
         "R8.1",
+        "R9.1",
+        "R10.1",
+        "R11.1",
+        "R12.1",
+        "R13.1",
+        "R14.1",
+        "R15.1",
         "U4.8",
-        "U4.3",
-        "U4.7",
         "J2.4",
         "U5.11",
         "U5.29",
@@ -2551,7 +2766,8 @@
       "kind": "signal",
       "members": [
         "U2.SD_D2",
-        "J2.1"
+        "J2.1",
+        "R14.2"
       ]
     },
     {
@@ -2559,7 +2775,8 @@
       "kind": "signal",
       "members": [
         "U2.SD_D3",
-        "J2.2"
+        "J2.2",
+        "R15.2"
       ]
     },
     {
@@ -2567,7 +2784,8 @@
       "kind": "signal",
       "members": [
         "U2.SD_CMD",
-        "J2.3"
+        "J2.3",
+        "R11.2"
       ]
     },
     {
@@ -2583,7 +2801,8 @@
       "kind": "signal",
       "members": [
         "U2.SD_D0",
-        "J2.7"
+        "J2.7",
+        "R12.2"
       ]
     },
     {
@@ -2591,7 +2810,8 @@
       "kind": "signal",
       "members": [
         "U2.SD_D1",
-        "J2.8"
+        "J2.8",
+        "R13.2"
       ]
     },
     {
@@ -2624,6 +2844,22 @@
       "members": [
         "U2.SPI0_CLK",
         "U4.6"
+      ]
+    },
+    {
+      "name": "H618_SPI0_WP_N",
+      "kind": "signal",
+      "members": [
+        "U4.3",
+        "R9.2"
+      ]
+    },
+    {
+      "name": "H618_SPI0_HOLD_N",
+      "kind": "signal",
+      "members": [
+        "U4.7",
+        "R10.2"
       ]
     },
     {
@@ -3007,7 +3243,7 @@
   ],
   "diagnostics": {
     "warnings": [
-      "Auto schematic layout resolved 5 symbol overlap(s)."
+      "Auto schematic layout resolved 7 symbol overlap(s)."
     ],
     "unsupported": []
   }

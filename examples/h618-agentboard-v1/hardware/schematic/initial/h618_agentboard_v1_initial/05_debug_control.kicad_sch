@@ -1,0 +1,1252 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "f0f06ab6-92ea-41ee-a12f-4ba46c753525")
+  (paper "A4")
+  (lib_symbols
+    (symbol "JLC-MCP-Misc:TESTPOINT_1P"
+    		(pin_names
+    			(offset 0.254)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom no)
+    		(on_board yes)
+    		(property "Reference" "TP"
+    			(at 0 3.81 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "TESTPOINT_1P"
+    			(at 0 -3.81 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" "JLC-MCP:TP-SMD_1P"
+    			(at 0 0 0)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "TESTPOINT_1P_0_1"
+    			(circle
+    				(center 0 0)
+    				(radius 1.27)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(symbol "TESTPOINT_1P_1_1"
+    			(pin passive line
+    				(at -5.08 0 0)
+    				(length 2.54)
+    				(name "1" (effects (font (size 1 1))))
+    				(number "1" (effects (font (size 1 1))))
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+    (symbol "JLC-MCP-Resistors:0603WAF1002T5E"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 0)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(property "Reference" "R"
+    			(at 2.54 0 90)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "0603WAF1002T5E"
+    			(at -1.778 0 90)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" "JLC-MCP:R0603"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Datasheet" "https://www.lcsc.com/datasheet/lcsc_datasheet_2206010045_UNI-ROYAL-Uniroyal-Elec-0603WAF1002T5E_C25804.pdf"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Product Page" "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount-UniOhm_10KR-1002-1_C25804.html"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Description" "100mW 10kΩ 75V Thick Film Resistor ±1% ±100ppm/℃ 0603 Chip Resistor - Surface Mount ROHS"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "LCSC" "C25804"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Manufacturer" "UNI-ROYAL(厚声)"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "ki_keywords" "C25804"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Stock" "8999650"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Price" "0.0017USD"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Process" "SMT"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Minimum Qty" "100"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Attrition Qty" "0"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Class" "Basic Part"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Part" "0603WAF1002T5E"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Resistance" "10kΩ"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Operating Temperature" "-55℃~+155℃"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Power(Watts)" "100mW"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Type" "Thick Film Resistor"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Voltage-Supply(Max)" "75V"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Tolerance" "±1%"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(property "Temperature Coefficient" "±100ppm/℃"
+    			(at 0 0 0)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(hide yes)
+    			)
+    		)
+    		(symbol "0603WAF1002T5E_0_1"
+    			(rectangle
+    				(start -1.016 2.54)
+    				(end 1.016 -2.54)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type background)
+    				)
+    			)
+    		)
+    		(symbol "0603WAF1002T5E_1_1"
+    			(pin passive line
+    				(at 0 3.81 270)
+    				(length 2.54)
+    				(name "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 0 -3.81 90)
+    				(length 2.54)
+    				(name "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+    (symbol "Switch:SW_Push"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 1.016)
+    			(hide yes)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(in_pos_files yes)
+    		(duplicate_pin_numbers_are_jumpers no)
+    		(property "Reference" "SW"
+    			(at 1.27 2.54 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(justify left)
+    			)
+    		)
+    		(property "Value" "SW_Push"
+    			(at 0 -1.524 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" "JLC-MCP:SW-SMD_TK-6580S-2"
+    			(at 0 5.08 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Datasheet" ""
+    			(at 0 5.08 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Description" "Push button switch, generic, two pins"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_keywords" "switch normally-open pushbutton push-button"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "SW_Push_0_1"
+    			(circle
+    				(center -2.032 0)
+    				(radius 0.508)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy 0 1.27) (xy 0 3.048)
+    				)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(circle
+    				(center 2.032 0)
+    				(radius 0.508)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy 2.54 1.27) (xy -2.54 1.27)
+    				)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(pin passive line
+    				(at -5.08 0 0)
+    				(length 2.54)
+    				(name "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 5.08 0 180)
+    				(length 2.54)
+    				(name "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+    (symbol "jlc_symbols:DS1021-1X4SF11-B"
+        (in_bom yes)
+        (on_board yes)
+        (property
+          "Reference"
+          "H"
+          (id 0)
+          (at 0 8.89 0)
+          (effects (font (size 1.27 1.27) ) )
+        )
+        (property
+          "Value"
+          "DS1021-1X4SF11-B"
+          (id 1)
+          (at 0 -8.89 0)
+          (effects (font (size 1.27 1.27) ) )
+        )
+        (property
+          "Footprint"
+          "jlc_symbols:HDR-TH_4P-P2.54-V-M-1"
+          (id 2)
+          (at 0 -11.43 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "Datasheet"
+          "https://www.lcsc.com/datasheet/C7430360.pdf"
+          (id 3)
+          (at 0 -13.97 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "Manufacturer"
+          "CONNFLY"
+          (id 4)
+          (at 0 -16.51 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "MPN"
+          "DS1021-1x4SF11-B"
+          (id 5)
+          (at 0 -19.05 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "LCSC Part"
+          "C7430360"
+          (id 6)
+          (at 0 -21.59 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (symbol "DS1021-1X4SF11-B_0_1"
+          (rectangle
+            (start -1.27 6.35)
+            (end 3.81 -6.35)
+            (stroke (width 0) (type default))
+            (fill (type background))
+          )
+          (circle
+            (center 0.00 5.08)
+            (radius 0.38)
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (pin passive line
+            (at -3.81 3.81 0)
+            (length 2.54)
+            (name "1" (effects (font (size 1.27 1.27))))
+            (number "1" (effects (font (size 1.27 1.27))))
+          )
+          (pin passive line
+            (at -3.81 1.27 0)
+            (length 2.54)
+            (name "2" (effects (font (size 1.27 1.27))))
+            (number "2" (effects (font (size 1.27 1.27))))
+          )
+          (pin passive line
+            (at -3.81 -1.27 0)
+            (length 2.54)
+            (name "3" (effects (font (size 1.27 1.27))))
+            (number "3" (effects (font (size 1.27 1.27))))
+          )
+          (pin passive line
+            (at -3.81 -3.81 0)
+            (length 2.54)
+            (name "4" (effects (font (size 1.27 1.27))))
+            (number "4" (effects (font (size 1.27 1.27))))
+          )
+        )
+      )
+  )
+  (symbol
+    (lib_id "jlc_symbols:DS1021-1X4SF11-B")
+    (at 190.5 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "9c553cae-3a22-49a1-abef-0535189a2bdc")
+    (property "Reference" "J3" (at 190.5 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "UART0 debug header" (at 190.5 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:HDR-TH_4P-P2.54-V-M-1" (at 190.5 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C7430360" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "a82eb681-8e03-4b05-a964-86ab72f5f5be"))
+      (pin "2" (uuid "7d9d3b98-2335-434a-aa90-994d0dd95601"))
+      (pin "3" (uuid "5b49741c-9e97-4ea6-a1d4-05b153a90aaa"))
+      (pin "4" (uuid "fd5f47ad-ca18-4b15-814d-0bee08181ce1"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "J3")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "Switch:SW_Push")
+    (at 137.16 553.72 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "35258683-e4e4-493a-93a4-d0088dbeb4b0")
+    (property "Reference" "SW1" (at 137.16 548.64 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "RESET" (at 137.16 558.8 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:SW-SMD_TK-6580S-2" (at 137.16 553.72 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C528775" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Manufacturer" "JXTCONN" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "b40a72c2-0fa8-4054-a18a-b8508196af75"))
+      (pin "2" (uuid "09b1b324-81f1-462a-9b62-010e6bc98f66"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "SW1")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "Switch:SW_Push")
+    (at 205.74 553.72 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "6fc8d397-f629-48d3-b41d-7bd821dfbc16")
+    (property "Reference" "SW2" (at 205.74 548.64 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "FEL / BOOT" (at 205.74 558.8 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:SW-SMD_TK-6580S-2" (at 205.74 553.72 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C528775" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "Manufacturer" "JXTCONN" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "0a6a57ae-3ddf-4315-8de2-1f6c35cd21e0"))
+      (pin "2" (uuid "4c4ad833-9be4-4b6a-a021-fb9e75cb48c6"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "SW2")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
+    (at 142.24 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "bf18242c-0601-4f4b-ac0e-bcd7a945fe1c")
+    (property "Reference" "R7" (at 142.24 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10k" (at 142.24 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:R0603" (at 142.24 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C25804" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "MPN" "0603WAF1002T5E" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "c840f01e-7a1e-4808-90d4-281675b39832"))
+      (pin "2" (uuid "d6d300af-a17f-4c8f-94eb-41e33064f234"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "R7")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Resistors:0603WAF1002T5E")
+    (at 50.8 782.32 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "e18d4b90-8c85-4f7d-aad1-73755226442c")
+    (property "Reference" "R8" (at 50.8 777.24 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10k" (at 50.8 787.4 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:R0603" (at 50.8 782.32 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C25804" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "MPN" "0603WAF1002T5E" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "48033f7c-4145-4a8a-8dbc-2b928998eca2"))
+      (pin "2" (uuid "c6657808-14d1-4a73-b5d4-4a0a243fc3f0"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "R8")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 934.72 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "b50625c0-ec6f-4edb-81a1-5cef8ee1ea93")
+    (property "Reference" "TP1" (at 53.34 929.64 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "+5V_IN" (at 53.34 939.8 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 934.72 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "3d65eb17-20f6-46b1-b129-ebedb928c359"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP1")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 962.66 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "65441441-7a10-4d3f-8767-ffbff69cdd50")
+    (property "Reference" "TP2" (at 53.34 957.58 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "+3V3" (at 53.34 967.74 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 962.66 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "a2069ef3-6fb0-48a3-bc7c-dc198fb6dd1b"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP2")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 990.6 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "b4b700bf-ffe3-4057-8ccc-100bc6bc8637")
+    (property "Reference" "TP3" (at 53.34 985.52 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "+1V8" (at 53.34 995.68 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 990.6 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "18f0dd46-b962-4d45-b3d5-701f88cff01b"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP3")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 1018.54 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "77371da5-6add-46fa-9a5d-929e41b685eb")
+    (property "Reference" "TP4" (at 53.34 1013.46 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "+1V1_CORE" (at 53.34 1023.62 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 1018.54 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "06c84654-4d6f-4c12-9792-e52a07580be4"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP4")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 1046.48 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "e4afe916-f8a8-4dac-a624-49346de6fff4")
+    (property "Reference" "TP5" (at 53.34 1041.4 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "H618_UART0_TX" (at 53.34 1051.56 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 1046.48 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "f1265b82-e9fa-4d10-b6bb-1b0f3765de68"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP5")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 1074.42 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "9d8ece26-caaf-40ff-bb04-c2c66f7c8a49")
+    (property "Reference" "TP6" (at 53.34 1069.34 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "H618_UART0_RX" (at 53.34 1079.5 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 1074.42 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "7c5caee5-139d-47c7-a8eb-e6d3e8b377e5"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP6")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 1102.36 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "98343111-1b70-4b47-8062-b4dc054e449e")
+    (property "Reference" "TP7" (at 53.34 1097.28 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "H618_RESET_N" (at 53.34 1107.44 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 1102.36 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "dbea110d-44f0-49a0-b26e-248cdc8295af"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP7")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 1130.3 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "fc26f171-6f75-433a-b1ab-900342b91dd6")
+    (property "Reference" "TP8" (at 53.34 1125.22 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "H618_FEL_BOOT" (at 53.34 1135.38 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 1130.3 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "4e13101a-15bc-4171-86ad-071c5418aedb"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP8")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 1158.24 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "717ccf63-eec7-4688-a651-4b837d0ad915")
+    (property "Reference" "TP9" (at 53.34 1153.16 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "+1V2_DDR" (at 53.34 1163.32 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 1158.24 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "c01d722a-3dd5-4052-bafe-e4da62ab71fe"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP9")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP-Misc:TESTPOINT_1P")
+    (at 53.34 1186.18 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "d36de665-9b36-439a-9762-703690a84554")
+    (property "Reference" "TP10" (at 53.34 1181.1 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "+0V9_DDR" (at 53.34 1191.26 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:TP-SMD_1P" (at 53.34 1186.18 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "e38d7c30-62f3-42a1-ba6a-6fee7640a81e"))
+    (instances
+      (project "h618_agentboard_v1_initial"
+        (path "/46d738dc-892e-4135-8263-520e3eb36067"
+          (reference "TP10")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 186.69 46.99) (xy 182.88 46.99))
+    (stroke (width 0) (type default))
+    (uuid "d9358a39-7312-42d1-90b7-63d2c84d6390")
+  )
+  (global_label "GND" (shape input) (at 182.88 46.99 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "5454e3ea-f0a6-4c3b-a891-eb9ce63a48e4")
+  )
+  (wire (pts (xy 186.69 49.53) (xy 182.88 49.53))
+    (stroke (width 0) (type default))
+    (uuid "aa3ee666-21ba-4515-a304-d98d792d2589")
+  )
+  (global_label "H618_UART0_TX" (shape bidirectional) (at 182.88 49.53 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "53534e0e-99bb-4385-be41-3fdb69efbdba")
+  )
+  (wire (pts (xy 186.69 52.07) (xy 182.88 52.07))
+    (stroke (width 0) (type default))
+    (uuid "20261b82-3561-4811-a6c5-87e360d5e097")
+  )
+  (global_label "H618_UART0_RX" (shape bidirectional) (at 182.88 52.07 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "4922a204-a21e-4d3b-a0c6-ac3c2683f2bb")
+  )
+  (wire (pts (xy 186.69 54.61) (xy 182.88 54.61))
+    (stroke (width 0) (type default))
+    (uuid "647f69e0-b53d-46d2-94db-f3124ad63479")
+  )
+  (global_label "+3V3" (shape input) (at 182.88 54.61 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "a39fd542-5cd3-4a93-a25e-72e026ab0d67")
+  )
+  (wire (pts (xy 132.08 553.72) (xy 128.27 553.72))
+    (stroke (width 0) (type default))
+    (uuid "3897606e-fe0f-4857-b08a-d19c775bacb4")
+  )
+  (global_label "GND" (shape input) (at 128.27 553.72 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "32922c99-66c0-4dc0-8427-4247e0a3b496")
+  )
+  (wire (pts (xy 142.24 553.72) (xy 146.05 553.72))
+    (stroke (width 0) (type default))
+    (uuid "7954eeed-9d45-40b1-95f0-89c1972078ef")
+  )
+  (global_label "H618_RESET_N" (shape bidirectional) (at 146.05 553.72 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "50712634-b023-46c2-8923-8acb6fa2f527")
+  )
+  (wire (pts (xy 200.66 553.72) (xy 196.85 553.72))
+    (stroke (width 0) (type default))
+    (uuid "b710fab3-4aaf-4e9b-ab4b-acd092433a4f")
+  )
+  (global_label "GND" (shape input) (at 196.85 553.72 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "1143c388-d3bf-4815-93ff-f9970c0271a3")
+  )
+  (wire (pts (xy 210.82 553.72) (xy 214.63 553.72))
+    (stroke (width 0) (type default))
+    (uuid "5ef3b283-b8f9-469d-9b92-1a38e694e2b3")
+  )
+  (global_label "H618_FEL_BOOT" (shape bidirectional) (at 214.63 553.72 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "2ed54e7f-f670-43ea-8ade-3db5436bd444")
+  )
+  (wire (pts (xy 142.24 54.61) (xy 142.24 58.42))
+    (stroke (width 0) (type default))
+    (uuid "daa7940d-8b8e-4f50-9f90-a66e91548109")
+  )
+  (global_label "+3V3" (shape input) (at 142.24 58.42 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "fa365c61-44d7-43df-913e-208cf6a08759")
+  )
+  (wire (pts (xy 142.24 46.99) (xy 142.24 43.18))
+    (stroke (width 0) (type default))
+    (uuid "0b7f5ea4-90b3-4de3-b2d9-2d29ece07ec0")
+  )
+  (global_label "H618_RESET_N" (shape bidirectional) (at 142.24 43.18 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "acfffc1f-8ca7-4425-93c8-65f73f00b3aa")
+  )
+  (wire (pts (xy 50.8 786.13) (xy 50.8 789.94))
+    (stroke (width 0) (type default))
+    (uuid "21406f94-d40b-4916-8611-99600e2a87dd")
+  )
+  (global_label "+3V3" (shape input) (at 50.8 789.94 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "473fa715-3b87-43dd-89d8-c9114d8d6eed")
+  )
+  (wire (pts (xy 50.8 778.51) (xy 50.8 774.7))
+    (stroke (width 0) (type default))
+    (uuid "f771ba89-1d6e-4c84-aab7-9a3cca1a6d69")
+  )
+  (global_label "H618_FEL_BOOT" (shape bidirectional) (at 50.8 774.7 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "74cab7f0-790c-4cbb-b944-b3ae4b447d5a")
+  )
+  (wire (pts (xy 48.26 934.72) (xy 44.45 934.72))
+    (stroke (width 0) (type default))
+    (uuid "d481680b-065e-4e55-a9e9-df3c3d310e4e")
+  )
+  (global_label "+5V_IN" (shape input) (at 44.45 934.72 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "1afff018-a193-48de-946e-b724e7986319")
+  )
+  (wire (pts (xy 48.26 962.66) (xy 44.45 962.66))
+    (stroke (width 0) (type default))
+    (uuid "01313e17-bf8b-4c9b-afdd-7720a835fa02")
+  )
+  (global_label "+3V3" (shape input) (at 44.45 962.66 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "c2d19cd1-3460-4fe3-b1cf-7e18c77c7b14")
+  )
+  (wire (pts (xy 48.26 990.6) (xy 44.45 990.6))
+    (stroke (width 0) (type default))
+    (uuid "c646e2f4-3b88-455a-8c31-324a6abdad1f")
+  )
+  (global_label "+1V8" (shape input) (at 44.45 990.6 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "ddd40a2f-8600-465a-abff-477365fd5a81")
+  )
+  (wire (pts (xy 48.26 1018.54) (xy 44.45 1018.54))
+    (stroke (width 0) (type default))
+    (uuid "9a2d520b-b7bc-4703-9a9d-f96b394975c1")
+  )
+  (global_label "+1V1_CORE" (shape input) (at 44.45 1018.54 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "0984613e-f3bb-4bc8-b8b1-a849722001a0")
+  )
+  (wire (pts (xy 48.26 1046.48) (xy 44.45 1046.48))
+    (stroke (width 0) (type default))
+    (uuid "6a173c6c-d505-4e38-953c-7ae0b21a91b7")
+  )
+  (global_label "H618_UART0_TX" (shape bidirectional) (at 44.45 1046.48 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "0c4ef7f7-0cb3-452f-90b4-2ef5da84cce9")
+  )
+  (wire (pts (xy 48.26 1074.42) (xy 44.45 1074.42))
+    (stroke (width 0) (type default))
+    (uuid "04a4fedf-888a-4fb4-b37e-0303b4907521")
+  )
+  (global_label "H618_UART0_RX" (shape bidirectional) (at 44.45 1074.42 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "24f2a88b-0ba5-4328-a8e3-cc32362a682d")
+  )
+  (wire (pts (xy 48.26 1102.36) (xy 44.45 1102.36))
+    (stroke (width 0) (type default))
+    (uuid "fa5b5d41-a2c3-402b-b7aa-f5f1ef31fe97")
+  )
+  (global_label "H618_RESET_N" (shape bidirectional) (at 44.45 1102.36 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "1a9cd37a-d022-40cf-8cc7-329f83713864")
+  )
+  (wire (pts (xy 48.26 1130.3) (xy 44.45 1130.3))
+    (stroke (width 0) (type default))
+    (uuid "9a37ef2d-717a-4109-a4e5-460af07d11b1")
+  )
+  (global_label "H618_FEL_BOOT" (shape bidirectional) (at 44.45 1130.3 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "a9344da2-eff8-4584-afaf-3c14f72830c6")
+  )
+  (wire (pts (xy 48.26 1158.24) (xy 44.45 1158.24))
+    (stroke (width 0) (type default))
+    (uuid "a69f91b5-71de-4185-8ed2-6d8a55f477e0")
+  )
+  (global_label "+1V2_DDR" (shape input) (at 44.45 1158.24 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "f41164c9-9d86-4142-979e-b2cd5ee9ecdf")
+  )
+  (wire (pts (xy 48.26 1186.18) (xy 44.45 1186.18))
+    (stroke (width 0) (type default))
+    (uuid "82e8a60e-b795-4bee-9ce4-35e771c6efae")
+  )
+  (global_label "+0V9_DDR" (shape input) (at 44.45 1186.18 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "40788779-0a75-4ea3-9f99-fce83fd5361e")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/d6058d2c-1e39-450a-a98b-f7e0b567bb2e" (page "2"))
+    (path "/94b8340a-a88c-4351-9eb7-1caf1e9eb372" (page "3"))
+    (path "/86a79d61-8b0d-4adc-9d5d-e43a8a670b13" (page "4"))
+    (path "/50c7ea96-48ca-4f0d-89a0-adb76130baec" (page "5"))
+    (path "/46d738dc-892e-4135-8263-520e3eb36067" (page "6"))
+    (path "/fcb348bb-564f-4098-b5c7-3bfd0080ba4f" (page "7"))
+    (path "/6d2f9a3c-19cb-45b7-8c63-c77e10ed64a0" (page "8"))
+    (path "/c0c26f21-8c44-4dce-8530-33cef538296f" (page "9"))
+  )
+)

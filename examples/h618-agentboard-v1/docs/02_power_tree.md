@@ -60,6 +60,7 @@ Status: In Progress
 - CC1/CC2 已有独立 5.1k Sink Rd。
 - RESET_N 和 FEL/BOOT 已有默认上拉和手动拉低路径。
 - DDR 相关 rail 已补充 bring-up 测试点。
+- PMIC INT 状态线已明确。
 - H618 代表性电源域已挂入当前电源树，便于后续继续对齐真实 pinmap。
 
 ## 仍需确认

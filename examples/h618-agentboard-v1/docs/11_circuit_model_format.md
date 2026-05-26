@@ -103,14 +103,14 @@ Status: Draft
 - `title` 要短，尽量是一个明确的设计判断。
 - `rationale` 要写清楚为什么这样做。
 - `impact` 要说明这一决定对调试、布线、风险或扩展性的影响。
-- 如果仍未最终拍板，必须在 `rationale` 中明确写出 `Can continue` 或 `Must confirm`。
+- 如果仍未最终拍板，必须在 `rationale` 中明确写出 `Can continue` 或 `Need review`。
 
 ## `risks` 填写规则
 
 `risks` 使用字符串数组，适合记录：
 
 - 还未最终确认的参考设计依赖
-- 还未冻结的器件级连接
+- 还未落实的器件级连接
 - 可能影响 bring-up 成功率的关键不确定项
 - 仍需软件协同确认的 pinmux 或启动路径问题
 
@@ -119,7 +119,7 @@ Status: Draft
 - 语言要短，不要写成长段落。
 - 每条风险只描述一件事。
 - 如果风险可以继续推进，就用 `Can continue` 开头。
-- 如果风险必须等待确认，就用 `Must confirm` 开头。
+- 如果风险必须等待确认，就用 `Need review` 开头。
 
 ## 模型组织原则
 

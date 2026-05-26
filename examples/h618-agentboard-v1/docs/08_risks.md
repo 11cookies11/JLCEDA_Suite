@@ -36,3 +36,9 @@ Status: Draft
 - 可以继续推进的风险，优先在文档和布局中消解
 - 必须等参考设计确认的风险，不在没有依据时自由发挥
 - 所有风险都要能回溯到 `circuit-model.json` 或需求文档
+
+## 阶段 4 额外提示
+
+- `RGMII / USB Hub / HDMI / USB-C` 仍应按参考捕获顺序推进。
+- 在 [高速接口参考设计采集清单](15_high_speed_reference_capture_checklist.md) 完成前，这些接口的器件细节不要被当成已定版。
+- 任何新的接口风险都应该直接回写到 `circuit-model.json`，避免只停留在文档里。

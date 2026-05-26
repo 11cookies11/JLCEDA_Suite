@@ -3,51 +3,26 @@
   "request_id": "h618-agentboard-v1-initial",
   "project_file": ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\h618_agentboard_v1_initial.kicad_pro",
   "schematic_file": ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\h618_agentboard_v1_initial.kicad_sch",
-  "symbol_count": 48,
-  "net_count": 78,
+  "symbol_count": 55,
+  "net_count": 80,
   "diagnostics": {
     "warnings": [
-      "Auto schematic layout resolved 5 symbol overlap(s)."
+      "Auto schematic layout resolved 7 symbol overlap(s)."
     ],
     "unsupported": []
   },
   "hierarchical_sheets": {
-    "sheet_count": 34,
+    "sheet_count": 9,
     "root_schematic_file": ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\h618_agentboard_v1_initial.kicad_sch",
     "sheet_files": [
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\01_input.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\02_reset.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\03_io.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\04_indicator.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\05_coprocessor_reserve.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\06_ethernet_magjack.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\07_h618_1v8.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\08_h618_24mhz_xtal.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\09_h618_32k_xtal.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\10_h618_3v3.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\11_h618_core.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\12_h618_fel_boot_pullup.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\13_h618_fel_key.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\14_h618_gpio.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\15_h618_pmic_i2c_pullup_scl.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\16_h618_pmic_i2c_pullup_sda.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\17_h618_pmic_input.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\18_h618_pmic_pwron_pullup.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\19_h618_reset_key.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\20_h618_soc_bga.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\21_lpddr4_2gb_memory.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\22_micro_hdmi_output.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\23_micro_sd_boot_socket.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\24_pmic_axp313a.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\25_rgmii_gigabit_phy.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\26_spi_nor_16mb_flash.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\27_test_point.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\28_usb2_hub.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\29_usb_c_cc1_sink_rd.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\30_usb_c_cc2_sink_rd.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\31_usb_host_port_1.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\32_usb_host_port_2.kicad_sch",
-      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\33_usb_type_c_power_input.kicad_sch"
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\01_power_entry_pmic.kicad_sch",
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\02_soc_boot_clock.kicad_sch",
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\03_memory_ddr.kicad_sch",
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\04_boot_storage.kicad_sch",
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\05_debug_control.kicad_sch",
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\06_network.kicad_sch",
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\07_usb.kicad_sch",
+      ".where\\h618-agentboard-v1\\h618_agentboard_v1_initial\\08_display_expansion.kicad_sch"
     ]
   }
 }

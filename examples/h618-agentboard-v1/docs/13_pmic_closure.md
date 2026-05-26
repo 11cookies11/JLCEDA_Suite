@@ -49,12 +49,14 @@ Status: In Progress
 - `H618_FEL_BOOT` 已补 R8 默认上拉，并保留 SW2 手动拉低进入恢复。
 - `H618_PMIC_PWRON` 已通过 R3 上拉到 `+3V3`。
 - `H618_PMIC_I2C_SCL/SDA` 已通过 R1/R2 上拉到 `+3V3`。
+- `H618_PMIC_INT` 已接到 U1/U2 之间的状态/中断通路，便于启动后报告异常事件。
 
 ## 完成标准
 
 - 每条主电源 rail 都有明确来源、负载和测试点。
 - RESET/FEL 默认状态明确，且可手动介入。
 - PMIC 控制总线和 PWRON 默认状态明确。
+- PMIC 状态中断路径明确。
 - pipeline 生成后 ERC 保持 0。
 
 ## 后续待办

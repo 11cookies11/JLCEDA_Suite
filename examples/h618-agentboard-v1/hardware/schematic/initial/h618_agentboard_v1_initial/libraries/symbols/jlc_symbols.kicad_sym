@@ -1,407 +1,367 @@
 (kicad_symbol_lib
   (version 20231120)
   (generator "kicad_suite")
-(symbol "DS1021-1X4SF11-B"
+(symbol "AXP313A_C5365290"
     (in_bom yes)
     (on_board yes)
     (property
       "Reference"
-      "H"
-      (id 0)
-      (at 0 8.89 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Value"
-      "DS1021-1X4SF11-B"
-      (id 1)
-      (at 0 -8.89 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Footprint"
-      "jlc_symbols:HDR-TH_4P-P2.54-V-M-1"
-      (id 2)
-      (at 0 -11.43 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Datasheet"
-      "https://www.lcsc.com/datasheet/C7430360.pdf"
-      (id 3)
-      (at 0 -13.97 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Manufacturer"
-      "CONNFLY"
-      (id 4)
-      (at 0 -16.51 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "MPN"
-      "DS1021-1x4SF11-B"
-      (id 5)
-      (at 0 -19.05 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "LCSC Part"
-      "C7430360"
-      (id 6)
-      (at 0 -21.59 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "DS1021-1X4SF11-B_0_1"
-      (rectangle
-        (start -1.27 6.35)
-        (end 3.81 -6.35)
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-      (circle
-        (center 0.00 5.08)
-        (radius 0.38)
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (pin passive line
-        (at -3.81 3.81 0)
-        (length 2.54)
-        (name "1" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -3.81 1.27 0)
-        (length 2.54)
-        (name "2" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -3.81 -1.27 0)
-        (length 2.54)
-        (name "3" (effects (font (size 1.27 1.27))))
-        (number "3" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -3.81 -3.81 0)
-        (length 2.54)
-        (name "4" (effects (font (size 1.27 1.27))))
-        (number "4" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
-
-(symbol "Header-Male-2.54_1x6"
-    (in_bom yes)
-    (on_board yes)
-    (property
-      "Reference"
-      "H"
-      (id 0)
-      (at 0 11.43 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Value"
-      "Header-Male-2.54_1x6"
-      (id 1)
-      (at 0 -11.43 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Footprint"
-      "jlc_symbols:HDR-TH_6P-P2.54-V-M-1"
-      (id 2)
-      (at 0 -13.97 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Datasheet"
-      "https://lcsc.com/product-detail/Male-Header_2-54mm-1x6-Header_C37208.html"
-      (id 3)
-      (at 0 -16.51 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Manufacturer"
-      "BOOMELE(博穆精密)"
-      (id 4)
-      (at 0 -19.05 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "MPN"
-      "2.54-1x6P直针"
-      (id 5)
-      (at 0 -21.59 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "LCSC Part"
-      "C37208"
-      (id 6)
-      (at 0 -24.13 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "ki_keywords"
-      "Pin Headers"
-      (id 8)
-      (at 0 -26.67 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "ki_description"
-      "2.54mm 1x6"
-      (id 9)
-      (at 0 -29.21 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "Header-Male-2.54_1x6_0_1"
-      (rectangle
-        (start -0.51 8.89)
-        (end 4.57 -8.89)
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-      (pin passive line
-        (at -2.54 6.35 0)
-        (length 2.54)
-        (name "1" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -2.54 3.81 0)
-        (length 2.54)
-        (name "2" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -2.54 1.27 0)
-        (length 2.54)
-        (name "3" (effects (font (size 1.27 1.27))))
-        (number "3" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -2.54 -1.27 0)
-        (length 2.54)
-        (name "4" (effects (font (size 1.27 1.27))))
-        (number "4" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -2.54 -3.81 0)
-        (length 2.54)
-        (name "5" (effects (font (size 1.27 1.27))))
-        (number "5" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -2.54 -6.35 0)
-        (length 2.54)
-        (name "6" (effects (font (size 1.27 1.27))))
-        (number "6" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
-
-(symbol "HC-RJ45-511Q-1-2"
-    (in_bom yes)
-    (on_board yes)
-    (property
-      "Reference"
-      "RJ"
+      "U"
       (id 0)
       (at 0 17.78 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Value"
-      "HC-RJ45-511Q-1-2"
+      "AXP313A_C5365290"
       (id 1)
       (at 0 -17.78 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Footprint"
-      "jlc_symbols:RJ45-SMD_HC-RJ45-511Q-1-2"
+      "jlc_symbols:QFN-20_L3.0-W3.0-P0.40-BL-EP1.7"
       (id 2)
       (at 0 -20.32 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Datasheet"
-      "https://www.lcsc.com/datasheet/C42376615.pdf"
+      "https://www.lcsc.com/datasheet/C5365290.pdf"
       (id 3)
       (at 0 -22.86 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Manufacturer"
-      "HCTL(华灿天禄)"
+      "x-powers"
       (id 4)
       (at 0 -25.40 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "MPN"
-      "HC-RJ45-511Q-1-2"
+      "AXP313A"
       (id 5)
       (at 0 -27.94 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "LCSC Part"
-      "C42376615"
+      "C5365290"
       (id 6)
       (at 0 -30.48 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
-    (symbol "HC-RJ45-511Q-1-2_0_1"
+    (symbol "AXP313A_C5365290_0_1"
       (rectangle
-        (start -11.43 10.16)
-        (end 11.43 -7.62)
+        (start -11.43 15.24)
+        (end 11.43 -15.24)
         (stroke (width 0) (type default))
         (fill (type background))
       )
-      (polyline
-        (pts
-          (xy -3.81 6.35) (xy -3.81 5.08) (xy -3.81 5.08)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy -2.54 6.35) (xy -2.54 5.08) (xy -2.54 5.08)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy 6.35 6.35) (xy -6.35 6.35) (xy -6.35 -3.81) (xy -3.81 -3.81) (xy -3.81 -5.08) (xy -2.54 -5.08) (xy -2.54 -5.08) (xy -2.54 -6.35) (xy 2.54 -6.35) (xy 2.54 -5.08) (xy 3.81 -5.08) (xy 3.81 -3.81) (xy 6.35 -3.81) (xy 6.35 6.35) (xy 6.35 5.08)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy -1.27 6.35) (xy -1.27 5.08) (xy -1.27 5.08)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy 1.27 6.35) (xy 1.27 5.08) (xy 1.27 5.08)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy 2.54 6.35) (xy 2.54 5.08) (xy 2.54 5.08)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy 3.81 6.35) (xy 3.81 5.08) (xy 3.81 5.08)
-        )
+      (circle
+        (center -10.16 13.97)
+        (radius 0.38)
         (stroke (width 0) (type default))
         (fill (type none))
       )
       (pin passive line
-        (at -16.51 2.54 0)
-        (length 5.08)
-        (name "R+" (effects (font (size 1.27 1.27))))
-        (number "12" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 16.51 2.54 180)
-        (length 5.08)
-        (name "L+" (effects (font (size 1.27 1.27))))
-        (number "14" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -1.27 -12.70 90)
-        (length 5.08)
-        (name "6" (effects (font (size 1.27 1.27))))
-        (number "6" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 1.27 -12.70 90)
-        (length 5.08)
-        (name "5" (effects (font (size 1.27 1.27))))
-        (number "5" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 3.81 -12.70 90)
-        (length 5.08)
-        (name "4" (effects (font (size 1.27 1.27))))
-        (number "4" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 6.35 -12.70 90)
-        (length 5.08)
-        (name "3" (effects (font (size 1.27 1.27))))
-        (number "3" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 8.89 -12.70 90)
-        (length 5.08)
-        (name "2" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 11.43 -12.70 90)
-        (length 5.08)
-        (name "1" (effects (font (size 1.27 1.27))))
+        (at -13.97 10.16 0)
+        (length 2.54)
+        (name "DCDC2" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -3.81 -12.70 90)
-        (length 5.08)
-        (name "7" (effects (font (size 1.27 1.27))))
+        (at -13.97 7.62 0)
+        (length 2.54)
+        (name "VIN3" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -13.97 5.08 0)
+        (length 2.54)
+        (name "LX3" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -13.97 2.54 0)
+        (length 2.54)
+        (name "DCDC3" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -13.97 -0.00 0)
+        (length 2.54)
+        (name "SDA" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -13.97 -2.54 0)
+        (length 2.54)
+        (name "SCL" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -13.97 -5.08 0)
+        (length 2.54)
+        (name "RTCLDO" (effects (font (size 1.27 1.27))))
         (number "7" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -6.35 -12.70 90)
-        (length 5.08)
-        (name "8" (effects (font (size 1.27 1.27))))
+        (at -13.97 -7.62 0)
+        (length 2.54)
+        (name "VREF" (effects (font (size 1.27 1.27))))
         (number "8" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -16.51 -0.00 0)
-        (length 5.08)
-        (name "R-" (effects (font (size 1.27 1.27))))
-        (number "11" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 16.51 -0.00 180)
-        (length 5.08)
-        (name "L-" (effects (font (size 1.27 1.27))))
-        (number "13" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -8.89 -12.70 90)
-        (length 5.08)
-        (name "9" (effects (font (size 1.27 1.27))))
+        (at -13.97 -10.16 0)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
         (number "9" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -11.43 -12.70 90)
-        (length 5.08)
-        (name "10" (effects (font (size 1.27 1.27))))
+        (at -13.97 -12.70 0)
+        (length 2.54)
+        (name "NC" (effects (font (size 1.27 1.27))))
         (number "10" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at 1.27 12.70 270)
+        (at 13.97 -12.70 180)
         (length 2.54)
-        (name "EH" (effects (font (size 1.27 1.27))))
+        (name "IRQ" (effects (font (size 1.27 1.27))))
+        (number "11" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 -10.16 180)
+        (length 2.54)
+        (name "DLDO1" (effects (font (size 1.27 1.27))))
+        (number "12" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 -7.62 180)
+        (length 2.54)
+        (name "PWROK" (effects (font (size 1.27 1.27))))
+        (number "13" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 -5.08 180)
+        (length 2.54)
+        (name "PWRON" (effects (font (size 1.27 1.27))))
+        (number "14" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 -2.54 180)
+        (length 2.54)
+        (name "ALDO1" (effects (font (size 1.27 1.27))))
         (number "15" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 -0.00 180)
+        (length 2.54)
+        (name "DCDC1" (effects (font (size 1.27 1.27))))
+        (number "16" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 2.54 180)
+        (length 2.54)
+        (name "VIN1" (effects (font (size 1.27 1.27))))
+        (number "17" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 5.08 180)
+        (length 2.54)
+        (name "LX1" (effects (font (size 1.27 1.27))))
+        (number "18" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 7.62 180)
+        (length 2.54)
+        (name "LX2" (effects (font (size 1.27 1.27))))
+        (number "19" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 10.16 180)
+        (length 2.54)
+        (name "VIN2" (effects (font (size 1.27 1.27))))
+        (number "20" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 13.97 12.70 180)
+        (length 2.54)
+        (name "PGND" (effects (font (size 1.27 1.27))))
+        (number "21" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+
+(symbol "TYPE-C16PIN"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "USB"
+      (id 0)
+      (at 0 24.13 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "TYPE-C16PIN"
+      (id 1)
+      (at 0 -24.13 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "jlc_symbols:USB-C-SMD_TYPE-C16PIN"
+      (id 2)
+      (at 0 -26.67 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Datasheet"
+      "https://lcsc.com/product-detail/USB-Connectors_SHOU-HAN-TYPE-C16PIN_C393939.html"
+      (id 3)
+      (at 0 -29.21 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "SHOU HAN(首韩)"
+      (id 4)
+      (at 0 -31.75 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "TYPE-C16PIN"
+      (id 5)
+      (at 0 -34.29 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "LCSC Part"
+      "C393939"
+      (id 6)
+      (at 0 -36.83 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "ki_keywords"
+      "USB Connectors"
+      (id 8)
+      (at 0 -39.37 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "TYPE-C16PIN_0_1"
+      (rectangle
+        (start -2.54 21.59)
+        (end 10.16 -21.59)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (circle
+        (center -1.27 20.32)
+        (radius 0.38)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (pin passive line
+        (at -5.08 19.05 0)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "A1B12" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 16.51 0)
+        (length 2.54)
+        (name "VBUS" (effects (font (size 1.27 1.27))))
+        (number "A4B9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 13.97 0)
+        (length 2.54)
+        (name "CC1" (effects (font (size 1.27 1.27))))
+        (number "A5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 11.43 0)
+        (length 2.54)
+        (name "DP1" (effects (font (size 1.27 1.27))))
+        (number "A6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 8.89 0)
+        (length 2.54)
+        (name "DN1" (effects (font (size 1.27 1.27))))
+        (number "A7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 6.35 0)
+        (length 2.54)
+        (name "SBU1" (effects (font (size 1.27 1.27))))
+        (number "A8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 3.81 0)
+        (length 2.54)
+        (name "CC2" (effects (font (size 1.27 1.27))))
+        (number "B5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 1.27 0)
+        (length 2.54)
+        (name "DP2" (effects (font (size 1.27 1.27))))
+        (number "B6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -1.27 0)
+        (length 2.54)
+        (name "DN2" (effects (font (size 1.27 1.27))))
+        (number "B7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -3.81 0)
+        (length 2.54)
+        (name "SBU2" (effects (font (size 1.27 1.27))))
+        (number "B8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -6.35 0)
+        (length 2.54)
+        (name "VBUS" (effects (font (size 1.27 1.27))))
+        (number "B4A9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -8.89 0)
+        (length 2.54)
+        (name "GND" (effects (font (size 1.27 1.27))))
+        (number "B1A12" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -11.43 0)
+        (length 2.54)
+        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -13.97 0)
+        (length 2.54)
+        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -16.51 0)
+        (length 2.54)
+        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -5.08 -19.05 0)
+        (length 2.54)
+        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
       )
     )
   )
@@ -558,237 +518,6 @@
         (length 2.54)
         (name "GND" (effects (font (size 1.27 1.27))))
         (number "4" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
-
-(symbol "DS1021-2X13SF11-B"
-    (in_bom yes)
-    (on_board yes)
-    (property
-      "Reference"
-      "U"
-      (id 0)
-      (at 0 20.32 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Value"
-      "DS1021-2X13SF11-B"
-      (id 1)
-      (at 0 -20.32 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Footprint"
-      "jlc_symbols:HDR-TH_26P-P2.54-V-M-R2-C13-S2.54"
-      (id 2)
-      (at 0 -22.86 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Datasheet"
-      "https://www.lcsc.com/datasheet/C7430409.pdf"
-      (id 3)
-      (at 0 -25.40 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Manufacturer"
-      "CONNFLY"
-      (id 4)
-      (at 0 -27.94 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "MPN"
-      "DS1021-2x13SF11-B"
-      (id 5)
-      (at 0 -30.48 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "LCSC Part"
-      "C7430409"
-      (id 6)
-      (at 0 -33.02 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "ki_keywords"
-      "Pin Headers"
-      (id 8)
-      (at 0 -35.56 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "DS1021-2X13SF11-B_0_1"
-      (rectangle
-        (start -5.08 17.78)
-        (end 5.08 -17.78)
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-      (circle
-        (center -3.81 16.51)
-        (radius 0.38)
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (pin passive line
-        (at -7.62 15.24 0)
-        (length 2.54)
-        (name "1" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -15.24 180)
-        (length 2.54)
-        (name "26" (effects (font (size 1.27 1.27))))
-        (number "26" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 12.70 0)
-        (length 2.54)
-        (name "3" (effects (font (size 1.27 1.27))))
-        (number "3" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -12.70 180)
-        (length 2.54)
-        (name "24" (effects (font (size 1.27 1.27))))
-        (number "24" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 10.16 0)
-        (length 2.54)
-        (name "5" (effects (font (size 1.27 1.27))))
-        (number "5" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -10.16 180)
-        (length 2.54)
-        (name "22" (effects (font (size 1.27 1.27))))
-        (number "22" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 7.62 0)
-        (length 2.54)
-        (name "7" (effects (font (size 1.27 1.27))))
-        (number "7" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -7.62 180)
-        (length 2.54)
-        (name "20" (effects (font (size 1.27 1.27))))
-        (number "20" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 5.08 0)
-        (length 2.54)
-        (name "9" (effects (font (size 1.27 1.27))))
-        (number "9" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -5.08 180)
-        (length 2.54)
-        (name "18" (effects (font (size 1.27 1.27))))
-        (number "18" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 2.54 0)
-        (length 2.54)
-        (name "11" (effects (font (size 1.27 1.27))))
-        (number "11" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -2.54 180)
-        (length 2.54)
-        (name "16" (effects (font (size 1.27 1.27))))
-        (number "16" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -0.00 0)
-        (length 2.54)
-        (name "13" (effects (font (size 1.27 1.27))))
-        (number "13" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -0.00 180)
-        (length 2.54)
-        (name "14" (effects (font (size 1.27 1.27))))
-        (number "14" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -2.54 0)
-        (length 2.54)
-        (name "15" (effects (font (size 1.27 1.27))))
-        (number "15" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 2.54 180)
-        (length 2.54)
-        (name "12" (effects (font (size 1.27 1.27))))
-        (number "12" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -5.08 0)
-        (length 2.54)
-        (name "17" (effects (font (size 1.27 1.27))))
-        (number "17" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 5.08 180)
-        (length 2.54)
-        (name "10" (effects (font (size 1.27 1.27))))
-        (number "10" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -7.62 0)
-        (length 2.54)
-        (name "19" (effects (font (size 1.27 1.27))))
-        (number "19" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 7.62 180)
-        (length 2.54)
-        (name "8" (effects (font (size 1.27 1.27))))
-        (number "8" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -10.16 0)
-        (length 2.54)
-        (name "21" (effects (font (size 1.27 1.27))))
-        (number "21" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 10.16 180)
-        (length 2.54)
-        (name "6" (effects (font (size 1.27 1.27))))
-        (number "6" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -12.70 0)
-        (length 2.54)
-        (name "23" (effects (font (size 1.27 1.27))))
-        (number "23" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 12.70 180)
-        (length 2.54)
-        (name "4" (effects (font (size 1.27 1.27))))
-        (number "4" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -15.24 0)
-        (length 2.54)
-        (name "25" (effects (font (size 1.27 1.27))))
-        (number "25" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 15.24 180)
-        (length 2.54)
-        (name "2" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
       )
     )
   )
@@ -2423,215 +2152,125 @@
     )
   )
 
-(symbol "467650301"
+(symbol "GD25Q16ETIGR"
     (in_bom yes)
     (on_board yes)
     (property
       "Reference"
       "U"
       (id 0)
-      (at 0 19.05 0)
+      (at 0 8.89 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Value"
-      "467650301"
+      "GD25Q16ETIGR"
       (id 1)
-      (at 0 -19.05 0)
+      (at 0 -8.89 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Footprint"
-      "jlc_symbols:TEPE-C-SMD_19P-P0.40"
+      "jlc_symbols:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL"
       (id 2)
-      (at 0 -21.59 0)
+      (at 0 -11.43 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Datasheet"
-      "https://www.lcsc.com/datasheet/C563877.pdf"
+      "https://www.lcsc.com/datasheet/C2904431.pdf"
       (id 3)
-      (at 0 -24.13 0)
+      (at 0 -13.97 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Manufacturer"
-      "MOLEX"
+      "GigaDevice(兆易创新)"
       (id 4)
-      (at 0 -26.67 0)
+      (at 0 -16.51 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "MPN"
-      "467650301"
+      "GD25Q16ETIGR"
       (id 5)
-      (at 0 -29.21 0)
+      (at 0 -19.05 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "LCSC Part"
-      "C563877"
+      "C2904431"
       (id 6)
-      (at 0 -31.75 0)
+      (at 0 -21.59 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "ki_keywords"
-      "Pre-ordered Connectors"
+      "NOR FLASH"
       (id 8)
-      (at 0 -34.29 0)
+      (at 0 -24.13 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
-    (symbol "467650301_0_1"
+    (symbol "GD25Q16ETIGR_0_1"
       (rectangle
-        (start -5.08 16.51)
-        (end 5.08 -16.51)
+        (start -17.78 6.35)
+        (end 17.78 -6.35)
         (stroke (width 0) (type default))
         (fill (type background))
       )
       (circle
-        (center -3.81 15.24)
+        (center -16.51 5.08)
         (radius 0.38)
         (stroke (width 0) (type default))
         (fill (type none))
       )
       (pin passive line
-        (at -7.62 13.97 0)
+        (at -20.32 3.81 0)
         (length 2.54)
-        (name "1" (effects (font (size 1.27 1.27))))
+        (name "~{CS}" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -7.62 11.43 0)
+        (at -20.32 1.27 0)
         (length 2.54)
-        (name "2" (effects (font (size 1.27 1.27))))
+        (name "SO(IO1)" (effects (font (size 1.27 1.27))))
         (number "2" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -7.62 8.89 0)
+        (at -20.32 -1.27 0)
         (length 2.54)
-        (name "3" (effects (font (size 1.27 1.27))))
+        (name "WP#(IO2)" (effects (font (size 1.27 1.27))))
         (number "3" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -7.62 6.35 0)
+        (at -20.32 -3.81 0)
         (length 2.54)
-        (name "4" (effects (font (size 1.27 1.27))))
+        (name "VSS" (effects (font (size 1.27 1.27))))
         (number "4" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -7.62 3.81 0)
+        (at 20.32 -3.81 180)
         (length 2.54)
-        (name "5" (effects (font (size 1.27 1.27))))
+        (name "SI(IO0)" (effects (font (size 1.27 1.27))))
         (number "5" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -7.62 1.27 0)
+        (at 20.32 -1.27 180)
         (length 2.54)
-        (name "6" (effects (font (size 1.27 1.27))))
+        (name "SCLK" (effects (font (size 1.27 1.27))))
         (number "6" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -7.62 -1.27 0)
+        (at 20.32 1.27 180)
         (length 2.54)
-        (name "7" (effects (font (size 1.27 1.27))))
+        (name "HOLD#(IO3)" (effects (font (size 1.27 1.27))))
         (number "7" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -7.62 -3.81 0)
+        (at 20.32 3.81 180)
         (length 2.54)
-        (name "8" (effects (font (size 1.27 1.27))))
+        (name "VCC" (effects (font (size 1.27 1.27))))
         (number "8" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -6.35 0)
-        (length 2.54)
-        (name "9" (effects (font (size 1.27 1.27))))
-        (number "9" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -8.89 0)
-        (length 2.54)
-        (name "10" (effects (font (size 1.27 1.27))))
-        (number "10" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -11.43 0)
-        (length 2.54)
-        (name "11" (effects (font (size 1.27 1.27))))
-        (number "11" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -7.62 -13.97 0)
-        (length 2.54)
-        (name "12" (effects (font (size 1.27 1.27))))
-        (number "12" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -12.70 180)
-        (length 2.54)
-        (name "13" (effects (font (size 1.27 1.27))))
-        (number "13" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -10.16 180)
-        (length 2.54)
-        (name "14" (effects (font (size 1.27 1.27))))
-        (number "14" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -7.62 180)
-        (length 2.54)
-        (name "15" (effects (font (size 1.27 1.27))))
-        (number "15" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -5.08 180)
-        (length 2.54)
-        (name "16" (effects (font (size 1.27 1.27))))
-        (number "16" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -2.54 180)
-        (length 2.54)
-        (name "17" (effects (font (size 1.27 1.27))))
-        (number "17" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 -0.00 180)
-        (length 2.54)
-        (name "18" (effects (font (size 1.27 1.27))))
-        (number "18" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 2.54 180)
-        (length 2.54)
-        (name "19" (effects (font (size 1.27 1.27))))
-        (number "19" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 5.08 180)
-        (length 2.54)
-        (name "20" (effects (font (size 1.27 1.27))))
-        (number "20" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 7.62 180)
-        (length 2.54)
-        (name "21" (effects (font (size 1.27 1.27))))
-        (number "21" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 10.16 180)
-        (length 2.54)
-        (name "22" (effects (font (size 1.27 1.27))))
-        (number "22" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 7.62 12.70 180)
-        (length 2.54)
-        (name "23" (effects (font (size 1.27 1.27))))
-        (number "23" (effects (font (size 1.27 1.27))))
       )
     )
   )
@@ -2789,196 +2428,295 @@
     )
   )
 
-(symbol "AXP313A_C5365290"
+(symbol "DS1021-1X4SF11-B"
     (in_bom yes)
     (on_board yes)
     (property
       "Reference"
-      "U"
+      "H"
+      (id 0)
+      (at 0 8.89 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "DS1021-1X4SF11-B"
+      (id 1)
+      (at 0 -8.89 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "jlc_symbols:HDR-TH_4P-P2.54-V-M-1"
+      (id 2)
+      (at 0 -11.43 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Datasheet"
+      "https://www.lcsc.com/datasheet/C7430360.pdf"
+      (id 3)
+      (at 0 -13.97 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "CONNFLY"
+      (id 4)
+      (at 0 -16.51 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "DS1021-1x4SF11-B"
+      (id 5)
+      (at 0 -19.05 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "LCSC Part"
+      "C7430360"
+      (id 6)
+      (at 0 -21.59 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "DS1021-1X4SF11-B_0_1"
+      (rectangle
+        (start -1.27 6.35)
+        (end 3.81 -6.35)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (circle
+        (center 0.00 5.08)
+        (radius 0.38)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (pin passive line
+        (at -3.81 3.81 0)
+        (length 2.54)
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -3.81 1.27 0)
+        (length 2.54)
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -3.81 -1.27 0)
+        (length 2.54)
+        (name "3" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -3.81 -3.81 0)
+        (length 2.54)
+        (name "4" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+
+(symbol "HC-RJ45-511Q-1-2"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "RJ"
       (id 0)
       (at 0 17.78 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Value"
-      "AXP313A_C5365290"
+      "HC-RJ45-511Q-1-2"
       (id 1)
       (at 0 -17.78 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Footprint"
-      "jlc_symbols:QFN-20_L3.0-W3.0-P0.40-BL-EP1.7"
+      "jlc_symbols:RJ45-SMD_HC-RJ45-511Q-1-2"
       (id 2)
       (at 0 -20.32 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Datasheet"
-      "https://www.lcsc.com/datasheet/C5365290.pdf"
+      "https://www.lcsc.com/datasheet/C42376615.pdf"
       (id 3)
       (at 0 -22.86 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Manufacturer"
-      "x-powers"
+      "HCTL(华灿天禄)"
       (id 4)
       (at 0 -25.40 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "MPN"
-      "AXP313A"
+      "HC-RJ45-511Q-1-2"
       (id 5)
       (at 0 -27.94 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "LCSC Part"
-      "C5365290"
+      "C42376615"
       (id 6)
       (at 0 -30.48 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
-    (symbol "AXP313A_C5365290_0_1"
+    (symbol "HC-RJ45-511Q-1-2_0_1"
       (rectangle
-        (start -11.43 15.24)
-        (end 11.43 -15.24)
+        (start -11.43 10.16)
+        (end 11.43 -7.62)
         (stroke (width 0) (type default))
         (fill (type background))
       )
-      (circle
-        (center -10.16 13.97)
-        (radius 0.38)
+      (polyline
+        (pts
+          (xy -3.81 6.35) (xy -3.81 5.08) (xy -3.81 5.08)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -2.54 6.35) (xy -2.54 5.08) (xy -2.54 5.08)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 6.35 6.35) (xy -6.35 6.35) (xy -6.35 -3.81) (xy -3.81 -3.81) (xy -3.81 -5.08) (xy -2.54 -5.08) (xy -2.54 -5.08) (xy -2.54 -6.35) (xy 2.54 -6.35) (xy 2.54 -5.08) (xy 3.81 -5.08) (xy 3.81 -3.81) (xy 6.35 -3.81) (xy 6.35 6.35) (xy 6.35 5.08)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -1.27 6.35) (xy -1.27 5.08) (xy -1.27 5.08)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.27 6.35) (xy 1.27 5.08) (xy 1.27 5.08)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 2.54 6.35) (xy 2.54 5.08) (xy 2.54 5.08)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 3.81 6.35) (xy 3.81 5.08) (xy 3.81 5.08)
+        )
         (stroke (width 0) (type default))
         (fill (type none))
       )
       (pin passive line
-        (at -13.97 10.16 0)
-        (length 2.54)
-        (name "DCDC2" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 7.62 0)
-        (length 2.54)
-        (name "VIN3" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 5.08 0)
-        (length 2.54)
-        (name "LX3" (effects (font (size 1.27 1.27))))
-        (number "3" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 2.54 0)
-        (length 2.54)
-        (name "DCDC3" (effects (font (size 1.27 1.27))))
-        (number "4" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 -0.00 0)
-        (length 2.54)
-        (name "SDA" (effects (font (size 1.27 1.27))))
-        (number "5" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 -2.54 0)
-        (length 2.54)
-        (name "SCL" (effects (font (size 1.27 1.27))))
-        (number "6" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 -5.08 0)
-        (length 2.54)
-        (name "RTCLDO" (effects (font (size 1.27 1.27))))
-        (number "7" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 -7.62 0)
-        (length 2.54)
-        (name "VREF" (effects (font (size 1.27 1.27))))
-        (number "8" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 -10.16 0)
-        (length 2.54)
-        (name "GND" (effects (font (size 1.27 1.27))))
-        (number "9" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -13.97 -12.70 0)
-        (length 2.54)
-        (name "NC" (effects (font (size 1.27 1.27))))
-        (number "10" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 -12.70 180)
-        (length 2.54)
-        (name "IRQ" (effects (font (size 1.27 1.27))))
-        (number "11" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 -10.16 180)
-        (length 2.54)
-        (name "DLDO1" (effects (font (size 1.27 1.27))))
+        (at -16.51 2.54 0)
+        (length 5.08)
+        (name "R+" (effects (font (size 1.27 1.27))))
         (number "12" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at 13.97 -7.62 180)
-        (length 2.54)
-        (name "PWROK" (effects (font (size 1.27 1.27))))
-        (number "13" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 -5.08 180)
-        (length 2.54)
-        (name "PWRON" (effects (font (size 1.27 1.27))))
+        (at 16.51 2.54 180)
+        (length 5.08)
+        (name "L+" (effects (font (size 1.27 1.27))))
         (number "14" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at 13.97 -2.54 180)
+        (at -1.27 -12.70 90)
+        (length 5.08)
+        (name "6" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 1.27 -12.70 90)
+        (length 5.08)
+        (name "5" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 3.81 -12.70 90)
+        (length 5.08)
+        (name "4" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 6.35 -12.70 90)
+        (length 5.08)
+        (name "3" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 8.89 -12.70 90)
+        (length 5.08)
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 11.43 -12.70 90)
+        (length 5.08)
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -3.81 -12.70 90)
+        (length 5.08)
+        (name "7" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -6.35 -12.70 90)
+        (length 5.08)
+        (name "8" (effects (font (size 1.27 1.27))))
+        (number "8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -16.51 -0.00 0)
+        (length 5.08)
+        (name "R-" (effects (font (size 1.27 1.27))))
+        (number "11" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 16.51 -0.00 180)
+        (length 5.08)
+        (name "L-" (effects (font (size 1.27 1.27))))
+        (number "13" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -8.89 -12.70 90)
+        (length 5.08)
+        (name "9" (effects (font (size 1.27 1.27))))
+        (number "9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -11.43 -12.70 90)
+        (length 5.08)
+        (name "10" (effects (font (size 1.27 1.27))))
+        (number "10" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 1.27 12.70 270)
         (length 2.54)
-        (name "ALDO1" (effects (font (size 1.27 1.27))))
+        (name "EH" (effects (font (size 1.27 1.27))))
         (number "15" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 -0.00 180)
-        (length 2.54)
-        (name "DCDC1" (effects (font (size 1.27 1.27))))
-        (number "16" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 2.54 180)
-        (length 2.54)
-        (name "VIN1" (effects (font (size 1.27 1.27))))
-        (number "17" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 5.08 180)
-        (length 2.54)
-        (name "LX1" (effects (font (size 1.27 1.27))))
-        (number "18" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 7.62 180)
-        (length 2.54)
-        (name "LX2" (effects (font (size 1.27 1.27))))
-        (number "19" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 10.16 180)
-        (length 2.54)
-        (name "VIN2" (effects (font (size 1.27 1.27))))
-        (number "20" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 13.97 12.70 180)
-        (length 2.54)
-        (name "PGND" (effects (font (size 1.27 1.27))))
-        (number "21" (effects (font (size 1.27 1.27))))
       )
     )
   )
@@ -3304,125 +3042,100 @@
     )
   )
 
-(symbol "GD25Q16ETIGR"
+(symbol "USB-A1VSB6"
     (in_bom yes)
     (on_board yes)
     (property
       "Reference"
-      "U"
+      "USB"
       (id 0)
       (at 0 8.89 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Value"
-      "GD25Q16ETIGR"
+      "USB-A1VSB6"
       (id 1)
       (at 0 -8.89 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Footprint"
-      "jlc_symbols:SOP-8_L4.9-W3.9-P1.27-LS6.0-BL"
+      "jlc_symbols:USB-A-TH_USB-A1VSB6"
       (id 2)
       (at 0 -11.43 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Datasheet"
-      "https://www.lcsc.com/datasheet/C2904431.pdf"
+      "https://www.lcsc.com/datasheet/C3197681.pdf"
       (id 3)
       (at 0 -13.97 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Manufacturer"
-      "GigaDevice(兆易创新)"
+      "On-Shore Tech"
       (id 4)
       (at 0 -16.51 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "MPN"
-      "GD25Q16ETIGR"
+      "USB-A1VSB6"
       (id 5)
       (at 0 -19.05 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "LCSC Part"
-      "C2904431"
+      "C3197681"
       (id 6)
       (at 0 -21.59 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
-    (property
-      "ki_keywords"
-      "NOR FLASH"
-      (id 8)
-      (at 0 -24.13 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "GD25Q16ETIGR_0_1"
+    (symbol "USB-A1VSB6_0_1"
       (rectangle
-        (start -17.78 6.35)
-        (end 17.78 -6.35)
+        (start -6.35 6.35)
+        (end 7.62 -6.35)
         (stroke (width 0) (type default))
         (fill (type background))
       )
       (circle
-        (center -16.51 5.08)
+        (center -5.08 5.08)
         (radius 0.38)
         (stroke (width 0) (type default))
         (fill (type none))
       )
       (pin passive line
-        (at -20.32 3.81 0)
+        (at -8.89 3.81 0)
         (length 2.54)
-        (name "~{CS}" (effects (font (size 1.27 1.27))))
+        (name "VCC" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -20.32 1.27 0)
+        (at -8.89 1.27 0)
         (length 2.54)
-        (name "SO(IO1)" (effects (font (size 1.27 1.27))))
+        (name "D-" (effects (font (size 1.27 1.27))))
         (number "2" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -20.32 -1.27 0)
+        (at -8.89 -1.27 0)
         (length 2.54)
-        (name "WP#(IO2)" (effects (font (size 1.27 1.27))))
+        (name "D+" (effects (font (size 1.27 1.27))))
         (number "3" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -20.32 -3.81 0)
+        (at -8.89 -3.81 0)
         (length 2.54)
-        (name "VSS" (effects (font (size 1.27 1.27))))
+        (name "GND" (effects (font (size 1.27 1.27))))
         (number "4" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at 20.32 -3.81 180)
+        (at 10.16 -3.81 180)
         (length 2.54)
-        (name "SI(IO0)" (effects (font (size 1.27 1.27))))
+        (name "GND" (effects (font (size 1.27 1.27))))
         (number "5" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 20.32 -1.27 180)
-        (length 2.54)
-        (name "SCLK" (effects (font (size 1.27 1.27))))
-        (number "6" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 20.32 1.27 180)
-        (length 2.54)
-        (name "HOLD#(IO3)" (effects (font (size 1.27 1.27))))
-        (number "7" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 20.32 3.81 180)
-        (length 2.54)
-        (name "VCC" (effects (font (size 1.27 1.27))))
-        (number "8" (effects (font (size 1.27 1.27))))
       )
     )
   )
@@ -3724,271 +3437,558 @@
     )
   )
 
-(symbol "USB-A1VSB6"
+(symbol "467650301"
     (in_bom yes)
     (on_board yes)
     (property
       "Reference"
-      "USB"
+      "U"
       (id 0)
-      (at 0 8.89 0)
+      (at 0 19.05 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Value"
-      "USB-A1VSB6"
+      "467650301"
       (id 1)
-      (at 0 -8.89 0)
+      (at 0 -19.05 0)
       (effects (font (size 1.27 1.27) ) )
     )
     (property
       "Footprint"
-      "jlc_symbols:USB-A-TH_USB-A1VSB6"
+      "jlc_symbols:TEPE-C-SMD_19P-P0.40"
       (id 2)
-      (at 0 -11.43 0)
+      (at 0 -21.59 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Datasheet"
-      "https://www.lcsc.com/datasheet/C3197681.pdf"
+      "https://www.lcsc.com/datasheet/C563877.pdf"
       (id 3)
-      (at 0 -13.97 0)
+      (at 0 -24.13 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
       "Manufacturer"
-      "On-Shore Tech"
+      "MOLEX"
       (id 4)
-      (at 0 -16.51 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "MPN"
-      "USB-A1VSB6"
-      (id 5)
-      (at 0 -19.05 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "LCSC Part"
-      "C3197681"
-      (id 6)
-      (at 0 -21.59 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "USB-A1VSB6_0_1"
-      (rectangle
-        (start -6.35 6.35)
-        (end 7.62 -6.35)
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-      (circle
-        (center -5.08 5.08)
-        (radius 0.38)
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (pin passive line
-        (at -8.89 3.81 0)
-        (length 2.54)
-        (name "VCC" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -8.89 1.27 0)
-        (length 2.54)
-        (name "D-" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -8.89 -1.27 0)
-        (length 2.54)
-        (name "D+" (effects (font (size 1.27 1.27))))
-        (number "3" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -8.89 -3.81 0)
-        (length 2.54)
-        (name "GND" (effects (font (size 1.27 1.27))))
-        (number "4" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at 10.16 -3.81 180)
-        (length 2.54)
-        (name "GND" (effects (font (size 1.27 1.27))))
-        (number "5" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
-
-(symbol "TYPE-C16PIN"
-    (in_bom yes)
-    (on_board yes)
-    (property
-      "Reference"
-      "USB"
-      (id 0)
-      (at 0 24.13 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Value"
-      "TYPE-C16PIN"
-      (id 1)
-      (at 0 -24.13 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Footprint"
-      "jlc_symbols:USB-C-SMD_TYPE-C16PIN"
-      (id 2)
       (at 0 -26.67 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
-      "Datasheet"
-      "https://lcsc.com/product-detail/USB-Connectors_SHOU-HAN-TYPE-C16PIN_C393939.html"
-      (id 3)
+      "MPN"
+      "467650301"
+      (id 5)
       (at 0 -29.21 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
-      "Manufacturer"
-      "SHOU HAN(首韩)"
-      (id 4)
+      "LCSC Part"
+      "C563877"
+      (id 6)
       (at 0 -31.75 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
     (property
-      "MPN"
-      "TYPE-C16PIN"
-      (id 5)
+      "ki_keywords"
+      "Pre-ordered Connectors"
+      (id 8)
       (at 0 -34.29 0)
       (effects (font (size 1.27 1.27) ) hide)
     )
-    (property
-      "LCSC Part"
-      "C393939"
-      (id 6)
-      (at 0 -36.83 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "ki_keywords"
-      "USB Connectors"
-      (id 8)
-      (at 0 -39.37 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "TYPE-C16PIN_0_1"
+    (symbol "467650301_0_1"
       (rectangle
-        (start -2.54 21.59)
-        (end 10.16 -21.59)
+        (start -5.08 16.51)
+        (end 5.08 -16.51)
         (stroke (width 0) (type default))
         (fill (type background))
       )
       (circle
-        (center -1.27 20.32)
+        (center -3.81 15.24)
         (radius 0.38)
         (stroke (width 0) (type default))
         (fill (type none))
       )
       (pin passive line
-        (at -5.08 19.05 0)
+        (at -7.62 13.97 0)
         (length 2.54)
-        (name "GND" (effects (font (size 1.27 1.27))))
-        (number "A1B12" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 16.51 0)
-        (length 2.54)
-        (name "VBUS" (effects (font (size 1.27 1.27))))
-        (number "A4B9" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 13.97 0)
-        (length 2.54)
-        (name "CC1" (effects (font (size 1.27 1.27))))
-        (number "A5" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 11.43 0)
-        (length 2.54)
-        (name "DP1" (effects (font (size 1.27 1.27))))
-        (number "A6" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 8.89 0)
-        (length 2.54)
-        (name "DN1" (effects (font (size 1.27 1.27))))
-        (number "A7" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 6.35 0)
-        (length 2.54)
-        (name "SBU1" (effects (font (size 1.27 1.27))))
-        (number "A8" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 3.81 0)
-        (length 2.54)
-        (name "CC2" (effects (font (size 1.27 1.27))))
-        (number "B5" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 1.27 0)
-        (length 2.54)
-        (name "DP2" (effects (font (size 1.27 1.27))))
-        (number "B6" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 -1.27 0)
-        (length 2.54)
-        (name "DN2" (effects (font (size 1.27 1.27))))
-        (number "B7" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 -3.81 0)
-        (length 2.54)
-        (name "SBU2" (effects (font (size 1.27 1.27))))
-        (number "B8" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 -6.35 0)
-        (length 2.54)
-        (name "VBUS" (effects (font (size 1.27 1.27))))
-        (number "B4A9" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 -8.89 0)
-        (length 2.54)
-        (name "GND" (effects (font (size 1.27 1.27))))
-        (number "B1A12" (effects (font (size 1.27 1.27))))
-      )
-      (pin passive line
-        (at -5.08 -11.43 0)
-        (length 2.54)
-        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (name "1" (effects (font (size 1.27 1.27))))
         (number "1" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -5.08 -13.97 0)
+        (at -7.62 11.43 0)
         (length 2.54)
-        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (name "2" (effects (font (size 1.27 1.27))))
         (number "2" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -5.08 -16.51 0)
+        (at -7.62 8.89 0)
         (length 2.54)
-        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (name "3" (effects (font (size 1.27 1.27))))
         (number "3" (effects (font (size 1.27 1.27))))
       )
       (pin passive line
-        (at -5.08 -19.05 0)
+        (at -7.62 6.35 0)
         (length 2.54)
-        (name "SHELL" (effects (font (size 1.27 1.27))))
+        (name "4" (effects (font (size 1.27 1.27))))
         (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 3.81 0)
+        (length 2.54)
+        (name "5" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 1.27 0)
+        (length 2.54)
+        (name "6" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -1.27 0)
+        (length 2.54)
+        (name "7" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -3.81 0)
+        (length 2.54)
+        (name "8" (effects (font (size 1.27 1.27))))
+        (number "8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -6.35 0)
+        (length 2.54)
+        (name "9" (effects (font (size 1.27 1.27))))
+        (number "9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -8.89 0)
+        (length 2.54)
+        (name "10" (effects (font (size 1.27 1.27))))
+        (number "10" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -11.43 0)
+        (length 2.54)
+        (name "11" (effects (font (size 1.27 1.27))))
+        (number "11" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -13.97 0)
+        (length 2.54)
+        (name "12" (effects (font (size 1.27 1.27))))
+        (number "12" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -12.70 180)
+        (length 2.54)
+        (name "13" (effects (font (size 1.27 1.27))))
+        (number "13" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -10.16 180)
+        (length 2.54)
+        (name "14" (effects (font (size 1.27 1.27))))
+        (number "14" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -7.62 180)
+        (length 2.54)
+        (name "15" (effects (font (size 1.27 1.27))))
+        (number "15" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -5.08 180)
+        (length 2.54)
+        (name "16" (effects (font (size 1.27 1.27))))
+        (number "16" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -2.54 180)
+        (length 2.54)
+        (name "17" (effects (font (size 1.27 1.27))))
+        (number "17" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -0.00 180)
+        (length 2.54)
+        (name "18" (effects (font (size 1.27 1.27))))
+        (number "18" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 2.54 180)
+        (length 2.54)
+        (name "19" (effects (font (size 1.27 1.27))))
+        (number "19" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 5.08 180)
+        (length 2.54)
+        (name "20" (effects (font (size 1.27 1.27))))
+        (number "20" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 7.62 180)
+        (length 2.54)
+        (name "21" (effects (font (size 1.27 1.27))))
+        (number "21" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 10.16 180)
+        (length 2.54)
+        (name "22" (effects (font (size 1.27 1.27))))
+        (number "22" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 12.70 180)
+        (length 2.54)
+        (name "23" (effects (font (size 1.27 1.27))))
+        (number "23" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+
+(symbol "DS1021-2X13SF11-B"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "U"
+      (id 0)
+      (at 0 20.32 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "DS1021-2X13SF11-B"
+      (id 1)
+      (at 0 -20.32 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "jlc_symbols:HDR-TH_26P-P2.54-V-M-R2-C13-S2.54"
+      (id 2)
+      (at 0 -22.86 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Datasheet"
+      "https://www.lcsc.com/datasheet/C7430409.pdf"
+      (id 3)
+      (at 0 -25.40 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "CONNFLY"
+      (id 4)
+      (at 0 -27.94 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "DS1021-2x13SF11-B"
+      (id 5)
+      (at 0 -30.48 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "LCSC Part"
+      "C7430409"
+      (id 6)
+      (at 0 -33.02 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "ki_keywords"
+      "Pin Headers"
+      (id 8)
+      (at 0 -35.56 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "DS1021-2X13SF11-B_0_1"
+      (rectangle
+        (start -5.08 17.78)
+        (end 5.08 -17.78)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (circle
+        (center -3.81 16.51)
+        (radius 0.38)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (pin passive line
+        (at -7.62 15.24 0)
+        (length 2.54)
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -15.24 180)
+        (length 2.54)
+        (name "26" (effects (font (size 1.27 1.27))))
+        (number "26" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 12.70 0)
+        (length 2.54)
+        (name "3" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -12.70 180)
+        (length 2.54)
+        (name "24" (effects (font (size 1.27 1.27))))
+        (number "24" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 10.16 0)
+        (length 2.54)
+        (name "5" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -10.16 180)
+        (length 2.54)
+        (name "22" (effects (font (size 1.27 1.27))))
+        (number "22" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 7.62 0)
+        (length 2.54)
+        (name "7" (effects (font (size 1.27 1.27))))
+        (number "7" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -7.62 180)
+        (length 2.54)
+        (name "20" (effects (font (size 1.27 1.27))))
+        (number "20" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 5.08 0)
+        (length 2.54)
+        (name "9" (effects (font (size 1.27 1.27))))
+        (number "9" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -5.08 180)
+        (length 2.54)
+        (name "18" (effects (font (size 1.27 1.27))))
+        (number "18" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 2.54 0)
+        (length 2.54)
+        (name "11" (effects (font (size 1.27 1.27))))
+        (number "11" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -2.54 180)
+        (length 2.54)
+        (name "16" (effects (font (size 1.27 1.27))))
+        (number "16" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -0.00 0)
+        (length 2.54)
+        (name "13" (effects (font (size 1.27 1.27))))
+        (number "13" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 -0.00 180)
+        (length 2.54)
+        (name "14" (effects (font (size 1.27 1.27))))
+        (number "14" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -2.54 0)
+        (length 2.54)
+        (name "15" (effects (font (size 1.27 1.27))))
+        (number "15" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 2.54 180)
+        (length 2.54)
+        (name "12" (effects (font (size 1.27 1.27))))
+        (number "12" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -5.08 0)
+        (length 2.54)
+        (name "17" (effects (font (size 1.27 1.27))))
+        (number "17" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 5.08 180)
+        (length 2.54)
+        (name "10" (effects (font (size 1.27 1.27))))
+        (number "10" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -7.62 0)
+        (length 2.54)
+        (name "19" (effects (font (size 1.27 1.27))))
+        (number "19" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 7.62 180)
+        (length 2.54)
+        (name "8" (effects (font (size 1.27 1.27))))
+        (number "8" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -10.16 0)
+        (length 2.54)
+        (name "21" (effects (font (size 1.27 1.27))))
+        (number "21" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 10.16 180)
+        (length 2.54)
+        (name "6" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -12.70 0)
+        (length 2.54)
+        (name "23" (effects (font (size 1.27 1.27))))
+        (number "23" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 12.70 180)
+        (length 2.54)
+        (name "4" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -7.62 -15.24 0)
+        (length 2.54)
+        (name "25" (effects (font (size 1.27 1.27))))
+        (number "25" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at 7.62 15.24 180)
+        (length 2.54)
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+
+(symbol "Header-Male-2.54_1x6"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "H"
+      (id 0)
+      (at 0 11.43 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "Header-Male-2.54_1x6"
+      (id 1)
+      (at 0 -11.43 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "jlc_symbols:HDR-TH_6P-P2.54-V-M-1"
+      (id 2)
+      (at 0 -13.97 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Datasheet"
+      "https://lcsc.com/product-detail/Male-Header_2-54mm-1x6-Header_C37208.html"
+      (id 3)
+      (at 0 -16.51 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "BOOMELE(博穆精密)"
+      (id 4)
+      (at 0 -19.05 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "2.54-1x6P直针"
+      (id 5)
+      (at 0 -21.59 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "LCSC Part"
+      "C37208"
+      (id 6)
+      (at 0 -24.13 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "ki_keywords"
+      "Pin Headers"
+      (id 8)
+      (at 0 -26.67 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "ki_description"
+      "2.54mm 1x6"
+      (id 9)
+      (at 0 -29.21 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "Header-Male-2.54_1x6_0_1"
+      (rectangle
+        (start -0.51 8.89)
+        (end 4.57 -8.89)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (pin passive line
+        (at -2.54 6.35 0)
+        (length 2.54)
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -2.54 3.81 0)
+        (length 2.54)
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -2.54 1.27 0)
+        (length 2.54)
+        (name "3" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -2.54 -1.27 0)
+        (length 2.54)
+        (name "4" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -2.54 -3.81 0)
+        (length 2.54)
+        (name "5" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin passive line
+        (at -2.54 -6.35 0)
+        (length 2.54)
+        (name "6" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
       )
     )
   )

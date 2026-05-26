@@ -1,7 +1,7 @@
 {
     "$schema": "https://schemas.kicad.org/erc.v1.json",
     "coordinate_units": "mm",
-    "date": "2026-05-26T21:05:10",
+    "date": "2026-05-27T02:10:03",
     "ignored_checks": [
         {
             "description": "Global label only appears once in the schematic",
@@ -28,172 +28,47 @@
     "sheets": [
         {
             "path": "/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2",
             "violations": []
         },
         {
-            "path": "/input/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/94ec4ba8-0126-4b72-8105-27894cd12c75",
+            "path": "/power_entry_pmic/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/d6058d2c-1e39-450a-a98b-f7e0b567bb2e",
             "violations": []
         },
         {
-            "path": "/indicator/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/31b33f30-46c8-4fe1-be2c-d06fbbbc0992",
+            "path": "/boot_storage/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/50c7ea96-48ca-4f0d-89a0-adb76130baec",
             "violations": []
         },
         {
-            "path": "/h618_1v8/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/f196dda9-3b90-488a-b9c2-c20a603e71cd",
+            "path": "/usb/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/6d2f9a3c-19cb-45b7-8c63-c77e10ed64a0",
             "violations": []
         },
         {
-            "path": "/h618_3v3/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/284603d0-b29d-4586-ab56-8c2a8e119254",
+            "path": "/soc_boot_clock/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/94b8340a-a88c-4351-9eb7-1caf1e9eb372",
             "violations": []
         },
         {
-            "path": "/h618_fel_key/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/54a43287-d964-4df7-9e7e-d1b6e1a5c407",
+            "path": "/debug_control/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/46d738dc-892e-4135-8263-520e3eb36067",
             "violations": []
         },
         {
-            "path": "/h618_pmic_i2c_pullup_sda/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/e6e1dded-653d-4511-b0b9-d99eb53590cb",
+            "path": "/display_expansion/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/c0c26f21-8c44-4dce-8530-33cef538296f",
             "violations": []
         },
         {
-            "path": "/h618_reset_key/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/36a80770-0baf-4ee9-bfc1-89e10be33f0f",
+            "path": "/memory_ddr/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/86a79d61-8b0d-4adc-9d5d-e43a8a670b13",
             "violations": []
         },
         {
-            "path": "/micro_hdmi_output/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/a1a65ab4-5c22-49ba-a94a-582862ddaabc",
-            "violations": []
-        },
-        {
-            "path": "/rgmii_gigabit_phy/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/37187014-47b7-426d-9def-02aac6df84ab",
-            "violations": []
-        },
-        {
-            "path": "/usb2_hub/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/4d4e7766-7db8-4a24-9bb5-123c2358fc4d",
-            "violations": []
-        },
-        {
-            "path": "/usb_host_port_1/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/1ffd4b7b-2d9b-4897-be72-02fffbf8d6ef",
-            "violations": []
-        },
-        {
-            "path": "/reset/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/e98a2a13-8b29-457f-955f-03d2c9361488",
-            "violations": []
-        },
-        {
-            "path": "/coprocessor_reserve/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/d4cd7712-a2fd-4ddd-bb20-7febf5987c70",
-            "violations": []
-        },
-        {
-            "path": "/h618_24mhz_xtal/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/7cb1a180-4587-43a5-a744-9f84b2df6ecb",
-            "violations": []
-        },
-        {
-            "path": "/h618_core/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/0ab9fde6-bb51-4815-aa9c-27ac4cc39537",
-            "violations": []
-        },
-        {
-            "path": "/h618_gpio/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/16bf6aeb-1d74-4e72-9de7-3b5c5b462401",
-            "violations": []
-        },
-        {
-            "path": "/h618_pmic_input/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/a91a95df-0a8b-46e3-85af-d117d6527513",
-            "violations": []
-        },
-        {
-            "path": "/h618_soc_bga/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/dcd1f680-1af9-4b96-b000-b126327c377d",
-            "violations": []
-        },
-        {
-            "path": "/micro_sd_boot_socket/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/33a26f35-1c34-4e7a-a246-c7f2b2aedc8a",
-            "violations": []
-        },
-        {
-            "path": "/spi_nor_16mb_flash/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/0e905d2b-cc9f-483e-bc91-a4ee5dc5583e",
-            "violations": []
-        },
-        {
-            "path": "/usb_c_cc1_sink_rd/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/4a3e4fe3-0361-497b-8723-f2ae2e776ac0",
-            "violations": []
-        },
-        {
-            "path": "/usb_host_port_2/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/3818267b-9044-43b2-ad1b-fd47d020acd3",
-            "violations": []
-        },
-        {
-            "path": "/io/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/730b730e-bfa6-4d2d-bbb0-e112bcf09da6",
-            "violations": []
-        },
-        {
-            "path": "/ethernet_magjack/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/699a46a6-ff10-4909-8728-1ab9ffb9d84f",
-            "violations": []
-        },
-        {
-            "path": "/h618_32k_xtal/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/51fc19cf-0146-4c44-a72e-feda708a6ee9",
-            "violations": []
-        },
-        {
-            "path": "/h618_fel_boot_pullup/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/211866ae-7629-420e-a86d-ecc98ddd5dcd",
-            "violations": []
-        },
-        {
-            "path": "/h618_pmic_i2c_pullup_scl/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/c85b3663-d33a-4960-af7d-36d6ae3cd2c2",
-            "violations": []
-        },
-        {
-            "path": "/h618_pmic_pwron_pullup/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/d666a00d-e870-4011-bf97-806ccc844320",
-            "violations": []
-        },
-        {
-            "path": "/lpddr4_2gb_memory/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/990cd876-4da3-44cb-9d49-465c9c58dbd1",
-            "violations": []
-        },
-        {
-            "path": "/pmic_axp313a/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/7c35330c-efa0-42f9-af03-91dbbec74bc4",
-            "violations": []
-        },
-        {
-            "path": "/test_point/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/94474b9d-06b4-4eba-afd8-90248a871b4f",
-            "violations": []
-        },
-        {
-            "path": "/usb_c_cc2_sink_rd/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/692f04a6-2b7b-4ef6-8bbf-28caa424d308",
-            "violations": []
-        },
-        {
-            "path": "/usb_type_c_power_input/",
-            "uuid_path": "/d4f17bbe-772b-4071-a60b-e4a4e1487ee0/576d9598-8523-49fa-a42c-069069795c6a",
+            "path": "/network/",
+            "uuid_path": "/a79f4b74-81b8-4d93-96ba-fba146f2f2d2/fcb348bb-564f-4098-b5c7-3bfd0080ba4f",
             "violations": []
         }
     ],
