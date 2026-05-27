@@ -42,7 +42,10 @@ def test_model_api_adds_component_and_returns_diff():
     assert result["schema_version"] == "dsl-api-result.v1"
     assert result["success"] is True
     assert result["result"] == {"ref": "U1"}
-    assert result["diff"] == [{"path": "components[U1]", "op": "add"}]
+    diff_paths = [d["path"] for d in result["diff"]]
+    assert "components[U1]" in diff_paths
+    component_diff = next(d for d in result["diff"] if d["path"] == "components[U1]")
+    assert component_diff["op"] == "add"
     assert service.model["components"][0]["ref"] == "U1"
 
 
@@ -240,6 +243,18 @@ def test_model_api_updates_component_and_selected_part():
     assert service.model["components"][0]["selected_part"]["part_id"] == "gd32f303-c8t6"
 
 
+def test_model_api_locks_and_unlocks_selected_part():
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
+
+    locked = service.handle_dict(_request("lock_selected_part", {"ref": "U1"}))
+    unlocked = service.handle_dict(_request("unlock_selected_part", {"ref": "U1"}))
+
+    assert locked["success"] is True
+    assert unlocked["success"] is True
+    assert service.model["components"][0]["selected_part_locked"] is False
+
+
 def test_model_api_adds_and_removes_candidate_part():
     service = ModelApiService()
     service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
@@ -339,6 +354,35 @@ def test_model_api_generic_risk_decision_sheet_and_constraint_crud():
     assert service.model["risks"][0]["status"] == "resolved"
 
 
+def test_model_api_link_operations_update_source_entity():
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "soc", "value": "H618"}))
+    service.handle_dict(_request("add_net", {"name": "DRAM_DQ0", "members": []}))
+    service.handle_dict(_request("add_risk", {"key": "ddr", "title": "DDR timing"}))
+    service.handle_dict(_request("add_design_decision", {"title": "Use LPDDR4", "status": "proposed"}))
+
+    risk_link = service.handle_dict(_request("link_risk_to_net", {"key": "ddr", "target": "DRAM_DQ0"}))
+    decision_link = service.handle_dict(
+        _request("link_decision_to_component", {"decision": "Use LPDDR4", "target": "U1"})
+    )
+
+    assert risk_link["success"] is True
+    assert decision_link["success"] is True
+    assert service.model["risks"][0]["nets"] == ["DRAM_DQ0"]
+    assert service.model["design_decisions"][0]["components"] == ["U1"]
+
+
+def test_model_api_set_risk_due_reason_keeps_full_field_name():
+    service = ModelApiService()
+    service.handle_dict(_request("add_risk", {"key": "pmic-seq", "title": "PMIC sequencing"}))
+
+    result = service.handle_dict(_request("set_risk_due_reason", {"key": "pmic-seq", "value": "await datasheet"}))
+
+    assert result["success"] is True
+    assert service.model["risks"][0]["due_reason"] == "await datasheet"
+    assert "reason" not in service.model["risks"][0]
+
+
 def test_model_api_pinmap_connects_pin_to_net():
     service = ModelApiService()
     service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
@@ -394,6 +438,19 @@ def test_model_api_compile_netlist_uses_existing_pipeline_builder():
     assert result["result"]["netlist"]["components"][0]["ref"] == "U1"
 
 
+def test_model_api_compile_spice_netlist_returns_schema_payload():
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "R1", "role": "resistor", "value": "10k"}))
+    service.handle_dict(_request("add_net", {"name": "N1", "members": ["R1.1"]}))
+    service.handle_dict(_request("add_net", {"name": "N2", "members": ["R1.2"]}))
+
+    result = service.handle_dict(_request("compile_spice_netlist", {}))
+
+    assert result["success"] is True
+    assert result["result"]["spice_netlist"]["schema_version"] == "spice-netlist.v1"
+    assert result["result"]["spice_netlist"]["lines"][-1]["text"] == ".end"
+
+
 def test_model_api_run_simulation_plan_writes_artifacts(tmp_path):
     service = ModelApiService()
     service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
@@ -403,6 +460,88 @@ def test_model_api_run_simulation_plan_writes_artifacts(tmp_path):
     assert result["success"] is True
     assert result["result"]["simulation"]["plan_file"]
     assert (tmp_path / "simulation-plan.json").exists()
+
+
+def test_deep_diff_nested_change_detects_field_level_paths():
+    """When a nested component field changes, the diff path drills into that field."""
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
+
+    update = service.handle_dict(_request("update_component", {"ref": "U1", "patch": {"value": "GD32F303"}}))
+
+    assert update["success"] is True
+    diff_paths = [d["path"] for d in update["diff"]]
+    # The diff should contain a nested path into the component's value field.
+    value_paths = [p for p in diff_paths if "value" in p and "U1" in p]
+    assert len(value_paths) > 0, f"Expected nested diff path with U1.value, got {diff_paths}"
+
+
+def test_deep_diff_net_member_change_detects_array_element():
+    """When a net member changes, the diff identifies the changed array element."""
+    service = ModelApiService()
+    service.handle_dict(_request("add_net", {"name": "+3V3", "members": ["U1.VDD"]}))
+
+    connect = service.handle_dict(_request("connect_member", {"net": "+3V3", "member": "U2.VDD"}))
+
+    assert connect["success"] is True
+    diff_paths = [d["path"] for d in connect["diff"]]
+    member_paths = [p for p in diff_paths if "members" in p or "+3V3" in p]
+    assert len(member_paths) > 0, f"Expected diff path referencing net members, got {diff_paths}"
+
+
+def test_payload_validation_update_component_requires_patch():
+    """update_component without a patch dict returns INVALID_PAYLOAD."""
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
+
+    result = service.handle_dict(_request("update_component", {"ref": "U1"}))
+
+    assert result["success"] is False
+    assert result["errors"][0]["code"] == "INVALID_PAYLOAD"
+
+
+def test_payload_validation_set_selected_part_requires_part():
+    """set_selected_part without a part dict returns INVALID_PAYLOAD."""
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
+
+    result = service.handle_dict(_request("set_selected_part", {"ref": "U1"}))
+
+    assert result["success"] is False
+    assert result["errors"][0]["code"] == "INVALID_PAYLOAD"
+
+
+def test_payload_validation_rename_net_requires_old_name():
+    """rename_net without old_name returns INVALID_PAYLOAD."""
+    service = ModelApiService()
+    service.handle_dict(_request("add_net", {"name": "+3V3", "members": []}))
+
+    result = service.handle_dict(_request("rename_net", {"new_name": "+5V"}))
+
+    assert result["success"] is False
+    assert result["errors"][0]["code"] == "INVALID_PAYLOAD"
+
+
+def test_deep_diff_model_compares_nested_structures():
+    """diff_model produces nested diff paths when models differ in nested fields."""
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
+
+    other = {
+        "schema_version": "circuit-model.v1",
+        "request_id": "other",
+        "project_id": "other-board",
+        "topology": "other",
+        "components": [{"ref": "U1", "role": "mcu", "value": "GD32F303"}],
+        "nets": [],
+    }
+    result = service.handle_dict(_request("diff_model", {"other": other}))
+
+    assert result["success"] is True
+    diff = result["result"]["diff"]
+    diff_paths = [d["path"] for d in diff]
+    assert len(diff) > 0
+    assert any("U1" in p for p in diff_paths)
 
 
 def test_external_tools_config_sets_environment(tmp_path, monkeypatch):

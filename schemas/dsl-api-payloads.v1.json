@@ -1,0 +1,1448 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "dsl-api-payloads.v1.json",
+  "title": "DSL API Operation Payloads",
+  "description": "Payload schemas for each supported circuit-model DSL API operation.",
+  "$defs": {
+
+    "common_ref": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Component reference (e.g. U1, R100, TP11)."
+    },
+    "common_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Entity name (net, sheet, calculation, constraint, power rail)."
+    },
+    "common_key": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Risk key identifier."
+    },
+    "common_title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Design decision title."
+    },
+    "common_value": {
+      "description": "Value for set_* / mark_* field operations."
+    },
+    "common_patch": {
+      "type": "object",
+      "description": "Partial update payload merged into the target object."
+    },
+    "common_component": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "role": { "type": "string" },
+        "value": { "type": "string" },
+        "selected_part": { "type": "object" },
+        "candidate_parts": { "type": "array" },
+        "availability_status": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" } },
+        "sheet": { "type": "string" }
+      }
+    },
+    "common_net": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "$ref": "#/$defs/common_name" },
+        "members": { "type": "array", "items": { "type": "string" } },
+        "kind": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" } },
+        "domain": { "type": "string" },
+        "aliases": { "type": "array", "items": { "type": "string" } },
+        "flags": { "type": "object" }
+      }
+    },
+
+    "add_component": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "component": { "$ref": "#/$defs/common_component" },
+        "role": { "type": "string" },
+        "value": { "type": "string" },
+        "selected_part": { "type": "object" },
+        "candidate_parts": { "type": "array" },
+        "availability_status": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" } },
+        "sheet": { "type": "string" },
+        "pinmap": { "type": "object" }
+      }
+    },
+    "update_component": {
+      "type": "object",
+      "required": ["ref", "patch"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "component": { "$ref": "#/$defs/common_component" },
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_component": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "component": { "type": "string" }
+      }
+    },
+    "get_component": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "component": { "type": "string" }
+      }
+    },
+    "set_selected_part": {
+      "type": "object",
+      "required": ["ref", "part"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "component": { "type": "string" },
+        "part": { "type": "object" },
+        "selected_part": { "type": "object" }
+      }
+    },
+    "add_candidate_part": {
+      "type": "object",
+      "required": ["ref", "part"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "component": { "type": "string" },
+        "part": { "type": "object" },
+        "candidate_part": { "type": "object" }
+      }
+    },
+    "remove_candidate_part": {
+      "type": "object",
+      "required": ["ref", "part_id"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "component": { "type": "string" },
+        "part_id": { "type": "string" }
+      }
+    },
+    "set_component_ref": {
+      "type": "object",
+      "required": ["ref", "value"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "value": { "type": "string" },
+        "new_ref": { "type": "string" }
+      }
+    },
+    "set_component_role": {
+      "type": "object",
+      "required": ["ref", "value"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "value": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "set_component_value": {
+      "type": "object",
+      "required": ["ref", "value"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "value": { "type": "string" }
+      }
+    },
+    "set_component_notes": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "value": { "type": "array" },
+        "notes": { "type": "array" }
+      }
+    },
+    "set_component_availability": {
+      "type": "object",
+      "required": ["ref", "value"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "value": { "type": "string" },
+        "availability_status": { "type": "string" }
+      }
+    },
+    "mark_component_resolved": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "mark_component_needs_review": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "mark_component_blocked": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "reason": { "type": "string" }
+      }
+    },
+    "assign_component_to_sheet": {
+      "type": "object",
+      "required": ["ref", "sheet_name"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "sheet": { "type": "string" },
+        "sheet_name": { "type": "string" }
+      }
+    },
+
+    "add_net": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "$ref": "#/$defs/common_name" },
+        "net": { "$ref": "#/$defs/common_net" },
+        "members": { "type": "array", "items": { "type": "string" } },
+        "kind": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "update_net": {
+      "type": "object",
+      "required": ["name", "patch"],
+      "properties": {
+        "name": { "$ref": "#/$defs/common_name" },
+        "net": { "type": "string" },
+        "patch": { "$ref": "#/$defs/common_patch" },
+        "net_patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_net": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "$ref": "#/$defs/common_name" },
+        "net": { "type": "string" }
+      }
+    },
+    "get_net": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "$ref": "#/$defs/common_name" },
+        "net": { "type": "string" }
+      }
+    },
+    "connect_member": {
+      "type": "object",
+      "required": ["net", "member"],
+      "properties": {
+        "net": { "type": "string" },
+        "member": { "type": "string" }
+      }
+    },
+    "disconnect_member": {
+      "type": "object",
+      "required": ["net", "member"],
+      "properties": {
+        "net": { "type": "string" },
+        "member": { "type": "string" }
+      }
+    },
+    "connect_members": {
+      "type": "object",
+      "required": ["net", "members"],
+      "properties": {
+        "net": { "type": "string" },
+        "members": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "disconnect_members": {
+      "type": "object",
+      "required": ["net", "members"],
+      "properties": {
+        "net": { "type": "string" },
+        "members": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "rename_net": {
+      "type": "object",
+      "required": ["old_name", "new_name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" },
+        "old_name": { "type": "string" },
+        "new_name": { "type": "string", "minLength": 1 }
+      }
+    },
+    "merge_nets": {
+      "type": "object",
+      "required": ["source", "target"],
+      "properties": {
+        "source": { "type": "string" },
+        "target": { "type": "string" }
+      }
+    },
+    "split_net": {
+      "type": "object",
+      "required": ["name", "new_nets"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" },
+        "new_nets": { "type": "array", "items": { "type": "string" } },
+        "new_names": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "set_net_kind": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" },
+        "value": { "type": "string" },
+        "kind": { "type": "string" }
+      }
+    },
+    "set_net_notes": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" },
+        "value": { "type": "array" },
+        "notes": { "type": "array" }
+      }
+    },
+    "set_net_aliases": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" },
+        "value": { "type": "array" },
+        "aliases": { "type": "array" }
+      }
+    },
+    "set_net_domain": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" },
+        "value": { "type": "string" },
+        "domain": { "type": "string" }
+      }
+    },
+    "mark_net_global": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" }
+      }
+    },
+    "mark_net_power": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" }
+      }
+    },
+    "mark_net_high_speed": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" }
+      }
+    },
+    "mark_net_debug": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" }
+      }
+    },
+    "mark_net_differential_pair": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "net": { "type": "string" }
+      }
+    },
+    "assign_net_to_sheet": {
+      "type": "object",
+      "required": ["net_name", "sheet_name"],
+      "properties": {
+        "net_name": { "type": "string" },
+        "sheet_name": { "type": "string" }
+      }
+    },
+
+    "set_pinmap": {
+      "type": "object",
+      "required": ["ref", "pinmap"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pinmap": { "type": "object" },
+        "map": { "type": "object" }
+      }
+    },
+    "update_pinmap": {
+      "type": "object",
+      "required": ["ref", "pinmap"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pinmap": { "type": "object" },
+        "map": { "type": "object" }
+      }
+    },
+    "remove_pinmap": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "get_pinmap": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "connect_pin_to_net": {
+      "type": "object",
+      "required": ["ref", "pin", "net"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "net": { "type": "string" }
+      }
+    },
+    "disconnect_pin_from_net": {
+      "type": "object",
+      "required": ["ref", "pin"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "net": { "type": "string" }
+      }
+    },
+    "set_pin_name": {
+      "type": "object",
+      "required": ["ref", "pin"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    },
+    "set_pin_role": {
+      "type": "object",
+      "required": ["ref", "pin"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "value": { "type": "string" },
+        "role": { "type": "string" }
+      }
+    },
+    "set_pin_direction": {
+      "type": "object",
+      "required": ["ref", "pin"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "value": { "type": "string" },
+        "direction": { "type": "string" }
+      }
+    },
+    "set_pin_no_connect": {
+      "type": "object",
+      "required": ["ref", "pin"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "enabled": { "type": "boolean" }
+      }
+    },
+    "add_pin_alias": {
+      "type": "object",
+      "required": ["ref", "pin", "alias"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "alias": { "type": "string" }
+      }
+    },
+    "resolve_pin_alias": {
+      "type": "object",
+      "required": ["ref", "pin"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "pin": { "type": "string" },
+        "alias": { "type": "string" }
+      }
+    },
+
+    "add_power_rail": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "rail": { "type": "object" },
+        "source_net": { "type": "string" },
+        "voltage": { "type": "number" },
+        "current_limit": { "type": "number" }
+      }
+    },
+    "update_power_rail": {
+      "type": "object",
+      "required": ["name", "patch"],
+      "properties": {
+        "name": { "type": "string" },
+        "rail": { "type": "string" },
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_power_rail": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "rail": { "type": "string" }
+      }
+    },
+    "get_power_rail": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "rail": { "type": "string" }
+      }
+    },
+    "set_rail_source": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "rail": { "type": "string" },
+        "value": { "type": "string" },
+        "source_net": { "type": "string" }
+      }
+    },
+    "set_rail_sink": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "sink_ref": { "type": "string" }
+      }
+    },
+    "set_rail_parent": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "parent": { "type": "string" }
+      }
+    },
+    "set_rail_children": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "array" },
+        "children": { "type": "array" }
+      }
+    },
+    "set_rail_voltage": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "number" },
+        "voltage": { "type": "number" }
+      }
+    },
+    "set_rail_current_limit": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "number" },
+        "current_limit": { "type": "number" }
+      }
+    },
+    "set_rail_sequence_order": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "integer" },
+        "sequence_order": { "type": "integer" }
+      }
+    },
+    "set_rail_enable_condition": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "enable_condition": { "type": "string" }
+      }
+    },
+    "add_rail_test_point": {
+      "type": "object",
+      "required": ["name", "ref"],
+      "properties": {
+        "name": { "type": "string" },
+        "rail": { "type": "string" },
+        "ref": { "type": "string" }
+      }
+    },
+    "bind_rail_to_test_point": {
+      "type": "object",
+      "required": ["name", "ref"],
+      "properties": {
+        "name": { "type": "string" },
+        "ref": { "type": "string" }
+      }
+    },
+
+    "add_sheet": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "sheet": { "type": "object" },
+        "inputs": { "type": "array" },
+        "outputs": { "type": "array" },
+        "components": { "type": "array" },
+        "nets": { "type": "array" }
+      }
+    },
+    "update_sheet": {
+      "type": "object",
+      "required": ["name", "patch"],
+      "properties": {
+        "name": { "type": "string" },
+        "sheet": { "type": "string" },
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_sheet": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "sheet": { "type": "string" }
+      }
+    },
+    "get_sheet": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "sheet": { "type": "string" }
+      }
+    },
+    "set_sheet_name": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    },
+    "set_sheet_inputs": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "array" },
+        "inputs": { "type": "array" }
+      }
+    },
+    "set_sheet_outputs": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "array" },
+        "outputs": { "type": "array" }
+      }
+    },
+    "set_sheet_components": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "array" },
+        "components": { "type": "array" }
+      }
+    },
+    "set_sheet_nets": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "array" },
+        "nets": { "type": "array" }
+      }
+    },
+    "set_sheet_constraints": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "array" },
+        "constraints": { "type": "array" }
+      }
+    },
+    "set_sheet_notes": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "array" },
+        "notes": { "type": "array" }
+      }
+    },
+
+    "add_calculation": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "calculation": { "type": "object" },
+        "formula": { "type": "string" },
+        "inputs": { "type": "object" },
+        "result": {},
+        "unit": { "type": "string" }
+      }
+    },
+    "update_calculation": {
+      "type": "object",
+      "required": ["name", "patch"],
+      "properties": {
+        "name": { "type": "string" },
+        "calculation": { "type": "string" },
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_calculation": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "calculation": { "type": "string" }
+      }
+    },
+    "get_calculation": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "calculation": { "type": "string" }
+      }
+    },
+    "recompute_calculation": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "calculation": { "type": "string" }
+      }
+    },
+    "set_calculation_formula": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "formula": { "type": "string" }
+      }
+    },
+    "set_calculation_inputs": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "object" },
+        "inputs": { "type": "object" }
+      }
+    },
+    "set_calculation_result": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": {}
+      }
+    },
+    "set_calculation_unit": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "unit": { "type": "string" }
+      }
+    },
+
+    "add_design_decision": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" },
+        "decision": { "type": "object" },
+        "design_decision": { "type": "object" },
+        "rationale": { "type": "string" },
+        "impact": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+    "update_design_decision": {
+      "type": "object",
+      "required": ["title", "patch"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" },
+        "decision": { "type": "string" },
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_design_decision": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" },
+        "decision": { "type": "string" }
+      }
+    },
+    "get_design_decision": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" },
+        "decision": { "type": "string" }
+      }
+    },
+    "mark_decision_proposed": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" }
+      }
+    },
+    "mark_decision_accepted": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" }
+      }
+    },
+    "mark_decision_rejected": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" }
+      }
+    },
+    "mark_decision_needs_review": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" }
+      }
+    },
+    "mark_decision_finalized": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": { "$ref": "#/$defs/common_title" }
+      }
+    },
+
+    "add_risk": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "object" },
+        "title": { "type": "string" },
+        "status": { "type": "string" },
+        "severity": { "type": "string" },
+        "category": { "type": "string" },
+        "description": { "type": "string" },
+        "owner": { "type": "string" },
+        "due_reason": { "type": "string" }
+      }
+    },
+    "update_risk": {
+      "type": "object",
+      "required": ["key", "patch"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "string" },
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_risk": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "string" }
+      }
+    },
+    "get_risk": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "string" }
+      }
+    },
+    "mark_risk_open": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" }
+      }
+    },
+    "mark_risk_in_progress": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" }
+      }
+    },
+    "mark_risk_blocked": {
+      "type": "object",
+      "required": ["key", "reason"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "reason": { "type": "string" }
+      }
+    },
+    "mark_risk_resolved": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" }
+      }
+    },
+    "mark_risk_deferred": {
+      "type": "object",
+      "required": ["key"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" }
+      }
+    },
+    "set_risk_category": {
+      "type": "object",
+      "required": ["key", "value"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "value": { "type": "string" },
+        "category": { "type": "string" }
+      }
+    },
+    "set_risk_severity": {
+      "type": "object",
+      "required": ["key", "value"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "value": { "type": "string" },
+        "severity": { "type": "string" }
+      }
+    },
+    "set_risk_owner": {
+      "type": "object",
+      "required": ["key", "value"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "value": { "type": "string" },
+        "owner": { "type": "string" }
+      }
+    },
+    "set_risk_due_reason": {
+      "type": "object",
+      "required": ["key", "value"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "value": { "type": "string" },
+        "due_reason": { "type": "string" }
+      }
+    },
+
+    "add_constraint": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "constraint": { "type": "object" },
+        "type": { "type": "string" },
+        "scope": { "type": "string" },
+        "status": { "type": "string" },
+        "priority": { "type": "string" }
+      }
+    },
+    "update_constraint": {
+      "type": "object",
+      "required": ["name", "patch"],
+      "properties": {
+        "name": { "type": "string" },
+        "constraint": { "type": "string" },
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+    "remove_constraint": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "constraint": { "type": "string" }
+      }
+    },
+    "get_constraint": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "constraint": { "type": "string" }
+      }
+    },
+    "set_constraint_type": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "type": { "type": "string" }
+      }
+    },
+    "set_constraint_scope": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "scope": { "type": "string" }
+      }
+    },
+    "set_constraint_priority": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "priority": { "type": "string" }
+      }
+    },
+    "set_constraint_status": {
+      "type": "object",
+      "required": ["name", "value"],
+      "properties": {
+        "name": { "type": "string" },
+        "value": { "type": "string" },
+        "status": { "type": "string" }
+      }
+    },
+
+    "select_part": {
+      "type": "object",
+      "required": ["ref", "part"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "part": { "type": "object" },
+        "selected_part": { "type": "object" }
+      }
+    },
+    "update_selected_part": {
+      "type": "object",
+      "required": ["ref", "part"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "part": { "type": "object" },
+        "selected_part": { "type": "object" }
+      }
+    },
+    "replace_selected_part": {
+      "type": "object",
+      "required": ["ref", "part"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "part": { "type": "object" },
+        "selected_part": { "type": "object" }
+      }
+    },
+    "lock_selected_part": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "unlock_selected_part": {
+      "type": "object",
+      "required": ["ref"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+
+    "begin_transaction": { "type": "object" },
+    "commit_transaction": { "type": "object" },
+    "rollback_transaction": { "type": "object" },
+    "diff_transaction": { "type": "object" },
+
+    "apply_operation": {
+      "type": "object",
+      "required": ["operation"],
+      "properties": {
+        "operation": { "type": "string" },
+        "payload": { "type": "object" }
+      }
+    },
+    "apply_batch": {
+      "type": "object",
+      "required": ["operations"],
+      "properties": {
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["operation"],
+            "properties": {
+              "operation": { "type": "string" },
+              "payload": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+    "dry_run": {
+      "type": "object",
+      "required": ["operations"],
+      "properties": {
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["operation"],
+            "properties": {
+              "operation": { "type": "string" },
+              "payload": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+
+    "validate_model": { "type": "object" },
+    "validate_schema": { "type": "object" },
+    "validate_references": { "type": "object" },
+    "validate_connectivity": { "type": "object" },
+    "validate_pinmap": { "type": "object" },
+    "validate_power_tree": { "type": "object" },
+    "validate_power_budget": { "type": "object" },
+    "validate_sequence": { "type": "object" },
+    "validate_sheet_boundary": { "type": "object" },
+    "validate_sheet_inputs_outputs": { "type": "object" },
+    "validate_part_availability": { "type": "object" },
+    "validate_risk_consistency": { "type": "object" },
+    "validate_readiness": { "type": "object" },
+
+    "compile_netlist": { "type": "object" },
+    "compile_spice_netlist": { "type": "object" },
+    "compile_kicad_execution_plan": { "type": "object" },
+
+    "export_circuit_model": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" }
+      }
+    },
+    "export_kicad_project": {
+      "type": "object",
+      "properties": {
+        "output_dir": { "type": "string" },
+        "project_name": { "type": "string" },
+        "config_path": { "type": "string" },
+        "config": { "type": "object" },
+        "kicad": { "type": "object" }
+      }
+    },
+    "export_summary": { "type": "object" },
+    "export_report": { "type": "object" },
+    "run_erc": {
+      "type": "object",
+      "required": ["project_dir"],
+      "properties": {
+        "project_dir": { "type": "string" },
+        "schematic_file": { "type": "string" },
+        "config_path": { "type": "string" },
+        "config": { "type": "object" }
+      }
+    },
+    "run_simulation_plan": {
+      "type": "object",
+      "properties": {
+        "output_dir": { "type": "string" },
+        "config_path": { "type": "string" },
+        "config": { "type": "object" },
+        "simulation": { "type": "object" }
+      }
+    },
+
+    "load_model": {
+      "type": "object",
+      "properties": {
+        "model": { "type": "object" }
+      }
+    },
+    "save_model": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" }
+      }
+    },
+    "clone_model": { "type": "object" },
+    "reset_model": { "type": "object" },
+    "diff_model": {
+      "type": "object",
+      "required": ["other"],
+      "properties": {
+        "other": { "type": "object" },
+        "model": { "type": "object" }
+      }
+    },
+    "merge_model": {
+      "type": "object",
+      "required": ["other"],
+      "properties": {
+        "other": { "type": "object" },
+        "model": { "type": "object" }
+      }
+    },
+    "patch_model": {
+      "type": "object",
+      "required": ["patch"],
+      "properties": {
+        "patch": { "$ref": "#/$defs/common_patch" }
+      }
+    },
+
+    "get_metadata": { "type": "object" },
+    "set_schema_version": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": { "type": "string" },
+        "schema_version": { "type": "string" }
+      }
+    },
+    "set_request_id": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": { "type": "string" },
+        "request_id": { "type": "string" }
+      }
+    },
+    "set_project_id": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": { "type": "string" },
+        "project_id": { "type": "string" }
+      }
+    },
+    "set_topology": {
+      "type": "object",
+      "required": ["value"],
+      "properties": {
+        "value": { "type": "string" },
+        "topology": { "type": "string" }
+      }
+    },
+    "update_metadata": {
+      "type": "object",
+      "properties": {
+        "metadata": { "type": "object" }
+      }
+    },
+
+    "link_calculation_to_component": {
+      "type": "object",
+      "required": ["calculation", "target"],
+      "properties": {
+        "calculation": { "type": "string" },
+        "target": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "link_calculation_to_net": {
+      "type": "object",
+      "required": ["calculation", "target"],
+      "properties": {
+        "calculation": { "type": "string" },
+        "target": { "type": "string" }
+      }
+    },
+    "link_decision_to_component": {
+      "type": "object",
+      "required": ["title", "target"],
+      "properties": {
+        "title": { "type": "string" },
+        "decision": { "type": "string" },
+        "design_decision": { "type": "string" },
+        "target": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "link_decision_to_net": {
+      "type": "object",
+      "required": ["title", "target"],
+      "properties": {
+        "title": { "type": "string" },
+        "decision": { "type": "string" },
+        "design_decision": { "type": "string" },
+        "target": { "type": "string" }
+      }
+    },
+    "link_decision_to_risk": {
+      "type": "object",
+      "required": ["title", "target"],
+      "properties": {
+        "title": { "type": "string" },
+        "decision": { "type": "string" },
+        "design_decision": { "type": "string" },
+        "target": { "$ref": "#/$defs/common_key" }
+      }
+    },
+    "link_decision_to_sheet": {
+      "type": "object",
+      "required": ["title", "target"],
+      "properties": {
+        "title": { "type": "string" },
+        "decision": { "type": "string" },
+        "design_decision": { "type": "string" },
+        "target": { "type": "string" }
+      }
+    },
+    "link_risk_to_component": {
+      "type": "object",
+      "required": ["key", "target"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "string" },
+        "target": { "$ref": "#/$defs/common_ref" }
+      }
+    },
+    "link_risk_to_net": {
+      "type": "object",
+      "required": ["key", "target"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "string" },
+        "target": { "type": "string" }
+      }
+    },
+    "link_risk_to_decision": {
+      "type": "object",
+      "required": ["key", "target"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "string" },
+        "target": { "$ref": "#/$defs/common_title" }
+      }
+    },
+    "link_risk_to_sheet": {
+      "type": "object",
+      "required": ["key", "target"],
+      "properties": {
+        "key": { "$ref": "#/$defs/common_key" },
+        "risk": { "type": "string" },
+        "target": { "type": "string" }
+      }
+    },
+
+    "list_components": { "type": "object" },
+    "list_nets": { "type": "object" },
+    "list_sheets": { "type": "object" },
+    "list_risks": { "type": "object" },
+    "list_design_decisions": { "type": "object" },
+    "list_calculations": { "type": "object" },
+    "list_constraints": { "type": "object" },
+    "list_power_rails": { "type": "object" },
+
+    "search_components": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string" }
+      }
+    },
+    "search_nets": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string" }
+      }
+    },
+    "search_risks": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string" }
+      }
+    },
+    "search_design_decisions": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string" }
+      }
+    },
+    "search_decisions": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string" }
+      }
+    },
+    "search_sheets": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string" }
+      }
+    },
+    "search_calculations": {
+      "type": "object",
+      "required": ["query"],
+      "properties": {
+        "query": { "type": "string" }
+      }
+    }
+  }
+}

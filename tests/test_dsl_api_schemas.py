@@ -3,7 +3,13 @@
 from __future__ import annotations
 
 import json
+import os
+import sys
 from pathlib import Path
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
+from kicad_suite.model_api.validation import SUPPORTED_OPERATIONS
 
 
 def _load_schema(name: str) -> dict[str, object]:
@@ -38,3 +44,30 @@ def test_dsl_api_request_operation_enum_covers_core_model_api():
     assert "validate_model" in operations
     assert "compile_kicad_execution_plan" in operations
     assert "run_erc" in operations
+
+
+def test_dsl_api_request_operation_enum_matches_implementation():
+    request_schema = _load_schema("dsl-api-request.v1.json")
+    operations = set(request_schema["properties"]["operation"]["enum"])
+
+    assert operations == set(SUPPORTED_OPERATIONS)
+
+
+def test_dsl_api_payload_schema_file_exists():
+    """The payload schema file exists and is valid JSON."""
+    payload_schema = _load_schema("dsl-api-payloads.v1.json")
+
+    assert payload_schema["$id"] == "dsl-api-payloads.v1.json"
+    assert "common_ref" in payload_schema["$defs"]
+    assert "common_name" in payload_schema["$defs"]
+
+
+def test_dsl_api_payload_schema_covers_all_operations():
+    """Every supported operation has a $def entry in the payload schema."""
+    payload_schema = _load_schema("dsl-api-payloads.v1.json")
+    schema_ops = set(payload_schema["$defs"].keys()) - {
+        k for k in payload_schema["$defs"] if k.startswith("common_")
+    }
+
+    missing = set(SUPPORTED_OPERATIONS) - schema_ops
+    assert missing == set(), f"Payload schema missing $defs for: {missing}"
