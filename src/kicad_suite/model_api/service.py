@@ -109,6 +109,18 @@ class ModelApiService(_CrudHandlers, _ExtendedHandlers):
             request, request_report, "UNSUPPORTED_OPERATION", f"unsupported operation: {operation}", before=before,
         )
 
+    def _validate_ir_operation(self, request: OperationRequest, before: dict[str, Any]) -> OperationResult:
+        from ..ir_compiler import build_ir
+        from ..ir_validator import validate_ir
+        try:
+            ir = build_ir(self.model)
+        except (ValueError, KeyError, TypeError) as exc:
+            return self._failure(request, ValidationReport(), "VALIDATION_FAILED", str(exc), before=before)
+        report = validate_ir(ir)
+        if not report.ok:
+            return self._failure(request, report, "VALIDATION_FAILED", report.errors[0], before=before)
+        return self._success(request, report, {"valid": True, "ir_stats": report.stats}, before, snapshot(self.model), [], [])
+
     def _validate_model(self, request: OperationRequest, before: dict[str, Any]) -> OperationResult:
         report = validate_model_snapshot(self.model)
         if not report.ok:
@@ -166,6 +178,8 @@ class ModelApiService(_CrudHandlers, _ExtendedHandlers):
             return self._transaction_operation(request, before)
         if operation in {"apply_operation", "apply_batch", "dry_run"}:
             return self._batch_operation(request, before)
+        if operation == "validate_ir":
+            return self._validate_ir_operation(request, before)
         if operation.startswith("validate_"):
             return self._validation_operation(request, before)
         if operation in {"build_ir", "export_ir", "compile_netlist", "compile_spice_netlist", "compile_kicad_execution_plan"}:

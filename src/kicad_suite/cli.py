@@ -24,6 +24,7 @@ from .project_state import (
     is_validate_operation,
     is_build_operation,
 )
+from .report_system import build_report, format_report, FORMAT_JSON, FORMAT_MARKDOWN, FORMAT_TEXT
 from .simulation_planner import (
     build_simulation_plan,
     load_circuit_model,
@@ -166,9 +167,12 @@ def _project_explain_handler(args: argparse.Namespace) -> int:
 
 
 def _project_report_handler(args: argparse.Namespace) -> int:
-    ps = ProjectState(_resolve_project_path(args))
-    ps.load()
-    return _print_json(ps.state.get("diagnostics", {}))
+    project_path = _resolve_project_path(args)
+    report = build_report(project_path)
+    fmt = args.format if getattr(args, "format", None) else FORMAT_JSON
+    output = format_report(report, fmt)
+    print(output)
+    return 0
 
 
 def _project_history_handler(args: argparse.Namespace) -> int:
@@ -250,8 +254,9 @@ def build_parser() -> argparse.ArgumentParser:
     p_explain.add_argument("--path", type=Path, default=None)
     p_explain.set_defaults(handler=_project_explain_handler)
 
-    p_report = project_subs.add_parser("report", help="Diagnostics report.")
+    p_report = project_subs.add_parser("report", help="Unified project report.")
     p_report.add_argument("--path", type=Path, default=None)
+    p_report.add_argument("--format", choices=["json", "markdown", "text"], default="json")
     p_report.set_defaults(handler=_project_report_handler)
 
     p_history = project_subs.add_parser("history", help="Show operation history.")

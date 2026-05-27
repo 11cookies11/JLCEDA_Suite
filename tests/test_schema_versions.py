@@ -20,6 +20,7 @@ class TestSchemaVersions(unittest.TestCase):
         expected = {
             "requirement-spec.v1",
             "circuit-model.v1",
+            "ir.v1",
             "netlist.v1",
             "spice-netlist.v1",
             "ngspice-execution.v1",

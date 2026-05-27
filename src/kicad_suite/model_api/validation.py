@@ -187,6 +187,7 @@ SUPPORTED_OPERATIONS = {
     "validate_connectivity",
     "validate_model",
     "validate_part_availability",
+    "validate_ir",
     "validate_pinmap",
     "validate_power_budget",
     "validate_power_tree",

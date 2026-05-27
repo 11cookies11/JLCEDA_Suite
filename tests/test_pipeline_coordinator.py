@@ -106,7 +106,7 @@ class TestRunPipeline(unittest.TestCase):
                 "net_count": 1,
             }
 
-            with patch("kicad_suite.pipeline_coordinator.compile_plan", return_value=fake_plan) as compile_plan:
+            with patch("kicad_suite.pipeline_coordinator.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
                 with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json") as write_output:
                     with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result) as write_project:
                         with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
@@ -116,7 +116,7 @@ class TestRunPipeline(unittest.TestCase):
                                         with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md"}) as run_parts:
                                             summary = run_pipeline(str(model_path), tmpdir)
 
-        compile_plan.assert_called_once()
+        ir_to_kicad.assert_called_once()
         write_output.assert_called_once()
         write_project.assert_called_once()
         write_simulation_artifacts.assert_called_once()
@@ -163,7 +163,7 @@ class TestRunPipeline(unittest.TestCase):
                 "net_count": 1,
             }
 
-            with patch("kicad_suite.pipeline_coordinator.compile_plan", return_value=fake_plan):
+            with patch("kicad_suite.pipeline_coordinator.ir_to_kicad", return_value=fake_plan):
                 with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json"):
                     with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result):
                         with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
