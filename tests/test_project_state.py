@@ -30,6 +30,7 @@ def _write_model(project_dir, model=None):
             "calculations": [],
             "design_decisions": [],
             "constraints": [],
+            "power_rails": [],
         }
     model_path = project_dir / "circuit-model.json"
     model_path.write_text(json.dumps(model, ensure_ascii=False), encoding="utf-8")
@@ -150,7 +151,21 @@ def test_recompute_from_files(tmp_path):
 
 
 def test_summary_counts(tmp_path):
-    _write_model(tmp_path)
+    model = {
+        "schema_version": "circuit-model.v1",
+        "request_id": "test",
+        "project_id": "test-board",
+        "topology": "test_topology",
+        "components": [{"ref": "U1", "role": "mcu", "value": "H618"}],
+        "nets": [{"name": "+3V3", "members": ["U1.VDD"]}],
+        "risks": [{"key": "ddr", "title": "DDR review", "status": "open"}],
+        "sheets": [],
+        "calculations": [],
+        "design_decisions": [],
+        "constraints": [],
+        "power_rails": [{"name": "+3V3"}, {"name": "+1V8"}],
+    }
+    _write_model(tmp_path, model)
     ps = ProjectState(tmp_path)
     ps.load()
     ps.recompute()
@@ -158,6 +173,7 @@ def test_summary_counts(tmp_path):
     assert s["component_count"] == 1
     assert s["net_count"] == 1
     assert s["risk_count"] == 1
+    assert s["power_rail_count"] == 2
 
 
 def test_explain_returns_string(tmp_path):
@@ -211,7 +227,7 @@ def test_validate_operation_classifier():
 
 
 def test_build_operation_classifier():
-    assert is_build_operation("compile_netlist") is True
-    assert is_build_operation("compile_kicad_execution_plan") is True
+    assert is_build_operation("compile_netlist") is False
+    assert is_build_operation("compile_kicad_execution_plan") is False
     assert is_build_operation("export_kicad_project") is True
     assert is_build_operation("validate_model") is False

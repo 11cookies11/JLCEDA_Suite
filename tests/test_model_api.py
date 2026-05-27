@@ -5,9 +5,15 @@ from __future__ import annotations
 import json
 import os
 import sys
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
+from kicad_suite.compile_kicad_execution_plan import (
+    KiCadDiagnostics,
+    KiCadExecutionPlan,
+    KiCadTarget,
+)
 from kicad_suite.cli import main
 from kicad_suite.model_api.external_tools import external_tool_env, load_external_tools_config
 from kicad_suite.model_api import CircuitModelRepository, ModelApiService
@@ -460,6 +466,41 @@ def test_model_api_run_simulation_plan_writes_artifacts(tmp_path):
     assert result["success"] is True
     assert result["result"]["simulation"]["plan_file"]
     assert (tmp_path / "simulation-plan.json").exists()
+
+
+def test_model_api_export_kicad_project_uses_ir_backend(tmp_path):
+    fake_plan = KiCadExecutionPlan(
+        schema_version="kicad-execution-plan.v1",
+        request_id="req-export",
+        target=KiCadTarget(
+            project_name="demo",
+            output_dir=str(tmp_path / "demo"),
+            schematic_file=str(tmp_path / "demo" / "demo.kicad_sch"),
+            project_file=str(tmp_path / "demo" / "demo.kicad_pro"),
+        ),
+        symbols=[],
+        nets=[],
+        diagnostics=KiCadDiagnostics(),
+    )
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
+
+    with patch("kicad_suite.model_api.handlers_extended.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
+        with patch(
+            "kicad_suite.model_api.handlers_extended.write_project",
+            return_value={"project_file": str(tmp_path / "demo" / "demo.kicad_pro")},
+        ) as write_project:
+            result = service.handle_dict(
+                _request(
+                    "export_kicad_project",
+                    {"output_dir": str(tmp_path), "project_name": "demo"},
+                )
+            )
+
+    assert result["success"] is True
+    ir_to_kicad.assert_called_once()
+    assert ir_to_kicad.call_args.args[0]["schema_version"] == "ir.v1"
+    write_project.assert_called_once()
 
 
 def test_deep_diff_nested_change_detects_field_level_paths():

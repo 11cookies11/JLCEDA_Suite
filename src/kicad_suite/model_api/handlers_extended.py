@@ -7,7 +7,6 @@ from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
-from ..compile_kicad_execution_plan import compile_plan
 from ..kicad_erc_runner import run as run_erc
 from ..kicad_project_writer import write_project
 from ..ir_compiler import build_ir
@@ -393,9 +392,12 @@ class _ExtendedHandlers:
                 kicad = config.get("kicad", {}) if isinstance(config.get("kicad"), dict) else {}
                 output_dir = Path(str(request.payload.get("output_dir", kicad.get("output_dir", ""))))
                 project_name = str(request.payload.get("project_name", kicad.get("project_name", "")))
-                with external_tool_env(config, {"KICAD_OUTPUT_DIR": str(output_dir), "KICAD_PROJECT_NAME": project_name}):
-                    netlist = build_netlist(self.model)
-                    plan = compile_plan(self.model, netlist)
+                with external_tool_env(
+                    config,
+                    {"KICAD_OUTPUT_DIR": str(output_dir), "KICAD_PROJECT_NAME": project_name},
+                ):
+                    ir = build_ir(self.model)
+                    plan = ir_to_kicad(ir)
                     result = write_project(asdict(plan))
                 return self._read_result(request, before, {"kicad_project": result})
             project_dir = Path(str(request.payload.get("project_dir", "")))

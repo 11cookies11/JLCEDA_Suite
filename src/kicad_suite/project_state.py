@@ -82,9 +82,8 @@ _VALIDATE_OPERATIONS = frozenset({
     "validate_risk_consistency", "validate_readiness",
 })
 
-# operations that produce build output
+# operations that produce committed project build output.
 _BUILD_OPERATIONS = frozenset({
-    "compile_netlist", "compile_spice_netlist", "compile_kicad_execution_plan",
     "export_kicad_project",
 })
 
@@ -329,7 +328,7 @@ class ProjectState:
             "calculation_count": _count("calculations"),
             "decision_count": _count("design_decisions"),
             "constraint_count": _count("constraints"),
-            "power_rail_count": model.get("power_rails", []) if isinstance(model.get("power_rails"), list) else 0,
+            "power_rail_count": _count("power_rails"),
         }
 
     def _compute_status(self) -> str:
@@ -396,4 +395,4 @@ def is_validate_operation(operation: str) -> bool:
 
 def is_build_operation(operation: str) -> bool:
     """Return True if *operation* produces build output."""
-    return operation in _BUILD_OPERATIONS or operation.startswith("compile_") or operation.startswith("export_kicad")
+    return operation in _BUILD_OPERATIONS

@@ -113,7 +113,7 @@ def _model_api_handler(args: argparse.Namespace) -> int:
     _print_json(result)
 
     # Update project state after successful API operations.
-    if result.get("success"):
+    if result.get("success") and _should_update_project_state(request):
         operation = request.get("operation", "")
         ps = ProjectState(args.model_path.parent)
         ps.load()
@@ -128,6 +128,18 @@ def _model_api_handler(args: argparse.Namespace) -> int:
         elif is_build_operation(operation):
             ps.mark_built({"operation": operation})
     return 0 if result.get("success") else 1
+
+
+def _should_update_project_state(request: dict[str, Any]) -> bool:
+    """Return True only when an API request reflects committed project state."""
+    options = request.get("options", {})
+    if not isinstance(options, dict):
+        return True
+    if options.get("dry_run") or options.get("validate_only"):
+        return False
+    if options.get("commit") is False:
+        return False
+    return True
 
 
 def _resolve_project_path(args: argparse.Namespace) -> Path:
