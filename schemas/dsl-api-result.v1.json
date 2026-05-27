@@ -1,0 +1,72 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schema/dsl-api-result.v1.json",
+  "title": "DSL API Result v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "success",
+    "request_id",
+    "project_id",
+    "operation",
+    "diagnostics"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "dsl-api-result.v1"
+    },
+    "success": {
+      "type": "boolean"
+    },
+    "request_id": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "operation": {
+      "type": "string"
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "diagnostics": {
+      "$ref": "dsl-api-entities.v1.json#/$defs/ValidationReport"
+    },
+    "warnings": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "dsl-api-entities.v1.json#/$defs/ApiError"
+      }
+    },
+    "before": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "after": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "diff": {
+      "type": "array",
+      "items": {
+        "$ref": "dsl-api-entities.v1.json#/$defs/DiffEntry"
+      }
+    },
+    "changed_paths": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

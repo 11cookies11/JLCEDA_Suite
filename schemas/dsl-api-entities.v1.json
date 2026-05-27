@@ -1,0 +1,557 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schema/dsl-api-entities.v1.json",
+  "title": "DSL API Entities v1",
+  "$defs": {
+    "PartSelection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "part_id",
+        "display_name"
+      ],
+      "properties": {
+        "part_id": {
+          "type": "string"
+        },
+        "display_name": {
+          "type": "string"
+        },
+        "lcsc_id": {
+          "type": "string"
+        },
+        "manufacturer": {
+          "type": "string"
+        },
+        "mpn": {
+          "type": "string"
+        },
+        "package": {
+          "type": "string"
+        },
+        "library_uuid": {
+          "type": "string"
+        },
+        "symbol_uuid": {
+          "type": "string"
+        },
+        "pin_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "named_pin_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "availability_status": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "available",
+            "unavailable"
+          ]
+        }
+      }
+    },
+    "ValidationReport": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ok",
+        "errors",
+        "warnings",
+        "checks",
+        "stats"
+      ],
+      "properties": {
+        "ok": {
+          "type": "boolean"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "warnings": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "checks": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "stats": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+    "ApiError": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "code",
+        "message"
+      ],
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "message": {
+          "type": "string"
+        },
+        "path": {
+          "type": "string"
+        },
+        "details": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "hint": {
+          "type": "string"
+        }
+      }
+    },
+    "DiffEntry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "op"
+      ],
+      "properties": {
+        "path": {
+          "type": "string"
+        },
+        "op": {
+          "type": "string",
+          "enum": [
+            "add",
+            "remove",
+            "replace",
+            "move",
+            "copy",
+            "test"
+          ]
+        },
+        "before": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "after": {
+          "type": [
+            "object",
+            "array",
+            "string",
+            "number",
+            "boolean",
+            "null"
+          ]
+        },
+        "note": {
+          "type": "string"
+        }
+      }
+    },
+    "Component": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ref",
+        "role",
+        "value",
+        "selected_part",
+        "candidate_parts",
+        "availability_status"
+      ],
+      "properties": {
+        "ref": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        },
+        "selected_part": {
+          "$ref": "#/$defs/PartSelection"
+        },
+        "candidate_parts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PartSelection"
+          }
+        },
+        "availability_status": {
+          "type": "string",
+          "enum": [
+            "unknown",
+            "available",
+            "unavailable"
+          ]
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Net": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "members"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "signal",
+            "power",
+            "ground",
+            "unknown"
+          ]
+        },
+        "members": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Calculation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "formula",
+        "inputs",
+        "result",
+        "unit"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "formula": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "result": {
+          "type": [
+            "number",
+            "string"
+          ]
+        },
+        "unit": {
+          "type": "string"
+        }
+      }
+    },
+    "DesignDecision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "title",
+        "rationale"
+      ],
+      "properties": {
+        "title": {
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        },
+        "impact": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "proposed",
+            "accepted",
+            "rejected",
+            "needs_review",
+            "finalized"
+          ]
+        }
+      }
+    },
+    "Risk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key",
+        "title",
+        "status",
+        "severity",
+        "category",
+        "description"
+      ],
+      "properties": {
+        "key": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "in_progress",
+            "blocked",
+            "resolved",
+            "deferred"
+          ]
+        },
+        "severity": {
+          "type": "string",
+          "enum": [
+            "low",
+            "medium",
+            "high"
+          ]
+        },
+        "category": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "owner": {
+          "type": "string"
+        },
+        "due_reason": {
+          "type": "string"
+        },
+        "links": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Constraint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "type",
+        "scope",
+        "status"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "type": "string"
+        },
+        "scope": {
+          "type": "string"
+        },
+        "priority": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "open",
+            "active",
+            "suspended",
+            "resolved"
+          ]
+        },
+        "rules": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Sheet": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "inputs",
+        "outputs",
+        "components",
+        "nets"
+      ],
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "inputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "outputs": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "nets": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "constraints": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "Transaction": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "transaction_id",
+        "request_id",
+        "status"
+      ],
+      "properties": {
+        "transaction_id": {
+          "type": "string"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string",
+          "enum": [
+            "active",
+            "committed",
+            "rolled_back",
+            "failed"
+          ]
+        },
+        "base_revision": {
+          "type": "string"
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "ModelSnapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "request_id",
+        "project_id",
+        "topology",
+        "components",
+        "nets",
+        "calculations",
+        "design_decisions",
+        "risks"
+      ],
+      "properties": {
+        "schema_version": {
+          "type": "string"
+        },
+        "request_id": {
+          "type": "string"
+        },
+        "project_id": {
+          "type": "string"
+        },
+        "topology": {
+          "type": "string"
+        },
+        "components": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Component"
+          }
+        },
+        "nets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Net"
+          }
+        },
+        "calculations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Calculation"
+          }
+        },
+        "design_decisions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/DesignDecision"
+          }
+        },
+        "risks": {
+          "type": "array",
+          "items": {
+            "type": [
+              "string",
+              "object"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

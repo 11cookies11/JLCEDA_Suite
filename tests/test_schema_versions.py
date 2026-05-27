@@ -32,6 +32,9 @@ class TestSchemaVersions(unittest.TestCase):
             "simulation-profile.v1",
             "simulation-plan.v1",
             "simulation-task-plan.v1",
+            "dsl-api-request.v1",
+            "dsl-api-result.v1",
+            "dsl-api-entities.v1",
         }
         self.assertEqual(set(CANONICAL_SCHEMA_VERSIONS), expected)
 

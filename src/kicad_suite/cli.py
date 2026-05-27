@@ -17,7 +17,14 @@ from .compile_kicad_execution_plan import run as run_compile_plan
 from .circuit_pipeline import diagnose_ngspice_environment
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import run as run_write_project
-from .simulation_planner import build_simulation_plan, load_circuit_model, load_simulation_profile, simulation_plan_to_dict
+from .model_api import CircuitModelRepository, ModelApiService
+from .simulation_planner import (
+    build_simulation_plan,
+    load_circuit_model,
+    load_simulation_profile,
+    simulation_plan_to_dict,
+)
+from .validation.common import load_json
 
 
 def _print_json(payload: Any) -> int:
@@ -76,6 +83,14 @@ def _simulation_plan_handler(args: argparse.Namespace) -> int:
     return _print_json(simulation_plan_to_dict(plan))
 
 
+def _model_api_handler(args: argparse.Namespace) -> int:
+    request = load_json(args.request_path)
+    service = ModelApiService.from_repository(CircuitModelRepository(args.model_path))
+    result = service.handle_dict(request)
+    _print_json(result)
+    return 0 if result.get("success") else 1
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(prog="kas", description=__doc__)
     subparsers = parser.add_subparsers(dest="command")
@@ -100,7 +115,10 @@ def build_parser() -> argparse.ArgumentParser:
     erc = subparsers.add_parser("erc", help="Run KiCad ERC on the resolved schematic.")
     erc.set_defaults(handler=_erc_handler)
 
-    validate_artifacts = subparsers.add_parser("validate-artifacts", help="Validate generated artifacts for consistency.")
+    validate_artifacts = subparsers.add_parser(
+        "validate-artifacts",
+        help="Validate generated artifacts for consistency.",
+    )
     validate_artifacts.add_argument("--summary", type=Path, required=True)
     validate_artifacts.add_argument("--strict", action="store_true")
     validate_artifacts.add_argument("--require-erc", action="store_true")
@@ -114,6 +132,14 @@ def build_parser() -> argparse.ArgumentParser:
     simulation_plan.add_argument("model_path", type=Path)
     simulation_plan.add_argument("--profile-path", type=Path, default=None)
     simulation_plan.set_defaults(handler=_simulation_plan_handler)
+
+    model_api = subparsers.add_parser(
+        "model-api",
+        help="Apply a DSL API request to a circuit-model JSON file.",
+    )
+    model_api.add_argument("request_path", type=Path)
+    model_api.add_argument("--model", dest="model_path", type=Path, required=True)
+    model_api.set_defaults(handler=_model_api_handler)
     return parser
 
 
