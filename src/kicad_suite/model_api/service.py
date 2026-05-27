@@ -168,7 +168,7 @@ class ModelApiService(_CrudHandlers, _ExtendedHandlers):
             return self._batch_operation(request, before)
         if operation.startswith("validate_"):
             return self._validation_operation(request, before)
-        if operation in {"compile_netlist", "compile_spice_netlist", "compile_kicad_execution_plan"}:
+        if operation in {"build_ir", "export_ir", "compile_netlist", "compile_spice_netlist", "compile_kicad_execution_plan"}:
             return self._compile_operation(request, before)
         if operation in {"export_kicad_project", "run_erc", "run_simulation_plan"}:
             return self._external_tool_operation(request, before)

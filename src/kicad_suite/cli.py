@@ -18,6 +18,12 @@ from .circuit_pipeline import diagnose_ngspice_environment
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import run as run_write_project
 from .model_api import CircuitModelRepository, ModelApiService
+from .project_state import (
+    ProjectState,
+    is_mutating_operation,
+    is_validate_operation,
+    is_build_operation,
+)
 from .simulation_planner import (
     build_simulation_plan,
     load_circuit_model,
@@ -85,10 +91,90 @@ def _simulation_plan_handler(args: argparse.Namespace) -> int:
 
 def _model_api_handler(args: argparse.Namespace) -> int:
     request = load_json(args.request_path)
+    payload = request.setdefault("payload", {})
+    options = request.setdefault("options", {})
+    if args.config_path is not None:
+        payload.setdefault("config", str(args.config_path))
+    if args.dry_run:
+        options["dry_run"] = True
+    if args.validate_only:
+        options["validate_only"] = True
+    if args.no_commit:
+        options["commit"] = False
+    if args.no_strict:
+        options["strict"] = False
+    if args.no_diff:
+        options["return_diff"] = False
+    if args.no_snapshot:
+        options["return_snapshot"] = False
     service = ModelApiService.from_repository(CircuitModelRepository(args.model_path))
     result = service.handle_dict(request)
     _print_json(result)
+
+    # Update project state after successful API operations.
+    if result.get("success"):
+        operation = request.get("operation", "")
+        ps = ProjectState(args.model_path.parent)
+        ps.load()
+        if is_mutating_operation(operation):
+            ps.mark_dirty(reason=f"api:{operation}")
+        elif is_validate_operation(operation):
+            diag = result.get("diagnostics", {})
+            if diag.get("ok"):
+                ps.mark_valid({"errors": diag.get("errors", []), "warnings": diag.get("warnings", [])})
+            else:
+                ps.mark_invalid({"errors": diag.get("errors", []), "warnings": diag.get("warnings", [])})
+        elif is_build_operation(operation):
+            ps.mark_built({"operation": operation})
     return 0 if result.get("success") else 1
+
+
+def _resolve_project_path(args: argparse.Namespace) -> Path:
+    """Resolve project path from --path flag, defaulting to CWD."""
+    path = args.path if getattr(args, "path", None) else Path.cwd()
+    return Path(path).resolve()
+
+
+def _project_status_handler(args: argparse.Namespace) -> int:
+    ps = ProjectState(_resolve_project_path(args))
+    ps.load()
+    status = ps.get_status()
+    stale = ps.is_stale()
+    _print_json({"status": status, "stale": stale})
+    return 0
+
+
+def _project_inspect_handler(args: argparse.Namespace) -> int:
+    ps = ProjectState(_resolve_project_path(args))
+    ps.load()
+    payload = {
+        "project": ps.state.get("project", {}),
+        "status": ps.get_status(),
+        "stale": ps.is_stale(),
+        "summary": ps.get_summary(),
+        "dsl": ps.state.get("dsl", {}),
+        "build": ps.state.get("build", {}),
+    }
+    return _print_json(payload)
+
+
+def _project_explain_handler(args: argparse.Namespace) -> int:
+    ps = ProjectState(_resolve_project_path(args))
+    ps.load()
+    print(ps.get_explain())
+    return 0
+
+
+def _project_report_handler(args: argparse.Namespace) -> int:
+    ps = ProjectState(_resolve_project_path(args))
+    ps.load()
+    return _print_json(ps.state.get("diagnostics", {}))
+
+
+def _project_history_handler(args: argparse.Namespace) -> int:
+    ps = ProjectState(_resolve_project_path(args))
+    limit = args.limit if getattr(args, "limit", None) else 50
+    return _print_json(ps.get_history(limit=limit))
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -139,7 +225,40 @@ def build_parser() -> argparse.ArgumentParser:
     )
     model_api.add_argument("request_path", type=Path)
     model_api.add_argument("--model", dest="model_path", type=Path, required=True)
+    model_api.add_argument("--config", "--config-path", dest="config_path", type=Path, default=None)
+    model_api.add_argument("--dry-run", action="store_true")
+    model_api.add_argument("--validate-only", action="store_true")
+    model_api.add_argument("--no-commit", action="store_true")
+    model_api.add_argument("--no-strict", action="store_true")
+    model_api.add_argument("--no-diff", action="store_true")
+    model_api.add_argument("--no-snapshot", action="store_true")
     model_api.set_defaults(handler=_model_api_handler)
+
+    # kas project
+    project_cmd = subparsers.add_parser("project", help="Project state management.")
+    project_subs = project_cmd.add_subparsers(dest="project_action")
+
+    p_status = project_subs.add_parser("status", help="Show current project status.")
+    p_status.add_argument("--path", type=Path, default=None)
+    p_status.set_defaults(handler=_project_status_handler)
+
+    p_inspect = project_subs.add_parser("inspect", help="Structured project summary.")
+    p_inspect.add_argument("--path", type=Path, default=None)
+    p_inspect.set_defaults(handler=_project_inspect_handler)
+
+    p_explain = project_subs.add_parser("explain", help="Natural-language project description.")
+    p_explain.add_argument("--path", type=Path, default=None)
+    p_explain.set_defaults(handler=_project_explain_handler)
+
+    p_report = project_subs.add_parser("report", help="Diagnostics report.")
+    p_report.add_argument("--path", type=Path, default=None)
+    p_report.set_defaults(handler=_project_report_handler)
+
+    p_history = project_subs.add_parser("history", help="Show operation history.")
+    p_history.add_argument("--path", type=Path, default=None)
+    p_history.add_argument("-n", "--limit", type=int, default=50)
+    p_history.set_defaults(handler=_project_history_handler)
+
     return parser
 
 

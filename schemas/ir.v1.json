@@ -1,0 +1,151 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ir.v1.json",
+  "title": "Resolved Hardware IR",
+  "description": "EDA-independent resolved hardware facts compiled from circuit-model.json.",
+  "type": "object",
+  "required": ["schema_version", "request_id", "project_id", "topology", "components", "nets"],
+  "properties": {
+    "schema_version": { "const": "ir.v1" },
+    "request_id": { "type": "string" },
+    "project_id": { "type": "string" },
+    "topology": { "type": "string" },
+    "components": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ir_component" }
+    },
+    "nets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ir_net" }
+    },
+    "sheets": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ir_sheet" }
+    },
+    "pinmap": { "$ref": "#/$defs/ir_pinmap" },
+    "power_tree": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ir_power_rail" }
+    },
+    "interfaces": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/ir_interface" }
+    },
+    "calculations": { "type": "array" },
+    "design_decisions": { "type": "array" },
+    "risks": { "type": "array" },
+    "constraints": { "type": "array" }
+  },
+  "$defs": {
+    "ir_component": {
+      "type": "object",
+      "required": ["ref", "role", "value"],
+      "properties": {
+        "ref": { "type": "string" },
+        "role": { "type": "string" },
+        "value": { "type": "string" },
+        "selected_part": {
+          "type": "object",
+          "properties": {
+            "part_id": { "type": "string" },
+            "display_name": { "type": "string" },
+            "mpn": { "type": "string" },
+            "manufacturer": { "type": "string" },
+            "lcsc_id": { "type": "string" },
+            "package": { "type": "string", "description": "Physical package e.g. QFN-20, SOT-23-5 (hardware fact, NOT KiCad footprint)" },
+            "mechanical_package": { "type": "string" }
+          }
+        },
+        "pins": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/ir_pin" }
+        },
+        "assigned_sheet": { "type": "string" },
+        "availability_status": { "type": "string" },
+        "notes": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "ir_pin": {
+      "type": "object",
+      "required": ["number", "net"],
+      "properties": {
+        "number": { "type": "string", "description": "Pin number/designator" },
+        "name": { "type": "string", "description": "Pin function name e.g. VDD, GPIO12" },
+        "net": { "type": "string", "description": "Connected net name (empty if NC)" },
+        "direction": { "type": "string", "enum": ["input", "output", "bidirectional", "power_in", "power_out", "passive", "open_collector", "open_emitter", "unspecified"] },
+        "locked": { "type": "boolean", "description": "Pin assignment locked against auto-routing changes" },
+        "source": { "type": "string", "enum": ["model", "netlist", "pinmap", "pack_default", "resolver"], "description": "Where this pin assignment came from" }
+      }
+    },
+    "ir_net": {
+      "type": "object",
+      "required": ["name", "members"],
+      "properties": {
+        "name": { "type": "string" },
+        "kind": { "type": "string", "enum": ["signal", "power", "ground", "unknown"] },
+        "members": { "type": "array", "items": { "type": "string" } },
+        "domain": { "type": "string" },
+        "flags": {
+          "type": "object",
+          "properties": {
+            "global": { "type": "boolean" },
+            "power": { "type": "boolean" },
+            "high_speed": { "type": "boolean" },
+            "debug": { "type": "boolean" },
+            "differential_pair": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "ir_sheet": {
+      "type": "object",
+      "required": ["name"],
+      "properties": {
+        "name": { "type": "string" },
+        "components": { "type": "array", "items": { "type": "string" } },
+        "nets": { "type": "array", "items": { "type": "string" } },
+        "inputs": { "type": "array", "items": { "type": "string" } },
+        "outputs": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "ir_pinmap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": {
+          "type": "object",
+          "properties": {
+            "net": { "type": "string" },
+            "locked": { "type": "boolean" },
+            "role": { "type": "string" }
+          }
+        }
+      },
+      "description": "Per-component pin assignments. Keyed by component ref, then pin number."
+    },
+    "ir_power_rail": {
+      "type": "object",
+      "required": ["rail"],
+      "properties": {
+        "rail": { "type": "string" },
+        "source_net": { "type": "string" },
+        "voltage": { "type": "number" },
+        "current_limit": { "type": "number" },
+        "parent": { "type": "string" },
+        "children": { "type": "array", "items": { "type": "string" } },
+        "sequence_order": { "type": "integer" }
+      }
+    },
+    "ir_interface": {
+      "type": "object",
+      "required": ["name", "type"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string" },
+        "nets": { "type": "array", "items": { "type": "string" } },
+        "connector_ref": { "type": "string" }
+      }
+    }
+  }
+}

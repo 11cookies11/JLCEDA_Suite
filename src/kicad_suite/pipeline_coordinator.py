@@ -14,6 +14,8 @@ from typing import Any
 
 from .adapters.kicad_cli import resolve_kicad_cli
 from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, normalize_net_kind, write_output
+from .ir_compiler import build_ir
+from .ir_to_kicad import ir_to_kicad
 from .env_utils import is_truthy_env
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import write_project
@@ -215,7 +217,14 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             "scenario_count": simulation_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
         },
     )
-    plan: KiCadExecutionPlan = compile_plan(model, netlist)
+    ir = build_ir(model)
+    append_pipeline_event(
+        event_log,
+        "ir-compiled",
+        "Resolved Hardware IR compiled",
+        {"component_count": len(ir.get("components", [])), "net_count": len(ir.get("nets", []))},
+    )
+    plan: KiCadExecutionPlan = ir_to_kicad(ir)
     plan_file = write_output(plan)
     write_result = write_project(asdict(plan))
     append_pipeline_event(

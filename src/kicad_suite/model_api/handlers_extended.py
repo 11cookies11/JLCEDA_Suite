@@ -10,6 +10,8 @@ from typing import Any
 from ..compile_kicad_execution_plan import compile_plan
 from ..kicad_erc_runner import run as run_erc
 from ..kicad_project_writer import write_project
+from ..ir_compiler import build_ir
+from ..ir_to_kicad import ir_to_kicad
 from ..pipeline_coordinator import build_netlist
 from ..simulation_planner import write_simulation_artifacts
 from ..schema_versions import SPICE_NETLIST_SCHEMA_VERSION
@@ -317,15 +319,40 @@ class _ExtendedHandlers:
 
     def _compile_operation(self, request: OperationRequest, before: dict[str, Any]) -> OperationResult:
         try:
+            if request.operation == "build_ir":
+                ir = build_ir(self.model)
+                return self._read_result(request, before, {"ir": ir})
+            if request.operation == "export_ir":
+                ir = build_ir(self.model)
+                return self._export_ir_to_file(request, before, ir)
             netlist = build_netlist(self.model)
             if request.operation == "compile_netlist":
                 return self._read_result(request, before, {"netlist": netlist})
             if request.operation == "compile_spice_netlist":
                 return self._read_result(request, before, {"spice_netlist": self._build_spice_netlist(netlist)})
-            plan = compile_plan(self.model, netlist)
+            ir = build_ir(self.model)
+            plan = ir_to_kicad(ir)
             return self._read_result(request, before, {"execution_plan": plan})
         except Exception as exc:
             return self._failure(request, ValidationReport(), "VALIDATION_FAILED", str(exc), before=before)
+
+    def _export_ir_to_file(
+        self, request: OperationRequest, before: dict[str, Any], ir: dict[str, Any],
+    ) -> OperationResult:
+        import json
+        from pathlib import Path
+        path_value = request.payload.get("path", "")
+        if path_value:
+            path = Path(str(path_value))
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(ir, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            return self._read_result(request, before, {"path": str(path), "ir": ir})
+        if self.repository is not None:
+            ir_path = self.repository.model_path.parent / "build" / "ir.json"
+            ir_path.parent.mkdir(parents=True, exist_ok=True)
+            ir_path.write_text(json.dumps(ir, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            return self._read_result(request, before, {"path": str(ir_path), "ir": ir})
+        return self._read_result(request, before, {"ir": ir})
 
     def _build_spice_netlist(self, netlist: dict[str, Any]) -> dict[str, Any]:
         lines: list[dict[str, str]] = [

@@ -1173,6 +1173,13 @@
     "validate_risk_consistency": { "type": "object" },
     "validate_readiness": { "type": "object" },
 
+    "build_ir": { "type": "object" },
+    "export_ir": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string" }
+      }
+    },
     "compile_netlist": { "type": "object" },
     "compile_spice_netlist": { "type": "object" },
     "compile_kicad_execution_plan": { "type": "object" },
