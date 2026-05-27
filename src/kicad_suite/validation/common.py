@@ -51,7 +51,7 @@ class ValidationReport:
 def load_json(path: Path) -> dict[str, Any]:
     raw = path.read_bytes()
     text: str | None = None
-    for encoding in ("utf-8", "utf-8-sig", "utf-16"):
+    for encoding in ("utf-8-sig", "utf-8", "utf-16"):
         try:
             text = raw.decode(encoding)
             break
@@ -164,4 +164,3 @@ def check_file_exists(report: ValidationReport, path: Path, label: str) -> None:
         report.add_check(f"{label}: found")
     else:
         report.add_error(f"{label}: missing file at {path}")
-

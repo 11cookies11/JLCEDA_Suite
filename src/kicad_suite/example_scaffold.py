@@ -25,33 +25,6 @@ WORKSPACE_FILES = {
     "hardware/pcb/README.md": "# PCB\n\nPlace PCB constraint notes, layout exports, and review artifacts here.\n",
     "hardware/libraries/README.md": "# Libraries\n\nPlace local symbol, footprint, and 3D asset work here if needed.\n",
     "hardware/production/README.md": "# Production\n\nPlace generated BOM, pick-and-place, fabrication outputs, and release notes here.\n",
-    "software/README.md": "# Software Workspace\n\nThis folder is reserved for firmware, bootloader, DTS, and rootfs work.\n",
-    "software/u-boot/README.md": "# U-Boot\n\nUse this folder for bootloader notes, patches, and board-specific configuration.\n",
-    "software/linux-dts/README.md": "# Linux DTS\n\nUse this folder for device-tree sources, overlays, and pin/function mapping notes.\n",
-    "software/rootfs/README.md": "# RootFS\n\nUse this folder for root filesystem notes, service definitions, and boot-time scripts.\n",
-    "software/tools/README.md": "# Tools\n\nUse this folder for bring-up scripts, serial helpers, and utility notes.\n",
-    "agent/README.md": "# Agent Workspace\n\nThis folder holds prompts, checklists, and review rules for AI-assisted hardware work.\n",
-    "agent/prompts/README.md": "# Prompts\n\nStore reusable prompts and task-specific instructions here.\n",
-    "agent/checklists/README.md": "# Checklists\n\nStore review and bring-up checklists here.\n",
-    "agent/review_rules.md": dedent(
-        """
-        # Review Rules
-
-        ## General
-
-        - Mark unknowns as `TODO` or `NEED_VERIFY`
-        - Keep the first revision debug-friendly
-        - Treat DDR, PMIC, boot straps, and debug UART as high-risk areas
-
-        ## Review Focus
-
-        - Power tree correctness
-        - Boot and recovery path
-        - Signal access for measurement
-        - Pinmux conflicts
-        - Hardware and software consistency
-        """
-    ).lstrip(),
 }
 
 
@@ -69,15 +42,15 @@ def _render_root_readme(title: str, project_name: str) -> str:
 
         Project intent:
 
-        - Low-cost Linux control board based on Allwinner H618
-        - Debug UART, MicroSD boot, SPI NOR, Ethernet, USB Host
-        - AI-agent-oriented hardware control and logging
+        - Start from a generic hardware project template
+        - Keep the workspace ready for schematic, PCB, release, and validation artifacts
+        - Let the hardware model define the actual target platform and BOM
 
         Current status:
 
         - Requirements captured in `docs/00_requirements.md`
         - Architecture and bring-up documents are scaffolded
-        - Hardware, software, and agent workspaces are ready for detail work
+        - Hardware workspaces are ready for detail work
 
         Recommended next steps:
 
@@ -105,17 +78,16 @@ def _render_doc(name: str, title: str) -> str:
 
             Captured intent:
 
-            - Low-cost Linux development board based on Allwinner H618
-            - Debug-friendly first revision
-            - Stable boot path via MicroSD and SPI NOR Flash
-            - Ethernet, USB Host, GPIO, UART, I2C, and SPI expansion
-            - Reserved interface for RP2040 or ESP32-class coprocessor
+            - Define the target hardware platform and product goals
+            - Keep the first revision debug-friendly
+            - Preserve a stable boot path and recovery path
+            - Identify the required external interfaces and expansion points
 
             Open items:
 
-            - Final PMIC selection
-            - Exact DDR topology reference board
-            - Final connector count and pin assignment
+            - Power tree
+            - Core silicon / SoC selection
+            - Connector count and pin assignment
             - Thermal and PCB size constraints
             """
         ).lstrip()
@@ -171,10 +143,10 @@ def _render_doc(name: str, title: str) -> str:
             Planned contents:
 
             - BootROM
-            - FEL / BOOT behavior
-            - MicroSD boot path
-            - SPI NOR recovery path
-            - U-Boot handoff
+            - Boot modes and recovery behavior
+            - Primary boot path
+            - Recovery boot path
+            - Bootloader handoff
             - Kernel and rootfs bring-up
             """
         ).lstrip()
@@ -190,7 +162,7 @@ def _render_doc(name: str, title: str) -> str:
 
             - Debug UART pins
             - Boot-sensitive pins
-            - RGMII
+            - High-speed interfaces
             - USB
             - GPIO header
             - I2C and SPI expansion
@@ -207,16 +179,13 @@ def _render_doc(name: str, title: str) -> str:
 
             Planned contents:
 
-            - H618 minimal system
-            - LPDDR4
+            - Core compute module
+            - Memory subsystem
             - PMIC and regulators
-            - MicroSD
-            - SPI NOR Flash
+            - Boot storage
             - Debug UART
-            - USB Hub
-            - Ethernet PHY
-            - HDMI
-            - Buttons and LEDs
+            - External interfaces
+            - Indicators and buttons
             - Test points
             """
         ).lstrip()

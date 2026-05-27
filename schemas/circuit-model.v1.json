@@ -77,6 +77,12 @@
               "package": {
                 "type": "string"
               },
+              "mechanical_package": {
+                "type": "string"
+              },
+              "kicad_footprint_hint": {
+                "type": "string"
+              },
               "library_uuid": {
                 "type": "string"
               },
@@ -84,6 +90,9 @@
                 "type": "string"
               },
               "pin_count": {
+                "type": "integer"
+              },
+              "named_pin_count": {
                 "type": "integer"
               }
             }
@@ -116,6 +125,12 @@
                 "package": {
                   "type": "string"
                 },
+                "mechanical_package": {
+                  "type": "string"
+                },
+                "kicad_footprint_hint": {
+                  "type": "string"
+                },
                 "library_uuid": {
                   "type": "string"
                 },
@@ -123,6 +138,9 @@
                   "type": "string"
                 },
                 "pin_count": {
+                  "type": "integer"
+                },
+                "named_pin_count": {
                   "type": "integer"
                 }
               }
@@ -222,6 +240,112 @@
           },
           "impact": {
             "type": "string"
+          }
+        }
+      }
+    },
+    "power_rails": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "source_net"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "source_net": {
+            "type": "string"
+          },
+          "voltage": {
+            "type": "number"
+          },
+          "current_limit": {
+            "type": "number"
+          },
+          "parent": {
+            "type": "string"
+          },
+          "sequence_order": {
+            "type": "integer"
+          },
+          "notes": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "sheets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name",
+          "components",
+          "nets"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "components": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "nets": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "inputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "outputs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "constraints": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": [
+          "name",
+          "type"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "scope": {
+            "type": "string"
+          },
+          "rules": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
           }
         }
       }

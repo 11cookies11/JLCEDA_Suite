@@ -164,7 +164,8 @@ def test_h618_procurement_settles_standard_bom_items():
     for ref in ("TP1", "TP2", "TP3", "TP4", "TP5", "TP6", "TP7", "TP8", "TP9", "TP10"):
         assert components[ref]["availability_status"] == "available"
         assert components[ref]["selected_part"]["part_id"] == "tp-1p"
-        assert components[ref]["selected_part"]["package"] == "JLC-MCP:TP-SMD_1P"
+        assert components[ref]["selected_part"]["package"] == "1-pin SMD test point"
+        assert components[ref]["selected_part"]["kicad_footprint_hint"] == "JLC-MCP:TP-SMD_1P"
 
 
 def test_h618_all_components_have_a_settled_availability_state():

@@ -9,12 +9,14 @@ from typing import Any
 
 from ..kicad_erc_runner import run as run_erc
 from ..kicad_project_writer import write_project
+from ..example_scaffold import scaffold_example
 from ..ir_compiler import build_ir
 from ..ir_to_kicad import ir_to_kicad
 from ..pipeline_coordinator import build_netlist
 from ..simulation_planner import write_simulation_artifacts
-from ..schema_versions import SPICE_NETLIST_SCHEMA_VERSION
-from ..validation.common import ValidationReport
+from ..project_state import ProjectState
+from ..schema_versions import CIRCUIT_MODEL_SCHEMA_VERSION, SPICE_NETLIST_SCHEMA_VERSION
+from ..validation.common import ValidationReport, load_json
 from .commands import OperationRequest
 from .results import OperationResult
 from .external_tools import external_tool_env, external_tools_config_from_payload
@@ -315,6 +317,149 @@ class _ExtendedHandlers:
         report.add_check("risks checked")
 
     # -- compile -----------------------------------------------------------
+
+    def _scaffold_project_template(
+        self, project_dir: Path, title: str, *, overwrite: bool,
+    ) -> list[Path]:
+        project_name = project_dir.name
+        return scaffold_example(
+            project_name,
+            title=title,
+            root_dir=project_dir.parent,
+            overwrite=overwrite,
+            include_circuit_model=False,
+        )
+
+    def _create_project_template(self, request: OperationRequest, before: dict[str, Any]) -> OperationResult:
+        project_dir_value = str(request.payload.get("project_dir", ""))
+        if not project_dir_value:
+            return self._payload_error(request, before, "project_dir is required", "payload.project_dir")
+        project_dir = Path(project_dir_value)
+        title = str(request.payload.get("title", "") or project_dir.name.replace("-", " ").replace("_", " ").title())
+        overwrite = bool(request.payload.get("overwrite", False))
+
+        try:
+            created_files = self._scaffold_project_template(project_dir, title, overwrite=overwrite)
+            return self._read_result(
+                request,
+                before,
+                {
+                    "project_dir": str(project_dir),
+                    "created": True,
+                    "created_files": [str(path) for path in created_files],
+                    "template": {
+                        "project_name": project_dir.name,
+                        "title": title,
+                    },
+                },
+            )
+        except FileExistsError as exc:
+            return self._failure(request, ValidationReport(), "ALREADY_EXISTS", str(exc), "payload.project_dir", before)
+        except Exception as exc:
+            return self._failure(request, ValidationReport(), "IO_ERROR", str(exc), before=before)
+
+    def _create_hardware_project(
+        self, request: OperationRequest, before: dict[str, Any],
+    ) -> OperationResult:
+        project_dir_value = str(request.payload.get("project_dir", ""))
+        project_dir = Path(project_dir_value)
+        project_id = str(request.payload.get("project_id", request.project_id))
+        if not project_id:
+            return self._payload_error(request, before, "project_id is required", "payload.project_id")
+        title = str(request.payload.get("title", project_id))
+        topology = str(request.payload.get("topology", request.topology or project_id.replace("-", "_")))
+        overwrite = bool(request.payload.get("overwrite", False))
+        should_initialize_state = bool(request.payload.get("initialize_state", True))
+        should_validate_ir = bool(request.payload.get("validate_ir", True))
+        should_export_ir = bool(request.payload.get("export_ir", False))
+
+        if not project_dir_value:
+            return self._payload_error(request, before, "project_dir is required", "payload.project_dir")
+        if project_dir.exists() and any(project_dir.iterdir()) and not overwrite:
+            return self._failure(
+                request,
+                ValidationReport(),
+                "ALREADY_EXISTS",
+                f"project directory is not empty: {project_dir}",
+                "payload.project_dir",
+                before,
+            )
+
+        try:
+            self._scaffold_project_template(project_dir, title, overwrite=overwrite)
+            model = self._project_model_from_payload(request, project_id=project_id, topology=topology)
+            model_path = project_dir / "circuit-model.json"
+            model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+            ir_path = ""
+            ir_stats: dict[str, Any] = {}
+            validation = ValidationReport()
+            if should_validate_ir or should_export_ir:
+                from ..ir_validator import validate_ir
+
+                ir = build_ir(model)
+                validation = validate_ir(ir)
+                ir_stats = dict(validation.stats)
+                if should_export_ir:
+                    output_path = project_dir / "build" / "ir.json"
+                    output_path.parent.mkdir(parents=True, exist_ok=True)
+                    output_path.write_text(json.dumps(ir, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                    ir_path = str(output_path)
+
+            state_path = ""
+            if should_initialize_state:
+                state = ProjectState(project_dir)
+                state.recompute()
+                diagnostics = {"errors": validation.errors, "warnings": validation.warnings}
+                if should_validate_ir:
+                    if validation.ok:
+                        state.mark_valid(diagnostics)
+                    else:
+                        state.mark_invalid(diagnostics)
+                state_path = str(state.state_path)
+
+            report = validation if should_validate_ir else ValidationReport(checks=["project created"])
+            if not report.ok:
+                return self._failure(
+                    request,
+                    report,
+                    "VALIDATION_FAILED",
+                    report.errors[0],
+                    before=before,
+                    after=snapshot(self.model),
+                )
+            report.add_check("hardware project created")
+            result = {
+                "project_dir": str(project_dir),
+                "model_path": str(model_path),
+                "state_path": state_path,
+                "ir_path": ir_path,
+                "created": True,
+                "valid": report.ok,
+                "ir_stats": ir_stats,
+            }
+            return self._success(request, report, result, before, snapshot(self.model), [], [])
+        except Exception as exc:
+            return self._failure(request, ValidationReport(), "IO_ERROR", str(exc), before=before)
+
+    def _project_model_from_payload(
+        self, request: OperationRequest, *, project_id: str, topology: str,
+    ) -> dict[str, Any]:
+        payload_model = request.payload.get("model")
+        if isinstance(payload_model, dict):
+            model = snapshot(payload_model)
+        else:
+            source_model = str(request.payload.get("source_model", ""))
+            if source_model:
+                model = load_json(Path(source_model))
+            else:
+                model = snapshot(self.model) if self.model else empty_model(request.request_id, project_id, topology)
+        model = normalize_model(model)
+        model["schema_version"] = CIRCUIT_MODEL_SCHEMA_VERSION
+        model["request_id"] = str(request.payload.get("request_id", request.request_id))
+        model["project_id"] = project_id
+        model["topology"] = topology
+        return model
 
     def _compile_operation(self, request: OperationRequest, before: dict[str, Any]) -> OperationResult:
         try:

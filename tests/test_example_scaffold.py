@@ -23,8 +23,8 @@ class TestExampleScaffold(unittest.TestCase):
             self.assertTrue((project_dir / "README.md").exists())
             self.assertTrue((project_dir / "docs" / "00_requirements.md").exists())
             self.assertTrue((project_dir / "hardware" / "README.md").exists())
-            self.assertTrue((project_dir / "software" / "README.md").exists())
-            self.assertTrue((project_dir / "agent" / "review_rules.md").exists())
+            self.assertFalse((project_dir / "software").exists())
+            self.assertFalse((project_dir / "agent").exists())
             self.assertIn(project_dir / "README.md", created)
 
     def test_scaffold_refuses_to_overwrite_existing_content(self):

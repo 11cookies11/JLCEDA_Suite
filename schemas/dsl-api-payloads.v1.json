@@ -1184,6 +1184,32 @@
     "compile_netlist": { "type": "object" },
     "compile_spice_netlist": { "type": "object" },
     "compile_kicad_execution_plan": { "type": "object" },
+    "create_project_template": {
+      "type": "object",
+      "required": ["project_dir"],
+      "properties": {
+        "project_dir": { "type": "string" },
+        "title": { "type": "string" },
+        "overwrite": { "type": "boolean" }
+      }
+    },
+    "create_hardware_project": {
+      "type": "object",
+      "required": ["project_dir", "project_id"],
+      "properties": {
+        "project_dir": { "type": "string" },
+        "project_id": { "type": "string" },
+        "title": { "type": "string" },
+        "topology": { "type": "string" },
+        "request_id": { "type": "string" },
+        "source_model": { "type": "string" },
+        "model": { "type": "object" },
+        "overwrite": { "type": "boolean" },
+        "initialize_state": { "type": "boolean" },
+        "validate_ir": { "type": "boolean" },
+        "export_ir": { "type": "boolean" }
+      }
+    },
 
     "export_circuit_model": {
       "type": "object",

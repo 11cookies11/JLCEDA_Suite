@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import Any
 
 from .schema_versions import IR_SCHEMA_VERSION
@@ -9,8 +10,9 @@ from .validation.common import ValidationReport
 
 
 # Fields that must never appear in IR (KiCad-specific leakage).
-_KICAD_FORBIDDEN_FIELDS = ("lib_id", "footprint", "at", "unit", "symbol_size")
+_KICAD_FORBIDDEN_FIELDS = ("lib_id", "footprint", "at", "symbol_size")
 _KICAD_FORBIDDEN_PREFIXES = ("KiCad:", "kicad_", "AIAgent:")
+_KICAD_LIBRARY_PATH_RE = re.compile(r"^[A-Za-z0-9_.+\-]+:[A-Za-z0-9_.+\-/]+$")
 
 
 def validate_ir(ir: dict[str, Any]) -> ValidationReport:
@@ -323,7 +325,7 @@ def _check_no_kicad_leakage(report: ValidationReport, ir: dict[str, Any]) -> Non
                     report.add_error(f"IR{cur}: forbidden KiCad field '{key}' leaked into IR")
                 if isinstance(value, str):
                     # Check for KiCad library path patterns (e.g. "Resistor_SMD:R_0603").
-                    if ":" in value and not value.startswith(("http:", "https:")):
+                    if _KICAD_LIBRARY_PATH_RE.match(value) and not value.startswith(("http:", "https:")):
                         # Package strings like "QFN-20" are hardware facts — allowed.
                         # Full library paths like "Resistor_SMD:R_0603" are not.
                         parts = value.split(":")

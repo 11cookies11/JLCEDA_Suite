@@ -138,6 +138,10 @@ class ModelApiService(_CrudHandlers, _ExtendedHandlers):
         self, request: OperationRequest, before: dict[str, Any],
     ) -> OperationResult | None:
         operation = request.operation
+        if operation == "create_project_template":
+            return self._create_project_template(request, before)
+        if operation == "create_hardware_project":
+            return self._create_hardware_project(request, before)
         if operation in {"save_model", "export_circuit_model"}:
             return self._export_circuit_model(request, before)
         if operation == "clone_model":

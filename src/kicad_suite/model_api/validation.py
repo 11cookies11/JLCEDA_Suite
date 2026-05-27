@@ -36,6 +36,8 @@ SUPPORTED_OPERATIONS = {
     "connect_member",
     "connect_members",
     "connect_pin_to_net",
+    "create_project_template",
+    "create_hardware_project",
     "diff_model",
     "diff_transaction",
     "disconnect_members",

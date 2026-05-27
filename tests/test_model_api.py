@@ -224,6 +224,81 @@ def test_model_api_cli_applies_request_to_model_file(tmp_path, capsys):
     assert saved["components"][0]["ref"] == "U1"
 
 
+def test_model_api_creates_hardware_project_without_agent_scaffold(tmp_path):
+    source_path = tmp_path / "source-circuit-model.json"
+    source_path.write_text(
+        json.dumps(
+            {
+                "schema_version": "circuit-model.v1",
+                "request_id": "source-demo",
+                "project_id": "source-board",
+                "topology": "source_board",
+                "components": [
+                    {
+                        "ref": "U1",
+                        "role": "mcu",
+                        "value": "GD32F303",
+                        "selected_part": {"part_id": "gd32f303-c8t6", "package": "LQFP-48"},
+                        "pinmap": {"1": {"net": "+3V3", "role": "VDD"}},
+                    }
+                ],
+                "nets": [{"name": "+3V3", "members": ["U1.1"], "kind": "power"}],
+            }
+        ),
+        encoding="utf-8",
+    )
+    project_dir = tmp_path / "generated-board"
+    service = ModelApiService()
+
+    result = service.handle_dict(
+        _request(
+            "create_hardware_project",
+            {
+                "project_dir": str(project_dir),
+                "project_id": "generated-board",
+                "title": "Generated Board",
+                "topology": "generated_board",
+                "source_model": str(source_path),
+                "initialize_state": True,
+                "validate_ir": True,
+                "export_ir": True,
+            },
+        )
+    )
+
+    generated_model = json.loads((project_dir / "circuit-model.json").read_text(encoding="utf-8"))
+    generated_state = json.loads((project_dir / "project.state.json").read_text(encoding="utf-8"))
+
+    assert result["success"] is True
+    assert generated_model["project_id"] == "generated-board"
+    assert generated_model["topology"] == "generated_board"
+    assert generated_state["status"] == "VALID"
+    assert (project_dir / "build" / "ir.json").exists()
+    assert not (project_dir / "agent").exists()
+
+
+def test_model_api_creates_generic_project_template(tmp_path):
+    project_dir = tmp_path / "generic-hardware-template"
+    service = ModelApiService()
+
+    result = service.handle_dict(
+        _request(
+            "create_project_template",
+            {
+                "project_dir": str(project_dir),
+                "title": "Generic Hardware Template",
+            },
+        )
+    )
+
+    assert result["success"] is True
+    assert (project_dir / "README.md").exists()
+    assert (project_dir / "docs" / "00_requirements.md").exists()
+    assert (project_dir / "hardware" / "schematic").exists()
+    assert not (project_dir / "software").exists()
+    assert not (project_dir / "agent").exists()
+
+
 def test_model_api_updates_component_and_selected_part():
     service = ModelApiService()
     service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))

@@ -186,6 +186,15 @@ def test_validate_detects_kicad_field_leakage():
     assert any("lib_id" in e for e in report.errors)
 
 
+def test_validate_allows_calculation_units():
+    ir = _valid_ir()
+    ir["calculations"] = [
+        {"name": "input_current", "result": 0.84, "unit": "A"},
+    ]
+    report = validate_ir(ir)
+    assert not any("unit" in e for e in report.errors)
+
+
 # ---- API integration ---------------------------------------------------
 
 

@@ -73,6 +73,8 @@ REQUIRED_FIELDS: dict[str, tuple[str, ...]] = {
     "diff_model": ("other",),
     "merge_model": ("other",),
     "patch_model": ("patch",),
+    "create_project_template": ("project_dir",),
+    "create_hardware_project": ("project_dir", "project_id"),
     # -- metadata --
     "set_schema_version": ("value",),
     "set_request_id": ("value",),
