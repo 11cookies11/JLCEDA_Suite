@@ -8,15 +8,18 @@ in the project output directory.
 from __future__ import annotations
 
 from pathlib import Path
+from dataclasses import asdict
 from typing import Any
 
-from ..lcsc_resolver import SearchBackend, describe_live_backend_status, get_default_backend, resolve_many
+from ..lcsc_resolver import SearchBackend, describe_live_backend_status, get_default_backend
 from ..part_selector import select_parts
 from ..kicad_lib_importer import import_parts, _build_lock_data, _build_risk_report, _yaml_dumps
 from .resolve import (
     build_mock_resolver_results as _mock_resolver_results,
+    build_resolver_requests as _build_resolver_requests,
     build_part_requirements as _components_to_requirements,
     enrich_selected_parts_with_refs as _enrich_selected_with_refs,
+    execute_resolver_requests as _execute_resolver_requests,
 )
 from .report import build_parts_summary
 
@@ -60,6 +63,7 @@ def run_parts_pipeline(
 
     # Step 1: Convert components 鈫?PartRequirements
     requirements = _components_to_requirements(components)
+    resolver_requests = _build_resolver_requests(requirements, components)
 
     # Step 2: Resolve LCSC parts (with graceful fallback if live lookup unavailable)
     live_available = bool(describe_live_backend_status().get("ok"))
@@ -67,7 +71,7 @@ def run_parts_pipeline(
     if live_available:
         try:
             backend = mcp_backend or get_default_backend(timeout=10.0)
-            resolver_results = resolve_many(requirements, backend=backend)
+            resolver_results = _execute_resolver_requests(resolver_requests, backend=backend)
         except Exception:
             live_available = False
             warnings.append("Live parts resolver unavailable; fell back to circuit-model-derived mock results.")
@@ -79,12 +83,19 @@ def run_parts_pipeline(
     # Step 3: Select best parts
     selections = select_parts(requirements, resolver_results)
 
+    resolver_results_payload = [asdict(result) for result in resolver_results]
+    selection_results_payload = [asdict(selection) for selection in selections]
+
     # Step 4: Enrich with reference designators
     selected_parts = _enrich_selected_with_refs(selections, components)
 
     result: dict[str, Any] = {
         "lock_file": "",
         "risk_report_file": "",
+        "requirements": [asdict(req) for req in requirements],
+        "resolver_requests": resolver_requests,
+        "resolver_results": resolver_results_payload,
+        "selection_results": selection_results_payload,
         "selections": [sel.selected for sel in selections if sel.selected],
         "warnings": warnings,
     }

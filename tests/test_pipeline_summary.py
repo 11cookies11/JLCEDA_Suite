@@ -47,6 +47,7 @@ class TestRunPipelineSummary(unittest.TestCase):
                     "risk_report_file": "part-risk-report.md",
                 },
                 plan_diagnostics={"warnings": 1},
+                project_resolution_result=None,
                 postprocess={"symbols_injected": True},
                 simulation_result={
                     "profile_file": "simulation-profile.json",

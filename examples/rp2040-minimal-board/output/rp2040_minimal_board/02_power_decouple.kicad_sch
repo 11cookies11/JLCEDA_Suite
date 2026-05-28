@@ -1,0 +1,318 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "8ede89c6-c82e-4e88-84c3-560bcae5b328")
+  (paper "A4")
+  (lib_symbols
+    (symbol "Device:C"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 0.254)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(in_pos_files yes)
+    		(duplicate_pin_numbers_are_jumpers no)
+    		(property "Reference" "C"
+    			(at 0.635 2.54 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(justify left)
+    			)
+    		)
+    		(property "Value" "C"
+    			(at 0.635 -2.54 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(justify left)
+    			)
+    		)
+    		(property "Footprint" ""
+    			(at 0.9652 -3.81 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Datasheet" ""
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Description" "Unpolarized capacitor"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_keywords" "cap capacitor"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_fp_filters" "C_*"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "C_0_1"
+    			(polyline
+    				(pts
+    					(xy -2.032 0.762) (xy 2.032 0.762)
+    				)
+    				(stroke
+    					(width 0.508)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy -2.032 -0.762) (xy 2.032 -0.762)
+    				)
+    				(stroke
+    					(width 0.508)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(symbol "C_1_1"
+    			(pin passive line
+    				(at 0 3.81 270)
+    				(length 2.794)
+    				(name ""
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 0 -3.81 90)
+    				(length 2.794)
+    				(name ""
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+  )
+  (symbol
+    (lib_id "Device:C")
+    (at 50.8 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "904be679-e3e1-442c-aa0d-593e75492a70")
+    (property "Reference" "C1" (at 50.8 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100nF" (at 50.8 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 50.8 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "d1178d03-8597-436a-9a38-6a8a327c1776"))
+      (pin "2" (uuid "6b8ddb35-61c7-4605-a4ba-2ca9246ea6f7"))
+    (instances
+      (project "rp2040_minimal_board"
+        (path "/8413001e-93cf-4276-bb8c-18ff22e3933d"
+          (reference "C1")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "Device:C")
+    (at 50.8 93.98 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "3fa1b766-26a9-413b-8416-e9d6f4298c5a")
+    (property "Reference" "C2" (at 50.8 88.9 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100nF" (at 50.8 99.06 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 50.8 93.98 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "60a0eb41-b937-4b45-b994-f598cb220307"))
+      (pin "2" (uuid "bab702c2-1933-4f9c-8ada-eeeb747c6e1c"))
+    (instances
+      (project "rp2040_minimal_board"
+        (path "/8413001e-93cf-4276-bb8c-18ff22e3933d"
+          (reference "C2")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "Device:C")
+    (at 50.8 137.16 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "edec8b71-dbb8-4f71-822e-597f040a6bad")
+    (property "Reference" "C3" (at 50.8 132.08 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "100nF" (at 50.8 142.24 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 50.8 137.16 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "dc8eded9-b4d5-438f-9da2-8d0ce1042084"))
+      (pin "2" (uuid "2253fd7a-073a-44fa-8144-f7930418c09c"))
+    (instances
+      (project "rp2040_minimal_board"
+        (path "/8413001e-93cf-4276-bb8c-18ff22e3933d"
+          (reference "C3")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 50.8 46.99) (xy 50.8 43.18))
+    (stroke (width 0) (type default))
+    (uuid "299c2b0a-354f-49f0-8e80-4a2fbb48fe3e")
+  )
+  (global_label "+3V3" (shape input) (at 50.8 43.18 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "29b7ae7a-2e5a-40c7-afc1-48d9ed518fe9")
+  )
+  (wire (pts (xy 50.8 54.61) (xy 50.8 58.42))
+    (stroke (width 0) (type default))
+    (uuid "b6edbcef-3e7f-4186-85ad-039dcc755fb1")
+  )
+  (global_label "GND" (shape input) (at 50.8 58.42 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "3b1ae821-79bb-49e5-a9f4-5ede8be7745f")
+  )
+  (wire (pts (xy 50.8 90.17) (xy 50.8 86.36))
+    (stroke (width 0) (type default))
+    (uuid "2ed588cb-317a-4d43-806b-f097c718a10b")
+  )
+  (global_label "+3V3" (shape input) (at 50.8 86.36 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "8d628f49-d686-4d8f-bfbb-3da5864d1d1c")
+  )
+  (wire (pts (xy 50.8 97.79) (xy 50.8 101.6))
+    (stroke (width 0) (type default))
+    (uuid "c2a20657-2025-4c45-a1b9-6d13c90bfcc4")
+  )
+  (global_label "GND" (shape input) (at 50.8 101.6 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "b73463ee-7de4-4e74-bdb8-992590015351")
+  )
+  (wire (pts (xy 50.8 133.35) (xy 50.8 129.54))
+    (stroke (width 0) (type default))
+    (uuid "e6b4a718-1080-4a14-98e2-347f153023b3")
+  )
+  (global_label "+3V3" (shape input) (at 50.8 129.54 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "afa5ad76-f0ec-41e3-9a27-31021c7467e1")
+  )
+  (wire (pts (xy 50.8 140.97) (xy 50.8 144.78))
+    (stroke (width 0) (type default))
+    (uuid "61739300-67ec-4d84-bdbf-9b758a019a73")
+  )
+  (global_label "GND" (shape input) (at 50.8 144.78 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "79ba6119-68e0-48d4-b689-e2261e1cf053")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/114256d8-ecb1-4469-a158-7c1fab927ccc" (page "2"))
+    (path "/8413001e-93cf-4276-bb8c-18ff22e3933d" (page "3"))
+    (path "/a48262e1-8fde-4d7d-afca-56f1b68da93b" (page "4"))
+    (path "/6d15e955-9065-4514-90e7-2ab73cbc05c3" (page "5"))
+    (path "/7cfde647-9aca-467d-a3cb-a1edc80d6881" (page "6"))
+    (path "/e9f75b44-552a-4093-b4af-87752d873a90" (page "7"))
+    (path "/658944e2-78d5-47b0-ae10-1b70e51ad372" (page "8"))
+    (path "/407a98b9-7ab9-41e1-a79a-b2cc1c20b968" (page "9"))
+    (path "/58d92c9d-689e-4e51-b415-7c1a01fec64e" (page "10"))
+    (path "/afc1478c-ba9f-4bbb-babf-aec908f69fa0" (page "11"))
+    (path "/0d2727ae-263d-4ab8-916c-5542cdbad177" (page "12"))
+    (path "/073f614d-0868-418b-884f-bd0c02a21176" (page "13"))
+    (path "/e104205e-56e5-4910-9de4-8d653eea2116" (page "14"))
+  )
+)

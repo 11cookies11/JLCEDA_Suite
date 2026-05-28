@@ -23,7 +23,8 @@ def _load_capability_db() -> dict[str, dict[str, list[str]]]:
     global _cap_db_cache, _config_path
     if _cap_db_cache is not None:
         return _cap_db_cache
-    path = _config_path or Path(__file__).resolve().parents[2] / "config" / "gpio-capabilities.json"
+    from .env_utils import repo_root
+    path = _config_path or repo_root() / 'config' / 'gpio-capabilities.json'
     if path.exists():
         raw = json.loads(path.read_text(encoding="utf-8"))
         _cap_db_cache = {

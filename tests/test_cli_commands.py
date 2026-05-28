@@ -27,6 +27,7 @@ class TestCliParser(unittest.TestCase):
         self.assertIn("ngspice-doctor", subparsers)
         self.assertIn("simulation-plan", subparsers)
         self.assertIn("model-api", subparsers)
+        self.assertIn("agent", subparsers)
 
     def test_main_without_args_prints_help(self):
         buffer = io.StringIO()
@@ -162,3 +163,473 @@ class TestCliDispatch(unittest.TestCase):
 
         self.assertEqual(code, 0)
         state_cls.assert_not_called()
+
+    def test_agent_manifest_prints_agent_entry_schema(self):
+        buffer = io.StringIO()
+        with redirect_stdout(buffer):
+            code = cli.main(["agent", "manifest"])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertEqual(payload["schema_version"], "kas-agent-entry.v1")
+        self.assertIn("run", payload["commands"])
+        self.assertIn("build-ir", payload["commands"])
+        self.assertIn("doctor", payload["commands"])
+        self.assertIn("pins", payload["commands"])
+        self.assertIn("self-test", payload["commands"])
+        self.assertIn("build-kicad-plan", payload["commands"])
+        self.assertIn("patch", payload["commands"])
+
+    def test_agent_run_builds_model_api_request_from_project(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "demo",
+                        "project_id": "agent-demo",
+                        "topology": "agent_board",
+                        "components": [],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli.ModelApiService") as service_cls:
+                service = service_cls.from_repository.return_value
+                service.handle_dict.return_value = {"success": True}
+                buffer = io.StringIO()
+                with redirect_stdout(buffer):
+                    code = cli.main(
+                        [
+                            "agent",
+                            "run",
+                            "add_net",
+                            "--project",
+                            str(project_path),
+                            "--payload-json",
+                            '{"name":"+3V3"}',
+                            "--dry-run",
+                        ]
+                    )
+
+        self.assertEqual(code, 0)
+        sent_request = service.handle_dict.call_args.args[0]
+        self.assertEqual(sent_request["schema_version"], "dsl-api-request.v1")
+        self.assertEqual(sent_request["project_id"], "agent-demo")
+        self.assertEqual(sent_request["topology"], "agent_board")
+        self.assertEqual(sent_request["operation"], "add_net")
+        self.assertEqual(sent_request["payload"], {"name": "+3V3"})
+        self.assertTrue(sent_request["options"]["dry_run"])
+
+    def test_agent_create_builds_create_hardware_project_request(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir) / "new-board"
+            source_model = Path(tmp_dir) / "source.json"
+            source_model.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "src",
+                        "project_id": "src",
+                        "topology": "src",
+                        "components": [],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli.ModelApiService") as service_cls:
+                service = service_cls.return_value
+                service.handle_dict.return_value = {"success": True}
+                with patch("kicad_suite.cli.ProjectState"):
+                    buffer = io.StringIO()
+                    with redirect_stdout(buffer):
+                        code = cli.main(
+                            [
+                                "agent",
+                                "create",
+                                str(project_path),
+                                "--project-id",
+                                "new-board",
+                                "--source-model",
+                                str(source_model),
+                                "--overwrite",
+                                "--export-ir",
+                            ]
+                        )
+
+        self.assertEqual(code, 0)
+        sent_request = service.handle_dict.call_args.args[0]
+        self.assertEqual(sent_request["operation"], "create_hardware_project")
+        self.assertEqual(sent_request["payload"]["project_id"], "new-board")
+        self.assertEqual(sent_request["payload"]["source_model"], str(source_model.resolve()))
+        self.assertTrue(sent_request["payload"]["overwrite"])
+        self.assertTrue(sent_request["payload"]["export_ir"])
+
+    def test_agent_export_kicad_uses_project_defaults(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir) / "agent-board"
+            project_path.mkdir()
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "demo",
+                        "project_id": "agent-board",
+                        "topology": "agent_board",
+                        "components": [],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli.ModelApiService") as service_cls:
+                service = service_cls.from_repository.return_value
+                service.handle_dict.return_value = {"success": True}
+                with patch("kicad_suite.cli.ProjectState"):
+                    buffer = io.StringIO()
+                    with redirect_stdout(buffer):
+                        code = cli.main(["agent", "export-kicad", "--project", str(project_path)])
+
+        self.assertEqual(code, 0)
+        sent_request = service.handle_dict.call_args.args[0]
+        self.assertEqual(sent_request["operation"], "export_kicad_project")
+        self.assertEqual(sent_request["payload"]["project_name"], "agent_board")
+        self.assertEqual(Path(sent_request["payload"]["output_dir"]), project_path / "output")
+
+    def test_agent_build_ir_writes_structured_ir_file(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "demo",
+                        "project_id": "agent-demo",
+                        "topology": "agent_board",
+                        "components": [{"ref": "U1", "role": "mcu", "value": "MCU"}],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "build-ir", "--project", str(project_path)])
+
+            self.assertEqual(code, 0)
+            payload = json.loads(buffer.getvalue())
+            self.assertTrue(payload["ok"])
+            self.assertEqual(payload["stage"], "build_ir")
+            self.assertTrue((project_path / "build" / "ir.v1.json").exists())
+
+    def test_agent_validate_ir_writes_validation_report(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "demo",
+                        "project_id": "agent-demo",
+                        "topology": "agent_board",
+                        "components": [{"ref": "U1", "role": "mcu", "value": "MCU"}],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "validate-ir", "--project", str(project_path)])
+
+            self.assertEqual(code, 0)
+            payload = json.loads(buffer.getvalue())
+            self.assertEqual(payload["stage"], "ir_validation")
+            self.assertTrue((project_path / "build" / "ir-validation.json").exists())
+
+    def test_agent_report_writes_json_and_markdown(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "demo",
+                        "project_id": "agent-demo",
+                        "topology": "agent_board",
+                        "components": [],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "report", "--project", str(project_path), "--markdown"])
+
+            self.assertEqual(code, 0)
+            payload = json.loads(buffer.getvalue())
+            self.assertEqual(payload["stage"], "report")
+            self.assertTrue((project_path / "build" / "report.json").exists())
+            self.assertTrue((project_path / "build" / "report.md").exists())
+
+    def test_agent_doctor_returns_structured_checks(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "doctor", "--project", tmp_dir])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertEqual(payload["stage"], "doctor")
+        self.assertTrue(any(item["name"] == "python" for item in payload["checks"]))
+
+    # -- new agent commands ---------------------------------------------------
+
+    def test_agent_pins_free_lists_free_gpio_pins(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "pin-demo",
+                    "topology": "pin_board",
+                    "components": [{"ref": "U1", "role": "mcu", "value": "ESP32-S3"}],
+                    "nets": [],
+                }),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "pins", "free", "--project", str(project_path), "--ref", "U1"])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertTrue(payload["ok"])
+        self.assertEqual(payload["stage"], "pins_free")
+        self.assertEqual(payload["mcu_ref"], "U1")
+        self.assertIsInstance(payload["pins"], list)
+
+    def test_agent_pins_assign_builds_connect_pin_request(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "pin-assign-demo",
+                    "topology": "pin_board",
+                    "components": [],
+                    "nets": [],
+                }),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli.ModelApiService") as service_cls:
+                service = service_cls.from_repository.return_value
+                service.handle_dict.return_value = {"success": True}
+                with patch("kicad_suite.cli.ProjectState"):
+                    buffer = io.StringIO()
+                    with redirect_stdout(buffer):
+                        code = cli.main([
+                            "agent", "pins", "assign",
+                            "--project", str(project_path),
+                            "--ref", "U1",
+                            "--pin", "GPIO17",
+                            "--net", "LCD_BL",
+                            "--role", "backlight",
+                        ])
+
+        self.assertEqual(code, 0)
+        sent = service.handle_dict.call_args.args[0]
+        self.assertEqual(sent["operation"], "connect_pin_to_net")
+        self.assertEqual(sent["payload"]["ref"], "U1")
+        self.assertEqual(sent["payload"]["pin"], "GPIO17")
+        self.assertEqual(sent["payload"]["net"], "LCD_BL")
+        self.assertEqual(sent["payload"]["role"], "backlight")
+
+    def test_agent_pins_check_reports_conflicts(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "pin-check-demo",
+                    "topology": "pin_board",
+                    "components": [{"ref": "U1", "role": "mcu", "value": "ESP32-S3"}],
+                    "nets": [],
+                }),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "pins", "check", "--project", str(project_path)])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertEqual(payload["stage"], "pins_check")
+        self.assertIsInstance(payload["conflicts"], list)
+
+    def test_agent_build_kicad_plan_compiles_execution_plan(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "plan-demo",
+                    "topology": "plan_board",
+                    "components": [],
+                    "nets": [],
+                }),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli.ModelApiService") as service_cls:
+                service = service_cls.from_repository.return_value
+                service.handle_dict.return_value = {"success": True}
+                with patch("kicad_suite.cli.ProjectState"):
+                    buffer = io.StringIO()
+                    with redirect_stdout(buffer):
+                        code = cli.main(["agent", "build-kicad-plan", "--project", str(project_path)])
+
+        self.assertEqual(code, 0)
+        sent = service.handle_dict.call_args.args[0]
+        self.assertEqual(sent["operation"], "compile_kicad_execution_plan")
+        self.assertIn("output_dir", sent["payload"])
+
+    def test_agent_patch_applies_model_patch(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "patch-demo",
+                    "topology": "patch_board",
+                    "components": [],
+                    "nets": [],
+                }),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli.ModelApiService") as service_cls:
+                service = service_cls.from_repository.return_value
+                service.handle_dict.return_value = {"success": True}
+                with patch("kicad_suite.cli.ProjectState"):
+                    buffer = io.StringIO()
+                    with redirect_stdout(buffer):
+                        code = cli.main([
+                            "agent", "patch",
+                            "--project", str(project_path),
+                            "--payload-json", '{"components":[{"ref":"U1","role":"mcu"}]}',
+                        ])
+
+        self.assertEqual(code, 0)
+        sent = service.handle_dict.call_args.args[0]
+        self.assertEqual(sent["operation"], "patch_model")
+        self.assertIn("patch", sent["payload"])
+        self.assertIn("components", sent["payload"]["patch"])
+
+    def test_diagnostic_parser_extracts_error_codes(self):
+        from kicad_suite.cli import _parse_diagnostic
+
+        d = _parse_diagnostic("IR.nets: duplicate net name 'VCC'", "error")
+        self.assertEqual(d["code"], "DUPLICATE_NET_NAME")
+        self.assertEqual(d["location"], "VCC")
+        self.assertIn("suggestion", d)
+
+        d = _parse_diagnostic("IR.nets['+3V3'] has no members (floating)", "warning")
+        self.assertEqual(d["code"], "FLOATING_NET")
+        self.assertIn("suggestion", d)
+
+        d = _parse_diagnostic("IR.components: duplicate ref 'U1'", "error")
+        self.assertEqual(d["code"], "DUPLICATE_COMPONENT_REF")
+        self.assertEqual(d["location"], "U1")
+
+        d = _parse_diagnostic("IR schema_version must be 'ir.v1', got 'circuit-model.v1'", "error")
+        self.assertEqual(d["code"], "SCHEMA_VERSION_MISMATCH")
+        self.assertEqual(d["location"], "ir.v1")
+        self.assertIn("suggestion", d)
+
+        d = _parse_diagnostic("some completely unknown error text here", "error")
+        self.assertEqual(d["code"], "UNKNOWN_VALUE")
+
+    def test_agent_build_ir_validates_output_is_written(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "ir-demo",
+                    "topology": "ir_board",
+                    "components": [{"ref": "U1", "role": "mcu", "value": "MCU"}],
+                    "nets": [{"name": "VCC", "members": ["U1.1"]}],
+                }),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "build-ir", "--project", str(project_path)])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertTrue(payload["ok"])
+        self.assertGreater(payload["summary"]["components"], 0)
+        self.assertEqual(payload["summary"]["nets"], 1)
+
+    def test_agent_validate_ir_with_duplicate_net_produces_specific_diagnostic(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "circuit-model.json"
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "dup-demo",
+                    "topology": "dup_board",
+                    "components": [{"ref": "U1", "role": "mcu", "value": "MCU"}],
+                    "nets": [
+                        {"name": "VCC", "members": ["U1.1"]},
+                        {"name": "VCC", "members": ["U1.2"]},
+                    ],
+                }),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "validate-ir", "--project", str(project_path)])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertFalse(payload["ok"])
+        self.assertGreater(len(payload["diagnostics"]), 0)
+        codes = [d["code"] for d in payload["diagnostics"]]
+        self.assertIn("DUPLICATE_NET_NAME", codes)

@@ -16,7 +16,9 @@ from .adapters.kicad_cli import resolve_kicad_cli
 from .env_utils import env
 from .kicad_project_writer import DEFAULT_ERC_PIN_MAP, DEFAULT_ERC_RULE_SEVERITIES, find_matching_paren, sanitize_symbol_block
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
+from .env_utils import repo_root
+
+REPO_ROOT = repo_root()
 
 
 def pin_project_libraries(project_dir: Path) -> dict[str, Any]:
@@ -163,7 +165,7 @@ def inject_jlc_symbols(schematic_path: Path) -> bool:
 
 def register_jlc_libraries(project_dir: Path) -> dict[str, Any]:
     """Register JLC-MCP libraries after schematic generation."""
-    install_script = str(Path(__file__).resolve().parents[2] / "scripts" / "install_jlc_mcp_parts.py")
+    install_script = str(repo_root() / 'scripts' / 'install_jlc_mcp_parts.py')
     try:
         process = subprocess.run(
             [sys.executable, install_script, "--project-dir", str(project_dir), "--register-only"],

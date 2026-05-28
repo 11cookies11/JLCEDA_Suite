@@ -17,8 +17,8 @@ from kicad_suite.symbol_footprint_resolver import (
 def test_load_symbol_map_returns_dict():
     sm = load_symbol_map()
     assert isinstance(sm, dict)
-    assert "mappings" in sm
-    assert isinstance(sm["mappings"], list)
+    # Shared rule table has been retired — resolution now uses selected_part
+    # plus built-in role templates.
 
 
 def test_symbol_mapping_for_resistor():

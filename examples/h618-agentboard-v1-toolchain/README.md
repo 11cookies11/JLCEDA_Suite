@@ -1,5 +1,23 @@
 # H618 AgentBoard V1 Toolchain
 
-- 项目 ID：`h618-agentboard-v1-toolchain`
-- 构建方式：通过 `model_api` 受控生成和更新 `circuit-model.json`。
-- 目录约定：DSL、状态、构建产物和 KiCad 输出分层存放，不包含 `agent/` 或 `software/` 这类泛化脚手架目录。
+This example is a starter workspace for the H618 AgentBoard V1 Toolchain project.
+
+Project intent:
+
+- Start from a generic hardware project template
+- Keep the workspace ready for schematic, PCB, release, and validation artifacts
+- Let the hardware model define the actual target platform and BOM
+
+Current status:
+
+- Requirements captured in `docs/00_requirements.md`
+- Architecture and bring-up documents are scaffolded
+- Hardware workspaces are ready for detail work
+
+Recommended next steps:
+
+1. Freeze requirements in `docs/00_requirements.md`
+2. Draft the system architecture in `docs/01_system_architecture.md`
+3. Create the first `circuit-model.json` when the interface list is stable
+
+Generated project slug: `h618-agentboard-v1-toolchain`

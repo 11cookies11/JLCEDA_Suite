@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import sys
+from .env_utils import repo_root
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
@@ -35,7 +36,7 @@ from .schema_versions import CIRCUIT_MODEL_SCHEMA_VERSION, REQUIREMENT_SPEC_SCHE
 
 
 def load_samples() -> dict[str, Any]:
-    fixture_path = Path(__file__).resolve().parents[2] / 'tests' / 'fixtures' / 'ngspice' / 'regression-samples.json'
+    fixture_path = repo_root() / 'tests' / 'fixtures' / 'ngspice' / 'regression-samples.json'
     return json.loads(fixture_path.read_text(encoding='utf-8'))
 
 

@@ -1,0 +1,1011 @@
+{
+  "schema_version": "ir.v1",
+  "request_id": "agent-create_hardware_project-20260527T185449Z",
+  "project_id": "rp2040-minimal",
+  "topology": "rp2040_minimal",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "rp2040_mcu",
+      "value": "RP2040",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "FLASH_DI",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "FLASH_DO",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "FLASH_CS",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "FLASH_CLK",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "10",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "16",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "23",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "24",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "30",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "35",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "36",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "38",
+          "name": "",
+          "net": "USB_DM",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "39",
+          "name": "",
+          "net": "USB_DP",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "42",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "43",
+          "name": "",
+          "net": "BOOTSEL",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "44",
+          "name": "",
+          "net": "LED",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "45",
+          "name": "",
+          "net": "XIN",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "46",
+          "name": "",
+          "net": "XOUT",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "47",
+          "name": "",
+          "net": "RESET",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "48",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "49",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "56",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AP2112K-3.3",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+5V",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "U3",
+      "role": "external_flash",
+      "value": "W25Q128JVSQ",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "FLASH_CS",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "FLASH_DO",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "FLASH_DI",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "FLASH_CLK",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "7",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "Y1",
+      "role": "main_12mhz_xtal",
+      "value": "12MHz",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "XIN",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "XOUT",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "C1",
+      "role": "vdd_decoupling_1",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "C2",
+      "role": "vdd_decoupling_2",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "C3",
+      "role": "vdd_decoupling_3",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "C4",
+      "role": "vdd_bulk_cap",
+      "value": "10uF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "C5",
+      "role": "reg_output_cap",
+      "value": "1uF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "C6",
+      "role": "xtal_load_cap_1",
+      "value": "22pF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "XIN",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "C7",
+      "role": "xtal_load_cap_2",
+      "value": "22pF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "XOUT",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "R1",
+      "role": "reset_pullup",
+      "value": "10K",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "RESET",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "R2",
+      "role": "led_resistor",
+      "value": "1K",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "LED",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "D1",
+      "role": "power_led",
+      "value": "LED0603-GREEN",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "J1",
+      "role": "usb_c_power_input",
+      "value": "USB-C16PIN",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+5V",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "SW1",
+      "role": "bootsel_button",
+      "value": "SW-TH_6x6",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "BOOTSEL",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    },
+    {
+      "ref": "SW2",
+      "role": "reset_button",
+      "value": "SW-TH_6x6",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "",
+        "package": "",
+        "mechanical_package": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "RESET",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": []
+    }
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "kind": "power",
+      "members": [
+        "U2.1",
+        "J1.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "+3V3",
+      "kind": "power",
+      "members": [
+        "U1.1",
+        "U1.10",
+        "U1.24",
+        "U1.36",
+        "U1.48",
+        "R1.1",
+        "U3.8",
+        "U3.7",
+        "C1.1",
+        "C2.1",
+        "C3.1",
+        "C4.1",
+        "C5.1",
+        "U2.4",
+        "D1.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "GND",
+      "kind": "ground",
+      "members": [
+        "U1.8",
+        "U1.16",
+        "U1.23",
+        "U1.30",
+        "U1.35",
+        "U1.42",
+        "U1.49",
+        "U1.56",
+        "SW2.2",
+        "C6.2",
+        "C7.2",
+        "U3.4",
+        "R2.2",
+        "SW1.2",
+        "C1.2",
+        "C2.2",
+        "C3.2",
+        "C4.2",
+        "C5.2",
+        "U2.2",
+        "J1.2",
+        "D1.2"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "RESET",
+      "kind": "signal",
+      "members": [
+        "U1.47",
+        "R1.2",
+        "SW2.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "XIN",
+      "kind": "signal",
+      "members": [
+        "U1.45",
+        "Y1.1",
+        "C6.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "XOUT",
+      "kind": "signal",
+      "members": [
+        "U1.46",
+        "Y1.3",
+        "C7.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "FLASH_CS",
+      "kind": "signal",
+      "members": [
+        "U1.4",
+        "U3.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "FLASH_DI",
+      "kind": "signal",
+      "members": [
+        "U1.2",
+        "U3.5"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "FLASH_DO",
+      "kind": "signal",
+      "members": [
+        "U1.3",
+        "U3.2"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "FLASH_CLK",
+      "kind": "signal",
+      "members": [
+        "U1.5",
+        "U3.6"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "USB_DP",
+      "kind": "signal",
+      "members": [
+        "U1.39"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "USB_DM",
+      "kind": "signal",
+      "members": [
+        "U1.38"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "LED",
+      "kind": "signal",
+      "members": [
+        "U1.44",
+        "R2.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "BOOTSEL",
+      "kind": "signal",
+      "members": [
+        "SW1.1",
+        "U1.43"
+      ],
+      "domain": "",
+      "flags": {}
+    }
+  ],
+  "sheets": [],
+  "pinmap": {},
+  "power_tree": [],
+  "interfaces": [],
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": []
+}

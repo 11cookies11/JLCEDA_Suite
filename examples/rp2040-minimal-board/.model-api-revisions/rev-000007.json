@@ -1,0 +1,56 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "agent-create_hardware_project-20260527T185449Z",
+  "project_id": "rp2040-minimal",
+  "topology": "rp2040_minimal",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "rp2040_mcu",
+      "value": "RP2040",
+      "package": "QFN-56_L7.0-W7.0-P0.4-EP"
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AP2112K-3.3",
+      "package": "SOT-23-5"
+    },
+    {
+      "ref": "U3",
+      "role": "external_flash",
+      "value": "W25Q128JVSQ",
+      "package": "SOIC-8_150mil"
+    },
+    {
+      "ref": "Y1",
+      "role": "main_12mhz_xtal",
+      "value": "12MHz",
+      "package": "CRYSTAL-SMD_3225-4P-L3.2-W2.5-BL"
+    },
+    {
+      "ref": "C1",
+      "role": "vdd_decoupling_1",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C2",
+      "role": "vdd_decoupling_2",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C3",
+      "role": "vdd_decoupling_3",
+      "value": "100nF",
+      "package": "C0603"
+    }
+  ],
+  "nets": [],
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": [],
+  "sheets": []
+}

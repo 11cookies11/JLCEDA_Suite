@@ -1,0 +1,165 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "agent-create_hardware_project-20260527T185449Z",
+  "project_id": "rp2040-minimal",
+  "topology": "rp2040_minimal",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "rp2040_mcu",
+      "value": "RP2040",
+      "package": "QFN-56_L7.0-W7.0-P0.4-EP"
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AP2112K-3.3",
+      "package": "SOT-23-5"
+    },
+    {
+      "ref": "U3",
+      "role": "external_flash",
+      "value": "W25Q128JVSQ",
+      "package": "SOIC-8_150mil"
+    },
+    {
+      "ref": "Y1",
+      "role": "main_12mhz_xtal",
+      "value": "12MHz",
+      "package": "CRYSTAL-SMD_3225-4P-L3.2-W2.5-BL"
+    },
+    {
+      "ref": "C1",
+      "role": "vdd_decoupling_1",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C2",
+      "role": "vdd_decoupling_2",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C3",
+      "role": "vdd_decoupling_3",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C4",
+      "role": "vdd_bulk_cap",
+      "value": "10uF",
+      "package": "C0805"
+    },
+    {
+      "ref": "C5",
+      "role": "reg_output_cap",
+      "value": "1uF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C6",
+      "role": "xtal_load_cap_1",
+      "value": "22pF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C7",
+      "role": "xtal_load_cap_2",
+      "value": "22pF",
+      "package": "C0603"
+    },
+    {
+      "ref": "R1",
+      "role": "reset_pullup",
+      "value": "10K",
+      "package": "R0603"
+    },
+    {
+      "ref": "R2",
+      "role": "led_resistor",
+      "value": "1K",
+      "package": "R0603"
+    },
+    {
+      "ref": "D1",
+      "role": "power_led",
+      "value": "LED0603-GREEN",
+      "package": "LED0603"
+    },
+    {
+      "ref": "J1",
+      "role": "usb_c_power_input",
+      "value": "USB-C16PIN",
+      "package": "USB-C-SMD"
+    },
+    {
+      "ref": "SW1",
+      "role": "bootsel_button",
+      "value": "SW-TH_6x6",
+      "package": "SW-TH"
+    },
+    {
+      "ref": "SW2",
+      "role": "reset_button",
+      "value": "SW-TH_6x6",
+      "package": "SW-TH"
+    }
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "kind": "power"
+    },
+    {
+      "name": "+3V3",
+      "kind": "power"
+    },
+    {
+      "name": "GND",
+      "kind": "ground"
+    },
+    {
+      "name": "RESET",
+      "kind": "signal"
+    },
+    {
+      "name": "XIN",
+      "kind": "signal"
+    },
+    {
+      "name": "XOUT",
+      "kind": "signal"
+    },
+    {
+      "name": "FLASH_CS",
+      "kind": "signal"
+    },
+    {
+      "name": "FLASH_DI",
+      "kind": "signal"
+    },
+    {
+      "name": "FLASH_DO",
+      "kind": "signal"
+    },
+    {
+      "name": "FLASH_CLK",
+      "kind": "signal"
+    },
+    {
+      "name": "USB_DP",
+      "kind": "signal"
+    },
+    {
+      "name": "USB_DM",
+      "kind": "signal"
+    }
+  ],
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": [],
+  "sheets": []
+}

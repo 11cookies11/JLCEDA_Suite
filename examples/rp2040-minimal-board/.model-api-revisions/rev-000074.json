@@ -1,0 +1,242 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "agent-create_hardware_project-20260527T185449Z",
+  "project_id": "rp2040-minimal",
+  "topology": "rp2040_minimal",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "rp2040_mcu",
+      "value": "RP2040",
+      "package": "QFN-56_L7.0-W7.0-P0.4-EP"
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AP2112K-3.3",
+      "package": "SOT-23-5"
+    },
+    {
+      "ref": "U3",
+      "role": "external_flash",
+      "value": "W25Q128JVSQ",
+      "package": "SOIC-8_150mil"
+    },
+    {
+      "ref": "Y1",
+      "role": "main_12mhz_xtal",
+      "value": "12MHz",
+      "package": "CRYSTAL-SMD_3225-4P-L3.2-W2.5-BL"
+    },
+    {
+      "ref": "C1",
+      "role": "vdd_decoupling_1",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C2",
+      "role": "vdd_decoupling_2",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C3",
+      "role": "vdd_decoupling_3",
+      "value": "100nF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C4",
+      "role": "vdd_bulk_cap",
+      "value": "10uF",
+      "package": "C0805"
+    },
+    {
+      "ref": "C5",
+      "role": "reg_output_cap",
+      "value": "1uF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C6",
+      "role": "xtal_load_cap_1",
+      "value": "22pF",
+      "package": "C0603"
+    },
+    {
+      "ref": "C7",
+      "role": "xtal_load_cap_2",
+      "value": "22pF",
+      "package": "C0603"
+    },
+    {
+      "ref": "R1",
+      "role": "reset_pullup",
+      "value": "10K",
+      "package": "R0603"
+    },
+    {
+      "ref": "R2",
+      "role": "led_resistor",
+      "value": "1K",
+      "package": "R0603"
+    },
+    {
+      "ref": "D1",
+      "role": "power_led",
+      "value": "LED0603-GREEN",
+      "package": "LED0603"
+    },
+    {
+      "ref": "J1",
+      "role": "usb_c_power_input",
+      "value": "USB-C16PIN",
+      "package": "USB-C-SMD"
+    },
+    {
+      "ref": "SW1",
+      "role": "bootsel_button",
+      "value": "SW-TH_6x6",
+      "package": "SW-TH"
+    },
+    {
+      "ref": "SW2",
+      "role": "reset_button",
+      "value": "SW-TH_6x6",
+      "package": "SW-TH"
+    }
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "kind": "power"
+    },
+    {
+      "name": "+3V3",
+      "kind": "power",
+      "members": [
+        "U1.1",
+        "U1.10",
+        "U1.24",
+        "U1.36",
+        "U1.48",
+        "R1.1",
+        "U3.8",
+        "U3.7"
+      ]
+    },
+    {
+      "name": "GND",
+      "kind": "ground",
+      "members": [
+        "U1.8",
+        "U1.16",
+        "U1.23",
+        "U1.30",
+        "U1.35",
+        "U1.42",
+        "U1.49",
+        "U1.56",
+        "SW2.2",
+        "C6.2",
+        "C7.2",
+        "U3.4",
+        "R2.2"
+      ]
+    },
+    {
+      "name": "RESET",
+      "kind": "signal",
+      "members": [
+        "U1.47",
+        "R1.2",
+        "SW2.1"
+      ]
+    },
+    {
+      "name": "XIN",
+      "kind": "signal",
+      "members": [
+        "U1.45",
+        "Y1.1",
+        "C6.1"
+      ]
+    },
+    {
+      "name": "XOUT",
+      "kind": "signal",
+      "members": [
+        "U1.46",
+        "Y1.3",
+        "C7.1"
+      ]
+    },
+    {
+      "name": "FLASH_CS",
+      "kind": "signal",
+      "members": [
+        "U1.4",
+        "U3.1"
+      ]
+    },
+    {
+      "name": "FLASH_DI",
+      "kind": "signal",
+      "members": [
+        "U1.2",
+        "U3.5"
+      ]
+    },
+    {
+      "name": "FLASH_DO",
+      "kind": "signal",
+      "members": [
+        "U1.3",
+        "U3.2"
+      ]
+    },
+    {
+      "name": "FLASH_CLK",
+      "kind": "signal",
+      "members": [
+        "U1.5",
+        "U3.6"
+      ]
+    },
+    {
+      "name": "USB_DP",
+      "kind": "signal",
+      "members": [
+        "U1.39"
+      ]
+    },
+    {
+      "name": "USB_DM",
+      "kind": "signal",
+      "members": [
+        "U1.38"
+      ]
+    },
+    {
+      "name": "LED",
+      "kind": "signal",
+      "members": [
+        "U1.44",
+        "R2.1"
+      ]
+    },
+    {
+      "name": "BOOTSEL",
+      "kind": "signal",
+      "members": [
+        "SW1.1"
+      ]
+    }
+  ],
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": [],
+  "sheets": []
+}

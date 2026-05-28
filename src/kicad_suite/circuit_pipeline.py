@@ -14,7 +14,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .env_utils import env, parse_json_env, is_truthy_env, to_float, normalize_text
+from .env_utils import env, parse_json_env, is_truthy_env, repo_root, to_float, normalize_text
 from .schema_versions import (
     CIRCUIT_MODEL_SCHEMA_VERSION,
     NGSPICE_EXECUTION_SCHEMA_VERSION,
@@ -252,8 +252,7 @@ def _dedupe_paths(paths: list[Path]) -> list[Path]:
 def _discover_ngspice_candidates() -> list[Path]:
     candidates: list[Path] = []
 
-    repo_root = Path(__file__).resolve().parents[2]
-    local_bundle = repo_root / 'tools' / 'ngspice-46_64' / 'Spice64' / 'bin' / 'ngspice.exe'
+    local_bundle = repo_root() / 'tools' / 'ngspice-46_64' / 'Spice64' / 'bin' / 'ngspice.exe'
     candidates.append(local_bundle)
 
     explicit_bin = env('NGSPICE_BIN')

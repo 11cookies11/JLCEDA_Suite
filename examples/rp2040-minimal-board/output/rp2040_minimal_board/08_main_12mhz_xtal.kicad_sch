@@ -1,0 +1,204 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "83b9b716-32b8-4c7d-91d5-ff02cb47f47f")
+  (paper "A4")
+  (lib_symbols
+    (symbol "Device:R"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 0)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(in_pos_files yes)
+    		(duplicate_pin_numbers_are_jumpers no)
+    		(property "Reference" "R"
+    			(at 2.032 0 90)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "R"
+    			(at 0 0 90)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" ""
+    			(at -1.778 0 90)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Datasheet" ""
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Description" "Resistor"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_keywords" "R res resistor"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_fp_filters" "R_*"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "R_0_1"
+    			(rectangle
+    				(start -1.016 -2.54)
+    				(end 1.016 2.54)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(symbol "R_1_1"
+    			(pin passive line
+    				(at 0 3.81 270)
+    				(length 1.27)
+    				(name ""
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 0 -3.81 90)
+    				(length 1.27)
+    				(name ""
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 50.8 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "e80d1ca3-050b-4ef9-ae76-76d36573a1ec")
+    (property "Reference" "Y1" (at 50.8 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "12MHz" (at 50.8 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 50.8 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "29559d31-492d-4348-83a7-c5a8a4d0d437"))
+      (pin "3" (uuid "e9584783-b299-4717-9e3a-24d03e37aea1"))
+      (pin "2" (uuid "ee251eae-14c8-4599-b07c-30603d1c0b63"))
+    (instances
+      (project "rp2040_minimal_board"
+        (path "/407a98b9-7ab9-41e1-a79a-b2cc1c20b968"
+          (reference "Y1")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 50.8 46.99) (xy 50.8 43.18))
+    (stroke (width 0) (type default))
+    (uuid "c29a6b60-901a-4b94-ae09-9a3c0c534198")
+  )
+  (global_label "XIN" (shape bidirectional) (at 50.8 43.18 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "b3ea070e-8436-4c2a-b936-3fc3686198a1")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/114256d8-ecb1-4469-a158-7c1fab927ccc" (page "2"))
+    (path "/8413001e-93cf-4276-bb8c-18ff22e3933d" (page "3"))
+    (path "/a48262e1-8fde-4d7d-afca-56f1b68da93b" (page "4"))
+    (path "/6d15e955-9065-4514-90e7-2ab73cbc05c3" (page "5"))
+    (path "/7cfde647-9aca-467d-a3cb-a1edc80d6881" (page "6"))
+    (path "/e9f75b44-552a-4093-b4af-87752d873a90" (page "7"))
+    (path "/658944e2-78d5-47b0-ae10-1b70e51ad372" (page "8"))
+    (path "/407a98b9-7ab9-41e1-a79a-b2cc1c20b968" (page "9"))
+    (path "/58d92c9d-689e-4e51-b415-7c1a01fec64e" (page "10"))
+    (path "/afc1478c-ba9f-4bbb-babf-aec908f69fa0" (page "11"))
+    (path "/0d2727ae-263d-4ab8-916c-5542cdbad177" (page "12"))
+    (path "/073f614d-0868-418b-884f-bd0c02a21176" (page "13"))
+    (path "/e104205e-56e5-4910-9de4-8d653eea2116" (page "14"))
+  )
+)

@@ -1,0 +1,421 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "75f7f847-aafa-4d2e-8de8-220ed8d8b672")
+  (paper "A4")
+  (lib_symbols
+    (symbol "Device:R"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 0)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(in_pos_files yes)
+    		(duplicate_pin_numbers_are_jumpers no)
+    		(property "Reference" "R"
+    			(at 2.032 0 90)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Value" "R"
+    			(at 0 0 90)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" ""
+    			(at -1.778 0 90)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Datasheet" ""
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Description" "Resistor"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_keywords" "R res resistor"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_fp_filters" "R_*"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "R_0_1"
+    			(rectangle
+    				(start -1.016 -2.54)
+    				(end 1.016 2.54)
+    				(stroke
+    					(width 0.254)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    		)
+    		(symbol "R_1_1"
+    			(pin passive line
+    				(at 0 3.81 270)
+    				(length 1.27)
+    				(name ""
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 0 -3.81 90)
+    				(length 1.27)
+    				(name ""
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+    (symbol "Switch:SW_Push"
+    		(pin_numbers
+    			(hide yes)
+    		)
+    		(pin_names
+    			(offset 1.016)
+    			(hide yes)
+    		)
+    		(exclude_from_sim no)
+    		(in_bom yes)
+    		(on_board yes)
+    		(in_pos_files yes)
+    		(duplicate_pin_numbers_are_jumpers no)
+    		(property "Reference" "SW"
+    			(at 1.27 2.54 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    				(justify left)
+    			)
+    		)
+    		(property "Value" "SW_Push"
+    			(at 0 -1.524 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Footprint" ""
+    			(at 0 5.08 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Datasheet" ""
+    			(at 0 5.08 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "Description" "Push button switch, generic, two pins"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(property "ki_keywords" "switch normally-open pushbutton push-button"
+    			(at 0 0 0)
+    			(show_name no)
+    			(do_not_autoplace no)
+    			(hide yes)
+    			(effects
+    				(font
+    					(size 1.27 1.27)
+    				)
+    			)
+    		)
+    		(symbol "SW_Push_0_1"
+    			(circle
+    				(center -2.032 0)
+    				(radius 0.508)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy 0 1.27) (xy 0 3.048)
+    				)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(circle
+    				(center 2.032 0)
+    				(radius 0.508)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(polyline
+    				(pts
+    					(xy 2.54 1.27) (xy -2.54 1.27)
+    				)
+    				(stroke
+    					(width 0)
+    					(type default)
+    				)
+    				(fill
+    					(type none)
+    				)
+    			)
+    			(pin passive line
+    				(at -5.08 0 0)
+    				(length 2.54)
+    				(name "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 5.08 0 180)
+    				(length 2.54)
+    				(name "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    		(embedded_fonts no)
+    	)
+  )
+  (symbol
+    (lib_id "Device:R")
+    (at 50.8 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "cad849c5-703b-46b0-9741-a94ac344d3bd")
+    (property "Reference" "R1" (at 50.8 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "10K" (at 50.8 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 50.8 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "423addf8-da5d-4a76-82e7-7e1993173e7c"))
+      (pin "2" (uuid "a8aaceba-361b-4028-848a-63e1fb1ef8d9"))
+    (instances
+      (project "rp2040_minimal_board"
+        (path "/6d15e955-9065-4514-90e7-2ab73cbc05c3"
+          (reference "R1")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "Switch:SW_Push")
+    (at 50.8 93.98 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "3fbc3627-3898-49ed-91a9-204fd835f4ee")
+    (property "Reference" "SW2" (at 50.8 88.9 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "SW-TH_6x6" (at 50.8 99.06 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "" (at 50.8 93.98 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (pin "1" (uuid "2a981592-9744-4fca-9878-42714787e43c"))
+      (pin "2" (uuid "f36a8756-84a3-41d3-b73c-5d259bbde2bf"))
+    (instances
+      (project "rp2040_minimal_board"
+        (path "/6d15e955-9065-4514-90e7-2ab73cbc05c3"
+          (reference "SW2")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 50.8 46.99) (xy 50.8 43.18))
+    (stroke (width 0) (type default))
+    (uuid "c2c25a3a-c5da-4087-92d3-9586c9553967")
+  )
+  (global_label "+3V3" (shape input) (at 50.8 43.18 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "81b7e351-d7b6-4fb3-9e6f-4cb571017e3e")
+  )
+  (wire (pts (xy 50.8 54.61) (xy 50.8 58.42))
+    (stroke (width 0) (type default))
+    (uuid "51ef6418-b80d-43cc-abf9-0f8a9f4e9860")
+  )
+  (global_label "RESET" (shape bidirectional) (at 50.8 58.42 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "b0fd562f-52f5-473d-8efd-e2b78578347d")
+  )
+  (wire (pts (xy 45.72 93.98) (xy 41.91 93.98))
+    (stroke (width 0) (type default))
+    (uuid "d3a60631-e7d3-4fea-a9e0-5f3163ba985a")
+  )
+  (global_label "RESET" (shape bidirectional) (at 41.91 93.98 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "9a91d6a9-2372-4fe1-b329-32b6f4d1b9ea")
+  )
+  (wire (pts (xy 55.88 93.98) (xy 59.69 93.98))
+    (stroke (width 0) (type default))
+    (uuid "23f52c22-5498-4cdc-9362-7c08be153a8c")
+  )
+  (global_label "GND" (shape input) (at 59.69 93.98 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "02d9fc7d-bcfd-4b9c-a3a9-3cd224102dc9")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/114256d8-ecb1-4469-a158-7c1fab927ccc" (page "2"))
+    (path "/8413001e-93cf-4276-bb8c-18ff22e3933d" (page "3"))
+    (path "/a48262e1-8fde-4d7d-afca-56f1b68da93b" (page "4"))
+    (path "/6d15e955-9065-4514-90e7-2ab73cbc05c3" (page "5"))
+    (path "/7cfde647-9aca-467d-a3cb-a1edc80d6881" (page "6"))
+    (path "/e9f75b44-552a-4093-b4af-87752d873a90" (page "7"))
+    (path "/658944e2-78d5-47b0-ae10-1b70e51ad372" (page "8"))
+    (path "/407a98b9-7ab9-41e1-a79a-b2cc1c20b968" (page "9"))
+    (path "/58d92c9d-689e-4e51-b415-7c1a01fec64e" (page "10"))
+    (path "/afc1478c-ba9f-4bbb-babf-aec908f69fa0" (page "11"))
+    (path "/0d2727ae-263d-4ab8-916c-5542cdbad177" (page "12"))
+    (path "/073f614d-0868-418b-884f-bd0c02a21176" (page "13"))
+    (path "/e104205e-56e5-4910-9de4-8d653eea2116" (page "14"))
+  )
+)

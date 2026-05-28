@@ -5,7 +5,23 @@ from __future__ import annotations
 import json
 import math
 import os
+import sys
+from pathlib import Path
 from typing import Any
+
+
+def repo_root() -> Path:
+    """Return the repository/installation root directory.
+
+    In development mode, resolves relative to this source file (``src/kicad_suite/`` → repo root).
+    In PyInstaller frozen mode, resolves relative to the executable location,
+    accounting for the ``_internal`` directory used by PyInstaller 6+ onedir builds.
+    """
+    if getattr(sys, 'frozen', False):
+        exe_dir = Path(sys.executable).parent
+        internal = exe_dir / "_internal"
+        return internal if internal.is_dir() else exe_dir
+    return Path(__file__).resolve().parents[2]
 
 
 def env(name: str, fallback: str = '') -> str:

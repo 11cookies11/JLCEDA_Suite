@@ -1,0 +1,676 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "agent-create_hardware_project-20260528T084606Z",
+  "project_id": "stm32f103-minimal-system",
+  "topology": "stm32f103_minimal_system",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "stm32f103_mcu",
+      "value": "STM32F103C8Tx",
+      "selected_part": {
+        "part_id": "C8734",
+        "display_name": "STM32F103C8T6",
+        "lcsc_id": "C8734",
+        "mpn": "STM32F103C8T6",
+        "manufacturer": "STMicroelectronics",
+        "package": "LQFP-48",
+        "pin_count": 48,
+        "named_pin_count": 48
+      },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": [
+        "STM32F103C8T6 ARM Cortex-M3 72MHz, 64KB Flash, 20KB SRAM, LQFP-48"
+      ]
+    },
+    {
+      "ref": "U2",
+      "role": "ldo_regulator",
+      "value": "AMS1117-3.3",
+      "selected_part": {
+        "part_id": "C5346136",
+        "display_name": "AMS1117-3.3",
+        "lcsc_id": "C5346136",
+        "mpn": "AMS1117-3.3",
+        "manufacturer": "AMS",
+        "package": "SOT-223",
+        "pin_count": 3,
+        "named_pin_count": 3
+      },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": [
+        "3.3V 1A LDO, SOT-223, JLC Basic Part"
+      ]
+    },
+    {
+      "ref": "Y1",
+      "role": "hse_crystal_8mhz",
+      "value": "8MHz",
+      "selected_part": {
+        "part_id": "C12674",
+        "display_name": "8MHz Crystal",
+        "lcsc_id": "C12674",
+        "mpn": "X32258MMB4SI",
+        "manufacturer": "YXC",
+        "package": "3225",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": [
+        "8MHz HSE crystal for system clock, 3225 SMD package"
+      ]
+    },
+    {
+      "ref": "Y2",
+      "role": "lse_crystal_32khz",
+      "value": "32.768kHz",
+      "selected_part": {
+        "part_id": "C32346",
+        "display_name": "32.768kHz Crystal",
+        "lcsc_id": "C32346",
+        "mpn": "X321532768KGD",
+        "manufacturer": "YXC",
+        "package": "3215",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": [
+        "32.768kHz LSE crystal for RTC, 3215 SMD package"
+      ]
+    },
+    {
+      "ref": "C1",
+      "role": "ldo_input_cap",
+      "value": "10uF",
+      "selected_part": {
+        "part_id": "C15850",
+        "display_name": "10uF 25V X5R",
+        "lcsc_id": "C15850",
+        "mpn": "GRM21BR61E106KA73L",
+        "manufacturer": "Murata",
+        "package": "0805",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C2",
+      "role": "ldo_output_cap",
+      "value": "10uF",
+      "selected_part": {
+        "part_id": "C15850",
+        "display_name": "10uF 25V X5R",
+        "lcsc_id": "C15850",
+        "mpn": "GRM21BR61E106KA73L",
+        "manufacturer": "Murata",
+        "package": "0805",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C3",
+      "role": "vdd1_decoupling_cap",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "C1710",
+        "display_name": "100nF 50V X7R",
+        "lcsc_id": "C1710",
+        "mpn": "CC0603KRX7R9BB104",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C4",
+      "role": "vdd2_decoupling_cap",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "C1710",
+        "display_name": "100nF 50V X7R",
+        "lcsc_id": "C1710",
+        "mpn": "CC0603KRX7R9BB104",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C5",
+      "role": "vdd3_decoupling_cap",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "C1710",
+        "display_name": "100nF 50V X7R",
+        "lcsc_id": "C1710",
+        "mpn": "CC0603KRX7R9BB104",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C6",
+      "role": "vdda_decoupling_cap",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "C1710",
+        "display_name": "100nF 50V X7R",
+        "lcsc_id": "C1710",
+        "mpn": "CC0603KRX7R9BB104",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C7",
+      "role": "hse_load_cap1",
+      "value": "22pF",
+      "selected_part": {
+        "part_id": "C1644",
+        "display_name": "22pF 50V NP0",
+        "lcsc_id": "C1644",
+        "mpn": "CC0603JRNPO9BN220",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C8",
+      "role": "hse_load_cap2",
+      "value": "22pF",
+      "selected_part": {
+        "part_id": "C1644",
+        "display_name": "22pF 50V NP0",
+        "lcsc_id": "C1644",
+        "mpn": "CC0603JRNPO9BN220",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C9",
+      "role": "lse_load_cap1",
+      "value": "12pF",
+      "selected_part": {
+        "part_id": "C1575",
+        "display_name": "12pF 50V NP0",
+        "lcsc_id": "C1575",
+        "mpn": "CC0603JRNPO9BN120",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "C10",
+      "role": "lse_load_cap2",
+      "value": "12pF",
+      "selected_part": {
+        "part_id": "C1575",
+        "display_name": "12pF 50V NP0",
+        "lcsc_id": "C1575",
+        "mpn": "CC0603JRNPO9BN120",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R1",
+      "role": "nrst_pullup",
+      "value": "10k",
+      "selected_part": {
+        "part_id": "C25804",
+        "display_name": "10k 5% 0603",
+        "lcsc_id": "C25804",
+        "mpn": "RC0603JR-0710KL",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R2",
+      "role": "boot0_pulldown",
+      "value": "10k",
+      "selected_part": {
+        "part_id": "C25804",
+        "display_name": "10k 5% 0603",
+        "lcsc_id": "C25804",
+        "mpn": "RC0603JR-0710KL",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R3",
+      "role": "user_led_resistor",
+      "value": "330R",
+      "selected_part": {
+        "part_id": "C23141",
+        "display_name": "330R 5% 0603",
+        "lcsc_id": "C23141",
+        "mpn": "RC0603JR-07330RL",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "R4",
+      "role": "power_led_resistor",
+      "value": "330R",
+      "selected_part": {
+        "part_id": "C23141",
+        "display_name": "330R 5% 0603",
+        "lcsc_id": "C23141",
+        "mpn": "RC0603JR-07330RL",
+        "manufacturer": "Yageo",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "LED1",
+      "role": "user_led",
+      "value": "USER LED",
+      "selected_part": {
+        "part_id": "C72038",
+        "display_name": "Green LED 0603",
+        "lcsc_id": "C72038",
+        "mpn": "19-217/GHC-YR1S2/3T",
+        "manufacturer": "Everlight",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "LED2",
+      "role": "power_indicator",
+      "value": "PWR LED",
+      "selected_part": {
+        "part_id": "C72038",
+        "display_name": "Green LED 0603",
+        "lcsc_id": "C72038",
+        "mpn": "19-217/GHC-YR1S2/3T",
+        "manufacturer": "Everlight",
+        "package": "0603",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "RESET",
+      "selected_part": {
+        "part_id": "C19791",
+        "display_name": "Tactile switch",
+        "lcsc_id": "C19791",
+        "mpn": "KMR241GLFS",
+        "manufacturer": "C&K",
+        "package": "SMD 4x3mm",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "SW2",
+      "role": "boot_button",
+      "value": "BOOT0",
+      "selected_part": {
+        "part_id": "C19791",
+        "display_name": "Tactile switch",
+        "lcsc_id": "C19791",
+        "mpn": "KMR241GLFS",
+        "manufacturer": "C&K",
+        "package": "SMD 4x3mm",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "J1",
+      "role": "usb_power_connector",
+      "value": "USB 5V IN",
+      "selected_part": {
+        "part_id": "C2894902",
+        "display_name": "USB-C 16P",
+        "lcsc_id": "C2894902",
+        "mpn": "TYPE-C-31-M-12",
+        "manufacturer": "JRC",
+        "package": "USB-C SMD",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": [
+        "USB-C for power only: VBUS, GND, CC pins to 5.1k to GND"
+      ]
+    },
+    {
+      "ref": "J2",
+      "role": "swd_programming_header",
+      "value": "SWD",
+      "selected_part": {
+        "part_id": "C16057",
+        "display_name": "1x04 Pin Header",
+        "lcsc_id": "C16057",
+        "mpn": "2214S-04G-37UX",
+        "manufacturer": "XFCN",
+        "package": "PinHeader 1x04 2.54mm",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": [
+        "SWD: 1=VDD, 2=SWDIO, 3=SWCLK, 4=GND"
+      ]
+    },
+    {
+      "ref": "J3",
+      "role": "uart_header",
+      "value": "UART1",
+      "selected_part": {
+        "part_id": "C16057",
+        "display_name": "1x04 Pin Header",
+        "lcsc_id": "C16057",
+        "mpn": "2214S-04G-37UX",
+        "manufacturer": "XFCN",
+        "package": "PinHeader 1x04 2.54mm",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "candidate_parts": [],
+      "availability_status": "available",
+      "notes": [
+        "UART1: 1=3V3, 2=TX(PA9), 3=RX(PA10), 4=GND"
+      ]
+    },
+    {
+      "ref": "F1",
+      "role": "usb_ptc_fuse",
+      "value": "500mA PTC",
+      "selected_part": {
+        "part_id": "C91409",
+        "display_name": "500mA PTC fuse",
+        "lcsc_id": "C91409",
+        "mpn": "SMD1206P050TF",
+        "manufacturer": "BHFUSE",
+        "package": "1206",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    },
+    {
+      "ref": "D1",
+      "role": "vbus_tvs_diode",
+      "value": "5V TVS",
+      "selected_part": {
+        "part_id": "C38249",
+        "display_name": "ESD5Z5.0T1G",
+        "lcsc_id": "C38249",
+        "mpn": "ESD5Z5.0T1G",
+        "manufacturer": "ON Semi",
+        "package": "SOD-523",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "candidate_parts": [],
+      "availability_status": "available"
+    }
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "members": [
+        "J1.1",
+        "F1.2",
+        "D1.1",
+        "U2.3",
+        "C1.1"
+      ]
+    },
+    {
+      "name": "GND",
+      "members": [
+        "J1.4",
+        "D1.2",
+        "U2.1",
+        "C1.2",
+        "C2.2",
+        "C3.2",
+        "C4.2",
+        "C5.2",
+        "C6.2",
+        "C7.2",
+        "C8.2",
+        "C9.2",
+        "C10.2",
+        "R2.2",
+        "R4.2",
+        "LED1.2",
+        "LED2.2",
+        "SW1.2",
+        "SW2.2",
+        "U1.8",
+        "U1.23",
+        "U1.35",
+        "U1.47",
+        "J2.4",
+        "J3.4"
+      ]
+    },
+    {
+      "name": "+3V3",
+      "members": [
+        "U2.2",
+        "C2.1",
+        "C3.1",
+        "C4.1",
+        "C5.1",
+        "C6.1",
+        "R1.1",
+        "U1.24",
+        "U1.36",
+        "U1.48",
+        "U1.9",
+        "J2.1",
+        "J3.1"
+      ]
+    },
+    {
+      "name": "NRST",
+      "members": [
+        "U1.7",
+        "R1.2",
+        "SW1.1"
+      ]
+    },
+    {
+      "name": "BOOT0",
+      "members": [
+        "U1.44",
+        "R2.1",
+        "SW2.1"
+      ]
+    },
+    {
+      "name": "HSE_IN",
+      "members": [
+        "U1.5",
+        "Y1.1",
+        "C7.1"
+      ]
+    },
+    {
+      "name": "HSE_OUT",
+      "members": [
+        "U1.6",
+        "Y1.2",
+        "C8.1"
+      ]
+    },
+    {
+      "name": "LSE_IN",
+      "members": [
+        "U1.3",
+        "Y2.1",
+        "C9.1"
+      ]
+    },
+    {
+      "name": "LSE_OUT",
+      "members": [
+        "U1.4",
+        "Y2.2",
+        "C10.1"
+      ]
+    },
+    {
+      "name": "SWDIO",
+      "members": [
+        "U1.34",
+        "J2.2"
+      ]
+    },
+    {
+      "name": "SWCLK",
+      "members": [
+        "U1.37",
+        "J2.3"
+      ]
+    },
+    {
+      "name": "USART1_TX",
+      "members": [
+        "U1.30",
+        "J3.2"
+      ]
+    },
+    {
+      "name": "USART1_RX",
+      "members": [
+        "U1.31",
+        "J3.3"
+      ]
+    },
+    {
+      "name": "USER_LED",
+      "members": [
+        "U1.25",
+        "R3.1"
+      ]
+    },
+    {
+      "name": "LED_A",
+      "members": [
+        "R3.2",
+        "LED1.1"
+      ]
+    },
+    {
+      "name": "PWR_LED",
+      "members": [
+        "R4.1",
+        "LED2.1"
+      ]
+    }
+  ],
+  "calculations": [],
+  "design_decisions": [
+    {
+      "title": "STM32F103C8T6 minimum system with USB power",
+      "rationale": "Complete minimum system with HSE+LSE crystals, decoupling, SWD programming header, USB-C 5V power input, reset/boot buttons, and indicator LEDs.",
+      "impact": "Provides all essential peripherals for STM32 development: clock sources, power regulation, programming interface, and user I/O."
+    },
+    {
+      "title": "USB-C power input with protection",
+      "rationale": "USB-C provides 5V VBUS. PTC fuse limits fault current, TVS diode provides ESD protection.",
+      "impact": "Protected 5V rail feeds AMS1117-3.3 LDO for 3.3V MCU power."
+    },
+    {
+      "title": "Dual crystal clock sources",
+      "rationale": "8MHz HSE for PLL system clock (72MHz max). 32.768kHz LSE for RTC and low-power modes.",
+      "impact": "Both crystals included with proper load capacitors."
+    },
+    {
+      "title": "All LCSC Basic Parts for JLCPCB assembly",
+      "rationale": "Components selected from JLCPCB Basic Parts catalog for low-cost assembly.",
+      "impact": "No extended part fees. All passives in 0603/0805 standard packages."
+    }
+  ],
+  "risks": [
+    "STM32F103C8T6 uses KiCad system library symbol MCU_ST_STM32F1:STM32F103C8Tx; verify pin mapping matches actual LQFP-48 pinout.",
+    "USB-C connector is high-risk for EasyEDA import due to mechanical complexity.",
+    "Crystal load capacitor values (22pF/12pF) are typical recommendations; verify with actual crystal datasheet.",
+    "This is a schematic-generation artifact; verify before PCB layout production."
+  ],
+  "constraints": [],
+  "sheets": []
+}

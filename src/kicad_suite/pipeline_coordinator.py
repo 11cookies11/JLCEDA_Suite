@@ -16,13 +16,15 @@ from .adapters.kicad_cli import resolve_kicad_cli
 from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, normalize_net_kind, write_output
 from .ir_compiler import build_ir
 from .ir_to_kicad import ir_to_kicad
-from .env_utils import is_truthy_env
+from .env_utils import is_truthy_env, repo_root
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import write_project
 from .parts.workflow import run_parts_pipeline
+from .parts.resolve import apply_selected_parts_to_model
 from .pipeline_event_log import append_pipeline_event, pipeline_event_log_path
 from .pipeline_postprocess import apply_postprocess, pin_project_libraries
 from .pipeline_summary import build_run_pipeline_summary
+from .project_resolution import write_project_resolution
 from .simulation_planner import write_simulation_artifacts
 
 
@@ -57,7 +59,7 @@ def _generate_board_from_plan(plan_file: str, project_dir: Path) -> dict[str, An
             "success": False,
             "warnings": ["KiCad Python was not found; PCB was not generated."],
         }
-    script = Path(__file__).resolve().parents[2] / "scripts" / "generate_pcb_from_plan.py"
+    script = repo_root() / 'scripts' / 'generate_pcb_from_plan.py'
     board_file = project_dir / f"{project_dir.name}.kicad_pcb"
     process = subprocess.run(
         [python_bin, str(script), plan_file, str(board_file)],
@@ -203,7 +205,6 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         {"model_path": model_path, "project_name": project_name, "output_dir": str(output), "project_output_dir": str(project_output_dir)},
     )
 
-    netlist = build_netlist(model)
     simulation_result = write_simulation_artifacts(model, output)
     simulation_result["event_log_file"] = str(event_log)
     append_pipeline_event(
@@ -217,7 +218,33 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             "scenario_count": simulation_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
         },
     )
-    ir = build_ir(model)
+
+    parts_result: dict[str, Any] = {}
+    if is_truthy_env("KICAD_PARTS_PIPELINE", "false"):
+        try:
+            parts_result = run_parts_pipeline(
+                model,
+                output,
+                project_name=project_name,
+                run_importer=is_truthy_env("KICAD_PARTS_IMPORT", "false"),
+            )
+        except Exception as exc:  # noqa: BLE001
+            parts_result = {"error": str(exc)}
+        append_pipeline_event(
+            event_log,
+            "parts-pipeline",
+            "parts pipeline completed",
+            {
+                "lock_file": parts_result.get("lock_file", ""),
+                "risk_report_file": parts_result.get("risk_report_file", ""),
+                "error": parts_result.get("error", ""),
+            },
+        )
+
+    resolved_model = apply_selected_parts_to_model(model, parts_result.get("selections", [])) if parts_result else model
+    _ = build_netlist(resolved_model)
+
+    ir = build_ir(resolved_model)
     append_pipeline_event(
         event_log,
         "ir-compiled",
@@ -288,27 +315,24 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     )
     postprocess["project_library_pins_after_erc"] = pin_project_libraries(project_dir)
 
-    parts_result: dict[str, Any] = {}
-    if is_truthy_env("KICAD_PARTS_PIPELINE", "false"):
-        try:
-            parts_result = run_parts_pipeline(
-                model,
-                output,
-                project_name=project_name,
-                run_importer=is_truthy_env("KICAD_PARTS_IMPORT", "false"),
-            )
-        except Exception as exc:  # noqa: BLE001
-            parts_result = {"error": str(exc)}
-        append_pipeline_event(
-            event_log,
-            "parts-pipeline",
-            "parts pipeline completed",
-            {
-                "lock_file": parts_result.get("lock_file", ""),
-                "risk_report_file": parts_result.get("risk_report_file", ""),
-                "error": parts_result.get("error", ""),
-            },
-        )
+    project_resolution_result = write_project_resolution(
+        resolved_model,
+        project_output_dir / "build",
+        parts_result=parts_result,
+        generator_name="hwtool",
+        generator_version="",
+    )
+    append_pipeline_event(
+        event_log,
+        "project-resolution",
+        "project resolution manifest written",
+        {
+            "path": project_resolution_result.get("path", ""),
+            "component_count": project_resolution_result.get("manifest", {}).get("summary", {}).get("component_count", 0),
+            "verified_count": project_resolution_result.get("manifest", {}).get("summary", {}).get("verified_count", 0),
+            "needs_reselection_count": project_resolution_result.get("manifest", {}).get("summary", {}).get("needs_reselection_count", 0),
+        },
+    )
 
     summary = build_run_pipeline_summary(
         project_name=project_name,
@@ -318,6 +342,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         write_result=write_result,
         erc_result=erc_result,
         parts_result=parts_result,
+        project_resolution_result=project_resolution_result,
         plan_diagnostics=asdict(plan.diagnostics) if hasattr(plan, "diagnostics") else {},
         postprocess=postprocess,
         simulation_result=simulation_result,

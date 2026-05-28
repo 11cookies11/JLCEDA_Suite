@@ -1,0 +1,26 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "agent-create_hardware_project-20260527T185449Z",
+  "project_id": "rp2040-minimal",
+  "topology": "rp2040_minimal",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "rp2040_mcu",
+      "value": "RP2040",
+      "package": "QFN-56_L7.0-W7.0-P0.4-EP"
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AP2112K-3.3",
+      "package": "SOT-23-5"
+    }
+  ],
+  "nets": [],
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": [],
+  "sheets": []
+}

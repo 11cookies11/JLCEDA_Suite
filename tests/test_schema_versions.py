@@ -36,6 +36,7 @@ class TestSchemaVersions(unittest.TestCase):
             "dsl-api-request.v1",
             "dsl-api-result.v1",
             "dsl-api-entities.v1",
+            "project-resolution.v1",
         }
         self.assertEqual(set(CANONICAL_SCHEMA_VERSIONS), expected)
 

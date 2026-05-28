@@ -170,6 +170,7 @@ def _build_components(
                 "lcsc_id": str(selected_part.get("lcsc_id", "")),
                 "package": str(selected_part.get("package", "")),
                 "mechanical_package": str(selected_part.get("mechanical_package", "")),
+                "kicad_footprint_hint": str(selected_part.get("kicad_footprint_hint", "")),
             },
             "pins": pins,
             "assigned_sheet": assigned_sheet,

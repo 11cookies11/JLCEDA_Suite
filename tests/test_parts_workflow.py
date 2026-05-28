@@ -16,7 +16,9 @@ from kicad_suite.part_selector import SelectedPart, SelectionResult, classify_pa
 from kicad_suite.parts.report import build_parts_summary
 from kicad_suite.parts.resolve import (
     build_mock_resolver_results,
+    build_resolver_requests,
     build_part_requirements,
+    execute_resolver_requests,
     enrich_selected_parts_with_refs,
 )
 from kicad_suite.parts.workflow import run_parts_pipeline
@@ -138,6 +140,41 @@ class TestPartsResolveHelpers(unittest.TestCase):
         self.assertEqual(summary["low_risk"], 1)
         self.assertEqual(summary["high_risk"], 1)
         self.assertEqual(summary["needs_review"], 1)
+
+    def test_build_and_execute_resolver_requests(self):
+        components = [_make_component()]
+        requirements = build_part_requirements(components)
+        requests = build_resolver_requests(requirements, components)
+
+        class DummyBackend:
+            def search(self, query: str, limit: int, **kwargs: object) -> list[dict]:
+                self.last_query = query
+                self.last_limit = limit
+                self.last_kwargs = kwargs
+                return [
+                    {
+                        "_source": "jlcpcb_parts",
+                        "lcsc_id": "C2040",
+                        "mpn": "AMS1117-3.3",
+                        "manufacturer": "AMS",
+                        "package": "SOT-223",
+                        "description": "3.3V LDO",
+                        "stock": 1000,
+                        "basic_or_extended": "Basic",
+                        "has_symbol": True,
+                        "has_footprint": True,
+                        "has_3d_model": False,
+                    }
+                ]
+
+        backend = DummyBackend()
+        results = execute_resolver_requests(requests, backend=backend, max_candidates=1)
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0].id, "ldo")
+        self.assertEqual(len(results[0].candidates), 1)
+        self.assertEqual(results[0].candidates[0].lcsc_id, "C2040")
+        self.assertIn("AMS1117-3.3", backend.last_query)
+        self.assertEqual(backend.last_limit, 10)
 
 
 class TestRunPartsPipeline(unittest.TestCase):

@@ -20,6 +20,7 @@ from kicad_suite.compile_kicad_execution_plan import (
     KiCadSymbol,
     KiCadTarget,
 )
+from kicad_suite.part_selector import SelectedPart
 from kicad_suite.pipeline_coordinator import build_netlist, run_pipeline
 
 
@@ -65,7 +66,16 @@ class TestRunPipeline(unittest.TestCase):
             "request_id": "req-1",
             "project_id": "proj-1",
             "topology": "demo",
-            "components": [],
+            "components": [
+                {
+                    "ref": "U1",
+                    "role": "ldo",
+                    "value": "3.3V LDO",
+                    "selected_part": {},
+                    "candidate_parts": [],
+                    "availability_status": "unknown",
+                }
+            ],
             "nets": [],
         }
 
@@ -105,17 +115,42 @@ class TestRunPipeline(unittest.TestCase):
                 "symbol_count": 1,
                 "net_count": 1,
             }
+            selected_part = SelectedPart(
+                requirement_id="ldo",
+                lcsc_id="C2040",
+                mpn="AMS1117-3.3",
+                manufacturer="AMS",
+                package="SOT-223",
+                description="3.3V LDO",
+                price=None,
+                stock=1000,
+                basic_or_extended="Basic",
+                has_easyeda_symbol=True,
+                has_easyeda_footprint=True,
+                has_3d_model=False,
+                source="jlcpcb_parts",
+                confidence=0.9,
+                composite_score=88.0,
+                reasons=[],
+                risks=[],
+                needs_review=False,
+                ref="U1",
+                value="3.3V LDO",
+            )
 
-            with patch("kicad_suite.pipeline_coordinator.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
-                with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json") as write_output:
-                    with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result) as write_project:
-                        with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
-                            with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": True}) as postprocess:
-                                with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
-                                    with patch("kicad_suite.pipeline_coordinator.is_truthy_env", side_effect=lambda name, default="false": name == "KICAD_PARTS_PIPELINE"):
-                                        with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md"}) as run_parts:
-                                            summary = run_pipeline(str(model_path), tmpdir)
+            with patch("kicad_suite.pipeline_coordinator.build_ir", side_effect=lambda model: model) as build_ir:
+                with patch("kicad_suite.pipeline_coordinator.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
+                    with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json") as write_output:
+                        with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result) as write_project:
+                            with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
+                                with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": True}) as postprocess:
+                                    with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
+                                        with patch("kicad_suite.pipeline_coordinator.is_truthy_env", side_effect=lambda name, default="false": name == "KICAD_PARTS_PIPELINE"):
+                                            with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md", "selections": [selected_part]}) as run_parts:
+                                                summary = run_pipeline(str(model_path), tmpdir)
 
+        build_ir.assert_called_once()
+        self.assertEqual(build_ir.call_args.args[0]["components"][0]["selected_part"]["lcsc_id"], "C2040")
         ir_to_kicad.assert_called_once()
         write_output.assert_called_once()
         write_project.assert_called_once()

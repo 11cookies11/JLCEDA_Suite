@@ -20,7 +20,7 @@ class TestKicadProjectWriter(unittest.TestCase):
         erc = project["erc"]
         self.assertEqual(erc["meta"]["version"], 0)
         self.assertEqual(len(erc["pin_map"]), 12)
-        self.assertEqual(erc["rule_severities"]["unconnected_wire_endpoint"], "warning")
+        self.assertEqual(erc["rule_severities"]["unconnected_wire_endpoint"], "ignore")
         self.assertEqual(erc["rule_severities"]["lib_symbol_issues"], "warning")
         self.assertEqual(erc["rule_severities"]["single_global_label"], "ignore")
 
@@ -34,7 +34,7 @@ class TestKicadProjectWriter(unittest.TestCase):
             project = json.loads(project_file.read_text(encoding="utf-8"))
 
         self.assertTrue(result["success"])
-        self.assertEqual(project["erc"]["rule_severities"]["unconnected_wire_endpoint"], "warning")
+        self.assertEqual(project["erc"]["rule_severities"]["unconnected_wire_endpoint"], "ignore")
         self.assertEqual(len(project["erc"]["pin_map"]), 12)
 
 

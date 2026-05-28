@@ -156,6 +156,8 @@ class SelectedPart:
     reasons: list[str]
     risks: list[RiskItem]
     needs_review: bool
+    part_id: str = ""
+    display_name: str = ""
     ref: str = ""              # reference designator, e.g. "U1", "R1" — filled by schematic
     value: str = ""            # e.g. "10k", "100nF" for passives
     note: str = ""             # human note, e.g. "模块封装需要人工检查边缘焊盘"
@@ -393,6 +395,8 @@ def select_part(
             reasons=reasons,
             risks=risks,
             needs_review=review,
+            part_id=candidate.lcsc_id or requirement.id,
+            display_name=candidate.description or candidate.mpn or requirement.function,
             value=requirement.function,  # rough initial value; refined later in pipeline
             note="",
         )

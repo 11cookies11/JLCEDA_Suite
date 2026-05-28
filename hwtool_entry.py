@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+"""Entry point for hwtool.exe — frozen PyInstaller launcher."""
+import sys
+from pathlib import Path
+
+# Ensure src/ is on path for frozen and dev modes
+_src = Path(__file__).resolve().parent / "src"
+if str(_src) not in sys.path:
+    sys.path.insert(0, str(_src))
+
+from kicad_suite.cli import main
+
+if __name__ == "__main__":
+    sys.exit(main())

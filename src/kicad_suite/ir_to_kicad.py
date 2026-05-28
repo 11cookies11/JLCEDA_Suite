@@ -81,9 +81,7 @@ def ir_to_kicad(ir: dict[str, Any]) -> KiCadExecutionPlan:
             "ref": ref,
             "role": comp.get("role", ""),
             "value": comp.get("value", ""),
-            "selected_part": {
-                "package": sp.get("package", sp.get("mechanical_package", "")),
-            },
+            "selected_part": dict(sp) if isinstance(sp, dict) else {},
         }
         lib_id, footprint, notes = symbol_mapping_for(component_for_map)
         preflight.append((ref, comp.get("role", ""), lib_id, footprint, notes))

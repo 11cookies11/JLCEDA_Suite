@@ -15,10 +15,44 @@ from .schema_versions import (
     KICAD_EXECUTION_PLAN_SCHEMA_VERSION,
     NETLIST_SCHEMA_VERSION,
 )
-REPO_ROOT = Path(__file__).resolve().parents[2]
-SYMBOL_MAP_CACHE: dict[str, Any] | None = None
+from .env_utils import repo_root
+
+REPO_ROOT = repo_root()
 LAYOUT_PROFILES_CACHE: dict[str, Any] | None = None
 FOOTPRINT_EXISTS_CACHE: dict[str, bool] = {}
+
+# Role → (KiCad_lib:symbol, footprint_lib) fallback when no symbol map match.
+_ROLE_FALLBACK: dict[str, tuple[str, str]] = {
+    "reset_button": ("Switch:SW_Push", ""),
+    "user_button": ("Switch:SW_Push", ""),
+    "bootsel_button": ("Switch:SW_Push", ""),
+    "boot_switch": ("Switch:SW_SPDT", ""),
+    "power_led": ("Device:LED", ""),
+    "status_led": ("Device:LED", ""),
+    "user_led": ("Device:LED", ""),
+    "swd_debug_header": ("Connector:Conn_01x04", ""),
+    "uart_header": ("Connector:Conn_01x04", ""),
+    "i2c_header": ("Connector:Conn_01x04", ""),
+    "spi_header": ("Connector:Conn_01x06", ""),
+    "usb_c_power_input": ("Connector:USB_C_Receptacle", ""),
+    "usb_c_data": ("Connector:USB_C_Receptacle", ""),
+    "usb_micro_b": ("Connector:USB_B_Micro", ""),
+    "led_resistor": ("Device:R", ""),
+    "user_button_pullup": ("Device:R", ""),
+    "nrst_pullup": ("Device:R", ""),
+    "boot0_pulldown": ("Device:R", ""),
+    "i2c_pullup": ("Device:R", ""),
+    "xtal_load_cap_1": ("Device:C", ""),
+    "xtal_load_cap_2": ("Device:C", ""),
+    "vdd_decoupling_1": ("Device:C", ""),
+    "vdd_decoupling_2": ("Device:C", ""),
+    "vdd_decoupling_3": ("Device:C", ""),
+    "vdd_bulk_cap": ("Device:C", ""),
+    "reg_input_cap": ("Device:C", ""),
+    "reg_output_cap": ("Device:C", ""),
+    "main_8mhz_xtal": ("Device:Crystal", ""),
+    "rtc_32k_xtal": ("Device:Crystal", ""),
+}
 
 
 @dataclass
@@ -133,12 +167,12 @@ def load_json_file(path: Path) -> dict[str, Any]:
 
 
 def load_symbol_map() -> dict[str, Any]:
-    global SYMBOL_MAP_CACHE
-    if SYMBOL_MAP_CACHE is not None:
-        return SYMBOL_MAP_CACHE
-    path = Path(env('KICAD_SYMBOL_MAP_FILE', str(REPO_ROOT / 'config' / 'kicad-symbol-map.json')))
-    SYMBOL_MAP_CACHE = load_json_file(path)
-    return SYMBOL_MAP_CACHE
+    """Return an empty compatibility config.
+
+    The old shared symbol rule table has been retired. Resolution now comes
+    from ``selected_part`` plus a small set of built-in role templates.
+    """
+    return {}
 
 
 def load_layout_profiles() -> dict[str, Any]:
@@ -194,49 +228,44 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
     ref = str(component.get('ref', '')).strip().upper()
     value = str(component.get('value', '')).strip().lower()
     selected = component.get('selected_part', {})
-    package = str(selected.get('package', '') if isinstance(selected, dict) else '').strip()
+    if not isinstance(selected, dict):
+        selected = {}
+    package = str(
+        selected.get('kicad_footprint_hint')
+        or selected.get('package', '')
+        or selected.get('mechanical_package', '')
+    ).strip()
     notes: list[str] = []
 
-    symbol_map = load_symbol_map()
-    for mapping in symbol_map.get('mappings', []):
-        if not isinstance(mapping, dict):
-            continue
-        match = mapping.get('match', {})
-        if not isinstance(match, dict) or not mapping_matches(match, ref, role, value):
-            continue
-        note = str(mapping.get('note', ''))
-        if note:
-            notes.append(note)
-        return str(mapping.get('lib_id', 'AIAgent:Generic_2Pin')), resolve_footprint(package, str(mapping.get('footprint', ''))), notes
+    symbol_name = _selected_part_symbol_name(selected)
+    if symbol_name:
+        lib_id = f'JLC-MCP:{symbol_name}'
+        notes.append('Resolved from selected_part; shared symbol rule table is retired.')
+        return lib_id, resolve_footprint(package, str(selected.get('kicad_footprint_hint', ''))), notes
 
-    fallback = symbol_map.get('fallback', {})
-    if isinstance(fallback, dict):
-        note = str(fallback.get('note', ''))
-        if note:
-            notes.append(note)
-        return str(fallback.get('lib_id', 'AIAgent:Generic_2Pin')), resolve_footprint(package, str(fallback.get('footprint', ''))), notes
+    # Role-based fallback to KiCad built-in symbols
+    role_fallback = _ROLE_FALLBACK.get(role)
+    if role_fallback:
+        lib_sym, fp = role_fallback
+        notes.append(f'Role "{role}" resolved to KiCad built-in {lib_sym} (selected_part missing or incomplete).')
+        return lib_sym, resolve_footprint(package, fp), notes
 
     notes.append(f'Mapped unknown role "{role}" to local AIAgent:Generic_2Pin placeholder symbol.')
     return 'AIAgent:Generic_2Pin', normalize_footprint(package), notes
 
 
+def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
+    """Derive a stable EasyEDA/JLC symbol name from selected_part."""
+    for key in ('display_name', 'part_id', 'lcsc_id', 'mpn'):
+        value = str(selected.get(key, '')).strip()
+        if value:
+            cleaned = re.sub(r'[^A-Za-z0-9_.-]+', '_', value)
+            return cleaned.strip('._-') or 'UNKNOWN'
+    return ''
+
+
 def normalize_footprint(footprint: str) -> str:
-    """Resolve footprint aliases and remap JLC-MCP to KiCad built-in equivalents.
-
-    JLC-MCP (EasyEDA-origin) footprints use path variables that KiCad 10.0
-    does not resolve.  Map them to the closest KiCad system-library footprint
-    so that projects open without external library configuration.
-    """
-    aliases = load_symbol_map().get('footprint_aliases', {})
-    if isinstance(aliases, dict):
-        mapped = aliases.get(footprint)
-        if mapped is not None:
-            return str(mapped)
-
-    # JLC-MCP footprints are installed by the JLC MCP bridge into
-    # the project-local JLC-MCP.pretty library. Keep them as-is to
-    # ensure symbol, footprint, and 3D model all come from the
-    # same EasyEDA source, eliminating symbol-footprint mismatches.
+    """Return the footprint unchanged unless it is a JLC-MCP path."""
     if footprint.startswith('JLC-MCP:'):
         return footprint
 
@@ -269,6 +298,12 @@ def _remap_jlc_footprint(fp: str) -> str:
         return 'Package_DFN_QFN:QFN-56-1EP_7x7mm_P0.4mm_EP3.2x3.2mm'
     if 'QFN-20' in name or 'QFN20' in name:
         return 'Package_DFN_QFN:QFN-20-1EP_3x5mm_P0.5mm_EP1.45x2.9mm'
+    if 'LQFP-48' in name or 'QFP-48' in name:
+        return 'Package_QFP:LQFP-48_7x7mm_P0.5mm'
+    if 'LQFP-64' in name or 'QFP-64' in name:
+        return 'Package_QFP:LQFP-64_10x10mm_P0.5mm'
+    if 'LQFP-100' in name or 'QFP-100' in name:
+        return 'Package_QFP:LQFP-100_14x14mm_P0.5mm'
 
     if 'SOT-23-6' in name or 'SOT23-6' in name:
         return 'Package_TO_SOT_SMD:SOT-23-6'
@@ -459,10 +494,6 @@ def _legacy_estimate_symbol_size(lib_id: str) -> tuple[float, float]:
     Returns (width, height) where width covers pin tips + labels on left/right,
     and height covers pin tips + labels on top/bottom.
     """
-    configured = load_symbol_map().get('symbol_sizes', {}).get(lib_id)
-    if isinstance(configured, list) and len(configured) >= 2:
-        return float(configured[0]), float(configured[1])
-
     from .kicad_project_writer import parse_symbol_pin_map
     pins = parse_symbol_pin_map(lib_id)
     if not pins:
@@ -519,9 +550,6 @@ def _estimate_symbol_size_from_pins(lib_id: str) -> tuple[float, float] | None:
 
 
 def _configured_symbol_size(lib_id: str) -> tuple[float, float] | None:
-    configured = load_symbol_map().get('symbol_sizes', {}).get(lib_id)
-    if isinstance(configured, list) and len(configured) >= 2:
-        return float(configured[0]), float(configured[1])
     return None
 
 

@@ -12,7 +12,9 @@ from .env_utils import env
 
 
 RULES_SCHEMA_VERSION = 'layout-rules.v1'
-REPO_ROOT = Path(__file__).resolve().parents[2]
+from .env_utils import repo_root
+
+REPO_ROOT = repo_root()
 
 
 @dataclass
