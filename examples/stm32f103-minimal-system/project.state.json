@@ -1,6 +1,6 @@
 {
   "dsl": {
-    "hash": "40a9f4d3",
+    "hash": "5340b212",
     "path": "circuit-model.json",
     "valid": true
   },
@@ -9,25 +9,66 @@
     "name": "stm32f103_minimal_system"
   },
   "summary": {
-    "component_count": 27,
-    "net_count": 16,
-    "risk_count": 4,
+    "component_count": 0,
+    "net_count": 0,
+    "risk_count": 0,
     "sheet_count": 0,
     "calculation_count": 0,
-    "decision_count": 4,
+    "decision_count": 0,
     "constraint_count": 0,
     "power_rail_count": 0
   },
-  "status": "BUILT",
+  "status": "DIRTY",
   "diagnostics": {
     "errors": 0,
     "warnings": 0,
-    "items": []
+    "items": [
+      {
+        "timestamp": "2026-05-28T22:43:04.954435+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      },
+      {
+        "timestamp": "2026-05-28T22:43:06.239692+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      },
+      {
+        "timestamp": "2026-05-28T22:47:34.273992+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      },
+      {
+        "timestamp": "2026-05-28T22:49:53.560515+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      },
+      {
+        "timestamp": "2026-05-28T23:04:45.415619+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      },
+      {
+        "timestamp": "2026-05-28T23:04:46.659515+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      },
+      {
+        "timestamp": "2026-05-28T23:04:47.894843+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      },
+      {
+        "timestamp": "2026-05-28T23:04:49.219251+00:00",
+        "level": "info",
+        "message": "api:set_component_search_hints"
+      }
+    ]
   },
   "build": {
     "last_build_ok": true,
-    "last_build_at": "2026-05-28T08:47:11.585627+00:00",
-    "input_dsl_hash": "40a9f4d3",
+    "last_build_at": "2026-05-28T22:10:56.242214+00:00",
+    "input_dsl_hash": "03e4b540",
     "outputs": {
       "operation": "export_kicad_project",
       "outputs": {

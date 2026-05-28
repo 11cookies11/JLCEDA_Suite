@@ -544,6 +544,15 @@ class _ExtendedHandlers:
                     ir = build_ir(self.model)
                     plan = ir_to_kicad(ir)
                     result = write_project(asdict(plan))
+                    # Pin project-local JLC libraries so KiCad can find them
+                    project_out = output_dir / project_name
+                    if project_out.is_dir():
+                        from ..pipeline_postprocess import pin_project_libraries
+                        try:
+                            pin_result = pin_project_libraries(project_out)
+                            result["library_pins"] = pin_result
+                        except Exception:
+                            pass
                 return self._read_result(request, before, {"kicad_project": result})
             project_dir = Path(str(request.payload.get("project_dir", "")))
             schematic_file = request.payload.get("schematic_file", "")

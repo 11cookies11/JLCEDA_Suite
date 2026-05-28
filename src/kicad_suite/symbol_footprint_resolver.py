@@ -24,40 +24,37 @@ REPO_ROOT = repo_root()
 _symbol_map_cache: dict[str, Any] | None = None
 _footprint_exists_cache: dict[str, bool] = {}
 
+# Minimal role → (KiCad_lib:symbol, footprint_hint) safety net.
+# These are only used when ``resolve-symbols`` was skipped and no
+# ``selected_part`` is present.  Generic EasyEDA search handles
+# everything else — see ``_ROLE_GENERIC_SEARCH`` in jlc_installer.py.
 _ROLE_FALLBACK: dict[str, tuple[str, str]] = {
-    # Switches & buttons
-    "reset_button": ("Button_Switch_SMD:SW_SPST_TL3342", "SWPUSH"),
-    "user_button": ("Button_Switch_SMD:SW_SPST_TL3342", "SWPUSH"),
-    "bootsel_button": ("Switch:SW_Push", ""),
-    "boot_switch": ("Switch:SW_SPDT", ""),
-    # LEDs
-    "power_led": ("LED_SMD:LED_0603_1608Metric", "LED0603"),
-    "status_led": ("Device:LED", ""),
-    "user_led": ("Device:LED", ""),
-    # Connectors
-    "swd_debug_header": ("Connector_Generic:Conn_01x04", "HDR-TH_4P-P2.54-V-M"),
-    "uart_header": ("Connector:Conn_01x04", ""),
-    "i2c_header": ("Connector:Conn_01x04", ""),
-    "spi_header": ("Connector:Conn_01x06", ""),
-    "usb_c_power_input": ("Connector_USB:USB_C_Receptacle_USB2.0_16Pin", "USB-C16PIN"),
-    "usb_c_data": ("Connector:USB_C_Receptacle", ""),
-    "usb_micro_b": ("Connector:USB_B_Micro", ""),
-    # Passives
+    # Passives — Device library symbols are reliable and universal
     "boot0_pulldown": ("Device:R", "R0603"),
     "nrst_pullup": ("Device:R", "R0603"),
-    "led_resistor": ("Device:R", ""),
-    "user_button_pullup": ("Device:R", ""),
-    "i2c_pullup": ("Device:R", ""),
+    "led_resistor": ("Device:R", "R0603"),
+    "user_button_pullup": ("Device:R", "R0603"),
+    "i2c_pullup": ("Device:R", "R0603"),
     "xtal_load_cap_1": ("Device:C", "C0603"),
     "xtal_load_cap_2": ("Device:C", "C0603"),
-    "vdd_decoupling_1": ("Device:C", ""),
-    "vdd_decoupling_2": ("Device:C", ""),
-    "vdd_decoupling_3": ("Device:C", ""),
-    "vdd_bulk_cap": ("Device:C", ""),
-    "reg_input_cap": ("Device:C", ""),
-    "reg_output_cap": ("Device:C", ""),
+    "hse_load_cap_1": ("Device:C", "C0603"),
+    "hse_load_cap_2": ("Device:C", "C0603"),
+    "lse_load_cap_1": ("Device:C", "C0603"),
+    "lse_load_cap_2": ("Device:C", "C0603"),
+    "vdd_decoupling_1": ("Device:C", "C0603"),
+    "vdd_decoupling_2": ("Device:C", "C0603"),
+    "vdd_decoupling_3": ("Device:C", "C0603"),
+    "vdd_decoupling_4": ("Device:C", "C0603"),
+    "vdd_bulk_cap": ("Device:C", "C0805"),
+    "reg_input_cap": ("Device:C", "C0805"),
+    "reg_output_cap": ("Device:C", "C0805"),
     "main_8mhz_xtal": ("Device:Crystal", ""),
     "rtc_32k_xtal": ("Device:Crystal", ""),
+    "main_12mhz_xtal": ("Device:Crystal", ""),
+    # LEDs — Device:LED works for any basic indicator
+    "power_led": ("Device:LED", ""),
+    "status_led": ("Device:LED", ""),
+    "user_led": ("Device:LED", ""),
 }
 
 

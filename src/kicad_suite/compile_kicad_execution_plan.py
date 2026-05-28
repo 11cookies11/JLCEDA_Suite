@@ -22,37 +22,7 @@ LAYOUT_PROFILES_CACHE: dict[str, Any] | None = None
 FOOTPRINT_EXISTS_CACHE: dict[str, bool] = {}
 
 # Role → (KiCad_lib:symbol, footprint_lib) fallback when no symbol map match.
-_ROLE_FALLBACK: dict[str, tuple[str, str]] = {
-    "reset_button": ("Switch:SW_Push", ""),
-    "user_button": ("Switch:SW_Push", ""),
-    "bootsel_button": ("Switch:SW_Push", ""),
-    "boot_switch": ("Switch:SW_SPDT", ""),
-    "power_led": ("Device:LED", ""),
-    "status_led": ("Device:LED", ""),
-    "user_led": ("Device:LED", ""),
-    "swd_debug_header": ("Connector:Conn_01x04", ""),
-    "uart_header": ("Connector:Conn_01x04", ""),
-    "i2c_header": ("Connector:Conn_01x04", ""),
-    "spi_header": ("Connector:Conn_01x06", ""),
-    "usb_c_power_input": ("Connector:USB_C_Receptacle", ""),
-    "usb_c_data": ("Connector:USB_C_Receptacle", ""),
-    "usb_micro_b": ("Connector:USB_B_Micro", ""),
-    "led_resistor": ("Device:R", ""),
-    "user_button_pullup": ("Device:R", ""),
-    "nrst_pullup": ("Device:R", ""),
-    "boot0_pulldown": ("Device:R", ""),
-    "i2c_pullup": ("Device:R", ""),
-    "xtal_load_cap_1": ("Device:C", ""),
-    "xtal_load_cap_2": ("Device:C", ""),
-    "vdd_decoupling_1": ("Device:C", ""),
-    "vdd_decoupling_2": ("Device:C", ""),
-    "vdd_decoupling_3": ("Device:C", ""),
-    "vdd_bulk_cap": ("Device:C", ""),
-    "reg_input_cap": ("Device:C", ""),
-    "reg_output_cap": ("Device:C", ""),
-    "main_8mhz_xtal": ("Device:Crystal", ""),
-    "rtc_32k_xtal": ("Device:Crystal", ""),
-}
+from .symbol_footprint_resolver import _ROLE_FALLBACK
 
 
 @dataclass

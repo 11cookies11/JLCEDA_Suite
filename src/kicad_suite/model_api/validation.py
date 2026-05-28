@@ -135,6 +135,7 @@ SUPPORTED_OPERATIONS = {
     "set_component_notes",
     "set_component_ref",
     "set_component_role",
+    "set_component_search_hints",
     "set_component_value",
     "set_constraint_priority",
     "set_constraint_scope",

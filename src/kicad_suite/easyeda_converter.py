@@ -39,32 +39,51 @@ _ELEC_TYPE_MAP = {
 
 
 def build_kicad_symbol(comp: ParsedComponent, lib_name: str = "JLC-MCP") -> str:
-    """Generate a ``.kicad_sym`` s-expression string from a parsed EasyEDA component."""
+    """Generate a KiCad 10 ``(symbol ...)`` block from a parsed EasyEDA component."""
     symbol_name = _sanitize_symbol_name(comp.title or comp.lcsc_id or "UNKNOWN")
-    lines = [
-        f'(kicad_symbol_lib (version 20231120) (generator "hwtool_jlc")',
-        f'  (symbol "{symbol_name}"',
-    ]
 
     # Pin name offset
     total_pin_length = 0.0
-    pin_count = 0
     for s in comp.shapes:
         if s.type == "pin":
-            pin_count += 1
             length = float(s.props.get("length", 20))
             if length > total_pin_length:
                 total_pin_length = length
 
     pin_name_offset = eda_to_kicad_pos(total_pin_length + 50)
 
+    lines: list[str] = []
+    lines.append(f'  (symbol "{symbol_name}"')
+
+    # KiCad 10 required symbol-level fields
+    lines.append('    (pin_numbers (hide yes))')
+    lines.append(f'    (pin_names (offset {pin_name_offset:.3f}))')
+    lines.append('    (exclude_from_sim no)')
+    lines.append('    (in_bom yes)')
+    lines.append('    (on_board yes)')
+    lines.append('    (duplicate_pin_numbers_are_jumpers no)')
+
     # Properties
     prefix = comp.prefix or "U"
-    lines.append(f'    (property "Reference" "{prefix}" (at 0 {eda_to_kicad_pos(comp.bbox.get("height", 0) / 2 + 50)}) (effects (font (size 1.27 1.27))) )')
-    lines.append(f'    (property "Value" "{symbol_name}" (at 0 {eda_to_kicad_pos(-comp.bbox.get("height", 0) / 2 - 50)}) (effects (font (size 1.27 1.27))) )')
-    lines.append(f'    (property "Footprint" "" (at 0 {eda_to_kicad_pos(-80)}) (effects (font (size 1.27 1.27)) hide) )')
-    lines.append(f'    (property "Datasheet" "" (at 0 0) (effects (font (size 1.27 1.27)) hide) )')
-    lines.append(f'    (property "ki_locked" "" (at 0 0) (effects (font (size 1.27 1.27)) hide) )')
+    ref_y = eda_to_kicad_pos(comp.bbox.get("height", 0) / 2 + 50)
+    val_y = eda_to_kicad_pos(-comp.bbox.get("height", 0) / 2 - 50)
+    fp_y = eda_to_kicad_pos(-80)
+
+    lines.append(f'    (property "Reference" "{prefix}" (at 0 {ref_y} 0)'
+                 f' (show_name no) (do_not_autoplace no)'
+                 f' (effects (font (size 1.27 1.27)) (justify right)))')
+    lines.append(f'    (property "Value" "{symbol_name}" (at 0 {val_y} 0)'
+                 f' (show_name no) (do_not_autoplace no)'
+                 f' (effects (font (size 1.27 1.27)) (justify right)))')
+    lines.append(f'    (property "Footprint" "" (at 0 {fp_y} 0)'
+                 f' (show_name no) (do_not_autoplace no) (hide yes)'
+                 f' (effects (font (size 1.27 1.27)) (justify right)))')
+    lines.append(f'    (property "Datasheet" "" (at 0 0 0)'
+                 f' (show_name no) (do_not_autoplace no) (hide yes)'
+                 f' (effects (font (size 1.27 1.27)) (justify right)))')
+    lines.append(f'    (property "ki_locked" "" (at 0 0 0)'
+                 f' (show_name no) (do_not_autoplace no) (hide yes)'
+                 f' (effects (font (size 1.27 1.27)) (justify right)))')
 
     # Symbol body (rectangle around all shapes)
     bx = eda_to_kicad_pos(comp.bbox.get("x", 0))
@@ -75,18 +94,15 @@ def build_kicad_symbol(comp: ParsedComponent, lib_name: str = "JLC-MCP") -> str:
     lines.append(f'      (rectangle (start {bx - bw / 2} {by - bh / 2}) (end {bx + bw / 2} {by + bh / 2})')
     lines.append(f'        (fill (type background)))')
 
-    # Draw shapes
     for s in comp.shapes:
         _symbol_shape_lines(s, lines)
 
-    # Draw pins
     for s in comp.shapes:
         if s.type == "pin" and s.props.get("show", True):
             _symbol_pin_lines(s, lines, pin_name_offset)
 
     lines.append("    )")
     lines.append("  )")
-    lines.append(")")
     return "\n".join(lines)
 
 
@@ -190,7 +206,8 @@ def _symbol_pin_lines(s: ParsedShape, lines: list[str], name_offset: float) -> N
         ex = x
         ey = y - length
 
-    lines.append(f'      (pin passive line (at {sx:.3f} {sy:.3f} {eda_to_kicad_angle(rotation):.0f}) (length {length:.3f})')
+    ki_angle = int(eda_to_kicad_angle(rotation)) % 360
+    lines.append(f'      (pin passive line (at {sx:.3f} {sy:.3f} {ki_angle}) (length {length:.3f})')
     lines.append(f'        (name "{name}" (effects (font (size 1.27 1.27))))')
     lines.append(f'        (number "{number}" (effects (font (size 1.27 1.27))))')
     lines.append("      )")
@@ -352,13 +369,23 @@ def _map_fp_layer(raw: str) -> str:
 def make_two_pin_symbol(ref: str, value: str, lib_name: str = "JLC-MCP") -> str:
     """Fallback: minimal 2-pin symbol for a component without full EasyEDA data."""
     name = _sanitize_symbol_name(value)
-    return f"""(kicad_symbol_lib (version 20231120) (generator "hwtool_jlc_fallback")
-  (symbol "{name}"
-    (property "Reference" "{ref[0] if ref else 'U'}" (at 0 5.08) (effects (font (size 1.27 1.27))))
-    (property "Value" "{name}" (at 0 -5.08) (effects (font (size 1.27 1.27))))
-    (property "Footprint" "" (at 0 -7.62) (effects (font (size 1.27 1.27)) hide))
-    (property "Datasheet" "" (at 0 0) (effects (font (size 1.27 1.27)) hide))
-    (property "ki_locked" "" (at 0 0) (effects (font (size 1.27 1.27)) hide))
+    return f"""  (symbol "{name}"
+    (pin_numbers (hide yes))
+    (pin_names (offset 2.54))
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (duplicate_pin_numbers_are_jumpers no)
+    (property "Reference" "{ref[0] if ref else 'U'}" (at 0 5.08 0)
+      (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify right)))
+    (property "Value" "{name}" (at 0 -5.08 0)
+      (show_name no) (do_not_autoplace no) (effects (font (size 1.27 1.27)) (justify right)))
+    (property "Footprint" "" (at 0 -7.62 0)
+      (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27)) (justify right)))
+    (property "Datasheet" "" (at 0 0 0)
+      (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27)) (justify right)))
+    (property "ki_locked" "" (at 0 0 0)
+      (show_name no) (do_not_autoplace no) (hide yes) (effects (font (size 1.27 1.27)) (justify right)))
     (symbol "{name}_0_1"
       (rectangle (start -5.08 -2.54) (end 5.08 2.54)
         (fill (type background)))
@@ -369,5 +396,4 @@ def make_two_pin_symbol(ref: str, value: str, lib_name: str = "JLC-MCP") -> str:
         (name "2" (effects (font (size 1.27 1.27))))
         (number "2" (effects (font (size 1.27 1.27)))))
     )
-  )
-)"""
+  )"""

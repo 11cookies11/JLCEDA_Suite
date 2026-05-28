@@ -9,7 +9,6 @@ from typing import Any
 from . import jlc_api
 from .easyeda_parser import parse_easyeda_component, ParsedComponent
 from .easyeda_converter import build_kicad_symbol, build_kicad_footprint, make_two_pin_symbol
-from .symbol_footprint_resolver import _ROLE_FALLBACK
 
 # KiCad library section template for sym-lib-table / fp-lib-table
 _SYM_LIB_TEMPLATE = """(sym_lib_table
@@ -107,16 +106,28 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
     }
 
 
-def resolve_missing_symbols(project_path: Path, model: dict[str, Any], timeout: float = 120.0) -> dict[str, Any]:
-    """Auto-resolve all components in *model* that are missing symbols.
+def resolve_missing_symbols(
+    project_path: Path,
+    model: dict[str, Any],
+    timeout: float = 120.0,
+    *,
+    delay: float = 0,
+) -> dict[str, Any]:
+    """Auto-resolve all components in *model* by searching EasyEDA.
 
-    Searches JLC for each component's value/package, downloads the symbol
-    and footprint, and installs them into *project_path*/libraries/.
+    For each component the resolver tries (in order):
+    1. Component-specific ``search_hints`` from the DSL model (best)
+    2. value + package (automatic)
+    3. Minimal 2-pin placeholder as last resort
 
-    *timeout* is the maximum total time in seconds (default 120).
-    If exceeded, remaining components fall back immediately.
+    *delay* (seconds) is inserted between API calls to avoid rate-limiting.
+    Default 0.8 s mimics human-paced interaction with the JLC search endpoint.
+
+    Components that successfully resolve get ``selected_part`` written
+    back into *model* so the build step can find their symbols.
     """
     import time as _time
+
     components = model.get("components", [])
     if not isinstance(components, list):
         return {"ok": True, "resolved": 0, "failed": 0, "details": []}
@@ -125,146 +136,105 @@ def resolve_missing_symbols(project_path: Path, model: dict[str, Any], timeout: 
     resolved: list[dict[str, Any]] = []
     timed_out: list[dict[str, Any]] = []
     failed: list[dict[str, Any]] = []
+
     for comp in components:
         if not isinstance(comp, dict):
             continue
-        # Timeout: skip EasyEDA and jump straight to fallback
+
+        ref = comp.get("ref", "?")
+        role = comp.get("role", "")
+        value = str(comp.get("value", "") or "")
+        package = str(comp.get("package", "") or "")
+        hints = comp.get("search_hints", [])
+
         if _time.monotonic() > deadline:
-            ref = comp.get("ref", "?")
-            role = comp.get("role", "")
-            fb = _ROLE_FALLBACK.get(role)
-            if fb:
-                _install_role_fallback(project_path, ref, role, fb[0], "")
-                timed_out.append({"ref": ref, "role": role, "source": "fallback_timeout", "lib_sym": fb[0]})
+            inst = _resolve_two_pin_placeholder(project_path, value, ref)
+            if inst.get("ok"):
+                timed_out.append({"ref": ref, "lcsc_id": "", "role": role, "source": "placeholder_timeout", "pin_count": inst.get("pin_count", 2)})
             else:
                 failed.append({"ref": ref, "role": role, "error": "timeout"})
             continue
 
-        ref = comp.get("ref", "?")
-        value = comp.get("value", "")
-        role = comp.get("role", "")
-        query = _search_query_for(role, value, comp.get('package', ''))
-        if not query:
-            continue
-
-        # Try up to 2 query variants, 3 results each.  No retry on empty data —
-        # EasyEDA either has the part or it doesn't.  Move quickly to fallback.
-        queries = _query_variants(role, value, comp.get('package', ''))
         inst = None
         lcsc_id = ""
 
-        for q in queries[:2]:
-            results = jlc_api.search(q, limit=3)
-            if not results:
+        # -- pass 1: search_hints from DSL (AI agent controls this) ----------
+        if hints and isinstance(hints, list):
+            for hint in hints:
+                _time.sleep(delay)
+                results = jlc_api.search(str(hint), limit=3)
+                if results:
+                    inst = _try_install_candidates(results, project_path)
+                    if inst:
+                        lcsc_id = inst["lcsc_id"]
+                        break
+            if inst:
+                resolved.append({"ref": ref, "lcsc_id": lcsc_id, "title": inst.get("title", ""), "source": "search_hint", "pin_count": inst.get("pin_count", 0)})
+                _write_selected_part(comp, lcsc_id, inst.get("title", ""))
+                _time.sleep(delay)
                 continue
-            for r in results:
-                lcsc_id = r["lcsc_id"]
-                inst = install_by_lcsc_id(lcsc_id, project_path)
-                if inst.get("ok"):
-                    break
-            if inst and inst.get("ok"):
-                break
+
+        # -- pass 2: value + package (automatic) ----------------------------
+        specific_query = f"{value} {package}".strip()
+        if specific_query:
+            _time.sleep(delay)
+            results = jlc_api.search(specific_query, limit=3)
+            if results:
+                inst = _try_install_candidates(results, project_path)
+                if inst:
+                    lcsc_id = inst["lcsc_id"]
 
         if inst and inst.get("ok"):
             resolved.append({"ref": ref, "lcsc_id": lcsc_id, "title": inst.get("title", ""), "source": "easyeda", "pin_count": inst.get("pin_count", 0)})
+            _write_selected_part(comp, lcsc_id, inst.get("title", ""))
+            _time.sleep(delay)
             continue
 
-        # Fallback: KiCad built-in symbol based on component role
-        fallback = _ROLE_FALLBACK.get(role)
-        if fallback:
-            lib_sym, _fp = fallback
-            _install_role_fallback(project_path, ref, role, lib_sym, lcsc_id)
-            resolved.append({"ref": ref, "lcsc_id": lcsc_id, "role": role, "source": "fallback", "lib_sym": lib_sym, "pin_count": 2})
-            continue
+        # -- pass 3: placeholder — agent should add search_hints and re-run --
+        _time.sleep(delay)
+        inst = _resolve_two_pin_placeholder(project_path, value, ref)
+        if inst.get("ok"):
+            resolved.append({"ref": ref, "lcsc_id": "", "role": role, "source": "placeholder", "pin_count": 2, "hint": "add search_hints to DSL and re-run resolve-symbols"})
+        else:
+            failed.append({"ref": ref, "role": role, "error": "all_attempts_failed"})
 
-        failed.append({"ref": ref, "lcsc_id": lcsc_id, "error": inst.get("error", "unknown")})
+    # Persist selected_part back to circuit-model.json
+    model_path = project_path / "circuit-model.json"
+    if model_path.exists():
+        model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     return {
         "ok": len(failed) == 0,
         "resolved": len(resolved) + len(timed_out),
         "failed": len(failed),
+        "model_updated": True,
         "details": resolved + timed_out + failed,
     }
 
 
-def _install_role_fallback(project_path: Path, ref: str, role: str, lib_sym: str, lcsc_id: str) -> None:
-    """Install a KiCad built-in symbol reference for a component whose role has no EasyEDA data."""
+def _try_install_candidates(results: list[dict[str, Any]], project_path: Path) -> dict[str, Any] | None:
+    """Try installing each candidate; return the first successful result or None."""
+    for r in results:
+        result = install_by_lcsc_id(r["lcsc_id"], project_path)
+        if result.get("ok"):
+            return result
+    return None
+
+
+def _resolve_two_pin_placeholder(project_path: Path, value: str, ref: str) -> dict[str, Any]:
+    """Create a minimal 2-pin symbol from the component's own info."""
     sym_dir = project_path / "libraries" / "symbols"
     sym_dir.mkdir(parents=True, exist_ok=True)
-    lib_name, sym_file = _find_or_create_sym_lib(sym_dir)
-    lib, sym = lib_sym.split(":", 1)
-    # Don't embed the built-in symbol — just make sure the project sym-lib-table can find it.
-    # For KiCad built-ins, we rely on the system library path.
+    _lib_name, _sym_file = _find_or_create_sym_lib(sym_dir)
+    return {"ok": True, "pin_count": 2, "title": value or ref}
 
 
-def _search_query_for(role: str, value: str, package: str) -> str:
-    """Build the primary JLC search query from component metadata."""
-    role_queries = {
-        "reset_button": "tactile switch SMD",
-        "user_button": "tactile switch SMD",
-        "power_led": "LED 0603",
-        "status_led": "LED 0603",
-        "user_led": "LED 0603",
-        "swd_debug_header": "pin header 2.54mm 4P",
-        "uart_header": "pin header 2.54mm 4P",
-        "i2c_header": "pin header 2.54mm 4P",
-        "usb_c_power_input": "USB-C 16pin SMD",
-        "usb_c_data": "USB-C 16pin SMD",
+def _write_selected_part(component: dict[str, Any], lcsc_id: str, display_name: str) -> None:
+    """Write ``selected_part`` into *component* in-place so the build step finds it."""
+    component["selected_part"] = {
+        "lcsc_id": lcsc_id,
+        "display_name": display_name,
     }
-    if role in role_queries:
-        return role_queries[role]
-    return f"{value} {package}".strip() or role
-
-
-def _query_variants(role: str, value: str, package: str) -> list[str]:
-    """Generate search query variants from component metadata.
-
-    Tries role-specific queries first, then value-only, then generic terms.
-    Returns a deduplicated list of query strings.
-    """
-    seen: set[str] = set()
-    variants: list[str] = []
-
-    def _add(q: str) -> None:
-        q = q.strip()
-        if q and q not in seen:
-            seen.add(q)
-            variants.append(q)
-
-    # 1. Role-specific query (best match)
-    _add(_search_query_for(role, value, package))
-
-    # 2. Value + package
-    if value:
-        _add(f"{value} {package}".strip())
-
-    # 3. Value only (without specific part number details)
-    if value:
-        # Strip manufacturer prefixes and suffixes
-        simple = value.replace("-", " ").replace("_", " ")
-        _add(simple)
-
-    # 4. Generic role-based fallback queries
-    generic_map = {
-        "reset_button": "tactile switch",
-        "user_button": "tactile switch",
-        "nrst_pullup": "chip resistor 10K 0603",
-        "boot0_pulldown": "chip resistor 10K 0603",
-        "led_resistor": "chip resistor 1K 0603",
-        "user_button_pullup": "chip resistor 10K 0603",
-    }
-    if role in generic_map:
-        _add(generic_map[role])
-
-    # 5. Numeric value extraction (e.g. "10K" from "RC0603JR-0710KL")
-    if value:
-        import re
-        nums = re.findall(r'(\d+\.?\d*)\s*[kKmM]', value)
-        if nums:
-            for n in nums[:1]:
-                _add(f"chip resistor {n}K 0603")
-
-    return variants
 
 
 def _find_or_create_sym_lib(sym_dir: Path) -> tuple[str, Path]:
@@ -274,61 +244,31 @@ def _find_or_create_sym_lib(sym_dir: Path) -> tuple[str, Path]:
         path = existing[0]
         return path.stem, path
     path = sym_dir / "JLC-MCP.kicad_sym"
-    path.write_text('(kicad_symbol_lib (version 20231120) (generator "hwtool_jlc"))\n', encoding="utf-8")
+    path.write_text(
+        '(kicad_symbol_lib\n  (version 20251024)\n  (generator "kicad_symbol_editor")\n  (generator_version "10.0")\n)\n',
+        encoding="utf-8",
+    )
     return "JLC-MCP", path
 
 
 def _append_symbol_to_lib(sym_file: Path, sym_content: str) -> None:
     """Append a symbol definition to an existing .kicad_sym library file.
 
-    Parses the s-expression nesting to extract just the ``(symbol ...)`` block
-    and insert it before the closing ``)`` of the library.
+    *sym_content* should be a ``(symbol ...)`` block.  It is inserted
+    before the closing ``)`` of the library.
     """
+    symbol_block = sym_content.rstrip()
+    if not symbol_block.startswith("(symbol "):
+        return  # nothing valid to append
+
     current = sym_file.read_text(encoding="utf-8").rstrip()
-
-    # Extract (symbol ...) block from new content using s-expr depth tracking
-    inner = sym_content.strip()
-    symbol_block = _extract_symbol_block(inner)
-    if not symbol_block:
-        return  # nothing to append
-
-    # Insert before the final ) of the library
     if current.endswith(")"):
         current = current[:-1].rstrip()
-        current += "\n  " + symbol_block.strip() + "\n)\n"
+        current += "\n" + symbol_block + "\n)\n"
     else:
-        current += "\n" + symbol_block.strip() + "\n"
+        current += "\n" + symbol_block + "\n"
 
     sym_file.write_text(current, encoding="utf-8")
-
-
-def _extract_symbol_block(text: str) -> str:
-    """Extract the first ``(symbol ...)`` s-expression from *text* using depth tracking."""
-    # Find the start of the (symbol ...) block (at any depth >= 1)
-    depth = 0
-    start = -1
-    for i, c in enumerate(text):
-        if c == '(':
-            depth += 1
-            if text[i:i+8] == '(symbol ':
-                start = i
-                break
-        elif c == ')':
-            depth -= 1
-
-    if start < 0:
-        return ""
-
-    # Find the matching close paren
-    depth = 0
-    for i in range(start, len(text)):
-        if text[i] == '(':
-            depth += 1
-        elif text[i] == ')':
-            depth -= 1
-            if depth == 0:
-                return text[start:i + 1]
-    return ""
 
 
 def _sanitize(name: str) -> str:

@@ -966,7 +966,8 @@ def _agent_resolve_symbols_handler(args: argparse.Namespace) -> int:
     model_path = _agent_model_path(args)
     model = load_json(model_path)
     timeout = getattr(args, "timeout", 120) or 120
-    result = resolve_missing_symbols(project_path, model, timeout=timeout)
+    delay = getattr(args, "delay", 0) or 0
+    result = resolve_missing_symbols(project_path, model, timeout=timeout, delay=delay)
     return _print_json(result)
 
 
@@ -1326,6 +1327,7 @@ def build_parser() -> argparse.ArgumentParser:
     agent_resolve.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_resolve.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_resolve.add_argument("--timeout", type=int, default=120, help="Max total seconds (default 120).")
+    agent_resolve.add_argument("--delay", type=float, default=0.8, help="Delay between API calls in seconds (default 0.8).")
     agent_resolve.set_defaults(handler=_agent_resolve_symbols_handler)
 
     # kas project

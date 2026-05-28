@@ -62,7 +62,8 @@
         },
         "assigned_sheet": { "type": "string" },
         "availability_status": { "type": "string" },
-        "notes": { "type": "array", "items": { "type": "string" } }
+        "notes": { "type": "array", "items": { "type": "string" } },
+        "search_hints": { "type": "array", "items": { "type": "string" } }
       },
       "additionalProperties": false
     },

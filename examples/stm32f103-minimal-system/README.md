@@ -1,6 +1,6 @@
-# STM32F103 Minimal System
+# stm32f103-minimal-system
 
-This example is a starter workspace for the STM32F103 Minimal System project.
+This example is a starter workspace for the stm32f103-minimal-system project.
 
 Project intent:
 

@@ -21,8 +21,88 @@ from .env_utils import repo_root
 REPO_ROOT = repo_root()
 
 
+def _find_project_libraries_dir(project_dir: Path) -> Path | None:
+    """Find the project-level libraries/ directory.
+
+    Checks the output directory first, then walks up to the grandparent
+    (project root) where ``circuit-model.json`` lives.
+    """
+    candidates = [
+        project_dir / "libraries",
+        project_dir.parent.parent / "libraries",
+        project_dir.parent / "libraries",
+    ]
+    for candidate in candidates:
+        if candidate.is_dir():
+            return candidate.resolve()
+    return None
+
+
+def _write_sym_lib_table(project_dir: Path, symbol_uris: list[tuple[str, str]]) -> Path:
+    """Write a project ``sym-lib-table`` next to the ``.kicad_pro`` file."""
+    lines = ["(sym_lib_table", "  (version 7)"]
+    for name, uri in symbol_uris:
+        lines.append(f'  (lib (name "{name}")(type "KiCad")(uri "{uri}")(options "")(descr ""))')
+    lines.append(")")
+    table_path = project_dir / "sym-lib-table"
+    table_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return table_path
+
+
+def _write_fp_lib_table(project_dir: Path, fp_uris: list[tuple[str, str]]) -> Path:
+    """Write a project ``fp-lib-table`` next to the ``.kicad_pro`` file."""
+    lines = ["(fp_lib_table", "  (version 7)"]
+    for name, uri in fp_uris:
+        lines.append(f'  (lib (name "{name}")(type "KiCad")(uri "{uri}")(options "")(descr ""))')
+    lines.append(")")
+    table_path = project_dir / "fp-lib-table"
+    table_path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    return table_path
+
+
+def _find_kicad_system_symbol_dir() -> Path | None:
+    """Locate the KiCad system symbol directory."""
+    candidates = [
+        Path("D:/Program Files/KiCad/10.0/share/kicad/symbols"),
+        Path("C:/Program Files/KiCad/10.0/share/kicad/symbols"),
+        Path("/usr/share/kicad/symbols"),
+    ]
+    for candidate in candidates:
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+def _find_kicad_system_footprint_dir() -> Path | None:
+    """Locate the KiCad system footprint directory."""
+    candidates = [
+        Path("D:/Program Files/KiCad/10.0/share/kicad/footprints"),
+        Path("C:/Program Files/KiCad/10.0/share/kicad/footprints"),
+        Path("/usr/share/kicad/footprints"),
+    ]
+    for candidate in candidates:
+        if candidate.is_dir():
+            return candidate
+    return None
+
+
+def _scan_schematic_libraries(project_dir: Path) -> set[str]:
+    """Find all library names referenced in schematic files under *project_dir*."""
+    lib_names: set[str] = set()
+    for sch_file in project_dir.glob("*.kicad_sch"):
+        text = sch_file.read_text(encoding="utf-8", errors="replace")
+        for m in re.finditer(r'\(symbol\s+"([^"]+):', text):
+            lib_names.add(m.group(1))
+    return lib_names
+
+
 def pin_project_libraries(project_dir: Path) -> dict[str, Any]:
-    """Ensure KiCad's project JSON pins the project-local JLC libraries."""
+    """Ensure KiCad's project JSON pins the project-local JLC libraries.
+
+    Resolves both output-level and project-level ``libraries/`` directories
+    and writes absolute-pathed ``sym-lib-table`` and ``fp-lib-table`` files
+    so KiCad CLI and GUI can find JLC-MCP symbols and footprints.
+    """
     project_files = sorted(project_dir.glob("*.kicad_pro"))
     if not project_files:
         return {"attempted": True, "success": False, "reason": "no .kicad_pro found"}
@@ -30,48 +110,91 @@ def pin_project_libraries(project_dir: Path) -> dict[str, Any]:
     project_file = project_files[0]
     try:
         data = json.loads(project_file.read_text(encoding="utf-8"))
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {"attempted": True, "success": False, "project": str(project_file), "reason": str(exc)}
 
-    symbols_dir = project_dir / "libraries" / "symbols"
-    symbol_files = sorted(symbols_dir.glob("*.kicad_sym")) if symbols_dir.exists() else []
-    pinned_symbols = [
-        {
-            "name": path.stem,
-            "type": "KiCad",
-            "uri": f"libraries/symbols/{path.name}",
-            "options": "",
-            "description": f"JLC-MCP {path.stem}",
-        }
-        for path in symbol_files
-    ]
+    proj_libs = _find_project_libraries_dir(project_dir)
+    sym_table_entries: list[tuple[str, str]] = []
+    fp_table_entries: list[tuple[str, str]] = []
+    pinned_symbols: list[dict[str, Any]] = []
+    pinned_footprints: list[dict[str, Any]] = []
+
+    if proj_libs:
+        # Project-local symbols
+        symbols_dir = proj_libs / "symbols"
+        if symbols_dir.is_dir():
+            for sym_file in sorted(symbols_dir.glob("*.kicad_sym")):
+                abs_path = sym_file.resolve().as_posix()
+                name = sym_file.stem
+                sym_table_entries.append((name, abs_path))
+                pinned_symbols.append({
+                    "name": name,
+                    "type": "KiCad",
+                    "uri": abs_path,
+                    "options": "",
+                    "description": f"JLC-MCP {name}",
+                })
+
+        # Project-local footprints
+        footprints_dir = proj_libs / "footprints"
+        if footprints_dir.is_dir():
+            for pretty_dir in sorted(footprints_dir.glob("*.pretty")):
+                abs_path = pretty_dir.resolve().as_posix()
+                name = pretty_dir.stem
+                fp_table_entries.append((name, abs_path))
+                pinned_footprints.append({
+                    "name": name,
+                    "type": "KiCad",
+                    "uri": abs_path,
+                    "options": "",
+                    "description": "JLC-MCP footprints",
+                })
+
+    # Discover which KiCad system libraries the schematic references
+    ref_libs = _scan_schematic_libraries(project_dir)
+    system_sym_dir = _find_kicad_system_symbol_dir()
+    system_fp_dir = _find_kicad_system_footprint_dir()
+    for lib_name in sorted(ref_libs):
+        if lib_name not in dict(sym_table_entries):
+            if system_sym_dir:
+                sym_file = system_sym_dir / f"{lib_name}.kicad_sym"
+                if sym_file.is_file():
+                    abs_path = sym_file.as_posix()
+                    sym_table_entries.append((lib_name, abs_path))
+
+    # Write lib-table files alongside the .kicad_pro
+    sym_table_path = None
+    fp_table_path = None
+    if sym_table_entries:
+        sym_table_path = _write_sym_lib_table(project_dir, sym_table_entries)
+    if fp_table_entries:
+        fp_table_path = _write_fp_lib_table(project_dir, fp_table_entries)
+    if not sym_table_entries and project_dir.joinpath("sym-lib-table").exists():
+        project_dir.joinpath("sym-lib-table").unlink()
+
+    # Update .kicad_pro
     data["libraries"] = {
-        "pinned_footprint_libs": [
-            {
-                "name": "JLC-MCP",
-                "type": "KiCad",
-                "uri": "libraries/footprints/JLC-MCP.pretty",
-                "options": "",
-                "description": "JLC-MCP footprints",
-            }
-        ],
+        "pinned_footprint_libs": pinned_footprints,
         "pinned_symbol_libs": pinned_symbols,
     }
     data.setdefault("erc", {
         "erc_exclusions": [],
-        "meta": {
-            "version": 0,
-        },
+        "meta": {"version": 0},
         "pin_map": DEFAULT_ERC_PIN_MAP,
         "rule_severities": DEFAULT_ERC_RULE_SEVERITIES,
     })
     project_file.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
     return {
         "attempted": True,
         "success": True,
         "project": str(project_file),
-        "pinned_footprint_libs": 1,
+        "proj_libs": str(proj_libs) if proj_libs else None,
+        "sym_lib_table": str(sym_table_path) if sym_table_path else None,
+        "fp_lib_table": str(fp_table_path) if fp_table_path else None,
         "pinned_symbol_libs": len(pinned_symbols),
+        "pinned_footprint_libs": len(pinned_footprints),
+        "system_library_refs": sorted(ref_libs),
     }
 
 
@@ -243,8 +366,9 @@ def sync_cached_symbol_libraries(schematic_file: Path, project_dir: Path) -> dic
         body = "\n\n".join(blocks)
         content = (
             "(kicad_symbol_lib\n"
-            "  (version 20231120)\n"
-            '  (generator "kicad_suite")\n'
+            "  (version 20251024)\n"
+            '  (generator "kicad_symbol_editor")\n'
+            '  (generator_version "10.0")\n'
             f"{body}\n"
             ")\n"
         )

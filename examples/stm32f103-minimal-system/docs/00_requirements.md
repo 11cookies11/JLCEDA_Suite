@@ -1,6 +1,6 @@
 # 00 Requirements
 
-Project: STM32F103 Minimal System
+Project: stm32f103-minimal-system
 
 Status:
 

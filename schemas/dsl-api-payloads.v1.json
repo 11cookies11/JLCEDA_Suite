@@ -43,7 +43,8 @@
         "candidate_parts": { "type": "array" },
         "availability_status": { "type": "string" },
         "notes": { "type": "array", "items": { "type": "string" } },
-        "sheet": { "type": "string" }
+        "sheet": { "type": "string" },
+        "search_hints": { "type": "array", "items": { "type": "string" } }
       }
     },
     "common_net": {
@@ -73,7 +74,8 @@
         "availability_status": { "type": "string" },
         "notes": { "type": "array", "items": { "type": "string" } },
         "sheet": { "type": "string" },
-        "pinmap": { "type": "object" }
+        "pinmap": { "type": "object" },
+        "search_hints": { "type": "array", "items": { "type": "string" } }
       }
     },
     "update_component": {
@@ -172,6 +174,15 @@
         "ref": { "$ref": "#/$defs/common_ref" },
         "value": { "type": "string" },
         "availability_status": { "type": "string" }
+      }
+    },
+    "set_component_search_hints": {
+      "type": "object",
+      "required": ["ref", "value"],
+      "properties": {
+        "ref": { "$ref": "#/$defs/common_ref" },
+        "value": { "type": "array", "items": { "type": "string" } },
+        "search_hints": { "type": "array", "items": { "type": "string" } }
       }
     },
     "mark_component_resolved": {

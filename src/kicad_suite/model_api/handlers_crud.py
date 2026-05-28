@@ -379,6 +379,7 @@ class _CrudHandlers:
             "set_component_value": "value",
             "set_component_notes": "notes",
             "set_component_availability": "availability_status",
+            "set_component_search_hints": "search_hints",
         }
         status_map = {
             "mark_component_resolved": "resolved",
