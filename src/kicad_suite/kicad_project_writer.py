@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from .env_utils import env
+from .pcb_generator import generate_pcb  # re-export for PyInstaller visibility
 from .schema_versions import KICAD_EXECUTION_PLAN_SCHEMA_VERSION, KICAD_PROJECT_WRITE_RESULT_SCHEMA_VERSION
 from .schematic_layout_rules import BlockLayoutRule, build_default_layout_rules, _resolve_wiring_block
 
