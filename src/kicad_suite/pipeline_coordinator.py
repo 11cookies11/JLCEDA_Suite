@@ -59,18 +59,28 @@ def _generate_board_from_plan(plan_file: str, project_dir: Path) -> dict[str, An
             "success": False,
             "warnings": ["KiCad Python was not found; PCB was not generated."],
         }
-    script = repo_root() / 'scripts' / 'generate_pcb_from_plan.py'
-    board_file = project_dir / f"{project_dir.name}.kicad_pcb"
-    process = subprocess.run(
-        [python_bin, str(script), plan_file, str(board_file)],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        encoding="utf-8",
-        errors="replace",
-        timeout=120,
-        check=False,
-    )
+    from .pcb_generator import _BOARD_SCRIPT
+    import tempfile as _tempfile
+    with _tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False, encoding="utf-8") as _sf:
+        _sf.write(_BOARD_SCRIPT)
+        script = _sf.name
+    try:
+        board_file = project_dir / f"{project_dir.name}.kicad_pcb"
+        process = subprocess.run(
+            [python_bin, script, plan_file, str(board_file)],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=120,
+            check=False,
+        )
+    finally:
+        try:
+            Path(script).unlink()
+        except OSError:
+            pass
     payload: dict[str, Any] = {}
     try:
         payload = json.loads(process.stdout)
@@ -88,7 +98,6 @@ def _generate_board_from_plan(plan_file: str, project_dir: Path) -> dict[str, An
         "success": process.returncode == 0,
         "return_code": process.returncode,
         "python": python_bin,
-        "script": str(script),
         "board_file": payload.get("board", str(board_file)),
         "footprints": int(payload.get("footprints", 0) or 0),
         "nets": int(payload.get("nets", 0) or 0),
