@@ -85,21 +85,29 @@ def build_kicad_symbol(comp: ParsedComponent, lib_name: str = "JLC-MCP") -> str:
                  f' (show_name no) (do_not_autoplace no) (hide yes)'
                  f' (effects (font (size 1.27 1.27)) (justify right)))')
 
-    # Symbol body (rectangle around all shapes)
+    # Symbol body — draw the actual EasyEDA shapes (rectangles, polylines)
+    # and compute body edges from them for pin placement.
+    body_shapes: list[ParsedShape] = [s for s in comp.shapes if s.type != "pin"]
+    pin_shapes: list[ParsedShape] = [s for s in comp.shapes if s.type == "pin" and s.props.get("show", True)]
+
+    # Use shapes (rectangles) for body edges; fall back to BBox
     bx = eda_to_kicad_pos(comp.bbox.get("x", 0))
     by = eda_to_kicad_pos(comp.bbox.get("y", 0))
     bw = eda_to_kicad_pos(comp.bbox.get("width", 200))
     bh = eda_to_kicad_pos(comp.bbox.get("height", 200))
+    body_l, body_r = bx - bw / 2, bx + bw / 2
+    body_t, body_b = by + bh / 2, by - bh / 2
+
     lines.append(f'    (symbol "{symbol_name}_0_1"')
-    lines.append(f'      (rectangle (start {bx - bw / 2} {by - bh / 2}) (end {bx + bw / 2} {by + bh / 2})')
-    lines.append(f'        (fill (type background)))')
-
-    for s in comp.shapes:
+    for s in body_shapes:
         _symbol_shape_lines(s, lines)
+    # If no explicit body shapes, draw fallback rectangle from BBox
+    if not body_shapes:
+        lines.append(f'      (rectangle (start {body_l} {body_b}) (end {body_r} {body_t})')
+        lines.append(f'        (fill (type background)))')
 
-    for s in comp.shapes:
-        if s.type == "pin" and s.props.get("show", True):
-            _symbol_pin_lines(s, lines, pin_name_offset)
+    for s in pin_shapes:
+        _symbol_pin_lines(s, lines, pin_name_offset, body_l, body_r, body_t, body_b)
 
     lines.append("    )")
     lines.append("  )")
@@ -170,41 +178,42 @@ def _symbol_shape_lines(s: ParsedShape, lines: list[str]) -> None:
         pass
 
 
-def _symbol_pin_lines(s: ParsedShape, lines: list[str], name_offset: float) -> None:
-    """Generate pin s-expression for a symbol."""
+def _symbol_pin_lines(
+    s: ParsedShape, lines: list[str], name_offset: float,
+    body_left: float = -5.08, body_right: float = 5.08,
+    body_top: float = 2.54, body_bottom: float = -2.54,
+) -> None:
+    """Generate pin s-expression for a symbol.  Pins are clamped to the body edges."""
     x = eda_to_kicad_pos(float(s.props.get("x", 0)))
     y = eda_to_kicad_pos(float(s.props.get("y", 0)))
     length = eda_to_kicad_pos(float(s.props.get("length", 20)))
     rotation = float(s.props.get("rotation", 0))
     name = s.props.get("name", "")
     number = s.props.get("number", "")
-    dot = s.props.get("dot", "0")
-    clock = s.props.get("clock", "0")
 
-    # Determine direction based on rotation
     direction = _ROTATION_TO_DIRECTION.get(int(rotation) % 360, "right")
 
-    # Calculate pin endpoints based on direction
+    # Clamp the pin tip to the body edge so it always touches the rectangle
     if direction == "right":
-        sx = x
+        sx = max(x, body_right)
         sy = y
-        ex = x + length
+        ex = sx + length
         ey = y
     elif direction == "left":
-        sx = x
+        sx = min(x, body_left)
         sy = y
-        ex = x - length
+        ex = sx - length
         ey = y
     elif direction == "up":
         sx = x
-        sy = y
+        sy = max(y, body_top)
         ex = x
-        ey = y + length
+        ey = sy + length
     else:  # down
         sx = x
-        sy = y
+        sy = min(y, body_bottom)
         ex = x
-        ey = y - length
+        ey = sy - length
 
     ki_angle = int(eda_to_kicad_angle(rotation)) % 360
     lines.append(f'      (pin passive line (at {sx:.3f} {sy:.3f} {ki_angle}) (length {length:.3f})')

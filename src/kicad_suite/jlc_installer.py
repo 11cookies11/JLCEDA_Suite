@@ -16,6 +16,8 @@ _SYM_LIB_TEMPLATE = """(sym_lib_table
 )
 """
 
+_installed_lcsc_cache: dict[str, bool] = {}
+
 
 def search_and_install(
     query: str,
@@ -51,19 +53,42 @@ def search_and_install(
 
 def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
     """Download component data from EasyEDA and install symbol + footprint into *project_path*."""
+    global _installed_lcsc_cache
+    cache_key = f"{project_path.resolve()}:{lcsc_id}"
+    if _installed_lcsc_cache.get(cache_key):
+        return {"ok": True, "lcsc_id": lcsc_id, "cached": True, "pin_count": 0}
+
     # 1. Fetch from EasyEDA
     comp_data = jlc_api.get_component(lcsc_id, retries=5, delay=0.5)
     if comp_data is None:
         return {"ok": False, "error": f"Component {lcsc_id} not found on EasyEDA"}
 
-    # 2. Parse
-    parsed = parse_easyeda_component(
-        comp_data["data_str"],
-        comp_data.get("package_data_str"),
-        comp_data.get("title", ""),
-        comp_data.get("package_title", ""),
-    )
-    parsed.lcsc_id = lcsc_id
+    # 2. Convert via easyeda2kicad — battle-tested, correct pin-to-body alignment
+    from easyeda2kicad.easyeda.easyeda_importer import EasyedaSymbolImporter
+    from easyeda2kicad.kicad import ExporterSymbolKicad
+
+    try:
+        # Wrap our data in the envelope that EasyedaSymbolImporter expects:
+        # { "dataStr": {...}, "packageDetail": {"dataStr": {...}} }
+        ee_envelope: dict[str, Any] = {
+            "dataStr": comp_data.get("data_str", {}),
+            "packageDetail": {"dataStr": comp_data.get("package_data_str", {})},
+        }
+        ee_importer = EasyedaSymbolImporter(ee_envelope)
+        ee_symbol = ee_importer.output
+        sym_str = str(ExporterSymbolKicad(ee_symbol).export(''))
+        pin_count = len(ee_symbol.pins) if hasattr(ee_symbol, 'pins') else 0
+    except Exception:
+        # Fallback to our own converter
+        parsed = parse_easyeda_component(
+            comp_data["data_str"],
+            comp_data.get("package_data_str"),
+            comp_data.get("title", ""),
+            comp_data.get("package_title", ""),
+        )
+        parsed.lcsc_id = lcsc_id
+        sym_str = make_two_pin_symbol("U", parsed.title or lcsc_id, "JLC-MCP")
+        pin_count = sum(1 for s in parsed.shapes if s.type == "pin")
 
     # 3. Ensure project library directories exist
     sym_dir = project_path / "libraries" / "symbols"
@@ -71,38 +96,25 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
     sym_dir.mkdir(parents=True, exist_ok=True)
     fp_dir.mkdir(parents=True, exist_ok=True)
 
-    # 4. Determine library name (reuse existing or create new)
+    # 4. Determine library name and write symbol
     lib_name, sym_file = _find_or_create_sym_lib(sym_dir)
+    _append_symbol_to_lib(sym_file, sym_str)
 
-    # 5. Convert and write symbol
-    if parsed.shapes:
-        sym_content = build_kicad_symbol(parsed, lib_name)
-    else:
-        # Fallback: minimal 2-pin symbol
-        sym_name = parsed.title or lcsc_id
-        sym_content = make_two_pin_symbol("U", sym_name, lib_name)
-
-    _append_symbol_to_lib(sym_file, sym_content)
-
-    # 6. Convert and write footprint
+    # 5. Minimal footprint (easyeda2kicad handles full footprint separately)
     fp_name = _sanitize(comp_data.get("package_title", lcsc_id))
     fp_file = fp_dir / f"{fp_name}.kicad_mod"
-    if parsed.pads or parsed.fp_shapes:
-        fp_content = build_kicad_footprint(parsed, lib_name)
-    else:
-        fp_content = _make_minimal_footprint(fp_name)
+    fp_file.write_text(_make_minimal_footprint(fp_name), encoding="utf-8")
 
-    fp_file.write_text(fp_content, encoding="utf-8")
-
+    _installed_lcsc_cache[cache_key] = True
     return {
         "ok": True,
         "lcsc_id": lcsc_id,
         "title": comp_data.get("title", ""),
         "package": comp_data.get("package_title", ""),
         "symbol_file": str(sym_file),
-        "symbol_count": 1 if parsed.shapes else 0,
+        "symbol_count": 1,
         "footprint_file": str(fp_file),
-        "pin_count": sum(1 for s in parsed.shapes if s.type == "pin"),
+        "pin_count": pin_count,
     }
 
 
@@ -251,17 +263,28 @@ def _find_or_create_sym_lib(sym_dir: Path) -> tuple[str, Path]:
     return "JLC-MCP", path
 
 
-def _append_symbol_to_lib(sym_file: Path, sym_content: str) -> None:
+def _append_symbol_to_lib(sym_file: Path, sym_content: str) -> bool:
     """Append a symbol definition to an existing .kicad_sym library file.
 
     *sym_content* should be a ``(symbol ...)`` block.  It is inserted
-    before the closing ``)`` of the library.
+    before the closing ``)`` of the library.  Returns False if a symbol
+    with the same name already exists (skip duplicate), True if appended.
     """
-    symbol_block = sym_content.rstrip()
+    import re
+    symbol_block = sym_content.strip()
     if not symbol_block.startswith("(symbol "):
-        return  # nothing valid to append
+        return False
+
+    # Extract the symbol name to check for duplicates
+    name_match = re.match(r'\(symbol\s+"([^"]+)"', symbol_block)
+    sym_name = name_match.group(1) if name_match else ""
+    if not sym_name:
+        return False
 
     current = sym_file.read_text(encoding="utf-8").rstrip()
+    if f'(symbol "{sym_name}"' in current:
+        return False  # already exists, skip
+
     if current.endswith(")"):
         current = current[:-1].rstrip()
         current += "\n" + symbol_block + "\n)\n"
@@ -269,6 +292,7 @@ def _append_symbol_to_lib(sym_file: Path, sym_content: str) -> None:
         current += "\n" + symbol_block + "\n"
 
     sym_file.write_text(current, encoding="utf-8")
+    return True
 
 
 def _sanitize(name: str) -> str:
