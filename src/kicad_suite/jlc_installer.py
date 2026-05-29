@@ -100,10 +100,19 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
     lib_name, sym_file = _find_or_create_sym_lib(sym_dir)
     _append_symbol_to_lib(sym_file, sym_str)
 
-    # 5. Minimal footprint (easyeda2kicad handles full footprint separately)
+    # 5. Generate footprint via easyeda2kicad (real pads)
+    from easyeda2kicad.easyeda.easyeda_importer import EasyedaFootprintImporter
+    from easyeda2kicad.kicad import ExporterFootprintKicad
     fp_name = _sanitize(comp_data.get("package_title", lcsc_id))
     fp_file = fp_dir / f"{fp_name}.kicad_mod"
-    fp_file.write_text(_make_minimal_footprint(fp_name), encoding="utf-8")
+    if not fp_file.exists():
+        try:
+            fp_importer = EasyedaFootprintImporter(ee_envelope)
+            fp_exporter = ExporterFootprintKicad(fp_importer.output)
+            fp_exporter.export(str(fp_file), "")  # writes directly to file
+        except Exception:
+            fp_file.write_text(_make_minimal_footprint(fp_name), encoding="utf-8")
+    # If file already exists, keep it (footprints are shared across components)
 
     _installed_lcsc_cache[cache_key] = True
     return {
@@ -215,13 +224,25 @@ def resolve_missing_symbols(
     if model_path.exists():
         model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    return {
+    summary = {
         "ok": len(failed) == 0,
         "resolved": len(resolved) + len(timed_out),
         "failed": len(failed),
         "model_updated": True,
         "details": resolved + timed_out + failed,
     }
+
+    # Write to operations.jsonl so the agent always knows what happened
+    _log_operation(project_path, "resolve_symbols", {
+        "ok": summary["ok"],
+        "total": summary["resolved"],
+        "easyeda": sum(1 for x in summary["details"] if x.get("source") == "easyeda"),
+        "search_hint": sum(1 for x in summary["details"] if x.get("source") == "search_hint"),
+        "placeholder": sum(1 for x in summary["details"] if "placeholder" in x.get("source", "")),
+        "failed": summary["failed"],
+    })
+
+    return summary
 
 
 def _try_install_candidates(results: list[dict[str, Any]], project_path: Path) -> dict[str, Any] | None:
@@ -231,6 +252,19 @@ def _try_install_candidates(results: list[dict[str, Any]], project_path: Path) -
         if result.get("ok"):
             return result
     return None
+
+
+def _log_operation(project_path: Path, op: str, data: dict[str, Any]) -> None:
+    """Append an entry to the project's operations.jsonl log."""
+    import json as _json
+    from datetime import datetime, timezone
+    log_dir = project_path / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_path = log_dir / "operations.jsonl"
+    entry = {"time": datetime.now(timezone.utc).isoformat(), "op": op}
+    entry.update(data)
+    with log_path.open("a", encoding="utf-8") as fh:
+        fh.write(_json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 def _resolve_two_pin_placeholder(project_path: Path, value: str, ref: str) -> dict[str, Any]:
