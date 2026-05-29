@@ -1,0 +1,895 @@
+{
+  "schema_version": "ir.v1",
+  "request_id": "fresh",
+  "project_id": "esp32c3-minimal-system",
+  "topology": "esp32c3_minimal_system",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "mcu",
+      "value": "ESP32-C3FH4",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "ESP32-C3FH4",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C2858491",
+        "package": "QFN-32",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "LED",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "9",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "11",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "16",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "17",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "23",
+          "name": "",
+          "net": "UART_TX",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "24",
+          "name": "",
+          "net": "UART_RX",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "29",
+          "name": "",
+          "net": "IO9",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "31",
+          "name": "",
+          "net": "EN",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AMS1117-3.3",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "AMS1117-3.3",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C6186",
+        "package": "SOT-223",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "+5V",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "C1",
+      "role": "vdd_decoupling_1",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "CL10B104KA8NNNC",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C1590",
+        "package": "C0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "C2",
+      "role": "vdd_decoupling_2",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C1590",
+        "package": "C0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "C3",
+      "role": "vdd_decoupling_3",
+      "value": "100nF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C1590",
+        "package": "C0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "C4",
+      "role": "vdd_bulk_cap",
+      "value": "10uF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "CL21A106KOQNNNE",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C1713",
+        "package": "C0805",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "C5",
+      "role": "en_rc_cap",
+      "value": "1uF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C1592",
+        "package": "C0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "EN",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "C6",
+      "role": "reg_input_cap",
+      "value": "10uF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C1713",
+        "package": "C0805",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "C7",
+      "role": "reg_output_cap",
+      "value": "10uF",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C1713",
+        "package": "C0805",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "R1",
+      "role": "en_pullup",
+      "value": "10K",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "0603WAJ0103T5E",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C15401",
+        "package": "R0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "EN",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "R2",
+      "role": "io0_pullup",
+      "value": "10K",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C15401",
+        "package": "R0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "IO9",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "R3",
+      "role": "led_resistor",
+      "value": "1K",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "RC0603JR-071KL",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C14676",
+        "package": "R0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "LED",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "D1",
+      "role": "power_led",
+      "value": "LED0603",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "APHD1608LCGCK",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C5139863",
+        "package": "LED0603",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "J1",
+      "role": "usb_c_power_input",
+      "value": "USB-C16PIN",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "USB-TYPE-C-006",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C2927026",
+        "package": "USB-C-SMD",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+5V",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "J2",
+      "role": "uart_debug_header",
+      "value": "UART-4P",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "2.54-1*4P",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C91552",
+        "package": "HDR-TH_4P",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "+3V3",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "UART_TX",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "UART_RX",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "SW-SMD_6x6",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "K5-1617SA-02",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C128964",
+        "package": "SW-SMD",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "EN",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    },
+    {
+      "ref": "SW2",
+      "role": "boot_button",
+      "value": "SW-SMD_6x6",
+      "selected_part": {
+        "part_id": "",
+        "display_name": "K5-1617SA-02",
+        "mpn": "",
+        "manufacturer": "",
+        "lcsc_id": "C128964",
+        "package": "SW-SMD",
+        "mechanical_package": "",
+        "kicad_footprint_hint": ""
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "IO9",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND",
+          "direction": "unspecified",
+          "locked": false,
+          "source": "netlist"
+        }
+      ],
+      "assigned_sheet": "",
+      "availability_status": "unknown",
+      "notes": [],
+      "search_hints": []
+    }
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "kind": "power",
+      "members": [
+        "J1.1",
+        "U2.3"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "+3V3",
+      "kind": "power",
+      "members": [
+        "U1.1",
+        "U1.11",
+        "U1.17",
+        "U2.2",
+        "R1.1",
+        "R2.1",
+        "D1.1",
+        "J2.1",
+        "C1.1",
+        "C2.1",
+        "C3.1",
+        "C4.1",
+        "C7.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "GND",
+      "kind": "ground",
+      "members": [
+        "U1.2",
+        "U1.9",
+        "U1.16",
+        "U2.1",
+        "R3.2",
+        "SW1.2",
+        "SW2.2",
+        "C1.2",
+        "C2.2",
+        "C3.2",
+        "C4.2",
+        "C5.2",
+        "C6.2",
+        "C7.2",
+        "D1.2",
+        "J1.2",
+        "J2.4"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "EN",
+      "kind": "signal",
+      "members": [
+        "U1.31",
+        "R1.2",
+        "C5.1",
+        "SW1.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "IO9",
+      "kind": "signal",
+      "members": [
+        "U1.29",
+        "R2.2",
+        "SW2.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "LED",
+      "kind": "signal",
+      "members": [
+        "U1.8",
+        "R3.1"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "UART_TX",
+      "kind": "signal",
+      "members": [
+        "U1.23",
+        "J2.2"
+      ],
+      "domain": "",
+      "flags": {}
+    },
+    {
+      "name": "UART_RX",
+      "kind": "signal",
+      "members": [
+        "U1.24",
+        "J2.3"
+      ],
+      "domain": "",
+      "flags": {}
+    }
+  ],
+  "sheets": [
+    {
+      "name": "power",
+      "components": [
+        "U2",
+        "J1",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ],
+      "nets": [
+        "+5V",
+        "+3V3",
+        "GND"
+      ]
+    },
+    {
+      "name": "mcu",
+      "components": [
+        "U1",
+        "R1",
+        "R2",
+        "C5",
+        "SW1",
+        "SW2"
+      ],
+      "nets": [
+        "+3V3",
+        "GND",
+        "EN",
+        "IO9"
+      ]
+    },
+    {
+      "name": "io",
+      "components": [
+        "R3",
+        "D1",
+        "J2"
+      ],
+      "nets": [
+        "+3V3",
+        "GND",
+        "LED",
+        "UART_TX",
+        "UART_RX"
+      ]
+    }
+  ],
+  "pinmap": {},
+  "power_tree": [],
+  "interfaces": [],
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": []
+}

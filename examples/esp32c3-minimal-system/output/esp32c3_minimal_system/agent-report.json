@@ -1,0 +1,765 @@
+{
+  "schema_version": "report.v1",
+  "generated_at": "2026-05-29T17:31:10.191053+00:00",
+  "overall_status": "ok",
+  "project": {
+    "name": "esp32c3_minimal_system",
+    "id": "esp32c3-minimal-system",
+    "status": "BUILT"
+  },
+  "sections": [
+    {
+      "key": "project",
+      "title": "Project Overview",
+      "status": "info",
+      "data": {
+        "project_name": "esp32c3_minimal_system",
+        "project_id": "esp32c3-minimal-system",
+        "status": "BUILT"
+      }
+    },
+    {
+      "key": "summary",
+      "title": "Summary",
+      "status": "info",
+      "data": {
+        "component_count": 20,
+        "net_count": 10,
+        "risk_count": 0,
+        "sheet_count": 3,
+        "calculation_count": 0,
+        "decision_count": 0,
+        "constraint_count": 0,
+        "power_rail_count": 0
+      }
+    },
+    {
+      "key": "dsl",
+      "title": "DSL Status",
+      "status": "ok",
+      "data": {
+        "path": "circuit-model.json",
+        "hash": "a6ebaa51",
+        "valid": true
+      }
+    },
+    {
+      "key": "build",
+      "title": "Build Status",
+      "status": "ok",
+      "data": {
+        "last_build_ok": true,
+        "last_build_at": "2026-05-29T17:27:59.181830+00:00",
+        "input_dsl_hash": "a6ebaa51",
+        "stale": true
+      }
+    },
+    {
+      "key": "diagnostics",
+      "title": "Diagnostics",
+      "status": "ok",
+      "data": {
+        "errors": 0,
+        "warnings": 0,
+        "items": [
+          {
+            "timestamp": "2026-05-29T17:19:59.232371+00:00",
+            "level": "info",
+            "message": "agent:build-ir"
+          }
+        ]
+      }
+    },
+    {
+      "key": "ir",
+      "title": "Resolved Hardware IR",
+      "status": "ok",
+      "data": {
+        "schema_version": "ir.v1",
+        "compiled": true,
+        "component_count": 17,
+        "net_count": 8,
+        "error": null
+      }
+    },
+    {
+      "key": "components",
+      "title": "Component Symbol Status",
+      "status": "ok",
+      "data": {
+        "status": "ok",
+        "total": 17,
+        "resolved": 17,
+        "placeholder": 0,
+        "items": [
+          {
+            "ref": "U1",
+            "role": "mcu",
+            "value": "ESP32-C3FH4",
+            "lcsc_id": "C2858491",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U2",
+            "role": "main_3v3_regulator",
+            "value": "AMS1117-3.3",
+            "lcsc_id": "C6186",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C1",
+            "role": "vdd_decoupling_1",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C2",
+            "role": "vdd_decoupling_2",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C3",
+            "role": "vdd_decoupling_3",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C4",
+            "role": "vdd_bulk_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C5",
+            "role": "en_rc_cap",
+            "value": "1uF",
+            "lcsc_id": "C1592",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C6",
+            "role": "reg_input_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C7",
+            "role": "reg_output_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R1",
+            "role": "en_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R2",
+            "role": "io0_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R3",
+            "role": "led_resistor",
+            "value": "1K",
+            "lcsc_id": "C14676",
+            "symbol_ok": true
+          },
+          {
+            "ref": "D1",
+            "role": "power_led",
+            "value": "LED0603",
+            "lcsc_id": "C5139863",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J1",
+            "role": "usb_c_power_input",
+            "value": "USB-C16PIN",
+            "lcsc_id": "C2927026",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J2",
+            "role": "uart_debug_header",
+            "value": "UART-4P",
+            "lcsc_id": "C91552",
+            "symbol_ok": true
+          },
+          {
+            "ref": "SW1",
+            "role": "reset_button",
+            "value": "SW-SMD_6x6",
+            "lcsc_id": "C128964",
+            "symbol_ok": true
+          },
+          {
+            "ref": "SW2",
+            "role": "boot_button",
+            "value": "SW-SMD_6x6",
+            "lcsc_id": "C128964",
+            "symbol_ok": true
+          }
+        ]
+      }
+    },
+    {
+      "key": "risks",
+      "title": "Risks",
+      "status": "ok",
+      "data": {
+        "total": 0,
+        "open": 0,
+        "items": []
+      }
+    },
+    {
+      "key": "erc",
+      "title": "ERC",
+      "status": "ok",
+      "data": {
+        "finding_count": 29,
+        "warnings": [],
+        "violations": [
+          {
+            "type": "pin_to_pin",
+            "count": 21,
+            "severity": "warning",
+            "example": "类型为 Unspecified 和 Passive 的引脚已连接"
+          },
+          {
+            "type": "lib_symbol_issues",
+            "count": 7,
+            "severity": "warning",
+            "example": "在符号库中 'C1590' 找不到符号 'JLC-MCP'"
+          },
+          {
+            "type": "pin_not_driven",
+            "count": 1,
+            "severity": "warning",
+            "example": "Input pin not driven by any Output pins"
+          }
+        ],
+        "attempted": true,
+        "success": true
+      }
+    },
+    {
+      "key": "history",
+      "title": "Recent Operations",
+      "status": "info",
+      "data": {
+        "count": 20,
+        "entries": [
+          {
+            "time": "2026-05-29T17:13:24.621197+00:00",
+            "op": "mark_dirty",
+            "reason": "agent:build-ir",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T17:13:25.876499+00:00",
+            "op": "mark_invalid",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T17:13:27.413384+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 20,
+            "nets": 10,
+            "sheets": 4,
+            "build_warnings": 20
+          },
+          {
+            "time": "2026-05-29T17:13:36.126982+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "7fc21dde",
+            "operation": "export_kicad_project",
+            "symbols": 20,
+            "nets": 10,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
+              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
+              "Y1 footprint CRYSTAL-SMD_3225 was not found in the configured KiCad footprint libraries.",
+              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C8 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C9 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
+              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 52,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 21
+              },
+              {
+                "type": "footprint_link_issues",
+                "count": 20
+              },
+              {
+                "type": "lib_symbol_issues",
+                "count": 9
+              },
+              {
+                "type": "multiple_net_names",
+                "count": 1
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 1
+              }
+            ],
+            "build_sec": 0.28,
+            "erc_sec": 8.67,
+            "report_status": "error",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T17:15:08.270669+00:00",
+            "op": "mark_dirty",
+            "reason": "agent:build-ir",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T17:15:09.618203+00:00",
+            "op": "mark_valid",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T17:15:11.147178+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "build_warnings": 17
+          },
+          {
+            "time": "2026-05-29T17:15:18.462383+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "a6ebaa51",
+            "operation": "export_kicad_project",
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
+              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
+              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
+              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 44,
+            "erc_violations": [
+              {
+                "type": "footprint_link_issues",
+                "count": 17
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 17
+              },
+              {
+                "type": "lib_symbol_issues",
+                "count": 9
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 1
+              }
+            ],
+            "build_sec": 0.23,
+            "erc_sec": 7.28,
+            "report_status": "ok",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T17:19:59.232578+00:00",
+            "op": "mark_dirty",
+            "reason": "agent:build-ir",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T17:20:00.760458+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "build_warnings": 17
+          },
+          {
+            "time": "2026-05-29T17:20:09.049232+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "a6ebaa51",
+            "operation": "export_kicad_project",
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
+              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
+              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
+              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 44,
+            "erc_violations": [
+              {
+                "type": "footprint_link_issues",
+                "count": 17
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 17
+              },
+              {
+                "type": "lib_symbol_issues",
+                "count": 9
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 1
+              }
+            ],
+            "build_sec": 0.99,
+            "erc_sec": 7.49,
+            "report_status": "ok",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T17:21:14.386161+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "build_warnings": 17
+          },
+          {
+            "time": "2026-05-29T17:21:19.696600+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "a6ebaa51",
+            "operation": "export_kicad_project",
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
+              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
+              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
+              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 44,
+            "erc_violations": [
+              {
+                "type": "footprint_link_issues",
+                "count": 17
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 17
+              },
+              {
+                "type": "lib_symbol_issues",
+                "count": 9
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 1
+              }
+            ],
+            "build_sec": 1.86,
+            "erc_sec": 3.64,
+            "report_status": "ok",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T17:22:14.073526+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "build_warnings": 17
+          },
+          {
+            "time": "2026-05-29T17:22:18.154172+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "a6ebaa51",
+            "operation": "export_kicad_project",
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
+              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
+              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
+              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 44,
+            "erc_violations": [
+              {
+                "type": "footprint_link_issues",
+                "count": 17
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 17
+              },
+              {
+                "type": "lib_symbol_issues",
+                "count": 9
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 1
+              }
+            ],
+            "build_sec": 0.66,
+            "erc_sec": 3.61,
+            "report_status": "ok",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T17:25:02.165329+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "build_warnings": 17
+          },
+          {
+            "time": "2026-05-29T17:25:06.207688+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "a6ebaa51",
+            "operation": "export_kicad_project",
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
+              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
+              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
+              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
+              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
+              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 44,
+            "erc_violations": [
+              {
+                "type": "footprint_link_issues",
+                "count": 17
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 17
+              },
+              {
+                "type": "lib_symbol_issues",
+                "count": 9
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 1
+              }
+            ],
+            "build_sec": 0.65,
+            "erc_sec": 3.59,
+            "report_status": "ok",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T17:27:54.950592+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "build_warnings": 10
+          },
+          {
+            "time": "2026-05-29T17:27:59.182037+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "a6ebaa51",
+            "operation": "export_kicad_project",
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint JLC-MCP:QFN-32 was not found in the configured KiCad footprint libraries.",
+              "U2 footprint JLC-MCP:SOT-223 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "D1 footprint JLC-MCP:LED0603 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint JLC-MCP:USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint JLC-MCP:HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint JLC-MCP:SW-SMD was not found in the configured KiCad footprint libraries.",
+              "SW2 footprint JLC-MCP:SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 34,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 17
+              },
+              {
+                "type": "lib_symbol_issues",
+                "count": 9
+              },
+              {
+                "type": "footprint_link_issues",
+                "count": 7
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 1
+              }
+            ],
+            "build_sec": 0.73,
+            "erc_sec": 3.71,
+            "report_status": "ok",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T17:31:05.983815+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 17,
+            "nets": 8,
+            "sheets": 4,
+            "build_warnings": 9
+          }
+        ]
+      }
+    }
+  ],
+  "timing": {
+    "build_sec": 0.75,
+    "erc_sec": 3.66
+  }
+}

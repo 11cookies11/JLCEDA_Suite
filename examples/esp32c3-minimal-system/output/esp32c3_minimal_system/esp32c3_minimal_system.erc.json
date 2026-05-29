@@ -1,0 +1,682 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-30T01:31:09",
+    "ignored_checks": [
+        {
+            "description": "Pin not connected",
+            "key": "pin_not_connected"
+        },
+        {
+            "description": "Unconnected \"no connection\" flag",
+            "key": "no_connect_dangling"
+        },
+        {
+            "description": "Label not connected",
+            "key": "label_dangling"
+        },
+        {
+            "description": "Label connected to only one pin",
+            "key": "isolated_pin_label"
+        },
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "Unconnected wire endpoint",
+            "key": "unconnected_wire_endpoint"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Symbol doesn't match copy in library",
+            "key": "lib_symbol_mismatch"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.1",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/3e0166da-dd28-4f13-a077-4a8c5f34f502",
+            "violations": [
+                {
+                    "description": "在符号库中 'C1590' 找不到符号 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C2 [C1590]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 0.7874
+                            },
+                            "uuid": "08247e2e-bd66-4cf4-9067-995982ebbced"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "在符号库中 'C1590' 找不到符号 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C3 [C1590]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 1.0668
+                            },
+                            "uuid": "387609ea-3d95-4bdd-aa3c-5f3d361ce206"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "在符号库中 'C1713' 找不到符号 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C6 [C1713]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 2.794
+                            },
+                            "uuid": "459eca8d-f69a-40b2-a7a9-c1f61a9cd0c3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "在符号库中 'C1713' 找不到符号 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C7 [C1713]",
+                            "pos": {
+                                "x": 1.2192,
+                                "y": 2.794
+                            },
+                            "uuid": "ad42e3fa-bc10-4407-a598-3d7047a49515"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "在符号库中 'C1592' 找不到符号 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C5 [C1592]",
+                            "pos": {
+                                "x": 1.9558,
+                                "y": 2.032
+                            },
+                            "uuid": "3458d7f7-2fed-451d-86cb-21f5b9d544a4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "在符号库中 'C15401' 找不到符号 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R2 [C15401]",
+                            "pos": {
+                                "x": 2.5146,
+                                "y": 2.794
+                            },
+                            "uuid": "9e058cc6-73d9-4c9b-a634-42eb4604e12b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "在符号库中 '2.54-1_4P' 找不到符号 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 J2 [2.54-1_4P]",
+                            "pos": {
+                                "x": 2.0828,
+                                "y": 0.508
+                            },
+                            "uuid": "f82914db-0485-4688-a21f-9b7e957a91ba"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                }
+            ]
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/3e0166da-dd28-4f13-a077-4a8c5f34f502/941ac8fb-efd2-42b9-8690-9d143bdd6f47",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 1 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1557,
+                                "y": 2.0066
+                            },
+                            "uuid": "a2d73d4e-62b0-4cd7-b993-dcb933a0f0f0"
+                        },
+                        {
+                            "description": "Symbol C7 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 1.27,
+                                "y": 2.794
+                            },
+                            "uuid": "0f443fa0-500b-45dc-9e7e-21f8325b95e3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 2 [VOUT, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1557,
+                                "y": 2.032
+                            },
+                            "uuid": "422c90f2-3c60-4198-a54e-748efb32c549"
+                        },
+                        {
+                            "description": "Symbol C7 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.1684,
+                                "y": 2.794
+                            },
+                            "uuid": "a792df16-66bb-45f6-bef4-2cd6165b767c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 3 [VIN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1557,
+                                "y": 2.0574
+                            },
+                            "uuid": "1b4739cd-4072-415b-b229-2ad4f2a3a636"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "410e7dd4-bd0a-439b-8f3d-868b32338c17"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 1 [SHELL, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7112,
+                                "y": 3.4925
+                            },
+                            "uuid": "2b971ed5-6a2a-40ce-9c60-1371a67cef36"
+                        },
+                        {
+                            "description": "Symbol U2 引脚 3 [VIN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1557,
+                                "y": 2.0574
+                            },
+                            "uuid": "1b4739cd-4072-415b-b229-2ad4f2a3a636"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 2 [SHELL, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7112,
+                                "y": 3.5179
+                            },
+                            "uuid": "69075058-4861-4147-b053-fd85573f49c1"
+                        },
+                        {
+                            "description": "Symbol C6 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 2.794
+                            },
+                            "uuid": "beb8b7d6-9fde-4081-ada3-9967229f509c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/mcu/",
+            "uuid_path": "/3e0166da-dd28-4f13-a077-4a8c5f34f502/b20b424c-4b8a-41b7-8077-b5373ef41b8f",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW1 引脚 1 [a, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4064,
+                                "y": 1.27
+                            },
+                            "uuid": "780b8e17-b4ea-4e23-b747-6cd629864fd0"
+                        },
+                        {
+                            "description": "Symbol C5 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.905,
+                                "y": 2.032
+                            },
+                            "uuid": "b7bbb3d4-f789-4a32-978c-83660cdc91de"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW1 引脚 2 [b, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6096,
+                                "y": 1.27
+                            },
+                            "uuid": "3186884b-c1a8-4f9b-886a-6bd92bda0f17"
+                        },
+                        {
+                            "description": "Symbol SW2 引脚 2 [b, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.397,
+                                "y": 1.27
+                            },
+                            "uuid": "1c5b25df-ad91-443d-aab4-63b68dabc0b1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW2 引脚 1 [a, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 1.27
+                            },
+                            "uuid": "a9621873-d99f-4e44-9764-c69e08178b31"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 29 [XTAL_N, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.1209,
+                                "y": 0.4064
+                            },
+                            "uuid": "c990faeb-55a9-410a-bf7f-565de0673b3c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 1 [LNA_IN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.3302
+                            },
+                            "uuid": "cfd99420-d5b1-4dc4-b9e6-e00f3e6f955e"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 11 [VDD3P3_RTC, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.5842
+                            },
+                            "uuid": "3646c8d5-26c0-432d-89b7-4a88eaf5a021"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 2 [VDD3P3, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.3556
+                            },
+                            "uuid": "6b6345aa-c72a-459b-bc7b-cb88585cf7f3"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 9 [MTMS, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.5334
+                            },
+                            "uuid": "de48ac2c-e375-4eb5-b94f-333875ec7872"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 8 [GPIO3, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.508
+                            },
+                            "uuid": "89d39bbd-b0b0-4334-ab10-33ea98ceb049"
+                        },
+                        {
+                            "description": "Symbol R3 引脚 1 [1, Input, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 1.27
+                            },
+                            "uuid": "8e3b7a2b-2131-482f-ae09-93344a88ae6e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 9 [MTMS, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.5334
+                            },
+                            "uuid": "de48ac2c-e375-4eb5-b94f-333875ec7872"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 16 [GPIO10, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.7112
+                            },
+                            "uuid": "04daa9fd-5eee-47bf-a8f3-c6c04e121e91"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 11 [VDD3P3_RTC, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.5842
+                            },
+                            "uuid": "3646c8d5-26c0-432d-89b7-4a88eaf5a021"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 17 [VDD3P3_CPU, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.1209,
+                                "y": 0.7112
+                            },
+                            "uuid": "f671a0c3-0766-4e59-85bc-a002655f85e4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 16 [GPIO10, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.7112
+                            },
+                            "uuid": "04daa9fd-5eee-47bf-a8f3-c6c04e121e91"
+                        },
+                        {
+                            "description": "Symbol C5 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 2.0066,
+                                "y": 2.032
+                            },
+                            "uuid": "b2aa37de-75ec-4074-8dc3-2259d258ac13"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW2 引脚 2 [b, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.397,
+                                "y": 1.27
+                            },
+                            "uuid": "1c5b25df-ad91-443d-aab4-63b68dabc0b1"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 16 [GPIO10, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7399,
+                                "y": 0.7112
+                            },
+                            "uuid": "04daa9fd-5eee-47bf-a8f3-c6c04e121e91"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 31 [VDDA, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.1209,
+                                "y": 0.3556
+                            },
+                            "uuid": "7421160f-0614-453e-b404-42de1b897836"
+                        },
+                        {
+                            "description": "Symbol C5 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.905,
+                                "y": 2.032
+                            },
+                            "uuid": "b7bbb3d4-f789-4a32-978c-83660cdc91de"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 29 [XTAL_N, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.1209,
+                                "y": 0.4064
+                            },
+                            "uuid": "c990faeb-55a9-410a-bf7f-565de0673b3c"
+                        },
+                        {
+                            "description": "Symbol R2 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 2.5654,
+                                "y": 2.794
+                            },
+                            "uuid": "dc7fea87-9873-42cf-ab9e-aa82d7598e4e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 23 [SPID, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.1209,
+                                "y": 0.5588
+                            },
+                            "uuid": "26c8875a-4cd8-4d66-a8b1-104e1b1921af"
+                        },
+                        {
+                            "description": "Symbol J2 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 2.1336,
+                                "y": 0.508
+                            },
+                            "uuid": "23a60d63-9272-4a5d-9e54-3c3659c8cce2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 17 [VDD3P3_CPU, Unspecified, Line]",
+                            "pos": {
+                                "x": 2.1209,
+                                "y": 0.7112
+                            },
+                            "uuid": "f671a0c3-0766-4e59-85bc-a002655f85e4"
+                        },
+                        {
+                            "description": "Symbol R1 引脚 1 [1, Input, Line]",
+                            "pos": {
+                                "x": 1.778,
+                                "y": 2.794
+                            },
+                            "uuid": "4089a0cb-34d1-420e-9360-5e28f19a6003"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/io/",
+            "uuid_path": "/3e0166da-dd28-4f13-a077-4a8c5f34f502/885564fa-b5e9-41ad-9cb2-38dcb23d248b",
+            "violations": [
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol R3 引脚 1 [1, Input, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 1.27
+                            },
+                            "uuid": "8e3b7a2b-2131-482f-ae09-93344a88ae6e"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol D1 引脚 1 [K, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 1.5621
+                            },
+                            "uuid": "fba8d5ba-0fb5-434a-9335-dc5c2ed5eb4b"
+                        },
+                        {
+                            "description": "Symbol J2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 2.032,
+                                "y": 0.508
+                            },
+                            "uuid": "14878f00-b1fe-4c25-83c5-c96442e6e5f9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol D1 引脚 2 [A, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 1.5621
+                            },
+                            "uuid": "8a8ab74e-8cf8-48cf-85b1-a9885b4eabb8"
+                        },
+                        {
+                            "description": "Symbol R3 引脚 2 [2, Input, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 1.27
+                            },
+                            "uuid": "15be3154-ace2-4b0e-8c5f-861b8efc4ebf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        }
+    ],
+    "source": "esp32c3_minimal_system.kicad_sch"
+}
