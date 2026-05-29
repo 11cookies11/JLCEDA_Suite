@@ -1,172 +1,155 @@
 # AGENTS.md
 
-This file defines repository-specific instructions for coding agents (including Codex).
+This file defines repository-specific instructions for AI coding agents (Claude Code, Codex, etc.)
+using the KiCad Agent Suite hardware toolchain.
 
-## Where Progress Contract
+## Quick Reference — hwtool Commands
 
-- Source file: `where.sourceFile` (default: `.where-agent-progress.md`)
-- Format: **Markdown only** (JSON is not allowed)
-- Encoding: UTF-8
-
-Required structure:
-
-```md
-# Plan: <title>
-- [ ] <task>
-- [~] <task>
-- [!] <task>
-- [x] <task>
-```
-
-Status mapping:
-
-- `[ ]` -> `todo`
-- `[~]` -> `in_progress`
-- `[!]` -> `blocked`
-- `[x]` -> `done`
-
-## Agent Behavior
-
-- Keep one task per line.
-- Update existing tasks when status changes; avoid duplicate tasks.
-- Keep task titles short and actionable.
-- For blocked tasks, include blocker reason in the title.
-- Do not output JSON for progress data.
-- Do not add unrelated long prose in the progress file.
-
-## Hardware Toolchain Workflow
-
-This repository is a hardware toolchain that converts `circuit-model.json` into Hardware IR and KiCad project output.
-
-Agents must prefer `python -m kicad_suite.cli agent ...` commands over direct file edits.
-
-### Mandatory Agent Workflow
-
-**Step 1 — Understand state (always run first):**
+All commands operate on a project directory containing `circuit-model.json`.
 
 ```powershell
-$env:PYTHONPATH="src"
-python -m kicad_suite.cli agent status --project .
-python -m kicad_suite.cli agent inspect --project .
-python -m kicad_suite.cli agent explain --project .
+# Project lifecycle
+hwtool agent status     --project .        # Show project state
+hwtool agent inspect    --project .        # Detailed project summary
+hwtool agent explain    --project .        # Human-readable status
+
+# Build pipeline (run in order)
+hwtool agent build-ir       --project .    # circuit-model.json → build/ir.v1.json
+hwtool agent validate-ir    --project .    # Validate IR, check diagnostics
+hwtool agent export-kicad   --project .    # Generate .kicad_pro + .kicad_sch + .kicad_pcb
+
+# Part resolution
+hwtool agent resolve-symbols --project . --timeout 120   # Download JLC symbols + footprints
+
+# JLC / LCSC
+hwtool agent jlc search "<keyword>" -n 5           # Search LCSC parts
+hwtool agent jlc download --lcsc-id C8734 --project . # Download single part
+
+# Reports & diagnostics
+hwtool agent report    --project . --markdown       # Generate build/report.md
+hwtool agent doctor    --project .                  # Environment check
+hwtool agent history   --project .                  # Operation history
+hwtool agent self-test                               # Run test suite
+
+# Model manipulation
+hwtool agent run <operation> --project . --payload-json '{...}'  # DSL API operations
+hwtool agent patch        --project . --payload-json '{...}'     # JSON patch model
+
+# Pin management
+hwtool agent pins free  --project . --ref U1            # List free MCU pins
+hwtool agent pins check --project .                     # Check pin conflicts
 ```
 
-**Step 2 — Build and validate IR:**
+## Mandatory Workflow
+
+**Every build MUST follow this sequence.  Never skip a step.**
+
+### Step 1 — Understand current state
 
 ```powershell
-python -m kicad_suite.cli agent build-ir --project .
-python -m kicad_suite.cli agent validate-ir --project .
+hwtool agent status --project .
+hwtool agent inspect --project .
 ```
 
-- If `validate-ir` returns errors, read the `diagnostics` array for specific error codes and suggested fixes.
-- Use `agent run <operation>` with the suggested payload to fix each error.
-- Do NOT proceed to `build-kicad` until `ok: true`.
-
-**Step 3 — Rule check:**
+### Step 2 — Resolve parts (first build, or after model changes)
 
 ```powershell
-python -m kicad_suite.cli agent rule-check --project .
+hwtool agent resolve-symbols --project . --timeout 120
 ```
 
-**Step 4 — Build KiCad plan and output:**
+Downloads symbols and footprints from JLC/LCSC into `libraries/`.  This step is REQUIRED
+before the first `export-kicad` — without it the PCB will have no footprints.
+
+### Step 3 — Build and validate IR
 
 ```powershell
-python -m kicad_suite.cli agent build-kicad-plan --project .
-python -m kicad_suite.cli agent build-kicad --project .
+hwtool agent build-ir --project .
+hwtool agent validate-ir --project .
 ```
 
-**Step 5 — Report:**
+- If `validate-ir` returns `ok: false`, read the `diagnostics` array.
+- Each diagnostic has `code`, `location`, `message`, and often a `suggestion` with the exact fix command.
+- Fix ALL errors before proceeding.
+
+### Step 4 — Export KiCad project
 
 ```powershell
-python -m kicad_suite.cli agent report --project . --markdown
+hwtool agent export-kicad --project .
 ```
 
-### Fixing Errors
+Generates:
+- `output/<topology>/<topology>.kicad_pro` — project file
+- `output/<topology>/<topology>.kicad_sch` — schematic
+- `output/<topology>/<topology>.kicad_pcb` — PCB layout
+- `output/<topology>/<topology>.erc.json` — ERC results
 
-Validation diagnostics include structured `code`, `location`, and `suggestion` fields:
-
-```json
-{
-  "level": "error",
-  "code": "DUPLICATE_NET_NAME",
-  "location": "VCC",
-  "message": "IR.nets: duplicate net name 'VCC'",
-  "suggestion": {
-    "action": "agent run",
-    "operation": "merge_nets",
-    "payload": {"source": "VCC"},
-    "hint": "Merge duplicate net 'VCC' with the original."
-  }
-}
-```
-
-Apply the suggestion:
+### Step 5 — Report
 
 ```powershell
-python -m kicad_suite.cli agent run merge_nets --project . --payload-json '{"source":"VCC"}'
+hwtool agent report --project . --markdown
 ```
 
-### Modifying Projects
+## circuit-model.json — Writing Guide
 
-Use `agent patch` to apply JSON patches to circuit-model.json:
+The AI agent writes `circuit-model.json` as the single source of truth.
+The authoritative schema is at `schemas/circuit-model.v1.json` — read it for exact field definitions.
 
-```powershell
-python -m kicad_suite.cli agent patch --project . --payload-json '{"components":[{"ref":"U1","role":"mcu"}]}'
-```
+### Component rules
 
-Or use `agent run` for specific model API operations:
+- Every component MUST have `ref`, `role`, `value`, `package`, `selected_part`.
+- `selected_part` MUST contain `lcsc_id` (LCSC part number) and `display_name`.
+- `package` contains the generic physical package (e.g. "C0603", "QFN-32", "SOT-223").
+- If the JLC footprint name differs from the generic package, add `kicad_footprint_hint` inside `selected_part` with the exact JLC .kicad_mod filename.
+- After running `resolve-symbols`, `kicad_footprint_hint` is populated automatically.
 
-```powershell
-python -m kicad_suite.cli agent run add_component --project . --payload-json '{"ref":"U1","role":"mcu","value":"ESP32-S3"}'
-python -m kicad_suite.cli agent run add_net --project . --payload-json '{"name":"+3V3","kind":"power"}'
-python -m kicad_suite.cli agent run connect_member --project . --payload-json '{"net":"+3V3","ref":"U1","pin":"1"}'
-```
+### Net rules
 
-### Pin Management
+- Every net MUST have `name`, `kind`, `members`.
+- `kind` is one of: `"power"`, `"ground"`, `"signal"`.
+- `members` are `"REF.PIN"` strings, e.g. `"U1.23"`, `"J2.2"`.
+- Net names starting with `+` are automatically classified as power; `GND` / `AGND` / `DGND` as ground.
 
-```powershell
-# List free GPIO pins on an MCU
-python -m kicad_suite.cli agent pins free --project . --ref U1 --mcu-family ESP32-S3
+### Sheet rules
 
-# Assign a pin to a net
-python -m kicad_suite.cli agent pins assign --project . --ref U1 --pin GPIO17 --net LCD_BL
+- Every component MUST appear in exactly one sheet.
+- Sheet `nets` list only the nets exposed at that sheet boundary.
 
-# Check for pin conflicts
-python -m kicad_suite.cli agent pins check --project .
-```
+### pcb_layout rules
 
-### Self-Test
+- Place components in named `regions` with `x`, `y`, and optional `rotation` / `spacing`.
+- Components placed in a region are automatically positioned left-to-right.
 
-```powershell
-python -m kicad_suite.cli agent self-test
-python -m kicad_suite.cli agent self-test -k "test_agent"
-```
+## Source of Truth
 
-### Doctor
+| File | Role |
+|------|------|
+| `circuit-model.json` | ✏️ Editable — the AI's source of truth |
+| `schemas/circuit-model.v1.json` | Schema — read for field definitions |
+| `build/ir.v1.json` | Generated — do NOT edit |
+| `build/ir-validation.json` | Generated — do NOT edit |
+| `build/rule-check.json` | Generated — do NOT edit |
+| `output/` | Generated KiCad files — do NOT edit directly |
 
-```powershell
-python -m kicad_suite.cli agent doctor --project .
-```
+## Common Problems
 
-## Source Of Truth
-
-- `circuit-model.json` is the editable source model.
-- `build/ir.v1.json` is generated — **do not edit**.
-- `build/ir-validation.json` is generated — **do not edit**.
-- `build/rule-check.json` is generated — **do not edit**.
-- `build/kicad-execution-plan.v1.json` is generated — **do not edit**.
-- `build/report.json` is generated for agents — **do not edit**.
-- `build/report.md` is generated for humans — **do not edit**.
-- `output/` contains generated KiCad artifacts — **do not edit**.
+| Symptom | Likely cause | Fix |
+|---------|-------------|-----|
+| `footprint not found` × many | Libraries not downloaded | Run `resolve-symbols` |
+| PCB is blank in KiCad 10 | Old pcb_generator format | Ensure hwtool is rebuilt with latest pcb_generator.py |
+| `pin_to_pin` ERC violation | Power pin type mismatch | Check component symbol pin types |
+| `duplicate pin number` | Same pin assigned to two nets | Check net members for conflicts |
+| IR validation errors | Model field format issues | Read `diagnostics[].suggestion` for fix commands |
 
 ## Do Not
 
-- Do not edit generated files under `build/` manually.
-- Do not edit generated KiCad files directly unless explicitly requested.
-- Prefer `python -m kicad_suite.cli agent run ...` over manually editing `circuit-model.json`.
-- Do not bypass `validate-ir` and `rule-check` before `build-kicad`.
-- Do not proceed to the next stage if the current stage has errors.
+- Do NOT edit files under `build/` or `output/` manually.
+- Do NOT skip `validate-ir` before `export-kicad`.
+- Do NOT proceed to next stage if current stage has errors.
+- Do NOT guess LCSC IDs — search with `hwtool agent jlc search` first.
 
-## Reference
+## Example Projects
 
-- Detailed spec: `docs/AGENT_PROGRESS_SPEC.zh-CN.md`
+- `examples/stm32f103-minimal-system/` — STM32F103C8T6 ARM Cortex-M3 minimal system (verified PCB)
+- `examples/esp32c3-minimal-system/` — ESP32-C3FH4 RISC-V minimal system (verified PCB)
+
+Study these for `circuit-model.json` structure and `pcb_layout.regions` patterns.
