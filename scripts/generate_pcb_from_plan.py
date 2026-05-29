@@ -23,7 +23,11 @@ def _repo_root() -> Path:
 
 def _footprint_library_dir(project_dir: Path, lib_name: str) -> Path | None:
     if lib_name == "JLC-MCP":
-        return project_dir / "libraries" / "footprints" / "JLC-MCP.pretty"
+        for base in [project_dir, project_dir.parent, project_dir.parent.parent]:
+            candidate = base / "libraries" / "footprints" / "JLC-MCP.pretty"
+            if candidate.is_dir():
+                return candidate
+        return None
     if lib_name == "AIAgent":
         return _repo_root() / "resources" / "kicad" / "footprints" / "AIAgent.pretty"
     return None
