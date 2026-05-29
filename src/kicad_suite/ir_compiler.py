@@ -154,6 +154,12 @@ def _build_components(
         # selected_part — keep package as hardware fact.
         sp = component.get("selected_part")
         selected_part = dict(sp) if isinstance(sp, dict) else {}
+        top_level_package = str(component.get("package", "")).strip()
+        if top_level_package and not str(selected_part.get("package", "")).strip():
+            selected_part["package"] = top_level_package
+        top_level_mechanical_package = str(component.get("mechanical_package", "")).strip()
+        if top_level_mechanical_package and not str(selected_part.get("mechanical_package", "")).strip():
+            selected_part["mechanical_package"] = top_level_mechanical_package
 
         # Assigned sheet.
         assigned_sheet = str(component.get("sheet", ""))

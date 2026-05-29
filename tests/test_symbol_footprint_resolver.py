@@ -12,6 +12,7 @@ from kicad_suite.symbol_footprint_resolver import (
     resolve_footprint,
     symbol_mapping_for,
 )
+from kicad_suite.compile_kicad_execution_plan import resolve_footprint as compile_resolve_footprint
 
 
 def test_load_symbol_map_returns_dict():
@@ -55,6 +56,11 @@ def test_resolve_footprint_falls_back_to_package():
     result = resolve_footprint("JLC-MCP:C0603", "")
     assert result
     assert "0603" in result
+
+
+def test_compile_resolve_footprint_maps_short_package_names():
+    result = compile_resolve_footprint("LQFP-48", "")
+    assert result == "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL"
 
 
 def test_footprint_exists_checks_cache():

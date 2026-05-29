@@ -1,6 +1,6 @@
 {
   "schema_version": "circuit-model.v1",
-  "request_id": "test",
+  "request_id": "fresh",
   "project_id": "stm32f103-minimal-system",
   "topology": "stm32f103_minimal_system",
   "components": [
@@ -355,16 +355,11 @@
       ]
     }
   ],
-  "calculations": [],
-  "design_decisions": [],
-  "risks": [],
-  "constraints": [],
   "pcb_layout": {
     "regions": {
       "power_input": {
         "x": 10,
         "y": 10,
-        "rotation": 90,
         "components": [
           "J1"
         ]
@@ -423,5 +418,9 @@
         ]
       }
     }
-  }
+  },
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": []
 }

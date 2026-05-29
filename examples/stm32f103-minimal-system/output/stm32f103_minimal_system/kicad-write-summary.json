@@ -1,8 +1,8 @@
 {
   "schema_version": "kicad-project-write-result.v1",
-  "request_id": "test",
-  "project_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_pro",
-  "schematic_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch",
+  "request_id": "fresh",
+  "project_file": "build\\verify-stm32pcb\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_pro",
+  "schematic_file": "build\\verify-stm32pcb\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch",
   "symbol_count": 18,
   "net_count": 10,
   "diagnostics": {
@@ -30,11 +30,11 @@
   },
   "hierarchical_sheets": {
     "sheet_count": 4,
-    "root_schematic_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch",
+    "root_schematic_file": "build\\verify-stm32pcb\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch",
     "sheet_files": [
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\01_power.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\02_mcu.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\03_io.kicad_sch"
+      "build\\verify-stm32pcb\\stm32f103_minimal_system\\01_01_power.kicad_sch",
+      "build\\verify-stm32pcb\\stm32f103_minimal_system\\02_02_mcu_and_clock.kicad_sch",
+      "build\\verify-stm32pcb\\stm32f103_minimal_system\\03_03_debug_and_io.kicad_sch"
     ]
   }
 }

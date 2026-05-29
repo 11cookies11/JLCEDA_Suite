@@ -103,6 +103,15 @@ def test_ir_has_no_kicad_fields():
         assert "footprint" not in sp or not any(":" in str(sp.get(k, "")) for k in sp)
 
 
+def test_ir_carries_top_level_package_into_selected_part():
+    model = _make_model()
+    model["components"][0]["selected_part"] = {"part_id": "h618", "mpn": "H618"}
+    model["components"][0]["package"] = "BGA-484"
+    ir = build_ir(model)
+    u1 = next(c for c in ir["components"] if c["ref"] == "U1")
+    assert u1["selected_part"]["package"] == "BGA-484"
+
+
 # ---- power tree --------------------------------------------------------
 
 def test_ir_power_tree_structure():
