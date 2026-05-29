@@ -1,6 +1,6 @@
 {
   "schema_version": "circuit-model.v1",
-  "request_id": "agent-create",
+  "request_id": "test",
   "project_id": "stm32f103-minimal-system",
   "topology": "stm32f103_minimal_system",
   "components": [
@@ -30,8 +30,8 @@
       "value": "8MHz",
       "package": "CRYSTAL-SMD_3225",
       "selected_part": {
-        "lcsc_id": "C5265856",
-        "display_name": "HY8MSMD3225OB1R30"
+        "lcsc_id": "C39097",
+        "display_name": "SiT8008AI-22-33E-8.000000D"
       }
     },
     {
@@ -51,7 +51,7 @@
       "package": "C0603",
       "selected_part": {
         "lcsc_id": "C1590",
-        "display_name": "CL10B104KA8NNNC"
+        "display_name": ""
       }
     },
     {
@@ -61,7 +61,7 @@
       "package": "C0603",
       "selected_part": {
         "lcsc_id": "C1590",
-        "display_name": "CL10B104KA8NNNC"
+        "display_name": ""
       }
     },
     {
@@ -81,7 +81,7 @@
       "package": "C0805",
       "selected_part": {
         "lcsc_id": "C1713",
-        "display_name": "CL21A106KOQNNNE"
+        "display_name": ""
       }
     },
     {
@@ -91,7 +91,7 @@
       "package": "C0805",
       "selected_part": {
         "lcsc_id": "C1713",
-        "display_name": "CL21A106KOQNNNE"
+        "display_name": ""
       }
     },
     {
@@ -111,7 +111,7 @@
       "package": "C0603",
       "selected_part": {
         "lcsc_id": "C1653",
-        "display_name": "CL10C220JB8NNNC"
+        "display_name": ""
       }
     },
     {
@@ -131,7 +131,7 @@
       "package": "R0603",
       "selected_part": {
         "lcsc_id": "C15401",
-        "display_name": "0603WAJ0103T5E"
+        "display_name": ""
       }
     },
     {
@@ -160,8 +160,8 @@
       "value": "USB-C16PIN",
       "package": "USB-C-SMD",
       "selected_part": {
-        "lcsc_id": "C165849",
-        "display_name": "P-5V"
+        "lcsc_id": "C2927026",
+        "display_name": "USB-TYPE-C-006"
       }
     },
     {
@@ -170,8 +170,8 @@
       "value": "SWD-4P",
       "package": "HDR-TH_4P",
       "selected_part": {
-        "lcsc_id": "C124378",
-        "display_name": "Header-Male-2.54_1x4"
+        "lcsc_id": "C36717",
+        "display_name": "2.54mm 1*2P"
       }
     },
     {
@@ -180,8 +180,8 @@
       "value": "SW-TH_6x6",
       "package": "SW-TH",
       "selected_part": {
-        "lcsc_id": "C145829",
-        "display_name": "K5-1617SA-01"
+        "lcsc_id": "C8363",
+        "display_name": "STM32F103TBU6"
       }
     }
   ],
@@ -300,10 +300,6 @@
       ]
     }
   ],
-  "calculations": [],
-  "design_decisions": [],
-  "risks": [],
-  "constraints": [],
   "sheets": [
     {
       "name": "power",
@@ -358,5 +354,67 @@
         "SWDIO"
       ]
     }
-  ]
+  ],
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": [],
+  "pcb_layout": {
+    "regions": {
+      "power_input": {
+        "x": 10,
+        "y": 10,
+        "components": [
+          "J1"
+        ]
+      },
+      "regulation": {
+        "x": 10,
+        "y": 50,
+        "components": [
+          "U2",
+          "C6",
+          "C7"
+        ]
+      },
+      "decoupling": {
+        "x": 70,
+        "y": 10,
+        "components": [
+          "C1",
+          "C2",
+          "C3",
+          "C5"
+        ]
+      },
+      "mcu": {
+        "x": 10,
+        "y": 100,
+        "components": [
+          "U1",
+          "Y1",
+          "C8",
+          "C9"
+        ]
+      },
+      "reset_boot": {
+        "x": 70,
+        "y": 100,
+        "components": [
+          "R1",
+          "R2",
+          "SW1"
+        ]
+      },
+      "led_io": {
+        "x": 10,
+        "y": 160,
+        "components": [
+          "D1",
+          "R3",
+          "J2"
+        ]
+      }
+    }
+  }
 }
