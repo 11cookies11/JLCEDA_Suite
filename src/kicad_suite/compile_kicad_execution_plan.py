@@ -235,11 +235,12 @@ def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
 
 
 def normalize_footprint(footprint: str) -> str:
-    """Return the footprint unchanged unless it is a JLC-MCP path."""
+    """Add JLC-MCP prefix if no library prefix is present."""
+    if not footprint:
+        return footprint
     if footprint.startswith('JLC-MCP:'):
         return footprint
-
-    return footprint
+    return f'JLC-MCP:{footprint}'
 
 
 def _remap_jlc_footprint(fp: str) -> str:

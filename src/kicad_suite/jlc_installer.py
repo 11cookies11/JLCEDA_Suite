@@ -55,8 +55,10 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
     """Download component data from EasyEDA and install symbol + footprint into *project_path*."""
     global _installed_lcsc_cache
     cache_key = f"{project_path.resolve()}:{lcsc_id}"
-    if _installed_lcsc_cache.get(cache_key):
-        return {"ok": True, "lcsc_id": lcsc_id, "cached": True, "pin_count": 0}
+    cached = _installed_lcsc_cache.get(cache_key)
+    if cached is not None:
+        pkg = str(cached) if cached else ""
+        return {"ok": True, "lcsc_id": lcsc_id, "cached": True, "pin_count": 0, "package": pkg}
 
     # 1. Fetch from EasyEDA
     comp_data = jlc_api.get_component(lcsc_id, retries=5, delay=0.5)
@@ -114,7 +116,7 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
             fp_file.write_text(_make_minimal_footprint(fp_name), encoding="utf-8")
     # If file already exists, keep it (footprints are shared across components)
 
-    _installed_lcsc_cache[cache_key] = True
+    _installed_lcsc_cache[cache_key] = comp_data.get("package_title", "")
     return {
         "ok": True,
         "lcsc_id": lcsc_id,
@@ -191,7 +193,7 @@ def resolve_missing_symbols(
                         break
             if inst:
                 resolved.append({"ref": ref, "lcsc_id": lcsc_id, "title": inst.get("title", ""), "source": "search_hint", "pin_count": inst.get("pin_count", 0)})
-                _write_selected_part(comp, lcsc_id, inst.get("title", ""))
+                _write_selected_part(comp, lcsc_id, inst.get("title", ""), inst.get("package", ""))
                 _time.sleep(delay)
                 continue
 
@@ -207,7 +209,7 @@ def resolve_missing_symbols(
 
         if inst and inst.get("ok"):
             resolved.append({"ref": ref, "lcsc_id": lcsc_id, "title": inst.get("title", ""), "source": "easyeda", "pin_count": inst.get("pin_count", 0)})
-            _write_selected_part(comp, lcsc_id, inst.get("title", ""))
+            _write_selected_part(comp, lcsc_id, inst.get("title", ""), inst.get("package", ""))
             _time.sleep(delay)
             continue
 
@@ -275,12 +277,15 @@ def _resolve_two_pin_placeholder(project_path: Path, value: str, ref: str) -> di
     return {"ok": True, "pin_count": 2, "title": value or ref}
 
 
-def _write_selected_part(component: dict[str, Any], lcsc_id: str, display_name: str) -> None:
+def _write_selected_part(component: dict[str, Any], lcsc_id: str, display_name: str, fp_hint: str = "") -> None:
     """Write ``selected_part`` into *component* in-place so the build step finds it."""
-    component["selected_part"] = {
+    sp: dict[str, str] = {
         "lcsc_id": lcsc_id,
         "display_name": display_name,
     }
+    if fp_hint:
+        sp["kicad_footprint_hint"] = fp_hint
+    component["selected_part"] = sp
 
 
 def _find_or_create_sym_lib(sym_dir: Path) -> tuple[str, Path]:
