@@ -9,6 +9,7 @@ from typing import Any
 
 from ..kicad_erc_runner import run as run_erc
 from ..kicad_project_writer import write_project
+from ..pcb_generator import generate_pcb
 from ..example_scaffold import scaffold_example
 from ..ir_compiler import build_ir
 from ..ir_to_kicad import ir_to_kicad
@@ -561,12 +562,9 @@ class _ExtendedHandlers:
                         except Exception:
                             pass
                         # Generate PCB
-                        try:
-                            from ..pcb_generator import generate_pcb
-                            pcb_result = generate_pcb(asdict(plan), project_path=source_project)
-                            result["pcb"] = pcb_result
-                        except Exception:
-                            pass
+                        from ..pcb_generator import generate_pcb
+                        pcb_result = generate_pcb(asdict(plan), project_path=source_project)
+                        result["pcb"] = pcb_result
                         try:
                             pin_result = pin_project_libraries(project_out)
                             result["library_pins"] = pin_result

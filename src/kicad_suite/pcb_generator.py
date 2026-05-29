@@ -14,11 +14,12 @@ PCB_FILE_VERSION = "20250119"
 
 
 def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -> dict[str, Any]:
-    """Create a ``.kicad_pcb`` file with components placed in rows by sheet.
-
-    Reads symbol footprints from the plan and places them on a grid.
-    Returns a dict with ``board_file`` path and ``component_count``.
-    """
+    """Create a ``.kicad_pcb`` file with components placed in rows by sheet."""
+    # Derive project path from output dir if not given
+    if not project_path:
+        output_root = env("KICAD_OUTPUT_DIR", "")
+        if output_root:
+            project_path = str(Path(output_root).parent)
     proj = Path(project_path) if project_path else None
     target = plan.get("target", {})
     if not isinstance(target, dict):
@@ -31,7 +32,7 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
     nets = [n for n in plan.get("nets", []) if isinstance(n, dict)]
 
     # Read PCB layout from DSL if present
-    regions = _read_pcb_regions(project_path)
+    regions = _read_pcb_regions(proj)
 
     # Place symbols: regions first, remaining in rows
     placements = _compute_placements(symbols, regions)
@@ -40,12 +41,16 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
     board_lines = _build_board(board_file, symbols, nets, placements, project_name, proj)
     board_file.write_text("\n".join(board_lines) + "\n", encoding="utf-8")
 
+    # Build placement summary for debugging
+    placement_refs = [{"ref": p["ref"], "x": p["x"], "y": p["y"], "rotation": p.get("rotation", 0)} for p in placements]
+
     return {
         "ok": True,
         "board_file": str(board_file),
         "component_count": len(symbols),
         "net_count": len(nets),
         "regions": len(regions) if regions else 0,
+        "placements": placement_refs,
     }
 
 
@@ -84,40 +89,60 @@ def _read_pcb_regions(project_path: str | Path | None) -> dict[str, dict[str, An
 def _compute_placements(
     symbols: list[dict[str, Any]], regions: dict[str, dict[str, Any]] | None,
 ) -> list[dict[str, Any]]:
-    """Return [(ref, footprint, x, y, height)] for every symbol.
-    Region-placed symbols go first, rest auto-laid in rows.
+    """Return list of placement dicts: {ref, fp, x, y, rotation, h, fp_path, sym}.
+    Region-placed symbols go first, rest auto-laid in rows below them.
     """
     placed: list[dict[str, Any]] = []
     auto_refs: list[str] = []
+    ref_to_sym = {str(s.get("ref", "")): s for s in symbols}
 
+    # Place by region
+    if regions:
+        for ref, r in regions.items():
+            if ref not in ref_to_sym:
+                continue
+            sym = ref_to_sym[ref]
+            fp = _resolve_footprint(sym)
+            fp_path = _find_footprint_file(fp)
+            placed.append({
+                "ref": ref, "fp": fp,
+                "x": r.get("x", 25), "y": r.get("y", 25),
+                "rotation": r.get("rotation", 0),
+                "h": _estimate_footprint_height(fp_path),
+                "fp_path": fp_path, "sym": sym,
+            })
+
+    # Auto-layout remaining symbols
     for sym in symbols:
         ref = str(sym.get("ref", ""))
+        if regions and ref in regions:
+            continue  # already placed
         fp = _resolve_footprint(sym)
         fp_path = _find_footprint_file(fp)
-        h = _estimate_footprint_height(fp_path)
-        if regions and ref in regions:
-            r = regions[ref]
-            placed.append({"ref": ref, "fp": fp, "x": r["x"], "y": r["y"], "h": h, "fp_path": fp_path, "sym": sym})
-        else:
-            placed.append({"ref": ref, "fp": fp, "x": 0, "y": 0, "h": h, "fp_path": fp_path, "sym": sym})
-            auto_refs.append(ref)
+        placed.append({
+            "ref": ref, "fp": fp,
+            "x": 0, "y": 0, "rotation": 0,
+            "h": _estimate_footprint_height(fp_path),
+            "fp_path": fp_path, "sym": sym,
+        })
+        auto_refs.append(ref)
 
-    # Auto-layout remaining symbols in rows
     if auto_refs:
-        max_ry = max((p["y"] + p["h"] + 5 for p in placed if p["x"] > 0), default=25)
-        cursor_x = 25.0
-        cursor_y = max_ry + 20
-        row_height = 0.0
+        grid_x = 25.0
+        grid_y = max((p["y"] + p.get("h", 10) + 10 for p in placed if p.get("y", 0) > 0), default=25) + 20
+        row_h = 0.0
         for p in placed:
-            if p["ref"] in auto_refs:
-                p["x"] = cursor_x
-                p["y"] = cursor_y
-                cursor_x += 20
-                row_height = max(row_height, p["h"])
-                if cursor_x > 160:
-                    cursor_x = 25
-                    cursor_y += row_height + 25
-                    row_height = 0
+            if p["ref"] not in auto_refs:
+                continue
+            p["x"] = grid_x
+            p["y"] = grid_y
+            grid_x += 20
+            h = p.get("h", 10)
+            row_h = max(row_h, h)
+            if grid_x > 160:
+                grid_x = 25
+                grid_y += row_h + 15
+                row_h = 0
 
     return placed
 
@@ -173,7 +198,7 @@ def _build_board(
         sym = p.get("sym", {})
         comp_uuid = str(uuid.uuid4())
         lines.append(f"  (footprint {_q(fp)} (layer F.Cu) (tedit 0) (tstamp {comp_uuid})")
-        lines.append(f"    (at {p['x']:.2f} {p['y']:.2f} 0)")
+        lines.append(f"    (at {p['x']:.2f} {p['y']:.2f} {p.get('rotation', 0)})")
         lines.append(f"    (attr smd)")
         lines.append(f"    (property \"Reference\" {_q(ref)} (at 0 0 0) (layer F.SilkS) (effects (font (size 1 1) (thickness 0.15))))")
         lines.append(f"    (property \"Value\" {_q(str(sym.get('value', ref)))} (at 0 2 0) (layer F.Fab) (effects (font (size 1 1) (thickness 0.15))))")
