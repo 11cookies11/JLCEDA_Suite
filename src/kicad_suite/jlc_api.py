@@ -15,11 +15,11 @@ import urllib.request
 from typing import Any
 
 _SEARCH_URL = "https://jlcpcb.com/api/overseas-pcb-order/v1/shoppingCart/smtGood/selectSmtComponentList/v2"
-_PRODUCT_URL = "https://easyeda.com/api/products/{lcsc_id}/components?version=6.4.19.5"
+_PRODUCT_URL = "https://lceda.cn/api/products/{lcsc_id}/components?version=6.4.19.5"
 
 # Minimum interval between API calls (seconds).  Normal humans browse at
 # roughly one click every second or two; we add slight jitter below.
-_RATE_LIMIT_INTERVAL = 1.0
+_RATE_LIMIT_INTERVAL = 3.0
 _last_call_time: float = 0.0
 
 # Browser-like headers — no "ai" or "bot" markers.
@@ -38,7 +38,7 @@ def _rate_limit() -> None:
     now = _time.monotonic()
     wait = _last_call_time + _RATE_LIMIT_INTERVAL - now
     if wait > 0:
-        _time.sleep(wait + random.uniform(0, 0.5))
+        _time.sleep(wait + random.uniform(0, 2.0))
     _last_call_time = _time.monotonic()
 
 
@@ -48,8 +48,8 @@ def _headers() -> dict[str, str]:
         "User-Agent": random.choice(_USER_AGENTS),
         "Accept": "application/json, text/plain, */*",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
-        "Referer": "https://easyeda.com/",
-        "Origin": "https://easyeda.com",
+        "Referer": "https://lceda.cn/",
+        "Origin": "https://lceda.cn",
         "Cache-Control": "no-cache",
     }
 

@@ -18,6 +18,9 @@ def repo_root() -> Path:
     accounting for the ``_internal`` directory used by PyInstaller 6+ onedir builds.
     """
     if getattr(sys, 'frozen', False):
+        meipass = getattr(sys, '_MEIPASS', '')
+        if meipass:
+            return Path(meipass)
         exe_dir = Path(sys.executable).parent
         internal = exe_dir / "_internal"
         return internal if internal.is_dir() else exe_dir
