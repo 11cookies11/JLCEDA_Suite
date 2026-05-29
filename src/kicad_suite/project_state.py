@@ -247,8 +247,11 @@ class ProjectState:
         self._append_operation({"op": "mark_invalid", "ok": True})
         self.save()
 
-    def mark_built(self, outputs: dict[str, Any] | None = None) -> None:
-        """Mark the project BUILT (KiCad generation succeeded)."""
+    def mark_built(self, outputs: dict[str, Any] | None = None, *, op_data: dict[str, Any] | None = None) -> None:
+        """Mark the project BUILT (KiCad generation succeeded).
+
+        *op_data* — extra context written to the operation log (symbol counts, ERC, timing).
+        """
         self._ensure_loaded()
         model = self._read_model()
         dsl_hash = self._hash_dict(model) if model else ""
@@ -259,7 +262,10 @@ class ProjectState:
             "input_dsl_hash": dsl_hash,
             "outputs": outputs or {},
         }
-        self._append_operation({"op": "mark_built", "ok": True, "hash": dsl_hash})
+        entry: dict[str, Any] = {"op": "mark_built", "ok": True, "hash": dsl_hash}
+        if op_data:
+            entry |= op_data
+        self._append_operation(entry)
         self.save()
 
     def mark_build_failed(self, diagnostics: dict[str, Any] | None = None) -> None:

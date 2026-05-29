@@ -122,7 +122,11 @@ def build_report(
         "error": ir_error,
     }))
 
-    # 7. Risks.
+    # 7. Component symbol status.
+    comp_section = _component_status(model)
+    sections.append(_section("components", "Component Symbol Status", comp_section["status"], comp_section))
+
+    # 8. Risks.
     risks = model.get("risks", []) if isinstance(model.get("risks"), list) else []
     open_risks = sum(1 for r in risks if isinstance(r, dict) and r.get("status") not in ("resolved", "closed"))
     sections.append(_section("risks", "Risks", "warning" if open_risks > 0 else "ok", {
@@ -131,17 +135,15 @@ def build_report(
         "items": risks[:20] if risks else [],
     }))
 
-    # 8. ERC (optional).
+    # 9. ERC details.
     if erc_result:
         erc_ok = erc_result.get("success", False)
-        sections.append(_section("erc", "ERC", "ok" if erc_ok else "error", {
-            "attempted": erc_result.get("attempted", False),
-            "success": erc_ok,
-            "finding_count": erc_result.get("finding_count", 0),
-            "warnings": erc_result.get("warnings", []),
-        }))
+        erc_data = _erc_details(erc_result)
+        erc_data["attempted"] = erc_result.get("attempted", False)
+        erc_data["success"] = erc_ok
+        sections.append(_section("erc", "ERC", "ok" if erc_ok else "error", erc_data))
 
-    # 9. Simulation (optional).
+    # 10. Simulation (optional).
     if simulation_result:
         sections.append(_section("simulation", "Simulation", "info", {
             "plan_file": simulation_result.get("plan_file", ""),
@@ -180,6 +182,81 @@ def format_report(report: dict[str, Any], fmt: str = FORMAT_JSON) -> str:
     if fmt == FORMAT_MARKDOWN:
         return _render_markdown(report)
     raise ValueError(f"Unknown report format: {fmt}")
+
+
+# ---------------------------------------------------------------------------
+# Internal: data extractors
+# ---------------------------------------------------------------------------
+
+
+def _component_status(model: dict[str, Any]) -> dict[str, Any]:
+    """Extract per-component symbol resolution status."""
+    components = model.get("components", [])
+    if not isinstance(components, list):
+        return {"status": "info", "total": 0, "resolved": 0, "placeholder": 0, "items": []}
+
+    items: list[dict[str, Any]] = []
+    resolved = 0
+    placeholder = 0
+    for c in components:
+        if not isinstance(c, dict):
+            continue
+        ref = str(c.get("ref", ""))
+        sp = c.get("selected_part", {})
+        sp = sp if isinstance(sp, dict) else {}
+        lcsc = str(sp.get("lcsc_id", ""))
+        has_symbol = bool(lcsc)
+        if has_symbol:
+            resolved += 1
+        elif c.get("value"):
+            placeholder += 1
+
+        items.append({
+            "ref": ref,
+            "role": str(c.get("role", "")),
+            "value": str(c.get("value", "")),
+            "lcsc_id": lcsc or None,
+            "symbol_ok": has_symbol,
+        })
+
+    status = "ok" if placeholder == 0 else ("warning" if resolved > 0 else "error")
+    return {"status": status, "total": len(items), "resolved": resolved, "placeholder": placeholder, "items": items}
+
+
+def _erc_details(erc_result: dict[str, Any]) -> dict[str, Any]:
+    """Extract structured ERC violation details."""
+    finding_count = erc_result.get("finding_count", 0)
+    details: dict[str, Any] = {
+        "finding_count": finding_count,
+        "warnings": erc_result.get("warnings", []),
+        "violations": [],
+    }
+
+    # Try to read the ERC JSON report for structured violations
+    output_file = erc_result.get("output_file", "")
+    if output_file:
+        try:
+            erc_data = json.loads(Path(output_file).read_text(encoding="utf-8"))
+            from collections import Counter
+            type_counts: Counter = Counter()
+            examples: dict[str, str] = {}
+            for sheet in erc_data.get("sheets", []):
+                for v in sheet.get("violations", []):
+                    vtype = str(v.get("type", "?"))
+                    type_counts[vtype] += 1
+                    if vtype not in examples:
+                        examples[vtype] = str(v.get("description", ""))[:120]
+            for vtype, count in type_counts.most_common(20):
+                details["violations"].append({
+                    "type": vtype,
+                    "count": count,
+                    "severity": str(v.get("severity", "?")),
+                    "example": examples.get(vtype, ""),
+                })
+        except (OSError, json.JSONDecodeError, LookupError):
+            pass
+
+    return details
 
 
 # ---------------------------------------------------------------------------

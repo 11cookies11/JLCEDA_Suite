@@ -537,23 +537,96 @@ class _ExtendedHandlers:
                 kicad = config.get("kicad", {}) if isinstance(config.get("kicad"), dict) else {}
                 output_dir = Path(str(request.payload.get("output_dir", kicad.get("output_dir", ""))))
                 project_name = str(request.payload.get("project_name", kicad.get("project_name", "")))
+                topology = str(self.model.get("topology", ""))
+                source_project = str(self.repository.model_path.parent) if self.repository else ""
+                import time as _time
+                t0 = _time.monotonic()
                 with external_tool_env(
                     config,
-                    {"KICAD_OUTPUT_DIR": str(output_dir), "KICAD_PROJECT_NAME": project_name},
+                    {
+                        "KICAD_OUTPUT_DIR": str(output_dir),
+                        "KICAD_PROJECT_NAME": project_name,
+                        "KICAD_TOPOLOGY": topology,
+                    },
                 ):
                     ir = build_ir(self.model)
                     plan = ir_to_kicad(ir)
-                    result = write_project(asdict(plan))
-                    # Pin project-local JLC libraries so KiCad can find them
+                    result = write_project(asdict(plan), project_path=source_project)
                     project_out = output_dir / project_name
                     if project_out.is_dir():
-                        from ..pipeline_postprocess import pin_project_libraries
+                        from ..pipeline_postprocess import inject_jlc_symbols, pin_project_libraries
+                        try:
+                            schematic_file = output_dir / project_name / (project_name + ".kicad_sch")
+                            inject_jlc_symbols(schematic_file)
+                        except Exception:
+                            pass
                         try:
                             pin_result = pin_project_libraries(project_out)
                             result["library_pins"] = pin_result
                         except Exception:
                             pass
-                return self._read_result(request, before, {"kicad_project": result})
+                build_time = round(_time.monotonic() - t0, 2)
+
+                # Auto-run ERC and build report for agent visibility
+                erc_result = None
+                erc_time = 0.0
+                report_data: dict[str, Any] = {}
+                try:
+                    schematic_file = output_dir / project_name / (project_name + ".kicad_sch")
+                    if schematic_file.exists():
+                        t1 = _time.monotonic()
+                        erc_output = output_dir / project_name / (project_name + ".erc.json")
+                        from ..kicad_erc_runner import run as run_erc_file
+                        with external_tool_env(config, {
+                            "KICAD_SCHEMATIC_FILE": str(schematic_file),
+                            "KICAD_ERC_OUTPUT_FILE": str(erc_output),
+                        }):
+                            erc_result = run_erc_file(emit=False)
+                        erc_time = round(_time.monotonic() - t1, 2)
+                    # Build agent-friendly report
+                    from ..report_system import build_report
+                    report_data = build_report(
+                        source_project or str(output_dir.parent),
+                        model=self.model,
+                        erc_result=erc_result,
+                    )
+                    report_data["timing"] = {"build_sec": build_time, "erc_sec": erc_time}
+                    report_path = output_dir / project_name / "agent-report.json"
+                    report_path.parent.mkdir(parents=True, exist_ok=True)
+                    report_path.write_text(json.dumps(report_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+                    report_data["report_path"] = str(report_path)
+                except Exception:
+                    pass
+
+                # Extract ERC violation summary for the operation log
+                erc_summary: dict[str, Any] = {}
+                if erc_result:
+                    erc_summary["finding_count"] = erc_result.get("finding_count", 0)
+                    try:
+                        erc_file = erc_result.get("output_file", "")
+                        if erc_file:
+                            erc_data = json.loads(Path(erc_file).read_text(encoding="utf-8"))
+                            from collections import Counter
+                            type_counts: Counter = Counter()
+                            for sheet in erc_data.get("sheets", []):
+                                for v in sheet.get("violations", []):
+                                    type_counts[str(v.get("type", "?"))] += 1
+                            erc_summary["violations"] = [
+                                {"type": t, "count": c} for t, c in type_counts.most_common()
+                            ]
+                    except Exception:
+                        pass
+
+                return self._read_result(request, before, {
+                    "kicad_project": result,
+                    "erc": erc_summary,
+                    "report": {
+                        "overall_status": report_data.get("overall_status", "?"),
+                        "component_count": len(report_data.get("sections", [])),
+                        "path": report_data.get("report_path", ""),
+                    },
+                    "timing": {"build_sec": build_time, "erc_sec": erc_time},
+                })
             project_dir = Path(str(request.payload.get("project_dir", "")))
             schematic_file = request.payload.get("schematic_file", "")
             with external_tool_env(

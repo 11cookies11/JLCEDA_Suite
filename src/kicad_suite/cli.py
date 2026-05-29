@@ -145,15 +145,35 @@ def _update_project_state_from_request(request: dict[str, Any], result: dict[str
         else:
             ps.mark_invalid({"errors": diag.get("errors", []), "warnings": diag.get("warnings", [])})
     elif is_build_operation(operation):
-        payload = {"operation": operation}
-        kicad_project = result.get("result", {}).get("kicad_project")
+        build_result = result.get("result", {})
+        kicad_project = build_result.get("kicad_project")
+        op_data: dict[str, Any] = {"operation": operation}
         if isinstance(kicad_project, dict):
-            payload["outputs"] = {
-                "kicad_project": kicad_project.get("project_file", ""),
+            op_data["symbols"] = kicad_project.get("symbol_count", 0)
+            op_data["nets"] = kicad_project.get("net_count", 0)
+            op_data["sheets"] = kicad_project.get("hierarchical_sheets", {}).get("sheet_count", 0)
+            op_data["outputs"] = {
+                "project": kicad_project.get("project_file", ""),
                 "schematic": kicad_project.get("schematic_file", ""),
-                "summary": kicad_project.get("summary_file", ""),
             }
-        ps.mark_built(payload)
+            # Footprint + symbol warnings from build diagnostics
+            diags = kicad_project.get("diagnostics", {})
+            unsupported = diags.get("unsupported", []) if isinstance(diags, dict) else []
+            if unsupported:
+                op_data["build_warnings"] = unsupported
+        erc = build_result.get("erc")
+        if erc:
+            op_data["erc_findings"] = erc.get("finding_count", 0)
+            op_data["erc_violations"] = erc.get("violations", [])
+        timing = build_result.get("timing")
+        if timing:
+            op_data["build_sec"] = timing.get("build_sec", 0)
+            op_data["erc_sec"] = timing.get("erc_sec", 0)
+        report = build_result.get("report")
+        if report:
+            op_data["report_status"] = report.get("overall_status", "?")
+            op_data["report_path"] = report.get("path", "")
+        ps.mark_built({"output_dir": str(project_path / "output")}, op_data=op_data)
 
 
 def _pipeline_handler(args: argparse.Namespace) -> int:
@@ -962,12 +982,37 @@ def _agent_jlc_download_handler(args: argparse.Namespace) -> int:
 
 
 def _agent_resolve_symbols_handler(args: argparse.Namespace) -> int:
+    import time as _time
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
     model = load_json(model_path)
     timeout = getattr(args, "timeout", 120) or 120
     delay = getattr(args, "delay", 0) or 0
+    t0 = _time.monotonic()
     result = resolve_missing_symbols(project_path, model, timeout=timeout, delay=delay)
+    elapsed = round(_time.monotonic() - t0, 2)
+    result["elapsed_sec"] = elapsed
+
+    # Log to operations.jsonl
+    ps = ProjectState(project_path)
+    ps.load()
+    easyeda = sum(1 for x in result.get("details", []) if x.get("source") == "easyeda")
+    search_hint = sum(1 for x in result.get("details", []) if x.get("source") == "search_hint")
+    placeholder = sum(1 for x in result.get("details", []) if "placeholder" in x.get("source", ""))
+    ps.mark_dirty(reason="resolve-symbols")
+    ps._append_operation({
+        "op": "resolve_symbols",
+        "ok": result.get("ok", False),
+        "elapsed_sec": elapsed,
+        "total": result.get("resolved", 0),
+        "easyeda": easyeda,
+        "search_hint": search_hint,
+        "placeholder": placeholder,
+        "failed": result.get("failed", 0),
+        "model_updated": result.get("model_updated", False),
+    })
+    ps.save()
+
     return _print_json(result)
 
 
