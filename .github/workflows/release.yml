@@ -1,0 +1,48 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    name: Build hwtool.exe
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: pip install pyinstaller easyeda2kicad aiohttp
+
+      - name: Build hwtool.exe
+        run: python -m PyInstaller hwtool.spec --noconfirm
+
+      - name: Package release
+        shell: pwsh
+        run: |
+          $version = "${{ github.ref_name }}".TrimStart('v')
+          $dir = "kicad-agent-suite-$version"
+          mkdir $dir
+          copy dist/hwtool.exe $dir/
+          copy -Recurse schemas $dir/schemas
+          copy -Recurse examples/stm32f103-minimal-system $dir/examples/stm32f103-minimal-system
+          copy -Recurse examples/esp32c3-minimal-system $dir/examples/esp32c3-minimal-system
+          copy README.md $dir/
+          copy README.zh-CN.md $dir/
+          copy CHANGELOG.md $dir/
+          copy CHANGELOG.zh-CN.md $dir/
+          copy AGENTS.md $dir/
+          copy -Recurse docs $dir/docs
+          Compress-Archive -Path $dir -DestinationPath "$dir.zip"
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: kicad-agent-suite-*.zip
+          generate_release_notes: true
