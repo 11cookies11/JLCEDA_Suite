@@ -1,71 +1,88 @@
-﻿{
+{
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://kicad-agent-suite.local/schema/circuit-model.v1.json",
   "title": "CircuitModel v1",
+  "description": "Hardware project model — the single source of truth an AI agent writes and the toolchain consumes.",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version",
     "request_id",
+    "project_id",
     "topology",
     "components",
-    "nets",
-    "calculations",
-    "design_decisions",
-    "risks"
+    "nets"
   ],
   "properties": {
     "schema_version": {
       "type": "string",
-      "const": "circuit-model.v1"
+      "const": "circuit-model.v1",
+      "description": "Schema identifier."
     },
     "request_id": {
-      "type": "string"
+      "type": "string",
+      "description": "Idempotency key / build request id."
     },
     "project_id": {
-      "type": "string"
+      "type": "string",
+      "description": "Unique project identifier, e.g. 'esp32c3-minimal-system'."
     },
     "topology": {
-      "type": "string"
+      "type": "string",
+      "description": "Filesystem-safe project name, e.g. 'esp32c3_minimal_system'."
     },
     "components": {
       "type": "array",
+      "description": "All components (ICs, passives, connectors, switches) on the board.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "ref",
-          "role",
-          "value",
-          "selected_part",
-          "candidate_parts",
-          "availability_status"
-        ],
+        "required": ["ref", "role", "value", "selected_part"],
         "properties": {
           "ref": {
-            "type": "string"
+            "type": "string",
+            "description": "Schematic reference designator, e.g. 'U1', 'C3', 'R2'."
           },
           "role": {
-            "type": "string"
+            "type": "string",
+            "description": "Functional role, e.g. 'mcu', 'main_3v3_regulator', 'reset_button'."
           },
           "value": {
-            "type": "string"
+            "type": "string",
+            "description": "Human-readable value, e.g. '100nF', '10K', 'STM32F103C8T6'."
+          },
+          "package": {
+            "type": "string",
+            "description": "Physical package, e.g. 'QFN-32', 'C0603', 'SOT-223'.  Merged into selected_part.package at IR compile time if missing there."
+          },
+          "sheet": {
+            "type": "string",
+            "description": "Optional sheet assignment override."
+          },
+          "notes": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "search_hints": {
+            "type": "array",
+            "items": {"type": "string"},
+            "description": "Search queries for JLC part resolution."
           },
           "selected_part": {
             "type": "object",
+            "description": "BOM selection — the chosen part from JLC / LCSC.",
             "additionalProperties": false,
-            "required": [
-              "part_id",
-              "display_name"
-            ],
+            "required": ["lcsc_id", "display_name"],
             "properties": {
-              "part_id": {
-                "type": "string"
+              "lcsc_id": {
+                "type": "string",
+                "description": "LCSC part number, e.g. 'C8734'."
               },
               "display_name": {
-                "type": "string"
+                "type": "string",
+                "description": "Part title from LCSC, e.g. 'STM32F103C8T6'."
               },
-              "lcsc_id": {
+              "part_id": {
                 "type": "string"
               },
               "manufacturer": {
@@ -75,177 +92,133 @@
                 "type": "string"
               },
               "package": {
-                "type": "string"
+                "type": "string",
+                "description": "Package name from the JLC library, e.g. 'C0603'."
               },
               "mechanical_package": {
                 "type": "string"
               },
               "kicad_footprint_hint": {
-                "type": "string"
+                "type": "string",
+                "description": "Exact JLC-MCP footprint name, e.g. 'QFN-32_L5.0-W5.0-P0.50-TL-EP3.7'.  Populated by resolve-symbols."
               },
-              "library_uuid": {
-                "type": "string"
-              },
-              "symbol_uuid": {
-                "type": "string"
-              },
-              "pin_count": {
-                "type": "integer"
-              },
-              "named_pin_count": {
-                "type": "integer"
-              }
+              "library_uuid": {"type": "string"},
+              "symbol_uuid": {"type": "string"},
+              "pin_count": {"type": "integer"},
+              "named_pin_count": {"type": "integer"}
             }
           },
           "candidate_parts": {
             "type": "array",
+            "description": "Alternative parts considered during BOM selection.",
             "items": {
               "type": "object",
               "additionalProperties": false,
-              "required": [
-                "part_id",
-                "display_name"
-              ],
+              "required": ["lcsc_id", "display_name"],
               "properties": {
-                "part_id": {
-                  "type": "string"
-                },
-                "display_name": {
-                  "type": "string"
-                },
-                "lcsc_id": {
-                  "type": "string"
-                },
-                "manufacturer": {
-                  "type": "string"
-                },
-                "mpn": {
-                  "type": "string"
-                },
-                "package": {
-                  "type": "string"
-                },
-                "mechanical_package": {
-                  "type": "string"
-                },
-                "kicad_footprint_hint": {
-                  "type": "string"
-                },
-                "library_uuid": {
-                  "type": "string"
-                },
-                "symbol_uuid": {
-                  "type": "string"
-                },
-                "pin_count": {
-                  "type": "integer"
-                },
-                "named_pin_count": {
-                  "type": "integer"
-                }
+                "lcsc_id": {"type": "string"},
+                "display_name": {"type": "string"},
+                "part_id": {"type": "string"},
+                "manufacturer": {"type": "string"},
+                "mpn": {"type": "string"},
+                "package": {"type": "string"},
+                "mechanical_package": {"type": "string"},
+                "kicad_footprint_hint": {"type": "string"},
+                "library_uuid": {"type": "string"},
+                "symbol_uuid": {"type": "string"},
+                "pin_count": {"type": "integer"},
+                "named_pin_count": {"type": "integer"}
               }
             }
           },
           "availability_status": {
             "type": "string",
-            "enum": [
-              "unknown",
-              "available",
-              "unavailable"
-            ]
-          },
-          "notes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "search_hints": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "enum": ["unknown", "available", "unavailable"],
+            "default": "unknown"
           }
         }
       }
     },
     "nets": {
       "type": "array",
+      "description": "All electrical nets in the design.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "members"
-        ],
+        "required": ["name", "kind", "members"],
         "properties": {
           "name": {
-            "type": "string"
+            "type": "string",
+            "description": "Net name, e.g. '+3V3', 'GND', 'UART_TX'."
+          },
+          "kind": {
+            "type": "string",
+            "enum": ["power", "ground", "signal"],
+            "description": "Net classification."
           },
           "members": {
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": {"type": "string"},
+            "description": "REF.PIN connections, e.g. 'U1.23', 'J2.2'."
           },
           "notes": {
             "type": "array",
-            "items": {
-              "type": "string"
-            }
+            "items": {"type": "string"}
           }
         }
       }
     },
-    "calculations": {
+    "sheets": {
       "type": "array",
+      "description": "Logical sheet grouping for hierarchical schematic.",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "formula",
-          "inputs",
-          "result",
-          "unit"
-        ],
+        "required": ["name", "components", "nets"],
         "properties": {
           "name": {
             "type": "string"
           },
-          "formula": {
-            "type": "string"
+          "components": {
+            "type": "array",
+            "items": {"type": "string"}
+          },
+          "nets": {
+            "type": "array",
+            "items": {"type": "string"}
           },
           "inputs": {
-            "type": "object"
+            "type": "array",
+            "items": {"type": "string"}
           },
-          "result": {
-            "type": "number"
-          },
-          "unit": {
-            "type": "string"
+          "outputs": {
+            "type": "array",
+            "items": {"type": "string"}
           }
         }
       }
     },
-    "design_decisions": {
-      "type": "array",
-      "items": {
-        "type": "object",
-        "additionalProperties": false,
-        "required": [
-          "title",
-          "rationale"
-        ],
-        "properties": {
-          "title": {
-            "type": "string"
-          },
-          "rationale": {
-            "type": "string"
-          },
-          "impact": {
-            "type": "string"
+    "pcb_layout": {
+      "type": "object",
+      "description": "Board-level placement regions for component grouping.",
+      "additionalProperties": false,
+      "properties": {
+        "regions": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["x", "y", "components"],
+            "properties": {
+              "x": {"type": "number", "description": "Starting X coordinate (mm)."},
+              "y": {"type": "number", "description": "Starting Y coordinate (mm)."},
+              "rotation": {"type": "number"},
+              "spacing": {"type": "number", "description": "Horizontal spacing between components (mm), default 18."},
+              "components": {
+                "type": "array",
+                "items": {"type": "string"},
+                "description": "Component refs placed in this region."
+              }
+            }
           }
         }
       }
@@ -255,76 +228,43 @@
       "items": {
         "type": "object",
         "additionalProperties": true,
-        "required": [
-          "name",
-          "source_net"
-        ],
+        "required": ["name", "source_net"],
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "source_net": {
-            "type": "string"
-          },
-          "voltage": {
-            "type": "number"
-          },
-          "current_limit": {
-            "type": "number"
-          },
-          "parent": {
-            "type": "string"
-          },
-          "sequence_order": {
-            "type": "integer"
-          },
-          "notes": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+          "name": {"type": "string"},
+          "source_net": {"type": "string"},
+          "voltage": {"type": "number"},
+          "current_limit": {"type": "number"},
+          "parent": {"type": "string"},
+          "sequence_order": {"type": "integer"},
+          "notes": {"type": "array", "items": {"type": "string"}}
         }
       }
     },
-    "sheets": {
+    "calculations": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": [
-          "name",
-          "components",
-          "nets"
-        ],
+        "required": ["name", "formula", "inputs", "result", "unit"],
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "components": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "nets": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "inputs": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          },
-          "outputs": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+          "name": {"type": "string"},
+          "formula": {"type": "string"},
+          "inputs": {"type": "object"},
+          "result": {"type": "number"},
+          "unit": {"type": "string"}
+        }
+      }
+    },
+    "design_decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["title", "rationale"],
+        "properties": {
+          "title": {"type": "string"},
+          "rationale": {"type": "string"},
+          "impact": {"type": "string"}
         }
       }
     },
@@ -333,34 +273,18 @@
       "items": {
         "type": "object",
         "additionalProperties": true,
-        "required": [
-          "name",
-          "type"
-        ],
+        "required": ["name", "type"],
         "properties": {
-          "name": {
-            "type": "string"
-          },
-          "type": {
-            "type": "string"
-          },
-          "scope": {
-            "type": "string"
-          },
-          "rules": {
-            "type": "array",
-            "items": {
-              "type": "string"
-            }
-          }
+          "name": {"type": "string"},
+          "type": {"type": "string"},
+          "scope": {"type": "string"},
+          "rules": {"type": "array", "items": {"type": "string"}}
         }
       }
     },
     "risks": {
       "type": "array",
-      "items": {
-        "type": "string"
-      }
+      "items": {"type": "string"}
     }
   }
 }
