@@ -1,0 +1,85 @@
+{
+  "ok": true,
+  "stage": "ir_validation",
+  "errors": 0,
+  "warnings": 4,
+  "diagnostics": [
+    {
+      "level": "warning",
+      "code": "COMPONENT_NO_PINS",
+      "message": "IR.components[R6] has no pins",
+      "location": "R6",
+      "suggestion": {
+        "action": "agent run",
+        "operation": "update_component",
+        "payload": {
+          "ref": "R6",
+          "patch": {
+            "pins": []
+          }
+        },
+        "hint": "Add pin definitions or select a part with pin data."
+      }
+    },
+    {
+      "level": "warning",
+      "code": "COMPONENT_NO_PINS",
+      "message": "IR.components[R7] has no pins",
+      "location": "R7",
+      "suggestion": {
+        "action": "agent run",
+        "operation": "update_component",
+        "payload": {
+          "ref": "R7",
+          "patch": {
+            "pins": []
+          }
+        },
+        "hint": "Add pin definitions or select a part with pin data."
+      }
+    },
+    {
+      "level": "warning",
+      "code": "COMPONENT_NO_PINS",
+      "message": "IR.components[R8] has no pins",
+      "location": "R8",
+      "suggestion": {
+        "action": "agent run",
+        "operation": "update_component",
+        "payload": {
+          "ref": "R8",
+          "patch": {
+            "pins": []
+          }
+        },
+        "hint": "Add pin definitions or select a part with pin data."
+      }
+    },
+    {
+      "level": "warning",
+      "code": "COMPONENT_NO_PINS",
+      "message": "IR.components[R9] has no pins",
+      "location": "R9",
+      "suggestion": {
+        "action": "agent run",
+        "operation": "update_component",
+        "payload": {
+          "ref": "R9",
+          "patch": {
+            "pins": []
+          }
+        },
+        "hint": "Add pin definitions or select a part with pin data."
+      }
+    }
+  ],
+  "stats": {
+    "component_count": 48,
+    "net_count": 16,
+    "sheet_count": 4,
+    "power_rail_count": 0,
+    "interface_count": 0,
+    "risk_count": 3,
+    "constraint_count": 3
+  }
+}

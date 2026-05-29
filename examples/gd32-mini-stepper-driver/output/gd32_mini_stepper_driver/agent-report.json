@@ -1,0 +1,781 @@
+{
+  "schema_version": "report.v1",
+  "generated_at": "2026-05-29T18:19:06.502778+00:00",
+  "overall_status": "warning",
+  "project": {
+    "name": "gd32_mini_stepper_driver",
+    "id": "gd32-mini-stepper-driver",
+    "status": "BUILT"
+  },
+  "sections": [
+    {
+      "key": "project",
+      "title": "Project Overview",
+      "status": "info",
+      "data": {
+        "project_name": "gd32_mini_stepper_driver",
+        "project_id": "gd32-mini-stepper-driver",
+        "status": "BUILT"
+      }
+    },
+    {
+      "key": "summary",
+      "title": "Summary",
+      "status": "info",
+      "data": {
+        "component_count": 48,
+        "net_count": 16,
+        "risk_count": 3,
+        "sheet_count": 4,
+        "calculation_count": 2,
+        "decision_count": 3,
+        "constraint_count": 3,
+        "power_rail_count": 0
+      }
+    },
+    {
+      "key": "dsl",
+      "title": "DSL Status",
+      "status": "ok",
+      "data": {
+        "path": "circuit-model.json",
+        "hash": "5453a89f",
+        "valid": true
+      }
+    },
+    {
+      "key": "build",
+      "title": "Build Status",
+      "status": "ok",
+      "data": {
+        "last_build_ok": true,
+        "last_build_at": "2026-05-29T18:18:15.595045+00:00",
+        "input_dsl_hash": "872b4a23",
+        "stale": true
+      }
+    },
+    {
+      "key": "diagnostics",
+      "title": "Diagnostics",
+      "status": "warning",
+      "data": {
+        "errors": 0,
+        "warnings": 4,
+        "items": [
+          "IR.components[R6] has no pins",
+          "IR.components[R7] has no pins",
+          "IR.components[R8] has no pins",
+          "IR.components[R9] has no pins"
+        ]
+      }
+    },
+    {
+      "key": "ir",
+      "title": "Resolved Hardware IR",
+      "status": "ok",
+      "data": {
+        "schema_version": "ir.v1",
+        "compiled": true,
+        "component_count": 48,
+        "net_count": 16,
+        "error": null
+      }
+    },
+    {
+      "key": "components",
+      "title": "Component Symbol Status",
+      "status": "warning",
+      "data": {
+        "status": "warning",
+        "total": 48,
+        "resolved": 32,
+        "placeholder": 16,
+        "items": [
+          {
+            "ref": "U1",
+            "role": "mcu",
+            "value": "GD32F130C8T6",
+            "lcsc_id": "C80735",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U2",
+            "role": "main_3v3_regulator",
+            "value": "AMS1117-3.3",
+            "lcsc_id": "C6186",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U3",
+            "role": "half_bridge_gate_driver_a_high",
+            "value": "IR2104S",
+            "lcsc_id": "C537543",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U4",
+            "role": "half_bridge_gate_driver_a_low",
+            "value": "IR2104S",
+            "lcsc_id": "C537543",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U5",
+            "role": "half_bridge_gate_driver_b_high",
+            "value": "IR2104S",
+            "lcsc_id": "C537543",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U6",
+            "role": "half_bridge_gate_driver_b_low",
+            "value": "IR2104S",
+            "lcsc_id": "C537543",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U7",
+            "role": "rs485_transceiver",
+            "value": "SP3485",
+            "lcsc_id": "C69144",
+            "symbol_ok": true
+          },
+          {
+            "ref": "Q1",
+            "role": "h_bridge_a_high_side_pmos",
+            "value": "AO3401A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Q2",
+            "role": "h_bridge_a_low_side_nmos",
+            "value": "AO3400A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Q3",
+            "role": "h_bridge_a_high_side_pmos",
+            "value": "AO3401A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Q4",
+            "role": "h_bridge_a_low_side_nmos",
+            "value": "AO3400A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Q5",
+            "role": "h_bridge_b_high_side_pmos",
+            "value": "AO3401A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Q6",
+            "role": "h_bridge_b_low_side_nmos",
+            "value": "AO3400A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Q7",
+            "role": "h_bridge_b_high_side_pmos",
+            "value": "AO3401A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Q8",
+            "role": "h_bridge_b_low_side_nmos",
+            "value": "AO3400A",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "Y1",
+            "role": "main_8mhz_xtal",
+            "value": "8MHz",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "C1",
+            "role": "vdd_decoupling_1",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C2",
+            "role": "vdd_decoupling_2",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C3",
+            "role": "vdd_decoupling_3",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C4",
+            "role": "vdd_bulk_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C5",
+            "role": "reg_input_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C6",
+            "role": "reg_output_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C7",
+            "role": "motor_power_bulk_cap",
+            "value": "100uF",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "C8",
+            "role": "xtal_load_cap_1",
+            "value": "22pF",
+            "lcsc_id": "C1653",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C9",
+            "role": "xtal_load_cap_2",
+            "value": "22pF",
+            "lcsc_id": "C1653",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C10",
+            "role": "gate_driver_bootstrap_a",
+            "value": "1uF",
+            "lcsc_id": "C1592",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C11",
+            "role": "gate_driver_bootstrap_b",
+            "value": "1uF",
+            "lcsc_id": "C1592",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C12",
+            "role": "gate_driver_vcc_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R1",
+            "role": "nrst_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R2",
+            "role": "boot0_pulldown",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R3",
+            "role": "led_resistor",
+            "value": "1K",
+            "lcsc_id": "C14676",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R4",
+            "role": "current_sense_a",
+            "value": "0.1R",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "R5",
+            "role": "current_sense_b",
+            "value": "0.1R",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "R6",
+            "role": "gate_resistor_a_high",
+            "value": "10R",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R7",
+            "role": "gate_resistor_a_low",
+            "value": "10R",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R8",
+            "role": "gate_resistor_b_high",
+            "value": "10R",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R9",
+            "role": "gate_resistor_b_low",
+            "value": "10R",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R10",
+            "role": "rs485_term",
+            "value": "120R",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "R11",
+            "role": "rs485_bias_a",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R12",
+            "role": "rs485_bias_b",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "D1",
+            "role": "power_led",
+            "value": "LED0603",
+            "lcsc_id": "C5139863",
+            "symbol_ok": true
+          },
+          {
+            "ref": "D2",
+            "role": "status_led",
+            "value": "LED0603",
+            "lcsc_id": "C5139863",
+            "symbol_ok": true
+          },
+          {
+            "ref": "D3",
+            "role": "bootstrap_diode_a",
+            "value": "1N4148",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "D4",
+            "role": "bootstrap_diode_b",
+            "value": "1N4148",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "J1",
+            "role": "usb_c_power_input",
+            "value": "USB-C16PIN",
+            "lcsc_id": "C2927026",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J2",
+            "role": "motor_connector",
+            "value": "MOTOR-4P",
+            "lcsc_id": "C91552",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J3",
+            "role": "rs485_connector",
+            "value": "RS485-3P",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "SW1",
+            "role": "reset_button",
+            "value": "SW-SMD_6x6",
+            "lcsc_id": "C128964",
+            "symbol_ok": true
+          }
+        ]
+      }
+    },
+    {
+      "key": "risks",
+      "title": "Risks",
+      "status": "ok",
+      "data": {
+        "total": 3,
+        "open": 0,
+        "items": [
+          "Bootstrap gate drive may fail at very low PWM duty cycles (< 5%)",
+          "IR2104S minimum VCC is 10V - need level shifting for 5V operation",
+          "GD32F130C8T6 pin compatibility with STM32F103 not guaranteed - verify pinout"
+        ]
+      }
+    },
+    {
+      "key": "erc",
+      "title": "ERC",
+      "status": "ok",
+      "data": {
+        "finding_count": 69,
+        "warnings": [],
+        "violations": [
+          {
+            "type": "lib_symbol_issues",
+            "count": 35,
+            "severity": "warning",
+            "example": "在符号库中 'C1713' 找不到符号 'JLC-MCP'"
+          },
+          {
+            "type": "pin_to_pin",
+            "count": 34,
+            "severity": "warning",
+            "example": "类型为 Unspecified 和 Passive 的引脚已连接"
+          }
+        ],
+        "attempted": true,
+        "success": true
+      }
+    },
+    {
+      "key": "history",
+      "title": "Recent Operations",
+      "status": "info",
+      "data": {
+        "count": 13,
+        "entries": [
+          {
+            "time": "2026-05-29T18:04:11.228853+00:00",
+            "op": "mark_dirty",
+            "reason": "agent:build-ir",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T18:10:27.337224+00:00",
+            "op": "resolve_symbols",
+            "ok": true,
+            "total": 48,
+            "easyeda": 1,
+            "search_hint": 5,
+            "placeholder": 42,
+            "failed": 0
+          },
+          {
+            "time": "2026-05-29T18:10:27.339290+00:00",
+            "op": "mark_dirty",
+            "reason": "resolve-symbols",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T18:10:27.340270+00:00",
+            "op": "resolve_symbols",
+            "ok": true,
+            "elapsed_sec": 362.82,
+            "total": 48,
+            "easyeda": 1,
+            "search_hint": 5,
+            "placeholder": 42,
+            "failed": 0,
+            "model_updated": true
+          },
+          {
+            "time": "2026-05-29T18:10:42.148139+00:00",
+            "op": "mark_invalid",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T18:11:57.628812+00:00",
+            "op": "mark_valid",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T18:12:09.726560+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 48,
+            "nets": 16,
+            "sheets": 5,
+            "build_warnings": 38
+          },
+          {
+            "time": "2026-05-29T18:12:14.219700+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "403bec01",
+            "operation": "export_kicad_project",
+            "symbols": 48,
+            "nets": 16,
+            "sheets": 5,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\gd32_mini_stepper_driver.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\gd32_mini_stepper_driver.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL was not found in the configured KiCad footprint libraries.",
+              "U2 footprint JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR was not found in the configured KiCad footprint libraries.",
+              "U3 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U4 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U5 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U6 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U7 footprint JLC-MCP:SOIC-8 was not found in the configured KiCad footprint libraries.",
+              "Q1 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q2 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q3 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q4 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q5 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q6 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q7 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q8 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Y1 footprint JLC-MCP:CRYSTAL-SMD_3225 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "C7 footprint JLC-MCP:C1206 was not found in the configured KiCad footprint libraries.",
+              "C12 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "R4 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "R4 footprint JLC-MCP:R1206 was not found in the configured KiCad footprint libraries.",
+              "R5 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "R5 footprint JLC-MCP:R1206 was not found in the configured KiCad footprint libraries.",
+              "R10 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D1 footprint JLC-MCP:LED0603 was not found in the configured KiCad footprint libraries.",
+              "D2 footprint JLC-MCP:LED0603 was not found in the configured KiCad footprint libraries.",
+              "D3 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D3 footprint JLC-MCP:SOD-323 was not found in the configured KiCad footprint libraries.",
+              "D4 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D4 footprint JLC-MCP:SOD-323 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint JLC-MCP:USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint JLC-MCP:HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "J3 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "J3 footprint JLC-MCP:HDR-TH_3P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint JLC-MCP:SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 108,
+            "erc_violations": [
+              {
+                "type": "lib_symbol_issues",
+                "count": 44
+              },
+              {
+                "type": "footprint_link_issues",
+                "count": 42
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 22
+              }
+            ],
+            "build_sec": 0.98,
+            "erc_sec": 3.94,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T18:17:36.167996+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 48,
+            "nets": 16,
+            "sheets": 5,
+            "build_warnings": 38
+          },
+          {
+            "time": "2026-05-29T18:17:40.737305+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "403bec01",
+            "operation": "export_kicad_project",
+            "symbols": 48,
+            "nets": 16,
+            "sheets": 5,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\gd32_mini_stepper_driver.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\gd32_mini_stepper_driver.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL was not found in the configured KiCad footprint libraries.",
+              "U2 footprint JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR was not found in the configured KiCad footprint libraries.",
+              "U3 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U4 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U5 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U6 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U7 footprint JLC-MCP:SOIC-8 was not found in the configured KiCad footprint libraries.",
+              "Q1 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q2 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q3 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q4 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q5 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q6 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q7 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Q8 footprint JLC-MCP:SOT-23 was not found in the configured KiCad footprint libraries.",
+              "Y1 footprint JLC-MCP:CRYSTAL-SMD_3225 was not found in the configured KiCad footprint libraries.",
+              "C4 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "C7 footprint JLC-MCP:C1206 was not found in the configured KiCad footprint libraries.",
+              "C12 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "R4 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "R4 footprint JLC-MCP:R1206 was not found in the configured KiCad footprint libraries.",
+              "R5 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "R5 footprint JLC-MCP:R1206 was not found in the configured KiCad footprint libraries.",
+              "R10 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D1 footprint JLC-MCP:LED0603 was not found in the configured KiCad footprint libraries.",
+              "D2 footprint JLC-MCP:LED0603 was not found in the configured KiCad footprint libraries.",
+              "D3 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D3 footprint JLC-MCP:SOD-323 was not found in the configured KiCad footprint libraries.",
+              "D4 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D4 footprint JLC-MCP:SOD-323 was not found in the configured KiCad footprint libraries.",
+              "J1 footprint JLC-MCP:USB-C-SMD was not found in the configured KiCad footprint libraries.",
+              "J2 footprint JLC-MCP:HDR-TH_4P was not found in the configured KiCad footprint libraries.",
+              "J3 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "J3 footprint JLC-MCP:HDR-TH_3P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint JLC-MCP:SW-SMD was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 90,
+            "erc_violations": [
+              {
+                "type": "lib_symbol_issues",
+                "count": 35
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 34
+              },
+              {
+                "type": "footprint_link_issues",
+                "count": 21
+              }
+            ],
+            "build_sec": 1.2,
+            "erc_sec": 3.8,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T18:18:11.258807+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 48,
+            "nets": 16,
+            "sheets": 5,
+            "build_warnings": 33
+          },
+          {
+            "time": "2026-05-29T18:18:15.595241+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "872b4a23",
+            "operation": "export_kicad_project",
+            "symbols": 48,
+            "nets": 16,
+            "sheets": 5,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\gd32_mini_stepper_driver.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\gd32_mini_stepper_driver.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 footprint JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL was not found in the configured KiCad footprint libraries.",
+              "U2 footprint JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR was not found in the configured KiCad footprint libraries.",
+              "U3 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U4 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U5 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U6 footprint JLC-MCP:SOIC-8_L5.0-W4.0-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "U7 footprint JLC-MCP:SOP-8_L5.0-W3.9-P1.27-LS6.0-BL was not found in the configured KiCad footprint libraries.",
+              "Q1 footprint JLC-MCP:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR was not found in the configured KiCad footprint libraries.",
+              "Q3 footprint JLC-MCP:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR was not found in the configured KiCad footprint libraries.",
+              "Q5 footprint JLC-MCP:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR was not found in the configured KiCad footprint libraries.",
+              "Q7 footprint JLC-MCP:SOT-23_L2.9-W1.3-P1.90-LS2.4-BR was not found in the configured KiCad footprint libraries.",
+              "C4 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C5 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C6 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "C7 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "C7 footprint JLC-MCP:C1210 was not found in the configured KiCad footprint libraries.",
+              "C12 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
+              "R4 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "R4 footprint JLC-MCP:R1206 was not found in the configured KiCad footprint libraries.",
+              "R5 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "R5 footprint JLC-MCP:R1206 was not found in the configured KiCad footprint libraries.",
+              "R10 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D1 footprint JLC-MCP:LED-SMD_L1.6-W0.8-RD_GREEN-1 was not found in the configured KiCad footprint libraries.",
+              "D2 footprint JLC-MCP:LED-SMD_L1.6-W0.8-RD_GREEN-1 was not found in the configured KiCad footprint libraries.",
+              "D3 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D3 footprint JLC-MCP:SOD-123_L2.8-W1.8-LS3.7-RD was not found in the configured KiCad footprint libraries.",
+              "D4 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "D4 footprint JLC-MCP:SOD-123_L2.8-W1.8-LS3.7-RD was not found in the configured KiCad footprint libraries.",
+              "J1 footprint JLC-MCP:USB-C-SMD_USB-TYPE-C-006 was not found in the configured KiCad footprint libraries.",
+              "J2 footprint JLC-MCP:HDR-TH_4P-P2.54-H-M-W10.4 was not found in the configured KiCad footprint libraries.",
+              "J3 uses placeholder symbol AIAgent:Generic_2Pin; replace with verified KiCad library symbol later.",
+              "J3 footprint JLC-MCP:HDR-TH_3P was not found in the configured KiCad footprint libraries.",
+              "SW1 footprint JLC-MCP:SW-SMD_K5-1617SA-02 was not found in the configured KiCad footprint libraries."
+            ],
+            "erc_findings": 72,
+            "erc_violations": [
+              {
+                "type": "lib_symbol_issues",
+                "count": 35
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 34
+              },
+              {
+                "type": "footprint_link_issues",
+                "count": 3
+              }
+            ],
+            "build_sec": 1.17,
+            "erc_sec": 3.59,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\gd32-mini-stepper-driver\\output\\gd32_mini_stepper_driver\\agent-report.json"
+          },
+          {
+            "time": "2026-05-29T18:19:02.004879+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 48,
+            "nets": 16,
+            "sheets": 5,
+            "build_warnings": 33
+          }
+        ]
+      }
+    }
+  ],
+  "timing": {
+    "build_sec": 1.31,
+    "erc_sec": 3.67
+  }
+}
