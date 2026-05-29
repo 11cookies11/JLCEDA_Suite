@@ -1,6 +1,6 @@
 {
   "dsl": {
-    "hash": "5340b212",
+    "hash": "46aacbec",
     "path": "circuit-model.json",
     "valid": true
   },
@@ -18,64 +18,24 @@
     "constraint_count": 0,
     "power_rail_count": 0
   },
-  "status": "DIRTY",
+  "status": "BUILT",
   "diagnostics": {
     "errors": 0,
     "warnings": 0,
     "items": [
       {
-        "timestamp": "2026-05-28T22:43:04.954435+00:00",
+        "timestamp": "2026-05-29T12:23:39.667088+00:00",
         "level": "info",
-        "message": "api:set_component_search_hints"
-      },
-      {
-        "timestamp": "2026-05-28T22:43:06.239692+00:00",
-        "level": "info",
-        "message": "api:set_component_search_hints"
-      },
-      {
-        "timestamp": "2026-05-28T22:47:34.273992+00:00",
-        "level": "info",
-        "message": "api:set_component_search_hints"
-      },
-      {
-        "timestamp": "2026-05-28T22:49:53.560515+00:00",
-        "level": "info",
-        "message": "api:set_component_search_hints"
-      },
-      {
-        "timestamp": "2026-05-28T23:04:45.415619+00:00",
-        "level": "info",
-        "message": "api:set_component_search_hints"
-      },
-      {
-        "timestamp": "2026-05-28T23:04:46.659515+00:00",
-        "level": "info",
-        "message": "api:set_component_search_hints"
-      },
-      {
-        "timestamp": "2026-05-28T23:04:47.894843+00:00",
-        "level": "info",
-        "message": "api:set_component_search_hints"
-      },
-      {
-        "timestamp": "2026-05-28T23:04:49.219251+00:00",
-        "level": "info",
-        "message": "api:set_component_search_hints"
+        "message": "resolve-symbols"
       }
     ]
   },
   "build": {
     "last_build_ok": true,
-    "last_build_at": "2026-05-28T22:10:56.242214+00:00",
-    "input_dsl_hash": "03e4b540",
+    "last_build_at": "2026-05-29T12:23:45.196208+00:00",
+    "input_dsl_hash": "46aacbec",
     "outputs": {
-      "operation": "export_kicad_project",
-      "outputs": {
-        "kicad_project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_pro",
-        "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch",
-        "summary": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\kicad-write-summary.json"
-      }
+      "output_dir": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output"
     }
   }
 }

@@ -1,0 +1,1328 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-05-29T18:57:04",
+    "ignored_checks": [
+        {
+            "description": "Pin not connected",
+            "key": "pin_not_connected"
+        },
+        {
+            "description": "Unconnected \"no connection\" flag",
+            "key": "no_connect_dangling"
+        },
+        {
+            "description": "Label not connected",
+            "key": "label_dangling"
+        },
+        {
+            "description": "Label connected to only one pin",
+            "key": "isolated_pin_label"
+        },
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "Unconnected wire endpoint",
+            "key": "unconnected_wire_endpoint"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Symbol doesn't match copy in library",
+            "key": "lib_symbol_mismatch"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.1",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/bd503e36-27bc-47c5-a0fa-2919e570feb2",
+            "violations": [
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.888,
+                                "y": 0.178
+                            },
+                            "uuid": "704e189e-244e-4ad9-94a4-2044442d2fef"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "垂直线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.888,
+                                "y": 0.178
+                            },
+                            "uuid": "9c3efe11-c2ed-436d-87a6-8466cb9f53c4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "垂直线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.908,
+                                "y": 0.178
+                            },
+                            "uuid": "8c89d245-d82e-4f11-8eb5-05998a4aeabf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C6 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 1.1142,
+                                "y": 0.7542
+                            },
+                            "uuid": "11c46ebc-4cb2-43c7-aae2-5fd4b6aabeee"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.1142,
+                                "y": 0.7542
+                            },
+                            "uuid": "8e201b5e-8e4b-4328-9672-7e0b4f91455a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.4392,
+                                "y": 0.203
+                            },
+                            "uuid": "a84a7881-dc90-4590-bfb8-3bec027ae4b0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 1 [GND, Passive, Line]",
+                            "pos": {
+                                "x": 1.4392,
+                                "y": 0.213
+                            },
+                            "uuid": "0808573d-e3b6-498c-bf40-2b854f89dfb2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.4392,
+                                "y": 0.213
+                            },
+                            "uuid": "345bd49f-b8a9-4cb2-bc92-98557b92bd3f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C7 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.0842,
+                                "y": 0.9842
+                            },
+                            "uuid": "344569e0-0c4d-4af8-8930-0ebc8bb89279"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.0842,
+                                "y": 0.9842
+                            },
+                            "uuid": "9a069825-df3d-4338-aa7e-73aa0e71df83"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.1142,
+                                "y": 0.9842
+                            },
+                            "uuid": "e00c1633-981b-4f96-8b6d-7bf80cd884e8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.5292,
+                                "y": 0.203
+                            },
+                            "uuid": "e5472272-deb7-4b60-9dea-8d62f88aaf91"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8492,
+                                "y": 0.488
+                            },
+                            "uuid": "0e5ea0a2-6a97-4118-8904-87f159e6fcef"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.8492,
+                                "y": 0.488
+                            },
+                            "uuid": "442ae86b-4c5e-4dcf-9a70-d7c94bfdd3fb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8792,
+                                "y": 0.488
+                            },
+                            "uuid": "7e4b9c55-9ca0-4ccf-b1a1-1df59f9f37c3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.8492,
+                                "y": 0.718
+                            },
+                            "uuid": "07c0bc64-62cc-46c4-9c70-ab22ea551af4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8492,
+                                "y": 0.718
+                            },
+                            "uuid": "8fe123fa-3a11-4a32-ab91-e97abc338e7a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8792,
+                                "y": 0.718
+                            },
+                            "uuid": "b30a3a3e-21f7-4842-be17-8bf092349f3e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C3 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.8492,
+                                "y": 0.948
+                            },
+                            "uuid": "4b7a1008-e282-445c-abe5-f5483b5fe75c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8492,
+                                "y": 0.948
+                            },
+                            "uuid": "d06b333f-533e-4b3f-b9ee-2eac508da7a1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8792,
+                                "y": 0.948
+                            },
+                            "uuid": "de6b68ff-d78f-462a-9943-1b9f81a36b61"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8642,
+                                "y": 1.198
+                            },
+                            "uuid": "479392a2-a110-4515-8ad1-fc4f16376ac1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C5 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.8642,
+                                "y": 1.198
+                            },
+                            "uuid": "9c6c5bc5-1375-4b50-8e03-322073df1cd7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.8942,
+                                "y": 1.198
+                            },
+                            "uuid": "5f51638d-c2a5-41ca-99aa-91991a0219c2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.093
+                            },
+                            "uuid": "2a3e1214-ff63-47b2-b4b9-ccf815be6626"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.103
+                            },
+                            "uuid": "75987e60-c367-40ef-9caf-08e6a35c6bd1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.203
+                            },
+                            "uuid": "8d770d1f-1ea3-4aed-b4e2-93c6d59b7581"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.243
+                            },
+                            "uuid": "2a6189c2-26f0-4386-9bb2-b7ef4fb3d3aa"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.253
+                            },
+                            "uuid": "4de5766f-59ee-4482-b566-258704f36bb0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.263
+                            },
+                            "uuid": "bcc0726e-6375-4e07-9421-bf52f4177793"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.273
+                            },
+                            "uuid": "c2189715-c62c-4b47-94ec-431d5287e784"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.283
+                            },
+                            "uuid": "c5ad7100-9b2f-4341-b642-dcf0b660f85d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.313
+                            },
+                            "uuid": "e884e2a0-baaa-4c65-8e2d-a9f52913df6a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.323
+                            },
+                            "uuid": "7080b56e-ce2a-4cc2-8246-ed28ebfb97e5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 1 [VBAT, Passive, Line]",
+                            "pos": {
+                                "x": 0.823,
+                                "y": 0.323
+                            },
+                            "uuid": "7d21a552-fe72-48ed-a641-624cf3e14bb4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.993,
+                                "y": 0.183
+                            },
+                            "uuid": "49e02d80-5a06-49d1-b85a-75748315aed0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.993,
+                                "y": 0.193
+                            },
+                            "uuid": "6f6e720f-67ab-4997-b515-3fd40a300ed8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.993,
+                                "y": 0.203
+                            },
+                            "uuid": "764f8ea6-9cab-40b4-b720-2716fad6159b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.993,
+                                "y": 0.213
+                            },
+                            "uuid": "9f312644-1f7c-4068-9fd2-6f5eea97854a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.993,
+                                "y": 0.283
+                            },
+                            "uuid": "38d9e895-5297-4cc8-ba49-590381093a30"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.993,
+                                "y": 0.313
+                            },
+                            "uuid": "7c873670-4e02-4511-93c6-e1b073dd375b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.993,
+                                "y": 0.323
+                            },
+                            "uuid": "ca861e53-2b5c-4f67-896e-71f51b64a793"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C8 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.368,
+                                "y": 0.7542
+                            },
+                            "uuid": "5c35e306-c48f-4163-864a-5ed17703c1b7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.368,
+                                "y": 0.7542
+                            },
+                            "uuid": "6d891a0c-2456-46f8-9d9e-cf57bbdf95f8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.398,
+                                "y": 0.7542
+                            },
+                            "uuid": "b5abe7f5-4c65-4bdc-af3f-222bfd6f5744"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol C9 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.368,
+                                "y": 0.9842
+                            },
+                            "uuid": "d6dfbc0f-cf66-44e9-8139-dce3540d86a1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.368,
+                                "y": 0.9842
+                            },
+                            "uuid": "e170e8a2-1270-4cfe-a99c-70a1f4af2657"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.398,
+                                "y": 0.9842
+                            },
+                            "uuid": "ee600929-4d51-461c-9ec2-e8419780a2f5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol Y1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.738,
+                                "y": 0.198
+                            },
+                            "uuid": "3a8c22f2-7923-4e41-9fc3-d503e2dfc6e6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.738,
+                                "y": 0.198
+                            },
+                            "uuid": "e506fcfa-c347-40c0-b245-f1aa66cb6206"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.798,
+                                "y": 0.218
+                            },
+                            "uuid": "0e282293-2040-4120-af0c-d83ec9c4f80f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.228,
+                                "y": 0.508
+                            },
+                            "uuid": "3e1a4f21-8cdc-40f1-acce-3bbd9e34ba30"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol R1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 2.228,
+                                "y": 0.508
+                            },
+                            "uuid": "c7b64f3e-1d5c-4e46-bcf3-f71551dc9a8d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.268,
+                                "y": 0.508
+                            },
+                            "uuid": "c237ca06-48bf-4d1e-8132-6fe8d14d74ca"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.228,
+                                "y": 0.738
+                            },
+                            "uuid": "792ae126-088e-4426-9cf4-55de1b9fd1a7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol R2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 2.228,
+                                "y": 0.738
+                            },
+                            "uuid": "7ef4a18d-11e3-4e48-b954-f754b7705ec3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.268,
+                                "y": 0.738
+                            },
+                            "uuid": "8907788a-0767-46e5-b7d9-a0e7bd6f96d0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol SW1 引脚 1 [a, Passive, Line]",
+                            "pos": {
+                                "x": 2.558,
+                                "y": 0.693
+                            },
+                            "uuid": "1350ad1c-2813-44f6-80a6-45f1a0cc6747"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.558,
+                                "y": 0.693
+                            },
+                            "uuid": "efc5230a-2a0c-49a8-a4fa-b2942aed7ce3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 2.638,
+                                "y": 0.693
+                            },
+                            "uuid": "5d0ba4e2-5850-468b-829a-bad2dd984981"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol R3 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.738
+                            },
+                            "uuid": "08599edb-b607-401d-82c3-50124c58c7ce"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.738
+                            },
+                            "uuid": "beea7826-47f8-40a1-b03d-8fd6aaa7f064"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol D1 引脚 1 [K, Passive, Line]",
+                            "pos": {
+                                "x": 0.888,
+                                "y": 0.218
+                            },
+                            "uuid": "5c5ecb47-3c3c-4fff-a728-97b406604798"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.888,
+                                "y": 0.218
+                            },
+                            "uuid": "a69a0847-f9ab-4cef-8ecc-7a5a7e5f26b0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.548,
+                                "y": 0.738
+                            },
+                            "uuid": "b955b050-5aa2-4cc3-9f46-acae8195b66e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 0.928,
+                                "y": 0.218
+                            },
+                            "uuid": "527b6a28-f873-412c-ac5a-c6465d38f0c0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.628,
+                                "y": 0.168
+                            },
+                            "uuid": "5c31da47-3278-4b3a-8208-c610d9f0ffba"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.628,
+                                "y": 0.178
+                            },
+                            "uuid": "6e17192c-9170-4955-9ecc-c9e2f1c5fcb3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.628,
+                                "y": 0.188
+                            },
+                            "uuid": "1102ec76-c718-4b5a-92a9-145ca22824df"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "水平线, 长度 0.0381 mm",
+                            "pos": {
+                                "x": 1.628,
+                                "y": 0.198
+                            },
+                            "uuid": "2697be74-8ea6-456a-a8b4-2c2b6adb45d2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                },
+                {
+                    "description": "Symbol pin or wire end off connection grid",
+                    "items": [
+                        {
+                            "description": "Symbol J2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.628,
+                                "y": 0.198
+                            },
+                            "uuid": "2a3475b5-d9cd-408e-bade-c82cc7e43315"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "endpoint_off_grid"
+                }
+            ]
+        },
+        {
+            "path": "/power/",
+            "uuid_path": "/bd503e36-27bc-47c5-a0fa-2919e570feb2/9a193359-0071-4f81-ad0c-dab61625a460",
+            "violations": [
+                {
+                    "description": "类型为 Power output 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "051f9fbd-0ff5-43ce-8622-17eed8589003"
+                        },
+                        {
+                            "description": "Symbol #FLG102 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2954
+                            },
+                            "uuid": "0ebad719-c4b3-4887-ac37-b1d65d6261a8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Power output 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol #FLG102 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2954
+                            },
+                            "uuid": "0ebad719-c4b3-4887-ac37-b1d65d6261a8"
+                        },
+                        {
+                            "description": "Symbol #FLG301 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "55c3483b-045c-42b3-85f4-ac8cb60efef8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/mcu/",
+            "uuid_path": "/bd503e36-27bc-47c5-a0fa-2919e570feb2/37ca98ed-bffc-493c-884c-9fe189f60e3c",
+            "violations": [
+                {
+                    "description": "类型为 Power output 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol #FLG200 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "902a5eca-420a-419e-94c9-9bef98e1d482"
+                        },
+                        {
+                            "description": "Symbol #FLG201 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "f0c9b908-a01b-4257-8947-e425b15f0505"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Power output 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol #FLG201 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "f0c9b908-a01b-4257-8947-e425b15f0505"
+                        },
+                        {
+                            "description": "Symbol #FLG301 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "55c3483b-045c-42b3-85f4-ac8cb60efef8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "+3V3 和 NRST 都连接到同一项上; 将使用 +3V3 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 '+3V3'",
+                            "pos": {
+                                "x": 0.8611,
+                                "y": 0.093
+                            },
+                            "uuid": "3792d469-6c64-4f23-8d9a-10d3b8fcdfb6"
+                        },
+                        {
+                            "description": "标签 'NRST'",
+                            "pos": {
+                                "x": 0.8611,
+                                "y": 0.263
+                            },
+                            "uuid": "978b46d2-985b-487c-8503-e6c5197c3730"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "GND 和 BOOT0 都连接到同一项上; 将使用 GND 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 'GND'",
+                            "pos": {
+                                "x": 0.8611,
+                                "y": 0.313
+                            },
+                            "uuid": "66588644-acd8-4763-a77a-02f96ba773e7"
+                        },
+                        {
+                            "description": "标签 'BOOT0'",
+                            "pos": {
+                                "x": 0.9549,
+                                "y": 0.283
+                            },
+                            "uuid": "b1da0aec-58ad-4ecf-841b-cf750ba42ee3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                }
+            ]
+        },
+        {
+            "path": "/io/",
+            "uuid_path": "/bd503e36-27bc-47c5-a0fa-2919e570feb2/f2846288-4d1c-47fd-8b6e-b5815967a0bf",
+            "violations": [
+                {
+                    "description": "类型为 Power output 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol #FLG300 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "3175931a-a60e-42f1-86c5-b554967d7131"
+                        },
+                        {
+                            "description": "Symbol #FLG301 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "55c3483b-045c-42b3-85f4-ac8cb60efef8"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "+3V3 和 GND 都连接到同一项上; 将使用 +3V3 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "全局标签 '+3V3'",
+                            "pos": {
+                                "x": 0.9261,
+                                "y": 0.218
+                            },
+                            "uuid": "d5b4056c-e435-4b18-996b-0e75a39b1a63"
+                        },
+                        {
+                            "description": "全局标签 'GND'",
+                            "pos": {
+                                "x": 0.8899,
+                                "y": 0.218
+                            },
+                            "uuid": "2501fad6-6144-4d81-9b78-1b2676dfecf5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                }
+            ]
+        }
+    ],
+    "source": "stm32f103_minimal_system.kicad_sch"
+}

@@ -1,6 +1,6 @@
 {
   "schema_version": "circuit-model.v1",
-  "request_id": "agent-create_hardware_project-20260528T220716Z",
+  "request_id": "agent-create",
   "project_id": "stm32f103-minimal-system",
   "topology": "stm32f103_minimal_system",
   "components": [
@@ -9,10 +9,6 @@
       "role": "mcu",
       "value": "STM32F103C8T6",
       "package": "LQFP-48",
-      "search_hints": [
-        "STM32F103C8T6",
-        "STM32F103 LQFP-48"
-      ],
       "selected_part": {
         "lcsc_id": "C8734",
         "display_name": "STM32F103C8T6"
@@ -23,10 +19,6 @@
       "role": "main_3v3_regulator",
       "value": "AMS1117-3.3",
       "package": "SOT-223",
-      "search_hints": [
-        "AMS1117-3.3 SOT-223",
-        "AMS1117 3.3V"
-      ],
       "selected_part": {
         "lcsc_id": "C6186",
         "display_name": "AMS1117-3.3"
@@ -36,10 +28,7 @@
       "ref": "Y1",
       "role": "main_8mhz_xtal",
       "value": "8MHz",
-      "package": "CRYSTAL-SMD_3225-4P-L3.2-W2.5-BL",
-      "search_hints": [
-        "8MHz crystal SMD 3225"
-      ],
+      "package": "CRYSTAL-SMD_3225",
       "selected_part": {
         "lcsc_id": "C5265856",
         "display_name": "HY8MSMD3225OB1R30"
@@ -158,49 +147,42 @@
     {
       "ref": "D1",
       "role": "power_led",
-      "value": "LED0603-GREEN",
+      "value": "LED0603",
       "package": "LED0603",
-      "search_hints": [
-        "SMD LED",
-        "LED 0603 SMD",
-        "indicator LED"
-      ],
-      "hints": ""
+      "selected_part": {
+        "lcsc_id": "C5139863",
+        "display_name": "APHD1608LCGCK"
+      }
     },
     {
       "ref": "J1",
       "role": "usb_c_power_input",
       "value": "USB-C16PIN",
-      "package": "USB-C-SMD_TYPE-C16PIN",
-      "search_hints": [
-        "TYPE-C SMD 16P",
-        "USB C SMD connector",
-        "USB type C"
-      ],
-      "hints": ""
+      "package": "USB-C-SMD",
+      "selected_part": {
+        "lcsc_id": "C165849",
+        "display_name": "P-5V"
+      }
     },
     {
       "ref": "J2",
       "role": "swd_debug_header",
       "value": "SWD-4P",
-      "package": "HDR-TH_4P-P2.54-V-M-1",
-      "search_hints": [
-        "2.54mm male header 1x4",
-        "pin header 4P 2.54mm"
-      ],
-      "hints": ""
+      "package": "HDR-TH_4P",
+      "selected_part": {
+        "lcsc_id": "C124378",
+        "display_name": "Header-Male-2.54_1x4"
+      }
     },
     {
       "ref": "SW1",
       "role": "reset_button",
       "value": "SW-TH_6x6",
       "package": "SW-TH",
-      "search_hints": [
-        "tact switch SMD",
-        "SMD tactile push button",
-        "push switch SMD"
-      ],
-      "hints": ""
+      "selected_part": {
+        "lcsc_id": "C145829",
+        "display_name": "K5-1617SA-01"
+      }
     }
   ],
   "nets": [
@@ -322,5 +304,59 @@
   "design_decisions": [],
   "risks": [],
   "constraints": [],
-  "sheets": []
+  "sheets": [
+    {
+      "name": "power",
+      "components": [
+        "J1",
+        "U2",
+        "C6",
+        "C7",
+        "C1",
+        "C2",
+        "C3",
+        "C5"
+      ],
+      "nets": [
+        "+5V",
+        "+3V3",
+        "GND"
+      ]
+    },
+    {
+      "name": "mcu",
+      "components": [
+        "U1",
+        "Y1",
+        "C8",
+        "C9",
+        "R1",
+        "R2",
+        "SW1"
+      ],
+      "nets": [
+        "+3V3",
+        "GND",
+        "NRST",
+        "BOOT0",
+        "HSE_IN",
+        "HSE_OUT"
+      ]
+    },
+    {
+      "name": "io",
+      "components": [
+        "R3",
+        "D1",
+        "J2"
+      ],
+      "nets": [
+        "+3V3",
+        "GND",
+        "LED",
+        "SWCLK",
+        "SWDIO"
+      ]
+    }
+  ]
 }

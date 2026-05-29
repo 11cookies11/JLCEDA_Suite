@@ -1,0 +1,502 @@
+{
+  "schema_version": "report.v1",
+  "generated_at": "2026-05-29T12:23:45.191488+00:00",
+  "overall_status": "ok",
+  "project": {
+    "name": "stm32f103_minimal_system",
+    "id": "stm32f103-minimal-system",
+    "status": "DIRTY"
+  },
+  "sections": [
+    {
+      "key": "project",
+      "title": "Project Overview",
+      "status": "info",
+      "data": {
+        "project_name": "stm32f103_minimal_system",
+        "project_id": "stm32f103-minimal-system",
+        "status": "DIRTY"
+      }
+    },
+    {
+      "key": "summary",
+      "title": "Summary",
+      "status": "info",
+      "data": {
+        "component_count": 0,
+        "net_count": 0,
+        "risk_count": 0,
+        "sheet_count": 0,
+        "calculation_count": 0,
+        "decision_count": 0,
+        "constraint_count": 0,
+        "power_rail_count": 0
+      }
+    },
+    {
+      "key": "dsl",
+      "title": "DSL Status",
+      "status": "ok",
+      "data": {
+        "path": "circuit-model.json",
+        "hash": "46aacbec",
+        "valid": true
+      }
+    },
+    {
+      "key": "build",
+      "title": "Build Status",
+      "status": "ok",
+      "data": {
+        "last_build_ok": true,
+        "last_build_at": "2026-05-29T12:21:49.402974+00:00",
+        "input_dsl_hash": "46aacbec",
+        "stale": false
+      }
+    },
+    {
+      "key": "diagnostics",
+      "title": "Diagnostics",
+      "status": "ok",
+      "data": {
+        "errors": 0,
+        "warnings": 0,
+        "items": [
+          {
+            "timestamp": "2026-05-29T12:23:39.667088+00:00",
+            "level": "info",
+            "message": "resolve-symbols"
+          }
+        ]
+      }
+    },
+    {
+      "key": "ir",
+      "title": "Resolved Hardware IR",
+      "status": "ok",
+      "data": {
+        "schema_version": "ir.v1",
+        "compiled": true,
+        "component_count": 18,
+        "net_count": 10,
+        "error": null
+      }
+    },
+    {
+      "key": "components",
+      "title": "Component Symbol Status",
+      "status": "ok",
+      "data": {
+        "status": "ok",
+        "total": 18,
+        "resolved": 18,
+        "placeholder": 0,
+        "items": [
+          {
+            "ref": "U1",
+            "role": "mcu",
+            "value": "STM32F103C8T6",
+            "lcsc_id": "C8734",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U2",
+            "role": "main_3v3_regulator",
+            "value": "AMS1117-3.3",
+            "lcsc_id": "C6186",
+            "symbol_ok": true
+          },
+          {
+            "ref": "Y1",
+            "role": "main_8mhz_xtal",
+            "value": "8MHz",
+            "lcsc_id": "C5265856",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C1",
+            "role": "vdd_decoupling_1",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C2",
+            "role": "vdd_decoupling_2",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C3",
+            "role": "vdd_decoupling_3",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C5",
+            "role": "vdd_bulk_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C6",
+            "role": "reg_input_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C7",
+            "role": "reg_output_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C8",
+            "role": "hse_load_cap_1",
+            "value": "22pF",
+            "lcsc_id": "C1653",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C9",
+            "role": "hse_load_cap_2",
+            "value": "22pF",
+            "lcsc_id": "C1653",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R1",
+            "role": "nrst_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R2",
+            "role": "boot0_pulldown",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R3",
+            "role": "led_resistor",
+            "value": "1K",
+            "lcsc_id": "C14676",
+            "symbol_ok": true
+          },
+          {
+            "ref": "D1",
+            "role": "power_led",
+            "value": "LED0603",
+            "lcsc_id": "C5139863",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J1",
+            "role": "usb_c_power_input",
+            "value": "USB-C16PIN",
+            "lcsc_id": "C165849",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J2",
+            "role": "swd_debug_header",
+            "value": "SWD-4P",
+            "lcsc_id": "C124378",
+            "symbol_ok": true
+          },
+          {
+            "ref": "SW1",
+            "role": "reset_button",
+            "value": "SW-TH_6x6",
+            "lcsc_id": "C145829",
+            "symbol_ok": true
+          }
+        ]
+      }
+    },
+    {
+      "key": "risks",
+      "title": "Risks",
+      "status": "ok",
+      "data": {
+        "total": 0,
+        "open": 0,
+        "items": []
+      }
+    },
+    {
+      "key": "erc",
+      "title": "ERC",
+      "status": "ok",
+      "data": {
+        "finding_count": 33,
+        "warnings": [],
+        "violations": [
+          {
+            "type": "pin_to_pin",
+            "count": 28,
+            "severity": "warning",
+            "example": "类型为 Unspecified 和 Unspecified 的引脚已连接"
+          },
+          {
+            "type": "pin_not_driven",
+            "count": 5,
+            "severity": "warning",
+            "example": "Input pin not driven by any Output pins"
+          }
+        ],
+        "attempted": true,
+        "success": true
+      }
+    },
+    {
+      "key": "history",
+      "title": "Recent Operations",
+      "status": "info",
+      "data": {
+        "count": 15,
+        "entries": [
+          {
+            "time": "2026-05-29T10:09:54.447465+00:00",
+            "op": "mark_valid",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T10:11:24.195153+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "262962b6"
+          },
+          {
+            "time": "2026-05-29T10:44:11.565691+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "262962b6"
+          },
+          {
+            "time": "2026-05-29T10:46:39.560072+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "262962b6"
+          },
+          {
+            "time": "2026-05-29T10:57:01.088176+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "262962b6"
+          },
+          {
+            "time": "2026-05-29T11:15:32.881956+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "262962b6"
+          },
+          {
+            "time": "2026-05-29T11:19:32.255312+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "262962b6"
+          },
+          {
+            "time": "2026-05-29T11:59:05.734695+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "46aacbec"
+          },
+          {
+            "time": "2026-05-29T12:02:33.630933+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "46aacbec"
+          },
+          {
+            "time": "2026-05-29T12:08:47.643780+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "46aacbec",
+            "operation": "export_kicad_project",
+            "symbols": 18,
+            "nets": 10,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch"
+            },
+            "erc_findings": 33,
+            "build_sec": 0.18,
+            "erc_sec": 3.56,
+            "report_status": "?",
+            "report_path": ""
+          },
+          {
+            "time": "2026-05-29T12:09:52.570979+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "46aacbec",
+            "operation": "export_kicad_project",
+            "symbols": 18,
+            "nets": 10,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 has no KiCad footprint assignment.",
+              "U2 has no KiCad footprint assignment.",
+              "Y1 has no KiCad footprint assignment.",
+              "C1 has no KiCad footprint assignment.",
+              "C2 has no KiCad footprint assignment.",
+              "C3 has no KiCad footprint assignment.",
+              "C5 has no KiCad footprint assignment.",
+              "C6 has no KiCad footprint assignment.",
+              "C7 has no KiCad footprint assignment.",
+              "C8 has no KiCad footprint assignment.",
+              "C9 has no KiCad footprint assignment.",
+              "R1 has no KiCad footprint assignment.",
+              "R2 has no KiCad footprint assignment.",
+              "R3 has no KiCad footprint assignment.",
+              "D1 has no KiCad footprint assignment.",
+              "J1 has no KiCad footprint assignment.",
+              "J2 has no KiCad footprint assignment.",
+              "SW1 has no KiCad footprint assignment."
+            ],
+            "erc_findings": 33,
+            "erc_violations": [],
+            "build_sec": 0.18,
+            "erc_sec": 3.54,
+            "report_status": "?",
+            "report_path": ""
+          },
+          {
+            "time": "2026-05-29T12:10:38.159465+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "46aacbec",
+            "operation": "export_kicad_project",
+            "symbols": 18,
+            "nets": 10,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 has no KiCad footprint assignment.",
+              "U2 has no KiCad footprint assignment.",
+              "Y1 has no KiCad footprint assignment.",
+              "C1 has no KiCad footprint assignment.",
+              "C2 has no KiCad footprint assignment.",
+              "C3 has no KiCad footprint assignment.",
+              "C5 has no KiCad footprint assignment.",
+              "C6 has no KiCad footprint assignment.",
+              "C7 has no KiCad footprint assignment.",
+              "C8 has no KiCad footprint assignment.",
+              "C9 has no KiCad footprint assignment.",
+              "R1 has no KiCad footprint assignment.",
+              "R2 has no KiCad footprint assignment.",
+              "R3 has no KiCad footprint assignment.",
+              "D1 has no KiCad footprint assignment.",
+              "J1 has no KiCad footprint assignment.",
+              "J2 has no KiCad footprint assignment.",
+              "SW1 has no KiCad footprint assignment."
+            ],
+            "erc_findings": 33,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 28
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 5
+              }
+            ],
+            "build_sec": 0.18,
+            "erc_sec": 3.58,
+            "report_status": "?",
+            "report_path": ""
+          },
+          {
+            "time": "2026-05-29T12:21:49.403212+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "46aacbec",
+            "operation": "export_kicad_project",
+            "symbols": 18,
+            "nets": 10,
+            "sheets": 4,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\stm32f103-minimal-system\\output\\stm32f103_minimal_system\\stm32f103_minimal_system.kicad_sch"
+            },
+            "build_warnings": [
+              "U1 has no KiCad footprint assignment.",
+              "U2 has no KiCad footprint assignment.",
+              "Y1 has no KiCad footprint assignment.",
+              "C1 has no KiCad footprint assignment.",
+              "C2 has no KiCad footprint assignment.",
+              "C3 has no KiCad footprint assignment.",
+              "C5 has no KiCad footprint assignment.",
+              "C6 has no KiCad footprint assignment.",
+              "C7 has no KiCad footprint assignment.",
+              "C8 has no KiCad footprint assignment.",
+              "C9 has no KiCad footprint assignment.",
+              "R1 has no KiCad footprint assignment.",
+              "R2 has no KiCad footprint assignment.",
+              "R3 has no KiCad footprint assignment.",
+              "D1 has no KiCad footprint assignment.",
+              "J1 has no KiCad footprint assignment.",
+              "J2 has no KiCad footprint assignment.",
+              "SW1 has no KiCad footprint assignment."
+            ],
+            "erc_findings": 33,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 28
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 5
+              }
+            ],
+            "build_sec": 0.19,
+            "erc_sec": 3.65,
+            "report_status": "?",
+            "report_path": ""
+          },
+          {
+            "time": "2026-05-29T12:23:39.667447+00:00",
+            "op": "mark_dirty",
+            "reason": "resolve-symbols",
+            "ok": true
+          },
+          {
+            "time": "2026-05-29T12:23:39.669009+00:00",
+            "op": "resolve_symbols",
+            "ok": true,
+            "elapsed_sec": 62.49,
+            "total": 18,
+            "easyeda": 0,
+            "search_hint": 0,
+            "placeholder": 18,
+            "failed": 0,
+            "model_updated": true
+          }
+        ]
+      }
+    }
+  ],
+  "timing": {
+    "build_sec": 0.21,
+    "erc_sec": 3.97
+  }
+}
