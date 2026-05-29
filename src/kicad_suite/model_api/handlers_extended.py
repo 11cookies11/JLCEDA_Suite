@@ -560,6 +560,13 @@ class _ExtendedHandlers:
                             inject_jlc_symbols(schematic_file)
                         except Exception:
                             pass
+                        # Generate PCB
+                        try:
+                            from ..pcb_generator import generate_pcb
+                            pcb_result = generate_pcb(asdict(plan), project_path=source_project)
+                            result["pcb"] = pcb_result
+                        except Exception:
+                            pass
                         try:
                             pin_result = pin_project_libraries(project_out)
                             result["library_pins"] = pin_result

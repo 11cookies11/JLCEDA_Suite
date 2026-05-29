@@ -6,6 +6,7 @@ import os
 import re
 import sys
 import uuid
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -1804,7 +1805,33 @@ def write_project(plan: dict[str, Any], project_path: str | Path | None = None) 
     summary_file = output_dir / 'kicad-write-summary.json'
     summary_file.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     summary['summary_file'] = str(summary_file)
+
+    # Log build result — always logged regardless of how write_project is called
+    _log_build(_PROJECT_PATH, summary, plan.get("diagnostics", {}))
+
     return summary
+
+
+def _log_build(project_path: Path | None, summary: dict[str, Any], diagnostics: Any) -> None:
+    """Append a build entry to the project's operations.jsonl."""
+    if not project_path:
+        return
+    log_dir = project_path / "logs"
+    log_dir.mkdir(parents=True, exist_ok=True)
+    log_path = log_dir / "operations.jsonl"
+    diags = diagnostics if isinstance(diagnostics, dict) else {}
+    unsupported = diags.get("unsupported", []) if isinstance(diags, dict) else []
+    entry = {
+        "time": datetime.now(timezone.utc).isoformat(),
+        "op": "build",
+        "ok": True,
+        "symbols": summary.get("symbol_count", 0),
+        "nets": summary.get("net_count", 0),
+        "sheets": summary.get("hierarchical_sheets", {}).get("sheet_count", 0) if isinstance(summary.get("hierarchical_sheets"), dict) else 0,
+        "build_warnings": len(unsupported),
+    }
+    with log_path.open("a", encoding="utf-8") as fh:
+        fh.write(json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 def run() -> None:
