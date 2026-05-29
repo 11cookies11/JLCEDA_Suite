@@ -198,18 +198,14 @@ def pin_project_libraries(project_dir: Path) -> dict[str, Any]:
     }
 
 
-def inject_jlc_symbols(schematic_path: Path) -> bool:
-    """Replace JLC-MCP 2-pin stubs with full symbol definitions from library files."""
+def _inject_symbols_into_sheet(sch_path: Path, lib_name: str, lib_content: str) -> int:
+    """Replace 2-pin stubs in one schematic file.  Returns number of replacements."""
     import re
 
-    sym_dir = schematic_path.parent / "libraries" / "symbols"
-    if not sym_dir.exists():
-        return False
-
-    sch = schematic_path.read_text(encoding="utf-8")
+    sch = sch_path.read_text(encoding="utf-8")
     lib_start = sch.find("(lib_symbols")
     if lib_start < 0:
-        return False
+        return 0
 
     depth = 0
     lib_end = lib_start
@@ -224,66 +220,69 @@ def inject_jlc_symbols(schematic_path: Path) -> bool:
     lib_section = sch[lib_start:lib_end]
 
     replaced = 0
-    for lib_file in sorted(sym_dir.glob("JLC-MCP-*.kicad_sym")):
-        lib_name = lib_file.stem
-        lib_content = lib_file.read_text(encoding="utf-8")
-        for sym_match in re.finditer(r'\(symbol\s+"([^"]+)"', lib_content):
-            sym_name = sym_match.group(1)
-            if re.search(r"_\d+_\d+$", sym_name):
-                continue
-            full_lib_id = lib_name + ":" + sym_name
-            if '(symbol "' + full_lib_id + '"' not in lib_section:
-                continue
-            start = sym_match.start()
-            depth2, end = 0, start
-            for index in range(start, len(lib_content)):
-                if lib_content[index] == "(":
-                    depth2 += 1
-                elif lib_content[index] == ")":
-                    depth2 -= 1
-                    if depth2 == 0:
-                        end = index + 1
-                        break
-            full_def = lib_content[start:end]
-            derived: list[tuple[str, str]] = []
-            pattern = re.compile(r'\(symbol\s+"' + re.escape(sym_name) + r'_\d+_\d+"')
-            for derived_match in pattern.finditer(lib_content):
-                derived_start = derived_match.start()
-                depth3, derived_end = 0, derived_start
-                for index in range(derived_start, len(lib_content)):
-                    if lib_content[index] == "(":
-                        depth3 += 1
-                    elif lib_content[index] == ")":
-                        depth3 -= 1
-                        if depth3 == 0:
-                            derived_end = index + 1
-                            break
-                derived_name = derived_match.group(0).split('"')[1]
-                derived.append((derived_name, lib_content[derived_start:derived_end]))
-            stub_start = lib_section.find('(symbol "' + full_lib_id + '"')
-            if stub_start < 0:
-                continue
-            depth4, stub_end = 0, stub_start
-            for index in range(stub_start, len(lib_section)):
-                if lib_section[index] == "(":
-                    depth4 += 1
-                elif lib_section[index] == ")":
-                    depth4 -= 1
-                    if depth4 == 0:
-                        stub_end = index + 1
-                        break
-            old_stub = lib_section[stub_start:stub_end]
-            new_content = full_def.replace('(symbol "' + sym_name + '"', '(symbol "' + full_lib_id + '"', 1)
-            for derived_name, derived_def in derived:
-                prefixed = lib_name + ":" + derived_name
-                derived_def2 = derived_def.replace('(symbol "' + derived_name + '"', '(symbol "' + prefixed + '"', 1)
-                new_content += "\n" + derived_def2
-            lib_section = lib_section.replace(old_stub, new_content.strip(), 1)
-            replaced += 1
+    for sym_match in re.finditer(r'\(symbol\s+"([^"]+)"', lib_content):
+        sym_name = sym_match.group(1)
+        if re.search(r"_\d+_\d+$", sym_name):
+            continue
+        full_lib_id = lib_name + ":" + sym_name
+        if '(symbol "' + full_lib_id + '"' not in lib_section:
+            continue
+        start = sym_match.start()
+        depth2, end = 0, start
+        for index in range(start, len(lib_content)):
+            if lib_content[index] == "(":
+                depth2 += 1
+            elif lib_content[index] == ")":
+                depth2 -= 1
+                if depth2 == 0:
+                    end = index + 1
+                    break
+        full_def = lib_content[start:end]
+
+        stub_start = lib_section.find('(symbol "' + full_lib_id + '"')
+        if stub_start < 0:
+            continue
+        depth4, stub_end = 0, stub_start
+        for index in range(stub_start, len(lib_section)):
+            if lib_section[index] == "(":
+                depth4 += 1
+            elif lib_section[index] == ")":
+                depth4 -= 1
+                if depth4 == 0:
+                    stub_end = index + 1
+                    break
+        old_stub = lib_section[stub_start:stub_end]
+        new_content = full_def.replace('(symbol "' + sym_name + '"', '(symbol "' + full_lib_id + '"', 1)
+        lib_section = lib_section.replace(old_stub, new_content.strip(), 1)
+        replaced += 1
 
     if replaced > 0:
-        schematic_path.write_text(sch[:lib_start] + lib_section + sch[lib_end:], encoding="utf-8")
-    return replaced > 0
+        sch_path.write_text(sch[:lib_start] + lib_section + sch[lib_end:], encoding="utf-8")
+    return replaced
+
+
+def inject_jlc_symbols(schematic_path: Path) -> bool:
+    """Replace JLC-MCP 2-pin stubs with full symbol definitions from library files.
+
+    Processes the root schematic AND all hierarchical sub-sheets.
+    """
+    proj_libs = _find_project_libraries_dir(schematic_path.parent)
+    sym_dir = (proj_libs / "symbols") if proj_libs else (schematic_path.parent / "libraries" / "symbols")
+    if not sym_dir.exists():
+        return False
+
+    lib_files = sorted(sym_dir.glob("JLC-MCP*.kicad_sym"))
+    if not lib_files:
+        return False
+
+    total_replaced = 0
+    for lib_file in lib_files:
+        lib_name = lib_file.stem
+        lib_content = lib_file.read_text(encoding="utf-8")
+        for sch_path in sorted(schematic_path.parent.glob("*.kicad_sch")):
+            total_replaced += _inject_symbols_into_sheet(sch_path, lib_name, lib_content)
+
+    return total_replaced > 0
 
 
 def register_jlc_libraries(project_dir: Path) -> dict[str, Any]:

@@ -931,19 +931,125 @@
         "tgt_uart_tx_series_resistor": "target",
         "tgt_uart_rx_series_resistor": "target"
       },
-      "block_order": ["power", "mcu", "rf", "target", "indicator"],
+      "block_order": [
+        "power",
+        "mcu",
+        "rf",
+        "target",
+        "indicator"
+      ],
       "sheet_groups": [
         {
           "name": "01_power",
-          "blocks": ["input", "power", "power_reg", "power_decouple", "buck", "buck_power", "buck_input_hf_bypass", "buck_output_hf_bypass"]
+          "blocks": [
+            "input",
+            "power",
+            "power_reg",
+            "power_decouple",
+            "buck",
+            "buck_power",
+            "buck_input_hf_bypass",
+            "buck_output_hf_bypass"
+          ]
         },
         {
           "name": "02_mcu",
-          "blocks": ["mcu", "reset"]
+          "blocks": [
+            "mcu",
+            "reset"
+          ]
         },
-        {"name": "03_rf", "blocks": ["rf"]},
-        {"name": "04_target", "blocks": ["target", "io"]},
-        {"name": "05_indicator", "blocks": ["indicator"]}
+        {
+          "name": "03_rf",
+          "blocks": [
+            "rf"
+          ]
+        },
+        {
+          "name": "04_target",
+          "blocks": [
+            "target",
+            "io"
+          ]
+        },
+        {
+          "name": "05_indicator",
+          "blocks": [
+            "indicator"
+          ]
+        }
+      ]
+    },
+    "stm32f103_minimal_system": {
+      "block_order": [
+        "input",
+        "power_reg",
+        "power_decouple",
+        "mcu",
+        "crystal",
+        "reset",
+        "boot",
+        "debug",
+        "indicator"
+      ],
+      "role_to_block": {
+        "mcu": "mcu",
+        "main_3v3_regulator": "power_reg",
+        "main_8mhz_xtal": "crystal",
+        "rtc_32k_xtal": "crystal",
+        "hse_load_cap_1": "crystal",
+        "hse_load_cap_2": "crystal",
+        "lse_load_cap_1": "crystal",
+        "lse_load_cap_2": "crystal",
+        "xtal_load_cap_1": "crystal",
+        "xtal_load_cap_2": "crystal",
+        "vdd_decoupling_1": "power_decouple",
+        "vdd_decoupling_2": "power_decouple",
+        "vdd_decoupling_3": "power_decouple",
+        "vdd_decoupling_4": "power_decouple",
+        "vdd_bulk_cap": "power_reg",
+        "reg_input_cap": "power_reg",
+        "reg_output_cap": "power_reg",
+        "nrst_pullup": "reset",
+        "boot0_pulldown": "boot",
+        "led_resistor": "indicator",
+        "power_led": "indicator",
+        "status_led": "indicator",
+        "user_led": "indicator",
+        "usb_c_power_input": "input",
+        "swd_debug_header": "debug",
+        "uart_header": "debug",
+        "i2c_header": "debug",
+        "spi_header": "debug",
+        "reset_button": "reset",
+        "user_button": "reset",
+        "bootsel_button": "boot"
+      },
+      "sheet_groups": [
+        {
+          "name": "01_power",
+          "blocks": [
+            "input",
+            "power_reg",
+            "power_decouple"
+          ]
+        },
+        {
+          "name": "02_mcu_and_clock",
+          "blocks": [
+            "mcu",
+            "crystal",
+            "reset",
+            "boot"
+          ]
+        },
+        {
+          "name": "03_debug_and_io",
+          "blocks": [
+            "debug",
+            "indicator"
+          ]
+        }
       ]
     }
   }
