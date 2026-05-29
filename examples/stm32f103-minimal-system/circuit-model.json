@@ -364,6 +364,7 @@
       "power_input": {
         "x": 10,
         "y": 10,
+        "rotation": 90,
         "components": [
           "J1"
         ]
@@ -391,15 +392,21 @@
         "x": 10,
         "y": 100,
         "components": [
-          "U1",
+          "U1"
+        ]
+      },
+      "clock": {
+        "x": 70,
+        "y": 100,
+        "components": [
           "Y1",
           "C8",
           "C9"
         ]
       },
       "reset_boot": {
-        "x": 70,
-        "y": 100,
+        "x": 10,
+        "y": 160,
         "components": [
           "R1",
           "R2",
@@ -407,7 +414,7 @@
         ]
       },
       "led_io": {
-        "x": 10,
+        "x": 70,
         "y": 160,
         "components": [
           "D1",
