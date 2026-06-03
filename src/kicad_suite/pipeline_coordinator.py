@@ -13,6 +13,7 @@ from pathlib import Path
 from typing import Any
 
 from .adapters.kicad_cli import resolve_kicad_cli
+from .circuit_model_io import load_dual_circuit_model, project_root_from_model_path, save_resolved_circuit_model
 from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, normalize_net_kind, write_output
 from .ir_compiler import build_ir
 from .ir_to_kicad import ir_to_kicad
@@ -185,9 +186,10 @@ def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
 
 def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     """Run full pipeline: model -> netlist -> plan -> KiCad output -> postprocess -> ERC."""
-    model = load_json(model_path)
+    model_path_obj = Path(model_path)
+    model = load_dual_circuit_model(model_path_obj)
     project_name = model.get("topology", model.get("request_id", "kicad_project"))
-    source_project_dir = Path(model_path).resolve().parent
+    source_project_dir = project_root_from_model_path(model_path_obj.resolve())
 
     explicit_workspace = os.environ.get("KICAD_WORKSPACE", "")
     workspace = explicit_workspace
@@ -251,6 +253,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         )
 
     resolved_model = apply_selected_parts_to_model(model, parts_result.get("selections", [])) if parts_result else model
+    save_resolved_circuit_model(model_path_obj, resolved_model)
     _ = build_netlist(resolved_model)
 
     ir = build_ir(resolved_model)
@@ -370,7 +373,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: python run_pipeline.py <circuit-model.json> <output-dir>")
+        print("Usage: python run_pipeline.py <source/circuit-model.source.json> <output-dir>")
         sys.exit(1)
     result = run_pipeline(sys.argv[1], sys.argv[2])
     print(json.dumps(result, ensure_ascii=False, indent=2))

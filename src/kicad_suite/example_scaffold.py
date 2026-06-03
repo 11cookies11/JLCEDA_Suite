@@ -25,6 +25,8 @@ WORKSPACE_FILES = {
     "hardware/pcb/README.md": "# PCB\n\nPlace PCB constraint notes, layout exports, and review artifacts here.\n",
     "hardware/libraries/README.md": "# Libraries\n\nPlace local symbol, footprint, and 3D asset work here if needed.\n",
     "hardware/production/README.md": "# Production\n\nPlace generated BOM, pick-and-place, fabrication outputs, and release notes here.\n",
+    "source/README.md": "# Source Model\n\nAuthor the human-maintained circuit model here.\n",
+    "build/README.md": "# Build Artifacts\n\nToolchain-generated resolved models and reports live here.\n",
 }
 
 
@@ -56,7 +58,8 @@ def _render_root_readme(title: str, project_name: str) -> str:
 
         1. Freeze requirements in `docs/00_requirements.md`
         2. Draft the system architecture in `docs/01_system_architecture.md`
-        3. Create the first `circuit-model.json` when the interface list is stable
+        3. Create `source/circuit-model.source.json` when the interface list is stable
+        4. Let the toolchain generate `build/circuit-model.resolved.json`
 
         Generated project slug: `{project_name}`
         """
@@ -280,7 +283,7 @@ def scaffold_example(
 
     if include_circuit_model:
         write_text(
-            root_path / f"{project_name}.circuit-model.json",
+            root_path / "source" / "circuit-model.source.json",
             dedent(
                 f"""
                 {{
@@ -294,6 +297,10 @@ def scaffold_example(
                 """
             ).strip()
             + "\n",
+        )
+        write_text(
+            root_path / "build" / "circuit-model.resolved.json",
+            "{}\n",
         )
 
     for relative_path, content in WORKSPACE_FILES.items():
@@ -311,7 +318,7 @@ def build_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--include-circuit-model",
         action="store_true",
-        help="Also create a minimal circuit-model.json placeholder",
+        help="Also create minimal source/circuit-model.source.json and build/circuit-model.resolved.json placeholders",
     )
     return parser
 

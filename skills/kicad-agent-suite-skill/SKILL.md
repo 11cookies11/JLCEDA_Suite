@@ -11,45 +11,46 @@ Use this skill when the user wants an AI agent to use repository resources to pr
 
 The active implementation target is KiCad, but the skill's purpose is broader: use structured requirements, circuit models, netlists, reusable component knowledge, simulation feedback, symbol resources, layout profiles, and validation tools as a hardware-development workspace.
 
-## Workspace Mode (preferred — single root, no path confusion)
+## Workspace Mode (preferred ? single root, no path confusion)
 
 Set `KICAD_WORKSPACE` to the project root. All paths derive from it automatically:
 
-```
-my-project/                     ← $env:KICAD_WORKSPACE
-├── circuit-model.json
-├── part-selection-results.json
-├── libraries/                  ← put JLC-MCP assets here
-│   ├── symbols/    (.kicad_sym)
-│   ├── footprints/ (.pretty/)
-│   └── 3dmodels/   (.step)
-└── output/                     ← auto-generated
-    └── {project_name}/
-        ├── *.kicad_{pro,sch,pcb}
-        └── libraries/          ← auto-copied from workspace
+```text
+my-project/                     ? $env:KICAD_WORKSPACE
+??? source/
+?   ??? circuit-model.source.json
+??? build/
+?   ??? circuit-model.resolved.json
+??? libraries/                  ? put JLC-MCP assets here
+?   ??? symbols/    (.kicad_sym)
+?   ??? footprints/ (.pretty/)
+?   ??? 3dmodels/   (.step)
+??? output/                     ? auto-generated
+    ??? {project_name}/
+        ??? *.kicad_{pro,sch,pcb}
+        ??? libraries/          ? auto-copied from workspace
 ```
 
-If `KICAD_WORKSPACE` is not set, the pipeline auto-detects it from `circuit-model.json`'s parent directory (when it contains `libraries/symbols/`).
+If `KICAD_WORKSPACE` is not set, the pipeline auto-detects it from `source/circuit-model.source.json`'s parent directory (when it contains `libraries/symbols/`).
 
-**Do NOT scatter files across `.where/` and `examples/` with different paths.** This was the root cause of v13's library resolution failures.
+**Do NOT scatter files across `.where/`, `examples/`, and ad hoc root-level model files with different paths.** This was the root cause of v13's library resolution failures.
 
 ## Current pipeline workflow (non-linear, iterative)
 
-```
-circuit-model.json + JLC libs → compile_plan() → write_project() → postprocess → ERC
-                       ↑                            │
-                       └── feedback loops ──────────┘
+```text
+source/circuit-model.source.json + JLC libs ? compile_plan() ? write_project() ? postprocess ? ERC
+                                         ? build/circuit-model.resolved.json
 ```
 
 Each stage produces versioned JSON. Changes to earlier stages just re-run the pipeline.
 
-1. **Clarify requirements** — electrical constraints, interfaces, power
-2. **Build circuit-model.json** — components (ref, role, value) + nets (name, kind, members)
-3. **Part selection** — LCSC Resolver → Part Selector → JLC MCP install
-4. **Compile execution plan** — symbol mapping, area-aware layout, library validation
-5. **Write KiCad files** — schematic (wire from pin tip to label), PCB, project
-6. **Post-process** — copy JLC libraries, inject symbols, fix pin types, register lib tables
-7. **ERC validation** — kicad-cli, check for pin_not_connected=0
+1. **Clarify requirements** ? electrical constraints, interfaces, power
+2. **Build source/circuit-model.source.json** ? components (ref, role, value, notes, search_hints) + nets (name, kind, members)
+3. **Part selection** ? LCSC Resolver ? Part Selector ? JLC MCP install, writes `build/circuit-model.resolved.json`
+4. **Compile execution plan** ? symbol mapping, area-aware layout, library validation
+5. **Write KiCad files** ? schematic (wire from pin tip to label), PCB, project
+6. **Post-process** ? copy JLC libraries, inject symbols, fix pin types, register lib tables
+7. **ERC validation** ? kicad-cli, check for pin_not_connected=0
 
 ## Critical gotchas (cost weeks to debug)
 
@@ -70,7 +71,7 @@ The original v13 had `.where/` paths that didn't exist. In workspace mode, table
 3. KiCad restarted after table changes
 
 ### Don't reuse old execution plans
-v13 → v17 → v19 showed that reusing pre-compiled JSON plans bypasses all layout and mapping improvements. Always regenerate from `circuit-model.json` using `compile_plan()`.
+v13 → v17 → v19 showed that reusing pre-compiled JSON plans bypasses all layout and mapping improvements. Always regenerate from `source/circuit-model.source.json` using `compile_plan()`.
 
 ### Pin endpoint coordinate system
 `pin_endpoint(symbol, pin_number)` returns the **pin tip absolute position** (electrical connection point). Wire must start EXACTLY here. `endpoint_from_pin()` applies rotation transform. The returned `direction` is the wire exit convention (0=left, 180=right, 90=up, 270=down).
@@ -83,7 +84,7 @@ The CLI may produce different ERC results than the GUI (v19: CLI=100, GUI=718). 
 | ERC type | Cause | Fix |
 |----------|-------|-----|
 | `pin_not_connected` × many | JLC lib not found → fake 2-pin symbols | Check workspace, verify `libraries/symbols/` |
-| `multiple_net_names` | Different labels shorted by single wire | Check circuit-model.json net members |
+| `multiple_net_names` | Different labels shorted by single wire | Check source/circuit-model.source.json net members |
 | `pin_to_pin` (bidirectional↔power_out) | Power pins typed wrong in library | Pin type fix in pipeline_postprocess |
 | `lib_symbol_mismatch` × many | Embedded symbols out of sync | "Update Symbols from Library" in KiCad GUI |
 | `label_dangling` | Label not connected to net | Usually cascading from pin_not_connected |
@@ -93,7 +94,7 @@ The CLI may produce different ERC results than the GUI (v19: CLI=100, GUI=718). 
 ```powershell
 # From workspace
 $env:KICAD_WORKSPACE = "D:/path/to/project"
-python -m kicad_suite.pipeline_coordinator circuit-model.json output/
+python -m kicad_suite.pipeline_coordinator source/circuit-model.source.json output/
 
 # Standalone ERC
 & "D:/Program Files/KiCad/10.0/bin/kicad-cli.exe" sch erc --format json --output erc.json project.kicad_sch
@@ -101,17 +102,24 @@ python -m kicad_suite.pipeline_coordinator circuit-model.json output/
 
 ## Agent Quick Start
 
-When an agent needs to use this repository directly, prefer this order:
+When an agent needs to use this repository directly, follow this 5-minute path:
 
-1. Inspect the user's goal and identify the missing electrical constraints.
-2. Use the unified local entrypoint for pipeline work:
-   - `python scripts/kas.py pipeline <model.json> <output-dir>`
-   - `python scripts/kas.py validate-artifacts --summary <summary.json>`
-   - `python scripts/kas.py erc`
-3. If real parts are needed, use the repository's parts pipeline and JLC MCP bridge instead of ad hoc searches or manual library copying.
-4. Read the generated summary before changing the design. Let validation errors, ERC failures, and missing paths drive the next edit.
-5. Improve reusable resources, configs, and validators first; avoid patching only the current board unless the change is truly one-off.
-6. Treat top-level summary warnings as structured fallback signals. A run can complete with warnings and still need review before acceptance.
+1. Set the workspace root and start from the source model:
+   - `KICAD_WORKSPACE=<project-root>`
+   - `source/circuit-model.source.json`
+   - `build/circuit-model.resolved.json`
+2. Inspect the source model and identify the missing electrical constraints or part choices.
+3. Run the main pipeline with the stable entrypoint:
+   - `python scripts/kas.py pipeline <source/circuit-model.source.json> <output-dir>`
+4. If the design needs real parts, resolve them explicitly:
+   - `hwtool agent resolve-symbols --project <project-dir>`
+   - or enable the parts pipeline in the workflow that owns the project
+5. Review the generated summary before editing anything else:
+   - validation errors
+   - ERC failures
+   - missing library paths
+   - structured warnings
+6. Prefer improving reusable resources, schemas, and validators over patching only one board unless the change is truly one-off.
 
 ## Default Workflow
 
@@ -328,7 +336,7 @@ EasyEDA Pro reads these on import to automatically match components to their LCS
 
 ## Circuit Model Format
 
-The pipeline accepts a `circuit-model.json` with this structure:
+The pipeline accepts a `source/circuit-model.source.json` with this structure:
 
 ```json
 {
@@ -367,6 +375,8 @@ Key conventions:
 - `role`: unique functional identifier (stm32f103_mcu, ldo_regulator)
 - `nets.members`: `REF.PIN_NUMBER` format (e.g., "U1.7" for U1 pin 7)
 - `selected_part.lcsc_id`: real LCSC part number for EasyEDA matching
+- `selected_part.symbol_ref`: exact symbol name used during export
+- `selected_part.kicad_footprint_hint`: exact footprint name used during export
 - Simple components (R/C/L/LED) only need 2 pins; complex ICs need correct pin numbers
 
 ## Library Configuration
@@ -434,16 +444,16 @@ kicad-cli sym export svg --symbol "jlc_symbols:STM32F103C8T6" --output test/ pat
 - `python scripts/write_jlc_mcp_part_lock.py --selections selections.json --install-report jlc-mcp-install-report.json --project-dir <project-dir>`: write JLC MCP `part.lock.yaml`
 - `python scripts/fix_lm393_jlc_mcp_symbol.py --project-dir <project-dir> --id C5252905`: repair missing LM393 pins after JLC MCP install
 - `python scripts/import_parts.py --selections selections.json --project-dir ./project`: import parts to project
-- `python scripts/import_jlc_parts.py <circuit-model.json> <project-dir> [--delay 3.0]`: import all LCSC parts from a circuit model
+- `python scripts/import_jlc_parts.py <source/circuit-model.source.json> <project-dir> [--delay 3.0]`: import all LCSC parts from a source model
 - `python scripts/demo_parts_pipeline.py`: end-to-end parts pipeline demo
 - `python scripts/demo_e2e_pipeline.py`: full pipeline demo with KiCad output
-- `python scripts/run_pipeline.py <circuit-model.json> <output-dir>`: run full KiCad pipeline from existing circuit model
+- `python scripts/run_pipeline.py <source/circuit-model.source.json> <output-dir>`: run full KiCad pipeline from existing source model
 
 ### `scripts/kas.py`
 
 Unified local CLI entrypoint for this skill.
 
-- `python scripts/kas.py pipeline <model.json> <output-dir>`: run the main KiCad pipeline
+- `python scripts/kas.py pipeline <source/circuit-model.source.json> <output-dir>`: run the main KiCad pipeline
 - `python scripts/kas.py validate-artifacts --summary <summary.json>`: validate generated outputs and ERC summaries
 - `python scripts/kas.py erc`: run KiCad ERC on the resolved schematic
 - `python scripts/kas.py text-to-kicad`: run the text-to-KiCad flow
@@ -455,13 +465,16 @@ Prefer `kas` for new work instead of calling stage scripts directly.
 The pipeline normally writes into:
 
 ```text
-.where/kicad-output/<project_name>/
+source/
+build/
+output/<project_name>/
 ```
 
 Expected artifacts:
 
 - `requirement-spec.json`
-- `circuit-model.json`
+- `source/circuit-model.source.json`
+- `build/circuit-model.resolved.json`
 - `netlist.json`
 - `spice-netlist.cir`
 - `ngspice-execution.json`
@@ -541,11 +554,33 @@ Treat the repository as the agent's hardware-development resource base:
 - `references/` inside this skill contains engineering workflow guidance
 - generated outputs are evidence to inspect, not source-of-truth design rules
 
+## Current Default Model Layout
+
+For new work, use the split layout below instead of a root-level model file:
+
+```text
+<project-root>/
+├── source/
+│   └── circuit-model.source.json    # human-authored source of truth
+├── build/
+│   └── circuit-model.resolved.json  # toolchain-derived overlay
+├── libraries/
+└── output/
+```
+
+Rules:
+
+- Write design intent into `source/circuit-model.source.json`
+- Let the pipeline write selected parts, symbol refs, and footprint hints into `build/circuit-model.resolved.json`
+- Treat `display_name` as descriptive metadata, not a stable symbol identifier
+- Prefer `selected_part.lcsc_id` for download and `selected_part.symbol_ref` / `selected_part.kicad_footprint_hint` for export
+- Do not reintroduce a root-level `circuit-model.json` as the primary workflow in release docs or examples
+
 ## Troubleshooting: JLC-MCP Symbols Not Visible in KiCad
 
 ### Symptom
 
-After running `python scripts/run_pipeline.py`, opening the generated `.kicad_pro` in KiCad shows JLC-MCP components as tiny 2-pin boxes or completely blank symbols. This affects all non-Device-library components (STM32, gate drivers, MOSFETs, LDOs, connectors from `@jlcpcb/mcp`).
+After running `python scripts/run_pipeline.py <source/circuit-model.source.json> <output-dir>`, opening the generated `.kicad_pro` in KiCad shows JLC-MCP components as tiny 2-pin boxes or completely blank symbols. This affects all non-Device-library components (STM32, gate drivers, MOSFETs, LDOs, connectors from `@jlcpcb/mcp`).
 
 ### Root Cause
 

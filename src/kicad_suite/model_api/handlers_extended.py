@@ -11,6 +11,12 @@ from ..kicad_erc_runner import run as run_erc
 from ..kicad_project_writer import write_project
 from ..pcb_generator import generate_pcb
 from ..example_scaffold import scaffold_example
+from ..circuit_model_io import (
+    load_dual_circuit_model,
+    project_root_from_model_path,
+    save_resolved_circuit_model,
+    save_source_circuit_model,
+)
 from ..ir_compiler import build_ir
 from ..ir_to_kicad import ir_to_kicad
 from ..pipeline_coordinator import build_netlist
@@ -389,8 +395,9 @@ class _ExtendedHandlers:
         try:
             self._scaffold_project_template(project_dir, title, overwrite=overwrite)
             model = self._project_model_from_payload(request, project_id=project_id, topology=topology)
-            model_path = project_dir / "circuit-model.json"
-            model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+            model_path = project_dir / "source" / "circuit-model.source.json"
+            save_source_circuit_model(model_path, model)
+            save_resolved_circuit_model(model_path, model)
 
             ir_path = ""
             ir_stats: dict[str, Any] = {}
@@ -452,7 +459,7 @@ class _ExtendedHandlers:
         else:
             source_model = str(request.payload.get("source_model", ""))
             if source_model:
-                model = load_json(Path(source_model))
+                model = load_dual_circuit_model(Path(source_model))
             else:
                 model = snapshot(self.model) if self.model else empty_model(request.request_id, project_id, topology)
         model = normalize_model(model)
@@ -539,7 +546,7 @@ class _ExtendedHandlers:
                 output_dir = Path(str(request.payload.get("output_dir", kicad.get("output_dir", ""))))
                 project_name = str(request.payload.get("project_name", kicad.get("project_name", "")))
                 topology = str(self.model.get("topology", ""))
-                source_project = str(self.repository.model_path.parent) if self.repository else ""
+                source_project = str(project_root_from_model_path(self.repository.model_path)) if self.repository else ""
                 import time as _time
                 t0 = _time.monotonic()
                 with external_tool_env(
@@ -663,7 +670,7 @@ class _ExtendedHandlers:
             return self._read_result(request, before, {"path": str(path)})
         if self.repository is not None:
             self.repository.save(self.model)
-            return self._read_result(request, before, {"path": str(self.repository.model_path)})
+            return self._read_result(request, before, {"path": str(self.repository.resolved_path)})
         return self._read_result(request, before, {"model": snapshot(self.model)})
 
     def _export_report(self, request: OperationRequest, before: dict[str, Any]) -> OperationResult:

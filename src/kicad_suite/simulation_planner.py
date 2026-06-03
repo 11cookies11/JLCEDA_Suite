@@ -9,6 +9,7 @@ from dataclasses import dataclass, field, asdict
 from pathlib import Path
 from typing import Any
 
+from .circuit_model_io import load_dual_circuit_model
 from .schema_versions import SIMULATION_PLAN_SCHEMA_VERSION, SIMULATION_PROFILE_SCHEMA_VERSION
 from .schema_versions import SIMULATION_TASK_PLAN_SCHEMA_VERSION
 
@@ -117,7 +118,7 @@ def _load_json_file(path: Path) -> dict[str, Any]:
 
 
 def load_circuit_model(path: Path) -> dict[str, Any]:
-    return _load_json_file(path)
+    return load_dual_circuit_model(path)
 
 
 def load_simulation_profile(path: Path | None) -> SimulationProfile | None:

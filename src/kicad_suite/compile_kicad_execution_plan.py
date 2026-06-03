@@ -226,6 +226,10 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
 
 def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
     """Derive a stable EasyEDA/JLC symbol name from selected_part."""
+    for key in ('symbol_ref', 'symbol_name', 'kicad_symbol'):
+        value = str(selected.get(key, '')).strip()
+        if value:
+            return value
     for key in ('display_name', 'part_id', 'lcsc_id', 'mpn'):
         value = str(selected.get(key, '')).strip()
         if value:
@@ -270,7 +274,7 @@ def _remap_jlc_footprint(fp: str) -> str:
     if 'QFN-20' in name or 'QFN20' in name:
         return 'Package_DFN_QFN:QFN-20-1EP_3x5mm_P0.5mm_EP1.45x2.9mm'
     if 'LQFP-48' in name or 'QFP-48' in name:
-        return 'Package_QFP:LQFP-48_7x7mm_P0.5mm'
+        return 'JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL'
     if 'LQFP-64' in name or 'QFP-64' in name:
         return 'Package_QFP:LQFP-64_10x10mm_P0.5mm'
     if 'LQFP-100' in name or 'QFP-100' in name:
@@ -325,13 +329,13 @@ def resolve_footprint(component_package: str, mapping_footprint: str) -> str:
     cause warnings and failures in KiCad.
     """
     if mapping_footprint and _has_library_prefix(mapping_footprint):
-        return normalize_footprint(mapping_footprint)
+        return _remap_jlc_footprint(mapping_footprint) or normalize_footprint(mapping_footprint)
     if component_package and _has_library_prefix(component_package):
-        return normalize_footprint(component_package)
+        return _remap_jlc_footprint(component_package) or normalize_footprint(component_package)
     if mapping_footprint:
-        return normalize_footprint(mapping_footprint)
+        return _remap_jlc_footprint(mapping_footprint) or normalize_footprint(mapping_footprint)
     if component_package:
-        return normalize_footprint(component_package)
+        return _remap_jlc_footprint(component_package) or normalize_footprint(component_package)
     return ''
 
 

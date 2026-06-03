@@ -30,7 +30,7 @@ def build_part_requirements(components: list[dict[str, Any]]) -> list[PartRequir
         value = str(comp.get("value", ""))
         ref = str(comp.get("ref", ""))
         sp = comp.get("selected_part") if isinstance(comp.get("selected_part"), dict) else {}
-        pkg = str(sp.get("package", ""))
+        pkg = str(comp.get("package", "")) or str(sp.get("package", ""))
 
         preferred_mpn: list[str] = []
         mpn = str(sp.get("mpn", ""))
@@ -104,9 +104,10 @@ def build_resolver_requests(
         role = str(comp.get("role", requirement.id)).strip()
         value = str(comp.get("value", requirement.function)).strip()
         selected = comp.get("selected_part", {}) if isinstance(comp.get("selected_part"), dict) else {}
-        package = str(selected.get("package", "")).strip()
-        mechanical_package = str(selected.get("mechanical_package", "")).strip()
-        manufacturer = str(selected.get("manufacturer", "")).strip()
+        package = str(comp.get("package", "")).strip() or str(selected.get("package", "")).strip()
+        mechanical_package = str(comp.get("mechanical_package", "")).strip() or str(selected.get("mechanical_package", "")).strip()
+        manufacturer = str(comp.get("manufacturer", "")).strip() or str(selected.get("manufacturer", "")).strip()
+        search_hints = _as_string_list(comp.get("search_hints", []))
         preferred_mpn = list(requirement.preferred_mpn)
         if not preferred_mpn:
             mpn = str(selected.get("mpn", "")).strip()
@@ -121,11 +122,14 @@ def build_resolver_requests(
             requirement.id,
             ref,
             *_role_search_hints(role, value),
+            *search_hints,
         ) if term]
         if package:
             search_terms.append(package)
         if mechanical_package and mechanical_package != package:
             search_terms.append(mechanical_package)
+        if manufacturer:
+            search_terms.append(manufacturer)
         search_terms = list(dict.fromkeys(search_terms))
 
         filters: dict[str, Any] = {}

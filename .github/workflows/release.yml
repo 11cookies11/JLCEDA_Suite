@@ -35,6 +35,8 @@ jobs:
           copy -Recurse schemas $dir/schemas
           copy -Recurse examples/stm32f103-minimal-system $dir/examples/stm32f103-minimal-system
           copy -Recurse examples/esp32c3-minimal-system $dir/examples/esp32c3-minimal-system
+          copy -Recurse skills $dir/skills
+          copy AGENT_QUICKSTART.md $dir/
           copy README.md $dir/
           copy README.zh-CN.md $dir/
           copy CHANGELOG.md $dir/

@@ -183,7 +183,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_run_builds_model_api_request_from_project(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source" / "circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps(
                     {

@@ -211,14 +211,15 @@ def _build_search_plan(component: dict[str, Any], selected_part: dict[str, Any])
     ref = str(component.get("ref", "")).strip()
     role = str(component.get("role", "")).strip()
     value = str(component.get("value", "")).strip()
-    package = str(selected_part.get("package", "")).strip()
-    mechanical_package = str(selected_part.get("mechanical_package", "")).strip()
-    manufacturer = str(selected_part.get("manufacturer", "")).strip()
+    package = str(component.get("package", "")).strip() or str(selected_part.get("package", "")).strip()
+    mechanical_package = str(component.get("mechanical_package", "")).strip() or str(selected_part.get("mechanical_package", "")).strip()
+    manufacturer = str(component.get("manufacturer", "")).strip() or str(selected_part.get("manufacturer", "")).strip()
     lcsc_id = str(selected_part.get("lcsc_id", "")).strip()
     mpn = str(selected_part.get("mpn", "")).strip()
+    search_hints = _as_string_list(component.get("search_hints", []))
 
     search_terms: list[str] = []
-    for term in (value, mpn, lcsc_id, str(selected_part.get("display_name", "")).strip(), role, ref):
+    for term in (value, mpn, lcsc_id, str(selected_part.get("display_name", "")).strip(), role, ref, *search_hints):
         if term:
             search_terms.append(term)
     search_terms.extend(_role_search_hints(role, value))

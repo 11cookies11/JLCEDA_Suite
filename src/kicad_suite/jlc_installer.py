@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
 from . import jlc_api
+from .circuit_model_io import save_resolved_circuit_model
 from .easyeda_parser import parse_easyeda_component, ParsedComponent
 from .easyeda_converter import build_kicad_symbol, build_kicad_footprint, make_two_pin_symbol
 
@@ -91,6 +93,7 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
         parsed.lcsc_id = lcsc_id
         sym_str = make_two_pin_symbol("U", parsed.title or lcsc_id, "JLC-MCP")
         pin_count = sum(1 for s in parsed.shapes if s.type == "pin")
+    symbol_name = _extract_symbol_name(sym_str) or str(comp_data.get("title", "")).strip() or lcsc_id
 
     # 3. Ensure project library directories exist
     sym_dir = project_path / "libraries" / "symbols"
@@ -121,6 +124,7 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
         "ok": True,
         "lcsc_id": lcsc_id,
         "title": comp_data.get("title", ""),
+        "symbol_ref": symbol_name,
         "package": comp_data.get("package_title", ""),
         "symbol_file": str(sym_file),
         "symbol_count": 1,
@@ -135,6 +139,7 @@ def resolve_missing_symbols(
     timeout: float = 120.0,
     *,
     delay: float = 0,
+    model_path: Path | None = None,
 ) -> dict[str, Any]:
     """Auto-resolve all components in *model* by searching EasyEDA.
 
@@ -193,7 +198,13 @@ def resolve_missing_symbols(
                         break
             if inst:
                 resolved.append({"ref": ref, "lcsc_id": lcsc_id, "title": inst.get("title", ""), "source": "search_hint", "pin_count": inst.get("pin_count", 0)})
-                _write_selected_part(comp, lcsc_id, inst.get("title", ""), inst.get("package", ""))
+                _write_selected_part(
+                    comp,
+                    lcsc_id,
+                    inst.get("title", ""),
+                    inst.get("package", ""),
+                    symbol_ref=str(inst.get("symbol_ref", "")),
+                )
                 _time.sleep(delay)
                 continue
 
@@ -209,7 +220,13 @@ def resolve_missing_symbols(
 
         if inst and inst.get("ok"):
             resolved.append({"ref": ref, "lcsc_id": lcsc_id, "title": inst.get("title", ""), "source": "easyeda", "pin_count": inst.get("pin_count", 0)})
-            _write_selected_part(comp, lcsc_id, inst.get("title", ""), inst.get("package", ""))
+            _write_selected_part(
+                comp,
+                lcsc_id,
+                inst.get("title", ""),
+                inst.get("package", ""),
+                symbol_ref=str(inst.get("symbol_ref", "")),
+            )
             _time.sleep(delay)
             continue
 
@@ -222,9 +239,9 @@ def resolve_missing_symbols(
             failed.append({"ref": ref, "role": role, "error": "all_attempts_failed"})
 
     # Persist selected_part back to circuit-model.json
-    model_path = project_path / "circuit-model.json"
-    if model_path.exists():
-        model_path.write_text(json.dumps(model, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if model_path is None:
+        model_path = project_path / "circuit-model.json"
+    save_resolved_circuit_model(model_path, model)
 
     summary = {
         "ok": len(failed) == 0,
@@ -277,7 +294,14 @@ def _resolve_two_pin_placeholder(project_path: Path, value: str, ref: str) -> di
     return {"ok": True, "pin_count": 2, "title": value or ref}
 
 
-def _write_selected_part(component: dict[str, Any], lcsc_id: str, display_name: str, fp_hint: str = "") -> None:
+def _write_selected_part(
+    component: dict[str, Any],
+    lcsc_id: str,
+    display_name: str,
+    fp_hint: str = "",
+    *,
+    symbol_ref: str = "",
+) -> None:
     """Write ``selected_part`` into *component* in-place so the build step finds it."""
     sp: dict[str, str] = {
         "lcsc_id": lcsc_id,
@@ -285,7 +309,16 @@ def _write_selected_part(component: dict[str, Any], lcsc_id: str, display_name: 
     }
     if fp_hint:
         sp["kicad_footprint_hint"] = fp_hint
+    if symbol_ref:
+        sp["symbol_ref"] = symbol_ref
     component["selected_part"] = sp
+
+
+def _extract_symbol_name(sym_str: str) -> str:
+    match = re.match(r'\(symbol\s+"([^"]+)"', sym_str.strip())
+    if match:
+        return match.group(1)
+    return ""
 
 
 def _find_or_create_sym_lib(sym_dir: Path) -> tuple[str, Path]:

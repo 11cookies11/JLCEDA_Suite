@@ -11,6 +11,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
+from .circuit_model_io import load_dual_circuit_model, resolve_model_paths
 from .ir_compiler import build_ir
 from .project_state import ProjectState
 from .schema_versions import IR_SCHEMA_VERSION
@@ -40,8 +41,8 @@ def build_report(
     """Aggregate all available data sources into a unified report dict.
 
     Args:
-        project_path: Root directory containing ``circuit-model.json``.
-        model: Pre-loaded circuit model dict (loaded from disk if None).
+        project_path: Project root containing ``source/`` and ``build/``.
+        model: Pre-loaded merged circuit model dict (loaded from disk if None).
         erc_result: Optional ERC result dict from ``run_erc()``.
         simulation_result: Optional simulation result dict.
         history_limit: Max operation history entries to include.
@@ -52,11 +53,16 @@ def build_report(
 
     # Load model if not provided.
     if model is None:
-        model_path = root / "circuit-model.json"
-        if model_path.exists():
-            model = json.loads(model_path.read_text(encoding="utf-8"))
+        model_path = root / "source" / "circuit-model.source.json"
+        source_path, resolved_path = resolve_model_paths(model_path)
+        if source_path.exists() or resolved_path.exists():
+            model = load_dual_circuit_model(model_path)
         else:
-            model = {}
+            legacy_model = root / "circuit-model.json"
+            if legacy_model.exists():
+                model = json.loads(legacy_model.read_text(encoding="utf-8"))
+            else:
+                model = {}
 
     # Project state.
     ps = ProjectState(root)
@@ -87,7 +93,7 @@ def build_report(
     # 3. DSL status.
     dsl = ps.state.get("dsl", {})
     sections.append(_section("dsl", "DSL Status", "ok" if dsl.get("hash") else "warning", {
-        "path": str(dsl.get("path", "circuit-model.json")),
+        "path": str(dsl.get("path", "source/circuit-model.source.json")),
         "hash": str(dsl.get("hash", "")),
         "valid": dsl.get("valid"),
     }))

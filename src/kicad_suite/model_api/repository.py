@@ -6,31 +6,36 @@ import json
 from pathlib import Path
 from typing import Any
 
-from ..validation.common import load_json
+from ..circuit_model_io import (
+    load_dual_circuit_model,
+    project_root_from_model_path,
+    resolve_model_paths,
+    save_resolved_circuit_model,
+)
 from .model import normalize_model
 
 
 class CircuitModelRepository:
-    """Load and save one circuit-model JSON file."""
+    """Load source+resolved circuit-model files and save the resolved overlay."""
 
     def __init__(self, model_path: Path) -> None:
         self.model_path = model_path
+        self.source_path, self.resolved_path = resolve_model_paths(model_path)
 
     def load(self) -> dict[str, Any]:
-        return normalize_model(load_json(self.model_path))
+        return normalize_model(load_dual_circuit_model(self.model_path))
 
     def save(self, model: dict[str, Any]) -> None:
-        self.model_path.parent.mkdir(parents=True, exist_ok=True)
-        payload = json.dumps(normalize_model(model), ensure_ascii=False, indent=2) + "\n"
-        self.model_path.write_text(payload, encoding="utf-8")
+        self.resolved_path.parent.mkdir(parents=True, exist_ok=True)
+        save_resolved_circuit_model(self.model_path, normalize_model(model))
 
     @property
     def log_path(self) -> Path:
-        return self.model_path.with_name("model-api-operations.jsonl")
+        return project_root_from_model_path(self.model_path) / "logs" / "model-api-operations.jsonl"
 
     @property
     def revisions_dir(self) -> Path:
-        return self.model_path.with_name(".model-api-revisions")
+        return project_root_from_model_path(self.model_path) / "build" / "model-api-revisions"
 
     def next_revision_id(self) -> str:
         self.revisions_dir.mkdir(parents=True, exist_ok=True)

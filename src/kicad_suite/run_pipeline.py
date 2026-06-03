@@ -16,7 +16,7 @@ from .pipeline_coordinator import run_pipeline as _run_pipeline
 def main(argv: list[str] | None = None) -> int:
     args = list(sys.argv[1:] if argv is None else argv)
     if len(args) < 2:
-        print("Usage: python run_pipeline.py <circuit-model.json> <output-dir>")
+        print("Usage: python run_pipeline.py <source/circuit-model.source.json> <output-dir>")
         return 1
     result = _run_pipeline(args[0], args[1])
     print(json.dumps(result, ensure_ascii=False, indent=2))

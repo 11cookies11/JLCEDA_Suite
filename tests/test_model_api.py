@@ -102,7 +102,8 @@ def test_model_api_dry_run_returns_snapshot_without_commit():
 
 
 def test_model_api_repository_commits_to_circuit_model_file(tmp_path):
-    model_path = tmp_path / "circuit-model.json"
+    model_path = tmp_path / "source" / "circuit-model.source.json"
+    model_path.parent.mkdir(parents=True, exist_ok=True)
     model_path.write_text(
         json.dumps(
             {
@@ -119,10 +120,13 @@ def test_model_api_repository_commits_to_circuit_model_file(tmp_path):
     service = ModelApiService.from_repository(CircuitModelRepository(model_path))
 
     result = service.handle_dict(_request("add_net", {"name": "+3V3", "members": []}))
-    saved = json.loads(model_path.read_text(encoding="utf-8"))
+    resolved_path = tmp_path / "build" / "circuit-model.resolved.json"
+    saved_source = json.loads(model_path.read_text(encoding="utf-8"))
+    saved_resolved = json.loads(resolved_path.read_text(encoding="utf-8"))
 
     assert result["success"] is True
-    assert saved["nets"] == [{"name": "+3V3", "members": []}]
+    assert saved_source["nets"] == []
+    assert saved_resolved["nets"] == [{"name": "+3V3", "members": []}]
 
 
 def test_model_api_repository_writes_operation_log_and_revision(tmp_path):
@@ -195,7 +199,8 @@ def test_model_api_validation_rejects_duplicate_net_names():
 
 
 def test_model_api_cli_applies_request_to_model_file(tmp_path, capsys):
-    model_path = tmp_path / "circuit-model.json"
+    model_path = tmp_path / "source" / "circuit-model.source.json"
+    model_path.parent.mkdir(parents=True, exist_ok=True)
     request_path = tmp_path / "request.json"
     model_path.write_text(
         json.dumps(
@@ -217,15 +222,19 @@ def test_model_api_cli_applies_request_to_model_file(tmp_path, capsys):
 
     code = main(["model-api", str(request_path), "--model", str(model_path)])
     output = json.loads(capsys.readouterr().out)
-    saved = json.loads(model_path.read_text(encoding="utf-8"))
+    resolved_path = tmp_path / "build" / "circuit-model.resolved.json"
+    saved_source = json.loads(model_path.read_text(encoding="utf-8"))
+    saved_resolved = json.loads(resolved_path.read_text(encoding="utf-8"))
 
     assert code == 0
     assert output["success"] is True
-    assert saved["components"][0]["ref"] == "U1"
+    assert saved_source["components"] == []
+    assert saved_resolved["components"][0]["ref"] == "U1"
 
 
 def test_model_api_creates_hardware_project_without_agent_scaffold(tmp_path):
-    source_path = tmp_path / "source-circuit-model.json"
+    source_path = tmp_path / "source" / "circuit-model.source.json"
+    source_path.parent.mkdir(parents=True, exist_ok=True)
     source_path.write_text(
         json.dumps(
             {
@@ -266,12 +275,14 @@ def test_model_api_creates_hardware_project_without_agent_scaffold(tmp_path):
         )
     )
 
-    generated_model = json.loads((project_dir / "circuit-model.json").read_text(encoding="utf-8"))
+    generated_source = json.loads((project_dir / "source" / "circuit-model.source.json").read_text(encoding="utf-8"))
+    generated_resolved = json.loads((project_dir / "build" / "circuit-model.resolved.json").read_text(encoding="utf-8"))
     generated_state = json.loads((project_dir / "project.state.json").read_text(encoding="utf-8"))
 
     assert result["success"] is True
-    assert generated_model["project_id"] == "generated-board"
-    assert generated_model["topology"] == "generated_board"
+    assert generated_source["project_id"] == "generated-board"
+    assert generated_resolved["project_id"] == "generated-board"
+    assert generated_source["topology"] == "generated_board"
     assert generated_state["status"] == "VALID"
     assert (project_dir / "build" / "ir.json").exists()
     assert not (project_dir / "agent").exists()

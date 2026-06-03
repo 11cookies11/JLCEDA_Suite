@@ -198,6 +198,10 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
 
 def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
     """Derive a stable EasyEDA/JLC symbol name from selected_part."""
+    for key in ("symbol_ref", "symbol_name", "kicad_symbol"):
+        value = str(selected.get(key, "")).strip()
+        if value:
+            return value
     for key in ("display_name", "part_id", "lcsc_id", "mpn"):
         value = str(selected.get(key, "")).strip()
         if value:

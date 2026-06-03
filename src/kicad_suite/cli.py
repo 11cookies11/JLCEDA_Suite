@@ -16,6 +16,7 @@ from .server_text_to_kicad import run as run_text_to_kicad
 from .artifact_validator import main as validate_artifacts_main
 from .compile_kicad_execution_plan import run as run_compile_plan
 from .circuit_pipeline import diagnose_ngspice_environment
+from .circuit_model_io import resolve_model_paths
 from .ir_compiler import build_ir
 from .ir_validator import validate_ir
 from .pin_manager import PinManager
@@ -77,12 +78,13 @@ def _agent_model_path(args: argparse.Namespace) -> Path:
     model = getattr(args, "model_path", None)
     if model is not None:
         return Path(model).resolve()
-    return _agent_project_path(args) / "circuit-model.json"
+    return _agent_project_path(args) / "source" / "circuit-model.source.json"
 
 
 def _agent_model_metadata(model_path: Path, project_path: Path) -> tuple[str, str]:
-    if model_path.exists():
-        model = load_json(model_path)
+    source_path, resolved_path = resolve_model_paths(model_path)
+    if source_path.exists() or resolved_path.exists() or model_path.exists():
+        model = load_circuit_model(model_path)
         if isinstance(model, dict):
             project_id = str(model.get("project_id", "") or project_path.name)
             topology = str(model.get("topology", "") or project_id.replace("-", "_"))
@@ -260,7 +262,7 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "status": "Return machine-readable lifecycle state.",
             "inspect": "Return project, model, build, and summary details.",
             "explain": "Return a compact project explanation for an agent.",
-            "build-ir": "Compile circuit-model.json into build/ir.v1.json.",
+            "build-ir": "Compile source/circuit-model.source.json into build/ir.v1.json.",
             "validate-ir": "Compile and validate Hardware IR.",
             "rule-check": "Run project readiness checks.",
             "build-kicad-plan": "Compile the KiCad execution plan from the validated IR.",
@@ -268,7 +270,7 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "report": "Write build/report.json and optionally build/report.md.",
             "doctor": "Check toolchain environment and project layout.",
             "history": "Return recent project operations.",
-            "run": "Apply one DSL Model API operation to a project circuit-model.json.",
+            "run": "Apply one DSL Model API operation to a project source model.",
             "create": "Create a hardware project from an optional source model.",
             "export-kicad": "Export the current project model to a KiCad project.",
             "patch": "Apply a JSON patch to the circuit model.",
@@ -279,7 +281,8 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "manifest": "Describe this agent-facing command surface.",
         },
         "project_files": {
-            "model": "circuit-model.json",
+            "model_source": "source/circuit-model.source.json",
+            "model_resolved": "build/circuit-model.resolved.json",
             "state": "project.state.json",
             "operation_log": "logs/operations.jsonl",
             "ir": "build/ir.v1.json",
@@ -314,7 +317,8 @@ def _agent_inspect_handler(args: argparse.Namespace) -> int:
     ps = ProjectState(project_path)
     ps.load()
     model_path = _agent_model_path(args)
-    model = load_json(model_path) if model_path.exists() else {}
+    source_path, resolved_path = resolve_model_paths(model_path)
+    model = load_circuit_model(model_path) if source_path.exists() or resolved_path.exists() or model_path.exists() else {}
     return _print_json({
         "ok": True,
         "stage": "inspect",
@@ -360,7 +364,7 @@ def _agent_suggest_next(ps: ProjectState) -> list[str]:
 def _agent_build_ir_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
-    model = load_json(model_path)
+    model = load_circuit_model(model_path)
     ir = build_ir(model)
     output = Path(args.output).resolve() if args.output else project_path / "build" / "ir.v1.json"
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -382,7 +386,7 @@ def _agent_build_ir_handler(args: argparse.Namespace) -> int:
 def _agent_validate_ir_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
-    model = load_json(model_path)
+    model = load_circuit_model(model_path)
     ir = build_ir(model)
     report = validate_ir(ir)
     output = Path(args.output).resolve() if args.output else project_path / "build" / "ir-validation.json"
@@ -782,6 +786,7 @@ def _agent_history_handler(args: argparse.Namespace) -> int:
 def _agent_doctor_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
+    source_path, resolved_path = resolve_model_paths(model_path)
     checks: list[dict[str, Any]] = []
     checks.append({
         "name": "python",
@@ -796,9 +801,9 @@ def _agent_doctor_handler(args: argparse.Namespace) -> int:
     })
     checks.append({
         "name": "circuit_model",
-        "ok": model_path.exists(),
-        "message": str(model_path),
-        "suggestion": "Create or provide circuit-model.json." if not model_path.exists() else "",
+        "ok": source_path.exists() or resolved_path.exists() or model_path.exists(),
+        "message": f"{source_path} | {resolved_path}",
+        "suggestion": "Create or provide source/circuit-model.source.json and/or build/circuit-model.resolved.json." if not (source_path.exists() or resolved_path.exists() or model_path.exists()) else "",
     })
     for rel in ('schemas', 'resources/kicad/symbols', 'resources/kicad/footprints'):
         path = repo_root() / rel
@@ -822,7 +827,7 @@ def _agent_doctor_handler(args: argparse.Namespace) -> int:
 def _agent_pins_free_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
-    model = load_json(model_path)
+    model = load_circuit_model(model_path)
     ir = build_ir(model)
     pm = PinManager(ir, mcu_family=args.mcu_family or "")
     free = pm.list_free(mcu_ref=args.ref or "")
@@ -862,7 +867,7 @@ def _agent_pins_assign_handler(args: argparse.Namespace) -> int:
 def _agent_pins_check_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
-    model = load_json(model_path)
+    model = load_circuit_model(model_path)
     ir = build_ir(model)
     pm = PinManager(ir, mcu_family=args.mcu_family or "")
     conflicts: list[dict[str, Any]] = []
@@ -985,11 +990,11 @@ def _agent_resolve_symbols_handler(args: argparse.Namespace) -> int:
     import time as _time
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
-    model = load_json(model_path)
+    model = load_circuit_model(model_path)
     timeout = getattr(args, "timeout", 120) or 120
     delay = getattr(args, "delay", 0) or 0
     t0 = _time.monotonic()
-    result = resolve_missing_symbols(project_path, model, timeout=timeout, delay=delay)
+    result = resolve_missing_symbols(project_path, model, timeout=timeout, delay=delay, model_path=model_path)
     elapsed = round(_time.monotonic() - t0, 2)
     result["elapsed_sec"] = elapsed
 
@@ -1156,7 +1161,7 @@ def build_parser() -> argparse.ArgumentParser:
     agent_explain.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_explain.set_defaults(handler=_agent_explain_handler)
 
-    agent_build_ir = agent_subs.add_parser("build-ir", help="Compile circuit-model.json to build/ir.v1.json.")
+    agent_build_ir = agent_subs.add_parser("build-ir", help="Compile source/circuit-model.source.json to build/ir.v1.json.")
     agent_build_ir.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_build_ir.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_build_ir.add_argument("--output", type=Path, default=None)
@@ -1185,7 +1190,7 @@ def build_parser() -> argparse.ArgumentParser:
     agent_rule_check.add_argument("--no-snapshot", action="store_true")
     agent_rule_check.set_defaults(handler=_agent_rule_check_handler)
 
-    agent_run = agent_subs.add_parser("run", help="Apply one DSL Model API operation to a project.")
+    agent_run = agent_subs.add_parser("run", help="Apply one DSL Model API operation to a project source model.")
     agent_run.add_argument("operation")
     agent_run.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_run.add_argument("--model", dest="model_path", type=Path, default=None)
@@ -1330,7 +1335,7 @@ def build_parser() -> argparse.ArgumentParser:
     agent_build_plan.add_argument("--no-snapshot", action="store_true")
     agent_build_plan.set_defaults(handler=_agent_build_kicad_plan_handler)
 
-    agent_patch = agent_subs.add_parser("patch", help="Apply a model patch to circuit-model.json.")
+    agent_patch = agent_subs.add_parser("patch", help="Apply a model patch to the source circuit model.")
     agent_patch.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_patch.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_patch.add_argument("--payload-json", default="")
