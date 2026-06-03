@@ -93,7 +93,10 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
         parsed.lcsc_id = lcsc_id
         sym_str = make_two_pin_symbol("U", parsed.title or lcsc_id, "JLC-MCP")
         pin_count = sum(1 for s in parsed.shapes if s.type == "pin")
-    symbol_name = _extract_symbol_name(sym_str) or str(comp_data.get("title", "")).strip() or lcsc_id
+    raw_symbol_name = _extract_symbol_name(sym_str) or str(comp_data.get("title", "")).strip() or lcsc_id
+    symbol_name = _sanitize_symbol_name(raw_symbol_name)
+    if raw_symbol_name and raw_symbol_name != symbol_name:
+        sym_str = _rename_symbol_block(sym_str, raw_symbol_name, symbol_name)
 
     # 3. Ensure project library directories exist
     sym_dir = project_path / "libraries" / "symbols"
@@ -174,6 +177,42 @@ def resolve_missing_symbols(
         value = str(comp.get("value", "") or "")
         package = str(comp.get("package", "") or "")
         hints = comp.get("search_hints", [])
+        selected = comp.get("selected_part", {}) if isinstance(comp.get("selected_part"), dict) else {}
+        selected_lcsc_id = str(selected.get("lcsc_id", "")).strip()
+
+        # If the DSL already resolved this component to a concrete LCSC ID,
+        # trust that selection and skip the search-based path entirely.
+        # This avoids re-searching known parts and hitting rate/403 limits.
+        if selected_lcsc_id:
+            inst = install_by_lcsc_id(selected_lcsc_id, project_path)
+            if inst.get("ok"):
+                resolved.append(
+                    {
+                        "ref": ref,
+                        "lcsc_id": selected_lcsc_id,
+                        "title": inst.get("title", ""),
+                        "source": "selected_part_lcsc_id",
+                        "pin_count": inst.get("pin_count", 0),
+                    }
+                )
+                _write_selected_part(
+                    comp,
+                    selected_lcsc_id,
+                    inst.get("title", ""),
+                    inst.get("package", ""),
+                    symbol_ref=str(inst.get("symbol_ref", "")),
+                )
+            else:
+                failed.append(
+                    {
+                        "ref": ref,
+                        "role": role,
+                        "lcsc_id": selected_lcsc_id,
+                        "error": str(inst.get("error", "selected_part_install_failed")),
+                    }
+                )
+            _time.sleep(delay)
+            continue
 
         if _time.monotonic() > deadline:
             inst = _resolve_two_pin_placeholder(project_path, value, ref)
@@ -319,6 +358,19 @@ def _extract_symbol_name(sym_str: str) -> str:
     if match:
         return match.group(1)
     return ""
+
+
+def _sanitize_symbol_name(name: str) -> str:
+    cleaned = name.replace(" ", "_").replace(":", "_").replace("/", "_")
+    cleaned = re.sub(r"[^A-Za-z0-9_.-]+", "_", cleaned)
+    return cleaned.strip("._-") or "UNKNOWN"
+
+
+def _rename_symbol_block(sym_str: str, raw_name: str, safe_name: str) -> str:
+    """Rename the primary and nested symbol names inside a KiCad symbol block."""
+    renamed = sym_str.replace(raw_name, safe_name)
+    renamed = renamed.replace(f'(symbol "{safe_name}"', f'(symbol "{safe_name}"', 1)
+    return renamed
 
 
 def _find_or_create_sym_lib(sym_dir: Path) -> tuple[str, Path]:

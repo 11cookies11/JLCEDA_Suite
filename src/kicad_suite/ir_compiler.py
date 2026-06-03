@@ -174,6 +174,7 @@ def _build_components(
                 "mpn": str(selected_part.get("mpn", "")),
                 "manufacturer": str(selected_part.get("manufacturer", "")),
                 "lcsc_id": str(selected_part.get("lcsc_id", "")),
+                "symbol_ref": str(selected_part.get("symbol_ref", "")),
                 "package": str(selected_part.get("package", "")),
                 "mechanical_package": str(selected_part.get("mechanical_package", "")),
                 "kicad_footprint_hint": str(selected_part.get("kicad_footprint_hint", "")),

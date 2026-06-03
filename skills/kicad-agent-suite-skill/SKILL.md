@@ -375,7 +375,7 @@ Key conventions:
 - `role`: unique functional identifier (stm32f103_mcu, ldo_regulator)
 - `nets.members`: `REF.PIN_NUMBER` format (e.g., "U1.7" for U1 pin 7)
 - `selected_part.lcsc_id`: real LCSC part number for EasyEDA matching
-- `selected_part.symbol_ref`: exact symbol name used during export
+- `selected_part.symbol_ref`: exact symbol name used during export, normally written by the resolver/import step
 - `selected_part.kicad_footprint_hint`: exact footprint name used during export
 - Simple components (R/C/L/LED) only need 2 pins; complex ICs need correct pin numbers
 
@@ -573,7 +573,9 @@ Rules:
 - Write design intent into `source/circuit-model.source.json`
 - Let the pipeline write selected parts, symbol refs, and footprint hints into `build/circuit-model.resolved.json`
 - Treat `display_name` as descriptive metadata, not a stable symbol identifier
-- Prefer `selected_part.lcsc_id` for download and `selected_part.symbol_ref` / `selected_part.kicad_footprint_hint` for export
+- Prefer `selected_part.lcsc_id` for download
+- Treat `selected_part.symbol_ref` as pipeline-owned output that normally comes from download/import, not a field to hand-author
+- Treat `selected_part.kicad_footprint_hint` as the export hint for PCB footprints
 - Do not reintroduce a root-level `circuit-model.json` as the primary workflow in release docs or examples
 
 ## Troubleshooting: JLC-MCP Symbols Not Visible in KiCad

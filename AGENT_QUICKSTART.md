@@ -20,7 +20,7 @@ This package is built for agents that need to inspect, modify, validate, or expo
 - `value`: human-readable component value or description
 - `search_hints`: search terms that help part selection
 - `selected_part.lcsc_id`: real LCSC identifier used for downloads
-- `selected_part.symbol_ref`: exact symbol name used for export
+- `selected_part.symbol_ref`: exact symbol name used for export; normally written by the resolver after download
 - `selected_part.kicad_footprint_hint`: exact footprint name used for export
 
 ## Directory Layout
@@ -38,6 +38,7 @@ This package is built for agents that need to inspect, modify, validate, or expo
 ## Practical Rules
 
 - Do not treat `display_name` as a stable export key.
+- Do not hand-author `selected_part.symbol_ref` unless you are intentionally overriding resolver output for a one-off repair.
 - Re-run `resolve-symbols` after changing part choices.
 - Re-run `build-ir` and `export-kicad` after changing the source model.
 - Review validation and ERC results before shipping a design.

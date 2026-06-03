@@ -32,6 +32,22 @@ _IDENTITY_KEYS: dict[str, str] = {
 }
 
 
+def _is_effective_value(value: Any) -> bool:
+    return value not in (None, "", [], {})
+
+
+def _merge_dicts(source: dict[str, Any], resolved: dict[str, Any]) -> dict[str, Any]:
+    merged = deepcopy(resolved)
+    for key, value in source.items():
+        if isinstance(value, dict) and isinstance(merged.get(key), dict):
+            merged[key] = _merge_dicts(value, merged[key])
+        elif _is_effective_value(value):
+            merged[key] = deepcopy(value)
+        elif key not in merged:
+            merged[key] = deepcopy(value)
+    return merged
+
+
 def resolve_model_paths(model_path: Path) -> tuple[Path, Path]:
     """Return ``(source_path, resolved_path)`` for *model_path*."""
     project_root = project_root_from_model_path(model_path)
@@ -102,7 +118,10 @@ def _merge_object_lists(
     for item_id in source_order:
         source_item = source_by_id.get(item_id, {})
         resolved_item = resolved_by_id.get(item_id, {})
-        merged.append({**source_item, **resolved_item} if resolved_item else deepcopy(source_item))
+        if not resolved_item:
+            merged.append(deepcopy(source_item))
+            continue
+        merged.append(_merge_dicts(source_item, resolved_item))
         seen.add(item_id)
 
     for item_id in resolved_order:

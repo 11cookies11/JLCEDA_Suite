@@ -80,6 +80,7 @@ This step:
 - downloads the real symbol and footprint from JLC/EasyEDA
 - writes the resolved overlay to `build/circuit-model.resolved.json`
 - updates `selected_part.symbol_ref` and `selected_part.kicad_footprint_hint`
+- treats `selected_part.symbol_ref` as resolver-owned output, not a hand-authored source field
 
 ## 第四步：编译并验证 IR / Step 4: Build & Validate IR
 

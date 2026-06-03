@@ -56,6 +56,7 @@ class PartCandidate:
     part_id: str
     display_name: str
     lcsc_id: str = ''
+    symbol_ref: str = ''
     manufacturer: str = ''
     mpn: str = ''
     package: str = ''
@@ -409,6 +410,7 @@ def load_part_catalog() -> dict[str, list[PartCandidate]]:
                     part_id=str(entry.get('part_id', '') or entry.get('partId', '') or f'{role}-{len(converted)+1}'),
                     display_name=str(entry.get('display_name', '') or entry.get('displayName', '') or role),
                     lcsc_id=str(entry.get('lcsc_id', '') or entry.get('lcscId', '')),
+                    symbol_ref=str(entry.get('symbol_ref', '') or entry.get('symbolRef', '') or entry.get('kicad_symbol', '')),
                     manufacturer=str(entry.get('manufacturer', '')),
                     mpn=str(entry.get('mpn', '')),
                     package=str(entry.get('package', '')),

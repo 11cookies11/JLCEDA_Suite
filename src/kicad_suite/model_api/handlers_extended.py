@@ -552,7 +552,9 @@ class _ExtendedHandlers:
                 with external_tool_env(
                     config,
                     {
+                        "KICAD_SOURCE_PROJECT_DIR": source_project,
                         "KICAD_OUTPUT_DIR": str(output_dir),
+                        "KICAD_OUTPUT_PROJECT_DIR": str(output_dir / project_name),
                         "KICAD_PROJECT_NAME": project_name,
                         "KICAD_TOPOLOGY": topology,
                     },

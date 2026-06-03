@@ -260,6 +260,7 @@ def apply_selected_parts_to_model(
             "part_id",
             "display_name",
             "lcsc_id",
+            "symbol_ref",
             "manufacturer",
             "mpn",
             "package",

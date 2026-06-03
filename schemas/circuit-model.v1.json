@@ -82,6 +82,10 @@
                 "type": "string",
                 "description": "Part title from LCSC, e.g. 'STM32F103C8T6'."
               },
+              "symbol_ref": {
+                "type": "string",
+                "description": "Exact KiCad symbol reference, e.g. 'MCU_RaspberryPi:RP2040'."
+              },
               "part_id": {
                 "type": "string"
               },

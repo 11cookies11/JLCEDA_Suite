@@ -58,6 +58,13 @@ _ROLE_FALLBACK: dict[str, tuple[str, str]] = {
 }
 
 
+def _sanitize_symbol_name(name: str) -> str:
+    """Return a KiCad-safe symbol name."""
+    cleaned = name.replace(" ", "_").replace(":", "_").replace("/", "_")
+    cleaned = re.sub(r"[^A-Za-z0-9_.-]+", "_", cleaned)
+    return cleaned.strip("._-") or "UNKNOWN"
+
+
 def _load_json_file(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -201,12 +208,12 @@ def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
     for key in ("symbol_ref", "symbol_name", "kicad_symbol"):
         value = str(selected.get(key, "")).strip()
         if value:
-            return value
+            return _sanitize_symbol_name(value)
     for key in ("display_name", "part_id", "lcsc_id", "mpn"):
         value = str(selected.get(key, "")).strip()
         if value:
             cleaned = re.sub(r"[^A-Za-z0-9_.-]+", "_", value)
-            return cleaned.strip("._-") or "UNKNOWN"
+            return _sanitize_symbol_name(cleaned)
     return ""
 
 
@@ -267,10 +274,10 @@ def _remap_jlc_footprint(fp: str) -> str:
 
 
 def _normalize_footprint(footprint: str) -> str:
-    """Return the footprint unchanged unless it already uses JLC-MCP syntax."""
-    if footprint.startswith("JLC-MCP:"):
+    """Return library-qualified footprints unchanged; otherwise use JLC-MCP naming."""
+    if ":" in footprint:
         return footprint
-    return _remap_jlc_footprint(footprint)
+    return f"JLC-MCP:{footprint}"
 
 
 def resolve_footprint(component_package: str, mapping_footprint: str) -> str:
@@ -283,9 +290,9 @@ def resolve_footprint(component_package: str, mapping_footprint: str) -> str:
     4. component_package raw
     """
     if mapping_footprint and _has_library_prefix(mapping_footprint):
-        return _normalize_footprint(mapping_footprint)
+        return mapping_footprint
     if component_package and _has_library_prefix(component_package):
-        return _normalize_footprint(component_package)
+        return component_package
     if mapping_footprint:
         return _normalize_footprint(mapping_footprint)
     if component_package:

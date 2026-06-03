@@ -60,7 +60,12 @@ def test_resolve_footprint_falls_back_to_package():
 
 def test_compile_resolve_footprint_maps_short_package_names():
     result = compile_resolve_footprint("LQFP-48", "")
-    assert result == "JLC-MCP:LQFP-48_L7.0-W7.0-P0.50-LS9.0-BL"
+    assert result == "JLC-MCP:LQFP-48"
+
+
+def test_compile_resolve_footprint_keeps_library_prefix():
+    result = compile_resolve_footprint("", "JLC-MCP:QFN-32_L5.0-W5.0-P0.50-TL-EP3.7")
+    assert result == "JLC-MCP:QFN-32_L5.0-W5.0-P0.50-TL-EP3.7"
 
 
 def test_footprint_exists_checks_cache():

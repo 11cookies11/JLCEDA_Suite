@@ -363,7 +363,17 @@ def sexpr_head(node: Any) -> str:
 
 
 def normalize_embedded_symbol_name(block: str, library: str, symbol_name: str) -> str:
-    return block.replace(f'(symbol "{symbol_name}"', f'(symbol "{library}:{symbol_name}"', 1)
+    safe_symbol_name = _sanitize_symbol_name(symbol_name)
+    if safe_symbol_name != symbol_name:
+        block = block.replace(symbol_name, safe_symbol_name)
+    return block.replace(f'(symbol "{safe_symbol_name}"', f'(symbol "{library}:{safe_symbol_name}"', 1)
+
+
+def _sanitize_symbol_name(name: str) -> str:
+    """Return a KiCad-safe symbol name."""
+    cleaned = name.replace(' ', '_').replace(':', '_').replace('/', '_')
+    cleaned = re.sub(r'[^A-Za-z0-9_.-]+', '_', cleaned)
+    return cleaned.strip('._-') or 'UNKNOWN'
 
 
 def sanitize_symbol_block(text: str) -> str:
@@ -394,36 +404,50 @@ def sanitize_symbol_block(text: str) -> str:
 def load_installed_symbol(library: str, symbol_name: str) -> str:
     needle = f'(symbol "{symbol_name}"'
     for root in kicad_symbol_roots():
-        symbol_file = root / f'{library}.kicad_sym'
-        if not symbol_file.exists():
-            continue
-        text = symbol_file.read_text(encoding='utf-8')
-        start = text.find(needle)
-        if start < 0:
-            continue
-        end = find_matching_paren(text, start)
-        if end < 0:
-            continue
-        block = sanitize_symbol_block(text[start:end + 1])
-        block = normalize_embedded_symbol_name(block, library, symbol_name)
-        return '\n'.join(f'    {line}' if line.strip() else line for line in block.splitlines())
+        candidate_files = _candidate_symbol_library_files(root, library)
+        for symbol_file in candidate_files:
+            if not symbol_file.exists():
+                continue
+            text = symbol_file.read_text(encoding='utf-8')
+            start = text.find(needle)
+            if start < 0:
+                continue
+            end = find_matching_paren(text, start)
+            if end < 0:
+                continue
+            block = sanitize_symbol_block(text[start:end + 1])
+            block = normalize_embedded_symbol_name(block, library, symbol_name)
+            return '\n'.join(f'    {line}' if line.strip() else line for line in block.splitlines())
     return ''
 
 
 def installed_symbol_block(library: str, symbol_name: str) -> str:
     needle = f'(symbol "{symbol_name}"'
     for root in kicad_symbol_roots():
-        symbol_file = root / f'{library}.kicad_sym'
-        if not symbol_file.exists():
-            continue
-        text = symbol_file.read_text(encoding='utf-8')
-        start = text.find(needle)
-        if start < 0:
-            continue
-        end = find_matching_paren(text, start)
-        if end >= 0:
-            return text[start:end + 1]
+        for symbol_file in _candidate_symbol_library_files(root, library):
+            if not symbol_file.exists():
+                continue
+            text = symbol_file.read_text(encoding='utf-8')
+            start = text.find(needle)
+            if start < 0:
+                continue
+            end = find_matching_paren(text, start)
+            if end >= 0:
+                return text[start:end + 1]
     return ''
+
+
+def _candidate_symbol_library_files(root: Path, library: str) -> list[Path]:
+    """Return symbol library files to inspect for a given library name."""
+    files: list[Path] = []
+    exact = root / f'{library}.kicad_sym'
+    if exact.exists():
+        files.append(exact)
+    if library == 'JLC-MCP':
+        for extra in sorted(root.glob('JLC-MCP*.kicad_sym')):
+            if extra not in files:
+                files.append(extra)
+    return files
 
 
 def symbol_block_for_lib_id(lib_id: str) -> str:

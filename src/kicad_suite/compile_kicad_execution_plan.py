@@ -229,13 +229,20 @@ def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
     for key in ('symbol_ref', 'symbol_name', 'kicad_symbol'):
         value = str(selected.get(key, '')).strip()
         if value:
-            return value
+            return _sanitize_symbol_name(value)
     for key in ('display_name', 'part_id', 'lcsc_id', 'mpn'):
         value = str(selected.get(key, '')).strip()
         if value:
             cleaned = re.sub(r'[^A-Za-z0-9_.-]+', '_', value)
-            return cleaned.strip('._-') or 'UNKNOWN'
+            return _sanitize_symbol_name(cleaned)
     return ''
+
+
+def _sanitize_symbol_name(name: str) -> str:
+    """Return a KiCad-safe symbol name."""
+    cleaned = name.replace(' ', '_').replace(':', '_').replace('/', '_')
+    cleaned = re.sub(r'[^A-Za-z0-9_.-]+', '_', cleaned)
+    return cleaned.strip('._-') or 'UNKNOWN'
 
 
 def normalize_footprint(footprint: str) -> str:
@@ -329,13 +336,13 @@ def resolve_footprint(component_package: str, mapping_footprint: str) -> str:
     cause warnings and failures in KiCad.
     """
     if mapping_footprint and _has_library_prefix(mapping_footprint):
-        return _remap_jlc_footprint(mapping_footprint) or normalize_footprint(mapping_footprint)
+        return mapping_footprint
     if component_package and _has_library_prefix(component_package):
-        return _remap_jlc_footprint(component_package) or normalize_footprint(component_package)
+        return component_package
     if mapping_footprint:
-        return _remap_jlc_footprint(mapping_footprint) or normalize_footprint(mapping_footprint)
+        return normalize_footprint(mapping_footprint)
     if component_package:
-        return _remap_jlc_footprint(component_package) or normalize_footprint(component_package)
+        return normalize_footprint(component_package)
     return ''
 
 

@@ -468,6 +468,8 @@ hwtool agent run <operation> --project <dir> \
 
 #### 导出 / Export
 
+The `display_name` field in these payloads is descriptive metadata only. Downstream export should use the resolver-written `selected_part.symbol_ref` and `selected_part.kicad_footprint_hint` when present.
+
 | Operation | Payload |
 |-----------|---------|
 | `build_ir` | `{}` |
