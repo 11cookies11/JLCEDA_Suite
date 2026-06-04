@@ -25,7 +25,16 @@ __pycache__/
 # Common build outputs (optional)
 dist/
 out/
+build/
 /build/dist/
+*.zip
+*.bak
+
+# Generated example/workspace artifacts
+**/.history/
+**/*-backups/
+examples/*-toolchain/
+project.state.json
 
 # Where local history
 .where-agent-progress.md
