@@ -1,11 +1,11 @@
 {
   "schema_version": "report.v1",
-  "generated_at": "2026-05-29T15:17:58.243103+00:00",
+  "generated_at": "2026-06-04T21:45:12.094922+00:00",
   "overall_status": "ok",
   "project": {
     "name": "stm32f103_minimal_system",
     "id": "stm32f103-minimal-system",
-    "status": "DIRTY"
+    "status": "VALID"
   },
   "sections": [
     {
@@ -15,7 +15,7 @@
       "data": {
         "project_name": "stm32f103_minimal_system",
         "project_id": "stm32f103-minimal-system",
-        "status": "DIRTY"
+        "status": "VALID"
       }
     },
     {
@@ -23,10 +23,10 @@
       "title": "Summary",
       "status": "info",
       "data": {
-        "component_count": 0,
-        "net_count": 0,
+        "component_count": 18,
+        "net_count": 10,
         "risk_count": 0,
-        "sheet_count": 0,
+        "sheet_count": 3,
         "calculation_count": 0,
         "decision_count": 0,
         "constraint_count": 0,
@@ -38,8 +38,8 @@
       "title": "DSL Status",
       "status": "ok",
       "data": {
-        "path": "circuit-model.json",
-        "hash": "7baa4177",
+        "path": "source/circuit-model.source.json",
+        "hash": "2955b6c8",
         "valid": true
       }
     },
@@ -61,13 +61,7 @@
       "data": {
         "errors": 0,
         "warnings": 0,
-        "items": [
-          {
-            "timestamp": "2026-05-29T15:17:51.618197+00:00",
-            "level": "info",
-            "message": "resolve-symbols"
-          }
-        ]
+        "items": []
       }
     },
     {
@@ -214,8 +208,8 @@
           {
             "ref": "SW1",
             "role": "reset_button",
-            "value": "SW-TH_6x6",
-            "lcsc_id": "C8363",
+            "value": "SW-SMD_6x6",
+            "lcsc_id": "C128964",
             "symbol_ok": true
           }
         ]
@@ -236,28 +230,411 @@
       "title": "ERC",
       "status": "ok",
       "data": {
-        "finding_count": 37,
+        "finding_count": 31,
         "warnings": [],
         "violations": [
           {
             "type": "pin_to_pin",
-            "count": 27,
+            "count": 25,
             "severity": "warning",
-            "example": "类型为 Unspecified 和 Unspecified 的引脚已连接"
-          },
-          {
-            "type": "lib_symbol_issues",
-            "count": 7,
-            "severity": "warning",
-            "example": "在符号库中 'C1713' 找不到符号 'JLC-MCP'"
+            "example": "类型为 Unspecified 和 Passive 的引脚已连接"
           },
           {
             "type": "pin_not_driven",
-            "count": 3,
-            "severity": "warning",
+            "count": 6,
+            "severity": "error",
             "example": "Input pin not driven by any Output pins"
           }
         ],
+        "classification": {
+          "schema_version": "erc-classification.v1",
+          "finding_count": 31,
+          "counts": {
+            "must_fix": 0,
+            "library_noise": 31,
+            "review_required": 0
+          },
+          "by_type": {
+            "pin_to_pin": 25,
+            "pin_not_driven": 6
+          },
+          "by_severity": {
+            "warning": 25,
+            "error": 6
+          },
+          "buckets": {
+            "must_fix": [],
+            "library_noise": [
+              {
+                "sheet": "/power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 1 [GND, Unspecified, Line]",
+                  "Symbol J1 引脚 1 [SHELL, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 2 [VOUT, Unspecified, Line]",
+                  "Symbol C5 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 4 [VOUT, Unspecified, Line]",
+                  "Symbol C5 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol R2 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol R1 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol C8 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol C9 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 1 [VBAT, Unspecified, Line]",
+                  "Symbol U1 引脚 9 [VDDA, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 2 [PC13-TAMPER-RTC, Unspecified, Line]",
+                  "Symbol U1 引脚 8 [VSSA, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 5 [PD0-OSC_IN, Unspecified, Line]",
+                  "Symbol Y1 引脚 1 [OE/ST, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 6 [PD1-OSC_OUT, Unspecified, Line]",
+                  "Symbol C9 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 7 [NRST, Unspecified, Line]",
+                  "Symbol R1 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 8 [VSSA, Unspecified, Line]",
+                  "Symbol U1 引脚 23 [VSS_1, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 9 [VDDA, Unspecified, Line]",
+                  "Symbol U1 引脚 24 [VDD_1, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 13 [PA3, Unspecified, Line]",
+                  "Symbol R3 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 23 [VSS_1, Unspecified, Line]",
+                  "Symbol U1 引脚 35 [VSS_2, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 48 [VDD_3, Unspecified, Line]",
+                  "Symbol R1 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 47 [VSS_3, Unspecified, Line]",
+                  "Symbol R2 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 24 [VDD_1, Unspecified, Line]",
+                  "Symbol U1 引脚 36 [VDD_2, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 44 [BOOT0, Unspecified, Line]",
+                  "Symbol R2 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 36 [VDD_2, Unspecified, Line]",
+                  "Symbol U1 引脚 48 [VDD_3, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 35 [VSS_2, Unspecified, Line]",
+                  "Symbol U1 引脚 47 [VSS_3, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 34 [PA13, Unspecified, Line]",
+                  "Symbol J2 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol SW1 引脚 1 [a, Unspecified, Line]",
+                  "Symbol R1 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol SW1 引脚 2 [b, Unspecified, Line]",
+                  "Symbol C8 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol Y1 引脚 1 [OE/ST, Unspecified, Line]",
+                  "Symbol C8 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol Y1 引脚 3 [OUT, Unspecified, Line]",
+                  "Symbol C9 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/io/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol R3 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/io/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol J2 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/io/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol D1 引脚 1 [K, Unspecified, Line]",
+                  "Symbol J2 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/io/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol D1 引脚 2 [A, Unspecified, Line]",
+                  "Symbol R3 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              }
+            ],
+            "review_required": []
+          }
+        },
         "attempted": true,
         "success": true
       }
@@ -267,56 +644,34 @@
       "title": "Recent Operations",
       "status": "info",
       "data": {
-        "count": 5,
+        "count": 3,
         "entries": [
           {
-            "time": "2026-05-29T15:14:34.132030+00:00",
+            "time": "2026-06-04T21:45:04.219521+00:00",
+            "op": "mark_dirty",
+            "reason": "agent:build-ir",
+            "ok": true
+          },
+          {
+            "time": "2026-06-04T21:45:04.572634+00:00",
             "op": "mark_valid",
             "ok": true
           },
           {
-            "time": "2026-05-29T15:17:51.616459+00:00",
-            "op": "resolve_symbols",
-            "ok": true,
-            "total": 18,
-            "easyeda": 18,
-            "search_hint": 0,
-            "placeholder": 0,
-            "failed": 0
-          },
-          {
-            "time": "2026-05-29T15:17:51.618542+00:00",
-            "op": "mark_dirty",
-            "reason": "resolve-symbols",
-            "ok": true
-          },
-          {
-            "time": "2026-05-29T15:17:51.619698+00:00",
-            "op": "resolve_symbols",
-            "ok": true,
-            "elapsed_sec": 128.55,
-            "total": 18,
-            "easyeda": 18,
-            "search_hint": 0,
-            "placeholder": 0,
-            "failed": 0,
-            "model_updated": true
-          },
-          {
-            "time": "2026-05-29T15:17:53.272609+00:00",
+            "time": "2026-06-04T21:45:05.152695+00:00",
             "op": "build",
             "ok": true,
             "symbols": 18,
             "nets": 10,
             "sheets": 4,
-            "build_warnings": 18
+            "build_warnings": 0
           }
         ]
       }
     }
   ],
   "timing": {
-    "build_sec": 0.27,
-    "erc_sec": 4.93
+    "build_sec": 3.04,
+    "erc_sec": 4.16
   }
 }

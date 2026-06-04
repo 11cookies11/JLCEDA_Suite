@@ -1,23 +1,46 @@
-# stm32f103-minimal-system
+# STM32F103 Minimal System
 
-This example is a starter workspace for the stm32f103-minimal-system project.
+Verified example for the current KiCad Agent Suite project protocol.
 
-Project intent:
+This project models a compact STM32F103C8T6 minimum system board with power input,
+3.3 V regulation, reset and boot straps, SWD programming, USB, user LED, and board
+edge expansion headers.
 
-- Start from a generic hardware project template
-- Keep the workspace ready for schematic, PCB, release, and validation artifacts
-- Let the hardware model define the actual target platform and BOM
+## Source Of Truth
 
-Current status:
+Edit this file only:
 
-- Requirements captured in `docs/00_requirements.md`
-- Architecture and bring-up documents are scaffolded
-- Hardware workspaces are ready for detail work
+```text
+source/circuit-model.source.json
+```
 
-Recommended next steps:
+Generated files are kept for inspection and KiCad handoff:
 
-1. Freeze requirements in `docs/00_requirements.md`
-2. Draft the system architecture in `docs/01_system_architecture.md`
-3. Create the first `source/circuit-model.source.json` when the interface list is stable
+```text
+output/stm32f103_minimal_system/
+```
 
-Generated project slug: `stm32f103-minimal-system`
+Do not edit generated `build/`, `output/`, or `project.state.json` files manually.
+
+## Rebuild
+
+Run from this example directory:
+
+```powershell
+hwtool agent status --project .
+hwtool agent inspect --project .
+hwtool agent resolve-symbols --project . --timeout 120
+hwtool agent build-ir --project .
+hwtool agent validate-ir --project .
+hwtool agent export-kicad --project .
+hwtool agent report --project . --markdown
+hwtool agent diagnose --project .
+```
+
+## Current Verification
+
+- `build-ir`: 18 components, 10 nets
+- `validate-ir`: ok, 0 errors, 0 warnings
+- `export-kicad`: generated schematic, PCB, ERC, and report artifacts
+- `diagnose`: no must-fix issues
+

@@ -1,0 +1,123 @@
+(footprint "CRYSTAL-SMD_3215-2P-L3.2-W1.5"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Local JLC-compatible alias footprint for a 32.768kHz 3215 2-pin crystal")
+	(tags "JLC-MCP crystal 3215 32k")
+	(property "Reference" "REF**"
+		(at 0 -2.2 0)
+		(layer "F.SilkS")
+		(uuid "e894fb37-97ac-489a-a4c4-3ac82ff40d11")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "CRYSTAL-SMD_3215-2P-L3.2-W1.5"
+		(at 0 2.2 0)
+		(layer "F.Fab")
+		(uuid "01bd6bb9-01b2-475e-a9f1-7cfa72abeb69")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b90fdd87-1272-4b67-90d1-0d68f3893e11")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "aee9f243-da7b-4359-961a-816f4f89496d")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "LCSC" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c989bbec-eb0d-4bbe-8c35-f0f2059733b2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.6 -0.9)
+		(end 0.6 -0.9)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3b8ce7d2-521e-45fa-8a60-f197eb4aed57")
+	)
+	(fp_line
+		(start -0.6 0.9)
+		(end 0.6 0.9)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "34fc5fae-2dd2-4987-b27d-b5c4c0a0297f")
+	)
+	(fp_rect
+		(start -2.35 -1.25)
+		(end 2.35 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "05c53065-4e23-400a-9412-881664fcbd6d")
+	)
+	(fp_rect
+		(start -1.6 -0.8)
+		(end 1.6 0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "67c0fdd7-6c10-4905-b36d-3a51fa45f4b1")
+	)
+	(pad "1" smd roundrect
+		(at -1 0)
+		(size 1.1 1.1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.12)
+		(uuid "0cac8ac8-0943-401c-b66e-6d1e2a514d37")
+	)
+	(pad "2" smd roundrect
+		(at 1 0)
+		(size 1.1 1.1)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.12)
+		(uuid "5725e4da-0be2-4dea-8e77-dff83387e6ee")
+	)
+	(embedded_fonts no)
+)

@@ -1,0 +1,232 @@
+(footprint "CRYSTAL-SMD_4P-L3.2-W2.5-BL"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -4.85 0)
+		(layer "F.SilkS")
+		(uuid "ad2535f6-0a4b-4db2-90fb-4a615a387be8")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "CRYSTAL-SMD_4P-L3.2-W2.5-BL"
+		(at 0 4.85 0)
+		(layer "F.Fab")
+		(uuid "8573f2fd-c0f7-4919-a6a4-23f2e2df03fe")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9beac2f5-1896-49bf-852c-c70bee95f996")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "272e48f6-5181-45a0-995a-cbf4fe09c8c1")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "LCSC Part" "C5181479"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "ab9fb598-8157-4850-9ea3-a638520512b7")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -2.26 0.25)
+		(end -2.26 1.91)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "66b4f4f0-8c4c-46b5-a9da-98d5788dc039")
+	)
+	(fp_line
+		(start -2.26 1.91)
+		(end -0.4 1.91)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "865b4574-d0a9-4abc-a432-a95e863948dd")
+	)
+	(fp_line
+		(start -2.03 -1.68)
+		(end 2.03 -1.68)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "38d5c15a-2112-4004-b7c2-42dd02386017")
+	)
+	(fp_line
+		(start -2.03 1.68)
+		(end -2.03 -1.68)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "971ee0d3-652c-4260-b7c6-f91afe1c0656")
+	)
+	(fp_line
+		(start 2.03 -1.68)
+		(end 2.03 1.68)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "da75d1d7-0a74-444e-804c-214a14136b59")
+	)
+	(fp_line
+		(start 2.03 1.68)
+		(end -2.03 1.68)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "4569c617-e131-40fa-b0c0-09b34186e9b0")
+	)
+	(fp_circle
+		(center -1.6 1.25)
+		(end -1.57 1.25)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "28d1e991-2270-40dc-8611-5bf7274a828e")
+	)
+	(fp_circle
+		(center -1.27 0.89)
+		(end -1.14 0.89)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "83f8ec93-5ba7-4dcc-8106-737f618c6f31")
+	)
+	(fp_line
+		(start -1.6 -1.25)
+		(end 1.6 -1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "829f8c80-a9bc-4c6f-8149-db5d4e8c23f6")
+	)
+	(fp_line
+		(start -1.6 1.25)
+		(end -1.6 -1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0b3dd875-a3f1-4c30-8cc4-6390734f3723")
+	)
+	(fp_line
+		(start 1.6 -1.25)
+		(end 1.6 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "565bbf2c-3da4-4f51-a3ee-15669052b2ce")
+	)
+	(fp_line
+		(start 1.6 1.25)
+		(end -1.6 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "69e8efd8-b399-44e0-a3f9-ecbf5a5b04db")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "b7749897-ab43-447b-b0a3-325d91d45244")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -1.1 0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "39bc8c40-a9cf-42b6-bc8a-97e9375fa979")
+	)
+	(pad "2" smd rect
+		(at 1.1 0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "7c6c0869-f3d2-4517-a7b1-688c5b49f2db")
+	)
+	(pad "3" smd rect
+		(at 1.1 -0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "635e07e6-afe4-4312-bb93-36d6ac5897de")
+	)
+	(pad "4" smd rect
+		(at -1.1 -0.85)
+		(size 1.4 1.2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "5ee8b9d4-23a2-4569-b6af-05ea8e6abef8")
+	)
+	(embedded_fonts no)
+	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/stm32f103-minimal-system/output/stm32f103_minimal_system/libraries/3dmodels/JLC-MCP.3dshapes/CRYSTAL-SMD_4P-L3.2-W2.5-BL.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

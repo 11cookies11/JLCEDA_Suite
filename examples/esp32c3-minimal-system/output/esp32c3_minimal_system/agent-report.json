@@ -1,11 +1,11 @@
 {
   "schema_version": "report.v1",
-  "generated_at": "2026-05-29T17:51:18.964805+00:00",
+  "generated_at": "2026-06-04T21:45:02.833587+00:00",
   "overall_status": "ok",
   "project": {
     "name": "esp32c3_minimal_system",
     "id": "esp32c3-minimal-system",
-    "status": "BUILT"
+    "status": "VALID"
   },
   "sections": [
     {
@@ -15,7 +15,7 @@
       "data": {
         "project_name": "esp32c3_minimal_system",
         "project_id": "esp32c3-minimal-system",
-        "status": "BUILT"
+        "status": "VALID"
       }
     },
     {
@@ -23,8 +23,8 @@
       "title": "Summary",
       "status": "info",
       "data": {
-        "component_count": 20,
-        "net_count": 10,
+        "component_count": 17,
+        "net_count": 8,
         "risk_count": 0,
         "sheet_count": 3,
         "calculation_count": 0,
@@ -38,19 +38,19 @@
       "title": "DSL Status",
       "status": "ok",
       "data": {
-        "path": "circuit-model.json",
-        "hash": "a6ebaa51",
+        "path": "source/circuit-model.source.json",
+        "hash": "0abdde4f",
         "valid": true
       }
     },
     {
       "key": "build",
       "title": "Build Status",
-      "status": "ok",
+      "status": "info",
       "data": {
-        "last_build_ok": true,
-        "last_build_at": "2026-05-29T17:50:30.777316+00:00",
-        "input_dsl_hash": "a62f7bf9",
+        "last_build_ok": false,
+        "last_build_at": null,
+        "input_dsl_hash": "",
         "stale": false
       }
     },
@@ -61,13 +61,7 @@
       "data": {
         "errors": 0,
         "warnings": 0,
-        "items": [
-          {
-            "timestamp": "2026-05-29T17:19:59.232371+00:00",
-            "level": "info",
-            "message": "agent:build-ir"
-          }
-        ]
+        "items": []
       }
     },
     {
@@ -229,28 +223,294 @@
       "title": "ERC",
       "status": "ok",
       "data": {
-        "finding_count": 29,
+        "finding_count": 21,
         "warnings": [],
         "violations": [
           {
             "type": "pin_to_pin",
-            "count": 21,
+            "count": 18,
             "severity": "warning",
-            "example": "类型为 Unspecified 和 Passive 的引脚已连接"
-          },
-          {
-            "type": "lib_symbol_issues",
-            "count": 7,
-            "severity": "warning",
-            "example": "在符号库中 'C1590' 找不到符号 'JLC-MCP'"
+            "example": "类型为 Unspecified 和 Power output 的引脚已连接"
           },
           {
             "type": "pin_not_driven",
-            "count": 1,
-            "severity": "warning",
+            "count": 3,
+            "severity": "error",
             "example": "Input pin not driven by any Output pins"
           }
         ],
+        "classification": {
+          "schema_version": "erc-classification.v1",
+          "finding_count": 21,
+          "counts": {
+            "must_fix": 0,
+            "library_noise": 21,
+            "review_required": 0
+          },
+          "by_type": {
+            "pin_to_pin": 18,
+            "pin_not_driven": 3
+          },
+          "by_severity": {
+            "warning": 18,
+            "error": 3
+          },
+          "buckets": {
+            "must_fix": [],
+            "library_noise": [
+              {
+                "sheet": "/power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 1 [GND, Unspecified, Line]",
+                  "Symbol #FLG102 引脚 1 [Power output, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 2 [VOUT, Unspecified, Line]",
+                  "Symbol C7 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 3 [VIN, Unspecified, Line]",
+                  "Symbol #FLG101 引脚 1 [Power output, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol C5 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol R2 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol SW1 引脚 1 [a, Unspecified, Line]",
+                  "Symbol C5 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol SW1 引脚 2 [b, Unspecified, Line]",
+                  "Symbol SW2 引脚 2 [b, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol SW2 引脚 1 [a, Unspecified, Line]",
+                  "Symbol U1 引脚 29 [XTAL_N, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 1 [LNA_IN, Unspecified, Line]",
+                  "Symbol U1 引脚 11 [VDD3P3_RTC, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 2 [VDD3P3, Unspecified, Line]",
+                  "Symbol U1 引脚 9 [MTMS, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 8 [GPIO3, Unspecified, Line]",
+                  "Symbol R3 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 9 [MTMS, Unspecified, Line]",
+                  "Symbol U1 引脚 16 [GPIO10, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 11 [VDD3P3_RTC, Unspecified, Line]",
+                  "Symbol U1 引脚 17 [VDD3P3_CPU, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 16 [GPIO10, Unspecified, Line]",
+                  "Symbol C5 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol SW2 引脚 2 [b, Unspecified, Line]",
+                  "Symbol U1 引脚 16 [GPIO10, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 31 [VDDA, Unspecified, Line]",
+                  "Symbol C5 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 29 [XTAL_N, Unspecified, Line]",
+                  "Symbol R2 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/mcu/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 17 [VDD3P3_CPU, Unspecified, Line]",
+                  "Symbol R2 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/io/",
+                "type": "pin_not_driven",
+                "severity": "error",
+                "description": "Input pin not driven by any Output pins",
+                "items": [
+                  "Symbol R3 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Passive-style component pin is marked as input, which is usually a library metadata issue.",
+                "suggested_action": "Normalize passive component pins to passive."
+              },
+              {
+                "sheet": "/io/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol D1 引脚 1 [K, Unspecified, Line]",
+                  "Symbol U2 引脚 2 [VOUT, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/io/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol D1 引脚 2 [A, Unspecified, Line]",
+                  "Symbol R3 引脚 2 [2, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              }
+            ],
+            "review_required": []
+          }
+        },
         "attempted": true,
         "success": true
       }
@@ -260,529 +520,34 @@
       "title": "Recent Operations",
       "status": "info",
       "data": {
-        "count": 20,
+        "count": 3,
         "entries": [
           {
-            "time": "2026-05-29T17:15:08.270669+00:00",
+            "time": "2026-06-04T21:44:55.211329+00:00",
             "op": "mark_dirty",
             "reason": "agent:build-ir",
             "ok": true
           },
           {
-            "time": "2026-05-29T17:15:09.618203+00:00",
+            "time": "2026-06-04T21:44:55.516306+00:00",
             "op": "mark_valid",
             "ok": true
           },
           {
-            "time": "2026-05-29T17:15:11.147178+00:00",
+            "time": "2026-06-04T21:44:56.084272+00:00",
             "op": "build",
             "ok": true,
             "symbols": 17,
             "nets": 8,
             "sheets": 4,
-            "build_warnings": 17
-          },
-          {
-            "time": "2026-05-29T17:15:18.462383+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a6ebaa51",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
-              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
-              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
-              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 44,
-            "erc_violations": [
-              {
-                "type": "footprint_link_issues",
-                "count": 17
-              },
-              {
-                "type": "pin_to_pin",
-                "count": 17
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 9
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 0.23,
-            "erc_sec": 7.28,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:19:59.232578+00:00",
-            "op": "mark_dirty",
-            "reason": "agent:build-ir",
-            "ok": true
-          },
-          {
-            "time": "2026-05-29T17:20:00.760458+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 17
-          },
-          {
-            "time": "2026-05-29T17:20:09.049232+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a6ebaa51",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
-              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
-              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
-              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 44,
-            "erc_violations": [
-              {
-                "type": "footprint_link_issues",
-                "count": 17
-              },
-              {
-                "type": "pin_to_pin",
-                "count": 17
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 9
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 0.99,
-            "erc_sec": 7.49,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:21:14.386161+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 17
-          },
-          {
-            "time": "2026-05-29T17:21:19.696600+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a6ebaa51",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
-              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
-              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
-              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 44,
-            "erc_violations": [
-              {
-                "type": "footprint_link_issues",
-                "count": 17
-              },
-              {
-                "type": "pin_to_pin",
-                "count": 17
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 9
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 1.86,
-            "erc_sec": 3.64,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:22:14.073526+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 17
-          },
-          {
-            "time": "2026-05-29T17:22:18.154172+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a6ebaa51",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
-              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
-              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
-              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 44,
-            "erc_violations": [
-              {
-                "type": "footprint_link_issues",
-                "count": 17
-              },
-              {
-                "type": "pin_to_pin",
-                "count": 17
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 9
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 0.66,
-            "erc_sec": 3.61,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:25:02.165329+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 17
-          },
-          {
-            "time": "2026-05-29T17:25:06.207688+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a6ebaa51",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U1 footprint QFN-32 was not found in the configured KiCad footprint libraries.",
-              "U2 footprint SOT-223 was not found in the configured KiCad footprint libraries.",
-              "C1 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C2 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C3 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C4 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C5 footprint C0603 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint C0805 was not found in the configured KiCad footprint libraries.",
-              "R1 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R2 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "R3 footprint R0603 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint LED0603 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint USB-C-SMD was not found in the configured KiCad footprint libraries.",
-              "J2 footprint HDR-TH_4P was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint SW-SMD was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint SW-SMD was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 44,
-            "erc_violations": [
-              {
-                "type": "footprint_link_issues",
-                "count": 17
-              },
-              {
-                "type": "pin_to_pin",
-                "count": 17
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 9
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 0.65,
-            "erc_sec": 3.59,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:27:54.950592+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 10
-          },
-          {
-            "time": "2026-05-29T17:27:59.182037+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a6ebaa51",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U1 footprint JLC-MCP:QFN-32 was not found in the configured KiCad footprint libraries.",
-              "U2 footprint JLC-MCP:SOT-223 was not found in the configured KiCad footprint libraries.",
-              "C4 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint JLC-MCP:LED0603 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint JLC-MCP:USB-C-SMD was not found in the configured KiCad footprint libraries.",
-              "J2 footprint JLC-MCP:HDR-TH_4P was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint JLC-MCP:SW-SMD was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint JLC-MCP:SW-SMD was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 34,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 17
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 9
-              },
-              {
-                "type": "footprint_link_issues",
-                "count": 7
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 0.73,
-            "erc_sec": 3.71,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:31:05.983815+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 9
-          },
-          {
-            "time": "2026-05-29T17:31:10.194357+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a62f7bf9",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U2 footprint JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR was not found in the configured KiCad footprint libraries.",
-              "C4 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint JLC-MCP:LED-SMD_L1.6-W0.8-RD_GREEN-1 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint JLC-MCP:USB-C-SMD_USB-TYPE-C-006 was not found in the configured KiCad footprint libraries.",
-              "J2 footprint JLC-MCP:HDR-TH_4P-P2.54-H-M-W10.4 was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint JLC-MCP:SW-SMD_K5-1617SA-02 was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint JLC-MCP:SW-SMD_K5-1617SA-02 was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 29,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 21
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 7
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 0.75,
-            "erc_sec": 3.66,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:50:26.268551+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 9
-          },
-          {
-            "time": "2026-05-29T17:50:30.777574+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "a62f7bf9",
-            "operation": "export_kicad_project",
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\esp32c3_minimal_system.kicad_sch"
-            },
-            "build_warnings": [
-              "U2 footprint JLC-MCP:SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR was not found in the configured KiCad footprint libraries.",
-              "C4 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "C6 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "C7 footprint JLC-MCP:C0805 was not found in the configured KiCad footprint libraries.",
-              "D1 footprint JLC-MCP:LED-SMD_L1.6-W0.8-RD_GREEN-1 was not found in the configured KiCad footprint libraries.",
-              "J1 footprint JLC-MCP:USB-C-SMD_USB-TYPE-C-006 was not found in the configured KiCad footprint libraries.",
-              "J2 footprint JLC-MCP:HDR-TH_4P-P2.54-H-M-W10.4 was not found in the configured KiCad footprint libraries.",
-              "SW1 footprint JLC-MCP:SW-SMD_K5-1617SA-02 was not found in the configured KiCad footprint libraries.",
-              "SW2 footprint JLC-MCP:SW-SMD_K5-1617SA-02 was not found in the configured KiCad footprint libraries."
-            ],
-            "erc_findings": 29,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 21
-              },
-              {
-                "type": "lib_symbol_issues",
-                "count": 7
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 1
-              }
-            ],
-            "build_sec": 0.8,
-            "erc_sec": 3.91,
-            "report_status": "ok",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\esp32c3-minimal-system\\output\\esp32c3_minimal_system\\agent-report.json"
-          },
-          {
-            "time": "2026-05-29T17:51:14.825765+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 17,
-            "nets": 8,
-            "sheets": 4,
-            "build_warnings": 9
+            "build_warnings": 0
           }
         ]
       }
     }
   ],
   "timing": {
-    "build_sec": 0.72,
-    "erc_sec": 3.62
+    "build_sec": 2.93,
+    "erc_sec": 4.07
   }
 }

@@ -2,226 +2,271 @@
   (version 20250114)
   (generator "kicad-agent-suite")
   (generator_version "10.0")
-  (uuid "701db557-5ce3-4f41-9406-e71746ff7701")
+  (uuid "6b4fa692-13b0-498b-b6b3-f86ba64b584c")
   (paper "A4")
   (lib_symbols
     (symbol "JLC-MCP:2.54-1_4P"
-      (pin_names (offset 0.254))
-      (exclude_from_sim no)
-      (in_bom yes)
-      (on_board yes)
-      (duplicate_pin_numbers_are_jumpers no)
-      (property "Reference" "R" (at 0 3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" "2.54-1_4P" (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "JLC-MCP:HDR-TH_4P-P2.54-H-M-W10.4" (at 0 0 0)
-        (hide yes)
-        (effects (font (size 1.27 1.27)))
-      )
-      (symbol "2.54-1_4P_0_1"
-        (rectangle (start -2.54 1.27) (end 2.54 -1.27)
-          (stroke (width 0.254) (type default))
-          (fill (type none))
+        (in_bom yes)
+        (on_board yes)
+        (property
+          "Reference"
+          "H"
+          (id 0)
+          (at 0 8.89 0)
+          (effects (font (size 1.27 1.27) ) )
         )
-        (pin passive line (at -5.08 0 0) (length 2.54)
-          (name "1" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
+        (property
+          "Value"
+          "2.54-1_4P"
+          (id 1)
+          (at 0 -8.89 0)
+          (effects (font (size 1.27 1.27) ) )
         )
-        (pin passive line (at 5.08 0 180) (length 2.54)
-          (name "2" (effects (font (size 1.27 1.27))))
-          (number "2" (effects (font (size 1.27 1.27))))
+        (property
+          "Footprint"
+          ":HDR-TH_4P-P2.54-H-M-W10.4"
+          (id 2)
+          (at 0 -11.43 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "Manufacturer"
+          "BOOMELE(博穆精密)"
+          (id 4)
+          (at 0 -13.97 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "MPN"
+          "2.54-1_4P"
+          (id 5)
+          (at 0 -16.51 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (symbol "2.54-1_4P_0_1"
+          (rectangle
+            (start -1.27 6.35)
+            (end 3.81 -6.35)
+            (stroke (width 0) (type default))
+            (fill (type background))
+          )
+          (circle
+            (center 0.00 5.08)
+            (radius 0.38)
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (pin unspecified line
+            (at -3.81 3.81 0)
+            (length 2.54)
+            (name "1" (effects (font (size 1.27 1.27))))
+            (number "1" (effects (font (size 1.27 1.27))))
+          )
+          (pin unspecified line
+            (at -3.81 1.27 0)
+            (length 2.54)
+            (name "2" (effects (font (size 1.27 1.27))))
+            (number "2" (effects (font (size 1.27 1.27))))
+          )
+          (pin unspecified line
+            (at -3.81 -1.27 0)
+            (length 2.54)
+            (name "3" (effects (font (size 1.27 1.27))))
+            (number "3" (effects (font (size 1.27 1.27))))
+          )
+          (pin unspecified line
+            (at -3.81 -3.81 0)
+            (length 2.54)
+            (name "4" (effects (font (size 1.27 1.27))))
+            (number "4" (effects (font (size 1.27 1.27))))
+          )
         )
       )
-      (embedded_fonts no)
-    )
     (symbol "JLC-MCP:APHD1608LCGCK"
-    (in_bom yes)
-    (on_board yes)
-    (property
-      "Reference"
-      "LED"
-      (id 0)
-      (at 0 3.81 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Value"
-      "APHD1608LCGCK"
-      (id 1)
-      (at 0 -6.35 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Footprint"
-      ":LED-SMD_L1.6-W0.8-RD_GREEN-1"
-      (id 2)
-      (at 0 -8.89 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Manufacturer"
-      "Kingbright(今台)"
-      (id 4)
-      (at 0 -11.43 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "MPN"
-      "APHD1608LCGCK"
-      (id 5)
-      (at 0 -13.97 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "APHD1608LCGCK_0_1"
-      (polyline
-        (pts
-          (xy -4.06 2.03) (xy -3.05 1.52) (xy -3.56 1.02) (xy -4.06 2.03)
+        (in_bom yes)
+        (on_board yes)
+        (property
+          "Reference"
+          "LED"
+          (id 0)
+          (at 0 3.81 0)
+          (effects (font (size 1.27 1.27) ) )
         )
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-      (polyline
-        (pts
-          (xy -3.05 3.05) (xy -2.03 2.54) (xy -2.54 2.03) (xy -3.05 3.05)
+        (property
+          "Value"
+          "APHD1608LCGCK"
+          (id 1)
+          (at 0 -6.35 0)
+          (effects (font (size 1.27 1.27) ) )
         )
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-      (polyline
-        (pts
-          (xy 1.27 0.51) (xy -1.27 -1.27) (xy 1.27 -3.05) (xy 1.27 0.51)
+        (property
+          "Footprint"
+          ":LED-SMD_L1.6-W0.8-RD_GREEN-1"
+          (id 2)
+          (at 0 -8.89 0)
+          (effects (font (size 1.27 1.27) ) hide)
         )
-        (stroke (width 0) (type default))
-        (fill (type background))
-      )
-      (polyline
-        (pts
-          (xy -2.29 0.25) (xy -3.30 1.27)
+        (property
+          "Manufacturer"
+          "Kingbright(今台)"
+          (id 4)
+          (at 0 -11.43 0)
+          (effects (font (size 1.27 1.27) ) hide)
         )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy -1.27 1.27) (xy -2.29 2.29)
+        (property
+          "MPN"
+          "APHD1608LCGCK"
+          (id 5)
+          (at 0 -13.97 0)
+          (effects (font (size 1.27 1.27) ) hide)
         )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy -1.27 -1.27) (xy -2.54 -1.27)
+        (symbol "APHD1608LCGCK_0_1"
+          (polyline
+            (pts
+              (xy -4.06 2.03) (xy -3.05 1.52) (xy -3.56 1.02) (xy -4.06 2.03)
+            )
+            (stroke (width 0) (type default))
+            (fill (type background))
+          )
+          (polyline
+            (pts
+              (xy -3.05 3.05) (xy -2.03 2.54) (xy -2.54 2.03) (xy -3.05 3.05)
+            )
+            (stroke (width 0) (type default))
+            (fill (type background))
+          )
+          (polyline
+            (pts
+              (xy 1.27 0.51) (xy -1.27 -1.27) (xy 1.27 -3.05) (xy 1.27 0.51)
+            )
+            (stroke (width 0) (type default))
+            (fill (type background))
+          )
+          (polyline
+            (pts
+              (xy -2.29 0.25) (xy -3.30 1.27)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (polyline
+            (pts
+              (xy -1.27 1.27) (xy -2.29 2.29)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (polyline
+            (pts
+              (xy -1.27 -1.27) (xy -2.54 -1.27)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (polyline
+            (pts
+              (xy 2.54 -1.27) (xy 1.27 -1.27)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (polyline
+            (pts
+              (xy -1.27 0.51) (xy -1.27 -3.05)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (pin unspecified line
+            (at -5.08 -1.27 0)
+            (length 2.54)
+            (name "K" (effects (font (size 1.27 1.27))))
+            (number "1" (effects (font (size 1.27 1.27))))
+          )
+          (pin unspecified line
+            (at 5.08 -1.27 180)
+            (length 2.54)
+            (name "A" (effects (font (size 1.27 1.27))))
+            (number "2" (effects (font (size 1.27 1.27))))
+          )
         )
-        (stroke (width 0) (type default))
-        (fill (type none))
       )
-      (polyline
-        (pts
-          (xy 2.54 -1.27) (xy 1.27 -1.27)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (polyline
-        (pts
-          (xy -1.27 0.51) (xy -1.27 -3.05)
-        )
-        (stroke (width 0) (type default))
-        (fill (type none))
-      )
-      (pin unspecified line
-        (at -5.08 -1.27 0)
-        (length 2.54)
-        (name "K" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-      (pin unspecified line
-        (at 5.08 -1.27 180)
-        (length 2.54)
-        (name "A" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
     (symbol "JLC-MCP:RC0603JR-071KL"
-    (in_bom yes)
-    (on_board yes)
-    (property
-      "Reference"
-      "R"
-      (id 0)
-      (at 0 5.08 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Value"
-      "RC0603JR-071KL"
-      (id 1)
-      (at 0 -5.08 0)
-      (effects (font (size 1.27 1.27) ) )
-    )
-    (property
-      "Footprint"
-      ":R0603"
-      (id 2)
-      (at 0 -7.62 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "Manufacturer"
-      "YAGEO(国巨)"
-      (id 4)
-      (at 0 -10.16 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (property
-      "MPN"
-      "RC0603JR-071KL"
-      (id 5)
-      (at 0 -12.70 0)
-      (effects (font (size 1.27 1.27) ) hide)
-    )
-    (symbol "RC0603JR-071KL_0_1"
-      (rectangle
-        (start -2.54 1.02)
-        (end 2.54 -1.02)
-        (stroke (width 0) (type default))
-        (fill (type background))
+        (in_bom yes)
+        (on_board yes)
+        (property
+          "Reference"
+          "R"
+          (id 0)
+          (at 0 5.08 0)
+          (effects (font (size 1.27 1.27) ) )
+        )
+        (property
+          "Value"
+          "RC0603JR-071KL"
+          (id 1)
+          (at 0 -5.08 0)
+          (effects (font (size 1.27 1.27) ) )
+        )
+        (property
+          "Footprint"
+          ":R0603"
+          (id 2)
+          (at 0 -7.62 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "Manufacturer"
+          "YAGEO(国巨)"
+          (id 4)
+          (at 0 -10.16 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "MPN"
+          "RC0603JR-071KL"
+          (id 5)
+          (at 0 -12.70 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (symbol "RC0603JR-071KL_0_1"
+          (rectangle
+            (start -2.54 1.02)
+            (end 2.54 -1.02)
+            (stroke (width 0) (type default))
+            (fill (type background))
+          )
+          (pin input line
+            (at 5.08 -0.00 180)
+            (length 2.54)
+            (name "2" (effects (font (size 1.27 1.27))))
+            (number "2" (effects (font (size 1.27 1.27))))
+          )
+          (pin input line
+            (at -5.08 -0.00 0)
+            (length 2.54)
+            (name "1" (effects (font (size 1.27 1.27))))
+            (number "1" (effects (font (size 1.27 1.27))))
+          )
+        )
       )
-      (pin input line
-        (at 5.08 -0.00 180)
-        (length 2.54)
-        (name "2" (effects (font (size 1.27 1.27))))
-        (number "2" (effects (font (size 1.27 1.27))))
-      )
-      (pin input line
-        (at -5.08 -0.00 0)
-        (length 2.54)
-        (name "1" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
   )
   (symbol
     (lib_id "JLC-MCP:RC0603JR-071KL")
-    (at 50.8 127 0)
+    (at 111.76 50.8 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
     (dnp no)
-    (uuid "5cfee1e0-f844-4b90-a5e9-8307f55be6cd")
-    (property "Reference" "R3" (at 50.8 121.92 0)
+    (uuid "1f161f46-59c1-473f-a6d6-352c2ab85626")
+    (property "Reference" "R3" (at 111.76 45.72 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "1K" (at 50.8 132.08 0)
+    (property "Value" "1K" (at 111.76 55.88 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "JLC-MCP:R0603" (at 50.8 127 0)
+    (property "Footprint" "JLC-MCP:R0603" (at 111.76 50.8 0)
       (hide yes)
       (effects (font (size 1.27 1.27)))
     )
@@ -229,11 +274,11 @@
         (hide yes)
         (effects (font (size 1.27 1.27)))
       )
-      (pin "1" (uuid "8324f360-24ae-4ea1-b819-2946c7f7efd1"))
-      (pin "2" (uuid "ad228fe7-a856-4a49-a021-f6aa3007664f"))
+      (pin "1" (uuid "f9a5b278-00c1-4f88-99c0-46f445f826af"))
+      (pin "2" (uuid "743a6d81-136a-4ca2-a2ec-4f573af6cdad"))
     (instances
       (project "esp32c3_minimal_system"
-        (path "/c6454059-6594-497e-831c-288c877860e1"
+        (path "/f24a40fa-5098-47d7-b8b7-13fc4119a715"
           (reference "R3")
           (unit 1)
         )
@@ -242,20 +287,20 @@
   )
   (symbol
     (lib_id "JLC-MCP:APHD1608LCGCK")
-    (at 50.8 154.94 0)
+    (at 111.76 78.74 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
     (dnp no)
-    (uuid "c10c62aa-2779-42ee-9ef9-ed39f3d32d44")
-    (property "Reference" "D1" (at 50.8 149.86 0)
+    (uuid "93756715-2b35-48be-8b70-c7e1557d249b")
+    (property "Reference" "D1" (at 111.76 73.66 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "LED0603" (at 50.8 160.02 0)
+    (property "Value" "LED0603" (at 111.76 83.82 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "JLC-MCP:LED-SMD_L1.6-W0.8-RD_GREEN-1" (at 50.8 154.94 0)
+    (property "Footprint" "JLC-MCP:LED-SMD_L1.6-W0.8-RD_GREEN-1" (at 111.76 78.74 0)
       (hide yes)
       (effects (font (size 1.27 1.27)))
     )
@@ -263,11 +308,11 @@
         (hide yes)
         (effects (font (size 1.27 1.27)))
       )
-      (pin "1" (uuid "079cb7fe-f87e-4a04-aa46-9f7e33e86abd"))
-      (pin "2" (uuid "09684db9-44ed-4886-89a7-efa481a16c21"))
+      (pin "1" (uuid "fb059b6a-5ab8-4fd7-87fb-8c7f0f2da3d6"))
+      (pin "2" (uuid "a1444335-2d43-408c-827c-b026a1ca8303"))
     (instances
       (project "esp32c3_minimal_system"
-        (path "/c6454059-6594-497e-831c-288c877860e1"
+        (path "/f24a40fa-5098-47d7-b8b7-13fc4119a715"
           (reference "D1")
           (unit 1)
         )
@@ -275,21 +320,21 @@
     )
   )
   (symbol
-    (lib_id "JLC-MCP:2.54-1_4P")
-    (at 208.28 50.8 0)
+    (lib_id "JLC-MCP:2.54-1*4P反弯排针")
+    (at 50.8 50.8 0)
     (unit 1)
     (exclude_from_sim no)
     (in_bom yes)
     (on_board yes)
     (dnp no)
-    (uuid "2aaa641e-71f8-45a9-ac0b-f0f4ef6c3838")
-    (property "Reference" "J2" (at 208.28 45.72 0)
+    (uuid "da9c2d02-086a-4c95-ad79-16b643b2fefc")
+    (property "Reference" "J2" (at 50.8 45.72 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Value" "UART-4P" (at 208.28 55.88 0)
+    (property "Value" "UART-4P" (at 50.8 55.88 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "JLC-MCP:HDR-TH_4P-P2.54-H-M-W10.4" (at 208.28 50.8 0)
+    (property "Footprint" "JLC-MCP:HDR-TH_4P-P2.54-H-M-W10.4" (at 50.8 50.8 0)
       (hide yes)
       (effects (font (size 1.27 1.27)))
     )
@@ -297,71 +342,87 @@
         (hide yes)
         (effects (font (size 1.27 1.27)))
       )
-      (pin "1" (uuid "a4946ea0-967a-42f6-b9df-494952406952"))
-      (pin "2" (uuid "b2c751c9-1dae-4637-995c-12eeea601aef"))
-      (pin "3" (uuid "333e5f99-5d6b-480d-bf07-d6748151b738"))
-      (pin "4" (uuid "1c296c7a-485d-4ab3-adb4-9382b456f7d2"))
+      (pin "1" (uuid "f73aa36b-cd16-4841-bbf6-e0d97d6e3f68"))
+      (pin "2" (uuid "ccd65b44-9bb1-4818-92f1-2ed7cdc95a2e"))
+      (pin "3" (uuid "6a3734d8-5db1-489c-9c73-6ae00c3291c5"))
+      (pin "4" (uuid "c7edec4e-35de-4e74-ab7c-7582985ed872"))
     (instances
       (project "esp32c3_minimal_system"
-        (path "/c6454059-6594-497e-831c-288c877860e1"
+        (path "/f24a40fa-5098-47d7-b8b7-13fc4119a715"
           (reference "J2")
           (unit 1)
         )
       )
     )
   )
-  (wire (pts (xy 45.72 127) (xy 41.91 127))
+  (wire (pts (xy 106.68 50.8) (xy 102.87 50.8))
     (stroke (width 0) (type default))
-    (uuid "d7b42599-b397-4334-b84e-6fb292d42dd8")
+    (uuid "9a954495-03ef-4a9b-82bf-a4e08faa9c96")
   )
-  (global_label "LED" (shape bidirectional) (at 41.91 127 0)
+  (global_label "LED" (shape bidirectional) (at 102.87 50.8 0)
     (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "a717c809-dc99-422a-99d8-1df580ce09b9")
+    (uuid "e44267c9-fd9c-472a-ad1a-f182db443fd6")
   )
-  (wire (pts (xy 55.88 127) (xy 59.69 127))
+  (wire (pts (xy 116.84 50.8) (xy 120.65 50.8))
     (stroke (width 0) (type default))
-    (uuid "7247be48-74ef-44db-ba21-fd72e2bca119")
+    (uuid "80d9b559-1691-4a4c-8d43-8b9f6d709d29")
   )
-  (global_label "GND" (shape input) (at 59.69 127 0)
+  (global_label "GND" (shape input) (at 120.65 50.8 0)
     (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "988893b9-dd72-484d-92e5-db05c7327937")
+    (uuid "fc78c29f-bd98-4b69-ad08-7cbd4be1e7a0")
   )
-  (wire (pts (xy 45.72 156.21) (xy 41.91 156.21))
+  (wire (pts (xy 106.68 80.01) (xy 102.87 80.01))
     (stroke (width 0) (type default))
-    (uuid "463e46e6-3eeb-48e1-b418-e6a31dbce394")
+    (uuid "1cdba7f1-a65b-4480-b3af-09b1f83f3273")
   )
-  (global_label "+3V3" (shape input) (at 41.91 156.21 0)
+  (global_label "+3V3" (shape input) (at 102.87 80.01 0)
     (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "e0317ee8-d224-4ebf-a5d0-d48542bdfda7")
+    (uuid "9042959c-90c6-4022-8779-e98c8a32623b")
   )
-  (wire (pts (xy 55.88 156.21) (xy 59.69 156.21))
+  (wire (pts (xy 116.84 80.01) (xy 120.65 80.01))
     (stroke (width 0) (type default))
-    (uuid "13723acf-d6c9-431e-8093-3f65209cc458")
+    (uuid "800deb9d-30d4-4545-890e-53b54af20c1d")
   )
-  (global_label "GND" (shape input) (at 59.69 156.21 0)
+  (global_label "GND" (shape input) (at 120.65 80.01 0)
     (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "90d91a31-7853-46dc-90aa-7a3e2d25e333")
+    (uuid "ba314a3a-cb5a-4f65-ac2c-d23dc4ea313f")
   )
-  (wire (pts (xy 203.2 50.8) (xy 199.39 50.8))
+  (wire (pts (xy 46.99 46.99) (xy 43.18 46.99))
     (stroke (width 0) (type default))
-    (uuid "f5e0094c-7c8d-45ad-8023-322f3d32e6f9")
+    (uuid "fbb11631-f16b-4b70-bcf5-2e81ea27c3b8")
   )
-  (global_label "+3V3" (shape input) (at 199.39 50.8 0)
+  (global_label "+3V3" (shape input) (at 43.18 46.99 0)
     (effects (font (size 1.27 1.27)) (justify right))
-    (uuid "ee91faa9-a125-4065-9030-11bccc292b7f")
+    (uuid "fde47efe-b477-495f-9e7b-690dc1286a8b")
   )
-  (wire (pts (xy 213.36 50.8) (xy 217.17 50.8))
+  (wire (pts (xy 46.99 49.53) (xy 43.18 49.53))
     (stroke (width 0) (type default))
-    (uuid "f3a2f020-3f14-41b4-9665-35387fe141f3")
+    (uuid "78e2b09a-f4ac-4a45-b78c-f7f48ccdbd47")
   )
-  (global_label "UART_TX" (shape bidirectional) (at 217.17 50.8 0)
-    (effects (font (size 1.27 1.27)) (justify left))
-    (uuid "353d5dc4-1fb7-428a-966e-8e971a7a8e1f")
+  (global_label "UART_TX" (shape bidirectional) (at 43.18 49.53 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "ff5bdb9c-0318-4461-baf0-d11b7c10a44a")
+  )
+  (wire (pts (xy 46.99 52.07) (xy 43.18 52.07))
+    (stroke (width 0) (type default))
+    (uuid "376a0891-7a3a-4d0c-81e7-072bb1030411")
+  )
+  (global_label "UART_RX" (shape bidirectional) (at 43.18 52.07 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "7a2c8ba2-46fb-422e-9d10-15a0806effde")
+  )
+  (wire (pts (xy 46.99 54.61) (xy 43.18 54.61))
+    (stroke (width 0) (type default))
+    (uuid "4a863797-1c56-4ff7-84b7-0c05ae75f47a")
+  )
+  (global_label "GND" (shape input) (at 43.18 54.61 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "e04f214b-5d75-4b00-83cf-ad33bbcbdb3d")
   )
   (sheet_instances
     (path "/" (page "1"))
-    (path "/6ba1db61-53e2-4496-809d-7d5332c09378" (page "2"))
-    (path "/b66f7af6-2bc6-459d-9261-43e27a46edcb" (page "3"))
-    (path "/c6454059-6594-497e-831c-288c877860e1" (page "4"))
+    (path "/be7a3b58-92fe-4a65-a699-f9d10f5b89d1" (page "2"))
+    (path "/02f1ebc9-e6c7-4388-b578-06adebacdf96" (page "3"))
+    (path "/f24a40fa-5098-47d7-b8b7-13fc4119a715" (page "4"))
   )
 )
