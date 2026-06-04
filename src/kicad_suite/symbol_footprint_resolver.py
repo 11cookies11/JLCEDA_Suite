@@ -29,7 +29,7 @@ _footprint_exists_cache: dict[str, bool] = {}
 # ``selected_part`` is present.  Generic EasyEDA search handles
 # everything else — see ``_ROLE_GENERIC_SEARCH`` in jlc_installer.py.
 _ROLE_FALLBACK: dict[str, tuple[str, str]] = {
-    # Passives — Device library symbols are reliable and universal
+    # Passives – Device library symbols are reliable and universal
     "boot0_pulldown": ("Device:R", "R0603"),
     "nrst_pullup": ("Device:R", "R0603"),
     "led_resistor": ("Device:R", "R0603"),
@@ -51,7 +51,51 @@ _ROLE_FALLBACK: dict[str, tuple[str, str]] = {
     "main_8mhz_xtal": ("Device:Crystal", ""),
     "rtc_32k_xtal": ("Device:Crystal", ""),
     "main_12mhz_xtal": ("Device:Crystal", ""),
-    # LEDs — Device:LED works for any basic indicator
+    # NexDAP bring-up board roles
+    "usb_vbus_ptc_fuse": ("Device:Fuse", "F1206"),
+    "usb_vbus_tvs_diode": ("Device:D_TVS", "SMF5.0A"),
+    "main_regulator_input_capacitor": ("Device:C", "C0603"),
+    "main_regulator_output_capacitor": ("Device:C", "C0603"),
+    "main_3v3_bulk_capacitor": ("Device:C", "C0603"),
+    "esp_chip_en_pullup": ("Device:R", "R0603"),
+    "esp_en_reset_capacitor": ("Device:C", "C0603"),
+    "esp_gpio9_boot_pullup": ("Device:R", "R0603"),
+    "esp_gpio8_strap_pullup": ("Device:R", "R0603"),
+    "esp_vdd3p3_decoupling_1": ("Device:C", "C0603"),
+    "esp_vdd3p3_decoupling_2": ("Device:C", "C0603"),
+    "esp_vdd3p3_bulk": ("Device:C", "C0603"),
+    "rp2040_run_pullup": ("Device:R", "R0603"),
+    "rp2040_vreg_in_bypass": ("Device:C", "C0603"),
+    "rp2040_vreg_out_bulk": ("Device:C", "C0603"),
+    "rp2040_iovdd_decoupling": ("Device:C", "C0603"),
+    "rp2040_dvdd_decoupling": ("Device:C", "C0603"),
+    "rp2040_3v3_bulk": ("Device:C", "C0603"),
+    "rp_xtal_load_cap_1": ("Device:C", "C0603"),
+    "rp_xtal_load_cap_2": ("Device:C", "C0603"),
+    "bridge_flash_decoupling": ("Device:C", "C0603"),
+    "rp2040_bootsel_gate_resistor": ("Device:R", "R0603"),
+    "rp2040_bootsel_gate_pulldown": ("Device:R", "R0603"),
+    "swdio_series_resistor": ("Device:R", "R0603"),
+    "swclk_series_resistor": ("Device:R", "R0603"),
+    "swo_series_resistor": ("Device:R", "R0603"),
+    "nreset_series_resistor": ("Device:R", "R0603"),
+    "target_uart_tx_series_resistor": ("Device:R", "R0603"),
+    "target_uart_rx_series_resistor": ("Device:R", "R0603"),
+    "target_nreset_pullup": ("Device:R", "R0603"),
+    "vtref_adc_divider_top": ("Device:R", "R0603"),
+    "vtref_adc_divider_bottom": ("Device:R", "R0603"),
+    "vtref_adc_filter_cap": ("Device:C", "C0603"),
+    "power_led_resistor": ("Device:R", "R0603"),
+    "dap_led_resistor": ("Device:R", "R0603"),
+    "target_swd_connector": ("Connector_Generic:Conn_02x05_Odd_Even", "HDR-TH_10P-P2.54-V-M-2X5"),
+    "rp2040_bootsel_open_drain_pulldown": ("Transistor_FET:2N7002", "SOT-23-3"),
+    "nreset_open_drain_nmos": ("Transistor_FET:2N7002", "SOT-23-3"),
+    "target_esd_protection": ("Device:D_TVS", "SOT-23-6"),
+    "power_indicator_led": ("Device:LED", "LED0603-RD"),
+    "dap_activity_led": ("Device:LED", "LED0603-RD"),
+    "test_point_swdio": ("Connector:TestPoint", "TP-SMD_1P"),
+    "test_point_swclk": ("Connector:TestPoint", "TP-SMD_1P"),
+    # LEDs – Device:LED works for any basic indicator
     "power_led": ("Device:LED", ""),
     "status_led": ("Device:LED", ""),
     "user_led": ("Device:LED", ""),
@@ -209,11 +253,6 @@ def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
         value = str(selected.get(key, "")).strip()
         if value:
             return _sanitize_symbol_name(value)
-    for key in ("display_name", "part_id", "lcsc_id", "mpn"):
-        value = str(selected.get(key, "")).strip()
-        if value:
-            cleaned = re.sub(r"[^A-Za-z0-9_.-]+", "_", value)
-            return _sanitize_symbol_name(cleaned)
     return ""
 
 

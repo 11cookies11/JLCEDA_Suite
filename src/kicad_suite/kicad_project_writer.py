@@ -366,7 +366,28 @@ def normalize_embedded_symbol_name(block: str, library: str, symbol_name: str) -
     safe_symbol_name = _sanitize_symbol_name(symbol_name)
     if safe_symbol_name != symbol_name:
         block = block.replace(symbol_name, safe_symbol_name)
-    return block.replace(f'(symbol "{safe_symbol_name}"', f'(symbol "{library}:{safe_symbol_name}"', 1)
+    block = block.replace(f'(symbol "{safe_symbol_name}"', f'(symbol "{library}:{safe_symbol_name}"', 1)
+    return strip_symbol_lib_id(block)
+
+
+def strip_symbol_lib_id(block: str) -> str:
+    """Remove accidental schematic-instance lib_id markers from library symbol blocks."""
+    lines = block.splitlines()
+    filtered = [line for line in lines if '(lib_id ' not in line]
+    return '\n'.join(filtered)
+
+
+def sanitize_lib_symbols_section(text: str) -> str:
+    """Ensure the top-level lib_symbols section only contains library-symbol syntax."""
+    lib_start = text.find('(lib_symbols')
+    if lib_start < 0:
+        return text
+    lib_end = find_matching_paren(text, lib_start)
+    if lib_end < 0:
+        return text
+    section = text[lib_start:lib_end + 1]
+    cleaned = strip_symbol_lib_id(section)
+    return text[:lib_start] + cleaned + text[lib_end + 1:]
 
 
 def _sanitize_symbol_name(name: str) -> str:
@@ -433,7 +454,7 @@ def installed_symbol_block(library: str, symbol_name: str) -> str:
                 continue
             end = find_matching_paren(text, start)
             if end >= 0:
-                return text[start:end + 1]
+                return strip_symbol_lib_id(text[start:end + 1])
     return ''
 
 
@@ -457,14 +478,14 @@ def symbol_block_for_lib_id(lib_id: str) -> str:
         if installed and symbol_name == 'ALLWINNERH618' and '(pin ' not in installed:
             return local_h618_minimal_symbol(lib_id)
         if installed:
-            return normalize_connector_pin_types(installed, symbol_name)
+            return strip_symbol_lib_id(normalize_connector_pin_types(installed, symbol_name))
         system_block = installed_symbol_block(library, symbol_name)
         if system_block:
             if symbol_name == 'ALLWINNERH618' and '(pin ' not in system_block:
                 return local_h618_minimal_symbol(lib_id)
             normalized = normalize_embedded_symbol_name(system_block, library, symbol_name)
             normalized = normalize_connector_pin_types(normalized, symbol_name)
-            return '\n'.join(f'    {line}' if line.strip() else line for line in normalized.splitlines())
+            return '\n'.join(f'    {line}' if line.strip() else line for line in strip_symbol_lib_id(normalized).splitlines())
 
     connector = local_connector_symbol(lib_id)
     if connector:
@@ -1071,7 +1092,12 @@ def automatic_power_flags_for_net_names(
 def automatic_power_flags(plan: dict[str, Any]) -> list[dict[str, Any]]:
     kind_map = net_kind_by_name(plan)
     net_names = {str(net.get('name', '')).strip() for net in plan.get('nets', []) if isinstance(net, dict)}
-    return automatic_power_flags_for_net_names(net_names, kind_map)
+    driven_power_nets = power_output_net_names(plan.get('symbols', []))
+    # Board-local regulator rails are driven by their regulator output symbols.
+    # Some imported JLC symbols are not always parseable early enough for
+    # power_output_net_names(), so keep this conservative board-local fallback.
+    driven_power_nets.update({name for name in net_names if name.upper() in {'+3V3_MAIN'}})
+    return automatic_power_flags_for_net_names(net_names - driven_power_nets, kind_map)
 
 
 def symbol_by_ref(symbols: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
@@ -1467,7 +1493,7 @@ def render_root_sheet(page: dict[str, Any], kind_map: dict[str, str]) -> str:
 def render_root_schematic(plan: dict[str, Any], sheet_pages: list[dict[str, Any]]) -> str:
     kind_map = net_kind_by_name(plan)
     sheets = '\n'.join(render_root_sheet(page, kind_map) for page in sheet_pages)
-    return f'''(kicad_sch
+    return sanitize_lib_symbols_section(f'''(kicad_sch
   (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
   (generator_version "10.0")
@@ -1476,7 +1502,7 @@ def render_root_schematic(plan: dict[str, Any], sheet_pages: list[dict[str, Any]
   (lib_symbols)
 {sheets}
 {render_sheet_instances(sheet_pages)}
-)'''
+)''')
 
 
 def render_child_schematic(
@@ -1502,10 +1528,13 @@ def render_child_schematic(
         page_index = 1
     if power_flag_nets is None:
         power_flag_nets = power_flag_net_names(page_net_names, net_kind_by_name(plan))
+    driven_power_nets = power_output_net_names(plan.get('symbols', []))
+    driven_power_nets.update({name for name in page_net_names if name.upper() in {'+3V3_MAIN'}})
+    power_flag_nets = set(power_flag_nets) - driven_power_nets
     page_symbols.extend(automatic_power_flags_for_net_names(power_flag_nets, net_kind_by_name(plan), start_index=page_index * 100))
     instances = '\n'.join(render_symbol_instance_at_path(symbol, project_name, page['path']) for symbol in page_symbols)
     connectivity = render_connectivity(plan, page_symbols, force_global_nets=cross_nets)
-    return f'''(kicad_sch
+    return sanitize_lib_symbols_section(f'''(kicad_sch
   (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
   (generator_version "10.0")
@@ -1515,7 +1544,7 @@ def render_child_schematic(
 {instances}
 {connectivity}
 {render_sheet_instances(sheet_pages)}
-)'''
+)''')
 
 
 def write_hierarchical_project(
@@ -1527,6 +1556,10 @@ def write_hierarchical_project(
     project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
     # The plan may not carry topology; prefer env var, else derive from project name
     topology = env('KICAD_TOPOLOGY', '') or project_name
+    if dsl_sheets is None:
+        plan_sheets = plan.get('sheets', [])
+        if isinstance(plan_sheets, list) and plan_sheets:
+            dsl_sheets = plan_sheets
     pages = group_symbols_by_sheet(base_symbols, topology, dsl_sheets=dsl_sheets)
     ref_to_sheet = symbol_ref_to_sheet(pages)
     cross_net_pages = page_cross_nets(plan, ref_to_sheet)
@@ -1798,16 +1831,23 @@ def write_project(plan: dict[str, Any], project_path: str | Path | None = None) 
 
     # Read DSL sheet assignments if present
     dsl_sheets = None
-    if _PROJECT_PATH:
-        model_file = _PROJECT_PATH / 'circuit-model.json'
-        if model_file.is_file():
-            try:
-                model = json.loads(model_file.read_text(encoding='utf-8'))
-                sheets = model.get('sheets', [])
-                if isinstance(sheets, list) and sheets:
-                    dsl_sheets = sheets
-            except (OSError, json.JSONDecodeError):
-                pass
+    plan_sheets = plan.get('sheets', [])
+    if isinstance(plan_sheets, list) and plan_sheets:
+        dsl_sheets = plan_sheets
+    elif _PROJECT_PATH:
+        for model_file in (
+            _PROJECT_PATH / 'source' / 'circuit-model.source.json',
+            _PROJECT_PATH / 'circuit-model.json',
+        ):
+            if model_file.is_file():
+                try:
+                    model = json.loads(model_file.read_text(encoding='utf-8'))
+                    sheets = model.get('sheets', [])
+                    if isinstance(sheets, list) and sheets:
+                        dsl_sheets = sheets
+                        break
+                except (OSError, json.JSONDecodeError):
+                    pass
 
     hierarchical = env('KICAD_HIERARCHICAL_SHEETS', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
     hierarchical_summary: dict[str, Any] = {}

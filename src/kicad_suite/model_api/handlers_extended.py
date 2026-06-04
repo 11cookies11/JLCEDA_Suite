@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from ..kicad_erc_runner import run as run_erc
-from ..kicad_project_writer import write_project
+from ..kicad_project_writer import write_hierarchical_project, write_project
 from ..pcb_generator import generate_pcb
 from ..example_scaffold import scaffold_example
 from ..circuit_model_io import (
@@ -564,12 +564,14 @@ class _ExtendedHandlers:
                     result = write_project(asdict(plan), project_path=source_project)
                     project_out = output_dir / project_name
                     if project_out.is_dir():
-                        from ..pipeline_postprocess import inject_jlc_symbols, pin_project_libraries
+                        from ..pipeline_postprocess import apply_postprocess, pin_project_libraries
+                        schematic_file = output_dir / project_name / (project_name + ".kicad_sch")
+                        postprocess_result: dict[str, Any] = {}
                         try:
-                            schematic_file = output_dir / project_name / (project_name + ".kicad_sch")
-                            inject_jlc_symbols(schematic_file)
-                        except Exception:
-                            pass
+                            postprocess_result = apply_postprocess(schematic_file, project_out)
+                            result["postprocess"] = postprocess_result
+                        except Exception as exc:
+                            result["postprocess_error"] = str(exc)
                         # Generate PCB
                         from ..pcb_generator import generate_pcb
                         pcb_result = generate_pcb(asdict(plan), project_path=source_project)
@@ -577,6 +579,22 @@ class _ExtendedHandlers:
                         try:
                             pin_result = pin_project_libraries(project_out)
                             result["library_pins"] = pin_result
+                        except Exception:
+                            pass
+                        try:
+                            # Final overwrite: keep the generated schematic text in the
+                            # clean renderer format after any intermediate post-processing.
+                            write_hierarchical_project(
+                                asdict(plan),
+                                project_out,
+                                schematic_file,
+                                dsl_sheets=self.model.get("sheets", []) if isinstance(self.model, dict) else None,
+                            )
+                            try:
+                                pin_result = pin_project_libraries(project_out)
+                                result["library_pins_after_final_write"] = pin_result
+                            except Exception:
+                                pass
                         except Exception:
                             pass
                 build_time = round(_time.monotonic() - t0, 2)

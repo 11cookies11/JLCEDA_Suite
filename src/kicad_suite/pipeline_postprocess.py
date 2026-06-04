@@ -14,7 +14,13 @@ from typing import Any
 
 from .adapters.kicad_cli import resolve_kicad_cli
 from .env_utils import env
-from .kicad_project_writer import DEFAULT_ERC_PIN_MAP, DEFAULT_ERC_RULE_SEVERITIES, find_matching_paren, sanitize_symbol_block
+from .kicad_project_writer import (
+    DEFAULT_ERC_PIN_MAP,
+    DEFAULT_ERC_RULE_SEVERITIES,
+    find_matching_paren,
+    sanitize_lib_symbols_section,
+    sanitize_symbol_block,
+)
 
 from .env_utils import repo_root
 
@@ -362,7 +368,28 @@ def sync_cached_symbol_libraries(schematic_file: Path, project_dir: Path) -> dic
     symbols_dir.mkdir(parents=True, exist_ok=True)
     written: list[str] = []
     for library, blocks in sorted(by_library.items()):
-        body = "\n\n".join(blocks)
+        path = symbols_dir / f"{library}.kicad_sym"
+        existing_blocks: list[str] = []
+        existing_names: set[str] = set()
+        if path.exists():
+            existing_text = path.read_text(encoding="utf-8-sig")
+            for match in re.finditer(r'\(symbol\s+"([^":]+)"', existing_text):
+                start = match.start()
+                end = find_matching_paren(existing_text, start)
+                if end < 0:
+                    continue
+                existing_names.add(match.group(1))
+                existing_blocks.append(existing_text[start:end + 1])
+        merged_blocks = list(existing_blocks)
+        for block in blocks:
+            match = re.search(r'\(symbol\s+"([^":]+)"', block)
+            symbol_name = match.group(1) if match else ""
+            if symbol_name and symbol_name in existing_names:
+                continue
+            if symbol_name:
+                existing_names.add(symbol_name)
+            merged_blocks.append(block)
+        body = "\n\n".join(merged_blocks)
         content = (
             "(kicad_symbol_lib\n"
             "  (version 20251024)\n"
@@ -371,7 +398,6 @@ def sync_cached_symbol_libraries(schematic_file: Path, project_dir: Path) -> dic
             f"{body}\n"
             ")\n"
         )
-        path = symbols_dir / f"{library}.kicad_sym"
         path.write_text(content, encoding="utf-8")
         written.append(str(path))
 
@@ -617,6 +643,18 @@ def patch_known_jlc_symbol_pin_types(project_dir: Path) -> dict[str, Any]:
     return {"patched_files": patched_files, "count": len(patched_files)}
 
 
+def sanitize_generated_schematics(project_dir: Path) -> dict[str, Any]:
+    """Final pass to keep generated schematic lib_symbols parseable by KiCad."""
+    patched_files: list[str] = []
+    for path in sorted(project_dir.glob("*.kicad_sch")):
+        text = path.read_text(encoding="utf-8")
+        patched = sanitize_lib_symbols_section(text)
+        if patched != text:
+            path.write_text(patched, encoding="utf-8")
+            patched_files.append(str(path))
+    return {"patched_files": patched_files, "count": len(patched_files)}
+
+
 def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]:
     """Run post-processing after KiCad file generation."""
     library_sync = sync_source_libraries(project_dir)
@@ -636,6 +674,7 @@ def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]
     registration = register_jlc_libraries(project_dir)
     project_library_pins = pin_project_libraries(project_dir)
     gui_asset_validation = validate_gui_assets(project_dir)
+    schematic_sanitization = sanitize_generated_schematics(project_dir)
     return {
         "library_sync": library_sync,
         "symbol_sanitization": symbol_sanitization,
@@ -645,6 +684,7 @@ def apply_postprocess(schematic_file: Path, project_dir: Path) -> dict[str, Any]
         "symbol_cache_sync": symbol_cache_sync,
         "symbols_injected": symbols_injected,
         "symbol_injection_error": inject_error,
+        "schematic_sanitization": schematic_sanitization,
         "library_registration": registration,
         "project_library_pins": project_library_pins,
         "gui_asset_validation": gui_asset_validation,

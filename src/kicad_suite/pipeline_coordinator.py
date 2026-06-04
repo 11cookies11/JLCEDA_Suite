@@ -19,7 +19,7 @@ from .ir_compiler import build_ir
 from .ir_to_kicad import ir_to_kicad
 from .env_utils import is_truthy_env, repo_root
 from .kicad_erc_runner import run as run_erc
-from .kicad_project_writer import write_project
+from .kicad_project_writer import write_hierarchical_project, write_project
 from .parts.workflow import run_parts_pipeline
 from .parts.resolve import apply_selected_parts_to_model
 from .pipeline_event_log import append_pipeline_event, pipeline_event_log_path
@@ -301,6 +301,22 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     elif board_result.get("warnings"):
         write_result.setdefault("board_warnings", []).extend(board_result.get("warnings", []))
 
+    # Re-render once more after post-processing so the final schematic files are
+    # guaranteed to come from the clean renderer, not from any late text patch.
+    final_schematic_path = Path(str(write_result.get("schematic_file", "")) or str(schematic_file))
+    final_project_dir = final_schematic_path.parent if str(final_schematic_path.parent) != "." else project_dir
+    final_project_dir.mkdir(parents=True, exist_ok=True)
+    final_write_result = write_hierarchical_project(
+        asdict(plan),
+        final_project_dir,
+        final_schematic_path,
+        dsl_sheets=model.get("sheets", []) if isinstance(model, dict) else None,
+    )
+    postprocess["final_write"] = {
+        "project_file": final_write_result.get("project_file", ""),
+        "schematic_file": final_write_result.get("schematic_file", ""),
+    }
+
     erc_result: dict[str, Any] = {"enabled": False, "attempted": False, "finding_count": 0}
     os.environ["KICAD_SCHEMATIC_FILE"] = str(write_result.get("schematic_file", ""))
     try:
@@ -345,6 +361,14 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
             "needs_reselection_count": project_resolution_result.get("manifest", {}).get("summary", {}).get("needs_reselection_count", 0),
         },
     )
+
+    # Final overwrite: guarantee the on-disk schematic files are the clean
+    # renderer output, after every postprocess/validation step has already run.
+    final_write_result = write_project(asdict(plan))
+    postprocess["final_write"] = {
+        "project_file": final_write_result.get("project_file", ""),
+        "schematic_file": final_write_result.get("schematic_file", ""),
+    }
 
     summary = build_run_pipeline_summary(
         project_name=project_name,

@@ -153,7 +153,7 @@ class TestRunPipeline(unittest.TestCase):
         self.assertEqual(build_ir.call_args.args[0]["components"][0]["selected_part"]["lcsc_id"], "C2040")
         ir_to_kicad.assert_called_once()
         write_output.assert_called_once()
-        write_project.assert_called_once()
+        self.assertEqual(write_project.call_count, 2)
         write_simulation_artifacts.assert_called_once()
         postprocess.assert_called_once()
         run_erc.assert_called_once()
