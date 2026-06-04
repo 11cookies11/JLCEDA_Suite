@@ -21,7 +21,8 @@ from kicad_suite.compile_kicad_execution_plan import (
     KiCadTarget,
 )
 from kicad_suite.part_selector import SelectedPart
-from kicad_suite.pipeline_coordinator import build_netlist, run_pipeline
+from kicad_suite.netlist_builder import build_netlist
+from kicad_suite.pipeline_coordinator import run_pipeline
 
 
 class TestBuildNetlist(unittest.TestCase):
@@ -80,7 +81,8 @@ class TestRunPipeline(unittest.TestCase):
         }
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            model_path = Path(tmpdir) / "model.json"
+            model_path = Path(tmpdir) / "source" / "circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(json.dumps(model), encoding="utf-8")
 
             fake_plan = KiCadExecutionPlan(
@@ -142,18 +144,22 @@ class TestRunPipeline(unittest.TestCase):
                 with patch("kicad_suite.pipeline_coordinator.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
                     with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json") as write_output:
                         with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result) as write_project:
-                            with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
-                                with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": True}) as postprocess:
-                                    with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
-                                        with patch("kicad_suite.pipeline_coordinator.is_truthy_env", side_effect=lambda name, default="false": name == "KICAD_PARTS_PIPELINE"):
-                                            with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md", "selections": [selected_part]}) as run_parts:
-                                                summary = run_pipeline(str(model_path), tmpdir)
+                            with patch("kicad_suite.pipeline_coordinator.write_hierarchical_project", return_value=fake_write_result) as write_hierarchical_project:
+                                with patch("kicad_suite.pipeline_coordinator.generate_board_from_plan", return_value={"attempted": False, "enabled": False}) as generate_board:
+                                    with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
+                                        with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": True}) as postprocess:
+                                            with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
+                                                with patch("kicad_suite.pipeline_coordinator.is_truthy_env", side_effect=lambda name, default="false": name == "KICAD_PARTS_PIPELINE"):
+                                                    with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md", "selections": [selected_part]}) as run_parts:
+                                                        summary = run_pipeline(str(model_path), tmpdir)
 
         build_ir.assert_called_once()
         self.assertEqual(build_ir.call_args.args[0]["components"][0]["selected_part"]["lcsc_id"], "C2040")
         ir_to_kicad.assert_called_once()
         write_output.assert_called_once()
         self.assertEqual(write_project.call_count, 2)
+        write_hierarchical_project.assert_called()
+        generate_board.assert_called_once()
         write_simulation_artifacts.assert_called_once()
         postprocess.assert_called_once()
         run_erc.assert_called_once()
@@ -174,7 +180,8 @@ class TestRunPipeline(unittest.TestCase):
         }
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            model_path = Path(tmpdir) / "model.json"
+            model_path = Path(tmpdir) / "source" / "circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(json.dumps(model), encoding="utf-8")
 
             fake_plan = KiCadExecutionPlan(
@@ -201,15 +208,19 @@ class TestRunPipeline(unittest.TestCase):
             with patch("kicad_suite.pipeline_coordinator.ir_to_kicad", return_value=fake_plan):
                 with patch("kicad_suite.pipeline_coordinator.write_output", return_value="plan.json"):
                     with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result):
-                        with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
-                            with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": False}):
-                                with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}):
-                                    with patch("kicad_suite.pipeline_coordinator.is_truthy_env", return_value=False):
-                                        with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline") as run_parts:
-                                            summary = run_pipeline(str(model_path), tmpdir)
+                        with patch("kicad_suite.pipeline_coordinator.write_hierarchical_project", return_value=fake_write_result) as write_hierarchical_project:
+                            with patch("kicad_suite.pipeline_coordinator.generate_board_from_plan", return_value={"attempted": False, "enabled": False}) as generate_board:
+                                with patch("kicad_suite.pipeline_coordinator.write_simulation_artifacts", return_value={"profile_file": "simulation-profile.json", "plan_file": "simulation-plan.json", "task_plan_file": "simulation-task-plan.json", "profile": {}, "plan": {}, "task_plan": {}}) as write_simulation_artifacts:
+                                    with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": False}):
+                                        with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}):
+                                            with patch("kicad_suite.pipeline_coordinator.is_truthy_env", return_value=False):
+                                                with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline") as run_parts:
+                                                    summary = run_pipeline(str(model_path), tmpdir)
 
         run_parts.assert_not_called()
         write_simulation_artifacts.assert_called_once()
+        write_hierarchical_project.assert_called()
+        generate_board.assert_called_once()
         self.assertEqual(summary["files"]["part_lock"], "")
         self.assertEqual(summary["files"]["simulation_task_plan"], "simulation-task-plan.json")
         self.assertTrue(summary["files"]["event_log"].endswith("pipeline-events.jsonl"))

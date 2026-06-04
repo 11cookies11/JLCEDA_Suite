@@ -1,4 +1,4 @@
-"""Tests for the unified CLI entrypoint."""
+﻿"""Tests for the unified CLI entrypoint."""
 
 from __future__ import annotations
 
@@ -85,7 +85,8 @@ class TestCliDispatch(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
             request_path = tmp_path / "request.json"
-            model_path = tmp_path / "circuit-model.json"
+            model_path = tmp_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             config_path = tmp_path / "external-tools.local.json"
             request_path.write_text(
                 json.dumps(
@@ -133,7 +134,8 @@ class TestCliDispatch(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             tmp_path = Path(tmp_dir)
             request_path = tmp_path / "request.json"
-            model_path = tmp_path / "circuit-model.json"
+            model_path = tmp_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             request_path.write_text(
                 json.dumps(
                     {
@@ -276,7 +278,8 @@ class TestCliDispatch(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir) / "agent-board"
             project_path.mkdir()
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps(
                     {
@@ -308,7 +311,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_build_ir_writes_structured_ir_file(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps(
                     {
@@ -336,7 +340,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_validate_ir_writes_validation_report(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps(
                     {
@@ -363,7 +368,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_report_writes_json_and_markdown(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps(
                     {
@@ -404,7 +410,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_pins_free_lists_free_gpio_pins(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps({
                     "schema_version": "circuit-model.v1",
@@ -431,7 +438,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_pins_assign_builds_connect_pin_request(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps({
                     "schema_version": "circuit-model.v1",
@@ -470,7 +478,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_pins_check_reports_conflicts(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps({
                     "schema_version": "circuit-model.v1",
@@ -495,7 +504,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_build_kicad_plan_compiles_execution_plan(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps({
                     "schema_version": "circuit-model.v1",
@@ -524,7 +534,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_patch_applies_model_patch(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps({
                     "schema_version": "circuit-model.v1",
@@ -582,7 +593,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_build_ir_validates_output_is_written(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps({
                     "schema_version": "circuit-model.v1",
@@ -608,7 +620,8 @@ class TestCliDispatch(unittest.TestCase):
     def test_agent_validate_ir_with_duplicate_net_produces_specific_diagnostic(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_path = Path(tmp_dir)
-            model_path = project_path / "circuit-model.json"
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text(
                 json.dumps({
                     "schema_version": "circuit-model.v1",
@@ -634,3 +647,5 @@ class TestCliDispatch(unittest.TestCase):
         self.assertGreater(len(payload["diagnostics"]), 0)
         codes = [d["code"] for d in payload["diagnostics"]]
         self.assertIn("DUPLICATE_NET_NAME", codes)
+
+

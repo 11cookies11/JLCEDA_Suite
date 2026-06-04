@@ -58,32 +58,6 @@ class TestValidateSummary(unittest.TestCase):
             self.assertIn("mock warning", report.warnings)
             self.assertTrue(any("stale paths" in item for item in report.checks))
 
-    def test_validate_summary_accepts_legacy_output_files_shape(self):
-        with tempfile.TemporaryDirectory() as tmpdir:
-            root = Path(tmpdir)
-            project = root / "demo.kicad_pro"
-            schematic = root / "demo.kicad_sch"
-            plan = root / "plan.json"
-            project.write_text("{}", encoding="utf-8")
-            schematic.write_text("{}", encoding="utf-8")
-            plan.write_text("{}", encoding="utf-8")
-            summary_path = root / "summary.json"
-            summary_path.write_text("{}", encoding="utf-8")
-
-            report = ValidationReport()
-            summary = {
-                "output_files": {
-                    "project": str(project),
-                    "schematic": str(schematic),
-                    "execution_plan": str(plan),
-                },
-                "warnings": [],
-            }
-            validate_summary(report, summary, summary_path)
-
-            self.assertTrue(report.ok)
-            self.assertTrue(any("stale paths" in item for item in report.checks))
-
     def test_validate_summary_accepts_hierarchical_sheet_shape(self):
         with tempfile.TemporaryDirectory() as tmpdir:
             root = Path(tmpdir)

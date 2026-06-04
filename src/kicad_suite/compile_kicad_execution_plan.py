@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 from __future__ import annotations
 
 import json
@@ -21,7 +21,7 @@ REPO_ROOT = repo_root()
 LAYOUT_PROFILES_CACHE: dict[str, Any] | None = None
 FOOTPRINT_EXISTS_CACHE: dict[str, bool] = {}
 
-# Role → (KiCad_lib:symbol, footprint_lib) fallback when no symbol map match.
+# Role 鈫?(KiCad_lib:symbol, footprint_lib) fallback when no symbol map match.
 from .symbol_footprint_resolver import _ROLE_FALLBACK
 
 
@@ -320,7 +320,7 @@ def _remap_jlc_footprint(fp: str) -> str:
     if 'CRYSTAL' in name:
         return 'Crystal:Crystal_SMD_3225-4Pin_3.2x2.5mm'
 
-    # Fallback: return original — caller should still report it via diagnostics
+    # Fallback: return original 鈥?caller should still report it via diagnostics
     return fp
 
 
@@ -470,41 +470,6 @@ def _resolve_block(role: str) -> str:
     return _resolve_wiring_block(role, build_default_layout_rules(topology).block_layout)
 
 
-def _legacy_estimate_symbol_size(lib_id: str) -> tuple[float, float]:
-    """Estimate symbol size in mm including label stubs on each side.
-
-    Returns (width, height) where width covers pin tips + labels on left/right,
-    and height covers pin tips + labels on top/bottom.
-    """
-    from .kicad_project_writer import parse_symbol_pin_map
-    pins = parse_symbol_pin_map(lib_id)
-    if not pins:
-        return 12.7, 10.16
-    xs = [p['x'] for p in pins.values()]
-    ys = [p['y'] for p in pins.values()]
-    if not xs:
-        return 12.7, 10.16
-
-    # Label extends from pin tip outward by pin_len + stub ≈ 6.35mm,
-    # plus ~5mm for typical label text.  Total ~12mm per side with labels.
-    _LABEL_EXTENSION = 12.0  # mm beyond pin tip for label + stub
-    _BODY_PAD = 3.81  # mm padding for symbol body edge
-
-    # Determine which sides have labels (based on pin exit direction)
-    has_left_labels = any(p['rotation'] == 0 for p in pins.values())
-    has_right_labels = any(p['rotation'] == 180 for p in pins.values())
-    has_top_labels = any(p['rotation'] == 270 for p in pins.values())
-    has_bottom_labels = any(p['rotation'] == 90 for p in pins.values())
-
-    left_margin = _LABEL_EXTENSION if has_left_labels else _BODY_PAD
-    right_margin = _LABEL_EXTENSION if has_right_labels else _BODY_PAD
-    top_margin = _LABEL_EXTENSION if has_top_labels else _BODY_PAD
-    bottom_margin = _LABEL_EXTENSION if has_bottom_labels else _BODY_PAD
-
-    w = (max(xs) - min(xs)) + left_margin + right_margin
-    h = (max(ys) - min(ys)) + top_margin + bottom_margin
-    return max(w, 10.0), max(h, 8.0)
-
 
 def _estimate_symbol_size_from_pins(lib_id: str) -> tuple[float, float] | None:
     from .kicad_project_writer import parse_symbol_pin_map
@@ -591,7 +556,7 @@ def _compute_block_layout(
         components: list of (ref, role, lib_id) tuples.
 
     Returns:
-        Dict mapping block_name → (center_x, next_y_slot).
+        Dict mapping block_name 鈫?(center_x, next_y_slot).
     """
     blocks: dict[str, list[tuple[str, str]]] = {}
     for ref, role, lib_id in components:
@@ -804,13 +769,13 @@ def _validate_symbol_libraries(preflight: list[tuple[str, str, str, str, list[st
     """Pre-flight check: verify all symbol libraries can be found on disk.
 
     If a library file is missing, symbol_block_for_lib_id falls back to a
-    hardcoded 2-pin placeholder with pins at ±5.08mm, which silently breaks
+    hardcoded 2-pin placeholder with pins at 卤5.08mm, which silently breaks
     all wire-to-pin connections.  This catches that early.
     """
     from .kicad_project_writer import installed_symbol_block, kicad_symbol_roots
 
     checked: set[str] = set()
-    missing_libs: dict[str, list[str]] = {}  # library → [refs]
+    missing_libs: dict[str, list[str]] = {}  # library 鈫?[refs]
 
     for ref, _role, lib_id, _footprint, _notes in preflight:
         if lib_id in checked:
@@ -818,7 +783,7 @@ def _validate_symbol_libraries(preflight: list[tuple[str, str, str, str, list[st
         if ':' not in lib_id:
             continue
         library, symbol_name = lib_id.split(':', 1)
-        # Only check JLC-MCP libraries — KiCad built-in libs use 'extends'
+        # Only check JLC-MCP libraries 鈥?KiCad built-in libs use 'extends'
         # which installed_symbol_block doesn't resolve.
         if not library.startswith('JLC-MCP-'):
             continue
@@ -840,7 +805,7 @@ def _validate_symbol_libraries(preflight: list[tuple[str, str, str, str, list[st
     )
     raise RuntimeError(
         f'{len(missing_libs)} symbol library file(s) not found.\n'
-        f'These will fall back to fake 2-pin symbols (±5.08mm),\n'
+        f'These will fall back to fake 2-pin symbols (卤5.08mm),\n'
         f'breaking all wire-to-pin connections.\n\n'
         f'Missing libraries:\n{missing_lines}\n\n'
         f'Search paths (kicad_symbol_roots):\n{root_lines}\n\n'
@@ -1021,3 +986,5 @@ if __name__ == '__main__':
         print('Compile KiCad execution plan failed.', file=sys.stderr)
         print(str(error), file=sys.stderr)
         sys.exit(1)
+
+

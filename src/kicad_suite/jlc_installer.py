@@ -277,9 +277,9 @@ def resolve_missing_symbols(
         else:
             failed.append({"ref": ref, "role": role, "error": "all_attempts_failed"})
 
-    # Persist selected_part back to circuit-model.json
+    # Persist selected_part back to the source circuit model.
     if model_path is None:
-        model_path = project_path / "circuit-model.json"
+        model_path = project_path / "source" / "circuit-model.source.json"
     save_resolved_circuit_model(model_path, model)
 
     summary = {

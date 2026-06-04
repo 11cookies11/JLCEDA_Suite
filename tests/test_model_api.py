@@ -130,7 +130,8 @@ def test_model_api_repository_commits_to_circuit_model_file(tmp_path):
 
 
 def test_model_api_repository_writes_operation_log_and_revision(tmp_path):
-    model_path = tmp_path / "circuit-model.json"
+    model_path = tmp_path / "source" / "circuit-model.source.json"
+    model_path.parent.mkdir(parents=True, exist_ok=True)
     model_path.write_text(
         json.dumps(
             {
@@ -157,7 +158,8 @@ def test_model_api_repository_writes_operation_log_and_revision(tmp_path):
 
 
 def test_model_api_repository_dry_run_does_not_write_file(tmp_path):
-    model_path = tmp_path / "circuit-model.json"
+    model_path = tmp_path / "source" / "circuit-model.source.json"
+    model_path.parent.mkdir(parents=True, exist_ok=True)
     original = {
         "schema_version": "circuit-model.v1",
         "request_id": "demo",

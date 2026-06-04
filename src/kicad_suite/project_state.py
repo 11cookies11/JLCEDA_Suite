@@ -101,7 +101,7 @@ class ProjectState:
 
     def __init__(self, project_path: str | Path) -> None:
         self.project_path = Path(project_path).resolve()
-        self.model_path = self.project_path / "circuit-model.json"
+        self.model_path = self.project_path / "source" / "circuit-model.source.json"
         self.state_path = self.project_path / "project.state.json"
         self.logs_dir = self.project_path / "logs"
         self.log_path = self.logs_dir / "operations.jsonl"
@@ -127,14 +127,14 @@ class ProjectState:
         )
 
     def recompute(self) -> dict[str, Any]:
-        """Rebuild state from ``circuit-model.json`` on disk (idempotent)."""
+        """Rebuild state from ``source/circuit-model.source.json`` on disk (idempotent)."""
         model = self._read_model()
         if model is None:
             self.state = self._empty_state()
         else:
             dsl_hash = self._hash_dict(model)
             self.state.setdefault("dsl", {})["hash"] = dsl_hash
-            self.state.setdefault("dsl", {})["path"] = str(self.model_path.name)
+            self.state.setdefault("dsl", {})["path"] = f"source/{self.model_path.name}"
             self.state.setdefault("project", {})["id"] = str(model.get("project_id", ""))
             self.state.setdefault("project", {})["name"] = str(model.get("topology", ""))
             self.state["summary"] = self._build_summary(model)
@@ -370,7 +370,7 @@ class ProjectState:
         return {
             "project": {"id": "", "name": ""},
             "status": STATUS_INIT,
-            "dsl": {"path": str(self.model_path.name), "hash": "", "valid": None},
+            "dsl": {"path": f"source/{self.model_path.name}", "hash": "", "valid": None},
             "build": {"last_build_ok": False, "last_build_at": None, "input_dsl_hash": "", "outputs": {}},
             "diagnostics": {"errors": 0, "warnings": 0, "items": []},
             "summary": {},

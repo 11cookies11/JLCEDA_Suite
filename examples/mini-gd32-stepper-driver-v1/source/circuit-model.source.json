@@ -1,0 +1,1192 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "mini-gd32-stepper-driver-v2",
+  "project_id": "mini-gd32-stepper-driver-v1",
+  "topology": "mini_gd32_stepper_driver_v1",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "gd32f150_mcu",
+      "value": "GD32F150C8T6"
+    },
+    {
+      "ref": "U2",
+      "role": "ldo_3v3",
+      "value": "AMS1117-3.3"
+    },
+    {
+      "ref": "J1",
+      "role": "usb_c_connector",
+      "value": "USB-C-16P"
+    },
+    {
+      "ref": "J2",
+      "role": "motor_output",
+      "value": "PH2.0-4P"
+    },
+    {
+      "ref": "J3",
+      "role": "power_input",
+      "value": "PH2.0-2P"
+    },
+    {
+      "ref": "J4",
+      "role": "swd_debug_header",
+      "value": "Header-5P"
+    },
+    {
+      "ref": "J5",
+      "role": "limit_input_1",
+      "value": "PH2.0-2P"
+    },
+    {
+      "ref": "J6",
+      "role": "limit_input_2",
+      "value": "PH2.0-2P"
+    },
+    {
+      "ref": "U3",
+      "role": "half_bridge_driver_a1",
+      "value": "IR2104S"
+    },
+    {
+      "ref": "U4",
+      "role": "half_bridge_driver_a2",
+      "value": "IR2104S"
+    },
+    {
+      "ref": "U5",
+      "role": "half_bridge_driver_b1",
+      "value": "IR2104S"
+    },
+    {
+      "ref": "U6",
+      "role": "half_bridge_driver_b2",
+      "value": "IR2104S"
+    },
+    {
+      "ref": "Q1",
+      "role": "hbridge_a_high_side_1",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "Q2",
+      "role": "hbridge_a_low_side_1",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "Q3",
+      "role": "hbridge_a_high_side_2",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "Q4",
+      "role": "hbridge_a_low_side_2",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "Q5",
+      "role": "hbridge_b_high_side_1",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "Q6",
+      "role": "hbridge_b_low_side_1",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "Q7",
+      "role": "hbridge_b_high_side_2",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "Q8",
+      "role": "hbridge_b_low_side_2",
+      "value": "AO3400A"
+    },
+    {
+      "ref": "D1",
+      "role": "reverse_protection",
+      "value": "SS34"
+    },
+    {
+      "ref": "D2",
+      "role": "tvs_input",
+      "value": "SMAJ12A"
+    },
+    {
+      "ref": "D3",
+      "role": "usb_esd_protection",
+      "value": "USBLC6-2SC6"
+    },
+    {
+      "ref": "D4",
+      "role": "bootstrap_diode_a1",
+      "value": "1N4148W"
+    },
+    {
+      "ref": "D5",
+      "role": "bootstrap_diode_a2",
+      "value": "1N4148W"
+    },
+    {
+      "ref": "D6",
+      "role": "bootstrap_diode_b1",
+      "value": "1N4148W"
+    },
+    {
+      "ref": "D7",
+      "role": "bootstrap_diode_b2",
+      "value": "1N4148W"
+    },
+    {
+      "ref": "R1",
+      "role": "usb_cc1_resistor",
+      "value": "5.1k"
+    },
+    {
+      "ref": "R2",
+      "role": "usb_cc2_resistor",
+      "value": "5.1k"
+    },
+    {
+      "ref": "R3",
+      "role": "nrst_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R4",
+      "role": "fault_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R5",
+      "role": "led_pwr_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "R6",
+      "role": "led_run_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "R7",
+      "role": "led_fault_resistor",
+      "value": "330R"
+    },
+    {
+      "ref": "R8",
+      "role": "user_button_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R9",
+      "role": "limit1_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R10",
+      "role": "limit2_pullup",
+      "value": "10k"
+    },
+    {
+      "ref": "R11",
+      "role": "current_sense_a",
+      "value": "0.2R"
+    },
+    {
+      "ref": "R12",
+      "role": "current_sense_b",
+      "value": "0.2R"
+    },
+    {
+      "ref": "R13",
+      "role": "gate_resistor_a_h1",
+      "value": "10R"
+    },
+    {
+      "ref": "R14",
+      "role": "gate_resistor_a_l1",
+      "value": "10R"
+    },
+    {
+      "ref": "R15",
+      "role": "gate_resistor_a_h2",
+      "value": "10R"
+    },
+    {
+      "ref": "R16",
+      "role": "gate_resistor_a_l2",
+      "value": "10R"
+    },
+    {
+      "ref": "R17",
+      "role": "gate_resistor_b_h1",
+      "value": "10R"
+    },
+    {
+      "ref": "R18",
+      "role": "gate_resistor_b_l1",
+      "value": "10R"
+    },
+    {
+      "ref": "R19",
+      "role": "gate_resistor_b_h2",
+      "value": "10R"
+    },
+    {
+      "ref": "R20",
+      "role": "gate_resistor_b_l2",
+      "value": "10R"
+    },
+    {
+      "ref": "C1",
+      "role": "vin_bulk",
+      "value": "47uF"
+    },
+    {
+      "ref": "C2",
+      "role": "ldo_input_cap",
+      "value": "10uF"
+    },
+    {
+      "ref": "C3",
+      "role": "ldo_output_cap",
+      "value": "10uF"
+    },
+    {
+      "ref": "C4",
+      "role": "mcu_decouple_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C5",
+      "role": "mcu_decouple_2",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C6",
+      "role": "mcu_decouple_3",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C7",
+      "role": "mcu_decouple_4",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C8",
+      "role": "mcu_bulk",
+      "value": "4.7uF"
+    },
+    {
+      "ref": "C9",
+      "role": "vmotor_bulk",
+      "value": "100uF"
+    },
+    {
+      "ref": "C10",
+      "role": "vmotor_decouple_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C11",
+      "role": "vmotor_decouple_2",
+      "value": "1uF"
+    },
+    {
+      "ref": "C12",
+      "role": "gate_driver_decouple_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C13",
+      "role": "gate_driver_decouple_2",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C14",
+      "role": "bootstrap_cap_a1",
+      "value": "1uF"
+    },
+    {
+      "ref": "C15",
+      "role": "bootstrap_cap_a2",
+      "value": "1uF"
+    },
+    {
+      "ref": "C16",
+      "role": "bootstrap_cap_b1",
+      "value": "1uF"
+    },
+    {
+      "ref": "C17",
+      "role": "bootstrap_cap_b2",
+      "value": "1uF"
+    },
+    {
+      "ref": "C18",
+      "role": "xtal_load_cap_1",
+      "value": "22pF"
+    },
+    {
+      "ref": "C19",
+      "role": "xtal_load_cap_2",
+      "value": "22pF"
+    },
+    {
+      "ref": "C20",
+      "role": "limit_rc_cap_1",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C21",
+      "role": "limit_rc_cap_2",
+      "value": "0.1uF"
+    },
+    {
+      "ref": "C22",
+      "role": "usb_vbus_decouple",
+      "value": "1uF"
+    },
+    {
+      "ref": "F1",
+      "role": "ptc_fuse",
+      "value": "500mA"
+    },
+    {
+      "ref": "LED1",
+      "role": "pwr_indicator",
+      "value": "Green"
+    },
+    {
+      "ref": "LED2",
+      "role": "run_indicator",
+      "value": "Blue"
+    },
+    {
+      "ref": "LED3",
+      "role": "fault_indicator",
+      "value": "Red"
+    },
+    {
+      "ref": "SW1",
+      "role": "user_button",
+      "value": "TS-1185A"
+    },
+    {
+      "ref": "Y1",
+      "role": "mcu_crystal_8mhz",
+      "value": "8MHz"
+    },
+    {
+      "ref": "L1",
+      "role": "ferrite_bead",
+      "value": "600R@100MHz"
+    },
+    {
+      "ref": "TP1",
+      "role": "test_point_vin",
+      "value": "TP"
+    },
+    {
+      "ref": "TP2",
+      "role": "test_point_3v3",
+      "value": "TP"
+    },
+    {
+      "ref": "TP3",
+      "role": "test_point_gnd",
+      "value": "TP"
+    },
+    {
+      "ref": "U7",
+      "role": "current_sense_amp_a",
+      "value": "INA180A2"
+    },
+    {
+      "ref": "U8",
+      "role": "current_sense_amp_b",
+      "value": "INA180A2"
+    }
+  ],
+  "nets": [
+    {
+      "name": "VIN",
+      "kind": "power",
+      "members": [
+        "J3.1",
+        "F1.1",
+        "D1.1"
+      ]
+    },
+    {
+      "name": "+5V",
+      "kind": "power",
+      "members": [
+        "F1.2",
+        "U2.3",
+        "C2.1",
+        "J1.7",
+        "C22.1"
+      ]
+    },
+    {
+      "name": "VMOTOR",
+      "kind": "power",
+      "members": [
+        "C9.1",
+        "C10.1",
+        "C11.1",
+        "D4.1",
+        "D5.1",
+        "D6.1",
+        "D7.1",
+        "U3.1",
+        "U4.1",
+        "U5.1",
+        "U6.1",
+        "Q1.3",
+        "Q3.3",
+        "Q5.3",
+        "Q7.3"
+      ]
+    },
+    {
+      "name": "+3V3",
+      "kind": "power",
+      "members": [
+        "U2.2",
+        "C3.1",
+        "C8.1",
+        "C4.1",
+        "C5.1",
+        "C6.1",
+        "C7.1",
+        "U1.9",
+        "U1.24",
+        "U1.36",
+        "U1.48",
+        "J4.1",
+        "R3.1",
+        "R4.1",
+        "R9.1",
+        "R10.1",
+        "R8.1"
+      ]
+    },
+    {
+      "name": "GND",
+      "kind": "ground",
+      "members": [
+        "J3.2",
+        "D1.2",
+        "D2.1",
+        "C1.1",
+        "U2.1",
+        "C2.2",
+        "C3.2",
+        "C4.2",
+        "C5.2",
+        "C6.2",
+        "C7.2",
+        "C8.2",
+        "C9.2",
+        "C10.2",
+        "C11.2",
+        "C12.2",
+        "C13.2",
+        "U3.4",
+        "U4.4",
+        "U5.4",
+        "U6.4",
+        "Q2.2",
+        "Q4.2",
+        "Q6.2",
+        "Q8.2",
+        "R11.2",
+        "R12.2",
+        "J4.4",
+        "R5.2",
+        "R6.2",
+        "R7.2",
+        "SW1.2",
+        "C20.2",
+        "C21.2",
+        "TP3.1",
+        "U1.8",
+        "U1.23",
+        "U1.35",
+        "U1.47",
+        "C22.2"
+      ]
+    },
+    {
+      "name": "USB_DP",
+      "kind": "signal",
+      "members": [
+        "J1.3",
+        "D3.3",
+        "U1.31"
+      ]
+    },
+    {
+      "name": "USB_DM",
+      "kind": "signal",
+      "members": [
+        "J1.4",
+        "D3.4",
+        "U1.32"
+      ]
+    },
+    {
+      "name": "USB_CC1",
+      "kind": "signal",
+      "members": [
+        "J1.5",
+        "R1.1"
+      ]
+    },
+    {
+      "name": "USB_CC2",
+      "kind": "signal",
+      "members": [
+        "J1.6",
+        "R2.1"
+      ]
+    },
+    {
+      "name": "SWDIO",
+      "kind": "signal",
+      "members": [
+        "J4.2",
+        "U1.46"
+      ]
+    },
+    {
+      "name": "SWCLK",
+      "kind": "signal",
+      "members": [
+        "J4.3",
+        "U1.45"
+      ]
+    },
+    {
+      "name": "NRST",
+      "kind": "signal",
+      "members": [
+        "J4.5",
+        "U1.7",
+        "R3.2"
+      ]
+    },
+    {
+      "name": "HIN_A1",
+      "kind": "signal",
+      "members": [
+        "U1.14",
+        "U3.2"
+      ]
+    },
+    {
+      "name": "LIN_A1",
+      "kind": "signal",
+      "members": [
+        "U1.15",
+        "U3.3"
+      ]
+    },
+    {
+      "name": "HIN_A2",
+      "kind": "signal",
+      "members": [
+        "U1.20",
+        "U4.2"
+      ]
+    },
+    {
+      "name": "LIN_A2",
+      "kind": "signal",
+      "members": [
+        "U1.21",
+        "U4.3"
+      ]
+    },
+    {
+      "name": "HIN_B1",
+      "kind": "signal",
+      "members": [
+        "U1.39",
+        "U5.2"
+      ]
+    },
+    {
+      "name": "LIN_B1",
+      "kind": "signal",
+      "members": [
+        "U1.40",
+        "U5.3"
+      ]
+    },
+    {
+      "name": "HIN_B2",
+      "kind": "signal",
+      "members": [
+        "U1.41",
+        "U6.2"
+      ]
+    },
+    {
+      "name": "LIN_B2",
+      "kind": "signal",
+      "members": [
+        "U1.42",
+        "U6.3"
+      ]
+    },
+    {
+      "name": "HO_A1",
+      "kind": "signal",
+      "members": [
+        "U3.7",
+        "R13.1"
+      ]
+    },
+    {
+      "name": "GATE_A_H1",
+      "kind": "signal",
+      "members": [
+        "R13.2",
+        "Q1.1"
+      ]
+    },
+    {
+      "name": "LO_A1",
+      "kind": "signal",
+      "members": [
+        "U3.5",
+        "R14.1"
+      ]
+    },
+    {
+      "name": "GATE_A_L1",
+      "kind": "signal",
+      "members": [
+        "R14.2",
+        "Q2.1"
+      ]
+    },
+    {
+      "name": "VS_A1",
+      "kind": "signal",
+      "members": [
+        "U3.6",
+        "Q1.2",
+        "Q2.3",
+        "C14.2"
+      ]
+    },
+    {
+      "name": "HO_A2",
+      "kind": "signal",
+      "members": [
+        "U4.7",
+        "R15.1"
+      ]
+    },
+    {
+      "name": "GATE_A_H2",
+      "kind": "signal",
+      "members": [
+        "R15.2",
+        "Q3.1"
+      ]
+    },
+    {
+      "name": "LO_A2",
+      "kind": "signal",
+      "members": [
+        "U4.5",
+        "R16.1"
+      ]
+    },
+    {
+      "name": "GATE_A_L2",
+      "kind": "signal",
+      "members": [
+        "R16.2",
+        "Q4.1"
+      ]
+    },
+    {
+      "name": "VS_A2",
+      "kind": "signal",
+      "members": [
+        "U4.6",
+        "Q3.2",
+        "Q4.3",
+        "C15.2"
+      ]
+    },
+    {
+      "name": "HO_B1",
+      "kind": "signal",
+      "members": [
+        "U5.7",
+        "R17.1"
+      ]
+    },
+    {
+      "name": "GATE_B_H1",
+      "kind": "signal",
+      "members": [
+        "R17.2",
+        "Q5.1"
+      ]
+    },
+    {
+      "name": "LO_B1",
+      "kind": "signal",
+      "members": [
+        "U5.5",
+        "R18.1"
+      ]
+    },
+    {
+      "name": "GATE_B_L1",
+      "kind": "signal",
+      "members": [
+        "R18.2",
+        "Q6.1"
+      ]
+    },
+    {
+      "name": "VS_B1",
+      "kind": "signal",
+      "members": [
+        "U5.6",
+        "Q5.2",
+        "Q6.3",
+        "C16.2"
+      ]
+    },
+    {
+      "name": "HO_B2",
+      "kind": "signal",
+      "members": [
+        "U6.7",
+        "R19.1"
+      ]
+    },
+    {
+      "name": "GATE_B_H2",
+      "kind": "signal",
+      "members": [
+        "R19.2",
+        "Q7.1"
+      ]
+    },
+    {
+      "name": "LO_B2",
+      "kind": "signal",
+      "members": [
+        "U6.5",
+        "R20.1"
+      ]
+    },
+    {
+      "name": "GATE_B_L2",
+      "kind": "signal",
+      "members": [
+        "R20.2",
+        "Q8.1"
+      ]
+    },
+    {
+      "name": "VS_B2",
+      "kind": "signal",
+      "members": [
+        "U6.6",
+        "Q7.2",
+        "Q8.3",
+        "C17.2"
+      ]
+    },
+    {
+      "name": "VB_A1",
+      "kind": "signal",
+      "members": [
+        "U3.8",
+        "C14.1",
+        "D4.2"
+      ]
+    },
+    {
+      "name": "VB_A2",
+      "kind": "signal",
+      "members": [
+        "U4.8",
+        "C15.1",
+        "D5.2"
+      ]
+    },
+    {
+      "name": "VB_B1",
+      "kind": "signal",
+      "members": [
+        "U5.8",
+        "C16.1",
+        "D6.2"
+      ]
+    },
+    {
+      "name": "VB_B2",
+      "kind": "signal",
+      "members": [
+        "U6.8",
+        "C17.1",
+        "D7.2"
+      ]
+    },
+    {
+      "name": "A_PLUS",
+      "kind": "signal",
+      "members": [
+        "Q1.2",
+        "Q2.3",
+        "J2.1"
+      ]
+    },
+    {
+      "name": "A_MINUS",
+      "kind": "signal",
+      "members": [
+        "Q3.2",
+        "Q4.3",
+        "J2.2"
+      ]
+    },
+    {
+      "name": "B_PLUS",
+      "kind": "signal",
+      "members": [
+        "Q5.2",
+        "Q6.3",
+        "J2.3"
+      ]
+    },
+    {
+      "name": "B_MINUS",
+      "kind": "signal",
+      "members": [
+        "Q7.2",
+        "Q8.3",
+        "J2.4"
+      ]
+    },
+    {
+      "name": "LED_PWR",
+      "kind": "signal",
+      "members": [
+        "U1.25",
+        "R5.1",
+        "LED1.2"
+      ]
+    },
+    {
+      "name": "LED_RUN",
+      "kind": "signal",
+      "members": [
+        "U1.26",
+        "R6.1",
+        "LED2.2"
+      ]
+    },
+    {
+      "name": "LED_FAULT",
+      "kind": "signal",
+      "members": [
+        "U1.27",
+        "R7.1",
+        "LED3.2"
+      ]
+    },
+    {
+      "name": "USER_KEY",
+      "kind": "signal",
+      "members": [
+        "U1.28",
+        "SW1.1",
+        "R8.2"
+      ]
+    },
+    {
+      "name": "LIMIT1",
+      "kind": "signal",
+      "members": [
+        "U1.29",
+        "J5.1",
+        "R9.2",
+        "C20.1"
+      ]
+    },
+    {
+      "name": "LIMIT2",
+      "kind": "signal",
+      "members": [
+        "U1.30",
+        "J6.1",
+        "R10.2",
+        "C21.1"
+      ]
+    },
+    {
+      "name": "XIN",
+      "kind": "signal",
+      "members": [
+        "U1.5",
+        "Y1.1",
+        "C18.1"
+      ]
+    },
+    {
+      "name": "XOUT",
+      "kind": "signal",
+      "members": [
+        "U1.6",
+        "Y1.2",
+        "C19.1"
+      ]
+    },
+    {
+      "name": "TP_VIN",
+      "kind": "signal",
+      "members": [
+        "TP1.1",
+        "VIN"
+      ]
+    },
+    {
+      "name": "TP_3V3",
+      "kind": "signal",
+      "members": [
+        "TP2.1",
+        "+3V3"
+      ]
+    },
+    {
+      "name": "CC1_GND",
+      "kind": "signal",
+      "members": [
+        "R1.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "CC2_GND",
+      "kind": "signal",
+      "members": [
+        "R2.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "D2_GND",
+      "kind": "signal",
+      "members": [
+        "D2.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "D3_GND",
+      "kind": "signal",
+      "members": [
+        "D3.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "D3_VBUS",
+      "kind": "signal",
+      "members": [
+        "D3.5",
+        "GND"
+      ]
+    },
+    {
+      "name": "LED1_GND",
+      "kind": "signal",
+      "members": [
+        "LED1.1",
+        "GND"
+      ]
+    },
+    {
+      "name": "LED2_GND",
+      "kind": "signal",
+      "members": [
+        "LED2.1",
+        "GND"
+      ]
+    },
+    {
+      "name": "LED3_GND",
+      "kind": "signal",
+      "members": [
+        "LED3.1",
+        "GND"
+      ]
+    },
+    {
+      "name": "J5_GND",
+      "kind": "signal",
+      "members": [
+        "J5.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "J6_GND",
+      "kind": "signal",
+      "members": [
+        "J6.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "C18_GND",
+      "kind": "signal",
+      "members": [
+        "C18.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "C19_GND",
+      "kind": "signal",
+      "members": [
+        "C19.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "C12_GND",
+      "kind": "signal",
+      "members": [
+        "C12.1",
+        "GND"
+      ]
+    },
+    {
+      "name": "C13_GND",
+      "kind": "signal",
+      "members": [
+        "C13.1",
+        "GND"
+      ]
+    },
+    {
+      "name": "L1_IN",
+      "kind": "signal",
+      "members": [
+        "C1.2",
+        "L1.1"
+      ]
+    },
+    {
+      "name": "VIN_FILT",
+      "kind": "power",
+      "members": [
+        "L1.2",
+        "D1.1"
+      ]
+    },
+    {
+      "name": "ISENSE_A_INP",
+      "kind": "signal",
+      "members": [
+        "U7.4",
+        "Q2.2",
+        "R11.1"
+      ]
+    },
+    {
+      "name": "ISENSE_A_INN",
+      "kind": "signal",
+      "members": [
+        "U7.3",
+        "R11.2"
+      ]
+    },
+    {
+      "name": "ISENSE_A_OUT",
+      "kind": "signal",
+      "members": [
+        "U7.1",
+        "U1.10"
+      ]
+    },
+    {
+      "name": "ISENSE_B_INP",
+      "kind": "signal",
+      "members": [
+        "U8.4",
+        "Q8.2",
+        "R12.1"
+      ]
+    },
+    {
+      "name": "ISENSE_B_INN",
+      "kind": "signal",
+      "members": [
+        "U8.3",
+        "R12.2"
+      ]
+    },
+    {
+      "name": "ISENSE_B_OUT",
+      "kind": "signal",
+      "members": [
+        "U8.1",
+        "U1.11"
+      ]
+    },
+    {
+      "name": "ISENSE_VCC",
+      "kind": "power",
+      "members": [
+        "U7.5",
+        "U8.5",
+        "+3V3"
+      ]
+    },
+    {
+      "name": "ISENSE_GND",
+      "kind": "signal",
+      "members": [
+        "U7.2",
+        "GND"
+      ]
+    },
+    {
+      "name": "ISENSE_B_GND",
+      "kind": "signal",
+      "members": [
+        "U8.2",
+        "GND"
+      ]
+    }
+  ],
+  "design_decisions": [
+    "Dual H-Bridge: 4x IR2104S half-bridge gate drivers + 8x AO3400A N-MOSFETs",
+    "IR2104S (SOIC-8): VCC=1, HIN=2, LIN=3, COM=4, LO=5, VS=6, HO=7, VB=8",
+    "AO3400A (SOT-23): Gate=1, Source=2, Drain=3",
+    "Bootstrap: 1N4148W diode + 1uF cap per gate driver",
+    "Gate resistors: 10R series on all MOSFET gates",
+    "Current sense: 0.2R on low-side return of each H-bridge",
+    "GD32F150C8T6: 8 GPIO for HIN/LIN control, USB on PA11/PA12",
+    "Power: VIN → SS34 → L1 ferrite → 3V3 LDO + VMOTOR",
+    "INA180A2IDBVT (C116203, SOT-23-5): current sense amp, gain=50V/V, 0.2R × 50V/V = 10mV/mA. At 500mA → 5V output. INA180 pins: OUT=1, GND=2, IN-=3, IN+=4, VCC=5"
+  ]
+}

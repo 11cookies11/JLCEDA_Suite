@@ -94,7 +94,7 @@ def _nested_dict(summary: dict[str, Any], *keys: str) -> dict[str, Any]:
 
 def project_dir_from_summary(summary: dict[str, Any], summary_path: Path) -> Path | None:
     base = repo_root(summary_path)
-    for container in (_as_dict(summary.get("files")), _as_dict(summary.get("output_files"))):
+    for container in (_as_dict(summary.get("files")),):
         for key in ("project", "schematic", "execution_plan", "part_lock"):
             raw = container.get(key)
             if isinstance(raw, str) and raw:
@@ -116,7 +116,7 @@ def project_dir_from_summary(summary: dict[str, Any], summary_path: Path) -> Pat
 def summary_project_files(summary: dict[str, Any], summary_path: Path) -> list[Path]:
     base = repo_root(summary_path)
     files: list[Path] = []
-    for container in (_as_dict(summary.get("files")), _as_dict(summary.get("output_files"))):
+    for container in (_as_dict(summary.get("files")),):
         for key in (
             "project",
             "schematic",

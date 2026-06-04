@@ -87,7 +87,11 @@ class TestProjectResolution(unittest.TestCase):
         }
 
         with patch("kicad_suite.project_resolution.footprint_exists", return_value=True):
-            manifest = build_project_resolution(model, parts_result=parts_result)
+            with patch(
+                "kicad_suite.project_resolution.symbol_mapping_for",
+                return_value=("MCU:STM32F103C8T6", "LQFP-48", []),
+            ):
+                manifest = build_project_resolution(model, parts_result=parts_result)
 
         self.assertEqual(manifest["summary"]["component_count"], 1)
         self.assertEqual(manifest["summary"]["search_queue_count"], 1)

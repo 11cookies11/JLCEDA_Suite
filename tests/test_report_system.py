@@ -34,7 +34,8 @@ def _make_project(tmp_path):
         "risks": [{"key": "ddr", "title": "DDR review", "status": "open", "severity": "high"}],
         "sheets": [], "calculations": [], "design_decisions": [], "constraints": [],
     }
-    model_path = tmp_path / "circuit-model.json"
+    model_path = tmp_path / "source" / "circuit-model.source.json"
+    model_path.parent.mkdir(parents=True, exist_ok=True)
     model_path.write_text(json.dumps(model, ensure_ascii=False), encoding="utf-8")
     return tmp_path
 

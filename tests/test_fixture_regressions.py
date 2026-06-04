@@ -18,7 +18,6 @@ from kicad_suite.validation.common import load_json
 
 
 FIXTURE_ROOT = Path(__file__).resolve().parent / "fixtures" / "e2e" / "complete-run"
-LEGACY_FIXTURE_ROOT = Path(__file__).resolve().parent / "fixtures" / "e2e" / "legacy-summary"
 
 
 def _copy_fixture_tree(source: Path, destination: Path) -> None:
@@ -86,23 +85,6 @@ class TestEndToEndFixture(unittest.TestCase):
             self.assertTrue(any("strict mode" in item for item in report.errors))
             self.assertTrue(any("mock parts resolver" in item for item in report.warnings))
             self.assertTrue(any("ERC: disabled or unavailable" in item for item in report.warnings))
-
-    def test_legacy_summary_fixture_validates(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp:
-            root = Path(tmp)
-            _copy_fixture_tree(LEGACY_FIXTURE_ROOT, root)
-
-            summary_path = root / "legacy-summary.json"
-            report = validate_artifacts(summary_path)
-            summary = load_json(summary_path)
-
-            self.assertTrue(report.ok)
-            self.assertEqual(report.stats.get("summary_schema"), "kicad-project-write-result.v1")
-            self.assertTrue(report.stats.get("erc_success"))
-            self.assertEqual(summary["output_files"]["project"], "project/legacy-demo.kicad_pro")
-            self.assertEqual(summary["hierarchical_sheets"]["root_schematic_file"], "project/legacy-demo.kicad_sch")
-            self.assertTrue(any("stale paths: none found" in item for item in report.checks))
-
 
 if __name__ == "__main__":
     unittest.main()

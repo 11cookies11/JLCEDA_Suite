@@ -3,21 +3,18 @@
 
 from __future__ import annotations
 
-import json
 import os
 import shutil
-import subprocess
-import sys
 from dataclasses import asdict
 from pathlib import Path
 from typing import Any
 
-from .adapters.kicad_cli import resolve_kicad_cli
+from .board_generator import generate_board_from_plan
 from .circuit_model_io import load_dual_circuit_model, project_root_from_model_path, save_resolved_circuit_model
-from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, normalize_net_kind, write_output
+from .compile_kicad_execution_plan import KiCadExecutionPlan, compile_plan, write_output
 from .ir_compiler import build_ir
 from .ir_to_kicad import ir_to_kicad
-from .env_utils import is_truthy_env, repo_root
+from .env_utils import is_truthy_env
 from .kicad_erc_runner import run as run_erc
 from .kicad_project_writer import write_hierarchical_project, write_project
 from .parts.workflow import run_parts_pipeline
@@ -26,6 +23,7 @@ from .pipeline_event_log import append_pipeline_event, pipeline_event_log_path
 from .pipeline_postprocess import apply_postprocess, pin_project_libraries
 from .pipeline_summary import build_run_pipeline_summary
 from .project_resolution import write_project_resolution
+from .netlist_builder import build_netlist
 from .simulation_planner import write_simulation_artifacts
 
 
@@ -38,152 +36,6 @@ def _clean_project_output_dir(output: Path, project_name: str) -> Path:
     return project_dir
 
 
-def _resolve_kicad_python() -> str:
-    explicit = os.environ.get("KICAD_PYTHON_BIN", "")
-    if explicit:
-        return explicit
-    cli = resolve_kicad_cli()
-    if cli:
-        candidate = Path(cli).with_name("python.exe")
-        if candidate.exists():
-            return str(candidate)
-    return ""
-
-
-def _generate_board_from_plan(plan_file: str, project_dir: Path) -> dict[str, Any]:
-    if not is_truthy_env("KICAD_GENERATE_PCB", "true"):
-        return {"attempted": False, "enabled": False}
-    python_bin = _resolve_kicad_python()
-    if not python_bin:
-        return {
-            "attempted": True,
-            "success": False,
-            "warnings": ["KiCad Python was not found; PCB was not generated."],
-        }
-    from .pcb_generator import _BOARD_SCRIPT
-    import tempfile as _tempfile
-    with _tempfile.NamedTemporaryFile(mode="w", suffix=".py", delete=False, encoding="utf-8") as _sf:
-        _sf.write(_BOARD_SCRIPT)
-        script = _sf.name
-    try:
-        board_file = project_dir / f"{project_dir.name}.kicad_pcb"
-        process = subprocess.run(
-            [python_bin, script, plan_file, str(board_file)],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True,
-            encoding="utf-8",
-            errors="replace",
-            timeout=120,
-            check=False,
-        )
-    finally:
-        try:
-            Path(script).unlink()
-        except OSError:
-            pass
-    payload: dict[str, Any] = {}
-    try:
-        payload = json.loads(process.stdout)
-    except Exception:
-        payload = {}
-    warnings: list[str] = []
-    if process.stderr:
-        warnings.append(process.stderr.strip())
-    if process.returncode != 0:
-        warnings.append(process.stdout.strip() or "PCB generation failed.")
-    if payload.get("skipped"):
-        warnings.extend(str(item) for item in payload.get("skipped", []))
-    return {
-        "attempted": True,
-        "success": process.returncode == 0,
-        "return_code": process.returncode,
-        "python": python_bin,
-        "board_file": payload.get("board", str(board_file)),
-        "footprints": int(payload.get("footprints", 0) or 0),
-        "nets": int(payload.get("nets", 0) or 0),
-        "warnings": warnings,
-    }
-
-
-def load_json(path: str) -> dict[str, Any]:
-    with Path(path).open("r", encoding="utf-8") as file:
-        return json.load(file)
-
-
-def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
-    """Build a netlist dict from the circuit model's nets and components."""
-    from collections import defaultdict
-
-    request_id = str(model.get("request_id", ""))
-    project_id = str(model.get("project_id", request_id))
-    pin_by_ref: dict[str, list[dict[str, str]]] = defaultdict(list)
-    for net in model.get("nets", []):
-        if not isinstance(net, dict):
-            continue
-        net_name = str(net.get("name", ""))
-        for member in net.get("members", []):
-            member_str = str(member).strip()
-            if "." in member_str:
-                ref, pin = member_str.rsplit(".", 1)
-                if ref and pin:
-                    pin_by_ref[ref].append({"pin": pin, "pin_name": "", "net": net_name})
-
-    components: list[dict[str, Any]] = []
-    for component in model.get("components", []):
-        if not isinstance(component, dict):
-            continue
-        ref = str(component.get("ref", "")).strip()
-        if not ref:
-            continue
-        selected_part = component.get("selected_part", {})
-        part = selected_part if isinstance(selected_part, dict) else {}
-        components.append(
-            {
-                "ref": ref,
-                "role": str(component.get("role", "")),
-                "value": str(component.get("value", "")),
-                "part": {
-                    "part_id": str(part.get("part_id", "")),
-                    "display_name": str(part.get("display_name", "")),
-                    "library_uuid": str(part.get("library_uuid", "")),
-                    "symbol_uuid": str(part.get("symbol_uuid", "")),
-                    "pin_count": int(part.get("pin_count", 0) or 0),
-                    "named_pin_count": int(part.get("named_pin_count", 0) or 0),
-                },
-                "pins": sorted(pin_by_ref.get(ref, []), key=lambda item: item.get("pin", "")),
-                "availability_status": str(component.get("availability_status", "unknown")),
-            }
-        )
-
-    nets: list[dict[str, Any]] = []
-    for net in model.get("nets", []):
-        if not isinstance(net, dict):
-            continue
-        net_name = str(net.get("name", "")).strip()
-        if not net_name:
-            continue
-        nets.append(
-            {
-                "name": net_name,
-                "kind": str(net.get("kind", normalize_net_kind(net_name))),
-                "members": [str(member) for member in net.get("members", [])],
-            }
-        )
-
-    return {
-        "schema_version": "netlist.v1",
-        "request_id": request_id,
-        "project_id": project_id,
-        "source_model": {
-            "schema_version": str(model.get("schema_version", "")),
-            "request_id": request_id,
-        },
-        "components": components,
-        "nets": nets,
-    }
-
-
 def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     """Run full pipeline: model -> netlist -> plan -> KiCad output -> postprocess -> ERC."""
     model_path_obj = Path(model_path)
@@ -192,11 +44,6 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     source_project_dir = project_root_from_model_path(model_path_obj.resolve())
 
     explicit_workspace = os.environ.get("KICAD_WORKSPACE", "")
-    workspace = explicit_workspace
-    if not workspace:
-        candidate = source_project_dir
-        if (candidate / "libraries" / "symbols").exists():
-            workspace = str(candidate)
 
     output = Path(output_dir)
     if not explicit_workspace:
@@ -280,7 +127,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     schematic_file = Path(write_result.get("schematic_file", ""))
     project_dir = schematic_file.parent if schematic_file.exists() else output / project_name
     postprocess = apply_postprocess(schematic_file, project_dir)
-    board_result = _generate_board_from_plan(str(plan_file), project_dir)
+    board_result = generate_board_from_plan(str(plan_file), project_dir)
     if board_result.get("attempted"):
         postprocess["board_generation"] = board_result
         append_pipeline_event(
@@ -393,11 +240,3 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
         },
     )
     return summary
-
-
-if __name__ == "__main__":
-    if len(sys.argv) < 3:
-        print("Usage: python run_pipeline.py <source/circuit-model.source.json> <output-dir>")
-        sys.exit(1)
-    result = run_pipeline(sys.argv[1], sys.argv[2])
-    print(json.dumps(result, ensure_ascii=False, indent=2))

@@ -32,7 +32,8 @@ def _write_model(project_dir, model=None):
             "constraints": [],
             "power_rails": [],
         }
-    model_path = project_dir / "circuit-model.json"
+    model_path = project_dir / "source" / "circuit-model.source.json"
+    model_path.parent.mkdir(parents=True, exist_ok=True)
     model_path.write_text(json.dumps(model, ensure_ascii=False), encoding="utf-8")
     return model_path
 
@@ -147,7 +148,7 @@ def test_recompute_from_files(tmp_path):
     ps.recompute()
     assert ps.get_status() in ("DIRTY", "VALID", "INIT")
     assert len(ps.state["dsl"]["hash"]) == 8
-    assert ps.state["dsl"]["path"] == "circuit-model.json"
+    assert ps.state["dsl"]["path"] == "source/circuit-model.source.json"
 
 
 def test_summary_counts(tmp_path):

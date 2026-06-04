@@ -373,8 +373,8 @@ def estimate_symbol_size(lib_id: str) -> tuple[float, float]:
     Uses symbol geometry on disk. The retired rule table no longer provides
     manual size overrides.
     """
-    from .compile_kicad_execution_plan import _estimate_symbol_size_from_pins, _legacy_estimate_symbol_size
+    from .compile_kicad_execution_plan import _estimate_symbol_size_from_pins
     result = _estimate_symbol_size_from_pins(lib_id)
     if result is not None:
         return result
-    return _legacy_estimate_symbol_size(lib_id)
+    return 12.7, 10.16

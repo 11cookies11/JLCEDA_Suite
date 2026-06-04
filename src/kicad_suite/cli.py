@@ -10,8 +10,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from .run_pipeline import run_pipeline
-from .server_eda_target import run as run_eda_target
+from .pipeline_coordinator import run_pipeline
 from .server_text_to_kicad import run as run_text_to_kicad
 from .artifact_validator import main as validate_artifacts_main
 from .compile_kicad_execution_plan import run as run_compile_plan
@@ -184,11 +183,6 @@ def _pipeline_handler(args: argparse.Namespace) -> int:
 
 def _text_to_kicad_handler(args: argparse.Namespace) -> int:
     run_text_to_kicad()
-    return 0
-
-
-def _eda_target_handler(args: argparse.Namespace) -> int:
-    run_eda_target()
     return 0
 
 
@@ -1092,9 +1086,6 @@ def build_parser() -> argparse.ArgumentParser:
     pipeline.add_argument("model_path", type=Path)
     pipeline.add_argument("output_dir", type=Path)
     pipeline.set_defaults(handler=_pipeline_handler)
-
-    eda_target = subparsers.add_parser("eda-target", help="Run the EDA target pipeline.")
-    eda_target.set_defaults(handler=_eda_target_handler)
 
     text_to_kicad = subparsers.add_parser("text-to-kicad", help="Run the text-to-KiCad pipeline.")
     text_to_kicad.set_defaults(handler=_text_to_kicad_handler)

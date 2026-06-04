@@ -58,11 +58,7 @@ def build_report(
         if source_path.exists() or resolved_path.exists():
             model = load_dual_circuit_model(model_path)
         else:
-            legacy_model = root / "circuit-model.json"
-            if legacy_model.exists():
-                model = json.loads(legacy_model.read_text(encoding="utf-8"))
-            else:
-                model = {}
+            model = {}
 
     # Project state.
     ps = ProjectState(root)

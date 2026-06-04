@@ -37,7 +37,7 @@ def validate_summary(report: ValidationReport, summary: dict[str, Any], summary_
             report.add_check("stale paths: none found")
 
     plan_path = None
-    for container in (_as_dict(summary.get("files")), _as_dict(summary.get("output_files"))):
+    for container in (_as_dict(summary.get("files")),):
         raw = container.get("execution_plan") or container.get("kicad_execution_plan")
         if isinstance(raw, str) and raw:
             plan_path = (Path(raw) if Path(raw).is_absolute() else (summary_path.parent / Path(raw)).resolve())

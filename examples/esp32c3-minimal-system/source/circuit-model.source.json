@@ -1,0 +1,219 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "fresh",
+  "project_id": "esp32c3-minimal-system",
+  "topology": "esp32c3_minimal_system",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "mcu",
+      "value": "ESP32-C3FH4",
+      "package": "QFN-32",
+      "selected_part": {
+        "lcsc_id": "C2858491",
+        "display_name": "ESP32-C3FH4",
+        "kicad_footprint_hint": "QFN-32_L5.0-W5.0-P0.50-TL-EP3.7"
+      }
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AMS1117-3.3",
+      "package": "SOT-223",
+      "selected_part": {
+        "lcsc_id": "C6186",
+        "display_name": "AMS1117-3.3",
+        "kicad_footprint_hint": "SOT-223-3_L6.5-W3.4-P2.30-LS7.0-BR"
+      }
+    },
+    {
+      "ref": "C1",
+      "role": "vdd_decoupling_1",
+      "value": "100nF",
+      "package": "C0603",
+      "selected_part": { "lcsc_id": "C1590", "display_name": "CL10B104KA8NNNC" }
+    },
+    {
+      "ref": "C2",
+      "role": "vdd_decoupling_2",
+      "value": "100nF",
+      "package": "C0603",
+      "selected_part": { "lcsc_id": "C1590", "display_name": "" }
+    },
+    {
+      "ref": "C3",
+      "role": "vdd_decoupling_3",
+      "value": "100nF",
+      "package": "C0603",
+      "selected_part": { "lcsc_id": "C1590", "display_name": "" }
+    },
+    {
+      "ref": "C4",
+      "role": "vdd_bulk_cap",
+      "value": "10uF",
+      "package": "C0805",
+      "selected_part": { "lcsc_id": "C1713", "display_name": "CL21A106KOQNNNE" }
+    },
+    {
+      "ref": "C5",
+      "role": "en_rc_cap",
+      "value": "1uF",
+      "package": "C0603",
+      "selected_part": { "lcsc_id": "C1592", "display_name": "" }
+    },
+    {
+      "ref": "C6",
+      "role": "reg_input_cap",
+      "value": "10uF",
+      "package": "C0805",
+      "selected_part": { "lcsc_id": "C1713", "display_name": "" }
+    },
+    {
+      "ref": "C7",
+      "role": "reg_output_cap",
+      "value": "10uF",
+      "package": "C0805",
+      "selected_part": { "lcsc_id": "C1713", "display_name": "" }
+    },
+    {
+      "ref": "R1",
+      "role": "en_pullup",
+      "value": "10K",
+      "package": "R0603",
+      "selected_part": { "lcsc_id": "C15401", "display_name": "0603WAJ0103T5E" }
+    },
+    {
+      "ref": "R2",
+      "role": "io0_pullup",
+      "value": "10K",
+      "package": "R0603",
+      "selected_part": { "lcsc_id": "C15401", "display_name": "" }
+    },
+    {
+      "ref": "R3",
+      "role": "led_resistor",
+      "value": "1K",
+      "package": "R0603",
+      "selected_part": { "lcsc_id": "C14676", "display_name": "RC0603JR-071KL" }
+    },
+    {
+      "ref": "D1",
+      "role": "power_led",
+      "value": "LED0603",
+      "package": "LED0603",
+      "selected_part": { "lcsc_id": "C5139863", "display_name": "APHD1608LCGCK", "kicad_footprint_hint": "LED-SMD_L1.6-W0.8-RD_GREEN-1" }
+    },
+    {
+      "ref": "J1",
+      "role": "usb_c_power_input",
+      "value": "USB-C16PIN",
+      "package": "USB-C-SMD",
+      "selected_part": { "lcsc_id": "C2927026", "display_name": "USB-TYPE-C-006", "kicad_footprint_hint": "USB-C-SMD_USB-TYPE-C-006" }
+    },
+    {
+      "ref": "J2",
+      "role": "uart_debug_header",
+      "value": "UART-4P",
+      "package": "HDR-TH_4P",
+      "selected_part": { "lcsc_id": "C91552", "display_name": "2.54-1*4P", "kicad_footprint_hint": "HDR-TH_4P-P2.54-H-M-W10.4" }
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "SW-SMD_6x6",
+      "package": "SW-SMD",
+      "selected_part": { "lcsc_id": "C128964", "display_name": "K5-1617SA-02", "kicad_footprint_hint": "SW-SMD_K5-1617SA-02" }
+    },
+    {
+      "ref": "SW2",
+      "role": "boot_button",
+      "value": "SW-SMD_6x6",
+      "package": "SW-SMD",
+      "selected_part": { "lcsc_id": "C128964", "display_name": "K5-1617SA-02", "kicad_footprint_hint": "SW-SMD_K5-1617SA-02" }
+    }
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "kind": "power",
+      "members": ["J1.1", "U2.3"]
+    },
+    {
+      "name": "+3V3",
+      "kind": "power",
+      "members": [
+        "U1.1", "U1.11", "U1.17",
+        "U2.2",
+        "R1.1", "R2.1", "D1.1", "J2.1",
+        "C1.1", "C2.1", "C3.1", "C4.1", "C7.1"
+      ]
+    },
+    {
+      "name": "GND",
+      "kind": "ground",
+      "members": [
+        "U1.2", "U1.9", "U1.16",
+        "U2.1",
+        "R3.2", "SW1.2", "SW2.2",
+        "C1.2", "C2.2", "C3.2", "C4.2", "C5.2", "C6.2", "C7.2",
+        "D1.2", "J1.2", "J2.4"
+      ]
+    },
+    {
+      "name": "EN",
+      "kind": "signal",
+      "members": ["U1.31", "R1.2", "C5.1", "SW1.1"]
+    },
+    {
+      "name": "IO9",
+      "kind": "signal",
+      "members": ["U1.29", "R2.2", "SW2.1"]
+    },
+    {
+      "name": "LED",
+      "kind": "signal",
+      "members": ["U1.8", "R3.1"]
+    },
+    {
+      "name": "UART_TX",
+      "kind": "signal",
+      "members": ["U1.23", "J2.2"]
+    },
+    {
+      "name": "UART_RX",
+      "kind": "signal",
+      "members": ["U1.24", "J2.3"]
+    }
+  ],
+  "sheets": [
+    {
+      "name": "power",
+      "components": ["U2", "J1", "C1", "C2", "C3", "C4", "C6", "C7"],
+      "nets": ["+5V", "+3V3", "GND"]
+    },
+    {
+      "name": "mcu",
+      "components": ["U1", "R1", "R2", "C5", "SW1", "SW2"],
+      "nets": ["+3V3", "GND", "EN", "IO9"]
+    },
+    {
+      "name": "io",
+      "components": ["R3", "D1", "J2"],
+      "nets": ["+3V3", "GND", "LED", "UART_TX", "UART_RX"]
+    }
+  ],
+  "pcb_layout": {
+    "regions": {
+      "power_input": { "x": 10, "y": 10, "components": ["J1"] },
+      "regulation": { "x": 10, "y": 50, "components": ["U2", "C6", "C7"] },
+      "decoupling": { "x": 70, "y": 10, "components": ["C1", "C2", "C3", "C4"] },
+      "mcu": { "x": 10, "y": 100, "components": ["U1"] },
+      "reset_boot": { "x": 10, "y": 160, "components": ["R1", "R2", "C5", "SW1", "SW2"] },
+      "led_io": { "x": 70, "y": 160, "components": ["D1", "R3", "J2"] }
+    }
+  },
+  "calculations": [],
+  "design_decisions": [],
+  "risks": [],
+  "constraints": []
+}

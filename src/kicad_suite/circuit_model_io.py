@@ -1,13 +1,12 @@
 """Helpers for loading and saving dual-file circuit models.
 
-The preferred layout is:
+The supported layout is:
 
 * ``source/<name>.source.json`` = human-authored source model
 * ``build/<name>.resolved.json`` = toolchain-derived resolution overlay
 
-Consumers should load the merged view and write only the resolved file.
-Legacy root-level ``circuit-model.json`` files are still readable as aliases,
-but new projects should use the split source/build layout.
+Consumers should load the merged view and write the resolved overlay beside
+the source file in the project workspace.
 """
 
 from __future__ import annotations
@@ -58,10 +57,6 @@ def resolve_model_paths(model_path: Path) -> tuple[Path, Path]:
     if model_path.name.endswith(".source.json") and model_path.parent.name == "source":
         source_path = model_path
     if model_path.name.endswith(".resolved.json") and model_path.parent.name == "build":
-        resolved_path = model_path
-    if model_path.exists() and model_path.parent.name not in {"source", "build"}:
-        source_path = model_path
-    if model_path.name == "circuit-model.resolved.json" and model_path.exists() and model_path.parent.name not in {"source", "build"}:
         resolved_path = model_path
     return source_path, resolved_path
 
@@ -164,20 +159,11 @@ def merge_circuit_models(source_model: dict[str, Any], resolved_model: dict[str,
 def load_dual_circuit_model(model_path: Path) -> dict[str, Any]:
     """Load the merged source+resolved circuit model for *model_path*."""
     source_path, resolved_path = resolve_model_paths(model_path)
-    project_root = project_root_from_model_path(model_path)
-    legacy_source = project_root / "circuit-model.json"
-    legacy_resolved = project_root / "circuit-model.resolved.json"
-    if not source_path.exists() and legacy_source.exists():
-        source_path = legacy_source
-    if not resolved_path.exists() and legacy_resolved.exists():
-        resolved_path = legacy_resolved
     if not source_path.exists() and not resolved_path.exists():
         raise FileNotFoundError(source_path)
 
     source_model = load_json(source_path) if source_path.exists() else {}
     resolved_model = load_json(resolved_path) if resolved_path.exists() else {}
-    if not source_model and model_path.exists() and model_path.name == "circuit-model.json":
-        source_model = load_json(model_path)
     if not source_model:
         return resolved_model
     if not resolved_model:

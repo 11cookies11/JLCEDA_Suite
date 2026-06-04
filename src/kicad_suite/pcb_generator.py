@@ -6,6 +6,7 @@ import json
 import os
 import subprocess
 import tempfile
+import uuid
 from pathlib import Path
 from typing import Any
 
@@ -112,6 +113,45 @@ if __name__ == "__main__":
 '''
 
 
+def _extract_pad_blocks(footprint_path: Path) -> list[list[str]]:
+    """Extract multiline pad blocks from a KiCad footprint file."""
+    lines = footprint_path.read_text(encoding="utf-8").splitlines()
+    blocks: list[list[str]] = []
+    current: list[str] = []
+    depth = 0
+    capturing = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("(pad "):
+            capturing = True
+            current = [line]
+            depth = line.count("(") - line.count(")")
+            if depth <= 0:
+                blocks.append(current)
+                capturing = False
+            continue
+        if capturing:
+            current.append(line)
+            depth += line.count("(") - line.count(")")
+            if depth <= 0:
+                blocks.append(current)
+                capturing = False
+    return blocks
+
+
+def _convert_pad_block(block: list[str]) -> list[str]:
+    """Return a normalized pad block with a UUID when missing."""
+    converted = list(block)
+    if not any("(uuid " in line for line in converted):
+        indent = "  "
+        for line in converted[1:]:
+            if line.startswith(" "):
+                indent = line[: len(line) - len(line.lstrip(" "))]
+                break
+        converted.insert(1, f"{indent}(uuid {uuid.uuid4()})")
+    return converted
+
+
 def _kicad_python() -> str | None:
     explicit = os.environ.get("KICAD_PYTHON_BIN", "")
     if explicit and Path(explicit).exists():
@@ -196,5 +236,16 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
         result.update(payload)
     except json.JSONDecodeError:
         result["raw_output"] = proc.stdout
+    result.setdefault("component_count", len(plan.get("symbols", [])) if isinstance(plan.get("symbols"), list) else 0)
+    result.setdefault("placements", [])
+    warnings = []
+    if isinstance(result.get("warnings"), list):
+        warnings.extend(str(item) for item in result["warnings"] if str(item))
+    if isinstance(result.get("skipped"), list):
+        warnings.extend(str(item) for item in result["skipped"] if str(item))
+    if warnings:
+        result["warnings"] = warnings
+    else:
+        result.setdefault("warnings", [])
     result.setdefault("ok", True)
     return result

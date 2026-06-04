@@ -1835,19 +1835,15 @@ def write_project(plan: dict[str, Any], project_path: str | Path | None = None) 
     if isinstance(plan_sheets, list) and plan_sheets:
         dsl_sheets = plan_sheets
     elif _PROJECT_PATH:
-        for model_file in (
-            _PROJECT_PATH / 'source' / 'circuit-model.source.json',
-            _PROJECT_PATH / 'circuit-model.json',
-        ):
-            if model_file.is_file():
-                try:
-                    model = json.loads(model_file.read_text(encoding='utf-8'))
-                    sheets = model.get('sheets', [])
-                    if isinstance(sheets, list) and sheets:
-                        dsl_sheets = sheets
-                        break
-                except (OSError, json.JSONDecodeError):
-                    pass
+        model_file = _PROJECT_PATH / 'source' / 'circuit-model.source.json'
+        if model_file.is_file():
+            try:
+                model = json.loads(model_file.read_text(encoding='utf-8'))
+                sheets = model.get('sheets', [])
+                if isinstance(sheets, list) and sheets:
+                    dsl_sheets = sheets
+            except (OSError, json.JSONDecodeError):
+                pass
 
     hierarchical = env('KICAD_HIERARCHICAL_SHEETS', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
     hierarchical_summary: dict[str, Any] = {}
