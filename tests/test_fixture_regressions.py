@@ -13,8 +13,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.artifact_validator import validate_artifacts
-from kicad_suite.validation.common import load_json
+from kicad_suite.application_services.artifact_validator import validate_artifacts
+from kicad_suite.shared.validation.common import load_json
 
 
 FIXTURE_ROOT = Path(__file__).resolve().parent / "fixtures" / "e2e" / "complete-run"

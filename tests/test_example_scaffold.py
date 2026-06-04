@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.example_scaffold import scaffold_example
+from kicad_suite.tooling.example_scaffold import scaffold_example
 
 
 class TestExampleScaffold(unittest.TestCase):

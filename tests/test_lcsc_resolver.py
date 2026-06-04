@@ -8,7 +8,7 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.lcsc_resolver import (
+from kicad_suite.adapters.lcsc_resolver import (
     LcscOpenApiBackend,
     _extract_jlc_mcp_results,
     _extract_lcsc_product_dicts,

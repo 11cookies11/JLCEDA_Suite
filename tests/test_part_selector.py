@@ -8,8 +8,8 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.lcsc_resolver import PartRequirement, ResolvedPart, ResolverResult
-from kicad_suite.part_selector import (
+from kicad_suite.adapters.lcsc_resolver import PartRequirement, ResolvedPart, ResolverResult
+from kicad_suite.domain.core.part_selector import (
     RiskItem,
     SelectedPart,
     SelectionResult,

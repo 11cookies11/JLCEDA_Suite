@@ -11,7 +11,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.pipeline_event_log import append_pipeline_event, pipeline_event_log_path
+from kicad_suite.orchestration.pipeline_event_log import append_pipeline_event, pipeline_event_log_path
 
 
 class TestPipelineEventLog(unittest.TestCase):

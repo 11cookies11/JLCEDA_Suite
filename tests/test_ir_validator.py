@@ -8,8 +8,8 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.ir_compiler import build_ir
-from kicad_suite.ir_validator import validate_ir
+from kicad_suite.domain.core.ir_compiler import build_ir
+from kicad_suite.domain.core.ir_validator import validate_ir
 
 
 def _make_model():

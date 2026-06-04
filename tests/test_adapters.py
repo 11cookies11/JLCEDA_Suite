@@ -16,7 +16,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.adapters.kicad_cli import count_findings, load_schematic_from_plan, resolve_kicad_cli, resolve_schematic_file
 from kicad_suite.adapters.jlc_mcp import extract_bridge_results, is_http_backend_reachable, resolve_bridge_script, run_bridge_search
-from kicad_suite.kicad_erc_runner import run as run_erc
+from kicad_suite.adapters.kicad_erc_runner import run as run_erc
 
 
 class TestKicadCliAdapter(unittest.TestCase):
@@ -97,8 +97,8 @@ class TestErcRunnerStructuredFailure(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmpdir:
             schematic = Path(tmpdir) / "demo.kicad_sch"
             schematic.write_text("(kicad_sch)", encoding="utf-8")
-            with patch("kicad_suite.kicad_erc_runner.resolve_schematic_file", return_value=schematic):
-                with patch("kicad_suite.kicad_erc_runner.resolve_kicad_cli", return_value=""):
+            with patch("kicad_suite.adapters.kicad_erc_runner.resolve_schematic_file", return_value=schematic):
+                with patch("kicad_suite.adapters.kicad_erc_runner.resolve_kicad_cli", return_value=""):
                     summary = run_erc(emit=False)
         self.assertFalse(summary["success"])
         self.assertEqual(summary["error"], "KICAD_CLI_NOT_FOUND")

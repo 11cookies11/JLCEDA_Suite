@@ -8,7 +8,7 @@ import os
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.project_state import (
+from kicad_suite.application_services.project_state import (
     ProjectState,
     is_mutating_operation,
     is_validate_operation,

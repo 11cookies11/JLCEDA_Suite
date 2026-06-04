@@ -12,7 +12,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.compile_kicad_execution_plan import (
+from kicad_suite.domain.core.compile_kicad_execution_plan import (
     KiCadDiagnostics,
     KiCadExecutionPlan,
     KiCadNet,
@@ -20,8 +20,8 @@ from kicad_suite.compile_kicad_execution_plan import (
     KiCadSymbol,
     KiCadTarget,
 )
-from kicad_suite.part_selector import SelectedPart
-from kicad_suite.netlist_builder import build_netlist
+from kicad_suite.domain.core.part_selector import SelectedPart
+from kicad_suite.domain.core.netlist_builder import build_netlist
 from kicad_suite.pipeline_coordinator import run_pipeline
 
 

@@ -8,7 +8,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.report_system import (
+from kicad_suite.application_services.report_system import (
     FORMAT_JSON,
     FORMAT_MARKDOWN,
     FORMAT_TEXT,

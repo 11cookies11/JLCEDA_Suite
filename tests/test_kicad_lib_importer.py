@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.kicad_lib_importer import (
+from kicad_suite.adapters.kicad_lib_importer import (
     ImportResult,
     _yaml_dumps,
     _yaml_value,
@@ -19,7 +19,7 @@ from kicad_suite.kicad_lib_importer import (
     _parse_lock_file,
     import_parts,
 )
-from kicad_suite.part_selector import SelectedPart
+from kicad_suite.domain.core.part_selector import SelectedPart
 
 
 def _make_selected(**overrides: object) -> SelectedPart:

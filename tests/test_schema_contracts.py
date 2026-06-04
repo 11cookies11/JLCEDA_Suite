@@ -8,7 +8,7 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.schema_contracts import (
+from kicad_suite.shared.schema_contracts import (
     CANONICAL_FIELD_CONTRACT_SCHEMAS,
     SCHEMA_FIELD_CONTRACTS,
     SUMMARY_STABLE_FIELDS,

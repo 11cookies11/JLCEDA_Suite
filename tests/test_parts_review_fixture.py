@@ -13,7 +13,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.parts.workflow import run_parts_pipeline
+from kicad_suite.domain.core.parts.workflow import run_parts_pipeline
 
 
 FIXTURE_ROOT = Path(__file__).resolve().parent / "fixtures" / "e2e" / "parts-review"
@@ -26,7 +26,7 @@ class TestPartsReviewFixture(unittest.TestCase):
             shutil.copytree(FIXTURE_ROOT, root, dirs_exist_ok=True)
             model = json.loads((root / "source" / "circuit-model.source.json").read_text(encoding="utf-8"))
 
-            with patch("kicad_suite.parts.workflow.describe_live_backend_status", return_value={"ok": False}):
+            with patch("kicad_suite.domain.core.parts.workflow.describe_live_backend_status", return_value={"ok": False}):
                 result = run_parts_pipeline(model, root / "project", project_name="parts-review-demo")
 
         self.assertTrue(result["warnings"])

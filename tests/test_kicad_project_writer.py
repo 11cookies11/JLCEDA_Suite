@@ -9,9 +9,9 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.kicad_project_writer import render_project
-from kicad_suite.pipeline_postprocess import pin_project_libraries
-from kicad_suite.pcb_generator import _convert_pad_block, _extract_pad_blocks, generate_pcb
+from kicad_suite.adapters.kicad_project_writer import render_project
+from kicad_suite.orchestration.pipeline_postprocess import pin_project_libraries
+from kicad_suite.adapters.pcb_generator import _convert_pad_block, _extract_pad_blocks, generate_pcb
 
 
 class TestKicadProjectWriter(unittest.TestCase):

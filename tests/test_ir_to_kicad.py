@@ -10,7 +10,7 @@ import pytest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.ir_compiler import build_ir
+from kicad_suite.domain.core.ir_compiler import build_ir
 
 
 def _make_model():
@@ -34,7 +34,7 @@ def _make_model():
 def _kiCad_available():
     """ir_to_kicad requires a KiCad environment with symbol maps and libs."""
     try:
-        from kicad_suite.compile_kicad_execution_plan import load_symbol_map
+        from kicad_suite.domain.core.compile_kicad_execution_plan import load_symbol_map
         load_symbol_map()
         return True
     except Exception:
@@ -43,7 +43,7 @@ def _kiCad_available():
 
 @pytest.mark.skipif(not _kiCad_available(), reason="KiCad symbol map not configured")
 def test_ir_to_kicad_produces_plan():
-    from kicad_suite.ir_to_kicad import ir_to_kicad
+    from kicad_suite.domain.core.ir_to_kicad import ir_to_kicad
     ir = build_ir(_make_model())
     plan = ir_to_kicad(ir)
     assert plan.schema_version == "kicad-execution-plan.v1"
@@ -54,7 +54,7 @@ def test_ir_to_kicad_produces_plan():
 
 @pytest.mark.skipif(not _kiCad_available(), reason="KiCad symbol map not configured")
 def test_ir_to_kicad_symbols_have_lib_id_and_footprint():
-    from kicad_suite.ir_to_kicad import ir_to_kicad
+    from kicad_suite.domain.core.ir_to_kicad import ir_to_kicad
     ir = build_ir(_make_model())
     plan = ir_to_kicad(ir)
     sym = plan.symbols[0]
@@ -64,7 +64,7 @@ def test_ir_to_kicad_symbols_have_lib_id_and_footprint():
 
 @pytest.mark.skipif(not _kiCad_available(), reason="KiCad symbol map not configured")
 def test_ir_to_kicad_symbols_have_position():
-    from kicad_suite.ir_to_kicad import ir_to_kicad
+    from kicad_suite.domain.core.ir_to_kicad import ir_to_kicad
     ir = build_ir(_make_model())
     plan = ir_to_kicad(ir)
     assert plan.symbols[0].at.x != 0 or plan.symbols[0].at.y != 0
@@ -72,5 +72,5 @@ def test_ir_to_kicad_symbols_have_position():
 
 def test_ir_to_kicad_module_imports():
     """Verify the module can be imported without error."""
-    from kicad_suite.ir_to_kicad import ir_to_kicad
+    from kicad_suite.domain.core.ir_to_kicad import ir_to_kicad
     assert callable(ir_to_kicad)

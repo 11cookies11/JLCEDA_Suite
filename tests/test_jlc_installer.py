@@ -11,7 +11,7 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.jlc_installer import resolve_missing_symbols
+from kicad_suite.adapters.jlc_installer import resolve_missing_symbols
 
 
 class TestResolveMissingSymbols(unittest.TestCase):
@@ -45,8 +45,8 @@ class TestResolveMissingSymbols(unittest.TestCase):
                 "pin_count": 32,
             }
 
-            with patch("kicad_suite.jlc_installer.install_by_lcsc_id", return_value=install_result) as install_mock:
-                with patch("kicad_suite.jlc_installer.jlc_api.search") as search_mock:
+            with patch("kicad_suite.adapters.jlc_installer.install_by_lcsc_id", return_value=install_result) as install_mock:
+                with patch("kicad_suite.adapters.jlc_installer.jlc_api.search") as search_mock:
                     result = resolve_missing_symbols(project_path, model, timeout=5, delay=0, model_path=model_path)
 
         self.assertTrue(result["ok"])

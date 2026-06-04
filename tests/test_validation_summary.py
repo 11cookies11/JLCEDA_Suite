@@ -10,8 +10,8 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.validation.common import ValidationReport
-from kicad_suite.validation.summary import validate_summary
+from kicad_suite.shared.validation.common import ValidationReport
+from kicad_suite.domain.core.validation.summary import validate_summary
 
 
 class TestValidateSummary(unittest.TestCase):

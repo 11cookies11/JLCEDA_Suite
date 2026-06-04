@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.model_api.validation import SUPPORTED_OPERATIONS
+from kicad_suite.application_services.model_api.validation import SUPPORTED_OPERATIONS
 
 
 def _load_schema(name: str) -> dict[str, object]:

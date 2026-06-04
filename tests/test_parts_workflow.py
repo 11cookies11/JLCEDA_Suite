@@ -11,17 +11,17 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.lcsc_resolver import PartRequirement, ResolvedPart, ResolverResult
-from kicad_suite.part_selector import SelectedPart, SelectionResult, classify_package_risk, select_parts
-from kicad_suite.parts.report import build_parts_summary
-from kicad_suite.parts.resolve import (
+from kicad_suite.adapters.lcsc_resolver import PartRequirement, ResolvedPart, ResolverResult
+from kicad_suite.domain.core.part_selector import SelectedPart, SelectionResult, classify_package_risk, select_parts
+from kicad_suite.domain.core.parts.report import build_parts_summary
+from kicad_suite.domain.core.parts.resolve import (
     build_mock_resolver_results,
     build_resolver_requests,
     build_part_requirements,
     execute_resolver_requests,
     enrich_selected_parts_with_refs,
 )
-from kicad_suite.parts.workflow import run_parts_pipeline
+from kicad_suite.domain.core.parts.workflow import run_parts_pipeline
 
 
 def _make_component(**overrides: object) -> dict[str, object]:
@@ -188,7 +188,7 @@ class TestRunPartsPipeline(unittest.TestCase):
     def test_pipeline_generates_outputs_without_live_backend(self):
         model = {"components": [_make_component()]}
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("kicad_suite.parts.workflow.describe_live_backend_status", return_value={"ok": False}):
+            with patch("kicad_suite.domain.core.parts.workflow.describe_live_backend_status", return_value={"ok": False}):
                 result = run_parts_pipeline(model, tmpdir, project_name="demo")
             self.assertTrue(result["lock_file"])
             self.assertTrue(result["risk_report_file"])
@@ -213,8 +213,8 @@ class TestRunPartsPipeline(unittest.TestCase):
             errors: list[str] = []
 
         with tempfile.TemporaryDirectory() as tmpdir:
-            with patch("kicad_suite.parts.workflow.describe_live_backend_status", return_value={"ok": False}):
-                with patch("kicad_suite.parts.workflow.import_parts", return_value=DummyImportResult()):
+            with patch("kicad_suite.domain.core.parts.workflow.describe_live_backend_status", return_value={"ok": False}):
+                with patch("kicad_suite.domain.core.parts.workflow.import_parts", return_value=DummyImportResult()):
                     result = run_parts_pipeline(model, tmpdir, project_name="demo", run_importer=True)
             self.assertEqual(result["import_result"]["imported_count"], 1)
             self.assertEqual(result["lock_file"], "lock.yaml")

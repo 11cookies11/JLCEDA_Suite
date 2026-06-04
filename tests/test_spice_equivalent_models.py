@@ -8,7 +8,7 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.circuit_pipeline import (  # noqa: E402
+from kicad_suite.orchestration.circuit_pipeline import (  # noqa: E402
     NetlistComponent,
     NetlistModel,
     NetlistNet,
@@ -18,7 +18,7 @@ from kicad_suite.circuit_pipeline import (  # noqa: E402
     build_spice_netlist_from_netlist,
     render_spice_netlist,
 )
-from kicad_suite.schema_versions import CIRCUIT_MODEL_SCHEMA_VERSION, NETLIST_SCHEMA_VERSION  # noqa: E402
+from kicad_suite.shared.schema_versions import CIRCUIT_MODEL_SCHEMA_VERSION, NETLIST_SCHEMA_VERSION  # noqa: E402
 
 
 def _make_component(ref: str, role: str, value: str, pins: list[tuple[str, str]]) -> NetlistComponent:

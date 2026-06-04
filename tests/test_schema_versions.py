@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.schema_versions import CANONICAL_SCHEMA_VERSIONS
+from kicad_suite.shared.schema_versions import CANONICAL_SCHEMA_VERSIONS
 
 
 class TestSchemaVersions(unittest.TestCase):

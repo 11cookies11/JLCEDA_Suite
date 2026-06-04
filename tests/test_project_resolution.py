@@ -9,8 +9,8 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.part_selector import SelectedPart
-from kicad_suite.project_resolution import build_project_resolution
+from kicad_suite.domain.core.part_selector import SelectedPart
+from kicad_suite.orchestration.project_resolution import build_project_resolution
 
 
 class TestProjectResolution(unittest.TestCase):
@@ -86,9 +86,9 @@ class TestProjectResolution(unittest.TestCase):
             ],
         }
 
-        with patch("kicad_suite.project_resolution.footprint_exists", return_value=True):
+        with patch("kicad_suite.orchestration.project_resolution.footprint_exists", return_value=True):
             with patch(
-                "kicad_suite.project_resolution.symbol_mapping_for",
+                "kicad_suite.orchestration.project_resolution.symbol_mapping_for",
                 return_value=("MCU:STM32F103C8T6", "LQFP-48", []),
             ):
                 manifest = build_project_resolution(model, parts_result=parts_result)
@@ -164,7 +164,7 @@ class TestProjectResolution(unittest.TestCase):
             ],
         }
 
-        with patch("kicad_suite.project_resolution.footprint_exists", return_value=False):
+        with patch("kicad_suite.orchestration.project_resolution.footprint_exists", return_value=False):
             manifest = build_project_resolution(model, parts_result=parts_result)
 
         self.assertEqual(manifest["components"][0]["resolution_result"]["recommended_candidates"][0]["part_id"], "candidate-a")

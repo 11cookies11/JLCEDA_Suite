@@ -10,7 +10,7 @@ from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.pipeline_summary import build_run_pipeline_summary
+from kicad_suite.orchestration.pipeline_summary import build_run_pipeline_summary
 
 
 class TestRunPipelineSummary(unittest.TestCase):

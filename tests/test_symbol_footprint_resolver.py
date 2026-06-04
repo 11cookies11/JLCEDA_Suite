@@ -7,12 +7,12 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.symbol_footprint_resolver import (
+from kicad_suite.adapters.symbol_footprint_resolver import (
     load_symbol_map,
     resolve_footprint,
     symbol_mapping_for,
 )
-from kicad_suite.compile_kicad_execution_plan import resolve_footprint as compile_resolve_footprint
+from kicad_suite.domain.core.compile_kicad_execution_plan import resolve_footprint as compile_resolve_footprint
 
 
 def test_load_symbol_map_returns_dict():
@@ -69,7 +69,7 @@ def test_compile_resolve_footprint_keeps_library_prefix():
 
 
 def test_footprint_exists_checks_cache():
-    from kicad_suite.symbol_footprint_resolver import (
+    from kicad_suite.adapters.symbol_footprint_resolver import (
         footprint_exists,
         clear_footprint_cache,
     )

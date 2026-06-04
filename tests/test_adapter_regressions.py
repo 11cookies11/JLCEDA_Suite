@@ -15,7 +15,7 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.adapters.jlc_mcp import run_bridge_search
-from kicad_suite.kicad_erc_runner import run as run_erc
+from kicad_suite.adapters.kicad_erc_runner import run as run_erc
 
 
 FIXTURE_DIR = Path(__file__).resolve().parent / "fixtures" / "adapters"
@@ -28,8 +28,8 @@ class TestAdapterFailureFixtures(unittest.TestCase):
             root = Path(tmp)
             schematic = root / fixture["schematic_file"]
             schematic.write_text("(kicad_sch)", encoding="utf-8")
-            with patch("kicad_suite.kicad_erc_runner.resolve_schematic_file", return_value=schematic):
-                with patch("kicad_suite.kicad_erc_runner.resolve_kicad_cli", return_value=""):
+            with patch("kicad_suite.adapters.kicad_erc_runner.resolve_schematic_file", return_value=schematic):
+                with patch("kicad_suite.adapters.kicad_erc_runner.resolve_kicad_cli", return_value=""):
                     summary = run_erc(emit=False)
 
         expected = fixture["expected"]

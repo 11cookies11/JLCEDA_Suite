@@ -9,13 +9,13 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.compile_kicad_execution_plan import (
+from kicad_suite.domain.core.compile_kicad_execution_plan import (
     KiCadDiagnostics,
     KiCadExecutionPlan,
     KiCadTarget,
 )
 from kicad_suite.cli import main
-from kicad_suite.model_api.external_tools import external_tool_env, load_external_tools_config
+from kicad_suite.application_services.model_api.external_tools import external_tool_env, load_external_tools_config
 from kicad_suite.model_api import CircuitModelRepository, ModelApiService
 
 
@@ -573,9 +573,9 @@ def test_model_api_export_kicad_project_uses_ir_backend(tmp_path):
     service = ModelApiService()
     service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))
 
-    with patch("kicad_suite.model_api.handlers_extended.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
+    with patch("kicad_suite.application_services.model_api.handlers_extended.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
         with patch(
-            "kicad_suite.model_api.handlers_extended.write_project",
+            "kicad_suite.application_services.model_api.handlers_extended.write_project",
             return_value={"project_file": str(tmp_path / "demo" / "demo.kicad_pro")},
         ) as write_project:
             result = service.handle_dict(

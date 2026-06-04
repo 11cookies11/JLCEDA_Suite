@@ -18,12 +18,12 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite import cli
-from kicad_suite.compile_kicad_execution_plan import KiCadDiagnostics, KiCadExecutionPlan, KiCadNet, KiCadTarget
+from kicad_suite.domain.core.compile_kicad_execution_plan import KiCadDiagnostics, KiCadExecutionPlan, KiCadNet, KiCadTarget
 from kicad_suite.model_api import ModelApiService
-from kicad_suite.parts.workflow import run_parts_pipeline
+from kicad_suite.domain.core.parts.workflow import run_parts_pipeline
 from kicad_suite.pipeline_coordinator import run_pipeline as run_pipeline_core
-from kicad_suite.schema_contracts import CANONICAL_FIELD_CONTRACT_SCHEMAS
-from kicad_suite.schema_versions import KICAD_EXECUTION_PLAN_SCHEMA_VERSION
+from kicad_suite.shared.schema_contracts import CANONICAL_FIELD_CONTRACT_SCHEMAS
+from kicad_suite.shared.schema_versions import KICAD_EXECUTION_PLAN_SCHEMA_VERSION
 
 
 def _minimal_model() -> dict[str, object]:

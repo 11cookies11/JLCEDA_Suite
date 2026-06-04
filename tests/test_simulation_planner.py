@@ -8,7 +8,7 @@ import unittest
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.simulation_planner import build_ngspice_task_plan, build_simulation_plan, default_simulation_profile
+from kicad_suite.domain.core.simulation_planner import build_ngspice_task_plan, build_simulation_plan, default_simulation_profile
 
 
 class TestSimulationPlanner(unittest.TestCase):

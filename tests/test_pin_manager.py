@@ -7,7 +7,7 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.pin_manager import PinManager, build_pin_assignment_table
+from kicad_suite.domain.core.pin_manager import PinManager, build_pin_assignment_table
 
 
 def _make_ir():
