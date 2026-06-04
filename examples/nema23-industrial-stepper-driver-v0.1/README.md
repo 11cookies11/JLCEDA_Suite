@@ -66,7 +66,10 @@ The expanded circuit model now contains **118 components** and **76 nets**, cove
 
 ```powershell
 python scripts/build_nema23_model.py
-python scripts/run_pipeline.py examples/nema23-industrial-stepper-driver-v0.1/nema23-industrial-stepper-driver-v0.1.circuit-model.json .where/nema23-industrial-stepper-driver-v0.1
+hwtool agent resolve-symbols --project examples/nema23-industrial-stepper-driver-v0.1 --timeout 120
+hwtool agent build-ir --project examples/nema23-industrial-stepper-driver-v0.1
+hwtool agent validate-ir --project examples/nema23-industrial-stepper-driver-v0.1
+hwtool agent export-kicad --project examples/nema23-industrial-stepper-driver-v0.1
 ```
 
 Generated output:

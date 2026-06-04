@@ -55,7 +55,7 @@ Status: Draft
 ## 落实原则
 
 - 不允许再新增与 V1 无关的功能分组。
-- 已有分组内如果要改，必须同时更新 `circuit-model.json`、引脚文档和后续原理图。
+- 已有分组内如果要改，必须同时更新 `source/circuit-model.source.json`、引脚文档和后续原理图。
 - `U2` 的功能分组一旦落实，后续的软硬件协同只允许在同一组内调整复用，不允许推翻总体拓扑。
 
 ## 需要确认的内容
@@ -75,5 +75,5 @@ Status: Draft
 
 ## 与模型的关系
 
-- `circuit-model.json` 中 `U2` 的说明应继续引用参考设计约束。
+- `source/circuit-model.source.json` 中 `U2` 的说明应继续引用参考设计约束。
 - 后续原理图分图应按这里落实的分组落网名和连接关系。

@@ -41,7 +41,7 @@ hwtool agent explain --project <dir>
 hwtool agent doctor --project <dir> [--model <path>]
 ```
 
-检查环境：Python 版本、项目目录、circuit-model.json、资源路径、ngspice。
+检查环境：Python 版本、项目目录、source/circuit-model.source.json、资源路径、ngspice。
 
 ### agent history
 
@@ -75,7 +75,7 @@ hwtool agent create <project_dir> \
   [--export-ir]
 ```
 
-创建新硬件项目，包含 `circuit-model.json` 骨架。可指定源模型模板。
+创建新硬件项目，包含 `source/circuit-model.source.json` 骨架。可指定源模型模板。
 
 ### agent build-ir
 
@@ -83,7 +83,7 @@ hwtool agent create <project_dir> \
 hwtool agent build-ir --project <dir> [--model <path>] [--output <path>]
 ```
 
-`circuit-model.json` → `build/ir.v1.json`
+`source/circuit-model.source.json` → `build/ir.v1.json`
 
 ### agent validate-ir
 
@@ -212,7 +212,7 @@ hwtool agent patch --project <dir> \
   --payload-json '<json-patch>'
 ```
 
-对 `circuit-model.json` 应用 JSON patch。配合 `agent build-ir` 使用可增量修改模型。
+对 `source/circuit-model.source.json` 应用 JSON patch。配合 `agent build-ir` 使用可增量修改模型。
 
 ### agent run
 
@@ -506,7 +506,7 @@ The `display_name` field in these payloads is descriptive metadata only. Downstr
 
 ```
 project/
-├── circuit-model.json      ✏️  源文件（AI 编写）
+├── source/circuit-model.source.json      ✏️  源文件（AI 编写）
 ├── project.state.json      状态机
 ├── logs/
 │   └── operations.jsonl    操作日志

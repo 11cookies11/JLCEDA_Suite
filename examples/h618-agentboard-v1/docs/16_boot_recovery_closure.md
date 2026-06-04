@@ -63,5 +63,5 @@ Status: Draft
 
 ## 与模型的关系
 
-- `circuit-model.json` 中的 `J2`、`U4`、`SW1`、`SW2`、`H618_FEL_BOOT`、`H618_SPI0_WP_N`、`H618_SPI0_HOLD_N`、`H618_SD_CMD` 和 `H618_SD_D0-D3` 网络应与本文件一致。
+- `source/circuit-model.source.json` 中的 `J2`、`U4`、`SW1`、`SW2`、`H618_FEL_BOOT`、`H618_SPI0_WP_N`、`H618_SPI0_HOLD_N`、`H618_SD_CMD` 和 `H618_SD_D0-D3` 网络应与本文件一致。
 - 后续原理图实现必须能解释这三条路径如何互相接管。

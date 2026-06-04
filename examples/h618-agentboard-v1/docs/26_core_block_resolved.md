@@ -17,6 +17,6 @@
 
 ## 关联文件
 
-- [circuit-model.json](../circuit-model.json)
+- [source/circuit-model.source.json](../source/circuit-model.source.json)
 - [25_procurement_ready.md](25_procurement_ready.md)
 - [24_final_review_package.md](24_final_review_package.md)

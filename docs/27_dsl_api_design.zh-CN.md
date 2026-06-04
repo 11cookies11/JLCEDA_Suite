@@ -8,7 +8,7 @@ Status: Draft
 
 这套 API 的核心任务不是单纯读写 JSON，而是把以下能力封装成稳定服务：
 
-- 维护 `circuit-model.json` 及其版本演进
+- 维护 `source/circuit-model.source.json` 及其版本演进
 - 对器件、网络、分图、决策、风险、计算做结构化操作
 - 对 schema、引用关系、电源树、pinmap、分图边界做校验
 - 对后续的 netlist、KiCad execution plan、ERC、仿真计划提供编译入口
@@ -16,7 +16,7 @@ Status: Draft
 
 ## 2. 设计原则
 
-- **文件仍是事实源**：最终落盘对象仍然是 `circuit-model.json` 和相关导出文件。
+- **文件仍是事实源**：最终落盘对象仍然是 `source/circuit-model.source.json` 和相关导出文件。
 - **API 负责约束**：agent 不直接拼整份 JSON，而是调用有边界的操作。
 - **schema 驱动**：所有对象都带 `schema_version`，并接受结构化验证。
 - **先校验再落盘**：API 允许 `dry_run`、`validate`、`commit` 三种节奏。

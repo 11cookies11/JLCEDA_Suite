@@ -27,7 +27,7 @@
 - 梳理 AXP313A 到 H618、LPDDR4、PHY、USB Hub 的 rail 归属。
 - 明确 `+5V_IN`、`+5V_SYS`、`+3V3`、`+1V8`、`+1V1_CORE`、`+1V2_DDR`、`+0V9_DDR` 的输入输出关系。
 - 补齐 PMIC EN、PWRON、INT、I2C、RESET 相关默认状态。
-- 把 H618 RESET/FEL 与 PMIC reset release 的关系写入 `circuit-model.json`。
+- 把 H618 RESET/FEL 与 PMIC reset release 的关系写入 `source/circuit-model.source.json`。
 - 为关键 rail 增加测试点和最小 bulk / decoupling 规则。
 
 完成标准：

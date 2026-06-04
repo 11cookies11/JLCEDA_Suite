@@ -6,7 +6,7 @@
 
 - KiCad 工程已经可以稳定生成。
 - KiCad ERC 当前为 `0` findings。
-- `circuit-model.json` 到 KiCad 原理图的 pipeline 已经打通。
+- `source/circuit-model.source.json` 到 KiCad 原理图的 pipeline 已经打通。
 - `.where` 产物与 example 工程目录已镜像一致。
 - 当前工程已经可以进入硬件评审，也具备直接下单打样的基础条件。
 
@@ -120,6 +120,6 @@
 
 ## 9. 关联文件
 
-- [circuit-model.json](../circuit-model.json)
+- [source/circuit-model.source.json](../source/circuit-model.source.json)
 - [25_procurement_ready.md](25_procurement_ready.md)
 - [26_core_block_resolved.md](26_core_block_resolved.md)

@@ -46,6 +46,6 @@ Status: Draft
 
 ## 与模型的关系
 
-- `circuit-model.json` 中的 `U3` 备注应指向本文件的约束。
+- `source/circuit-model.source.json` 中的 `U3` 备注应指向本文件的约束。
 - 后续原理图分图应把 DDR 作为独立模块处理。
 - PCB 阶段必须先满足 DDR，再谈接口密度和外形紧凑度。

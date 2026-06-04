@@ -33,7 +33,7 @@
 - 原理图捕获顺序已记录在 `docs/20_schematic_capture_order.md`
 - 原理图捕获模板已记录在 `docs/21_schematic_capture_templates.md`
 - ERC findings 分类已记录在 `docs/22_erc_findings_triage.md`
-- 初始虚拟电路保存在 `circuit-model.json`
+- 初始虚拟电路保存在 `source/circuit-model.source.json`
 - 根目录 `libraries/` 已包含本项目的 EasyEDA/JLC 符号、封装和 3D 资产
 - 初版原理图 pipeline 输出在 `output/v1/`
 - KiCad 工程入口在 `output/v1/h618_agentboard_v1_initial/`
@@ -43,7 +43,7 @@
 1. 收口 `docs/00_requirements.md` 中的需求
 2. 完成 `docs/01_system_architecture.md` 和 `docs/02_power_tree.md`
 3. 按 `docs/09_implementation_plan.md` 继续推进
-4. 用统一格式维护 `circuit-model.json`
+4. 用统一格式维护 `source/circuit-model.source.json`
 
 ## 相关入口
 

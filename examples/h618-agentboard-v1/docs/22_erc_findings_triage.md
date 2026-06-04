@@ -5,7 +5,7 @@
 ## 当前结论
 
 - pipeline 可以生成 KiCad 工程、原理图、PCB 初始文件和 ERC 报告。
-- `unsupported` 为空，说明当前 `circuit-model.json` 没有无法映射的器件。
+- `unsupported` 为空，说明当前 `source/circuit-model.source.json` 没有无法映射的器件。
 - GUI 资产校验通过，符号、封装和 3D 资产没有阻塞级缺失。
 - KiCad ERC 当前为 `0` findings。
 - 当前生成结果包含 `44` 个符号、`73` 条网络。

@@ -4,7 +4,7 @@ KiCad Agent Suite 是一个面向硬件设计协作的自动化工作流仓库�
 
 这个仓库最核心的思路很简单：
 
-- 用 `circuit-model.json` 作为统一输入
+- 用 `source/circuit-model.source.json` 作为统一输入
 - 让元件选择、符号映射、封装映射、3D 资产、原理图生成和后续校验都围绕这份模型展开
 - 用 `where` 进度文件跟踪托管式实施状态
 - 用标准化 example 目录承载不同硬件项目
@@ -38,7 +38,7 @@ KiCad Agent Suite 想解决的，就是把这些信息重新收束成一个可�
 
 ### 2. 模型层
 
-用 `circuit-model.json` 把需求转成结构化描述，包括：
+用 `source/circuit-model.source.json` 把需求转成结构化描述，包括：
 
 - 元件
 - 网络
@@ -61,7 +61,7 @@ KiCad Agent Suite 想解决的，就是把这些信息重新收束成一个可�
 
 ## 为什么强调 circuit-model
 
-在这个仓库里，`circuit-model.json` 不是普通配置文件，而是硬件设计的“中间事实层”。
+在这个仓库里，`source/circuit-model.source.json` 不是普通配置文件，而是硬件设计的“中间事实层”。
 
 它的作用是：
 

@@ -83,5 +83,5 @@ Status: Draft
 
 ## 与模型的关系
 
-- `circuit-model.json` 中 `U5`、`U6`、`H618_RGMII`、`H618_USB` 和 `H618_HDMI` 应与本文件一致。
+- `source/circuit-model.source.json` 中 `U5`、`U6`、`H618_RGMII`、`H618_USB` 和 `H618_HDMI` 应与本文件一致。
 - 后续原理图和 PCB 阶段应优先继承这里的接口边界和落实原则。

@@ -12,7 +12,7 @@ Status: Draft
 - `HTTP` 可以映射为 JSON body
 - `CLI` 可以读写同一套文件化消息
 
-目标是让 agent 不再直接拼整份 `circuit-model.json`，而是通过结构化请求调用受控操作。
+目标是让 agent 不再直接拼整份 `source/circuit-model.source.json`，而是通过结构化请求调用受控操作。
 
 ## 2. 设计原则
 

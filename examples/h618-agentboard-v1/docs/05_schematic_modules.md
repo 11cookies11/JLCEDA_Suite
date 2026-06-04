@@ -73,7 +73,7 @@ Status: Draft
 
 - 先从 `sheet_01`、`sheet_02`、`sheet_03`、`sheet_04` 开始
 - 再补 `sheet_05` 到 `sheet_10`
-- 任何模块拆分都要保持当前 `circuit-model.json` 的网名可追溯
+- 任何模块拆分都要保持当前 `source/circuit-model.source.json` 的网名可追溯
 
 待确认项：
 

@@ -124,7 +124,7 @@
 可以列出的事实：
 
 - `requirement-spec.json`
-- `circuit-model.json`
+- `source/circuit-model.source.json`
 - `netlist.json`
 - `spice-netlist.cir`
 - `ngspice-execution.json`

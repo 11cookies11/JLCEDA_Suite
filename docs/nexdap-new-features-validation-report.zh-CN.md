@@ -10,7 +10,7 @@
 
 ## 验证对象
 
-- 项目模型：`examples/nexdap-fresh/circuit-model.json`
+- 项目模型：`examples/nexdap-fresh/source/circuit-model.source.json`
 - 仿真配置：`examples/nexdap-fresh/simulation-profile.json`
 - 生成入口：`python .\scripts\kas.py pipeline ...`
 - 文本入口：`python .\scripts\kas.py text-to-kicad`
@@ -20,7 +20,7 @@
 运行命令：
 
 ```powershell
-python .\scripts\kas.py pipeline examples\nexdap-fresh\circuit-model.json .where\nexdap-nexdap-test
+python .\scripts\kas.py pipeline examples\nexdap-fresh\source/circuit-model.source.json .where\nexdap-nexdap-test
 ```
 
 主要结果：
@@ -64,7 +64,7 @@ python .\scripts\kas.py text-to-kicad
 主要结果：
 
 - `requirement-spec.json` 生成成功
-- `circuit-model.json` 生成成功
+- `source/circuit-model.source.json` 生成成功
 - `netlist.json` 生成成功
 - `simulation-profile.json` 和 `simulation-plan.json` 生成成功
 - `simulation-task-plan.json` 生成成功

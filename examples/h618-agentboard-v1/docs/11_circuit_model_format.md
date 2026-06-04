@@ -4,13 +4,13 @@ Status: Draft
 
 ## 目的
 
-- 约定 `circuit-model.json` 的固定结构。
+- 约定 `source/circuit-model.source.json` 的固定结构。
 - 统一后续模型填写口径，避免同一类信息在不同文件里重复发散。
 - 让 example 的虚拟电路始终保持可被流水线解析、可被人工审阅、可被后续原理图阶段承接。
 
 ## 顶层字段
 
-`circuit-model.json` 必须包含以下顶层字段：
+`source/circuit-model.source.json` 必须包含以下顶层字段：
 
 1. `schema_version`
 - 记录模型版本。
@@ -123,7 +123,7 @@ Status: Draft
 
 ## 模型组织原则
 
-- `circuit-model.json` 保持单文件，不拆成多个物理文件。
+- `source/circuit-model.source.json` 保持单文件，不拆成多个物理文件。
 - 文件内部按模块逻辑组织，例如：
   - 电源
   - 启动
@@ -137,11 +137,11 @@ Status: Draft
 
 ## 与后续阶段的关系
 
-- `circuit-model.json` 负责表达“要做什么”和“为什么这样做”。
+- `source/circuit-model.source.json` 负责表达“要做什么”和“为什么这样做”。
 - 原理图负责表达“实际怎么接”。
 - PCB 负责表达“实际怎么摆、怎么布线”。
 - bring-up 负责验证前面两层是否真的成立。
 
 ## 本示例的当前约定
 
-`examples/h618-agentboard-v1/circuit-model.json` 目前已经采用这套结构，后续新增内容应继续沿用同一口径。
+`examples/h618-agentboard-v1/source/circuit-model.source.json` 目前已经采用这套结构，后续新增内容应继续沿用同一口径。

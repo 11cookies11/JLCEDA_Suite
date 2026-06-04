@@ -1,4 +1,4 @@
-﻿# ngspice 仿真开发计划
+# ngspice 仿真开发计划
 
 ## 1. 目标
 
@@ -66,7 +66,7 @@ RequirementSpec
 输出文件现在至少包括：
 
 - `requirement-spec.json`
-- `circuit-model.json`
+- `source/circuit-model.source.json`
 - `netlist.json`
 - `spice-netlist.cir`
 - `spice-netlist.json`
@@ -169,7 +169,7 @@ tools/ngspice-46_64/Spice64/bin/ngspice.exe
 
 ### 仿真项目模板
 
-推荐先准备 `simulation-profile.json`，再根据 `circuit-model.json` 自动生成 `simulation-plan.json`。
+推荐先准备 `simulation-profile.json`，再根据 `source/circuit-model.source.json` 自动生成 `simulation-plan.json`。
 
 最小数据链路建议如下：
 

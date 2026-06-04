@@ -24,7 +24,7 @@ class TestPartsReviewFixture(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
             shutil.copytree(FIXTURE_ROOT, root, dirs_exist_ok=True)
-            model = json.loads((root / "model" / "circuit-model.json").read_text(encoding="utf-8"))
+            model = json.loads((root / "source" / "circuit-model.source.json").read_text(encoding="utf-8"))
 
             with patch("kicad_suite.parts.workflow.describe_live_backend_status", return_value={"ok": False}):
                 result = run_parts_pipeline(model, root / "project", project_name="parts-review-demo")

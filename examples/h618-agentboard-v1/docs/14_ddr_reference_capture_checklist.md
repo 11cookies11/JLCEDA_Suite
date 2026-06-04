@@ -25,7 +25,7 @@ Status: Draft
 ## 建议输出格式
 
 - 每条信息都写成“来源 + 结论 + 影响”三段式。
-- 结论必须能直接写回 `circuit-model.json`。
+- 结论必须能直接写回 `source/circuit-model.source.json`。
 - 如果暂时无法确认，就标成 `need-verify`，不要用猜测填空。
 
 ## 当前模型的边界
@@ -36,6 +36,6 @@ Status: Draft
 
 ## 交付要求
 
-- 参考设计信息应能直接写回 `circuit-model.json`。
+- 参考设计信息应能直接写回 `source/circuit-model.source.json`。
 - 每条新补充的 DDR 网络都应有明确来源说明。
 - 在没有参考设计依据前，不扩展到更多信号。

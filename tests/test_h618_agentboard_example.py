@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 def test_h618_example_circuit_model_is_present_and_shaped():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     assert model["schema_version"] == "circuit-model.v1"
@@ -23,7 +23,7 @@ def test_h618_example_circuit_model_is_present_and_shaped():
 
 
 def test_h618_usb_c_power_input_has_explicit_sink_rd():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     components = {component["ref"]: component for component in model["components"]}
@@ -39,7 +39,7 @@ def test_h618_usb_c_power_input_has_explicit_sink_rd():
 
 
 def test_h618_usb_c_power_path_places_fuse_between_input_and_system_rail():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     nets = {net["name"]: set(net["members"]) for net in model["nets"]}
@@ -50,7 +50,7 @@ def test_h618_usb_c_power_path_places_fuse_between_input_and_system_rail():
 
 
 def test_h618_power_and_reset_defaults_are_explicit():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     components = {component["ref"]: component for component in model["components"]}
@@ -88,7 +88,7 @@ def test_h618_power_and_reset_defaults_are_explicit():
 
 
 def test_h618_lpddr4_remains_a_constrained_skeleton_domain():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     components = {component["ref"]: component for component in model["components"]}
@@ -114,7 +114,7 @@ def test_h618_lpddr4_remains_a_constrained_skeleton_domain():
 
 
 def test_h618_high_speed_interfaces_remain_reference_captured_domains():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     components = {component["ref"]: component for component in model["components"]}
@@ -138,7 +138,7 @@ def test_h618_high_speed_interfaces_remain_reference_captured_domains():
 
 
 def test_h618_procurement_settles_standard_bom_items():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     components = {component["ref"]: component for component in model["components"]}
@@ -169,7 +169,7 @@ def test_h618_procurement_settles_standard_bom_items():
 
 
 def test_h618_all_components_have_a_settled_availability_state():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     statuses = {component["availability_status"] for component in model["components"]}
@@ -178,7 +178,7 @@ def test_h618_all_components_have_a_settled_availability_state():
 
 
 def test_h618_core_blocks_are_marked_as_resolved_not_pending():
-    model_path = Path("examples/h618-agentboard-v1/circuit-model.json")
+    model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
     model = json.loads(model_path.read_text(encoding="utf-8"))
 
     components = {component["ref"]: component for component in model["components"]}

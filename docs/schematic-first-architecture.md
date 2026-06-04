@@ -110,7 +110,7 @@ Capture enough electrical intent before synthesis:
 
 Generate:
 
-- `circuit-model.json`
+- `source/circuit-model.source.json`
 - `netlist.json`
 - design decisions
 - model risks

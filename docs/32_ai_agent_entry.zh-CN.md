@@ -57,11 +57,11 @@ status -> inspect -> build-ir -> validate-ir -> rule-check -> build-kicad -> rep
 python -m kicad_suite.cli agent create examples/my-board-v1 `
   --project-id my-board-v1 `
   --topology my_board_v1 `
-  --source-model seed/circuit-model.json `
+  --source-model seed/source/circuit-model.source.json `
   --export-ir
 ```
 
-该命令会调用 `create_hardware_project`，生成标准项目目录、`circuit-model.json`、`project.state.json`，并可选导出 `build/ir.json`。
+该命令会调用 `create_hardware_project`，生成标准项目目录、`source/circuit-model.source.json`、`project.state.json`，并可选导出 `build/ir.json`。
 
 ## 调用 DSL 操作
 
@@ -87,7 +87,7 @@ python -m kicad_suite.cli agent export-kicad `
   --project-name my_board_v1
 ```
 
-默认读取项目下的 `circuit-model.json`，输出到项目下的 `output/`。
+默认读取项目下的 `source/circuit-model.source.json`，输出到项目下的 `output/`。
 
 `build-kicad` 是同一能力的工作流别名：
 
@@ -112,7 +112,7 @@ python -m kicad_suite.cli agent report --project examples/my-board-v1 --markdown
 python -m kicad_suite.cli agent doctor --project examples/my-board-v1
 ```
 
-该命令检查 Python、项目目录、`circuit-model.json`、schema、KiCad 资源目录和 ngspice 环境，并返回结构化 JSON。
+该命令检查 Python、项目目录、`source/circuit-model.source.json`、schema、KiCad 资源目录和 ngspice 环境，并返回结构化 JSON。
 
 ## 常用控制参数
 
@@ -129,7 +129,7 @@ python -m kicad_suite.cli agent doctor --project examples/my-board-v1
 
 ```text
 hardware-project/
-  circuit-model.json
+  source/circuit-model.source.json
   project.state.json
   toolchains/KiCadAgentSuite/
 ```

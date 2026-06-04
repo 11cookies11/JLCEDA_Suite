@@ -18,6 +18,6 @@ Recommended next steps:
 
 1. Freeze requirements in `docs/00_requirements.md`
 2. Draft the system architecture in `docs/01_system_architecture.md`
-3. Create the first `circuit-model.json` when the interface list is stable
+3. Create the first `source/circuit-model.source.json` when the interface list is stable
 
 Generated project slug: `rp2040-minimal-board`
