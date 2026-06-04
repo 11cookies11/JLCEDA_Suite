@@ -1,0 +1,122 @@
+(footprint "HDR-TH_2P-P2.54-V-M"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "2-pin 2.54mm vertical through-hole jumper header")
+	(tags "JLC-MCP header jumper 2.54")
+	(property "Reference" "REF**"
+		(at 0 -2.54 0)
+		(layer "F.SilkS")
+		(uuid "79f257a2-121c-4b9c-8e9a-4bc8998eacc7")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "HDR-TH_2P-P2.54-V-M"
+		(at 0 5.08 0)
+		(layer "F.Fab")
+		(uuid "b1362f06-6b17-4eae-b003-499640a9ee37")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fa142f3a-146a-455c-aaec-a8c1c4671d2c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "acaa1c86-b94c-4729-a776-4dc0d7fe5de2")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr through_hole)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -1.27 -1.27)
+		(end -1.27 3.81)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "870479a2-b472-4727-b5a9-628a8c018e0b")
+	)
+	(fp_line
+		(start -1.27 -1.27)
+		(end 1.27 -1.27)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c48a35f2-0dc5-44d6-8cf0-b50b016187a6")
+	)
+	(fp_line
+		(start -1.27 3.81)
+		(end 1.27 3.81)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "7ad97e4e-f1b0-47ba-a899-9573536d9caf")
+	)
+	(fp_line
+		(start 1.27 -1.27)
+		(end 1.27 3.81)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "53d7fce5-1b0a-4e69-9bba-e743e0a2d9d1")
+	)
+	(fp_rect
+		(start -1.6 -1.6)
+		(end 1.6 4.14)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "f69dbc13-7abe-4691-876b-9273bf319120")
+	)
+	(pad "1" thru_hole rect
+		(at 0 0)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "1e3450ed-2ceb-41cf-a4c5-c0d25c040281")
+	)
+	(pad "2" thru_hole circle
+		(at 0 2.54)
+		(size 1.7 1.7)
+		(drill 1)
+		(layers "*.Cu" "*.Mask")
+		(remove_unused_layers no)
+		(uuid "4c8977c6-781e-415b-87c5-3b30343c2ac2")
+	)
+	(embedded_fonts no)
+)

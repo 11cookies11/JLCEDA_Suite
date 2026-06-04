@@ -1,0 +1,356 @@
+{
+  "schema_version": "circuit-model.v1",
+  "request_id": "stm32-minimal-demo-001",
+  "project_id": "refactor-layout-demo",
+  "topology": "stm32_minimal_demo",
+  "components": [
+    {
+      "ref": "U1",
+      "role": "mcu",
+      "value": "STM32F103C8T6",
+      "package": "LQFP-48",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C8734",
+        "display_name": "STM32F103C8T6",
+        "manufacturer": "STMicroelectronics",
+        "mpn": "STM32F103C8T6",
+        "package": "LQFP-48"
+      }
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AMS1117-3.3",
+      "package": "SOT-223",
+      "sheet": "power",
+      "selected_part": {
+        "lcsc_id": "C6186",
+        "display_name": "AMS1117-3.3",
+        "package": "SOT-223"
+      }
+    },
+    {
+      "ref": "J1",
+      "role": "power_input_header",
+      "value": "5V input",
+      "package": "HDR-TH_2P",
+      "sheet": "power",
+      "selected_part": {
+        "lcsc_id": "C492401",
+        "display_name": "2.54mm 1x2 pin header",
+        "package": "HDR-TH_2P"
+      }
+    },
+    {
+      "ref": "J2",
+      "role": "swd_debug_header",
+      "value": "SWD 6-pin",
+      "package": "HDR-TH_6P",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C492405",
+        "display_name": "2.54mm 1x6 pin header",
+        "package": "HDR-TH_6P"
+      }
+    },
+    {
+      "ref": "Y1",
+      "role": "hse_crystal",
+      "value": "8MHz",
+      "package": "Crystal-3225",
+      "sheet": "clock",
+      "selected_part": {
+        "lcsc_id": "C9002",
+        "display_name": "8MHz crystal 3225",
+        "package": "Crystal-3225"
+      }
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "Reset",
+      "package": "SW-TACT-6x6",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C318884",
+        "display_name": "6x6 tactile switch",
+        "package": "SW-TACT-6x6"
+      }
+    },
+    {
+      "ref": "R1",
+      "role": "nrst_pullup",
+      "value": "10K",
+      "package": "R0603",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C25804",
+        "display_name": "10K 1% 0603 resistor",
+        "package": "R0603"
+      }
+    },
+    {
+      "ref": "R2",
+      "role": "boot0_pulldown",
+      "value": "10K",
+      "package": "R0603",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C25804",
+        "display_name": "10K 1% 0603 resistor",
+        "package": "R0603"
+      }
+    },
+    {
+      "ref": "R3",
+      "role": "power_led_resistor",
+      "value": "1K",
+      "package": "R0603",
+      "sheet": "power",
+      "selected_part": {
+        "lcsc_id": "C21190",
+        "display_name": "1K 1% 0603 resistor",
+        "package": "R0603"
+      }
+    },
+    {
+      "ref": "D1",
+      "role": "power_indicator_led",
+      "value": "Green LED",
+      "package": "LED0603",
+      "sheet": "power",
+      "selected_part": {
+        "lcsc_id": "C72043",
+        "display_name": "Green 0603 LED",
+        "package": "LED0603"
+      }
+    },
+    {
+      "ref": "C1",
+      "role": "reg_input_capacitor",
+      "value": "10uF",
+      "package": "C0805",
+      "sheet": "power",
+      "selected_part": {
+        "lcsc_id": "C15850",
+        "display_name": "10uF 0805 capacitor",
+        "package": "C0805"
+      }
+    },
+    {
+      "ref": "C2",
+      "role": "reg_output_capacitor",
+      "value": "10uF",
+      "package": "C0805",
+      "sheet": "power",
+      "selected_part": {
+        "lcsc_id": "C15850",
+        "display_name": "10uF 0805 capacitor",
+        "package": "C0805"
+      }
+    },
+    {
+      "ref": "C3",
+      "role": "mcu_decoupling_1",
+      "value": "100nF",
+      "package": "C0603",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C14663",
+        "display_name": "100nF 0603 capacitor",
+        "package": "C0603"
+      }
+    },
+    {
+      "ref": "C4",
+      "role": "mcu_decoupling_2",
+      "value": "100nF",
+      "package": "C0603",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C14663",
+        "display_name": "100nF 0603 capacitor",
+        "package": "C0603"
+      }
+    },
+    {
+      "ref": "C5",
+      "role": "vdda_filter_capacitor",
+      "value": "100nF",
+      "package": "C0603",
+      "sheet": "mcu",
+      "selected_part": {
+        "lcsc_id": "C14663",
+        "display_name": "100nF 0603 capacitor",
+        "package": "C0603"
+      }
+    },
+    {
+      "ref": "C6",
+      "role": "hse_load_capacitor_1",
+      "value": "22pF",
+      "package": "C0603",
+      "sheet": "clock",
+      "selected_part": {
+        "lcsc_id": "C1653",
+        "display_name": "22pF 0603 capacitor",
+        "package": "C0603"
+      }
+    },
+    {
+      "ref": "C7",
+      "role": "hse_load_capacitor_2",
+      "value": "22pF",
+      "package": "C0603",
+      "sheet": "clock",
+      "selected_part": {
+        "lcsc_id": "C1653",
+        "display_name": "22pF 0603 capacitor",
+        "package": "C0603"
+      }
+    }
+  ],
+  "nets": [
+    {
+      "name": "+5V",
+      "kind": "power",
+      "members": ["J1.1", "U2.3", "C1.1"]
+    },
+    {
+      "name": "+3V3",
+      "kind": "power",
+      "members": [
+        "U2.2",
+        "C2.1",
+        "C3.1",
+        "C4.1",
+        "C5.1",
+        "U1.9",
+        "U1.24",
+        "U1.36",
+        "U1.48",
+        "U1.1",
+        "R1.1",
+        "R3.1",
+        "J2.1"
+      ]
+    },
+    {
+      "name": "GND",
+      "kind": "ground",
+      "members": [
+        "J1.2",
+        "U2.1",
+        "C1.2",
+        "C2.2",
+        "C3.2",
+        "C4.2",
+        "C5.2",
+        "C6.2",
+        "C7.2",
+        "U1.8",
+        "U1.23",
+        "U1.35",
+        "U1.47",
+        "U1.2",
+        "R2.2",
+        "D1.1",
+        "SW1.2",
+        "J2.4"
+      ]
+    },
+    {
+      "name": "NRST",
+      "kind": "signal",
+      "members": ["U1.7", "R1.2", "SW1.1", "J2.5"]
+    },
+    {
+      "name": "BOOT0",
+      "kind": "signal",
+      "members": ["U1.44", "R2.1"]
+    },
+    {
+      "name": "HSE_IN",
+      "kind": "signal",
+      "members": ["U1.5", "Y1.1", "C6.1"]
+    },
+    {
+      "name": "HSE_OUT",
+      "kind": "signal",
+      "members": ["U1.6", "Y1.2", "C7.1"]
+    },
+    {
+      "name": "SWDIO",
+      "kind": "signal",
+      "members": ["U1.34", "J2.2"]
+    },
+    {
+      "name": "SWCLK",
+      "kind": "signal",
+      "members": ["U1.37", "J2.3"]
+    },
+    {
+      "name": "LED_A",
+      "kind": "signal",
+      "members": ["R3.2", "D1.2"]
+    }
+  ],
+  "sheets": [
+    {
+      "name": "power",
+      "components": ["J1", "U2", "C1", "C2", "R3", "D1"],
+      "nets": ["+5V", "+3V3", "GND", "LED_A"]
+    },
+    {
+      "name": "mcu",
+      "components": ["U1", "R1", "R2", "SW1", "C3", "C4", "C5", "J2"],
+      "nets": ["+3V3", "GND", "NRST", "BOOT0", "SWDIO", "SWCLK"]
+    },
+    {
+      "name": "clock",
+      "components": ["Y1", "C6", "C7"],
+      "nets": ["HSE_IN", "HSE_OUT", "GND"]
+    }
+  ],
+  "pcb_layout": {
+    "regions": [
+      {
+        "name": "power_input",
+        "x": 15,
+        "y": 18,
+        "components": ["J1", "U2", "C1", "C2", "R3", "D1"],
+        "spacing": 9
+      },
+      {
+        "name": "mcu_core",
+        "x": 50,
+        "y": 35,
+        "components": ["U1", "C3", "C4", "C5", "Y1", "C6", "C7"],
+        "spacing": 8
+      },
+      {
+        "name": "debug_and_boot",
+        "x": 88,
+        "y": 22,
+        "components": ["J2", "SW1", "R1", "R2"],
+        "spacing": 9
+      }
+    ]
+  },
+  "design_decisions": [
+    {
+      "title": "Use external 8MHz HSE",
+      "rationale": "Keeps the minimum system suitable for USB-timed firmware and common STM32 examples.",
+      "impact": "Adds crystal and two load capacitors."
+    },
+    {
+      "title": "Expose SWD plus NRST",
+      "rationale": "Allows firmware flashing and recovery without relying on bootloader pins.",
+      "impact": "Uses a compact 5-pin debug header."
+    }
+  ],
+  "risks": [
+    "Generated JLC symbols may still need pin-type normalization before using ERC as a fabrication gate."
+  ]
+}

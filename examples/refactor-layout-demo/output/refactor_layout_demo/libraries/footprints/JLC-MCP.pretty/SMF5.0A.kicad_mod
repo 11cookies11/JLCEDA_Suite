@@ -1,0 +1,133 @@
+(footprint "SMF5.0A"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "SMF5.0A unidirectional TVS diode, reused from validated NexDAP power block")
+	(tags "JLC-MCP TVS SMF")
+	(property "Reference" "REF**"
+		(at 0 -2.3 0)
+		(layer "F.SilkS")
+		(uuid "add50507-7a1a-40cd-8281-083921526498")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SMF5.0A"
+		(at 0 2.3 0)
+		(layer "F.Fab")
+		(uuid "561f398f-2162-417d-a826-0e4463f755ef")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "5a72e3b3-b43c-42ef-b8ed-a358d65f7558")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "321d16f5-2200-48f3-9ea7-a4d1f92f4fd3")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "LCSC" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3d54e125-4257-4849-9b6d-4e3da478087b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.8 -0.95)
+		(end 0.8 -0.95)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "0a7d7fd1-99ab-499e-a5fc-b7de14b58e05")
+	)
+	(fp_line
+		(start -0.8 0.95)
+		(end 0.8 0.95)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ec3dd99e-9ec9-428a-bd4f-05a184724671")
+	)
+	(fp_rect
+		(start -2.4 -1.3)
+		(end 2.4 1.3)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "19f216bc-f0ba-4ce3-aad3-2cafe4a602c2")
+	)
+	(fp_line
+		(start -0.35 -0.75)
+		(end -0.35 0.75)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(layer "F.Fab")
+		(uuid "bcd6cbc7-e1f2-455b-ab95-a8803e064969")
+	)
+	(fp_rect
+		(start -1.75 -0.9)
+		(end 1.75 0.9)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "5fd10c94-7280-4a95-8e97-53aa1c86e46b")
+	)
+	(pad "1" smd roundrect
+		(at -1.35 0)
+		(size 1.25 1.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "fd01c964-5eef-46e4-a08f-d1827d308a77")
+	)
+	(pad "2" smd roundrect
+		(at 1.35 0)
+		(size 1.25 1.5)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "7ec95a2e-89be-474a-b6b9-dd74140f9124")
+	)
+	(embedded_fonts no)
+)

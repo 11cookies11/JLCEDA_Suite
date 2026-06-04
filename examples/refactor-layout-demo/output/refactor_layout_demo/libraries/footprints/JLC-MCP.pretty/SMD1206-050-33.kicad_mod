@@ -1,0 +1,123 @@
+(footprint "SMD1206-050-33"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "SMD1206-050-33 resettable PTC fuse, reused from validated NexDAP power block")
+	(tags "JLC-MCP PTC 1206")
+	(property "Reference" "REF**"
+		(at 0 -2.2 0)
+		(layer "F.SilkS")
+		(uuid "f4ac9bd5-81d5-4b3c-8872-e6ab18f50ccc")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SMD1206-050-33"
+		(at 0 2.2 0)
+		(layer "F.Fab")
+		(uuid "43a4dfba-f3cd-4bf1-9fa4-75b4a95de75c")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9147e23c-c170-4d49-a2bb-a89d8b3dd085")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8dac20ce-f924-4a10-8891-42e00354ec89")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "LCSC" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9a743a23-121a-42bb-8591-faf45c0cc26b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.65 -0.9)
+		(end 0.65 -0.9)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "d50a1469-6ed3-4c50-9671-bda2b35dcafe")
+	)
+	(fp_line
+		(start -0.65 0.9)
+		(end 0.65 0.9)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "312363e2-bb4c-4a5e-b28a-db751b611f72")
+	)
+	(fp_rect
+		(start -2.35 -1.25)
+		(end 2.35 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "4b6628aa-0e34-41d6-9304-56d6e3ced77e")
+	)
+	(fp_rect
+		(start -1.6 -0.8)
+		(end 1.6 0.8)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "6d2dc0b7-b130-4930-912d-250fb69c593d")
+	)
+	(pad "1" smd roundrect
+		(at -1.45 0)
+		(size 1.45 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "45b67801-61d4-4172-a159-6e54f3303637")
+	)
+	(pad "2" smd roundrect
+		(at 1.45 0)
+		(size 1.45 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.15)
+		(uuid "107bfcc1-d3dc-4f75-8130-55dbc2bc2f0c")
+	)
+	(embedded_fonts no)
+)
