@@ -1,3 +1,3 @@
-﻿"""Parts workflow package."""
+"""Parts workflow package."""
 
-from .workflow import run_parts_pipeline
+from ..domain.core.parts.workflow import run_parts_pipeline

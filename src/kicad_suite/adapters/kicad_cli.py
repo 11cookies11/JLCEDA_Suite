@@ -8,7 +8,7 @@ import shutil
 from pathlib import Path
 from typing import Any
 
-from ..env_utils import env
+from ..shared.env_utils import env
 
 
 def resolve_kicad_cli() -> str:

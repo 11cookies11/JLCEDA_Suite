@@ -1,0 +1,2 @@
+"""Domain core validation helpers."""
+

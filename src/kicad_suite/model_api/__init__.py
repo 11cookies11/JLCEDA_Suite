@@ -2,10 +2,10 @@
 
 from __future__ import annotations
 
-from .commands import OperationRequest, RequestOptions, operation_request_from_dict
-from .repository import CircuitModelRepository
-from .results import ApiError, OperationResult
-from .service import ModelApiService
+from ..application_services.model_api.commands import OperationRequest, RequestOptions, operation_request_from_dict
+from ..application_services.model_api.repository import CircuitModelRepository
+from ..application_services.model_api.results import ApiError, OperationResult
+from ..application_services.model_api.service import ModelApiService
 
 __all__ = [
     "ApiError",

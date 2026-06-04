@@ -11,35 +11,35 @@ from pathlib import Path
 from typing import Any
 
 from .pipeline_coordinator import run_pipeline
-from .server_text_to_kicad import run as run_text_to_kicad
-from .artifact_validator import main as validate_artifacts_main
-from .compile_kicad_execution_plan import run as run_compile_plan
-from .circuit_pipeline import diagnose_ngspice_environment
-from .circuit_model_io import resolve_model_paths
-from .ir_compiler import build_ir
-from .ir_validator import validate_ir
-from .pin_manager import PinManager
-from . import jlc_api
-from .jlc_api import search as jlc_search
-from .jlc_installer import install_by_lcsc_id, search_and_install, resolve_missing_symbols
-from .kicad_erc_runner import run as run_erc
-from .kicad_project_writer import run as run_write_project
+from .entrypoints.server_text_to_kicad import run as run_text_to_kicad
+from .application_services.artifact_validator import main as validate_artifacts_main
+from .domain.core.compile_kicad_execution_plan import run as run_compile_plan
+from .orchestration.circuit_pipeline import diagnose_ngspice_environment
+from .domain.core.circuit_model_io import resolve_model_paths
+from .domain.core.ir_compiler import build_ir
+from .domain.core.ir_validator import validate_ir
+from .domain.core.pin_manager import PinManager
+from .adapters import jlc_api
+from .adapters.jlc_api import search as jlc_search
+from .adapters.jlc_installer import install_by_lcsc_id, search_and_install, resolve_missing_symbols
+from .adapters.kicad_erc_runner import run as run_erc
+from .adapters.kicad_project_writer import run as run_write_project
 from .model_api import CircuitModelRepository, ModelApiService
-from .project_state import (
+from .application_services.project_state import (
     ProjectState,
     is_mutating_operation,
     is_validate_operation,
     is_build_operation,
 )
-from .report_system import build_report, format_report, FORMAT_JSON, FORMAT_MARKDOWN, FORMAT_TEXT
-from .simulation_planner import (
+from .application_services.report_system import build_report, format_report, FORMAT_JSON, FORMAT_MARKDOWN, FORMAT_TEXT
+from .domain.core.simulation_planner import (
     build_simulation_plan,
     load_circuit_model,
     load_simulation_profile,
     simulation_plan_to_dict,
 )
-from .validation.common import load_json
-from .env_utils import repo_root
+from .shared.validation.common import load_json
+from .shared.env_utils import repo_root
 
 
 def _print_json(payload: Any) -> int:

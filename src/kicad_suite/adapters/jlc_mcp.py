@@ -12,7 +12,7 @@ from typing import Any
 
 
 def resolve_bridge_script(bridge_script: str | Path | None = None) -> Path:
-    from kicad_suite.env_utils import repo_root
+    from kicad_suite.shared.env_utils import repo_root
     return Path(bridge_script) if bridge_script else repo_root() / "scripts" / "jlc_mcp_bridge.mjs"
 
 
