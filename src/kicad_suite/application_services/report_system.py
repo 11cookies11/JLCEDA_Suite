@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 from .project_state import ProjectState
+from .erc_classification_service import ErcClassificationService
 from ..domain.core.circuit_model_io import load_dual_circuit_model, resolve_model_paths
 from ..domain.core.ir_compiler import build_ir
 from ..shared.schema_versions import IR_SCHEMA_VERSION
@@ -248,13 +249,19 @@ def _erc_details(erc_result: dict[str, Any]) -> dict[str, Any]:
                     type_counts[vtype] += 1
                     if vtype not in examples:
                         examples[vtype] = str(v.get("description", ""))[:120]
+            severities: dict[str, str] = {}
+            for sheet in erc_data.get("sheets", []):
+                for v in sheet.get("violations", []):
+                    vtype = str(v.get("type", "?"))
+                    severities.setdefault(vtype, str(v.get("severity", "?")))
             for vtype, count in type_counts.most_common(20):
                 details["violations"].append({
                     "type": vtype,
                     "count": count,
-                    "severity": str(v.get("severity", "?")),
+                    "severity": severities.get(vtype, "?"),
                     "example": examples.get(vtype, ""),
                 })
+            details["classification"] = ErcClassificationService().classify_report(erc_data)
         except (OSError, json.JSONDecodeError, LookupError):
             pass
 

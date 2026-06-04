@@ -290,16 +290,6 @@ def resolve_missing_symbols(
         "details": resolved + timed_out + failed,
     }
 
-    # Write to operations.jsonl so the agent always knows what happened
-    _log_operation(project_path, "resolve_symbols", {
-        "ok": summary["ok"],
-        "total": summary["resolved"],
-        "easyeda": sum(1 for x in summary["details"] if x.get("source") == "easyeda"),
-        "search_hint": sum(1 for x in summary["details"] if x.get("source") == "search_hint"),
-        "placeholder": sum(1 for x in summary["details"] if "placeholder" in x.get("source", "")),
-        "failed": summary["failed"],
-    })
-
     return summary
 
 
@@ -310,19 +300,6 @@ def _try_install_candidates(results: list[dict[str, Any]], project_path: Path) -
         if result.get("ok"):
             return result
     return None
-
-
-def _log_operation(project_path: Path, op: str, data: dict[str, Any]) -> None:
-    """Append an entry to the project's operations.jsonl log."""
-    import json as _json
-    from datetime import datetime, timezone
-    log_dir = project_path / "logs"
-    log_dir.mkdir(parents=True, exist_ok=True)
-    log_path = log_dir / "operations.jsonl"
-    entry = {"time": datetime.now(timezone.utc).isoformat(), "op": op}
-    entry.update(data)
-    with log_path.open("a", encoding="utf-8") as fh:
-        fh.write(_json.dumps(entry, ensure_ascii=False) + "\n")
 
 
 def _resolve_two_pin_placeholder(project_path: Path, value: str, ref: str) -> dict[str, Any]:

@@ -113,6 +113,7 @@ class ProjectState:
         """Load ``project.state.json``, falling back to recompute if missing."""
         if self.state_path.exists():
             self.state = json.loads(self.state_path.read_text(encoding="utf-8"))
+            self.refresh_from_model()
         else:
             self.state = self._empty_state()
             self.recompute()
@@ -132,15 +133,32 @@ class ProjectState:
         if model is None:
             self.state = self._empty_state()
         else:
-            dsl_hash = self._hash_dict(model)
-            self.state.setdefault("dsl", {})["hash"] = dsl_hash
-            self.state.setdefault("dsl", {})["path"] = f"source/{self.model_path.name}"
-            self.state.setdefault("project", {})["id"] = str(model.get("project_id", ""))
-            self.state.setdefault("project", {})["name"] = str(model.get("topology", ""))
-            self.state["summary"] = self._build_summary(model)
-            self.state["status"] = self._compute_status()
+            self._sync_model_metadata(model)
         self.save()
         return self.state
+
+    def refresh_from_model(self) -> bool:
+        """Refresh cached model-derived fields when the source model changed.
+
+        Returns True when the in-memory state was updated.
+        """
+        model = self._read_model()
+        if model is None:
+            return False
+        current_hash = self._hash_dict(model)
+        current_summary = self._build_summary(model)
+        dsl = self.state.setdefault("dsl", {})
+        changed = (
+            dsl.get("hash") != current_hash
+            or self.state.get("summary") != current_summary
+            or self.state.get("project", {}).get("id") != str(model.get("project_id", ""))
+            or self.state.get("project", {}).get("name") != str(model.get("topology", ""))
+        )
+        if not changed:
+            return False
+        self._sync_model_metadata(model)
+        self.save()
+        return True
 
     # -- status queries ----------------------------------------------------
 
@@ -200,7 +218,7 @@ class ProjectState:
         self._ensure_loaded()
         model = self._read_model()
         if model is not None:
-            self.state.setdefault("dsl", {})["hash"] = self._hash_dict(model)
+            self._sync_model_metadata(model)
         self.state["status"] = STATUS_DIRTY
         self.state.setdefault("diagnostics", {})
         self.state["diagnostics"].setdefault("items", [])
@@ -216,6 +234,9 @@ class ProjectState:
     def mark_valid(self, diagnostics: dict[str, Any] | None = None) -> None:
         """Mark the project VALID (validation passed)."""
         self._ensure_loaded()
+        model = self._read_model()
+        if model is not None:
+            self._sync_model_metadata(model)
         self.state["status"] = STATUS_VALID
         self.state["dsl"]["valid"] = True
         if diagnostics:
@@ -230,6 +251,9 @@ class ProjectState:
     def mark_invalid(self, diagnostics: dict[str, Any] | None = None) -> None:
         """Mark the project INVALID (validation failed)."""
         self._ensure_loaded()
+        model = self._read_model()
+        if model is not None:
+            self._sync_model_metadata(model)
         self.state["status"] = STATUS_INVALID
         self.state["dsl"]["valid"] = False
         if diagnostics:
@@ -255,6 +279,8 @@ class ProjectState:
         self._ensure_loaded()
         model = self._read_model()
         dsl_hash = self._hash_dict(model) if model else ""
+        if model is not None:
+            self._sync_model_metadata(model)
         self.state["status"] = STATUS_BUILT
         self.state["build"] = {
             "last_build_ok": True,
@@ -336,6 +362,15 @@ class ProjectState:
             "constraint_count": _count("constraints"),
             "power_rail_count": _count("power_rails"),
         }
+
+    def _sync_model_metadata(self, model: dict[str, Any]) -> None:
+        dsl_hash = self._hash_dict(model)
+        self.state.setdefault("dsl", {})["hash"] = dsl_hash
+        self.state.setdefault("dsl", {})["path"] = f"source/{self.model_path.name}"
+        self.state.setdefault("project", {})["id"] = str(model.get("project_id", ""))
+        self.state.setdefault("project", {})["name"] = str(model.get("topology", ""))
+        self.state["summary"] = self._build_summary(model)
+        self.state["status"] = self._compute_status()
 
     def _compute_status(self) -> str:
         dsl = self.state.get("dsl", {})

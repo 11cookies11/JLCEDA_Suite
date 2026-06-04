@@ -21,7 +21,7 @@ from .domain.core.ir_validator import validate_ir
 from .domain.core.pin_manager import PinManager
 from .adapters import jlc_api
 from .adapters.jlc_api import search as jlc_search
-from .adapters.jlc_installer import install_by_lcsc_id, search_and_install, resolve_missing_symbols
+from .adapters.jlc_installer import install_by_lcsc_id, search_and_install
 from .adapters.kicad_erc_runner import run as run_erc
 from .adapters.kicad_project_writer import run as run_write_project
 from .model_api import CircuitModelRepository, ModelApiService
@@ -31,6 +31,8 @@ from .application_services.project_state import (
     is_validate_operation,
     is_build_operation,
 )
+from .application_services.agent_diagnostics import build_agent_diagnostics
+from .application_services.part_resolution_service import PartResolutionService
 from .application_services.report_system import build_report, format_report, FORMAT_JSON, FORMAT_MARKDOWN, FORMAT_TEXT
 from .domain.core.simulation_planner import (
     build_simulation_plan,
@@ -256,6 +258,7 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "status": "Return machine-readable lifecycle state.",
             "inspect": "Return project, model, build, and summary details.",
             "explain": "Return a compact project explanation for an agent.",
+            "diagnose": "Return unified structured diagnostics for agent repair loops.",
             "build-ir": "Compile source/circuit-model.source.json into build/ir.v1.json.",
             "validate-ir": "Compile and validate Hardware IR.",
             "rule-check": "Run project readiness checks.",
@@ -818,6 +821,19 @@ def _agent_doctor_handler(args: argparse.Namespace) -> int:
     return _print_json({"ok": ok, "stage": "doctor", "checks": checks})
 
 
+def _agent_diagnose_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    model_path = _agent_model_path(args)
+    payload = build_agent_diagnostics(project_path, model_path)
+    output = getattr(args, "output", None)
+    if output is not None:
+        output_path = Path(output).resolve()
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+        payload["output"] = str(output_path)
+    return _print_json(payload)
+
+
 def _agent_pins_free_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
@@ -988,7 +1004,13 @@ def _agent_resolve_symbols_handler(args: argparse.Namespace) -> int:
     timeout = getattr(args, "timeout", 120) or 120
     delay = getattr(args, "delay", 0) or 0
     t0 = _time.monotonic()
-    result = resolve_missing_symbols(project_path, model, timeout=timeout, delay=delay, model_path=model_path)
+    result = PartResolutionService().resolve_symbols(
+        project_path,
+        model,
+        timeout=timeout,
+        delay=delay,
+        model_path=model_path,
+    )
     elapsed = round(_time.monotonic() - t0, 2)
     result["elapsed_sec"] = elapsed
 
@@ -1273,6 +1295,12 @@ def build_parser() -> argparse.ArgumentParser:
     agent_doctor.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_doctor.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_doctor.set_defaults(handler=_agent_doctor_handler)
+
+    agent_diagnose = agent_subs.add_parser("diagnose", help="Return unified structured diagnostics for agents.")
+    agent_diagnose.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    agent_diagnose.add_argument("--model", dest="model_path", type=Path, default=None)
+    agent_diagnose.add_argument("--output", type=Path, default=None)
+    agent_diagnose.set_defaults(handler=_agent_diagnose_handler)
 
     agent_pins = agent_subs.add_parser("pins", help="Pin resource management.")
     agent_pins_subs = agent_pins.add_subparsers(dest="pins_action")

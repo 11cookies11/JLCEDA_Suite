@@ -405,6 +405,35 @@ class TestCliDispatch(unittest.TestCase):
         self.assertEqual(payload["stage"], "doctor")
         self.assertTrue(any(item["name"] == "python" for item in payload["checks"]))
 
+    def test_agent_diagnose_returns_structured_diagnostics(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "diag-demo",
+                    "topology": "diag_board",
+                    "components": [{"ref": "U1", "role": "mcu", "value": "MCU"}],
+                    "nets": [{"name": "VCC", "members": ["U1.1"]}],
+                    "sheets": [],
+                    "risks": [],
+                }),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "diagnose", "--project", str(project_path)])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertEqual(payload["stage"], "diagnose")
+        self.assertIn("must_fix", payload["diagnostics"])
+        self.assertIn("suggested_actions", payload["diagnostics"])
+
     # -- new agent commands ---------------------------------------------------
 
     def test_agent_pins_free_lists_free_gpio_pins(self):

@@ -83,31 +83,40 @@ def _merge_object_lists(
     identity_key: str,
 ) -> list[Any]:
     merged: list[Any] = []
+    scalar_seen: set[str] = set()
+
+    def _append_scalar_once(item: Any) -> None:
+        marker = json.dumps(item, sort_keys=True, ensure_ascii=False) if isinstance(item, (dict, list)) else repr(item)
+        if marker in scalar_seen:
+            return
+        scalar_seen.add(marker)
+        merged.append(deepcopy(item))
+
     source_by_id: dict[str, dict[str, Any]] = {}
     source_order: list[str] = []
     for item in source_items:
         if not isinstance(item, dict):
-            merged.append(deepcopy(item))
+            _append_scalar_once(item)
             continue
         item_id = str(item.get(identity_key, "")).strip()
         if item_id:
             source_by_id[item_id] = deepcopy(item)
             source_order.append(item_id)
         else:
-            merged.append(deepcopy(item))
+            _append_scalar_once(item)
 
     resolved_by_id: dict[str, dict[str, Any]] = {}
     resolved_order: list[str] = []
     for item in resolved_items:
         if not isinstance(item, dict):
-            merged.append(deepcopy(item))
+            _append_scalar_once(item)
             continue
         item_id = str(item.get(identity_key, "")).strip()
         if item_id:
             resolved_by_id[item_id] = deepcopy(item)
             resolved_order.append(item_id)
         else:
-            merged.append(deepcopy(item))
+            _append_scalar_once(item)
 
     seen: set[str] = set()
     for item_id in source_order:
@@ -137,6 +146,11 @@ def merge_circuit_models(source_model: dict[str, Any], resolved_model: dict[str,
         source_items = merged.get(key, [])
         resolved_items = resolved_model.get(key, [])
         if isinstance(source_items, list) or isinstance(resolved_items, list):
+            if key == "risks":
+                resolved_items = _filter_resolved_risks(
+                    source_items if isinstance(source_items, list) else [],
+                    resolved_items if isinstance(resolved_items, list) else [],
+                )
             merged[key] = _merge_object_lists(
                 source_items if isinstance(source_items, list) else [],
                 resolved_items if isinstance(resolved_items, list) else [],
@@ -154,6 +168,18 @@ def merge_circuit_models(source_model: dict[str, Any], resolved_model: dict[str,
             merged[key] = deepcopy(value)
 
     return merged
+
+
+def _filter_resolved_risks(source_items: list[Any], resolved_items: list[Any]) -> list[Any]:
+    """Keep source-authored keyless risks authoritative over stale overlays."""
+    source_has_keyless = any(not (isinstance(item, dict) and str(item.get("key", "")).strip()) for item in source_items)
+    if not source_has_keyless:
+        return resolved_items
+    return [
+        item
+        for item in resolved_items
+        if isinstance(item, dict) and str(item.get("key", "")).strip()
+    ]
 
 
 def load_dual_circuit_model(model_path: Path) -> dict[str, Any]:

@@ -128,6 +128,25 @@ def test_mark_built_then_stale(tmp_path):
     assert ps.is_stale() is True
 
 
+def test_load_refreshes_summary_when_model_changes(tmp_path):
+    model_path = _write_model(tmp_path)
+    ps = ProjectState(tmp_path)
+    ps.load()
+    assert ps.get_summary()["component_count"] == 1
+
+    model = json.loads(model_path.read_text(encoding="utf-8"))
+    model["components"].append({"ref": "U2", "role": "regulator", "value": "AMS1117"})
+    model["nets"].append({"name": "+5V", "members": ["U2.3"]})
+    model_path.write_text(json.dumps(model, ensure_ascii=False), encoding="utf-8")
+
+    reloaded = ProjectState(tmp_path)
+    reloaded.load()
+
+    assert reloaded.get_summary()["component_count"] == 2
+    assert reloaded.get_summary()["net_count"] == 2
+    assert reloaded.get_status() == "DIRTY"
+
+
 def test_append_and_read_history(tmp_path):
     _write_model(tmp_path)
     ps = ProjectState(tmp_path)
