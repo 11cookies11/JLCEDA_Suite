@@ -7,6 +7,14 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，
 版本号遵循 [语义化版本](https://semver.org/spec/v2.0.0.html)。
 
+## [0.3.1] - 2026-06-05
+
+### 变更
+
+- 删除 symbol fallback 路径，缺失或不匹配的 KiCad symbol 现在会直接失败，而不是静默生成占位器件。
+- 刷新了已验证的 `esp32c3-minimal-system` 和 `stm32f103-minimal-system` 示例，使其对齐当前协议和 release 布局。
+- 同步了 Python 包元数据版本，使其与可发布的 `package.json` 版本保持一致。
+
 ## [0.1.28] - 2026-05-11
 
 ### 修复
