@@ -99,7 +99,7 @@ class TestRunPipeline(unittest.TestCase):
                         ref="U1",
                         role="ldo",
                         value="3.3V LDO",
-                        lib_id="AIAgent:Generic_2Pin",
+                        lib_id="Device:R",
                         footprint="",
                         at=KiCadPoint(x=0.0, y=0.0, rotation=0.0),
                         pins=[],
@@ -151,7 +151,8 @@ class TestRunPipeline(unittest.TestCase):
                                             with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
                                                 with patch("kicad_suite.pipeline_coordinator.is_truthy_env", side_effect=lambda name, default="false": name == "KICAD_PARTS_PIPELINE"):
                                                     with patch("kicad_suite.pipeline_coordinator.run_parts_pipeline", return_value={"lock_file": "part.lock.yaml", "risk_report_file": "part-risk-report.md", "selections": [selected_part]}) as run_parts:
-                                                        summary = run_pipeline(str(model_path), tmpdir)
+                                                        with patch("kicad_suite.pipeline_coordinator.write_project_resolution", return_value={"resolved": []}):
+                                                            summary = run_pipeline(str(model_path), tmpdir)
 
         build_ir.assert_called_once()
         self.assertEqual(build_ir.call_args.args[0]["components"][0]["selected_part"]["lcsc_id"], "C2040")

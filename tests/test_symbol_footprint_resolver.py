@@ -5,9 +5,12 @@ from __future__ import annotations
 import os
 import sys
 
+import pytest
+
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.adapters.symbol_footprint_resolver import (
+    SymbolResolutionError,
     load_symbol_map,
     resolve_footprint,
     symbol_mapping_for,
@@ -24,7 +27,7 @@ def test_load_symbol_map_returns_dict():
 
 def test_symbol_mapping_for_resistor():
     comp = {"ref": "R1", "role": "resistor", "value": "10k",
-            "selected_part": {"package": "0603"}}
+            "selected_part": {"symbol_ref": "0603WAJ0103T5E", "package": "0603"}}
     lib_id, footprint, notes = symbol_mapping_for(comp)
     assert lib_id
     assert ":" in lib_id
@@ -33,18 +36,53 @@ def test_symbol_mapping_for_resistor():
 
 def test_symbol_mapping_for_capacitor():
     comp = {"ref": "C1", "role": "capacitor", "value": "100nF",
-            "selected_part": {"package": "0603"}}
+            "selected_part": {"symbol_ref": "CL10B104KA8NNNC", "package": "0603"}}
     lib_id, footprint, notes = symbol_mapping_for(comp)
     assert lib_id
     assert ":" in lib_id
 
 
-def test_symbol_mapping_for_unknown_role_returns_fallback():
+def test_symbol_mapping_for_unknown_role_without_symbol_raises():
     comp = {"ref": "X1", "role": "mystery_chip", "value": "???",
             "selected_part": {}}
+    with pytest.raises(SymbolResolutionError, match="No explicit KiCad symbol found"):
+        symbol_mapping_for(comp)
+
+
+def test_symbol_mapping_prefers_imported_jlc_symbol(monkeypatch, tmp_path):
+    symbols = tmp_path / "libraries" / "symbols"
+    symbols.mkdir(parents=True)
+    (symbols / "JLC-MCP.kicad_sym").write_text(
+        "\n".join([
+            "(kicad_symbol_lib",
+            "  (version 20250114)",
+            "  (generator \"test\")",
+            "  (symbol \"ESP32-C3FH4\"",
+            "    (property \"Reference\" \"U\" (at 0 0 0))",
+            "  )",
+            ")",
+        ]),
+        encoding="utf-8",
+    )
+    monkeypatch.setenv("KICAD_SOURCE_PROJECT_DIR", str(tmp_path))
+
+    comp = {
+        "ref": "U1",
+        "role": "mcu",
+        "value": "ESP32-C3FH4",
+        "package": "QFN-32",
+        "selected_part": {
+            "lcsc_id": "C2858491",
+            "display_name": "ESP32-C3FH4",
+            "kicad_footprint_hint": "QFN-32_L5.0-W5.0-P0.50-TL-EP3.7",
+        },
+    }
+
     lib_id, footprint, notes = symbol_mapping_for(comp)
-    assert lib_id
-    assert ":" in lib_id
+
+    assert lib_id == "JLC-MCP:ESP32-C3FH4"
+    assert footprint == "JLC-MCP:QFN-32_L5.0-W5.0-P0.50-TL-EP3.7"
+    assert any("imported project-local JLC symbol" in note for note in notes)
 
 
 def test_resolve_footprint_uses_mapping_when_library_prefix():

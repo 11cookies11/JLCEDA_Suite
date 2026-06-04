@@ -23,82 +23,9 @@ REPO_ROOT = repo_root()
 _symbol_map_cache: dict[str, Any] | None = None
 _footprint_exists_cache: dict[str, bool] = {}
 
-# Minimal role ->(KiCad_lib:symbol, footprint_hint) safety net.
-# These are only used when ``resolve-symbols`` was skipped and no
-# ``selected_part`` is present.  Generic EasyEDA search handles
-# everything else ???see ``_ROLE_GENERIC_SEARCH`` in jlc_installer.py.
-_ROLE_FALLBACK: dict[str, tuple[str, str]] = {
-    # Passives ???Device library symbols are reliable and universal
-    "boot0_pulldown": ("Device:R", "R0603"),
-    "nrst_pullup": ("Device:R", "R0603"),
-    "led_resistor": ("Device:R", "R0603"),
-    "user_button_pullup": ("Device:R", "R0603"),
-    "i2c_pullup": ("Device:R", "R0603"),
-    "xtal_load_cap_1": ("Device:C", "C0603"),
-    "xtal_load_cap_2": ("Device:C", "C0603"),
-    "hse_load_cap_1": ("Device:C", "C0603"),
-    "hse_load_cap_2": ("Device:C", "C0603"),
-    "lse_load_cap_1": ("Device:C", "C0603"),
-    "lse_load_cap_2": ("Device:C", "C0603"),
-    "vdd_decoupling_1": ("Device:C", "C0603"),
-    "vdd_decoupling_2": ("Device:C", "C0603"),
-    "vdd_decoupling_3": ("Device:C", "C0603"),
-    "vdd_decoupling_4": ("Device:C", "C0603"),
-    "vdd_bulk_cap": ("Device:C", "C0805"),
-    "reg_input_cap": ("Device:C", "C0805"),
-    "reg_output_cap": ("Device:C", "C0805"),
-    "main_8mhz_xtal": ("Device:Crystal", ""),
-    "rtc_32k_xtal": ("Device:Crystal", ""),
-    "main_12mhz_xtal": ("Device:Crystal", ""),
-    # NexDAP bring-up board roles
-    "usb_vbus_ptc_fuse": ("Device:Fuse", "F1206"),
-    "usb_vbus_tvs_diode": ("Device:D_TVS", "SMF5.0A"),
-    "main_regulator_input_capacitor": ("Device:C", "C0603"),
-    "main_regulator_output_capacitor": ("Device:C", "C0603"),
-    "main_3v3_bulk_capacitor": ("Device:C", "C0603"),
-    "esp_chip_en_pullup": ("Device:R", "R0603"),
-    "esp_en_reset_capacitor": ("Device:C", "C0603"),
-    "esp_gpio9_boot_pullup": ("Device:R", "R0603"),
-    "esp_gpio8_strap_pullup": ("Device:R", "R0603"),
-    "esp_vdd3p3_decoupling_1": ("Device:C", "C0603"),
-    "esp_vdd3p3_decoupling_2": ("Device:C", "C0603"),
-    "esp_vdd3p3_bulk": ("Device:C", "C0603"),
-    "rp2040_run_pullup": ("Device:R", "R0603"),
-    "rp2040_vreg_in_bypass": ("Device:C", "C0603"),
-    "rp2040_vreg_out_bulk": ("Device:C", "C0603"),
-    "rp2040_iovdd_decoupling": ("Device:C", "C0603"),
-    "rp2040_dvdd_decoupling": ("Device:C", "C0603"),
-    "rp2040_3v3_bulk": ("Device:C", "C0603"),
-    "rp_xtal_load_cap_1": ("Device:C", "C0603"),
-    "rp_xtal_load_cap_2": ("Device:C", "C0603"),
-    "bridge_flash_decoupling": ("Device:C", "C0603"),
-    "rp2040_bootsel_gate_resistor": ("Device:R", "R0603"),
-    "rp2040_bootsel_gate_pulldown": ("Device:R", "R0603"),
-    "swdio_series_resistor": ("Device:R", "R0603"),
-    "swclk_series_resistor": ("Device:R", "R0603"),
-    "swo_series_resistor": ("Device:R", "R0603"),
-    "nreset_series_resistor": ("Device:R", "R0603"),
-    "target_uart_tx_series_resistor": ("Device:R", "R0603"),
-    "target_uart_rx_series_resistor": ("Device:R", "R0603"),
-    "target_nreset_pullup": ("Device:R", "R0603"),
-    "vtref_adc_divider_top": ("Device:R", "R0603"),
-    "vtref_adc_divider_bottom": ("Device:R", "R0603"),
-    "vtref_adc_filter_cap": ("Device:C", "C0603"),
-    "power_led_resistor": ("Device:R", "R0603"),
-    "dap_led_resistor": ("Device:R", "R0603"),
-    "target_swd_connector": ("Connector_Generic:Conn_02x05_Odd_Even", "HDR-TH_10P-P2.54-V-M-2X5"),
-    "rp2040_bootsel_open_drain_pulldown": ("Transistor_FET:2N7002", "SOT-23-3"),
-    "nreset_open_drain_nmos": ("Transistor_FET:2N7002", "SOT-23-3"),
-    "target_esd_protection": ("Device:D_TVS", "SOT-23-6"),
-    "power_indicator_led": ("Device:LED", "LED0603-RD"),
-    "dap_activity_led": ("Device:LED", "LED0603-RD"),
-    "test_point_swdio": ("Connector:TestPoint", "TP-SMD_1P"),
-    "test_point_swclk": ("Connector:TestPoint", "TP-SMD_1P"),
-    # LEDs ???Device:LED works for any basic indicator
-    "power_led": ("Device:LED", ""),
-    "status_led": ("Device:LED", ""),
-    "user_led": ("Device:LED", ""),
-}
+
+class SymbolResolutionError(ValueError):
+    """Raised when a component cannot be mapped to an explicit KiCad symbol."""
 
 
 def _sanitize_symbol_name(name: str) -> str:
@@ -120,8 +47,8 @@ def _load_json_file(path: Path) -> dict[str, Any]:
 def load_symbol_map() -> dict[str, Any]:
     """Return an empty compatibility config.
 
-    The shared rule table has been retired. Resolution now uses selected_part
-    plus built-in role templates.
+    The shared rule table has been retired. Resolution now requires explicit
+    selected_part symbol data or a matching imported project-local JLC symbol.
     """
     return {}
 
@@ -236,14 +163,17 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
         notes.append("Resolved from selected_part; shared symbol rule table is retired.")
         return lib_id, resolve_footprint(package, str(selected.get("kicad_footprint_hint", ""))), notes
 
-    role_fallback = _ROLE_FALLBACK.get(role)
-    if role_fallback:
-        lib_sym, fp = role_fallback
-        notes.append(f'Role "{role}" resolved to KiCad built-in {lib_sym} (selected_part missing or incomplete).')
-        return lib_sym, resolve_footprint(package, fp), notes
+    imported_symbol_name = _imported_jlc_symbol_name(component, selected)
+    if imported_symbol_name:
+        lib_id = f"JLC-MCP:{imported_symbol_name}"
+        notes.append("Resolved from imported project-local JLC symbol library.")
+        return lib_id, resolve_footprint(package, str(selected.get("kicad_footprint_hint", ""))), notes
 
-    notes.append(f'Mapped unknown role "{role}" to local AIAgent:Generic_2Pin placeholder symbol.')
-    return 'AIAgent:Generic_2Pin', _normalize_footprint(package), notes
+    raise SymbolResolutionError(
+        f'No explicit KiCad symbol found for component {ref or "<unknown>"} '
+        f'(role={role or "<empty>"}, value={value or "<empty>"}). '
+        'Run resolve-symbols or set selected_part.symbol_ref / selected_part.display_name to an imported symbol.'
+    )
 
 
 def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
@@ -252,6 +182,44 @@ def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
         value = str(selected.get(key, "")).strip()
         if value:
             return _sanitize_symbol_name(value)
+    return ""
+
+
+def _imported_jlc_symbol_name(component: dict[str, Any], selected: dict[str, Any]) -> str:
+    """Find a matching symbol already imported into the project-local JLC library."""
+    candidates: list[str] = []
+    for key in ("display_name", "mpn", "part_id", "lcsc_id"):
+        value = str(selected.get(key, "")).strip()
+        if value:
+            candidates.append(value)
+    value = str(component.get("value", "")).strip()
+    if value:
+        candidates.append(value)
+
+    seen: set[str] = set()
+    for candidate in candidates:
+        symbol_name = _sanitize_symbol_name(candidate)
+        if not symbol_name or symbol_name in seen:
+            continue
+        seen.add(symbol_name)
+        imported_name = _find_imported_jlc_symbol_by_normalized_name(symbol_name)
+        if imported_name:
+            return imported_name
+    return ""
+
+
+def _find_imported_jlc_symbol_by_normalized_name(normalized_name: str) -> str:
+    from .kicad_symbol_library import kicad_symbol_roots
+
+    for root in kicad_symbol_roots():
+        for symbol_file in sorted(root.glob("JLC-MCP*.kicad_sym")):
+            if not symbol_file.is_file():
+                continue
+            text = symbol_file.read_text(encoding="utf-8", errors="replace")
+            for match in re.finditer(r'^\s*\(symbol\s+"([^"]+)"', text, re.MULTILINE):
+                imported_name = match.group(1)
+                if _sanitize_symbol_name(imported_name) == normalized_name:
+                    return imported_name
     return ""
 
 

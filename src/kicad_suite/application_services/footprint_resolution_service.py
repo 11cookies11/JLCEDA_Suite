@@ -212,18 +212,25 @@ class FootprintResolutionService:
         fp_table_entries: list[tuple[str, str]] = []
         pinned_symbols: list[dict[str, Any]] = []
         pinned_footprints: list[dict[str, Any]] = []
+        project_resolved = project.resolve()
+
+        def _project_uri(path: Path) -> str:
+            try:
+                return path.resolve().relative_to(project_resolved).as_posix()
+            except ValueError:
+                return path.resolve().as_posix()
 
         if proj_libs:
             symbols_dir = proj_libs / "symbols"
             if symbols_dir.is_dir():
                 for sym_file in sorted(symbols_dir.glob("*.kicad_sym")):
-                    abs_path = sym_file.resolve().as_posix()
+                    uri = _project_uri(sym_file)
                     name = sym_file.stem
-                    sym_table_entries.append((name, abs_path))
+                    sym_table_entries.append((name, uri))
                     pinned_symbols.append({
                         "name": name,
                         "type": "KiCad",
-                        "uri": abs_path,
+                        "uri": uri,
                         "options": "",
                         "description": f"JLC-MCP {name}",
                     })
@@ -231,13 +238,13 @@ class FootprintResolutionService:
             footprints_dir = proj_libs / "footprints"
             if footprints_dir.is_dir():
                 for pretty_dir in sorted(footprints_dir.glob("*.pretty")):
-                    abs_path = pretty_dir.resolve().as_posix()
+                    uri = _project_uri(pretty_dir)
                     name = pretty_dir.stem
-                    fp_table_entries.append((name, abs_path))
+                    fp_table_entries.append((name, uri))
                     pinned_footprints.append({
                         "name": name,
                         "type": "KiCad",
-                        "uri": abs_path,
+                        "uri": uri,
                         "options": "",
                         "description": "JLC-MCP footprints",
                     })

@@ -1,4 +1,4 @@
-"""Symbol library parsing and fallback symbol templates."""
+"""Symbol library parsing for explicit KiCad symbol references."""
 
 from __future__ import annotations
 
@@ -105,10 +105,12 @@ def fmt(value: float) -> str:
 
 
 def local_symbol_library(symbols: list[dict[str, Any]]) -> str:
-    lib_ids = sorted({str(symbol.get("lib_id", "AIAgent:Generic_2Pin")) for symbol in symbols})
+    lib_ids = sorted({str(symbol.get("lib_id", "")).strip() for symbol in symbols})
+    if any(not lib_id for lib_id in lib_ids):
+        raise ValueError("Every KiCad symbol instance must provide an explicit lib_id.")
     footprints_by_lib_id: dict[str, str] = {}
     for symbol in symbols:
-        lib_id = str(symbol.get("lib_id", "AIAgent:Generic_2Pin"))
+        lib_id = str(symbol.get("lib_id", "")).strip()
         footprint = str(symbol.get("footprint", "")).strip()
         if footprint and lib_id not in footprints_by_lib_id:
             footprints_by_lib_id[lib_id] = footprint
@@ -428,101 +430,6 @@ def local_h618_minimal_symbol(lib_id: str) -> str:
     )'''
 
 
-def local_two_pin_symbol(lib_id: str, reference_prefix: str) -> str:
-    symbol_name = lib_id.split(":", 1)[-1]
-    return f'''    (symbol {q(lib_id)}
-      (pin_names (offset 0.254))
-      (exclude_from_sim no)
-      (in_bom yes)
-      (on_board yes)
-      (duplicate_pin_numbers_are_jumpers no)
-      (property "Reference" {q(reference_prefix)} (at 0 3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" {q(symbol_name)} (at 0 -3.81 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (hide yes)
-        (effects (font (size 1.27 1.27)))
-      )
-      (symbol "{symbol_name}_0_1"
-        (rectangle (start -2.54 1.27) (end 2.54 -1.27)
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-        (pin passive line (at -5.08 0 0) (length 2.54)
-          (name "1" (effects (font (size 1.27 1.27))))
-          (number "1" (effects (font (size 1.27 1.27))))
-        )
-        (pin passive line (at 5.08 0 180) (length 2.54)
-          (name "2" (effects (font (size 1.27 1.27))))
-          (number "2" (effects (font (size 1.27 1.27))))
-        )
-      )
-      (embedded_fonts no)
-    )'''
-
-
-def local_connector_symbol(lib_id: str) -> str:
-    match = re.fullmatch(r"Connector_Generic:Conn_(\d{2})x(\d{2})", lib_id)
-    if not match:
-        return ""
-    columns = int(match.group(1))
-    rows = int(match.group(2))
-    if columns not in {1, 2} or rows < 1:
-        return ""
-    symbol_name = lib_id.split(":", 1)[-1]
-    half_height = max(1.27, (rows - 1) * 2.54 / 2 + 1.27)
-    pins: list[str] = []
-    if columns == 1:
-        for row in range(rows):
-            number = str(row + 1)
-            y = (rows - 1) * 1.27 - row * 2.54
-            pins.append(f'''        (pin passive line (at -5.08 {fmt(y)} 0) (length 2.54)
-          (name {q(number)} (effects (font (size 1.27 1.27))))
-          (number {q(number)} (effects (font (size 1.27 1.27))))
-        )''')
-    else:
-        for row in range(rows):
-            y = (rows - 1) * 1.27 - row * 2.54
-            left_number = str(row * 2 + 1)
-            right_number = str(row * 2 + 2)
-            pins.append(f'''        (pin passive line (at -5.08 {fmt(y)} 0) (length 2.54)
-          (name {q(left_number)} (effects (font (size 1.27 1.27))))
-          (number {q(left_number)} (effects (font (size 1.27 1.27))))
-        )''')
-            pins.append(f'''        (pin passive line (at 5.08 {fmt(y)} 180) (length 2.54)
-          (name {q(right_number)} (effects (font (size 1.27 1.27))))
-          (number {q(right_number)} (effects (font (size 1.27 1.27))))
-        )''')
-    return f'''    (symbol {q(lib_id)}
-      (pin_names (offset 0.254))
-      (exclude_from_sim no)
-      (in_bom yes)
-      (on_board yes)
-      (duplicate_pin_numbers_are_jumpers no)
-      (property "Reference" "J" (at 0 {fmt(half_height + 2.54)} 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Value" {q(symbol_name)} (at 0 {fmt(-half_height - 2.54)} 0)
-        (effects (font (size 1.27 1.27)))
-      )
-      (property "Footprint" "" (at 0 0 0)
-        (hide yes)
-        (effects (font (size 1.27 1.27)))
-      )
-      (symbol "{symbol_name}_0_1"
-        (rectangle (start -2.54 {fmt(half_height)}) (end 2.54 {fmt(-half_height)} )
-          (stroke (width 0.254) (type default))
-          (fill (type none))
-        )
-{chr(10).join(pins)}
-      )
-      (embedded_fonts no)
-    )'''
-
-
 def symbol_block_for_lib_id(lib_id: str) -> str:
     if ":" in lib_id:
         library, symbol_name = lib_id.split(":", 1)
@@ -539,23 +446,7 @@ def symbol_block_for_lib_id(lib_id: str) -> str:
             normalized = normalize_connector_pin_types(normalized, symbol_name)
             return "\n".join(f"    {line}" if line.strip() else line for line in strip_symbol_lib_id(normalized).splitlines())
 
-    connector = local_connector_symbol(lib_id)
-    if connector:
-        return connector
-
-    fallback_prefixes = {
-        "Connector_Generic:Conn_01x04": "J",
-        "Connector:Conn_Coaxial": "J",
-        "Switch:SW_Push": "SW",
-        "Device:Crystal": "Y",
-        "Device:LED": "D",
-        "Device:D": "D",
-        "Device:R": "R",
-        "Device:C": "C",
-        "Device:L": "L",
-        "power:PWR_FLAG": "#FLG",
-    }
-    return local_two_pin_symbol(lib_id, fallback_prefixes.get(lib_id, "R"))
+    raise ValueError(f"KiCad symbol not found: {lib_id}")
 
 
 def symbol_block_with_default_footprint(block: str, footprint: str) -> str:
