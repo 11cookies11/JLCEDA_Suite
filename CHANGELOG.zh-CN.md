@@ -7,6 +7,12 @@
 格式基于 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)，
 版本号遵循 [语义化版本](https://semver.org/spec/v2.0.0.html)。
 
+## [0.3.2] - 2026-06-05
+
+### 变更
+
+- 在同步包元数据和 release 文档之后，发布一个后续的 release 构建。
+
 ## [0.3.1] - 2026-06-05
 
 ### 变更
