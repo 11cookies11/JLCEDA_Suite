@@ -30,6 +30,8 @@ The current source of truth is the split project layout:
     circuit-model.resolved.json
     ir.v1.json
     ir-validation.json
+    placement-plan.json
+    placement-plan.md
     report.json
     report.md
   libraries/
@@ -67,6 +69,7 @@ hwtool agent diagnose --project .
 hwtool agent resolve-symbols --project . --timeout 120
 hwtool agent build-ir --project .
 hwtool agent validate-ir --project .
+hwtool agent build-kicad-plan --project .
 hwtool agent export-kicad --project .
 hwtool agent report --project . --markdown
 ```
@@ -84,7 +87,7 @@ Workflow rules:
 For automated repair, use this loop:
 
 ```text
-inspect -> diagnose -> patch/run -> resolve-symbols if needed -> build-ir -> validate-ir -> export-kicad -> diagnose
+inspect -> diagnose -> patch/run -> resolve-symbols if needed -> build-ir -> validate-ir -> build-kicad-plan -> export-kicad -> diagnose
 ```
 
 Use these interfaces:
@@ -131,7 +134,71 @@ For sheets:
 For PCB layout:
 
 - Put placement intent in `pcb_layout.regions`.
-- Let `export-kicad` generate the actual `.kicad_pcb`.
+- Run `hwtool agent build-kicad-plan --project .` to compile the placement plan for inspection.
+- The placement plan is written to `build/placement-plan.json` and `build/placement-plan.md`.
+- Use `layout-lab` for pre-export visualization and rule validation (see Layout-Lab section below).
+- Let `export-kicad` generate the actual `.kicad_pcb` from the placement plan.
+
+## Layout-Lab (Placement Sandbox)
+
+Layout-lab is a standalone PCB placement visualization sandbox. It does NOT call KiCad — it validates placement rules visually before wiring them into the production pipeline.
+
+### When to Use
+
+- Before `export-kicad`, to preview and tune component placement.
+- When adding or refactoring `pcb_layout.regions` in the circuit model.
+- To visually explain placement decisions to the user.
+
+### Run
+
+```powershell
+# Single scenario
+python scripts/layout_lab.py --scenario examples/layout-lab/scenario.json --out tmp/layout-lab
+
+# Batch samples + gallery
+python scripts/layout_lab_batch.py
+```
+
+### Outputs
+
+- `tmp/layout-lab/steps/*.svg` — one SVG per placement step
+- `tmp/layout-lab/final.svg` — final board layout
+- `tmp/layout-lab/layout-summary.json` — score breakdown for each candidate
+- `tmp/layout-lab/report.md` — human-readable summary
+- `tmp/layout-lab/steps.html` — step-by-step gallery
+
+### Key Concepts
+
+- **Grid**: 1mm x 1mm. Anchor is the lower-left corner of the occupied rectangle.
+- **Patterns** (defined in `patterns.json`): `center_cluster`, `power_chain`, `clock_ring`, `usb_interface_chain`, `boot_reset_cluster`, `rf_island`, `debug_access_cluster`, `indicator_cluster`, `analog_island`, `edge_connector`, `high_current_path`, `signal_chain`, `diff_pair_adjacency`, `rf_keepout_island`.
+- **Roles** (defined in `roles.json`): role defaults, slot preferences, cluster slot order, board defaults.
+- **Solver**: constraint-based candidate search → filter (margin, overlap, keepout) → score → recurse with backtracking.
+- **Scoring**: Each placed candidate gets a score breakdown in the summary JSON.
+
+### Files
+
+| File | Purpose |
+|------|---------|
+| `examples/layout-lab/scenario.json` | Board size, components, pattern membership |
+| `examples/layout-lab/patterns.json` | Pattern summaries, colors, template defaults |
+| `examples/layout-lab/roles.json` | Role defaults, slot preferences |
+| `examples/layout-lab/rules.json` | Legacy combined input (kept for compatibility) |
+| `scripts/layout_lab.py` | Solver + SVG renderer |
+| `scripts/layout_lab_batch.py` | Batch runner for samples + gallery |
+
+## Placement Planner (Pipeline Integration)
+
+The placement planner (`application_services/placement_planner.py`) translates `pcb_layout.regions` into a structured placement plan consumed by `export-kicad`. It auto-generates:
+
+- Grid-based packing within each region (sqrt-column layout by component priority).
+- Component size estimation from role/package/selected_part.
+- Overlap detection between regions.
+- Fallback "unassigned" region for components not in any explicit region.
+- Board size inference from constraints or region extents.
+
+Output schema: `placement-plan.v1`. Written as `build/placement-plan.json`.
+
+Key CLI entry: `hwtool agent build-kicad-plan --project .` (compiles the KiCad execution plan including the placement plan).
 
 ## Service Boundaries
 
@@ -143,6 +210,8 @@ When changing code, keep repair logic in the right service:
 - ERC classification: `ErcClassificationService`.
 - Agent-facing structured diagnosis: `build_agent_diagnostics`.
 - Project lifecycle state: `ProjectState`.
+- Placement planning and region packing: `PlacementPlanner` / `build_placement_plan`.
+- PCB generation with placement plan consumption: `pcb_generator`.
 
 Do not scatter special-case ERC, symbol, or footprint fixes across CLI handlers, writers, or orchestration code.
 
@@ -205,22 +274,47 @@ Use the smallest relevant reference file:
 - `references/schematic-construction-description.md` for schematic intent.
 - `references/refactoring-design-rules.md` before changing generator, resolver, validation, or service code.
 - `references/text-to-schematic.md` only for older terminology; interpret it through the current `hwtool agent` workflow.
+- `examples/layout-lab/README.md` for running the placement sandbox.
+- `examples/layout-lab/ARCHITECTURE.md` for solver, pattern, and rendering design.
 
 ## Quick Command Reference
 
 ```powershell
+# Project lifecycle
+hwtool agent create <name> --board <board_name> --mcu <mcu> --topology single
 hwtool agent manifest
 hwtool agent status --project .
 hwtool agent inspect --project .
+hwtool agent explain --project .
 hwtool agent diagnose --project .
+hwtool agent doctor --project .
+
+# Symbol & footprint resolution
 hwtool agent resolve-symbols --project . --timeout 120
+hwtool agent jlc search "<keyword>" -n 5
+hwtool agent jlc download --lcsc-id C8734 --project .
+
+# IR build & validation
 hwtool agent build-ir --project .
 hwtool agent validate-ir --project .
+hwtool agent rule-check --project .
+
+# KiCad generation
+hwtool agent build-kicad-plan --project .
 hwtool agent export-kicad --project .
+
+# Reporting & history
 hwtool agent report --project . --markdown
+hwtool agent history --project .
+
+# Model editing
 hwtool agent patch --project . --payload-json '{...}'
 hwtool agent run <operation> --project . --payload-json '{...}'
+
+# Pin management
 hwtool agent pins free --project . --ref U1
 hwtool agent pins check --project .
-hwtool agent jlc search "STM32F103C8T6" -n 5
+
+# Self-test
+hwtool agent self-test
 ```
