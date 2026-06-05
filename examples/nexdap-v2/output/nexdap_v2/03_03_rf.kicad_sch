@@ -1,0 +1,336 @@
+(kicad_sch
+  (version 20250114)
+  (generator "kicad-agent-suite")
+  (generator_version "10.0")
+  (uuid "8ded9741-4b24-4377-85dd-a089ed1e35fa")
+  (paper "A4")
+  (lib_symbols
+    (symbol "JLC-MCP:2450AT18A100E"
+        (in_bom yes)
+        (on_board yes)
+        (property
+          "Reference"
+          "AE"
+          (id 0)
+          (at 0 8.89 0)
+          (effects (font (size 1.27 1.27) ) )
+        )
+        (property
+          "Value"
+          "2450AT18A100E"
+          (id 1)
+          (at 0 -10.16 0)
+          (effects (font (size 1.27 1.27) ) )
+        )
+        (property
+          "Footprint"
+          "JLC-MCP:ANT-SMD_L3.2-W1.6"
+          (id 2)
+          (at 0 -12.70 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "Datasheet"
+          "https://lcsc.com/product-detail/RF-Antenna_JOHANSON_2450AT18A100E_2450AT18A100E_C89334.html"
+          (id 3)
+          (at 0 -15.24 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "Manufacturer"
+          "JOHANSON(绾︾堪閫?"
+          (id 4)
+          (at 0 -17.78 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "MPN"
+          "2450AT18A100E"
+          (id 5)
+          (at 0 -20.32 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "LCSC Part"
+          "C89334"
+          (id 6)
+          (at 0 -22.86 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "ki_keywords"
+          "Antennas"
+          (id 8)
+          (at 0 -25.40 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (property
+          "ki_description"
+          "Mini 2.45 GHz Antenna, Johanson Technology"
+          (id 9)
+          (at 0 -27.94 0)
+          (effects (font (size 1.27 1.27) ) hide)
+        )
+        (symbol "2450AT18A100E_0_1"
+          (polyline
+            (pts
+              (xy 0.00 -0.00) (xy -2.54 2.54)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (polyline
+            (pts
+              (xy 2.54 2.54) (xy 0.00 -0.00)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (polyline
+            (pts
+              (xy 0.00 -0.00) (xy 0.00 -2.54)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (polyline
+            (pts
+              (xy 0.00 -0.00) (xy 0.00 3.81)
+            )
+            (stroke (width 0) (type default))
+            (fill (type none))
+          )
+          (pin unspecified line
+            (at 0.00 -5.08 90)
+            (length 2.54)
+            (name "ANT" (effects (font (size 1.27 1.27))))
+            (number "1" (effects (font (size 1.27 1.27))))
+          )
+          (pin unspecified line
+            (at 0.00 3.81 270)
+            (length 2.54)
+            (name "2" (effects (font (size 1.27 1.27))))
+            (number "2" (effects (font (size 1.27 1.27))))
+          )
+        )
+      )
+    (symbol "JLC-MCP:CC0603KRX7R9BB104_1_1"
+    			(pin passive line
+    				(at 0 2.54 270)
+    				(length 2.54)
+    				(name "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "1"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    			(pin passive line
+    				(at 0 -2.54 90)
+    				(length 2.54)
+    				(name "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    				(number "2"
+    					(effects
+    						(font
+    							(size 1.27 1.27)
+    						)
+    					)
+    				)
+    			)
+    		)
+    (symbol "JLC-MCP:INDUCTOR_2P_1_1"
+    			(pin passive line
+    				(at -5.08 0 0)
+    				(length 2.54)
+    				(name "1" (effects (font (size 1 1))))
+    				(number "1" (effects (font (size 1 1))))
+    			)
+    			(pin passive line
+    				(at 5.08 0 180)
+    				(length 2.54)
+    				(name "2" (effects (font (size 1 1))))
+    				(number "2" (effects (font (size 1 1))))
+    			)
+    		)
+  )
+  (symbol
+    (lib_id "JLC-MCP:INDUCTOR_2P_1_1")
+    (at 50.8 50.8 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "e9e8d531-9672-4fec-a3af-0d99b4881425")
+    (property "Reference" "L_RF" (at 50.8 45.72 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "3.9nH" (at 50.8 55.88 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:IND-SMD_L1.2-W0.7" (at 50.8 50.8 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C285959" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "MPN" "CS0402-3N9G-S" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "86a0216d-6202-4fbb-bc75-270b8078e111"))
+      (pin "2" (uuid "20556a20-1baf-4224-a994-0b84061c29e7"))
+    (instances
+      (project "nexdap_v2"
+        (path "/a1747641-a659-46d7-9fb9-a082997d4a2d"
+          (reference "L_RF")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP:CC0603KRX7R9BB104_1_1")
+    (at 50.8 83.82 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "21f32250-3f21-49dc-aace-65ffb4d74136")
+    (property "Reference" "C_RF_SHUNT" (at 50.8 78.74 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "1.2pF" (at 50.8 88.9 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:C0603" (at 50.8 83.82 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C1653" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "fa5ac278-4c38-4c26-8d37-28324aa87d0e"))
+      (pin "2" (uuid "d864b4ba-7235-4cf5-bc0d-f4de943a73a8"))
+    (instances
+      (project "nexdap_v2"
+        (path "/a1747641-a659-46d7-9fb9-a082997d4a2d"
+          (reference "C_RF_SHUNT")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (symbol
+    (lib_id "JLC-MCP:2450AT18A100E")
+    (at 50.8 129.54 0)
+    (unit 1)
+    (exclude_from_sim no)
+    (in_bom yes)
+    (on_board yes)
+    (dnp no)
+    (uuid "c83800d2-0408-45f7-b820-ff50ae45d579")
+    (property "Reference" "ANT1" (at 50.8 124.46 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Value" "2450AT18A100E" (at 50.8 134.62 0)
+      (effects (font (size 1.27 1.27)))
+    )
+    (property "Footprint" "JLC-MCP:ANT-SMD_L3.2-W1.6" (at 50.8 129.54 0)
+      (hide yes)
+      (effects (font (size 1.27 1.27)))
+    )
+      (property "LCSC" "C89334" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (property "MPN" "2450AT18A100E" (at 0 0 0)
+        (hide yes)
+        (effects (font (size 1.27 1.27)))
+      )
+      (pin "1" (uuid "ad86c6b0-d272-462f-9c53-7b4f13849110"))
+      (pin "2" (uuid "8f09020a-218c-4ce2-918a-708d4aa4aa3e"))
+    (instances
+      (project "nexdap_v2"
+        (path "/a1747641-a659-46d7-9fb9-a082997d4a2d"
+          (reference "ANT1")
+          (unit 1)
+        )
+      )
+    )
+  )
+  (wire (pts (xy 45.72 50.8) (xy 41.91 50.8))
+    (stroke (width 0) (type default))
+    (uuid "451ecaee-c9d6-4023-9154-c98408fb8d81")
+  )
+  (global_label "ESP_RF_OUT" (shape bidirectional) (at 41.91 50.8 0)
+    (effects (font (size 1.27 1.27)) (justify right))
+    (uuid "9ed6ad4a-4750-43ef-a364-4e978ac65bd9")
+  )
+  (wire (pts (xy 55.88 50.8) (xy 59.69 50.8))
+    (stroke (width 0) (type default))
+    (uuid "0ece1d4c-f9b7-4b93-8695-e3e761d782e7")
+  )
+  (label "RF_ANT" (at 59.69 50.8 0)
+    (effects (font (size 1.27 1.27)) (justify left))
+    (uuid "e9fc99d8-102d-4676-9972-713d9074fa07")
+  )
+  (wire (pts (xy 50.8 81.28) (xy 50.8 77.47))
+    (stroke (width 0) (type default))
+    (uuid "61ef37cd-13f8-4cb0-83ae-8b03f8965b4a")
+  )
+  (label "RF_ANT" (at 50.8 77.47 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "3c2eb32f-406e-48bc-a55b-fd59c4f274e0")
+  )
+  (wire (pts (xy 50.8 86.36) (xy 50.8 90.17))
+    (stroke (width 0) (type default))
+    (uuid "c0661fa9-55e9-45d1-9cbc-301edeacd16a")
+  )
+  (global_label "GND_HOST" (shape input) (at 50.8 90.17 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "0a3be439-5c59-40f6-b038-3ec89aa7976b")
+  )
+  (wire (pts (xy 50.8 134.62) (xy 50.8 138.43))
+    (stroke (width 0) (type default))
+    (uuid "4adc392c-42f5-475f-8938-557ee833d6b1")
+  )
+  (global_label "GND_HOST" (shape input) (at 50.8 138.43 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "b980f8e1-e07e-4854-99b7-f184a435f123")
+  )
+  (wire (pts (xy 50.8 125.73) (xy 50.8 121.92))
+    (stroke (width 0) (type default))
+    (uuid "d4ecc0fe-4155-47cb-a77f-04f1516974cf")
+  )
+  (label "RF_ANT" (at 50.8 121.92 0)
+    (effects (font (size 1.27 1.27)))
+    (uuid "7f71070f-cd35-485f-ae17-599c43d8fec4")
+  )
+  (sheet_instances
+    (path "/" (page "1"))
+    (path "/09186f8d-037a-4d51-ac54-94bf62dc6548" (page "2"))
+    (path "/ec51b807-8c94-4b45-ae44-0e830907b234" (page "3"))
+    (path "/a1747641-a659-46d7-9fb9-a082997d4a2d" (page "4"))
+    (path "/e4bef373-17c2-4450-911f-6cd3a498be24" (page "5"))
+    (path "/101e4e91-00a5-4642-83e8-1d3deb98686d" (page "6"))
+  )
+)

@@ -1,0 +1,1660 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-06-06T02:52:01",
+    "ignored_checks": [
+        {
+            "description": "Pin not connected",
+            "key": "pin_not_connected"
+        },
+        {
+            "description": "Unconnected \"no connection\" flag",
+            "key": "no_connect_dangling"
+        },
+        {
+            "description": "Label not connected",
+            "key": "label_dangling"
+        },
+        {
+            "description": "Label connected to only one pin",
+            "key": "isolated_pin_label"
+        },
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "Unconnected wire endpoint",
+            "key": "unconnected_wire_endpoint"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Symbol doesn't match copy in library",
+            "key": "lib_symbol_mismatch"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.1",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/a18b22b6-be90-4563-864a-efd0cea64aa7",
+            "violations": []
+        },
+        {
+            "path": "/01_power/",
+            "uuid_path": "/a18b22b6-be90-4563-864a-efd0cea64aa7/09186f8d-037a-4d51-ac54-94bf62dc6548",
+            "violations": [
+                {
+                    "description": "Input Power pin not driven by any Output Power pins",
+                    "items": [
+                        {
+                            "description": "Symbol C_BUCK_OUT 引脚 1 [1, Input, Line]",
+                            "pos": {
+                                "x": 1.2573,
+                                "y": 3.429
+                            },
+                            "uuid": "9d8e9765-d4ed-4818-8770-ac56800590c9"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "power_pin_not_driven"
+                },
+                {
+                    "description": "Input pin not driven by any Output pins",
+                    "items": [
+                        {
+                            "description": "Symbol R_BUCK_FB1 引脚 2 [2, Input, Line]",
+                            "pos": {
+                                "x": 1.3462,
+                                "y": 3.6576
+                            },
+                            "uuid": "2953e210-86f5-476b-bab1-64afb121905c"
+                        }
+                    ],
+                    "severity": "error",
+                    "type": "pin_not_driven"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol F1 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.508
+                            },
+                            "uuid": "b11fc3ef-d204-4426-8573-6460f045d1aa"
+                        },
+                        {
+                            "description": "Symbol #FLG103 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.3716
+                            },
+                            "uuid": "ec5cfc8b-cbab-4c7d-925c-07890c896e8b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol F1 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.508
+                            },
+                            "uuid": "b242b16f-0172-4ad3-b0e0-ec1ed63be164"
+                        },
+                        {
+                            "description": "Symbol #FLG101 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2192
+                            },
+                            "uuid": "f21e343d-1c69-4cef-bdc1-c78064cae389"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol D_VBUS_TVS 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.7874
+                            },
+                            "uuid": "eed374d3-a90b-420f-a1bd-a9b603c04fba"
+                        },
+                        {
+                            "description": "Symbol F1 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.508
+                            },
+                            "uuid": "b11fc3ef-d204-4426-8573-6460f045d1aa"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol D_VBUS_TVS 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.7874
+                            },
+                            "uuid": "1e8c0aca-eb25-41e4-87e4-9834f8c86e0d"
+                        },
+                        {
+                            "description": "Symbol #FLG102 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2954
+                            },
+                            "uuid": "ce1ebab9-b986-47f6-8810-bfaec52ac2f9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_BUCK 引脚 4 [VIN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 2.3622
+                            },
+                            "uuid": "17197ad3-3dc0-47ca-b6a3-7e63640a37fb"
+                        },
+                        {
+                            "description": "Symbol D_USB_ESD 引脚 5 [5, Input, Line]",
+                            "pos": {
+                                "x": 1.4605,
+                                "y": 2.032
+                            },
+                            "uuid": "1f9f75b3-cda7-4bd8-b32d-6f9a8340856e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_BUCK 引脚 1 [EN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 2.4384
+                            },
+                            "uuid": "cb3d769b-0e32-44a8-8d1a-19a300ec38a6"
+                        },
+                        {
+                            "description": "Symbol U_BUCK 引脚 4 [VIN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 2.3622
+                            },
+                            "uuid": "17197ad3-3dc0-47ca-b6a3-7e63640a37fb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol C_BUCK_IN_HF 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 2.6924
+                            },
+                            "uuid": "90bc9999-d761-427c-9959-da5780918459"
+                        },
+                        {
+                            "description": "Symbol U_BUCK 引脚 1 [EN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.1938,
+                                "y": 2.4384
+                            },
+                            "uuid": "cb3d769b-0e32-44a8-8d1a-19a300ec38a6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol C_BUCK_IN_HF 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 2.6924
+                            },
+                            "uuid": "2bf7e1b4-73b7-4505-ade3-925a61c800ef"
+                        },
+                        {
+                            "description": "Symbol U_BUCK 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.2954,
+                                "y": 2.4892
+                            },
+                            "uuid": "3b12e740-7601-44b3-a775-b2bac82756e0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_BUCK 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.2954,
+                                "y": 2.4892
+                            },
+                            "uuid": "3b12e740-7601-44b3-a775-b2bac82756e0"
+                        },
+                        {
+                            "description": "Symbol C_BUCK_IN 引脚 2 [2, Input, Line]",
+                            "pos": {
+                                "x": 1.3335,
+                                "y": 2.9718
+                            },
+                            "uuid": "5201bbae-1a73-42ad-aadd-9fabcd0c8d08"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_BUCK 引脚 5 [FB, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.397,
+                                "y": 2.4384
+                            },
+                            "uuid": "e0009270-8457-4d5f-90e6-450ca58169a3"
+                        },
+                        {
+                            "description": "Symbol R_BUCK_FB1 引脚 2 [2, Input, Line]",
+                            "pos": {
+                                "x": 1.3462,
+                                "y": 3.6576
+                            },
+                            "uuid": "2953e210-86f5-476b-bab1-64afb121905c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol L_BUCK 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.2446,
+                                "y": 2.7432
+                            },
+                            "uuid": "51c0d068-ad93-44f6-a069-ecdc249c4402"
+                        },
+                        {
+                            "description": "Symbol U_BUCK 引脚 3 [SW, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.397,
+                                "y": 2.3622
+                            },
+                            "uuid": "85783812-2d54-4f0a-a6fd-dda22b17f0f1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol L_BUCK 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.3462,
+                                "y": 2.7432
+                            },
+                            "uuid": "5d6944d3-4357-4c98-b463-d4bab2ac82e5"
+                        },
+                        {
+                            "description": "Symbol C_BUCK_OUT 引脚 1 [1, Input, Line]",
+                            "pos": {
+                                "x": 1.2573,
+                                "y": 3.429
+                            },
+                            "uuid": "9d8e9765-d4ed-4818-8770-ac56800590c9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol C_BUCK_OUT_HF 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.143,
+                                "y": 3.2004
+                            },
+                            "uuid": "08016709-c82a-4b4f-aecd-b52f81d37c16"
+                        },
+                        {
+                            "description": "Symbol C_BUCK_OUT 引脚 1 [1, Input, Line]",
+                            "pos": {
+                                "x": 1.2573,
+                                "y": 3.429
+                            },
+                            "uuid": "9d8e9765-d4ed-4818-8770-ac56800590c9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol C_BUCK_OUT_HF 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.2446,
+                                "y": 3.2004
+                            },
+                            "uuid": "14a01068-b1ed-41fb-9c4a-5b4788f13a23"
+                        },
+                        {
+                            "description": "Symbol C_BUCK_IN 引脚 2 [2, Input, Line]",
+                            "pos": {
+                                "x": 1.3335,
+                                "y": 2.9718
+                            },
+                            "uuid": "5201bbae-1a73-42ad-aadd-9fabcd0c8d08"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/04_target/",
+            "uuid_path": "/a18b22b6-be90-4563-864a-efd0cea64aa7/e4bef373-17c2-4450-911f-6cd3a498be24",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_NRST 引脚 3 [D, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 1.8542
+                            },
+                            "uuid": "624b582a-c021-4419-bacb-9615ff405f55"
+                        },
+                        {
+                            "description": "Symbol R_NRST_PU 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.2987
+                            },
+                            "uuid": "dfb2f6a9-b64c-492d-991e-b3f76187749c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Bidirectional 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_NRST 引脚 1 [G, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 1.905
+                            },
+                            "uuid": "92a14cb1-3a7d-40f4-8f32-e7ed63518715"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 15 [GPIO12, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8255,
+                                "y": 5.7912
+                            },
+                            "uuid": "c714fc48-d4aa-4313-b6ed-3564c9986e16"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_NRST 引脚 2 [S, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 1.9558
+                            },
+                            "uuid": "a62cedc3-84ef-4b29-a1bd-2c44b0827d07"
+                        },
+                        {
+                            "description": "Symbol R_VTREF_DIV2 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.3843
+                            },
+                            "uuid": "8ce1bc71-fc30-4953-9f8c-42f77c24b3e6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "TGT_SWCLK 和 TGT_nRESET 都连接到同一项上; 将使用 TGT_SWCLK 作为网表中的网络名称",
+                    "items": [
+                        {
+                            "description": "标签 'TGT_SWCLK'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 3.175
+                            },
+                            "uuid": "0fa0fd70-daf5-4a3c-ad68-42c18c7ad5e2"
+                        },
+                        {
+                            "description": "标签 'TGT_nRESET'",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.0894
+                            },
+                            "uuid": "3daaf173-3267-46da-9a69-7cf78bd34ada"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "multiple_net_names"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol JP_TGT_PWR 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4699,
+                                "y": 5.1689
+                            },
+                            "uuid": "0d07c51a-3dac-410b-a2f0-acf81007e1b2"
+                        },
+                        {
+                            "description": "Symbol F_TGT 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 4.4704
+                            },
+                            "uuid": "153ae896-0c70-455f-a9bf-9ea806315455"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol JP_TGT_PWR 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4699,
+                                "y": 5.1943
+                            },
+                            "uuid": "82387532-02d5-43d1-ba01-a2c15ce3f8cf"
+                        },
+                        {
+                            "description": "Symbol #FLG400 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "d0fdb4af-a108-4081-bcd3-5f2d89f81b64"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/02_mcu/",
+            "uuid_path": "/a18b22b6-be90-4563-864a-efd0cea64aa7/ec51b807-8c94-4b45-ae44-0e830907b234",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 1 [LNA_IN, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.3302
+                            },
+                            "uuid": "731447bf-ab4a-4825-928e-4f86fe3f5b22"
+                        },
+                        {
+                            "description": "Symbol L_RF 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.508
+                            },
+                            "uuid": "86a0216d-6202-4fbb-bc75-270b8078e111"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 2 [VDD3P3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.3556
+                            },
+                            "uuid": "a5f89cf8-ca1e-4fd1-b694-f83cd1dd1009"
+                        },
+                        {
+                            "description": "Symbol U_ESP32 引脚 3 [VDD3P3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.381
+                            },
+                            "uuid": "2f37c0ae-7ffd-4ed9-b4fc-0a351e0aa9bc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 3 [VDD3P3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.381
+                            },
+                            "uuid": "2f37c0ae-7ffd-4ed9-b4fc-0a351e0aa9bc"
+                        },
+                        {
+                            "description": "Symbol U_ESP32 引脚 11 [VDD3P3_RTC, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.5842
+                            },
+                            "uuid": "e1fcdf3c-2cda-4830-8488-726c1304ff8f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 6 [GPIO2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.4572
+                            },
+                            "uuid": "80f100dd-51c1-4e16-8ce7-9df49d87637c"
+                        },
+                        {
+                            "description": "Symbol R_ESP_GPIO2 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.6543
+                            },
+                            "uuid": "705b861b-d876-4c54-899d-cc3fca83d44a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 7 [CHIP_EN, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.4826
+                            },
+                            "uuid": "c82f2818-437d-4ff6-a326-3279598c0180"
+                        },
+                        {
+                            "description": "Symbol R_ESP_EN 引脚 2 [2, Input, Line]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 0.9906
+                            },
+                            "uuid": "819d8e45-ec42-41d8-95ad-76fb41f47bf9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 8 [GPIO3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.508
+                            },
+                            "uuid": "6c35b265-1cc6-45ed-937d-15a59e958f3a"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 26 [RUN, Input, Line]",
+                            "pos": {
+                                "x": 0.1905,
+                                "y": 6.0198
+                            },
+                            "uuid": "45027024-31be-4770-b5b4-daf3a0a487a5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 9 [MTMS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.5334
+                            },
+                            "uuid": "6df3b4d6-58e6-4287-b1c1-f09b7a230fcb"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 24 [SWCLK, Output, Line]",
+                            "pos": {
+                                "x": 0.1905,
+                                "y": 6.1341
+                            },
+                            "uuid": "59416e1f-d564-48cf-bd29-ffce27ff7b6d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Bidirectional 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 10 [MTDI, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.5588
+                            },
+                            "uuid": "d2f894af-2514-456a-a234-6980d915a9b6"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 4 [GPIO2, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8255,
+                                "y": 5.5372
+                            },
+                            "uuid": "e1dda674-baa7-4b99-911b-71b950ca7830"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 11 [VDD3P3_RTC, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.5842
+                            },
+                            "uuid": "e1fcdf3c-2cda-4830-8488-726c1304ff8f"
+                        },
+                        {
+                            "description": "Symbol U_ESP32 引脚 17 [VDD3P3_CPU, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.7112
+                            },
+                            "uuid": "b46fd41f-7f71-4748-8959-74f6ccffed23"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Bidirectional 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 12 [MTCK, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.6096
+                            },
+                            "uuid": "13e29d7e-2761-4dda-b21e-dd5539d982df"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 12 [GPIO9, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8255,
+                                "y": 5.715
+                            },
+                            "uuid": "6be96b26-7c31-4e7a-815e-e60dcaf3acfd"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Bidirectional 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 13 [MTDO, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.635
+                            },
+                            "uuid": "4469e891-77a1-4a8c-ab43-682a00f972a8"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 11 [GPIO8, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8255,
+                                "y": 5.6896
+                            },
+                            "uuid": "37fd545b-2d31-4ca9-81ee-a0c93fedd7f0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 14 [GPIO8, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.6604
+                            },
+                            "uuid": "6908ee02-41d7-4fe0-ba74-918c80d01c67"
+                        },
+                        {
+                            "description": "Symbol R_ESP_GPIO8 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 2.1971
+                            },
+                            "uuid": "cfcc6644-af1b-4bf2-8f29-172172959847"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 15 [GPIO9, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.6858
+                            },
+                            "uuid": "3497e49a-cda2-49a5-b636-dd45b0814686"
+                        },
+                        {
+                            "description": "Symbol R_ESP_BOOT 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.7399
+                            },
+                            "uuid": "9ddf389a-ed01-4436-9b8c-91fc3e0cd7b0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 33 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.3048
+                            },
+                            "uuid": "4e166297-1a07-4e77-b495-137b6bf3c81f"
+                        },
+                        {
+                            "description": "Symbol C_ESP_EN 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.3462
+                            },
+                            "uuid": "6fb526a1-3c9b-4b85-961b-ca1d08f22bd2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 32 [VDDA, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.3302
+                            },
+                            "uuid": "8107a192-9d73-4ff0-9bd1-a8b781cf9971"
+                        },
+                        {
+                            "description": "Symbol R_ESP_EN 引脚 1 [1, Input, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 0.9906
+                            },
+                            "uuid": "f9e8afbb-61a8-4759-b310-7746f017caae"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Bidirectional 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 16 [GPIO10, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.3175,
+                                "y": 0.7112
+                            },
+                            "uuid": "9ad816bb-362c-41cb-b528-4ea50292eebf"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 5 [GPIO3, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8255,
+                                "y": 5.5626
+                            },
+                            "uuid": "4d03fd6f-14f4-48a7-b3ee-8a8426c8a644"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 31 [VDDA, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.3556
+                            },
+                            "uuid": "0eeda587-aa21-41f9-b5a0-69bfd3c0db79"
+                        },
+                        {
+                            "description": "Symbol U_ESP32 引脚 32 [VDDA, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.3302
+                            },
+                            "uuid": "8107a192-9d73-4ff0-9bd1-a8b781cf9971"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 30 [XTAL_P, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.381
+                            },
+                            "uuid": "f6370780-7970-4c08-9e8e-1e8bdf46459b"
+                        },
+                        {
+                            "description": "Symbol Y_ESP32 引脚 1 [OSC1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4318,
+                                "y": 4.1656
+                            },
+                            "uuid": "232cdf67-03fa-45d0-8c24-652455235281"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 29 [XTAL_N, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.4064
+                            },
+                            "uuid": "6d3262ad-26fd-4e8c-88df-d54673e8bcea"
+                        },
+                        {
+                            "description": "Symbol Y_ESP32 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.1656
+                            },
+                            "uuid": "69ba4b0b-28a6-4eed-80ed-a8351eb0ceb0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Bidirectional 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 28 [U0TXD, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.4318
+                            },
+                            "uuid": "ee2f2415-7f65-437d-ac0e-d45bab94dc1e"
+                        },
+                        {
+                            "description": "Symbol U_RP2040 引脚 14 [GPIO11, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.8255,
+                                "y": 5.7658
+                            },
+                            "uuid": "797c1ba7-be16-4cf9-912f-8c8c81a57a33"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 27 [U0RXD, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.4572
+                            },
+                            "uuid": "cd69c4cf-1096-41b5-ab99-96a772a512db"
+                        },
+                        {
+                            "description": "Symbol R_RP_BOOTSEL_GATE 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 9.1567
+                            },
+                            "uuid": "5e2afc85-2999-414c-be64-03e16d4f68bc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 26 [GPIO19, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.4826
+                            },
+                            "uuid": "23491c21-8c74-46a8-9976-3ca9406dd56f"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B6 [Dp2, Passive, Line]",
+                            "pos": {
+                                "x": 1.1684,
+                                "y": 0.5715
+                            },
+                            "uuid": "cd231cf4-aa1f-4e28-98be-7df8fdda15e2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 25 [GPIO18, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.508
+                            },
+                            "uuid": "32b2ed14-2c21-4e1f-9fc9-eef82f9bb53a"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B7 [Dn2, Passive, Line]",
+                            "pos": {
+                                "x": 1.1684,
+                                "y": 0.4699
+                            },
+                            "uuid": "df6df9b7-bb0f-4d0d-bcfd-af193aac3a88"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_ESP32 引脚 17 [VDD3P3_CPU, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.7112
+                            },
+                            "uuid": "b46fd41f-7f71-4748-8959-74f6ccffed23"
+                        },
+                        {
+                            "description": "Symbol U_ESP32 引脚 31 [VDDA, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 0.3556
+                            },
+                            "uuid": "0eeda587-aa21-41f9-b5a0-69bfd3c0db79"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 4 [4, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4953,
+                                "y": 3.1242
+                            },
+                            "uuid": "4985198f-c39b-4d14-b57c-17d7a3948728"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 5 [5, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.1242
+                            },
+                            "uuid": "46182103-f3f6-4524-b3e9-23b79a8b0963"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 5 [5, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.1242
+                            },
+                            "uuid": "46182103-f3f6-4524-b3e9-23b79a8b0963"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 6 [6, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.1242
+                            },
+                            "uuid": "35b2683d-4fb2-482c-9f28-1b480466ed32"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 6 [6, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.1242
+                            },
+                            "uuid": "35b2683d-4fb2-482c-9f28-1b480466ed32"
+                        },
+                        {
+                            "description": "Symbol C_ESP_XTAL1 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.5212
+                            },
+                            "uuid": "f9fc7431-f0dd-491d-9aca-593b9e5c8ef9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4953,
+                                "y": 3.2766
+                            },
+                            "uuid": "6d2555b4-9ff3-4c0a-8efc-48e19db4ddf1"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.2766
+                            },
+                            "uuid": "3847b98f-6280-4beb-acb4-5c60f5c4e3bf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.2766
+                            },
+                            "uuid": "3847b98f-6280-4beb-acb4-5c60f5c4e3bf"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 3 [3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.2766
+                            },
+                            "uuid": "dc112e04-db31-4190-bf45-f26db8eac63a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 3 [3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.2766
+                            },
+                            "uuid": "dc112e04-db31-4190-bf45-f26db8eac63a"
+                        },
+                        {
+                            "description": "Symbol C_ESP_EN 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.2954
+                            },
+                            "uuid": "e98d2422-1dbd-42cb-9782-f234260ff2e7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 4 [4, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4953,
+                                "y": 3.6576
+                            },
+                            "uuid": "b3d2ac15-e96f-4e1f-b867-b4547721fdfb"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 5 [5, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.6576
+                            },
+                            "uuid": "8dd6e62e-e705-4665-a7bc-77b623ac6134"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 5 [5, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.6576
+                            },
+                            "uuid": "8dd6e62e-e705-4665-a7bc-77b623ac6134"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 6 [6, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.6576
+                            },
+                            "uuid": "ee02df55-cd38-4287-a89b-4299c5529fdb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 6 [6, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.6576
+                            },
+                            "uuid": "ee02df55-cd38-4287-a89b-4299c5529fdb"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_RST 引脚 6 [6, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.1242
+                            },
+                            "uuid": "35b2683d-4fb2-482c-9f28-1b480466ed32"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4953,
+                                "y": 3.81
+                            },
+                            "uuid": "64757210-0280-47e9-8f2b-f30ecf4b9fa3"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.81
+                            },
+                            "uuid": "08959a2f-463b-4119-a1fe-86c12c54931e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 3.81
+                            },
+                            "uuid": "08959a2f-463b-4119-a1fe-86c12c54931e"
+                        },
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 3 [3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.81
+                            },
+                            "uuid": "754d7e1c-63d2-4a1d-ba85-0ef9f3c1e9bf"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol SW_ESP_BOOT 引脚 3 [3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 3.81
+                            },
+                            "uuid": "754d7e1c-63d2-4a1d-ba85-0ef9f3c1e9bf"
+                        },
+                        {
+                            "description": "Symbol R_ESP_BOOT 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.7399
+                            },
+                            "uuid": "9ddf389a-ed01-4436-9b8c-91fc3e0cd7b0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Y_ESP32 引脚 1 [OSC1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4318,
+                                "y": 4.1656
+                            },
+                            "uuid": "232cdf67-03fa-45d0-8c24-652455235281"
+                        },
+                        {
+                            "description": "Symbol C_ESP_XTAL1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.4704
+                            },
+                            "uuid": "6bbf9199-1974-4b1c-94f0-48ae5a39eef8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Y_ESP32 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.1656
+                            },
+                            "uuid": "69ba4b0b-28a6-4eed-80ed-a8351eb0ceb0"
+                        },
+                        {
+                            "description": "Symbol C_ESP_XTAL2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 4.9022
+                            },
+                            "uuid": "e4f5d8e0-eae6-48da-9031-8a67c1d31764"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 50 [DVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 5.3086
+                            },
+                            "uuid": "0faa1806-1fae-4fa1-ba3f-8d491955eb4c"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "61b0857f-6cb1-436a-bb00-19a9cd58d577"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 23 [DVDD, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.3302,
+                                "y": 5.3086
+                            },
+                            "uuid": "c5843525-6011-4768-9f70-30d729fa3801"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "61b0857f-6cb1-436a-bb00-19a9cd58d577"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 45 [VREG_VOUT, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.381,
+                                "y": 5.3086
+                            },
+                            "uuid": "92ef41cd-c5c9-4975-b07c-8984469ad7af"
+                        },
+                        {
+                            "description": "Symbol #FLG100 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.143
+                            },
+                            "uuid": "61b0857f-6cb1-436a-bb00-19a9cd58d577"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Bidirectional 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U_RP2040 引脚 57 [GND, Bidirectional, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 6.3246
+                            },
+                            "uuid": "66d5d71b-850f-433d-882e-791bdbe81cef"
+                        },
+                        {
+                            "description": "Symbol #FLG102 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 1.2954
+                            },
+                            "uuid": "ce1ebab9-b986-47f6-8810-bfaec52ac2f9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_RP_BOOTSEL 引脚 3 [D, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 8.5852
+                            },
+                            "uuid": "35740b81-422e-4240-b1e1-0b81f5743f2b"
+                        },
+                        {
+                            "description": "Symbol U_FLASH 引脚 1 [CS#, Output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 6.6675
+                            },
+                            "uuid": "a80e801c-513a-4eb0-a77c-05719a6905d0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_RP_BOOTSEL 引脚 1 [G, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.4572,
+                                "y": 8.636
+                            },
+                            "uuid": "9d25c817-865d-4d24-9215-d2d0c46a60c1"
+                        },
+                        {
+                            "description": "Symbol R_RP_BOOTSEL_GATE 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 9.0805
+                            },
+                            "uuid": "c500ffa9-8978-4545-9916-796e978a208c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q_RP_BOOTSEL 引脚 2 [S, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 8.6868
+                            },
+                            "uuid": "db6dd785-1e29-4585-8ee3-865ac58e327d"
+                        },
+                        {
+                            "description": "Symbol C_RP_XTAL2 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 8.2042
+                            },
+                            "uuid": "d746cfb3-992e-4815-bbf7-d075076b86e1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        },
+        {
+            "path": "/05_indicator/",
+            "uuid_path": "/a18b22b6-be90-4563-864a-efd0cea64aa7/101e4e91-00a5-4642-83e8-1d3deb98686d",
+            "violations": []
+        },
+        {
+            "path": "/03_rf/",
+            "uuid_path": "/a18b22b6-be90-4563-864a-efd0cea64aa7/a1747641-a659-46d7-9fb9-a082997d4a2d",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol ANT1 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.2573
+                            },
+                            "uuid": "8f09020a-218c-4ce2-918a-708d4aa4aa3e"
+                        },
+                        {
+                            "description": "Symbol C_RF_SHUNT 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.8128
+                            },
+                            "uuid": "fa5ac278-4c38-4c26-8d37-28324aa87d0e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol ANT1 引脚 1 [ANT, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 1.3462
+                            },
+                            "uuid": "ad86c6b0-d272-462f-9c53-7b4f13849110"
+                        },
+                        {
+                            "description": "Symbol C_RF_SHUNT 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.508,
+                                "y": 0.8636
+                            },
+                            "uuid": "d864b4ba-7235-4cf5-bc0d-f4de943a73a8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        }
+    ],
+    "source": "nexdap_v2.kicad_sch"
+}

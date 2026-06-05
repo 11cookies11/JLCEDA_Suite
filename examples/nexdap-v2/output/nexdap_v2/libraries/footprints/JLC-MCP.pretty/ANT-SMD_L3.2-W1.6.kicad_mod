@@ -1,0 +1,210 @@
+(footprint "ANT-SMD_L3.2-W1.6"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "Mini 2.45 GHz Antenna, Johanson Technology")
+	(property "Reference" "REF**"
+		(at 0 -4 0)
+		(layer "F.SilkS")
+		(uuid "1ae57c40-2812-4cbf-8bc2-c2a0f6a219fe")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "ANT-SMD_L3.2-W1.6"
+		(at 0 4 0)
+		(layer "F.Fab")
+		(uuid "f1eac156-33b9-4c08-884c-65e57eb19d38")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "96a9d128-6875-4ad0-847c-86d4c013322c")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4188056b-1d6d-4568-ad47-7501e2440028")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "LCSC Part" "C89334"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3072283f-45f4-42dd-84d1-f9d6054bdc99")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -1.68 -1.06)
+		(end 1.68 -1.05)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ee0d67d5-da5d-4f34-a784-9f8bb5e629ea")
+	)
+	(fp_line
+		(start -0.76 -0.25)
+		(end -0.76 0.25)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ae11b562-5162-4075-a6cc-2c7ebeff834e")
+	)
+	(fp_line
+		(start -0.76 0.25)
+		(end -0.25 0.25)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "44a89f4b-849a-4858-a70d-c1a39e654631")
+	)
+	(fp_line
+		(start -0.25 -0.25)
+		(end -0.76 -0.25)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "2984806a-7287-476a-9719-5d8f7e4816f8")
+	)
+	(fp_line
+		(start -0.25 0.25)
+		(end -0.25 -0.25)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3a12e409-d858-49c3-98d6-a1fcdaaeb813")
+	)
+	(fp_line
+		(start 1.52 1.05)
+		(end -1.68 1.05)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f8e5f6e0-ca3c-4bf7-ba64-860e5f673c3c")
+	)
+	(fp_circle
+		(center -1.6 0.8)
+		(end -1.57 0.8)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "9428367f-333f-4e82-a681-8566545a6b24")
+	)
+	(fp_line
+		(start -1.6 -0.8)
+		(end 1.6 -0.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "2738ec8b-1ef0-4094-aef7-7593f1c71bc4")
+	)
+	(fp_line
+		(start -1.6 0.8)
+		(end -1.6 -0.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "d287af0c-cd8e-4505-97a4-31b057961837")
+	)
+	(fp_line
+		(start 1.6 -0.8)
+		(end 1.6 0.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "4a53cfb9-595d-41e8-abde-a4dcaab8bd95")
+	)
+	(fp_line
+		(start 1.6 0.8)
+		(end -1.6 0.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "681e2a5b-ad74-4785-8052-fd72ce7b3119")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "1b785a3a-9d1a-40b6-876b-df6add44dfdd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -1.58 0)
+		(size 1 1.75)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "5a0d6734-9660-4df9-88c3-1ebf2c0f58e5")
+	)
+	(pad "2" smd rect
+		(at 1.58 0)
+		(size 1 1.75)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "6c37369b-8e08-448d-b494-34db3a6ca0b6")
+	)
+	(embedded_fonts no)
+	(model "libraries/3dmodels/JLC-MCP.3dshapes/Crystal_SMD_3225-4Pin_3.2x2.5mm.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 180)
+		)
+	)
+)
