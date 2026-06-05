@@ -1002,7 +1002,7 @@ def _agent_resolve_symbols_handler(args: argparse.Namespace) -> int:
     model_path = _agent_model_path(args)
     model = load_circuit_model(model_path)
     timeout = getattr(args, "timeout", 120) or 120
-    delay = getattr(args, "delay", 0) or 0
+    delay = getattr(args, "delay", 2.0) or 2.0
     t0 = _time.monotonic()
     result = PartResolutionService().resolve_symbols(
         project_path,

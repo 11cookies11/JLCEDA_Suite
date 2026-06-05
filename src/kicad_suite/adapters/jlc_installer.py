@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import random
 import re
 from pathlib import Path
 from typing import Any
@@ -141,7 +142,7 @@ def resolve_missing_symbols(
     model: dict[str, Any],
     timeout: float = 120.0,
     *,
-    delay: float = 0,
+    delay: float = 2.0,
     model_path: Path | None = None,
 ) -> dict[str, Any]:
     """Auto-resolve all components in *model* by searching EasyEDA.
@@ -152,12 +153,17 @@ def resolve_missing_symbols(
     3. Minimal 2-pin placeholder as last resort
 
     *delay* (seconds) is inserted between API calls to avoid rate-limiting.
-    Default 0.8 s mimics human-paced interaction with the JLC search endpoint.
+    Default 2.0 s, with ±50 % jitter, yielding 1–3 s gaps between sequential
+    components so a batch of 30 parts spreads across 1–2 minutes.
 
     Components that successfully resolve get ``selected_part`` written
     back into *model* so the build step can find their symbols.
     """
     import time as _time
+
+    def _jittered_sleep(base: float) -> None:
+        """Sleep for *base* seconds ±50 % to break up bot-like timing patterns."""
+        _time.sleep(base * random.uniform(0.5, 1.5))
 
     components = model.get("components", [])
     if not isinstance(components, list):
@@ -211,7 +217,7 @@ def resolve_missing_symbols(
                         "error": str(inst.get("error", "selected_part_install_failed")),
                     }
                 )
-            _time.sleep(delay)
+            _jittered_sleep(delay)
             continue
 
         if _time.monotonic() > deadline:
@@ -228,7 +234,7 @@ def resolve_missing_symbols(
         # -- pass 1: search_hints from DSL (AI agent controls this) ----------
         if hints and isinstance(hints, list):
             for hint in hints:
-                _time.sleep(delay)
+                _jittered_sleep(delay)
                 results = jlc_api.search(str(hint), limit=3)
                 if results:
                     inst = _try_install_candidates(results, project_path)
@@ -244,13 +250,13 @@ def resolve_missing_symbols(
                     inst.get("package", ""),
                     symbol_ref=str(inst.get("symbol_ref", "")),
                 )
-                _time.sleep(delay)
+                _jittered_sleep(delay)
                 continue
 
         # -- pass 2: value + package (automatic) ----------------------------
         specific_query = f"{value} {package}".strip()
         if specific_query:
-            _time.sleep(delay)
+            _jittered_sleep(delay)
             results = jlc_api.search(specific_query, limit=3)
             if results:
                 inst = _try_install_candidates(results, project_path)
@@ -266,11 +272,11 @@ def resolve_missing_symbols(
                 inst.get("package", ""),
                 symbol_ref=str(inst.get("symbol_ref", "")),
             )
-            _time.sleep(delay)
+            _jittered_sleep(delay)
             continue
 
         # -- pass 3: placeholder — agent should add search_hints and re-run --
-        _time.sleep(delay)
+        _jittered_sleep(delay)
         inst = _resolve_two_pin_placeholder(project_path, value, ref)
         if inst.get("ok"):
             resolved.append({"ref": ref, "lcsc_id": "", "role": role, "source": "placeholder", "pin_count": 2, "hint": "add search_hints to DSL and re-run resolve-symbols"})
@@ -294,8 +300,16 @@ def resolve_missing_symbols(
 
 
 def _try_install_candidates(results: list[dict[str, Any]], project_path: Path) -> dict[str, Any] | None:
-    """Try installing each candidate; return the first successful result or None."""
-    for r in results:
+    """Try installing each candidate; return the first successful result or None.
+
+    A small delay is inserted between candidates so we don't hammer the
+    EasyEDA API with back-to-back ``get_component`` calls for every
+    search result.
+    """
+    import time as _time
+    for i, r in enumerate(results):
+        if i > 0:
+            _time.sleep(2.0 + random.uniform(0, 2.0))  # 2–4 s jitter
         result = install_by_lcsc_id(r["lcsc_id"], project_path)
         if result.get("ok"):
             return result

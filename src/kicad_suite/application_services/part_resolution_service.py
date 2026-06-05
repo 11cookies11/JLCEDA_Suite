@@ -17,7 +17,7 @@ class PartResolutionService:
         model: dict[str, Any],
         *,
         timeout: int = 120,
-        delay: float = 0.8,
+        delay: float = 2.0,
         model_path: str | Path | None = None,
     ) -> dict[str, Any]:
         return resolve_missing_symbols(
