@@ -148,7 +148,8 @@ def _resolve_model_stage(state: PipelineRunState) -> None:
 
 
 def _run_placement_stage(state: PipelineRunState) -> None:
-    state.placement_result = write_placement_plan(state.project_output_dir, state.resolved_model)
+    placement_root = state.source_project_dir
+    state.placement_result = write_placement_plan(placement_root, state.resolved_model)
     append_pipeline_event(
         state.event_log,
         "placement-planner",

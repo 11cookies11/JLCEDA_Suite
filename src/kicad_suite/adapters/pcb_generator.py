@@ -61,9 +61,35 @@ def _net(board, nets, net_name):
         nets[net_name] = item
     return nets[net_name]
 
-def generate_board(plan_path, output_path):
+def _load_placement_map(project_dir: Path) -> dict[str, dict[str, float]]:
+    plan_path = project_dir / "build" / "placement-plan.json"
+    if not plan_path.is_file():
+        return {}
+    try:
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    except Exception:
+        return {}
+    placement_map: dict[str, dict[str, float]] = {}
+    for region in plan.get("regions", []):
+        if not isinstance(region, dict):
+            continue
+        for placement in region.get("placements", []):
+            if not isinstance(placement, dict):
+                continue
+            ref = str(placement.get("ref", "")).strip()
+            if not ref:
+                continue
+            placement_map[ref] = {
+                "x": float(placement.get("x", 0.0)),
+                "y": float(placement.get("y", 0.0)),
+                "rotation": float(placement.get("rotation_deg", 0.0)),
+            }
+    return placement_map
+
+def generate_board(plan_path, output_path, source_project_dir=None):
     plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
-    project_dir = Path(output_path).parent
+    project_dir = Path(source_project_dir) if source_project_dir else Path(output_path).parent
+    placement_map = _load_placement_map(project_dir)
     board = pcbnew.BOARD()
     nets = {}
     loaded = 0
@@ -90,10 +116,15 @@ def generate_board(plan_path, output_path):
         fp.SetReference(ref)
         fp.SetValue(str(symbol.get("value", "")))
         at = symbol.get("at", {}) if isinstance(symbol.get("at"), dict) else {}
-        x_mm = float(at.get("x", 0.0)) + (index % 8) * 6.0
-        y_mm = float(at.get("y", 0.0)) + (index // 8) * 6.0
+        placement = placement_map.get(ref, {})
+        x_mm = float(placement.get("x", at.get("x", 0.0))) if placement else float(at.get("x", 0.0))
+        y_mm = float(placement.get("y", at.get("y", 0.0))) if placement else float(at.get("y", 0.0))
+        rotation_deg = float(placement.get("rotation", at.get("rotation", 0.0))) if placement else float(at.get("rotation", 0.0))
+        if not placement:
+            x_mm += (index % 8) * 6.0
+            y_mm += (index // 8) * 6.0
         fp.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(x_mm), pcbnew.FromMM(y_mm)))
-        fp.SetOrientationDegrees(float(at.get("rotation", 0.0)))
+        fp.SetOrientationDegrees(rotation_deg)
 
         pad_map = _pad_net_map(symbol)
         for pad in fp.Pads():
@@ -109,7 +140,7 @@ def generate_board(plan_path, output_path):
     return {"board": str(output_path), "footprints": loaded, "nets": len(nets), "skipped": skipped}
 
 if __name__ == "__main__":
-    print(json.dumps(generate_board(sys.argv[1], sys.argv[2]), ensure_ascii=False, indent=2))
+    print(json.dumps(generate_board(sys.argv[1], sys.argv[2], sys.argv[3] if len(sys.argv) > 3 else None), ensure_ascii=False, indent=2))
 '''
 
 
@@ -208,7 +239,7 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
 
     try:
         proc = subprocess.run(
-            [python_bin, script_file, plan_file, str(board_file)],
+        [python_bin, script_file, plan_file, str(board_file), str(project_path or "")],
             capture_output=True,
             text=True,
             encoding="utf-8",
