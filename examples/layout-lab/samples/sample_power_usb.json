@@ -1,0 +1,24 @@
+{
+  "board": {
+    "width_mm": 120,
+    "height_mm": 80,
+    "margin_mm": 4
+  },
+  "components": [
+    { "ref": "J1", "role": "power_input", "grid_w": 8, "grid_h": 4 },
+    { "ref": "F1", "role": "series_resistor", "grid_w": 4, "grid_h": 2 },
+    { "ref": "U1", "role": "regulator", "grid_w": 7, "grid_h": 5 },
+    { "ref": "C1", "role": "input_cap", "grid_w": 4, "grid_h": 3 },
+    { "ref": "C2", "role": "output_cap", "grid_w": 4, "grid_h": 3 },
+    { "ref": "J2", "role": "usb", "grid_w": 10, "grid_h": 6 },
+    { "ref": "D1", "role": "esd", "grid_w": 4, "grid_h": 3 },
+    { "ref": "R1", "role": "series_resistor", "grid_w": 3, "grid_h": 2 },
+    { "ref": "R2", "role": "series_resistor", "grid_w": 3, "grid_h": 2 },
+    { "ref": "J3", "role": "connector", "grid_w": 10, "grid_h": 5 }
+  ],
+  "patterns": [
+    { "name": "power_entry", "type": "power_entry_chain", "members": ["J1", "F1", "U1", "C1", "C2"] },
+    { "name": "usb_path", "type": "usb_interface_chain", "members": ["J2", "D1", "R1", "R2"] },
+    { "name": "expansion_edge", "type": "edge_connector", "members": ["J3"] }
+  ]
+}

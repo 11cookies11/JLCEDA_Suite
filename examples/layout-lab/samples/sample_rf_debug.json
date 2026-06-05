@@ -1,0 +1,31 @@
+{
+  "board": {
+    "width_mm": 140,
+    "height_mm": 90,
+    "margin_mm": 4
+  },
+  "components": [
+    { "ref": "U1", "role": "analog", "grid_w": 8, "grid_h": 6 },
+    { "ref": "R1", "role": "analog", "grid_w": 3, "grid_h": 2 },
+    { "ref": "C1", "role": "analog", "grid_w": 3, "grid_h": 2 },
+    { "ref": "U2", "role": "rf", "grid_w": 9, "grid_h": 6 },
+    { "ref": "L1", "role": "rf", "grid_w": 3, "grid_h": 2 },
+    { "ref": "C2", "role": "rf", "grid_w": 3, "grid_h": 2 },
+    { "ref": "U3", "role": "rf", "grid_w": 9, "grid_h": 6 },
+    { "ref": "L2", "role": "rf", "grid_w": 3, "grid_h": 2 },
+    { "ref": "C3", "role": "rf", "grid_w": 3, "grid_h": 2 },
+    { "ref": "J1", "role": "debug", "grid_w": 10, "grid_h": 5 },
+    { "ref": "SW1", "role": "reset_button", "grid_w": 6, "grid_h": 6 },
+    { "ref": "R2", "role": "reset_pullup", "grid_w": 3, "grid_h": 2 },
+    { "ref": "R3", "role": "boot_pullup", "grid_w": 3, "grid_h": 2 },
+    { "ref": "P1", "role": "diff_pair", "grid_w": 4, "grid_h": 3 },
+    { "ref": "P2", "role": "diff_pair", "grid_w": 4, "grid_h": 3 }
+  ],
+  "patterns": [
+    { "name": "analog_frontend", "type": "analog_island", "members": ["U1", "R1", "C1"] },
+    { "name": "rf_block", "type": "rf_island", "members": ["U2", "L1", "C2"] },
+    { "name": "rf_reserved", "type": "rf_keepout_island", "members": ["U3", "L2", "C3"] },
+    { "name": "debug_port", "type": "debug_access_cluster", "members": ["J1", "SW1", "R2", "R3"] },
+    { "name": "diff_pair", "type": "diff_pair_adjacency", "members": ["P1", "P2"] }
+  ]
+}

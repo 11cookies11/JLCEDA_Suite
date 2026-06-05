@@ -1,0 +1,23 @@
+{
+  "board": {
+    "width_mm": 100,
+    "height_mm": 80,
+    "margin_mm": 4
+  },
+  "components": [
+    { "ref": "U1", "role": "mcu", "grid_w": 14, "grid_h": 14 },
+    { "ref": "Y1", "role": "crystal", "grid_w": 4, "grid_h": 3 },
+    { "ref": "C1", "role": "decoupling", "grid_w": 2, "grid_h": 2 },
+    { "ref": "C2", "role": "decoupling", "grid_w": 2, "grid_h": 2 },
+    { "ref": "C3", "role": "decoupling", "grid_w": 2, "grid_h": 2 },
+    { "ref": "SW1", "role": "reset_button", "grid_w": 6, "grid_h": 6 },
+    { "ref": "R1", "role": "reset_pullup", "grid_w": 3, "grid_h": 2 },
+    { "ref": "R2", "role": "boot_pullup", "grid_w": 3, "grid_h": 2 },
+    { "ref": "D1", "role": "indicator", "grid_w": 3, "grid_h": 2 },
+    { "ref": "R3", "role": "indicator", "grid_w": 3, "grid_h": 2 }
+  ],
+  "patterns": [
+    { "name": "mcu_core", "type": "center_cluster", "anchor_ref": "U1", "members": ["U1", "Y1", "C1", "C2", "C3", "SW1", "R1", "R2"] },
+    { "name": "status_led", "type": "indicator_cluster", "members": ["D1", "R3"] }
+  ]
+}

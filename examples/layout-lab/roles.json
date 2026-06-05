@@ -1,0 +1,44 @@
+{
+  "board_defaults": {
+    "width_mm": 150,
+    "height_mm": 110,
+    "margin_mm": 4
+  },
+  "role_defaults": {
+    "mcu": "center_cluster",
+    "crystal": "center_cluster",
+    "decoupling": "center_cluster",
+    "power_input": "power_chain",
+    "regulator": "power_chain",
+    "clock": "clock_ring",
+    "usb": "usb_interface_chain",
+    "esd": "usb_interface_chain",
+    "series_resistor": "usb_interface_chain",
+    "connector": "edge_connector",
+    "debug": "edge_connector",
+    "indicator": "indicator_cluster",
+    "analog": "analog_island",
+    "rf": "rf_island"
+  },
+  "role_slot_preferences": {
+    "crystal": ["top_right", "top_left", "right", "left"],
+    "decoupling": ["top", "bottom", "left", "right"],
+    "mcu_decoupling": ["top", "bottom", "left", "right"],
+    "reset_button": ["bottom_right", "bottom_left", "right", "left"],
+    "boot_button": ["bottom_right", "bottom_left", "right", "left"],
+    "regulator": ["left", "right", "top", "bottom"],
+    "power_input": ["left", "right", "top", "bottom"],
+    "indicator": ["top", "right", "bottom", "left"],
+    "led": ["top", "right", "bottom", "left"]
+  },
+  "cluster_slot_order": [
+    "top_right",
+    "top_left",
+    "bottom_left",
+    "bottom_right",
+    "right",
+    "left",
+    "top",
+    "bottom"
+  ]
+}

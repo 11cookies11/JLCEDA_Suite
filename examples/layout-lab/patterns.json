@@ -1,0 +1,111 @@
+{
+  "pattern_colors": {
+    "center_cluster": "#8b5cf6",
+    "boot_reset_cluster": "#a855f7",
+    "clock_ring": "#6d28d9",
+    "power_entry_chain": "#1d4ed8",
+    "power_chain": "#2563eb",
+    "signal_chain": "#0f766e",
+    "usb_interface_chain": "#0284c7",
+    "high_current_path": "#ea580c",
+    "edge_connector": "#dc2626",
+    "indicator_cluster": "#16a34a",
+    "analog_island": "#7c3aed",
+    "rf_keepout_island": "#db2777",
+    "rf_island": "#be185d",
+    "diff_pair_adjacency": "#0891b2",
+    "debug_access_cluster": "#7c3aed"
+  },
+  "templates": {
+    "center_cluster": {
+      "kind": "cluster",
+      "summary": "Place a core part in the center and fit nearby support parts around it.",
+      "anchor_from": "first_member"
+    },
+    "boot_reset_cluster": {
+      "kind": "cluster",
+      "summary": "Keep reset and boot components close to the MCU.",
+      "anchor_from": "first_member"
+    },
+    "clock_ring": {
+      "kind": "cluster",
+      "summary": "Place crystal and load capacitors around the MCU clock domain.",
+      "anchor_from": "first_member",
+      "fallback_x": 102,
+      "fallback_y": 22
+    },
+    "power_entry_chain": {
+      "kind": "chain",
+      "summary": "Lay out input protection, regulator, and caps along a power flow.",
+      "direction": "right",
+      "lane_y": 24,
+      "gap": 3,
+      "edge": "left"
+    },
+    "power_chain": {
+      "kind": "chain",
+      "summary": "Lay out a general power path as a left-to-right chain.",
+      "direction": "right",
+      "lane_y": 14,
+      "gap": 3
+    },
+    "signal_chain": {
+      "kind": "chain",
+      "summary": "Lay out a signal flow as a chain with local adjacency.",
+      "direction": "right",
+      "lane_y": 54,
+      "gap": 3
+    },
+    "usb_interface_chain": {
+      "kind": "edge_chain",
+      "summary": "Start from the board edge and move inward through protection parts.",
+      "edge": "right",
+      "lane_y": 46,
+      "gap": 2
+    },
+    "high_current_path": {
+      "kind": "chain",
+      "summary": "Keep the high-current path short and ordered.",
+      "direction": "right",
+      "lane_y": 8,
+      "gap": 3
+    },
+    "edge_connector": {
+      "kind": "edge",
+      "summary": "Snap connectors to a board edge.",
+      "edge": "right",
+      "lane_y": 68
+    },
+    "indicator_cluster": {
+      "kind": "edge_cluster",
+      "summary": "Group indicators near an accessible board edge.",
+      "edge": "top",
+      "lane_y": 82
+    },
+    "analog_island": {
+      "kind": "island",
+      "summary": "Keep analog parts grouped away from noisy blocks.",
+      "region": "top_left"
+    },
+    "rf_keepout_island": {
+      "kind": "island",
+      "summary": "Keep RF parts near a defined keepout region."
+    },
+    "rf_island": {
+      "kind": "island",
+      "summary": "Group RF parts into an isolated area.",
+      "region": "top_right"
+    },
+    "diff_pair_adjacency": {
+      "kind": "pair",
+      "summary": "Keep differential pair members adjacent."
+    },
+    "debug_access_cluster": {
+      "kind": "edge_cluster",
+      "summary": "Keep debug access, reset, and boot parts near the board edge.",
+      "edge": "left",
+      "lane_y": 76,
+      "gap": 2
+    }
+  }
+}
