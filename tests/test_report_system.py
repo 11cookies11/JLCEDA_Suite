@@ -31,6 +31,15 @@ def _make_project(tmp_path):
             {"name": "+3V3", "members": ["U1.VDD"]},
             {"name": "GND", "members": ["U1.GND"]},
         ],
+        "pcb_layout": {
+            "regions": {
+                "mcu": {
+                    "x": 10,
+                    "y": 12,
+                    "components": ["U1"],
+                }
+            }
+        },
         "risks": [{"key": "ddr", "title": "DDR review", "status": "open", "severity": "high"}],
         "sheets": [], "calculations": [], "design_decisions": [], "constraints": [],
     }
@@ -52,7 +61,7 @@ def test_build_report_has_all_sections(tmp_path):
     path = _make_project(tmp_path)
     report = build_report(path)
     keys = {s["key"] for s in report["sections"]}
-    expected = {"project", "summary", "dsl", "build", "diagnostics", "ir", "risks", "history"}
+    expected = {"project", "summary", "dsl", "build", "diagnostics", "ir", "risks", "placement", "history"}
     assert expected.issubset(keys), f"Missing sections: {expected - keys}"
 
 
@@ -105,3 +114,23 @@ def test_build_report_with_simulation(tmp_path):
     report = build_report(path, simulation_result=sim)
     keys = {s["key"] for s in report["sections"]}
     assert "simulation" in keys
+
+
+def test_build_report_with_placement_plan(tmp_path):
+    path = _make_project(tmp_path)
+    build_dir = path / "build"
+    build_dir.mkdir(parents=True, exist_ok=True)
+    plan = {
+        "schema_version": "placement-plan.v1",
+        "project_id": "test-board",
+        "topology": "test_topology",
+        "board": {"width_mm": 80, "height_mm": 60, "source": "constraints.board_size"},
+        "summary": {"region_count": 1, "placed_count": 1, "unassigned_count": 0, "overlap_count": 0},
+        "warnings": [],
+        "regions": [{"name": "mcu", "placements": [], "warnings": []}],
+    }
+    (build_dir / "placement-plan.json").write_text(json.dumps(plan, ensure_ascii=False), encoding="utf-8")
+
+    report = build_report(path)
+    placement = next(s for s in report["sections"] if s["key"] == "placement")
+    assert placement["data"]["summary"]["region_count"] == 1

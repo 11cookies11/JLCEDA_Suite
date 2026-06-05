@@ -18,6 +18,7 @@ from .domain.core.ir_to_kicad import ir_to_kicad
 from .adapters.kicad_erc_runner import run as run_erc
 from .adapters.kicad_project_writer import write_hierarchical_project, write_project
 from .domain.core.netlist_builder import build_netlist
+from .application_services.placement_planner import write_placement_plan
 from .domain.core.parts.resolve import apply_selected_parts_to_model
 from .domain.core.parts.workflow import run_parts_pipeline
 from .orchestration.pipeline_event_log import append_pipeline_event, pipeline_event_log_path
@@ -41,6 +42,7 @@ class PipelineRunState:
     resolved_model: dict[str, Any] = field(default_factory=dict)
     plan: KiCadExecutionPlan | None = None
     plan_file: str = ""
+    placement_result: dict[str, Any] = field(default_factory=dict)
     write_result: dict[str, Any] = field(default_factory=dict)
     final_write_result: dict[str, Any] = field(default_factory=dict)
     postprocess: dict[str, Any] = field(default_factory=dict)
@@ -143,6 +145,22 @@ def _resolve_model_stage(state: PipelineRunState) -> None:
     state.resolved_model = apply_selected_parts_to_model(state.model, selections) if selections else state.model
     save_resolved_circuit_model(state.model_path, state.resolved_model)
     _ = build_netlist(state.resolved_model)
+
+
+def _run_placement_stage(state: PipelineRunState) -> None:
+    state.placement_result = write_placement_plan(state.project_output_dir, state.resolved_model)
+    append_pipeline_event(
+        state.event_log,
+        "placement-planner",
+        "pcb placement plan generated",
+        {
+            "plan_file": state.placement_result.get("plan_file", ""),
+            "report_file": state.placement_result.get("report_file", ""),
+            "region_count": state.placement_result.get("plan", {}).get("summary", {}).get("region_count", 0),
+            "placed_count": state.placement_result.get("plan", {}).get("summary", {}).get("placed_count", 0),
+            "unassigned_count": state.placement_result.get("plan", {}).get("summary", {}).get("unassigned_count", 0),
+        },
+    )
 
 
 def _build_ir_and_plan_stage(state: PipelineRunState) -> None:
@@ -273,6 +291,7 @@ def _finish_pipeline(state: PipelineRunState) -> dict[str, Any]:
         erc_result=state.erc_result,
         parts_result=state.parts_result,
         project_resolution_result=state.project_resolution_result,
+        placement_result=state.placement_result,
         plan_diagnostics=asdict(state.plan.diagnostics) if state.plan is not None and hasattr(state.plan, "diagnostics") else {},
         postprocess=state.postprocess,
         simulation_result=state.simulation_result,
@@ -295,6 +314,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     _run_simulation_stage(state)
     _run_parts_stage(state)
     _resolve_model_stage(state)
+    _run_placement_stage(state)
     _build_ir_and_plan_stage(state)
     project_dir = _render_and_postprocess_stage(state)
     _run_erc_and_resolution_stage(state, project_dir)

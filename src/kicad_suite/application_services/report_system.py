@@ -13,6 +13,7 @@ from typing import Any
 
 from .project_state import ProjectState
 from .erc_classification_service import ErcClassificationService
+from .placement_planner import build_placement_plan, PLACEMENT_PLAN_SCHEMA_VERSION
 from ..domain.core.circuit_model_io import load_dual_circuit_model, resolve_model_paths
 from ..domain.core.ir_compiler import build_ir
 from ..shared.schema_versions import IR_SCHEMA_VERSION
@@ -153,7 +154,13 @@ def build_report(
             "scenario_count": simulation_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
         }))
 
-    # 10. Operation history.
+    # 10. Placement planning.
+    placement = _placement_details(root, model or {})
+    if placement is not None:
+        placement_status = "warning" if placement.get("warnings") else "ok"
+        sections.append(_section("placement", "PCB Placement Plan", placement_status, placement))
+
+    # 11. Operation history.
     history = ps.get_history(limit=history_limit)
     sections.append(_section("history", "Recent Operations", "info", {
         "count": len(history),
@@ -266,6 +273,56 @@ def _erc_details(erc_result: dict[str, Any]) -> dict[str, Any]:
             pass
 
     return details
+
+
+def _placement_details(root: Path, model: dict[str, Any]) -> dict[str, Any] | None:
+    """Return placement-plan details if the model supports board placement."""
+    build_path = root / "build" / "placement-plan.json"
+    if build_path.exists():
+        try:
+            plan = json.loads(build_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            plan = None
+        if isinstance(plan, dict):
+            return {
+                "schema_version": plan.get("schema_version", PLACEMENT_PLAN_SCHEMA_VERSION),
+                "plan_file": str(build_path),
+                "report_file": str(build_path.with_suffix(".md")),
+                "board": plan.get("board", {}),
+                "summary": plan.get("summary", {}),
+                "warnings": plan.get("warnings", []),
+                "regions": [
+                    {
+                        "name": region.get("name", ""),
+                        "placements": len(region.get("placements", [])),
+                        "warnings": region.get("warnings", []),
+                    }
+                    for region in plan.get("regions", [])
+                    if isinstance(region, dict)
+                ],
+            }
+
+    if not isinstance(model, dict) or not model.get("pcb_layout"):
+        return None
+
+    plan = build_placement_plan(model)
+    return {
+        "schema_version": plan.get("schema_version", PLACEMENT_PLAN_SCHEMA_VERSION),
+        "plan_file": "",
+        "report_file": "",
+        "board": plan.get("board", {}),
+        "summary": plan.get("summary", {}),
+        "warnings": plan.get("warnings", []),
+        "regions": [
+            {
+                "name": region.get("name", ""),
+                "placements": len(region.get("placements", [])),
+                "warnings": region.get("warnings", []),
+            }
+            for region in plan.get("regions", [])
+            if isinstance(region, dict)
+        ],
+    }
 
 
 # ---------------------------------------------------------------------------
