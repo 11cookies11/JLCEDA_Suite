@@ -191,7 +191,11 @@ def _render_and_postprocess_stage(state: PipelineRunState) -> Path:
     schematic_file = Path(state.write_result.get("schematic_file", ""))
     project_dir = schematic_file.parent if schematic_file.exists() else state.output_dir / state.project_name
     state.postprocess = apply_postprocess(schematic_file, project_dir)
-    board_result = generate_board_from_plan(str(state.plan_file), project_dir)
+    board_result = generate_board_from_plan(
+        str(state.plan_file),
+        project_dir,
+        state.source_project_dir,
+    )
     if board_result.get("attempted"):
         state.postprocess["board_generation"] = board_result
         append_pipeline_event(

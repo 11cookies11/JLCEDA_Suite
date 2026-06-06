@@ -9,6 +9,8 @@ from __future__ import annotations
 
 import shutil
 import subprocess
+import random
+import time as _time
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from pathlib import Path
@@ -16,6 +18,11 @@ from typing import Any
 
 from ..shared.env_utils import env
 from ..domain.core.part_selector import SelectedPart, classify_package_risk, package_risk_note
+
+_BATCH_MIN_DELAY = 3.0
+_BATCH_MAX_DELAY = 8.0
+_RATE_LIMIT_COOLDOWN = 30.0
+_MAX_DOWNLOAD_ATTEMPTS = 2
 
 
 # ---------------------------------------------------------------------------
@@ -145,39 +152,73 @@ def _run_easyeda2kicad(
     executable: str,
     output_dir: Path,
     timeout: float,
+    *,
+    use_cache: bool = True,
 ) -> dict[str, object]:
     """Run easyeda2kicad for a single LCSC ID."""
     command = [executable, "--full", f"--lcsc_id={lcsc_id}", "--output", str(output_dir)]
-    try:
-        proc = subprocess.run(
-            command,
-            capture_output=True,
-            text=True,
-            timeout=timeout,
-        )
-        return {
-            "lcsc_id": lcsc_id,
-            "returncode": proc.returncode,
-            "stdout": proc.stdout,
-            "stderr": proc.stderr,
-            "success": proc.returncode == 0,
-        }
-    except subprocess.TimeoutExpired:
-        return {
-            "lcsc_id": lcsc_id,
-            "returncode": None,
-            "stdout": "",
-            "stderr": f"Timeout after {timeout}s",
-            "success": False,
-        }
-    except OSError as exc:
-        return {
-            "lcsc_id": lcsc_id,
-            "returncode": None,
-            "stdout": "",
-            "stderr": str(exc),
-            "success": False,
-        }
+    if use_cache:
+        command.append("--use-cache")
+    command.append("--overwrite")
+
+    def _is_rate_limited(output: str) -> bool:
+        text = output.lower()
+        return "403" in text or "forbidden" in text or "rate limit" in text or "too many requests" in text
+
+    def _sleep_before_attempt() -> None:
+        _time.sleep(random.uniform(_BATCH_MIN_DELAY, _BATCH_MAX_DELAY))
+
+    last_result: dict[str, object] = {
+        "lcsc_id": lcsc_id,
+        "returncode": None,
+        "stdout": "",
+        "stderr": "",
+        "success": False,
+    }
+    for attempt in range(_MAX_DOWNLOAD_ATTEMPTS):
+        try:
+            _sleep_before_attempt()
+            proc = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                timeout=timeout,
+            )
+            last_result = {
+                "lcsc_id": lcsc_id,
+                "returncode": proc.returncode,
+                "stdout": proc.stdout,
+                "stderr": proc.stderr,
+                "success": proc.returncode == 0,
+            }
+            if proc.returncode == 0:
+                return last_result
+            output = f"{proc.stdout}\n{proc.stderr}".strip()
+            if attempt < _MAX_DOWNLOAD_ATTEMPTS - 1 and _is_rate_limited(output):
+                _time.sleep(_RATE_LIMIT_COOLDOWN)
+                continue
+            return last_result
+        except subprocess.TimeoutExpired:
+            last_result = {
+                "lcsc_id": lcsc_id,
+                "returncode": None,
+                "stdout": "",
+                "stderr": f"Timeout after {timeout}s",
+                "success": False,
+            }
+            if attempt < _MAX_DOWNLOAD_ATTEMPTS - 1:
+                _time.sleep(_RATE_LIMIT_COOLDOWN)
+                continue
+            return last_result
+        except OSError as exc:
+            return {
+                "lcsc_id": lcsc_id,
+                "returncode": None,
+                "stdout": "",
+                "stderr": str(exc),
+                "success": False,
+            }
+    return last_result
 
 
 # ---------------------------------------------------------------------------
@@ -409,6 +450,7 @@ def import_parts(
     lib_dir: str | Path | None = None,
     easyeda2kicad_bin: str = "",
     timeout: float = 120.0,
+    use_cache: bool = True,
 ) -> ImportResult:
     """Import selected parts into project-local KiCad libraries.
 
@@ -429,6 +471,7 @@ def import_parts(
         lib_dir: Override library directory (default: <project_dir>/libs).
         easyeda2kicad_bin: Path to easyeda2kicad executable.
         timeout: Timeout per subprocess call in seconds.
+        use_cache: Pass --use-cache to easyeda2kicad to reuse EasyEDA responses.
 
     Returns:
         ImportResult with paths and status.
@@ -481,7 +524,13 @@ def import_parts(
             skipped.append(sel)
             continue
 
-        result = _run_easyeda2kicad(sel.lcsc_id, executable, lib_path, timeout)
+        result = _run_easyeda2kicad(
+            sel.lcsc_id,
+            executable,
+            lib_path,
+            timeout,
+            use_cache=use_cache,
+        )
         if result["success"]:
             imported.append(sel)
         else:

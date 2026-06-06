@@ -41,7 +41,7 @@ def test_erc_classification_service_delegates_to_classifier() -> None:
 def test_part_resolution_service_delegates_to_installer(tmp_path) -> None:
     with patch("kicad_suite.application_services.part_resolution_service.resolve_missing_symbols") as resolver:
         resolver.return_value = {"ok": True, "resolved": 0, "failed": 0}
-        result = PartResolutionService().resolve_symbols(tmp_path, {}, timeout=1, delay=0)
+        result = PartResolutionService().resolve_symbols(tmp_path, {}, timeout=1)
 
     assert result["ok"] is True
     resolver.assert_called_once()

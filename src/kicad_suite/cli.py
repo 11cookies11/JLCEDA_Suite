@@ -1002,13 +1002,11 @@ def _agent_resolve_symbols_handler(args: argparse.Namespace) -> int:
     model_path = _agent_model_path(args)
     model = load_circuit_model(model_path)
     timeout = getattr(args, "timeout", 120) or 120
-    delay = getattr(args, "delay", 0) or 0
     t0 = _time.monotonic()
     result = PartResolutionService().resolve_symbols(
         project_path,
         model,
         timeout=timeout,
-        delay=delay,
         model_path=model_path,
     )
     elapsed = round(_time.monotonic() - t0, 2)
@@ -1396,7 +1394,6 @@ def build_parser() -> argparse.ArgumentParser:
     agent_resolve.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_resolve.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_resolve.add_argument("--timeout", type=int, default=120, help="Max total seconds (default 120).")
-    agent_resolve.add_argument("--delay", type=float, default=0.8, help="Delay between API calls in seconds (default 0.8).")
     agent_resolve.set_defaults(handler=_agent_resolve_symbols_handler)
 
     # kas project

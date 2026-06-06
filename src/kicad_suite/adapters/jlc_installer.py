@@ -3,7 +3,10 @@
 from __future__ import annotations
 
 import json
+from dataclasses import dataclass
 import re
+import random
+import time as _time
 from pathlib import Path
 from typing import Any
 
@@ -19,6 +22,49 @@ _SYM_LIB_TEMPLATE = """(sym_lib_table
 """
 
 _installed_lcsc_cache: dict[str, bool] = {}
+
+
+def _looks_rate_limited(text: str) -> bool:
+    lowered = text.lower()
+    return "403" in lowered or "forbidden" in lowered or "rate limit" in lowered or "too many requests" in lowered
+
+
+@dataclass(frozen=True)
+class EasyedaAccessPolicy:
+    """Shared retry and pacing rules for EasyEDA access."""
+
+    delay_range: tuple[float, float] = (3.0, 8.0)
+    rate_limit_cooldown: float = 30.0
+    max_attempts: int = 2
+    install_retries: int = 2
+    install_delay: float = 30.0
+    search_limit: int = 3
+
+    def search(self, query: str, *, limit: int | None = None) -> list[dict[str, Any]]:
+        last_error = ""
+        limit_value = limit if limit is not None else self.search_limit
+        for attempt in range(self.max_attempts):
+            _time.sleep(random.uniform(*self.delay_range))
+            try:
+                return jlc_api.search(query, limit=limit_value)
+            except Exception as exc:  # noqa: BLE001
+                last_error = str(exc)
+                if attempt < self.max_attempts - 1 and _looks_rate_limited(last_error):
+                    _time.sleep(self.rate_limit_cooldown)
+                    continue
+                break
+        if last_error and not _looks_rate_limited(last_error):
+            raise RuntimeError(last_error) from None
+        return []
+
+    def install(self, lcsc_id: str, project_path: Path) -> dict[str, Any]:
+        return install_by_lcsc_id(
+            lcsc_id,
+            project_path,
+            retries=self.install_retries,
+            delay=self.install_delay,
+            initial_delay_range=self.delay_range,
+        )
 
 
 def search_and_install(
@@ -53,7 +99,14 @@ def search_and_install(
     }
 
 
-def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
+def install_by_lcsc_id(
+    lcsc_id: str,
+    project_path: Path,
+    *,
+    retries: int = 5,
+    delay: float = 0.5,
+    initial_delay_range: tuple[float, float] | None = None,
+) -> dict[str, Any]:
     """Download component data from EasyEDA and install symbol + footprint into *project_path*."""
     global _installed_lcsc_cache
     cache_key = f"{project_path.resolve()}:{lcsc_id}"
@@ -62,8 +115,11 @@ def install_by_lcsc_id(lcsc_id: str, project_path: Path) -> dict[str, Any]:
         pkg = str(cached) if cached else ""
         return {"ok": True, "lcsc_id": lcsc_id, "cached": True, "pin_count": 0, "package": pkg}
 
+    if initial_delay_range is not None:
+        _time.sleep(random.uniform(*initial_delay_range))
+
     # 1. Fetch from EasyEDA
-    comp_data = jlc_api.get_component(lcsc_id, retries=5, delay=0.5)
+    comp_data = jlc_api.get_component(lcsc_id, retries=retries, delay=delay)
     if comp_data is None:
         return {"ok": False, "error": f"Component {lcsc_id} not found on EasyEDA"}
 
@@ -141,7 +197,7 @@ def resolve_missing_symbols(
     model: dict[str, Any],
     timeout: float = 120.0,
     *,
-    delay: float = 0,
+    policy: EasyedaAccessPolicy | None = None,
     model_path: Path | None = None,
 ) -> dict[str, Any]:
     """Auto-resolve all components in *model* by searching EasyEDA.
@@ -151,14 +207,13 @@ def resolve_missing_symbols(
     2. value + package (automatic)
     3. Minimal 2-pin placeholder as last resort
 
-    *delay* (seconds) is inserted between API calls to avoid rate-limiting.
-    Default 0.8 s mimics human-paced interaction with the JLC search endpoint.
+    The default policy uses random 3-8 second delays and a 30 second
+    cooldown after rate-limit responses.
 
     Components that successfully resolve get ``selected_part`` written
     back into *model* so the build step can find their symbols.
     """
-    import time as _time
-
+    access = policy or EasyedaAccessPolicy()
     components = model.get("components", [])
     if not isinstance(components, list):
         return {"ok": True, "resolved": 0, "failed": 0, "details": []}
@@ -184,7 +239,7 @@ def resolve_missing_symbols(
         # trust that selection and skip the search-based path entirely.
         # This avoids re-searching known parts and hitting rate/403 limits.
         if selected_lcsc_id:
-            inst = install_by_lcsc_id(selected_lcsc_id, project_path)
+            inst = access.install(selected_lcsc_id, project_path)
             if inst.get("ok"):
                 resolved.append(
                     {
@@ -211,7 +266,6 @@ def resolve_missing_symbols(
                         "error": str(inst.get("error", "selected_part_install_failed")),
                     }
                 )
-            _time.sleep(delay)
             continue
 
         if _time.monotonic() > deadline:
@@ -228,10 +282,9 @@ def resolve_missing_symbols(
         # -- pass 1: search_hints from DSL (AI agent controls this) ----------
         if hints and isinstance(hints, list):
             for hint in hints:
-                _time.sleep(delay)
-                results = jlc_api.search(str(hint), limit=3)
+                results = access.search(str(hint))
                 if results:
-                    inst = _try_install_candidates(results, project_path)
+                    inst = _try_install_candidates(results, project_path, access)
                     if inst:
                         lcsc_id = inst["lcsc_id"]
                         break
@@ -244,16 +297,14 @@ def resolve_missing_symbols(
                     inst.get("package", ""),
                     symbol_ref=str(inst.get("symbol_ref", "")),
                 )
-                _time.sleep(delay)
                 continue
 
         # -- pass 2: value + package (automatic) ----------------------------
         specific_query = f"{value} {package}".strip()
         if specific_query:
-            _time.sleep(delay)
-            results = jlc_api.search(specific_query, limit=3)
+            results = access.search(specific_query)
             if results:
-                inst = _try_install_candidates(results, project_path)
+                inst = _try_install_candidates(results, project_path, access)
                 if inst:
                     lcsc_id = inst["lcsc_id"]
 
@@ -266,11 +317,9 @@ def resolve_missing_symbols(
                 inst.get("package", ""),
                 symbol_ref=str(inst.get("symbol_ref", "")),
             )
-            _time.sleep(delay)
             continue
 
         # -- pass 3: placeholder — agent should add search_hints and re-run --
-        _time.sleep(delay)
         inst = _resolve_two_pin_placeholder(project_path, value, ref)
         if inst.get("ok"):
             resolved.append({"ref": ref, "lcsc_id": "", "role": role, "source": "placeholder", "pin_count": 2, "hint": "add search_hints to DSL and re-run resolve-symbols"})
@@ -293,10 +342,10 @@ def resolve_missing_symbols(
     return summary
 
 
-def _try_install_candidates(results: list[dict[str, Any]], project_path: Path) -> dict[str, Any] | None:
+def _try_install_candidates(results: list[dict[str, Any]], project_path: Path, access: EasyedaAccessPolicy) -> dict[str, Any] | None:
     """Try installing each candidate; return the first successful result or None."""
     for r in results:
-        result = install_by_lcsc_id(r["lcsc_id"], project_path)
+        result = access.install(r["lcsc_id"], project_path)
         if result.get("ok"):
             return result
     return None

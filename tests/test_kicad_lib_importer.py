@@ -7,6 +7,8 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
@@ -17,6 +19,7 @@ from kicad_suite.adapters.kicad_lib_importer import (
     _build_lock_data,
     _build_risk_report,
     _parse_lock_file,
+    _run_easyeda2kicad,
     import_parts,
 )
 from kicad_suite.domain.core.part_selector import SelectedPart
@@ -252,6 +255,33 @@ class TestImportParts(unittest.TestCase):
             # Report and lock file paths are set even if import failed
             self.assertTrue(result.risk_report_file)
             self.assertTrue(result.lock_file)
+
+    def test_run_easyeda2kicad_retries_on_forbidden_output(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_dir = Path(tmpdir) / "libs"
+            output_dir.mkdir(parents=True, exist_ok=True)
+            fail_proc = SimpleNamespace(returncode=1, stdout="", stderr="HTTP 403 Forbidden")
+            ok_proc = SimpleNamespace(returncode=0, stdout='{"ok": true}', stderr="")
+            with patch("kicad_suite.adapters.kicad_lib_importer.subprocess.run", side_effect=[fail_proc, ok_proc]) as run_mock:
+                with patch("kicad_suite.adapters.kicad_lib_importer.random.uniform", side_effect=[3.5, 6.5]):
+                    with patch("kicad_suite.adapters.kicad_lib_importer._time.sleep") as sleep_mock:
+                        result = _run_easyeda2kicad("C2040", "easyeda2kicad", output_dir, timeout=10)
+
+        self.assertTrue(result["success"])
+        self.assertEqual(run_mock.call_count, 2)
+        self.assertTrue(any("--use-cache" in arg for arg in run_mock.call_args_list[0].args[0]))
+        self.assertEqual([call.args[0] for call in sleep_mock.call_args_list], [3.5, 30.0, 6.5])
+
+    def test_import_parts_runs_each_selection(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            tool = Path(tmpdir) / "easyeda2kicad.exe"
+            tool.write_text("", encoding="utf-8")
+            selections = [_make_selected(lcsc_id="C1001"), _make_selected(lcsc_id="C1002")]
+            with patch("kicad_suite.adapters.kicad_lib_importer._run_easyeda2kicad", return_value={"success": True, "lcsc_id": "C1001", "returncode": 0, "stdout": "", "stderr": ""}) as run_mock:
+                result = import_parts(selections, tmpdir, easyeda2kicad_bin=str(tool))
+
+        self.assertEqual(result.imported_count, 2)
+        self.assertEqual(run_mock.call_count, 2)
 
 
 if __name__ == "__main__":

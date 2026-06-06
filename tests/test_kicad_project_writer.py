@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
@@ -84,7 +85,20 @@ class TestKicadProjectWriter(unittest.TestCase):
                 "nets": [],
             }
 
-            result = generate_pcb(plan, project_path=tmpdir)
+            with patch("kicad_suite.adapters.pcb_generator._kicad_python", return_value="fake-kicad-python"):
+                with patch("kicad_suite.adapters.pcb_generator.subprocess.run") as run:
+                    run.return_value.returncode = 0
+                    run.return_value.stdout = json.dumps(
+                        {
+                            "board": str(output_dir / "demo.kicad_pcb"),
+                            "footprints": 0,
+                            "nets": 0,
+                            "skipped": ["U1: no footprint"],
+                        }
+                    )
+                    run.return_value.stderr = ""
+
+                    result = generate_pcb(plan, project_path=tmpdir)
 
         self.assertTrue(result["ok"])
         self.assertEqual(result["component_count"], 1)

@@ -25,7 +25,11 @@ def _resolve_kicad_python() -> str:
     return ""
 
 
-def generate_board_from_plan(plan_file: str, project_dir: Path) -> dict[str, Any]:
+def generate_board_from_plan(
+    plan_file: str,
+    project_dir: Path,
+    source_project_dir: str | Path | None = None,
+) -> dict[str, Any]:
     if not is_truthy_env("KICAD_GENERATE_PCB", "true"):
         return {"attempted": False, "enabled": False}
     python_bin = _resolve_kicad_python()
@@ -42,8 +46,9 @@ def generate_board_from_plan(plan_file: str, project_dir: Path) -> dict[str, Any
         script = temp_script.name
     try:
         board_file = project_dir / f"{project_dir.name}.kicad_pcb"
+        source_project_arg = str(source_project_dir or "")
         process = subprocess.run(
-            [python_bin, script, plan_file, str(board_file)],
+            [python_bin, script, plan_file, str(board_file), source_project_arg],
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,

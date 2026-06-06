@@ -5,7 +5,6 @@ merges into project libs/, and outputs a mapping for schematic generation.
 
 Usage:
   python scripts/import_jlc_parts.py <circuit-model.json> <project-dir>
-  python scripts/import_jlc_parts.py <circuit-model.json> <project-dir> --delay 3.0
 """
 
 from __future__ import annotations
@@ -17,6 +16,7 @@ import shutil
 import subprocess
 import sys
 import time
+import random
 from pathlib import Path
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
@@ -24,32 +24,66 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 def run_easyeda2kicad(lcsc_id: str, sym_lib: Path) -> dict[str, str]:
     """Run easyeda2kicad for one LCSC ID. Returns {lcsc_id, symbol, footprint, model_dir, error}."""
-    cmd = ["easyeda2kicad", "--full", f"--lcsc_id={lcsc_id}", "--output", str(sym_lib), "--overwrite"]
-    try:
-        proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
-        output = proc.stdout + proc.stderr
+    cmd = [
+        "easyeda2kicad",
+        "--full",
+        f"--lcsc_id={lcsc_id}",
+        "--output",
+        str(sym_lib),
+        "--overwrite",
+        "--use-cache",
+    ]
+    def _is_rate_limited(output: str) -> bool:
+        text = output.lower()
+        return "403" in text or "forbidden" in text or "rate limit" in text or "too many requests" in text
 
-        # Parse symbol name and footprint name from output
-        symbol_name = ""
-        footprint_name = ""
-        for line in output.splitlines():
-            if "Symbol name" in line:
-                symbol_name = line.split(":")[-1].strip()
-            if "Footprint name:" in line:
-                footprint_name = line.split(":")[-1].strip()
+    last_error = ""
+    for attempt in range(2):
+        try:
+            time.sleep(random.uniform(3.0, 8.0))
+            proc = subprocess.run(cmd, capture_output=True, text=True, timeout=60)
+            output = proc.stdout + proc.stderr
 
-        return {
-            "lcsc_id": lcsc_id,
-            "symbol": symbol_name,
-            "footprint": footprint_name,
-            "success": proc.returncode == 0,
-            "error": "" if proc.returncode == 0 else output[-200:],
-        }
-    except Exception as exc:
-        return {"lcsc_id": lcsc_id, "symbol": "", "footprint": "", "success": False, "error": str(exc)}
+            # Parse symbol name and footprint name from output
+            symbol_name = ""
+            footprint_name = ""
+            for line in output.splitlines():
+                if "Symbol name" in line:
+                    symbol_name = line.split(":")[-1].strip()
+                if "Footprint name:" in line:
+                    footprint_name = line.split(":")[-1].strip()
+
+            if proc.returncode == 0:
+                return {
+                    "lcsc_id": lcsc_id,
+                    "symbol": symbol_name,
+                    "footprint": footprint_name,
+                    "success": True,
+                    "error": "",
+                }
+
+            last_error = output[-200:]
+            if attempt == 0 and _is_rate_limited(output):
+                time.sleep(30.0)
+                continue
+            return {
+                "lcsc_id": lcsc_id,
+                "symbol": symbol_name,
+                "footprint": footprint_name,
+                "success": False,
+                "error": last_error,
+            }
+        except Exception as exc:
+            last_error = str(exc)
+            if attempt == 0 and _is_rate_limited(last_error):
+                time.sleep(30.0)
+                continue
+            return {"lcsc_id": lcsc_id, "symbol": "", "footprint": "", "success": False, "error": last_error}
+
+    return {"lcsc_id": lcsc_id, "symbol": "", "footprint": "", "success": False, "error": last_error}
 
 
-def import_parts_from_model(model_path: str, project_dir: str, delay: float = 2.0) -> dict:
+def import_parts_from_model(model_path: str, project_dir: str) -> dict:
     """Import all LCSC parts from a circuit model into project-local libraries."""
     model = json.loads(Path(model_path).read_text(encoding="utf-8"))
     project = Path(project_dir)
@@ -92,7 +126,7 @@ def import_parts_from_model(model_path: str, project_dir: str, delay: float = 2.
             success_count += 1
         else:
             print(f"FAIL: {result['error'][:80]}")
-        time.sleep(delay)
+        time.sleep(random.uniform(3.0, 8.0))
 
     # Rename footprint and 3d directories to our standard names
     default_fp = lib_dir / "jlc_symbols.pretty"
@@ -143,13 +177,8 @@ def import_parts_from_model(model_path: str, project_dir: str, delay: float = 2.
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("Usage: python import_jlc_parts.py <circuit-model.json> <project-dir> [--delay 3.0]")
+        print("Usage: python import_jlc_parts.py <circuit-model.json> <project-dir>")
         sys.exit(1)
 
-    delay = 2.0
-    for i, arg in enumerate(sys.argv):
-        if arg == "--delay" and i + 1 < len(sys.argv):
-            delay = float(sys.argv[i + 1])
-
-    result = import_parts_from_model(sys.argv[1], sys.argv[2], delay=delay)
+    result = import_parts_from_model(sys.argv[1], sys.argv[2])
     print(json.dumps({k: v for k, v in result.items() if k != "parts"}, indent=2, ensure_ascii=False))
