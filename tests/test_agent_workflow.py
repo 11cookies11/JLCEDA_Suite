@@ -14,6 +14,7 @@ from kicad_suite.orchestration.agent_tasks import agent_tasks_path, read_agent_t
 from kicad_suite.orchestration.agent_workflow import AgentWorkflowService
 from kicad_suite.orchestration.proposed_workflow import proposed_workflow_path
 from kicad_suite.orchestration.workflow_stack import WorkflowStackStore, workflow_stack_path
+from kicad_suite.shared.validation.common import ValidationReport
 
 
 class FakePartResolutionService:
@@ -91,7 +92,7 @@ def test_lcsc_workflow_emits_agent_tasks_for_missing_selection(tmp_path: Path) -
     assert result["workflow"]["active_workflow"] == "lcsc_selection_v1"
     assert result["workflow"]["depth"] == 1
     assert workflow_stack_path(tmp_path).exists()
-    assert fake.calls[0]["timeout"] == 7
+    assert fake.calls == []
     tasks = read_agent_tasks(tmp_path)
     assert tasks["task_count"] == 1
     task = tasks["tasks"][0]
@@ -137,6 +138,7 @@ def test_lcsc_workflow_completed_clears_stale_tasks(tmp_path: Path) -> None:
     assert result["status"] == "completed"
     assert not task_path.exists()
     assert not workflow_stack_path(tmp_path).exists()
+    assert fake.calls == []
 
 
 def test_workflow_status_summarizes_pending_tasks(tmp_path: Path) -> None:
@@ -264,6 +266,7 @@ def test_full_build_emits_route_task_for_missing_parts(tmp_path: Path) -> None:
     assert stack[0]["status"] == "paused"
     assert stack[0]["blocked_by"] == "__route_pending__"
     assert stack[1]["workflow_id"] == "__route_pending__"
+    assert fake.calls == []
     tasks = read_agent_tasks(tmp_path)["tasks"]
     assert tasks[0]["decision_schema"] == "choose_workflow_route_v1"
     assert tasks[0]["recommended_workflow"] == "lcsc_selection_v1"
@@ -295,6 +298,7 @@ def test_choose_route_replaces_route_pending_frame(tmp_path: Path) -> None:
     assert stack[1]["workflow_id"] == "lcsc_selection_v1"
     assert stack[1]["chosen_from"] == "__route_pending__"
     assert not agent_tasks_path(tmp_path).exists()
+    assert fake.calls == []
 
 
 def test_repair_after_diagnose_emits_repair_and_review_tasks(tmp_path: Path) -> None:
@@ -343,7 +347,7 @@ def test_workflow_status_lists_main_and_problem_templates(tmp_path: Path) -> Non
     result = AgentWorkflowService().status(tmp_path)
     template_ids = {item["workflow_id"] for item in result["templates"]}
 
-    assert {"full_build_v1", "lcsc_selection_v1", "repair_after_diagnose_v1", "unknown_task_v1"} <= template_ids
+    assert {"full_build_v1", "lcsc_selection_v1", "ir_repair_v1", "repair_after_diagnose_v1", "export_repair_v1", "unknown_task_v1"} <= template_ids
 
 
 def test_unknown_task_workflow_emits_review_task(tmp_path: Path) -> None:
@@ -391,6 +395,173 @@ def test_propose_workflow_validates_and_replaces_active_frame(tmp_path: Path) ->
     active = WorkflowStackStore(tmp_path).active()
     assert active["workflow_id"] == "agent_proposed:fix_usb_power_erc"
     assert active["status"] == "waiting_for_agent_execution"
+
+
+def test_ir_repair_emits_tasks_for_validation_errors(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [
+            {
+                "ref": "U1",
+                "role": "mcu",
+                "value": "RP2040",
+                "package": "QFN-56",
+                "selected_part": {"lcsc_id": "C2040"},
+            }
+        ],
+    )
+    error_msg = "IR.components[0] missing ref"
+    with patch("kicad_suite.orchestration.agent_workflow.validate_ir", return_value=ValidationReport(ok=False, errors=[error_msg], warnings=[])):
+        result = AgentWorkflowService().run(
+            tmp_path,
+            template="ir_repair_v1",
+            model_path=model_path,
+        )
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["reason"] == "ir_validation_failed"
+    assert result["task_count"] == 1
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["type"] == "agent_repair"
+    assert tasks[0]["decision_schema"] == "repair_diagnostic_v1"
+    assert tasks[0]["diagnostic"]["source"] == "ir_validation"
+    assert tasks[0]["diagnostic"]["code"] == "MISSING_REFERENCE"
+    assert error_msg in tasks[0]["diagnostic"]["message"]
+
+
+def test_ir_repair_emits_review_for_warnings(tmp_path: Path) -> None:
+    model_path = _write_source_model(tmp_path, [{"ref": "U1", "role": "mcu", "value": "RP2040", "package": "QFN-56", "selected_part": {"lcsc_id": "C2040"}}])
+    with patch("kicad_suite.orchestration.agent_workflow.validate_ir", return_value=ValidationReport(ok=True, errors=[], warnings=["Floating net GND"])):
+        result = AgentWorkflowService().run(tmp_path, template="ir_repair_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["reason"] == "ir_validation_failed"
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["type"] == "agent_review"
+    assert tasks[0]["decision_schema"] == "review_diagnostic_v1"
+    assert tasks[0]["diagnostic"]["code"] == "FLOATING_NET"
+
+
+def test_ir_repair_completed_clears_stale_tasks(tmp_path: Path) -> None:
+    model_path = _write_source_model(tmp_path, [{"ref": "U1", "role": "mcu", "value": "RP2040", "package": "QFN-56", "selected_part": {"lcsc_id": "C2040"}}])
+    task_path = agent_tasks_path(tmp_path)
+    task_path.parent.mkdir(parents=True, exist_ok=True)
+    task_path.write_text('{"tasks":[{"task_id":"stale"}]}', encoding="utf-8")
+
+    with patch("kicad_suite.orchestration.agent_workflow.validate_ir", return_value=ValidationReport(ok=True, errors=[], warnings=[])):
+        result = AgentWorkflowService().run(tmp_path, template="ir_repair_v1", model_path=model_path)
+
+    assert result["ok"] is True
+    assert result["status"] == "completed"
+    assert not task_path.exists()
+    assert not workflow_stack_path(tmp_path).exists()
+
+
+def test_ir_repair_handles_ir_build_exception(tmp_path: Path) -> None:
+    model_path = _write_source_model(tmp_path, [{"ref": "U1", "role": "mcu", "value": "RP2040", "package": "QFN-56", "selected_part": {"lcsc_id": "C2040"}}])
+    with patch("kicad_suite.orchestration.agent_workflow.build_ir", side_effect=ValueError("Cannot compile IR")):
+        result = AgentWorkflowService().run(tmp_path, template="ir_repair_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["reason"] == "ir_build_failed"
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["diagnostic"]["code"] == "IR_BUILD_FAILED"
+    assert "Cannot compile IR" in tasks[0]["diagnostic"]["message"]
+
+
+def test_full_build_routes_to_ir_repair_on_validation_errors(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [
+            {
+                "ref": "U1",
+                "role": "mcu",
+                "value": "RP2040",
+                "package": "QFN-56",
+                "selected_part": {"lcsc_id": "C2040"},
+            }
+        ],
+    )
+    with patch("kicad_suite.orchestration.agent_workflow.validate_ir", return_value=ValidationReport(ok=False, errors=["IR.components[0] missing ref"], warnings=[])):
+        result = AgentWorkflowService().run(tmp_path, template="full_build_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["reason"] == "route_decision_required"
+    assert result["route"]["recommended_workflow"] == "ir_repair_v1"
+    assert "ir_repair_v1" in result["route"]["alternatives"]
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["decision_schema"] == "choose_workflow_route_v1"
+    assert tasks[0]["reason"] == "ir_validation_failed"
+
+
+def test_workflow_status_lists_ir_repair_template(tmp_path: Path) -> None:
+    result = AgentWorkflowService().status(tmp_path)
+    template_ids = {item["workflow_id"] for item in result["templates"]}
+    assert "ir_repair_v1" in template_ids
+
+
+def test_full_build_routes_to_ir_repair_on_build_failure(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [{"ref": "U1", "role": "mcu", "value": "RP2040", "package": "QFN-56", "selected_part": {"lcsc_id": "C2040"}}],
+    )
+    with patch("kicad_suite.orchestration.agent_workflow.build_ir", side_effect=ValueError("Cannot compile")):
+        result = AgentWorkflowService().run(tmp_path, template="full_build_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["reason"] == "route_decision_required"
+    assert result["route"]["recommended_workflow"] == "ir_repair_v1"
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["reason"] == "ir_build_failed"
+
+
+def test_full_build_routes_to_export_repair_on_export_failure(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [{"ref": "U1", "role": "mcu", "value": "RP2040", "package": "QFN-56", "selected_part": {"lcsc_id": "C2040"}}],
+    )
+    with patch("kicad_suite.orchestration.agent_workflow.validate_ir", return_value=ValidationReport(ok=True, errors=[], warnings=[])):
+        with patch.object(AgentWorkflowService, "_export_kicad_for_workflow", return_value={"ok": False, "error": "Export crash"}):
+            result = AgentWorkflowService().run(tmp_path, template="full_build_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["reason"] == "route_decision_required"
+    assert result["route"]["recommended_workflow"] == "export_repair_v1"
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["reason"] == "export_failed"
+
+
+def test_export_repair_retries_and_emits_task_on_failure(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [{"ref": "U1", "role": "mcu", "value": "RP2040", "package": "QFN-56", "selected_part": {"lcsc_id": "C2040"}}],
+    )
+    with patch.object(AgentWorkflowService, "_export_kicad_for_workflow", return_value={"ok": False, "error": "Export crash"}):
+        result = AgentWorkflowService().run(tmp_path, template="export_repair_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["reason"] == "export_failed"
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["type"] == "agent_repair"
+    assert tasks[0]["diagnostic"]["code"] == "EXPORT_FAILED"
+
+
+def test_export_repair_completed_clears_tasks(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [{"ref": "U1", "role": "mcu", "value": "RP2040", "package": "QFN-56", "selected_part": {"lcsc_id": "C2040"}}],
+    )
+    task_path = agent_tasks_path(tmp_path)
+    task_path.parent.mkdir(parents=True, exist_ok=True)
+    task_path.write_text('{"tasks":[{"task_id":"stale"}]}', encoding="utf-8")
+
+    with patch.object(AgentWorkflowService, "_export_kicad_for_workflow", return_value={"ok": True, "export": {}}):
+        result = AgentWorkflowService().run(tmp_path, template="export_repair_v1", model_path=model_path)
+
+    assert result["ok"] is True
+    assert result["status"] == "completed"
+    assert not task_path.exists()
+    assert not workflow_stack_path(tmp_path).exists()
 
 
 def test_propose_workflow_rejects_unsafe_step(tmp_path: Path) -> None:

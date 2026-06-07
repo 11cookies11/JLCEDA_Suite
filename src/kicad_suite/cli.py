@@ -275,8 +275,8 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "pins": "Pin resource management (free, assign, check).",
             "self-test": "Run the test suite and return structured results.",
             "jlc": "LCSC component search, preview (info), and download (download).",
-            "resolve-symbols": "Resolve symbols for components with selected_part.lcsc_id (--timeout 120).",
-            "workflow": "Run agent-assisted workflow templates.",
+            "resolve-symbols": "Legacy helper for downloading selected LCSC parts (--timeout 120).",
+            "workflow": "Run agent-assisted workflow templates and task routing.",
             "manifest": "Describe this agent-facing command surface.",
         },
         "project_files": {
@@ -1433,7 +1433,7 @@ def build_parser() -> argparse.ArgumentParser:
     jlc_download_cmd.add_argument("-n", "--limit", type=int, default=5)
     jlc_download_cmd.set_defaults(handler=_agent_jlc_download_handler)
 
-    agent_resolve = agent_subs.add_parser("resolve-symbols", help="Resolve symbols for selected LCSC parts.")
+    agent_resolve = agent_subs.add_parser("resolve-symbols", help="Legacy helper for downloading selected LCSC parts.")
     agent_resolve.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_resolve.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_resolve.add_argument("--timeout", type=int, default=120, help="Max total seconds (default 120).")
@@ -1446,7 +1446,7 @@ def build_parser() -> argparse.ArgumentParser:
     workflow_run.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     workflow_run.add_argument("--model", dest="model_path", type=Path, default=None)
     workflow_run.add_argument("--template", default="lcsc_selection_v1")
-    workflow_run.add_argument("--timeout", type=int, default=120, help="Max total seconds for resolving selected parts.")
+    workflow_run.add_argument("--timeout", type=int, default=120, help="Max total seconds for workflow execution.")
     workflow_run.set_defaults(handler=_agent_workflow_run_handler)
 
     workflow_status = agent_workflow_subs.add_parser("status", help="Show current agent workflow state.")

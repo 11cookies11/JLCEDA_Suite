@@ -1,23 +1,23 @@
-# KiCad Agent Suite 工作流 / Workflow
+# KiCad Agent Suite Workflow
 
-## 概览 / Overview
+## Overview
 
 ```text
 source/circuit-model.source.json
-  -> resolve-symbols
+  -> workflow run full_build_v1 / lcsc_selection_v1 / repair_after_diagnose_v1
   -> build-ir / validate-ir
   -> build/circuit-model.resolved.json
   -> export-kicad
   -> output/<topology>/
 ```
 
-## 环境要求 / Requirements
+## Requirements
 
 - Windows
 - KiCad 10.0 installed, or `KICAD_PYTHON_BIN` points to KiCad's bundled `python.exe`
 - `hwtool.exe` available on PATH or via absolute path
 
-## 第一步：创建项目 / Step 1: Create Project
+## Step 1: Create Project
 
 ```powershell
 hwtool agent create <project_dir> --project-id "my-project" --topology "my_project"
@@ -35,7 +35,7 @@ If `--include-circuit-model` is passed, the scaffold also creates:
 - `source/circuit-model.source.json`
 - `build/circuit-model.resolved.json`
 
-## 第二步：编写源模型 / Step 2: Write Source Model
+## Step 2: Write Source Model
 
 Source model path:
 
@@ -68,26 +68,30 @@ Recommended source-only fields:
 - `notes`
 - `search_hints`
 
-## 第三步：解析元件 / Step 3: Resolve Symbols
+## Step 3: LCSC Selection Workflow
 
 ```powershell
-hwtool agent resolve-symbols --project . --timeout 120
+hwtool agent workflow run --project . --template lcsc_selection_v1 --timeout 120
+hwtool agent workflow status --project .
 ```
 
-This step:
+This workflow:
 
-- reads each component's `selected_part.lcsc_id`
-- downloads the real symbol and footprint from JLC/EasyEDA
-- reports components without `selected_part.lcsc_id` as `needs_selection`
-- writes the resolved overlay to `build/circuit-model.resolved.json`
-- updates `selected_part.symbol_ref` and `selected_part.kicad_footprint_hint`
-- treats `selected_part.symbol_ref` as resolver-owned output, not a hand-authored source field
+- uses workflow orchestration as the top-level control plane
+- scans the source model for components without `selected_part.lcsc_id`
+- reports those components as `needs_selection`
+- writes agent selection tasks to `build/agent-tasks.json`
+- lets the agent choose LCSC IDs through Model API
+- reruns the same workflow after the source model changes
 
-If `needs_selection` is non-empty, the Agent should use `hwtool agent jlc search`
+If `needs_selection` is non-empty, the agent should use `hwtool agent jlc search`
 and `hwtool agent jlc info` to choose LCSC IDs, then write them through
-`hwtool agent run set_selected_part`. Do not let `resolve-symbols` guess parts.
+`hwtool agent run set_selected_part`. Then rerun the same workflow.
 
-## 第四步：编译并验证 IR / Step 4: Build & Validate IR
+`resolve-symbols` is a legacy helper for downloading already-selected parts, not
+the workflow's selection engine.
+
+## Step 4: Build and Validate IR
 
 ```powershell
 hwtool agent build-ir --project .
@@ -104,7 +108,7 @@ Output:
 
 Validation failures usually include a code and a suggestion.
 
-## 第五步：导出 KiCad / Step 5: Export KiCad
+## Step 5: Export KiCad
 
 ```powershell
 hwtool agent export-kicad --project .
@@ -114,20 +118,20 @@ Generated files:
 
 ```text
 output/<topology>/
-├── <topology>.kicad_pro
-├── <topology>.kicad_sch
-├── <topology>.kicad_pcb
-├── fp-lib-table
-├── sym-lib-table
-├── <topology>.erc.json
-└── agent-report.json
+  <topology>.kicad_pro
+  <topology>.kicad_sch
+  <topology>.kicad_pcb
+  fp-lib-table
+  sym-lib-table
+  <topology>.erc.json
+  agent-report.json
 ```
 
-## 常见问题 / Troubleshooting
+## Troubleshooting
 
 ### footprint not found
 
-- Run `resolve-symbols` first
+- Run `hwtool agent workflow run --project . --template lcsc_selection_v1 --timeout 120` first
 - Make sure `selected_part.lcsc_id` is correct
 - Add `kicad_footprint_hint` when the automatic footprint mapping is ambiguous
 
@@ -137,10 +141,12 @@ output/<topology>/
 - Confirm `KICAD_PYTHON_BIN` points to the correct Python
 - Re-run `hwtool agent export-kicad`
 
-### resolve-symbols times out
+### resolve-symbols is slow or times out
 
-- Increase `--timeout`
-- Verify network access to EasyEDA/JLC
+- Treat `resolve-symbols` as an optional legacy helper, not a required workflow step
+- Use `hwtool agent workflow run --project . --template lcsc_selection_v1 --timeout 120`
+  to drive LCSC selection through the workflow stack
+- Verify network access to EasyEDA/JLC only when you intentionally use the legacy helper
 
 ## PCB Verification
 

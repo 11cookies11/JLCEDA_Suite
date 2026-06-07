@@ -58,43 +58,52 @@ Rules:
 
 ## Mandatory Agent Workflow
 
-Run these stages in order for project work:
+Use workflow orchestration as the primary entrypoint for project work:
 
 ```powershell
 hwtool agent status --project .
 hwtool agent inspect --project .
 hwtool agent diagnose --project .
 hwtool agent workflow status --project .
-hwtool agent resolve-symbols --project . --timeout 120
-hwtool agent workflow run --project . --template lcsc_selection_v1 --timeout 120
-hwtool agent build-ir --project .
-hwtool agent validate-ir --project .
-hwtool agent export-kicad --project .
+hwtool agent workflow run --project . --template full_build_v1 --timeout 120
+hwtool agent workflow status --project .
 hwtool agent report --project . --markdown
 ```
+
+`full_build_v1` covers: LCSC check → IR build & validate → KiCad export → ERC diagnose.
+When it returns `waiting_for_agent`, resolve the task; when it returns `completed`, the
+KiCad project has been generated and ERC is clean.
 
 Workflow rules:
 
 - Start with `status`, `inspect`, and `diagnose` before editing.
-- Run `resolve-symbols` before the first KiCad export, or after part choices change.
-- Run `build-ir` and `validate-ir` after model changes.
-- Do not run `export-kicad` if `validate-ir` reports errors.
-- Run `diagnose` again after repairs so the Agent can compare structured results.
+- Run workflow templates, not ad hoc atomic commands, to create and manage agent tasks.
+- Use `full_build_v1` as the main workflow unless the user asks for a specific child workflow.
+- Use `lcsc_selection_v1` for LCSC selection tasks.
+- Use `ir_repair_v1` for IR validation repair tasks.
+- Use `repair_after_diagnose_v1` for ERC/diagnose repair or review tasks.
+- Use `unknown_task_v1` for unclassified workflow conditions.
+- `build-ir`, `validate-ir`, and `export-kicad` remain available as diagnostic/debug atomic commands. Prefer workflow templates for normal project work.
 
 ## Agent Repair Loop
 
 For automated repair, use this loop:
 
 ```text
-inspect -> diagnose -> patch/run -> resolve-symbols if needed -> build-ir -> validate-ir -> export-kicad -> diagnose
+inspect -> diagnose -> workflow run/status -> patch/run if task requires it -> rerun workflow
 ```
+
+`full_build_v1` handles IR build, IR validation, KiCad export, and ERC diagnose
+internally. The agent only needs to resolve tasks when the workflow returns
+`waiting_for_agent`.
 
 Use these interfaces:
 
 - `hwtool agent inspect --project .` for project summary and model counts.
 - `hwtool agent diagnose --project .` for structured repair categories.
-- `hwtool agent workflow run --project . --template lcsc_selection_v1` for agent-assisted LCSC selection tasks.
-- `hwtool agent workflow run --project . --template full_build_v1` for the main workflow.
+- `hwtool agent workflow run --project . --template full_build_v1` for the main workflow (LCSC → IR → export → ERC).
+- `hwtool agent workflow run --project . --template lcsc_selection_v1` for LCSC selection tasks.
+- `hwtool agent workflow run --project . --template ir_repair_v1` for IR validation repair tasks.
 - `hwtool agent workflow run --project . --template repair_after_diagnose_v1` for diagnose-driven repair/review tasks.
 - `hwtool agent workflow run --project . --template unknown_task_v1` for unknown task classification.
 - `hwtool agent workflow propose --project . --file <plan.json>` for a validated agent-proposed workflow when no built-in template fits.
@@ -108,19 +117,34 @@ Use these interfaces:
 - `hwtool agent jlc search "<keyword>" -n 5` before choosing unknown LCSC IDs.
 - `hwtool agent jlc download --lcsc-id C8734 --project .` for a single part download.
 
+Atomic commands such as `resolve-symbols`, `jlc search`, `jlc info`, `agent run`,
+and `agent patch` are tools used inside a workflow decision. Do not use them as
+the top-level plan when a workflow template can represent the task.
+
 ## LCSC Selection Loop
 
-`resolve-symbols` is a deterministic downloader. It only downloads parts that
-already have `selected_part.lcsc_id`; missing IDs are `needs_selection`, not a
-resolver failure.
+`lcsc_selection_v1` is the workflow for LCSC selection. It does not depend on
+`resolve-symbols` as a workflow step. The workflow only scans for components
+that are missing `selected_part.lcsc_id` and emits agent tasks for those parts.
+`resolve-symbols` remains a legacy helper for downloading already-selected
+parts, not the selection engine.
+
+Start with:
+
+```powershell
+hwtool agent workflow run --project . --template lcsc_selection_v1 --timeout 120
+hwtool agent workflow status --project .
+```
 
 When `needs_selection` is returned:
 
+- Read the current task from `hwtool agent workflow status --project .` or from `build/agent-tasks.json`.
 - Use the component `role`, `value`, `package`, sheet, nets, notes, and search hints to build a search query.
 - Run `hwtool agent jlc search "<query>" -n 5`, then inspect plausible candidates with `hwtool agent jlc info <C...>`.
 - Write the selected part through `hwtool agent run set_selected_part --project . --payload-json '{...}'`.
-- Re-run `hwtool agent resolve-symbols --project . --timeout 120`.
-- Do not write `selected_part.symbol_ref` or `selected_part.kicad_footprint_hint`; those are resolver-owned.
+- Re-run `hwtool agent workflow run --project . --template lcsc_selection_v1 --timeout 120`.
+- Write `selected_part.lcsc_id` through Model API.
+- Do not treat `resolve-symbols` as the workflow's decision maker.
 
 Example:
 
@@ -195,11 +219,11 @@ hwtool agent diagnose --project .
 
 Common interpretations:
 
-- `footprint not found`: run `resolve-symbols`; verify `selected_part.lcsc_id`; inspect `kicad_footprint_hint`.
+- `footprint not found`: verify `selected_part.lcsc_id`; inspect `kicad_footprint_hint`; use `resolve-symbols` only as a legacy helper if you intentionally want to download selected parts.
 - `pin_to_pin` with generic or unspecified pins: often library metadata; check `library_noise` before changing nets.
 - `pin_not_driven` on passives: often imported symbol pin types; check whether classification marks it as `library_noise`.
 - `duplicate pin number`: real model issue; inspect net members and pinmap.
-- `PROJECT_STATE_STALE`: rerun `build-ir` and `validate-ir` after source changes.
+- `PROJECT_STATE_STALE`: rerun `hwtool agent workflow run --template full_build_v1` after source changes.
 
 ## Do Not
 
@@ -252,11 +276,12 @@ hwtool agent manifest
 hwtool agent status --project .
 hwtool agent inspect --project .
 hwtool agent diagnose --project .
-hwtool agent resolve-symbols --project . --timeout 120
-hwtool agent build-ir --project .
-hwtool agent validate-ir --project .
-hwtool agent export-kicad --project .
+hwtool agent workflow run --project . --template full_build_v1 --timeout 120
+hwtool agent workflow status --project .
 hwtool agent report --project . --markdown
+hwtool agent build-ir --project .       # diagnostic / debug only
+hwtool agent validate-ir --project .    # diagnostic / debug only
+hwtool agent export-kicad --project .   # diagnostic / debug only
 hwtool agent patch --project . --payload-json '{...}'
 hwtool agent run <operation> --project . --payload-json '{...}'
 hwtool agent pins free --project . --ref U1

@@ -342,7 +342,7 @@ class ProjectState:
     def _read_model(self) -> dict[str, Any] | None:
         if not self.model_path.exists():
             return None
-        return json.loads(self.model_path.read_text(encoding="utf-8"))
+        return json.loads(self.model_path.read_text(encoding="utf-8-sig"))
 
     def _hash_dict(self, data: dict[str, Any]) -> str:
         canonical = json.dumps(data, sort_keys=True, ensure_ascii=False)

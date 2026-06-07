@@ -128,7 +128,7 @@ Runs an agent-assisted workflow template. The first implemented template is
 `lcsc_selection_v1`. Available initial templates:
 
 - `full_build_v1`: main workflow; emits route tasks for agent-confirmed child workflows.
-- `lcsc_selection_v1`: resolves selected LCSC parts and emits LCSC selection tasks.
+- `lcsc_selection_v1`: scans for missing `selected_part.lcsc_id` values and emits LCSC selection tasks.
 - `repair_after_diagnose_v1`: emits repair/review tasks from diagnose findings.
 - `unknown_task_v1`: fallback review workflow for unknown or unsupported conditions.
 
@@ -201,10 +201,10 @@ hwtool agent resolve-symbols --project <dir> [--model <path>] `
   [--timeout 120]
 ```
 
-Downloads JLC/EasyEDA symbols and footprints based on `selected_part.lcsc_id`.
-Components without `selected_part.lcsc_id` are reported as `needs_selection`; the
-agent should select an LCSC ID with `jlc search` / `jlc info` and write it back
-with `agent run set_selected_part`.
+Legacy helper that downloads JLC/EasyEDA symbols and footprints based on
+`selected_part.lcsc_id`. Components without `selected_part.lcsc_id` are reported
+as `needs_selection`; the agent should select an LCSC ID with `jlc search` /
+`jlc info` and write it back with `agent run set_selected_part`.
 
 Outputs:
 
@@ -213,7 +213,8 @@ Outputs:
 - resolver-owned fields such as `selected_part.symbol_ref`
 - resolver-owned fields such as `selected_part.kicad_footprint_hint`
 
-Run this before the first `export-kicad`, and after part choices change.
+Use this only when you explicitly want the legacy downloader. It is not required
+as a workflow step.
 
 ### `agent build-ir`
 
@@ -459,7 +460,6 @@ hwtool agent status --project .
 hwtool agent inspect --project .
 hwtool agent diagnose --project .
 hwtool agent patch --project . --payload-json '{...}'
-hwtool agent resolve-symbols --project . --timeout 120
 hwtool agent build-ir --project .
 hwtool agent validate-ir --project .
 hwtool agent export-kicad --project .

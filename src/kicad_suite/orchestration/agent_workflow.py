@@ -1,7 +1,8 @@
 """Agent-assisted workflow orchestration.
 
-This module coordinates existing atomic services. It does not make part
-selection decisions and does not write generated files as source truth.
+This module coordinates workflow templates and task emission. It does not
+make part selection decisions or perform symbol downloading as a workflow
+dependency.
 """
 
 from __future__ import annotations
@@ -10,7 +11,8 @@ from pathlib import Path
 from typing import Any
 
 from ..application_services.agent_diagnostics import build_agent_diagnostics
-from ..application_services.part_resolution_service import PartResolutionService
+from ..domain.core.ir_compiler import build_ir
+from ..domain.core.ir_validator import validate_ir
 from ..domain.core.simulation_planner import load_circuit_model
 from .proposed_workflow import (
     load_proposed_workflow_file,
@@ -37,8 +39,9 @@ ROUTE_PENDING_WORKFLOW_ID = "__route_pending__"
 class AgentWorkflowService:
     """Run idempotent agent-assisted workflows."""
 
-    def __init__(self, *, part_resolution_service: PartResolutionService | None = None) -> None:
-        self.part_resolution_service = part_resolution_service or PartResolutionService()
+    def __init__(self, *, part_resolution_service: object | None = None) -> None:
+        # Kept for backward compatibility with older tests and callers.
+        self.part_resolution_service = part_resolution_service
 
     def run(
         self,
@@ -81,6 +84,10 @@ class AgentWorkflowService:
                 result = self._run_lcsc_selection(project, model_path=model_path, timeout=timeout)
             elif workflow_template.workflow_id == "repair_after_diagnose_v1":
                 result = self._run_repair_after_diagnose(project, model_path=model_path)
+            elif workflow_template.workflow_id == "ir_repair_v1":
+                result = self._run_ir_repair(project, model_path=model_path)
+            elif workflow_template.workflow_id == "export_repair_v1":
+                result = self._run_export_repair(project, model_path=model_path)
             elif workflow_template.workflow_id == "unknown_task_v1":
                 result = self._run_unknown_task(project)
             else:
@@ -292,13 +299,8 @@ class AgentWorkflowService:
                 "reason": "model_not_found",
                 "model": str(model_file),
             }
-        result = self.part_resolution_service.resolve_symbols(
-            project_path,
-            model,
-            timeout=timeout,
-            model_path=model_file,
-        )
-        tasks = _build_lcsc_selection_tasks(model, result)
+        missing = _components_missing_lcsc(model)
+        tasks = [_lcsc_selection_task(item) for item in missing]
         if tasks:
             tasks_file = write_agent_tasks(
                 project_path,
@@ -315,19 +317,23 @@ class AgentWorkflowService:
                 "tasks_file": str(tasks_file),
                 "task_count": len(tasks),
                 "rerun_after_agent": True,
-                "next_action": "read tasks_file, set selected_part.lcsc_id through Model API, then rerun this workflow",
-                "resolution": _resolution_summary(result),
+                "next_action": "read tasks_file, choose LCSC IDs through Model API, then rerun this workflow",
+                "selection": {
+                    "missing_selected_part_lcsc_id": len(missing),
+                },
             }
         clear_agent_tasks(project_path)
         return {
-            "ok": bool(result.get("ok", False)),
+            "ok": True,
             "stage": "workflow",
             "workflow_id": workflow_id,
-            "status": "completed" if result.get("ok", False) else "failed",
-            "reason": "" if result.get("ok", False) else "resolution_failed",
+            "status": "completed",
+            "reason": "",
             "tasks_file": str(agent_tasks_path(project_path)),
             "task_count": 0,
-            "resolution": _resolution_summary(result),
+            "selection": {
+                "missing_selected_part_lcsc_id": 0,
+            },
         }
 
     def _run_full_build(
@@ -367,6 +373,60 @@ class AgentWorkflowService:
                 },
             )
 
+        # IR build milestone
+        try:
+            ir = build_ir(model)
+        except (ValueError, KeyError, TypeError) as exc:
+            return self._emit_route_task(
+                project_path,
+                workflow_id=workflow_id,
+                task_id="route:ir_build_failed",
+                reason="ir_build_failed",
+                summary=f"IR build failed: {exc}",
+                recommended_workflow="ir_repair_v1",
+                alternatives=["ir_repair_v1", "unknown_task_v1"],
+                context={
+                    "error": str(exc),
+                    "source": "full_build_v1.ir_build_milestone",
+                },
+            )
+
+        # IR validation milestone
+        ir_report = validate_ir(ir)
+        if ir_report.errors:
+            return self._emit_route_task(
+                project_path,
+                workflow_id=workflow_id,
+                task_id="route:ir_validation_failed",
+                reason="ir_validation_failed",
+                summary=f"IR validation found {len(ir_report.errors)} errors and {len(ir_report.warnings)} warnings.",
+                recommended_workflow="ir_repair_v1",
+                alternatives=["ir_repair_v1", "unknown_task_v1"],
+                context={
+                    "ir_errors": len(ir_report.errors),
+                    "ir_warnings": len(ir_report.warnings),
+                    "source": "full_build_v1.ir_milestone",
+                },
+            )
+
+        # KiCad export milestone
+        export_result = self._export_kicad_for_workflow(project_path, model, model_file)
+        if not export_result.get("ok"):
+            return self._emit_route_task(
+                project_path,
+                workflow_id=workflow_id,
+                task_id="route:export_failed",
+                reason="export_failed",
+                summary=str(export_result.get("error", "KiCad export failed.")),
+                recommended_workflow="export_repair_v1",
+                alternatives=["export_repair_v1", "unknown_task_v1"],
+                context={
+                    "error": export_result.get("error", "KiCad export failed."),
+                    "source": "full_build_v1.export_milestone",
+                },
+            )
+
+        # Post-export diagnose milestone
         diagnostics = build_agent_diagnostics(project_path, model_file)
         counts = diagnostics.get("counts", {}) if isinstance(diagnostics, dict) else {}
         must_fix = int(counts.get("must_fix", 0) or 0)
@@ -399,6 +459,7 @@ class AgentWorkflowService:
                 "must_fix": must_fix,
                 "review_required": review_required,
             },
+            "export": export_result.get("export", {}),
         }
 
     def _run_repair_after_diagnose(
@@ -439,6 +500,218 @@ class AgentWorkflowService:
             "status": "completed",
             "reason": "",
             "diagnostics": diagnostics.get("counts", {}) if isinstance(diagnostics, dict) else {},
+        }
+
+    def _run_ir_repair(
+        self,
+        project_path: Path,
+        *,
+        model_path: str | Path | None,
+    ) -> dict[str, Any]:
+        workflow_id = "ir_repair_v1"
+        model_file = Path(model_path) if model_path is not None else project_path / "source" / "circuit-model.source.json"
+        try:
+            model = load_circuit_model(model_file)
+        except FileNotFoundError:
+            return {
+                "ok": False,
+                "stage": "workflow",
+                "workflow_id": workflow_id,
+                "status": "failed",
+                "reason": "model_not_found",
+                "model": str(model_file),
+            }
+        try:
+            ir = build_ir(model)
+        except (ValueError, KeyError, TypeError) as exc:
+            tasks_file = write_agent_tasks(
+                project_path,
+                workflow_id=workflow_id,
+                tasks=[{
+                    "task_id": "repair:ir_build:BUILD_FAILED:1",
+                    "type": "agent_repair",
+                    "decision_schema": "repair_diagnostic_v1",
+                    "reason": "must_fix",
+                    "diagnostic": {
+                        "source": "ir_build",
+                        "code": "IR_BUILD_FAILED",
+                        "severity": "error",
+                        "message": str(exc),
+                    },
+                    "allowed_actions": [
+                        "apply_model_operation",
+                        "needs_human_review",
+                        "skip_with_reason",
+                    ],
+                    "allowed_operations": [
+                        "connect_member",
+                        "disconnect_member",
+                        "set_net_kind",
+                        "update_component",
+                        "set_selected_part",
+                        "patch_model",
+                    ],
+                    "write_operation": "agent run or agent patch",
+                }],
+                reason="ir_build_failed",
+            )
+            return {
+                "ok": False,
+                "stage": "workflow",
+                "workflow_id": workflow_id,
+                "status": "waiting_for_agent",
+                "reason": "ir_build_failed",
+                "tasks_file": str(tasks_file),
+                "task_count": 1,
+                "rerun_after_agent": True,
+                "next_action": "fix the circuit model so it can compile to IR, then rerun this workflow",
+            }
+        report = validate_ir(ir)
+        tasks = _build_ir_diagnostic_tasks(report)
+        if tasks:
+            tasks_file = write_agent_tasks(
+                project_path,
+                workflow_id=workflow_id,
+                tasks=tasks,
+                reason="ir_validation_failed",
+            )
+            return {
+                "ok": False,
+                "stage": "workflow",
+                "workflow_id": workflow_id,
+                "status": "waiting_for_agent",
+                "reason": "ir_validation_failed",
+                "tasks_file": str(tasks_file),
+                "task_count": len(tasks),
+                "rerun_after_agent": True,
+                "next_action": "resolve IR validation errors through Model API, then rerun this workflow",
+                "ir_validation": {
+                    "errors": len(report.errors),
+                    "warnings": len(report.warnings),
+                },
+            }
+        clear_agent_tasks(project_path)
+        return {
+            "ok": True,
+            "stage": "workflow",
+            "workflow_id": workflow_id,
+            "status": "completed",
+            "reason": "",
+            "ir_validation": {
+                "errors": 0,
+                "warnings": 0,
+            },
+        }
+
+    @staticmethod
+    def _export_kicad_for_workflow(
+        project_path: Path,
+        model: dict[str, Any],
+        model_file: Path,
+    ) -> dict[str, Any]:
+        """Run KiCad export through ModelApiService and return a summary.
+
+        This keeps the full export logic (plan, write, postprocess, ERC, report)
+        inside the Model API layer; the workflow only orchestrates the result.
+        """
+        from ..model_api import CircuitModelRepository, ModelApiService  # noqa: PLC0415
+        try:
+            service = ModelApiService.from_repository(CircuitModelRepository(model_file))
+            project_id = str(model.get("project_id", "") or project_path.name)
+            topology = str(model.get("topology", "") or project_id.replace("-", "_"))
+            request = {
+                "schema_version": "dsl-api-request.v1",
+                "request_id": f"agent-workflow-export-{topology}",
+                "project_id": project_id,
+                "topology": topology,
+                "operation": "export_kicad_project",
+                "payload": {
+                    "output_dir": str(project_path / "output"),
+                    "project_name": topology,
+                },
+            }
+            result = service.handle_dict(request)
+            if result.get("success"):
+                return {"ok": True, "export": result.get("result", {})}
+            errors = result.get("errors", [])
+            message = str(errors[0].get("message", "Export failed.")) if errors else "Export failed."
+            return {"ok": False, "error": message}
+        except ImportError as exc:
+            return {"ok": False, "error": f"Model API not available: {exc}"}
+        except (OSError, ValueError, KeyError, TypeError) as exc:
+            return {"ok": False, "error": str(exc)}
+
+    def _run_export_repair(
+        self,
+        project_path: Path,
+        *,
+        model_path: str | Path | None,
+    ) -> dict[str, Any]:
+        workflow_id = "export_repair_v1"
+        model_file = Path(model_path) if model_path is not None else project_path / "source" / "circuit-model.source.json"
+        try:
+            model = load_circuit_model(model_file)
+        except FileNotFoundError:
+            return {
+                "ok": False,
+                "stage": "workflow",
+                "workflow_id": workflow_id,
+                "status": "failed",
+                "reason": "model_not_found",
+                "model": str(model_file),
+            }
+        export_result = self._export_kicad_for_workflow(project_path, model, model_file)
+        if not export_result.get("ok"):
+            tasks_file = write_agent_tasks(
+                project_path,
+                workflow_id=workflow_id,
+                tasks=[{
+                    "task_id": "repair:export_kicad:EXPORT_FAILED:1",
+                    "type": "agent_repair",
+                    "decision_schema": "repair_diagnostic_v1",
+                    "reason": "must_fix",
+                    "diagnostic": {
+                        "source": "export_kicad",
+                        "code": "EXPORT_FAILED",
+                        "severity": "error",
+                        "message": str(export_result.get("error", "KiCad export failed.")),
+                    },
+                    "allowed_actions": [
+                        "apply_model_operation",
+                        "needs_human_review",
+                        "skip_with_reason",
+                    ],
+                    "allowed_operations": [
+                        "connect_member",
+                        "disconnect_member",
+                        "set_net_kind",
+                        "update_component",
+                        "set_selected_part",
+                        "patch_model",
+                    ],
+                    "write_operation": "agent run or agent patch",
+                }],
+                reason="export_failed",
+            )
+            return {
+                "ok": False,
+                "stage": "workflow",
+                "workflow_id": workflow_id,
+                "status": "waiting_for_agent",
+                "reason": "export_failed",
+                "tasks_file": str(tasks_file),
+                "task_count": 1,
+                "rerun_after_agent": True,
+                "next_action": "fix circuit model issues and rerun this workflow",
+            }
+        clear_agent_tasks(project_path)
+        return {
+            "ok": True,
+            "stage": "workflow",
+            "workflow_id": workflow_id,
+            "status": "completed",
+            "reason": "",
+            "export": export_result.get("export", {}),
         }
 
     def _run_unknown_task(self, project_path: Path) -> dict[str, Any]:
@@ -544,31 +817,6 @@ class AgentWorkflowService:
         return {**result, "workflow": stack.summary()}
 
 
-def _resolution_summary(result: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "ok": bool(result.get("ok", False)),
-        "resolved": int(result.get("resolved", 0) or 0),
-        "downloaded": int(result.get("downloaded", 0) or 0),
-        "needs_selection": int(result.get("needs_selection", 0) or 0),
-        "failed": int(result.get("failed", 0) or 0),
-    }
-
-
-def _build_lcsc_selection_tasks(model: dict[str, Any], result: dict[str, Any]) -> list[dict[str, Any]]:
-    components_by_ref = _components_by_ref(model)
-    tasks: list[dict[str, Any]] = []
-    for item in result.get("details", []):
-        if not isinstance(item, dict):
-            continue
-        reason = str(item.get("reason", ""))
-        if reason not in {"missing_selected_part_lcsc_id", "timeout"}:
-            continue
-        ref = str(item.get("ref", "")).strip()
-        component = components_by_ref.get(ref, {})
-        tasks.append(_lcsc_selection_task(ref, component, reason))
-    return tasks
-
-
 def _components_missing_lcsc(model: dict[str, Any]) -> list[dict[str, Any]]:
     components = model.get("components", [])
     if not isinstance(components, list):
@@ -623,21 +871,107 @@ def _build_diagnostic_tasks(diagnostics: dict[str, Any]) -> list[dict[str, Any]]
     return tasks
 
 
-def _components_by_ref(model: dict[str, Any]) -> dict[str, dict[str, Any]]:
-    components = model.get("components", [])
-    if not isinstance(components, list):
-        return {}
-    result: dict[str, dict[str, Any]] = {}
-    for component in components:
-        if not isinstance(component, dict):
-            continue
-        ref = str(component.get("ref", "")).strip()
-        if ref:
-            result[ref] = component
-    return result
+def _build_ir_diagnostic_tasks(report: Any) -> list[dict[str, Any]]:
+    """Convert an IR validation report (errors/warnings) into agent repair tasks."""
+    tasks: list[dict[str, Any]] = []
+    errors = getattr(report, "errors", []) if hasattr(report, "errors") else []
+    warnings = getattr(report, "warnings", []) if hasattr(report, "warnings") else []
+    if not isinstance(errors, list):
+        errors = []
+    if not isinstance(warnings, list):
+        warnings = []
+    for index, error in enumerate(errors, start=1):
+        message = str(error)
+        code = _classify_ir_message(message)
+        tasks.append({
+            "task_id": f"agent_repair:ir_validation:{code}:{index}",
+            "type": "agent_repair",
+            "decision_schema": "repair_diagnostic_v1",
+            "reason": "must_fix",
+            "diagnostic": {
+                "source": "ir_validation",
+                "code": code,
+                "severity": "error",
+                "message": message,
+            },
+            "allowed_actions": [
+                "apply_model_operation",
+                "needs_human_review",
+                "skip_with_reason",
+            ],
+            "allowed_operations": [
+                "connect_member",
+                "disconnect_member",
+                "set_net_kind",
+                "update_component",
+                "set_selected_part",
+                "patch_model",
+                "add_component",
+                "remove_component",
+                "add_net",
+                "remove_net",
+                "merge_nets",
+            ],
+            "write_operation": "agent run or agent patch",
+        })
+    for index, warning in enumerate(warnings, start=len(errors) + 1):
+        message = str(warning)
+        code = _classify_ir_message(message)
+        tasks.append({
+            "task_id": f"agent_review:ir_validation:{code}:{index}",
+            "type": "agent_review",
+            "decision_schema": "review_diagnostic_v1",
+            "reason": "review_required",
+            "diagnostic": {
+                "source": "ir_validation",
+                "code": code,
+                "severity": "warning",
+                "message": message,
+            },
+            "allowed_actions": [
+                "apply_model_operation",
+                "needs_human_review",
+                "mark_library_noise",
+                "skip_with_reason",
+            ],
+            "allowed_operations": [
+                "connect_member",
+                "disconnect_member",
+                "set_net_kind",
+                "update_component",
+                "set_selected_part",
+                "patch_model",
+            ],
+            "write_operation": "agent run or agent patch",
+        })
+    return tasks
 
 
-def _lcsc_selection_task(ref: str, component: dict[str, Any], reason: str) -> dict[str, Any]:
+def _classify_ir_message(message: str) -> str:
+    """Classify an IR validation message into a stable error code."""
+    lower = message.lower()
+    if "duplicate" in lower:
+        return "DUPLICATE_ENTRY"
+    if "missing" in lower or "not found" in lower:
+        return "MISSING_REFERENCE"
+    if "must be" in lower:
+        return "INVALID_FIELD_TYPE"
+    if "circular" in lower:
+        return "CIRCULAR_REFERENCE"
+    if "floating" in lower:
+        return "FLOATING_NET"
+    if "schema_version" in lower:
+        return "SCHEMA_VERSION_MISMATCH"
+    if "unknown" in lower:
+        return "UNKNOWN_VALUE"
+    if "forbidden" in lower or "leaked" in lower or "leakage" in lower:
+        return "KICAD_FIELD_LEAKAGE"
+    return "VALIDATION_FINDING"
+
+
+def _lcsc_selection_task(component: dict[str, Any]) -> dict[str, Any]:
+    ref = str(component.get("ref", "")).strip()
+    reason = "missing_selected_part_lcsc_id"
     selected = component.get("selected_part", {}) if isinstance(component.get("selected_part"), dict) else {}
     search_hints = component.get("search_hints", [])
     if not isinstance(search_hints, list):

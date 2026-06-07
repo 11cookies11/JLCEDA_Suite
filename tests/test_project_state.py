@@ -53,6 +53,18 @@ def test_mark_dirty_changes_status(tmp_path):
     assert ps.state_path.exists()
 
 
+def test_mark_dirty_accepts_bom_encoded_model(tmp_path):
+    model_path = _write_model(tmp_path)
+    text = model_path.read_text(encoding="utf-8")
+    model_path.write_text("\ufeff" + text, encoding="utf-8")
+
+    ps = ProjectState(tmp_path)
+    ps.load()
+    ps.mark_dirty("bom model")
+
+    assert ps.get_status() == "DIRTY"
+
+
 def test_mark_valid_after_dirty(tmp_path):
     _write_model(tmp_path)
     ps = ProjectState(tmp_path)
