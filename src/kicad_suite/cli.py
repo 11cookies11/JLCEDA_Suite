@@ -25,6 +25,7 @@ from .adapters.jlc_installer import install_by_lcsc_id, search_and_install
 from .adapters.kicad_erc_runner import run as run_erc
 from .adapters.kicad_project_writer import run as run_write_project
 from .model_api import CircuitModelRepository, ModelApiService
+from .orchestration.agent_workflow import AgentWorkflowService
 from .application_services.project_state import (
     ProjectState,
     is_mutating_operation,
@@ -274,7 +275,8 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "pins": "Pin resource management (free, assign, check).",
             "self-test": "Run the test suite and return structured results.",
             "jlc": "LCSC component search, preview (info), and download (download).",
-            "resolve-symbols": "Auto-resolve missing symbols via JLC search (--timeout 120).",
+            "resolve-symbols": "Resolve symbols for components with selected_part.lcsc_id (--timeout 120).",
+            "workflow": "Run agent-assisted workflow templates.",
             "manifest": "Describe this agent-facing command surface.",
         },
         "project_files": {
@@ -299,6 +301,7 @@ def _agent_status_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     ps = ProjectState(project_path)
     ps.load()
+    workflow = AgentWorkflowService().status(project_path).get("workflow", {})
     return _print_json({
         "ok": True,
         "stage": "status",
@@ -306,6 +309,7 @@ def _agent_status_handler(args: argparse.Namespace) -> int:
         "stale": ps.is_stale(),
         "project": ps.state.get("project", {}),
         "summary": ps.get_summary(),
+        "workflow": workflow,
     })
 
 
@@ -1017,21 +1021,41 @@ def _agent_resolve_symbols_handler(args: argparse.Namespace) -> int:
     ps.load()
     easyeda = sum(1 for x in result.get("details", []) if x.get("source") == "easyeda")
     search_hint = sum(1 for x in result.get("details", []) if x.get("source") == "search_hint")
-    placeholder = sum(1 for x in result.get("details", []) if "placeholder" in x.get("source", ""))
     ps.mark_dirty(reason="resolve-symbols")
     ps._append_operation({
         "op": "resolve_symbols",
         "ok": result.get("ok", False),
         "elapsed_sec": elapsed,
-        "total": result.get("resolved", 0),
+        "resolved": result.get("resolved", 0),
+        "downloaded": result.get("downloaded", 0),
         "easyeda": easyeda,
         "search_hint": search_hint,
-        "placeholder": placeholder,
+        "placeholder": result.get("placeholders", 0),
+        "pending": result.get("pending", 0),
+        "needs_selection": result.get("needs_selection", 0),
         "failed": result.get("failed", 0),
         "model_updated": result.get("model_updated", False),
     })
     ps.save()
 
+    return _print_json(result)
+
+
+def _agent_workflow_run_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    model_path = _agent_model_path(args)
+    result = AgentWorkflowService().run(
+        project_path,
+        template=args.template,
+        model_path=model_path,
+        timeout=args.timeout,
+    )
+    return _print_json(result)
+
+
+def _agent_workflow_status_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    result = AgentWorkflowService().status(project_path)
     return _print_json(result)
 
 
@@ -1390,11 +1414,25 @@ def build_parser() -> argparse.ArgumentParser:
     jlc_download_cmd.add_argument("-n", "--limit", type=int, default=5)
     jlc_download_cmd.set_defaults(handler=_agent_jlc_download_handler)
 
-    agent_resolve = agent_subs.add_parser("resolve-symbols", help="Auto-resolve all missing symbols via JLC search.")
+    agent_resolve = agent_subs.add_parser("resolve-symbols", help="Resolve symbols for selected LCSC parts.")
     agent_resolve.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     agent_resolve.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_resolve.add_argument("--timeout", type=int, default=120, help="Max total seconds (default 120).")
     agent_resolve.set_defaults(handler=_agent_resolve_symbols_handler)
+
+    agent_workflow = agent_subs.add_parser("workflow", help="Run agent-assisted workflow templates.")
+    agent_workflow_subs = agent_workflow.add_subparsers(dest="workflow_action")
+
+    workflow_run = agent_workflow_subs.add_parser("run", help="Run an agent-assisted workflow template.")
+    workflow_run.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    workflow_run.add_argument("--model", dest="model_path", type=Path, default=None)
+    workflow_run.add_argument("--template", default="lcsc_selection_v1")
+    workflow_run.add_argument("--timeout", type=int, default=120, help="Max total seconds for resolving selected parts.")
+    workflow_run.set_defaults(handler=_agent_workflow_run_handler)
+
+    workflow_status = agent_workflow_subs.add_parser("status", help="Show current agent workflow state.")
+    workflow_status.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    workflow_status.set_defaults(handler=_agent_workflow_status_handler)
 
     # kas project
     project_cmd = subparsers.add_parser("project", help="Project state management.")

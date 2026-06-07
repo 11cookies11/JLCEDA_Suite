@@ -64,7 +64,9 @@ Run these stages in order for project work:
 hwtool agent status --project .
 hwtool agent inspect --project .
 hwtool agent diagnose --project .
+hwtool agent workflow status --project .
 hwtool agent resolve-symbols --project . --timeout 120
+hwtool agent workflow run --project . --template lcsc_selection_v1 --timeout 120
 hwtool agent build-ir --project .
 hwtool agent validate-ir --project .
 hwtool agent export-kicad --project .
@@ -91,12 +93,44 @@ Use these interfaces:
 
 - `hwtool agent inspect --project .` for project summary and model counts.
 - `hwtool agent diagnose --project .` for structured repair categories.
+- `hwtool agent workflow run --project . --template lcsc_selection_v1` for agent-assisted LCSC selection tasks.
+- `hwtool agent workflow status --project .` for pending workflow task summary.
+- `hwtool agent status --project .` includes workflow stack/task summary for the Agent.
 - `hwtool agent patch --project . --payload-json '{...}'` for JSON patch changes.
 - `hwtool agent run <operation> --project . --payload-json '{...}'` for model API operations.
 - `hwtool agent pins free --project . --ref U1` for available MCU pins.
 - `hwtool agent pins check --project .` for pin conflicts.
 - `hwtool agent jlc search "<keyword>" -n 5` before choosing unknown LCSC IDs.
 - `hwtool agent jlc download --lcsc-id C8734 --project .` for a single part download.
+
+## LCSC Selection Loop
+
+`resolve-symbols` is a deterministic downloader. It only downloads parts that
+already have `selected_part.lcsc_id`; missing IDs are `needs_selection`, not a
+resolver failure.
+
+When `needs_selection` is returned:
+
+- Use the component `role`, `value`, `package`, sheet, nets, notes, and search hints to build a search query.
+- Run `hwtool agent jlc search "<query>" -n 5`, then inspect plausible candidates with `hwtool agent jlc info <C...>`.
+- Write the selected part through `hwtool agent run set_selected_part --project . --payload-json '{...}'`.
+- Re-run `hwtool agent resolve-symbols --project . --timeout 120`.
+- Do not write `selected_part.symbol_ref` or `selected_part.kicad_footprint_hint`; those are resolver-owned.
+
+Example:
+
+```powershell
+hwtool agent run set_selected_part --project . --payload-json '{
+  "ref": "R1",
+  "part": {
+    "lcsc_id": "C22843",
+    "display_name": "10k 1% 0603 resistor",
+    "mpn": "0603WAF1002T5E",
+    "manufacturer": "UNI-ROYAL",
+    "package": "0603"
+  }
+}'
+```
 
 Interpret `diagnose` categories:
 

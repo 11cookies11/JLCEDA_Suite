@@ -63,14 +63,13 @@ class TestResolveMissingSymbols(unittest.TestCase):
         self.assertEqual(model["components"][0]["selected_part"]["symbol_ref"], "ESP32-C3FH4")
         self.assertEqual(model["components"][0]["selected_part"]["kicad_footprint_hint"], "QFN-32")
 
-    def test_search_path_retries_after_forbidden_and_cools_down(self) -> None:
+    def test_component_without_lcsc_id_needs_selection(self) -> None:
         model = {
             "components": [
                 {
                     "ref": "R1",
                     "role": "resistor",
                     "value": "10k",
-                    "package": "0603",
                 }
             ]
         }
@@ -81,31 +80,16 @@ class TestResolveMissingSymbols(unittest.TestCase):
             model_path.parent.mkdir(parents=True, exist_ok=True)
             model_path.write_text("{}", encoding="utf-8")
 
-            install_result = {
-                "ok": True,
-                "lcsc_id": "C1234",
-                "title": "10k Resistor",
-                "package": "0603",
-                "symbol_ref": "R",
-                "pin_count": 2,
-            }
+            with patch("kicad_suite.adapters.jlc_installer.install_by_lcsc_id") as install_mock:
+                with patch("kicad_suite.adapters.jlc_installer.jlc_api.search") as search_mock:
+                    result = resolve_missing_symbols(project_path, model, timeout=5, model_path=model_path)
 
-            with patch("kicad_suite.adapters.jlc_installer.jlc_api.search", side_effect=[Exception("HTTP 403 Forbidden"), [{"lcsc_id": "C1234"}]]) as search_mock:
-                with patch("kicad_suite.adapters.jlc_installer.install_by_lcsc_id", return_value=install_result) as install_mock:
-                    with patch("kicad_suite.adapters.jlc_installer.random.uniform", side_effect=[3.5, 4.5]):
-                        with patch("kicad_suite.adapters.jlc_installer._time.sleep") as sleep_mock:
-                            result = resolve_missing_symbols(project_path, model, timeout=5, model_path=model_path)
-
-        self.assertTrue(result["ok"])
-        self.assertEqual(search_mock.call_count, 2)
-        install_mock.assert_called_once_with(
-            "C1234",
-            project_path,
-            retries=2,
-            delay=30.0,
-            initial_delay_range=(3.0, 8.0),
-        )
-        self.assertEqual([call.args[0] for call in sleep_mock.call_args_list], [3.5, 30.0, 4.5])
+        self.assertFalse(result["ok"])
+        self.assertEqual(result["resolved"], 0)
+        self.assertEqual(result["needs_selection"], 1)
+        self.assertEqual(result["details"][0]["reason"], "missing_selected_part_lcsc_id")
+        install_mock.assert_not_called()
+        search_mock.assert_not_called()
 
 
 if __name__ == "__main__":

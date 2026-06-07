@@ -118,6 +118,33 @@ Interpretation:
 - Treat `library_noise` as evidence, not a reason to blindly change the source model.
 - If `PROJECT_STATE_STALE` appears, rerun `build-ir` and `validate-ir`.
 
+### `agent workflow run`
+
+```powershell
+hwtool agent workflow run --project <dir> --template lcsc_selection_v1 [--timeout 120]
+```
+
+Runs an agent-assisted workflow template. The first implemented template is
+`lcsc_selection_v1`, which resolves components that already have
+`selected_part.lcsc_id` and writes `build/agent-tasks.json` for components that
+still need agent-selected LCSC IDs.
+
+Possible statuses:
+
+- `completed`: workflow target is satisfied.
+- `waiting_for_agent`: read `build/agent-tasks.json`, use `jlc search` / `jlc info`,
+  write source through `agent run set_selected_part`, then rerun the same workflow.
+- `failed`: deterministic workflow step failed.
+
+### `agent workflow status`
+
+```powershell
+hwtool agent workflow status --project <dir>
+```
+
+Returns the current workflow/task summary for agents. `agent status` also embeds
+this workflow summary.
+
 ### `agent doctor`
 
 ```powershell
@@ -148,10 +175,13 @@ Runs the test suite and returns structured results.
 
 ```powershell
 hwtool agent resolve-symbols --project <dir> [--model <path>] `
-  [--timeout 120] [--delay 0.8]
+  [--timeout 120]
 ```
 
 Downloads JLC/EasyEDA symbols and footprints based on `selected_part.lcsc_id`.
+Components without `selected_part.lcsc_id` are reported as `needs_selection`; the
+agent should select an LCSC ID with `jlc search` / `jlc info` and write it back
+with `agent run set_selected_part`.
 
 Outputs:
 

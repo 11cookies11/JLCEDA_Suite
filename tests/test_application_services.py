@@ -44,7 +44,7 @@ def test_part_resolution_service_delegates_to_installer(tmp_path) -> None:
         result = PartResolutionService().resolve_symbols(tmp_path, {}, timeout=1)
 
     assert result["ok"] is True
-    resolver.assert_called_once()
+    resolver.assert_called_once_with(tmp_path, {}, timeout=1, model_path=None)
 
 
 def test_postprocess_uses_named_services(tmp_path) -> None:

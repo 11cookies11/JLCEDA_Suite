@@ -78,9 +78,14 @@ This step:
 
 - reads each component's `selected_part.lcsc_id`
 - downloads the real symbol and footprint from JLC/EasyEDA
+- reports components without `selected_part.lcsc_id` as `needs_selection`
 - writes the resolved overlay to `build/circuit-model.resolved.json`
 - updates `selected_part.symbol_ref` and `selected_part.kicad_footprint_hint`
 - treats `selected_part.symbol_ref` as resolver-owned output, not a hand-authored source field
+
+If `needs_selection` is non-empty, the Agent should use `hwtool agent jlc search`
+and `hwtool agent jlc info` to choose LCSC IDs, then write them through
+`hwtool agent run set_selected_part`. Do not let `resolve-symbols` guess parts.
 
 ## 第四步：编译并验证 IR / Step 4: Build & Validate IR
 

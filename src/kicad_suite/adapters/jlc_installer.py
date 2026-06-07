@@ -192,7 +192,7 @@ def install_by_lcsc_id(
     }
 
 
-def resolve_missing_symbols(
+def _resolve_missing_symbols_legacy(
     project_path: Path,
     model: dict[str, Any],
     timeout: float = 120.0,
@@ -340,6 +340,96 @@ def resolve_missing_symbols(
     }
 
     return summary
+
+
+def resolve_missing_symbols(
+    project_path: Path,
+    model: dict[str, Any],
+    timeout: float = 120.0,
+    *,
+    policy: EasyedaAccessPolicy | None = None,
+    model_path: Path | None = None,
+) -> dict[str, Any]:
+    """Resolve components into project-local libraries.
+
+    ``resolved`` counts only real EasyEDA downloads. Components without a
+    selected_part.lcsc_id are reported as ``needs_selection``.
+    """
+    access = policy or EasyedaAccessPolicy()
+    components = model.get("components", [])
+    if not isinstance(components, list):
+        return {
+            "ok": True,
+            "resolved": 0,
+            "downloaded": 0,
+            "needs_selection": 0,
+            "failed": 0,
+            "details": [],
+        }
+
+    deadline = _time.monotonic() + timeout
+    resolved: list[dict[str, Any]] = []
+    needs_selection: list[dict[str, Any]] = []
+    failed: list[dict[str, Any]] = []
+
+    for comp in components:
+        if not isinstance(comp, dict):
+            continue
+
+        ref = comp.get("ref", "?")
+        role = comp.get("role", "")
+        value = str(comp.get("value", "") or "")
+        selected = comp.get("selected_part", {}) if isinstance(comp.get("selected_part"), dict) else {}
+        selected_lcsc_id = str(selected.get("lcsc_id", "")).strip()
+
+        if selected_lcsc_id:
+            if _time.monotonic() > deadline:
+                needs_selection.append({"ref": ref, "role": role, "value": value, "reason": "timeout"})
+                continue
+            inst = access.install(selected_lcsc_id, project_path)
+            if inst.get("ok"):
+                resolved.append(
+                    {
+                        "ref": ref,
+                        "lcsc_id": selected_lcsc_id,
+                        "title": inst.get("title", ""),
+                        "source": "selected_part_lcsc_id",
+                        "pin_count": inst.get("pin_count", 0),
+                    }
+                )
+                _write_selected_part(
+                    comp,
+                    selected_lcsc_id,
+                    inst.get("title", ""),
+                    inst.get("package", ""),
+                    symbol_ref=str(inst.get("symbol_ref", "")),
+                )
+            else:
+                failed.append(
+                    {
+                        "ref": ref,
+                        "role": role,
+                        "lcsc_id": selected_lcsc_id,
+                        "error": str(inst.get("error", "selected_part_install_failed")),
+                    }
+                )
+            continue
+
+        needs_selection.append({"ref": ref, "role": role, "value": value, "reason": "missing_selected_part_lcsc_id"})
+
+    if model_path is None:
+        model_path = project_path / "source" / "circuit-model.source.json"
+    save_resolved_circuit_model(model_path, model)
+
+    return {
+        "ok": len(failed) == 0 and len(needs_selection) == 0,
+        "resolved": len(resolved),
+        "downloaded": len(resolved),
+        "needs_selection": len(needs_selection),
+        "failed": len(failed),
+        "model_updated": True,
+        "details": resolved + needs_selection + failed,
+    }
 
 
 def _try_install_candidates(results: list[dict[str, Any]], project_path: Path, access: EasyedaAccessPolicy) -> dict[str, Any] | None:

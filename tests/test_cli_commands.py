@@ -595,6 +595,46 @@ class TestCliDispatch(unittest.TestCase):
         self.assertIn("patch", sent["payload"])
         self.assertIn("components", sent["payload"]["patch"])
 
+    def test_agent_workflow_run_delegates_to_service(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
+            model_path.write_text(
+                json.dumps({
+                    "schema_version": "circuit-model.v1",
+                    "request_id": "demo",
+                    "project_id": "workflow-demo",
+                    "topology": "workflow_board",
+                    "components": [],
+                    "nets": [],
+                }),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli.AgentWorkflowService") as workflow_cls:
+                workflow_cls.return_value.run.return_value = {
+                    "ok": True,
+                    "stage": "workflow",
+                    "status": "completed",
+                }
+                buffer = io.StringIO()
+                with redirect_stdout(buffer):
+                    code = cli.main([
+                        "agent", "workflow", "run",
+                        "--project", str(project_path),
+                        "--template", "lcsc_selection_v1",
+                        "--timeout", "5",
+                    ])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertEqual(payload["status"], "completed")
+        workflow_cls.return_value.run.assert_called_once()
+        call_kwargs = workflow_cls.return_value.run.call_args.kwargs
+        self.assertEqual(call_kwargs["template"], "lcsc_selection_v1")
+        self.assertEqual(call_kwargs["timeout"], 5)
+
     def test_diagnostic_parser_extracts_error_codes(self):
         from kicad_suite.cli import _parse_diagnostic
 
@@ -676,5 +716,4 @@ class TestCliDispatch(unittest.TestCase):
         self.assertGreater(len(payload["diagnostics"]), 0)
         codes = [d["code"] for d in payload["diagnostics"]]
         self.assertIn("DUPLICATE_NET_NAME", codes)
-
 
