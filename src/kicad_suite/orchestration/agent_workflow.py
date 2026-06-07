@@ -12,6 +12,12 @@ from typing import Any
 from ..application_services.agent_diagnostics import build_agent_diagnostics
 from ..application_services.part_resolution_service import PartResolutionService
 from ..domain.core.simulation_planner import load_circuit_model
+from .proposed_workflow import (
+    load_proposed_workflow_file,
+    proposed_workflow_summary,
+    save_proposed_workflow,
+    validate_proposed_workflow,
+)
 from .agent_tasks import (
     agent_tasks_path,
     clear_agent_tasks,
@@ -25,6 +31,7 @@ from .workflow_templates import get_template, list_templates
 
 
 DEFAULT_WORKFLOW_ID = "lcsc_selection_v1"
+ROUTE_PENDING_WORKFLOW_ID = "__route_pending__"
 
 
 class AgentWorkflowService:
@@ -49,6 +56,16 @@ class AgentWorkflowService:
             workflow_id = str(active.get("workflow_id", "")) if active else template
             workflow_template = get_template(workflow_id)
             if workflow_template is None:
+                if workflow_id == ROUTE_PENDING_WORKFLOW_ID:
+                    return self._with_stack({
+                        "ok": False,
+                        "stage": "workflow",
+                        "status": "waiting_for_agent",
+                        "reason": "route_decision_required",
+                        "workflow_id": workflow_id,
+                        "tasks_file": str(agent_tasks_path(project)),
+                        "rerun_after_agent": True,
+                    }, stack)
                 stack.update_active(status="failed", reason="unknown_template")
                 return self._with_stack({
                     "ok": False,
@@ -64,15 +81,18 @@ class AgentWorkflowService:
                 result = self._run_lcsc_selection(project, model_path=model_path, timeout=timeout)
             elif workflow_template.workflow_id == "repair_after_diagnose_v1":
                 result = self._run_repair_after_diagnose(project, model_path=model_path)
+            elif workflow_template.workflow_id == "unknown_task_v1":
+                result = self._run_unknown_task(project)
             else:
-                stack.update_active(status="failed", reason="unsupported_template")
-                return self._with_stack({
+                self.push_workflow(project, workflow_id="unknown_task_v1", reason="unsupported_template")
+                result = {
                     "ok": False,
                     "stage": "workflow",
-                    "status": "failed",
+                    "status": "pushed_workflow",
                     "reason": "unsupported_template",
                     "workflow_id": workflow_template.workflow_id,
-                }, stack)
+                    "pushed_workflow": "unknown_task_v1",
+                }
             status = str(result.get("status", ""))
             if status == "pushed_workflow":
                 continue
@@ -104,6 +124,7 @@ class AgentWorkflowService:
         )
         if not workflow.get("active_workflow") and tasks.get("workflow_id"):
             workflow["active_workflow"] = tasks.get("workflow_id", "")
+        workflow["proposed_workflow"] = proposed_workflow_summary(project)
         return {
             "ok": True,
             "stage": "workflow_status",
@@ -168,6 +189,88 @@ class AgentWorkflowService:
     ) -> dict[str, Any]:
         """Backward-compatible wrapper for internal push_workflow action."""
         return self.push_workflow(project_path, workflow_id=workflow_id, reason=reason)
+
+    def propose_workflow(
+        self,
+        project_path: str | Path,
+        *,
+        proposal_file: str | Path,
+    ) -> dict[str, Any]:
+        project = Path(project_path)
+        plan = load_proposed_workflow_file(proposal_file)
+        validation = validate_proposed_workflow(plan)
+        path = save_proposed_workflow(project, plan, validation)
+        if not validation.get("ok"):
+            return {
+                "ok": False,
+                "stage": "workflow_propose",
+                "status": "failed",
+                "reason": "invalid_proposed_workflow",
+                "proposal_file": str(path),
+                "validation": validation,
+            }
+        workflow_id = f"agent_proposed:{validation.get('workflow_id')}"
+        stack = WorkflowStackStore(project)
+        payload = stack.replace_active(
+            workflow_id,
+            reason=str(plan.get("reason", "agent_proposed_workflow")),
+            status="waiting_for_agent_execution",
+            proposed_workflow_file=str(path),
+        )
+        return {
+            "ok": True,
+            "stage": "workflow_propose",
+            "status": "waiting_for_agent_execution",
+            "workflow_id": workflow_id,
+            "proposal_file": str(path),
+            "validation": validation,
+            "workflow": WorkflowStackStore(project).summary(),
+            "stack": payload,
+        }
+
+    def choose_route(
+        self,
+        project_path: str | Path,
+        *,
+        workflow_id: str,
+        reason: str = "",
+    ) -> dict[str, Any]:
+        project = Path(project_path)
+        template = get_template(workflow_id)
+        if template is None:
+            return {
+                "ok": False,
+                "stage": "workflow_choose_route",
+                "status": "failed",
+                "reason": "unknown_template",
+                "workflow_id": workflow_id,
+            }
+        stack = WorkflowStackStore(project)
+        active = stack.active()
+        if not active or str(active.get("workflow_id", "")) != ROUTE_PENDING_WORKFLOW_ID:
+            return {
+                "ok": False,
+                "stage": "workflow_choose_route",
+                "status": "failed",
+                "reason": "no_route_pending",
+                "workflow_id": workflow_id,
+                "workflow": stack.summary(),
+            }
+        clear_agent_tasks(project)
+        payload = stack.replace_active(
+            workflow_id,
+            reason=reason or str(active.get("reason", "route_chosen")),
+            status="running",
+            chosen_from=ROUTE_PENDING_WORKFLOW_ID,
+        )
+        return {
+            "ok": True,
+            "stage": "workflow_choose_route",
+            "status": "route_chosen",
+            "workflow_id": workflow_id,
+            "workflow": stack.summary(),
+            "stack": payload,
+        }
 
     def _run_lcsc_selection(
         self,
@@ -249,16 +352,20 @@ class AgentWorkflowService:
 
         missing = _components_missing_lcsc(model)
         if missing:
-            self.push_workflow(project_path, workflow_id="lcsc_selection_v1", reason="needs_selection")
-            return {
-                "ok": False,
-                "stage": "workflow",
-                "workflow_id": workflow_id,
-                "status": "pushed_workflow",
-                "reason": "needs_selection",
-                "pushed_workflow": "lcsc_selection_v1",
-                "missing_lcsc_count": len(missing),
-            }
+            return self._emit_route_task(
+                project_path,
+                workflow_id=workflow_id,
+                task_id="route:needs_selection",
+                reason="needs_selection",
+                summary=f"{len(missing)} components are missing selected_part.lcsc_id.",
+                recommended_workflow="lcsc_selection_v1",
+                alternatives=["lcsc_selection_v1", "unknown_task_v1"],
+                context={
+                    "missing_lcsc_count": len(missing),
+                    "sample_refs": [str(item.get("ref", "")) for item in missing[:10] if isinstance(item, dict)],
+                    "source": "full_build_v1.parts_milestone",
+                },
+            )
 
         diagnostics = build_agent_diagnostics(project_path, model_file)
         counts = diagnostics.get("counts", {}) if isinstance(diagnostics, dict) else {}
@@ -266,19 +373,20 @@ class AgentWorkflowService:
         review_required = int(counts.get("review_required", 0) or 0)
         if must_fix or review_required:
             reason = "diagnose_must_fix" if must_fix else "diagnose_review_required"
-            self.push_workflow(project_path, workflow_id="repair_after_diagnose_v1", reason=reason)
-            return {
-                "ok": False,
-                "stage": "workflow",
-                "workflow_id": workflow_id,
-                "status": "pushed_workflow",
-                "reason": reason,
-                "pushed_workflow": "repair_after_diagnose_v1",
-                "diagnostics": {
+            return self._emit_route_task(
+                project_path,
+                workflow_id=workflow_id,
+                task_id=f"route:{reason}",
+                reason=reason,
+                summary=f"diagnose reports {must_fix} must_fix and {review_required} review_required findings.",
+                recommended_workflow="repair_after_diagnose_v1",
+                alternatives=["repair_after_diagnose_v1", "unknown_task_v1"],
+                context={
                     "must_fix": must_fix,
                     "review_required": review_required,
+                    "source": "full_build_v1.diagnose_milestone",
                 },
-            }
+            )
 
         clear_agent_tasks(project_path)
         return {
@@ -331,6 +439,104 @@ class AgentWorkflowService:
             "status": "completed",
             "reason": "",
             "diagnostics": diagnostics.get("counts", {}) if isinstance(diagnostics, dict) else {},
+        }
+
+    def _run_unknown_task(self, project_path: Path) -> dict[str, Any]:
+        workflow_id = "unknown_task_v1"
+        stack = WorkflowStackStore(project_path).summary()
+        tasks_file = write_agent_tasks(
+            project_path,
+            workflow_id=workflow_id,
+            tasks=[
+                {
+                    "task_id": "review:unknown_task:1",
+                    "type": "agent_review",
+                    "decision_schema": "classify_unknown_task_v1",
+                    "reason": "unknown_condition",
+                    "summary": "Classify the current unknown workflow condition.",
+                    "context": {
+                        "workflow_stack": stack,
+                    },
+                    "allowed_actions": [
+                        "choose_workflow_template",
+                        "needs_human_review",
+                        "mark_blocked",
+                        "skip_with_reason",
+                    ],
+                    "available_templates": [item["workflow_id"] for item in list_templates()],
+                }
+            ],
+            reason="unknown_condition",
+        )
+        return {
+            "ok": False,
+            "stage": "workflow",
+            "workflow_id": workflow_id,
+            "status": "waiting_for_agent",
+            "reason": "unknown_condition",
+            "tasks_file": str(tasks_file),
+            "task_count": 1,
+            "rerun_after_agent": True,
+            "next_action": "classify current unknown task and choose a specific workflow or request human review",
+        }
+
+    def _emit_route_task(
+        self,
+        project_path: Path,
+        *,
+        workflow_id: str,
+        task_id: str,
+        reason: str,
+        summary: str,
+        recommended_workflow: str,
+        alternatives: list[str],
+        context: dict[str, Any],
+    ) -> dict[str, Any]:
+        tasks_file = write_agent_tasks(
+            project_path,
+            workflow_id=workflow_id,
+            tasks=[
+                {
+                    "task_id": task_id,
+                    "type": "agent_review",
+                    "decision_schema": "choose_workflow_route_v1",
+                    "reason": reason,
+                    "summary": summary,
+                    "recommended_workflow": recommended_workflow,
+                    "alternatives": alternatives,
+                    "context": context,
+                    "allowed_actions": [
+                        "confirm_route",
+                        "choose_alternative",
+                        "propose_workflow",
+                        "needs_human_review",
+                        "mark_blocked",
+                    ],
+                }
+            ],
+            reason="route_decision_required",
+        )
+        WorkflowStackStore(project_path).push_placeholder(
+            reason=reason,
+            task_id=task_id,
+            tasks_file=str(tasks_file),
+            recommended_workflow=recommended_workflow,
+        )
+        return {
+            "ok": False,
+            "stage": "workflow",
+            "workflow_id": workflow_id,
+            "status": "waiting_for_agent",
+            "reason": "route_decision_required",
+            "tasks_file": str(tasks_file),
+            "task_count": 1,
+            "route": {
+                "reason": reason,
+                "recommended_workflow": recommended_workflow,
+                "alternatives": alternatives,
+            },
+            "rerun_after_agent": True,
+            "next_action": "choose a workflow route, propose a workflow, or request human review",
         }
 
     @staticmethod

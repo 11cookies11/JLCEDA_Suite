@@ -270,6 +270,10 @@ lcsc_selection_v1
 repair_after_diagnose_v1
   读取 diagnose 输出，把 must_fix/review_required 转为 agent_repair/agent_review task。
 
+unknown_task_v1
+  兜底模板。无法分类的问题进入 agent_review，由 agent 判断应转入哪个具体 workflow、
+  请求用户确认，或标记 blocked。
+
 full_build_v1
   status -> inspect -> diagnose -> lcsc_selection -> build-ir -> validate-ir -> export-kicad -> report -> diagnose。
 ```
@@ -279,8 +283,8 @@ full_build_v1
 ```text
 full_build_v1
   主 workflow。当前负责检查 LCSC 选型 milestone 和 diagnose milestone；
-  如有缺失 LCSC，自动 push lcsc_selection_v1；
-  如 diagnose 有 must_fix/review_required，自动 push repair_after_diagnose_v1。
+  如有缺失 LCSC 或 diagnose 问题，生成 choose_workflow_route_v1 route task；
+  由 agent 确认后通过 choose-route 替换 route frame。
 
 lcsc_selection_v1
   问题处理 workflow。解析已有 LCSC，缺失时生成 agent_decision task。
@@ -288,6 +292,14 @@ lcsc_selection_v1
 repair_after_diagnose_v1
   问题处理 workflow。把 diagnose.must_fix 转为 agent_repair task；
   把 diagnose.review_required 转为 agent_review task。
+
+unknown_task_v1
+  问题处理 workflow。把未知条件转为 classify_unknown_task_v1 的 agent_review task；
+  不直接修改 source，不自动修复。
+
+agent_proposed_workflow
+  Agent 提交的受控临时 workflow plan。编排层只做 schema 和白名单校验、
+  保存计划并替换当前 route frame；第一版不自动执行任意步骤。
 ```
 
 第一版实现 `lcsc_selection_v1` 时，`workflow_templates.py` 仍应保留这些模板 metadata 的位置：
@@ -361,6 +373,127 @@ rerun workflow
 - `library_noise` 默认不让 agent 修改 source，除非诊断明确指出真实电气问题。
 - ERC pin type、symbol normalization、footprint repair 等一类问题应进入专门 service，不在 workflow 中写一堆 if/else。
 - Workflow 只负责任务生成和状态推进，不负责具体修复策略。
+
+## Unknown Task v1
+
+该模板用于兜底，不替代具体问题模板。
+
+触发场景：
+
+```text
+workflow handler 遇到无法分类的状态
+用户或 agent 明确不知道该选哪个 workflow
+后续模板还没有实现
+```
+
+输出：
+
+```text
+agent_review task
+decision_schema = classify_unknown_task_v1
+allowed_actions = choose_workflow_template / needs_human_review / mark_blocked / skip_with_reason
+```
+
+边界：
+
+- 不直接修复 source。
+- 不猜测应该执行哪个具体修复。
+- 只要求 agent 分类、选择后续 workflow，或请求用户确认。
+
+## Agent Proposed Workflow
+
+当没有合适的内置模板时，agent 可以提交受控临时 workflow plan。
+
+入口：
+
+```powershell
+hwtool agent workflow propose --project . --file build/agent-proposed-workflow.input.json
+```
+
+输入 schema：
+
+```json
+{
+  "schema_version": "agent_proposed_workflow.v1",
+  "workflow_id": "fix_usb_power_erc",
+  "reason": "No built-in workflow handles this case.",
+  "steps": [
+    {"id": "inspect", "type": "agent_command", "command": "inspect", "args": {"project": "."}},
+    {
+      "id": "connect_power",
+      "type": "model_api",
+      "operation": "connect_member",
+      "payload": {"net": "+5V", "member": "U1.VBUS"}
+    },
+    {"id": "diagnose", "type": "agent_command", "command": "diagnose", "args": {"project": "."}}
+  ],
+  "completion": {"type": "diagnose_clean", "max_must_fix": 0}
+}
+```
+
+第一版行为：
+
+```text
+validate proposed workflow
+save to build/agent-proposed-workflow.json
+replace active stack frame with agent_proposed:<workflow_id>
+status = waiting_for_agent_execution
+```
+
+第一版不自动执行 proposed steps。Agent 按批准后的 plan 调用受控 CLI/API 执行，执行完后重新运行 workflow 或 diagnose。
+
+允许的 step 类型：
+
+```text
+agent_command
+model_api
+workflow
+agent_review
+```
+
+禁止：
+
+- 任意 shell 命令。
+- 直接写 `build/`、`output/` 作为真实状态。
+- 未在白名单中的 Model API operation。
+- 没有 completion 条件的临时 workflow。
+
+## Route Decision
+
+父 workflow 遇到问题时不直接选择子 workflow。它会先 push 一个 route pending frame，并写入 route task：
+
+```text
+workflow_id = __route_pending__
+task.decision_schema = choose_workflow_route_v1
+```
+
+示例：
+
+```json
+{
+  "task_id": "route:needs_selection",
+  "type": "agent_review",
+  "decision_schema": "choose_workflow_route_v1",
+  "reason": "needs_selection",
+  "recommended_workflow": "lcsc_selection_v1",
+  "alternatives": ["lcsc_selection_v1", "unknown_task_v1"],
+  "allowed_actions": [
+    "confirm_route",
+    "choose_alternative",
+    "propose_workflow",
+    "needs_human_review",
+    "mark_blocked"
+  ]
+}
+```
+
+Agent 确认后执行：
+
+```powershell
+hwtool agent workflow choose-route --project . --workflow lcsc_selection_v1
+```
+
+`choose-route` 会把当前 `__route_pending__` frame 替换为选定 workflow，不额外增加 stack 深度。
 
 ## 为什么第一版不做 Resume
 

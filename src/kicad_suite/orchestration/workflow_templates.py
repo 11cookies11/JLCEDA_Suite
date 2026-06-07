@@ -54,6 +54,16 @@ _TEMPLATES: dict[str, WorkflowTemplate] = {
         agent_cut_points=("diagnose_must_fix", "diagnose_review_required"),
         supported_task_types=("agent_repair", "agent_review"),
     ),
+    "unknown_task_v1": WorkflowTemplate(
+        workflow_id="unknown_task_v1",
+        description="Fallback workflow that asks the agent to classify an unknown or unsupported workflow condition.",
+        deterministic_steps=(
+            "read_workflow_context",
+            "build_unknown_task_review",
+        ),
+        agent_cut_points=("unknown_condition",),
+        supported_task_types=("agent_review",),
+    ),
 }
 
 

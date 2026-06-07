@@ -1059,6 +1059,25 @@ def _agent_workflow_status_handler(args: argparse.Namespace) -> int:
     return _print_json(result)
 
 
+def _agent_workflow_propose_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    result = AgentWorkflowService().propose_workflow(
+        project_path,
+        proposal_file=args.file,
+    )
+    return _print_json(result)
+
+
+def _agent_workflow_choose_route_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    result = AgentWorkflowService().choose_route(
+        project_path,
+        workflow_id=args.workflow,
+        reason=args.reason,
+    )
+    return _print_json(result)
+
+
 def _should_update_project_state(request: dict[str, Any]) -> bool:
     """Return True only when an API request reflects committed project state."""
     options = request.get("options", {})
@@ -1433,6 +1452,17 @@ def build_parser() -> argparse.ArgumentParser:
     workflow_status = agent_workflow_subs.add_parser("status", help="Show current agent workflow state.")
     workflow_status.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
     workflow_status.set_defaults(handler=_agent_workflow_status_handler)
+
+    workflow_propose = agent_workflow_subs.add_parser("propose", help="Validate and register an agent-proposed workflow plan.")
+    workflow_propose.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    workflow_propose.add_argument("--file", type=Path, required=True, help="Path to agent_proposed_workflow.v1 JSON.")
+    workflow_propose.set_defaults(handler=_agent_workflow_propose_handler)
+
+    workflow_choose_route = agent_workflow_subs.add_parser("choose-route", help="Replace a route-pending frame with a selected workflow.")
+    workflow_choose_route.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    workflow_choose_route.add_argument("--workflow", required=True, help="Workflow template id to run for the current route task.")
+    workflow_choose_route.add_argument("--reason", default="", help="Optional route decision reason.")
+    workflow_choose_route.set_defaults(handler=_agent_workflow_choose_route_handler)
 
     # kas project
     project_cmd = subparsers.add_parser("project", help="Project state management.")

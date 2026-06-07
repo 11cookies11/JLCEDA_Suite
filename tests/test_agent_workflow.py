@@ -12,6 +12,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.orchestration.agent_tasks import agent_tasks_path, read_agent_tasks
 from kicad_suite.orchestration.agent_workflow import AgentWorkflowService
+from kicad_suite.orchestration.proposed_workflow import proposed_workflow_path
 from kicad_suite.orchestration.workflow_stack import WorkflowStackStore, workflow_stack_path
 
 
@@ -218,7 +219,7 @@ def test_workflow_stack_module_exposes_navigation_api(tmp_path: Path) -> None:
     assert status["stack"]["depth"] == 1
 
 
-def test_full_build_pushes_lcsc_selection_for_missing_parts(tmp_path: Path) -> None:
+def test_full_build_emits_route_task_for_missing_parts(tmp_path: Path) -> None:
     model_path = _write_source_model(
         tmp_path,
         [
@@ -253,13 +254,47 @@ def test_full_build_pushes_lcsc_selection_for_missing_parts(tmp_path: Path) -> N
     )
 
     assert result["status"] == "waiting_for_agent"
-    assert result["workflow_id"] == "lcsc_selection_v1"
-    assert result["workflow"]["active_workflow"] == "lcsc_selection_v1"
+    assert result["workflow_id"] == "full_build_v1"
+    assert result["reason"] == "route_decision_required"
+    assert result["route"]["recommended_workflow"] == "lcsc_selection_v1"
+    assert result["workflow"]["active_workflow"] == "__route_pending__"
     assert result["workflow"]["depth"] == 2
     stack = result["workflow"]["stack"]
     assert stack[0]["workflow_id"] == "full_build_v1"
     assert stack[0]["status"] == "paused"
-    assert stack[0]["blocked_by"] == "lcsc_selection_v1"
+    assert stack[0]["blocked_by"] == "__route_pending__"
+    assert stack[1]["workflow_id"] == "__route_pending__"
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["decision_schema"] == "choose_workflow_route_v1"
+    assert tasks[0]["recommended_workflow"] == "lcsc_selection_v1"
+
+
+def test_choose_route_replaces_route_pending_frame(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [{"ref": "R1", "role": "pullup_resistor", "value": "10k", "package": "0603"}],
+    )
+    fake = FakePartResolutionService({
+        "ok": False,
+        "resolved": 0,
+        "downloaded": 0,
+        "needs_selection": 1,
+        "failed": 0,
+        "details": [{"ref": "R1", "reason": "missing_selected_part_lcsc_id"}],
+    })
+    service = AgentWorkflowService(part_resolution_service=fake)
+    service.run(tmp_path, template="full_build_v1", model_path=model_path)
+
+    result = service.choose_route(tmp_path, workflow_id="lcsc_selection_v1", reason="agent_confirmed")
+
+    assert result["ok"] is True
+    assert result["status"] == "route_chosen"
+    assert result["workflow"]["active_workflow"] == "lcsc_selection_v1"
+    stack = WorkflowStackStore(tmp_path).load()["stack"]
+    assert stack[0]["workflow_id"] == "full_build_v1"
+    assert stack[1]["workflow_id"] == "lcsc_selection_v1"
+    assert stack[1]["chosen_from"] == "__route_pending__"
+    assert not agent_tasks_path(tmp_path).exists()
 
 
 def test_repair_after_diagnose_emits_repair_and_review_tasks(tmp_path: Path) -> None:
@@ -308,4 +343,72 @@ def test_workflow_status_lists_main_and_problem_templates(tmp_path: Path) -> Non
     result = AgentWorkflowService().status(tmp_path)
     template_ids = {item["workflow_id"] for item in result["templates"]}
 
-    assert {"full_build_v1", "lcsc_selection_v1", "repair_after_diagnose_v1"} <= template_ids
+    assert {"full_build_v1", "lcsc_selection_v1", "repair_after_diagnose_v1", "unknown_task_v1"} <= template_ids
+
+
+def test_unknown_task_workflow_emits_review_task(tmp_path: Path) -> None:
+    result = AgentWorkflowService().run(tmp_path, template="unknown_task_v1")
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["workflow_id"] == "unknown_task_v1"
+    assert result["task_count"] == 1
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["type"] == "agent_review"
+    assert tasks[0]["decision_schema"] == "classify_unknown_task_v1"
+    assert "available_templates" in tasks[0]
+
+
+def test_propose_workflow_validates_and_replaces_active_frame(tmp_path: Path) -> None:
+    service = AgentWorkflowService()
+    service.push_workflow(tmp_path, workflow_id="unknown_task_v1", reason="unknown_condition")
+    proposal = tmp_path / "proposal.json"
+    proposal.write_text(
+        json.dumps({
+            "schema_version": "agent_proposed_workflow.v1",
+            "workflow_id": "fix_usb_power_erc",
+            "reason": "No built-in workflow handles this case.",
+            "steps": [
+                {"id": "inspect", "type": "agent_command", "command": "inspect", "args": {"project": "."}},
+                {
+                    "id": "connect_power",
+                    "type": "model_api",
+                    "operation": "connect_member",
+                    "payload": {"net": "+5V", "member": "U1.VBUS"},
+                },
+                {"id": "diagnose", "type": "agent_command", "command": "diagnose", "args": {"project": "."}},
+            ],
+            "completion": {"type": "diagnose_clean", "max_must_fix": 0},
+        }),
+        encoding="utf-8",
+    )
+
+    result = service.propose_workflow(tmp_path, proposal_file=proposal)
+
+    assert result["ok"] is True
+    assert result["status"] == "waiting_for_agent_execution"
+    assert result["workflow_id"] == "agent_proposed:fix_usb_power_erc"
+    assert proposed_workflow_path(tmp_path).exists()
+    active = WorkflowStackStore(tmp_path).active()
+    assert active["workflow_id"] == "agent_proposed:fix_usb_power_erc"
+    assert active["status"] == "waiting_for_agent_execution"
+
+
+def test_propose_workflow_rejects_unsafe_step(tmp_path: Path) -> None:
+    proposal = tmp_path / "proposal.json"
+    proposal.write_text(
+        json.dumps({
+            "schema_version": "agent_proposed_workflow.v1",
+            "workflow_id": "unsafe",
+            "steps": [
+                {"id": "shell", "type": "agent_command", "command": "shell", "args": {"command": "del *"}},
+            ],
+            "completion": {"type": "diagnose_clean"},
+        }),
+        encoding="utf-8",
+    )
+
+    result = AgentWorkflowService().propose_workflow(tmp_path, proposal_file=proposal)
+
+    assert result["ok"] is False
+    assert result["reason"] == "invalid_proposed_workflow"
+    assert any("command is not allowed" in item for item in result["validation"]["errors"])

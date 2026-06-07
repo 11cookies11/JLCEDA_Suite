@@ -93,6 +93,43 @@ class WorkflowStackStore:
         self.save(payload)
         return self.load()
 
+    def replace_active(self, workflow_id: str, *, reason: str = "", status: str = "running", **extra: Any) -> dict[str, Any]:
+        payload = self.load()
+        stack = payload.get("stack", [])
+        entry = _new_entry(workflow_id, reason=reason)
+        entry["status"] = status
+        entry.update({key: value for key, value in extra.items() if value not in (None, "")})
+        if stack:
+            stack[-1] = entry
+        else:
+            stack = [entry]
+        payload["stack"] = stack
+        payload["status"] = status
+        self.save(payload)
+        return self.load()
+
+    def push_placeholder(self, *, reason: str, task_id: str, parent_status: str = "paused", **extra: Any) -> dict[str, Any]:
+        payload = self.load()
+        stack = payload.get("stack", [])
+        placeholder_id = "__route_pending__"
+        if stack:
+            parent = dict(stack[-1])
+            parent["status"] = parent_status
+            parent["blocked_by"] = placeholder_id
+            parent["updated_at"] = _now_iso()
+            stack[-1] = parent
+        entry = _new_entry(placeholder_id, reason=reason)
+        entry.update({
+            "status": "waiting_for_agent",
+            "task_id": task_id,
+        })
+        entry.update({key: value for key, value in extra.items() if value not in (None, "")})
+        stack.append(entry)
+        payload["stack"] = stack
+        payload["status"] = "waiting_for_agent"
+        self.save(payload)
+        return self.load()
+
     def update_active(self, **updates: Any) -> dict[str, Any]:
         payload = self.load()
         stack = payload.get("stack", [])

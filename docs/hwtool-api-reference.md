@@ -127,9 +127,10 @@ hwtool agent workflow run --project <dir> --template lcsc_selection_v1 [--timeou
 Runs an agent-assisted workflow template. The first implemented template is
 `lcsc_selection_v1`. Available initial templates:
 
-- `full_build_v1`: main workflow; pushes part selection or diagnose repair child workflows.
+- `full_build_v1`: main workflow; emits route tasks for agent-confirmed child workflows.
 - `lcsc_selection_v1`: resolves selected LCSC parts and emits LCSC selection tasks.
 - `repair_after_diagnose_v1`: emits repair/review tasks from diagnose findings.
+- `unknown_task_v1`: fallback review workflow for unknown or unsupported conditions.
 
 Possible statuses:
 
@@ -146,6 +147,26 @@ hwtool agent workflow status --project <dir>
 
 Returns the current workflow/task summary for agents. `agent status` also embeds
 this workflow summary.
+
+### `agent workflow propose`
+
+```powershell
+hwtool agent workflow propose --project <dir> --file <agent_proposed_workflow.json>
+```
+
+Validates and registers an agent-proposed workflow plan for cases not covered by
+built-in templates. The first version validates schema and whitelisted step
+types, saves `build/agent-proposed-workflow.json`, and marks the active stack
+frame as `waiting_for_agent_execution`. It does not execute arbitrary steps.
+
+### `agent workflow choose-route`
+
+```powershell
+hwtool agent workflow choose-route --project <dir> --workflow <template-id> [--reason <text>]
+```
+
+Replaces the active `__route_pending__` stack frame with the workflow selected
+by the agent. Use this after a `choose_workflow_route_v1` task.
 
 ### `agent doctor`
 

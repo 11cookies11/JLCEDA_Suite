@@ -96,6 +96,9 @@ Use these interfaces:
 - `hwtool agent workflow run --project . --template lcsc_selection_v1` for agent-assisted LCSC selection tasks.
 - `hwtool agent workflow run --project . --template full_build_v1` for the main workflow.
 - `hwtool agent workflow run --project . --template repair_after_diagnose_v1` for diagnose-driven repair/review tasks.
+- `hwtool agent workflow run --project . --template unknown_task_v1` for unknown task classification.
+- `hwtool agent workflow propose --project . --file <plan.json>` for a validated agent-proposed workflow when no built-in template fits.
+- `hwtool agent workflow choose-route --project . --workflow <template-id>` after a `choose_workflow_route_v1` route task.
 - `hwtool agent workflow status --project .` for pending workflow task summary.
 - `hwtool agent status --project .` includes workflow stack/task summary for the Agent.
 - `hwtool agent patch --project . --payload-json '{...}'` for JSON patch changes.

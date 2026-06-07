@@ -635,6 +635,58 @@ class TestCliDispatch(unittest.TestCase):
         self.assertEqual(call_kwargs["template"], "lcsc_selection_v1")
         self.assertEqual(call_kwargs["timeout"], 5)
 
+    def test_agent_workflow_propose_delegates_to_service(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            proposal = project_path / "proposal.json"
+            proposal.write_text("{}", encoding="utf-8")
+
+            with patch("kicad_suite.cli.AgentWorkflowService") as workflow_cls:
+                workflow_cls.return_value.propose_workflow.return_value = {
+                    "ok": True,
+                    "stage": "workflow_propose",
+                    "status": "waiting_for_agent_execution",
+                }
+                buffer = io.StringIO()
+                with redirect_stdout(buffer):
+                    code = cli.main([
+                        "agent", "workflow", "propose",
+                        "--project", str(project_path),
+                        "--file", str(proposal),
+                    ])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertEqual(payload["status"], "waiting_for_agent_execution")
+        workflow_cls.return_value.propose_workflow.assert_called_once()
+
+    def test_agent_workflow_choose_route_delegates_to_service(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+
+            with patch("kicad_suite.cli.AgentWorkflowService") as workflow_cls:
+                workflow_cls.return_value.choose_route.return_value = {
+                    "ok": True,
+                    "stage": "workflow_choose_route",
+                    "status": "route_chosen",
+                }
+                buffer = io.StringIO()
+                with redirect_stdout(buffer):
+                    code = cli.main([
+                        "agent", "workflow", "choose-route",
+                        "--project", str(project_path),
+                        "--workflow", "lcsc_selection_v1",
+                        "--reason", "agent_confirmed",
+                    ])
+
+        self.assertEqual(code, 0)
+        payload = json.loads(buffer.getvalue())
+        self.assertEqual(payload["status"], "route_chosen")
+        workflow_cls.return_value.choose_route.assert_called_once()
+        kwargs = workflow_cls.return_value.choose_route.call_args.kwargs
+        self.assertEqual(kwargs["workflow_id"], "lcsc_selection_v1")
+        self.assertEqual(kwargs["reason"], "agent_confirmed")
+
     def test_diagnostic_parser_extracts_error_codes(self):
         from kicad_suite.cli import _parse_diagnostic
 
@@ -716,4 +768,3 @@ class TestCliDispatch(unittest.TestCase):
         self.assertGreater(len(payload["diagnostics"]), 0)
         codes = [d["code"] for d in payload["diagnostics"]]
         self.assertIn("DUPLICATE_NET_NAME", codes)
-
