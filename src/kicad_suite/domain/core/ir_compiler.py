@@ -119,6 +119,8 @@ def _build_components(
         seen_pins: set[str] = set()
         for entry in pin_entries.get(ref, []):
             pin_num = entry["number"]
+            if pin_num in seen_pins:
+                continue  # already assigned from another net
             overrides = pinmap_lookup.get(ref, {}).get(pin_num)
             if isinstance(overrides, dict):
                 merged = dict(entry)
@@ -203,7 +205,7 @@ def _build_nets(model: dict[str, Any]) -> list[dict[str, Any]]:
         nets.append({
             "name": name,
             "kind": kind,
-            "members": [str(m) for m in net.get("members", [])],
+            "members": [str(m) for m in net.get("members", []) if "." in str(m)],
             "domain": str(net.get("domain", "")),
             "flags": dict(flags) if isinstance(flags, dict) else {},
         })
@@ -304,7 +306,10 @@ def _validate_references(
     refs = {c["ref"] for c in components}
     for net in nets:
         for member in net.get("members", []):
-            ref = str(member).split(".", 1)[0]
+            member_str = str(member)
+            if "." not in member_str:
+                continue  # bare net name, not a component reference
+            ref = member_str.split(".", 1)[0]
             if ref and ref not in refs:
                 raise ValueError(
                     f"IR validation: net '{net['name']}' references missing component '{ref}'"
