@@ -94,6 +94,8 @@ Use these interfaces:
 - `hwtool agent inspect --project .` for project summary and model counts.
 - `hwtool agent diagnose --project .` for structured repair categories.
 - `hwtool agent workflow run --project . --template lcsc_selection_v1` for agent-assisted LCSC selection tasks.
+- `hwtool agent workflow run --project . --template full_build_v1` for the main workflow.
+- `hwtool agent workflow run --project . --template repair_after_diagnose_v1` for diagnose-driven repair/review tasks.
 - `hwtool agent workflow status --project .` for pending workflow task summary.
 - `hwtool agent status --project .` includes workflow stack/task summary for the Agent.
 - `hwtool agent patch --project . --payload-json '{...}'` for JSON patch changes.

@@ -274,6 +274,22 @@ full_build_v1
   status -> inspect -> diagnose -> lcsc_selection -> build-ir -> validate-ir -> export-kicad -> report -> diagnose。
 ```
 
+当前已实现的第一批模板：
+
+```text
+full_build_v1
+  主 workflow。当前负责检查 LCSC 选型 milestone 和 diagnose milestone；
+  如有缺失 LCSC，自动 push lcsc_selection_v1；
+  如 diagnose 有 must_fix/review_required，自动 push repair_after_diagnose_v1。
+
+lcsc_selection_v1
+  问题处理 workflow。解析已有 LCSC，缺失时生成 agent_decision task。
+
+repair_after_diagnose_v1
+  问题处理 workflow。把 diagnose.must_fix 转为 agent_repair task；
+  把 diagnose.review_required 转为 agent_review task。
+```
+
 第一版实现 `lcsc_selection_v1` 时，`workflow_templates.py` 仍应保留这些模板 metadata 的位置：
 
 ```text

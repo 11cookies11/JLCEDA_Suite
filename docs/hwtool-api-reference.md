@@ -125,9 +125,11 @@ hwtool agent workflow run --project <dir> --template lcsc_selection_v1 [--timeou
 ```
 
 Runs an agent-assisted workflow template. The first implemented template is
-`lcsc_selection_v1`, which resolves components that already have
-`selected_part.lcsc_id` and writes `build/agent-tasks.json` for components that
-still need agent-selected LCSC IDs.
+`lcsc_selection_v1`. Available initial templates:
+
+- `full_build_v1`: main workflow; pushes part selection or diagnose repair child workflows.
+- `lcsc_selection_v1`: resolves selected LCSC parts and emits LCSC selection tasks.
+- `repair_after_diagnose_v1`: emits repair/review tasks from diagnose findings.
 
 Possible statuses:
 

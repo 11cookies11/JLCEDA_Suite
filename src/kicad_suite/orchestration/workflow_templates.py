@@ -20,6 +20,18 @@ class WorkflowTemplate:
 
 
 _TEMPLATES: dict[str, WorkflowTemplate] = {
+    "full_build_v1": WorkflowTemplate(
+        workflow_id="full_build_v1",
+        description="Main project workflow that pushes child workflows for part selection and diagnostic repair.",
+        deterministic_steps=(
+            "load_source_model",
+            "check_parts_selected",
+            "run_diagnose",
+            "complete_when_clean",
+        ),
+        agent_cut_points=("needs_selection", "diagnose_must_fix", "diagnose_review_required"),
+        supported_task_types=("agent_decision", "agent_repair", "agent_review"),
+    ),
     "lcsc_selection_v1": WorkflowTemplate(
         workflow_id="lcsc_selection_v1",
         description="Resolve selected LCSC parts and emit agent tasks for components that still need selection.",
@@ -31,6 +43,17 @@ _TEMPLATES: dict[str, WorkflowTemplate] = {
         agent_cut_points=("needs_selection",),
         supported_task_types=("agent_decision",),
     ),
+    "repair_after_diagnose_v1": WorkflowTemplate(
+        workflow_id="repair_after_diagnose_v1",
+        description="Convert diagnose must_fix and review_required findings into agent repair/review tasks.",
+        deterministic_steps=(
+            "run_diagnose",
+            "build_repair_tasks",
+            "complete_when_clean",
+        ),
+        agent_cut_points=("diagnose_must_fix", "diagnose_review_required"),
+        supported_task_types=("agent_repair", "agent_review"),
+    ),
 }
 
 
@@ -40,4 +63,3 @@ def get_template(workflow_id: str) -> WorkflowTemplate | None:
 
 def list_templates() -> list[dict[str, object]]:
     return [template.to_dict() for template in _TEMPLATES.values()]
-

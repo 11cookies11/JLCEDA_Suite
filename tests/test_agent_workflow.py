@@ -6,6 +6,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
@@ -215,3 +216,96 @@ def test_workflow_stack_module_exposes_navigation_api(tmp_path: Path) -> None:
 
     assert status["active_workflow"] == "lcsc_selection_v1"
     assert status["stack"]["depth"] == 1
+
+
+def test_full_build_pushes_lcsc_selection_for_missing_parts(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [
+            {
+                "ref": "R1",
+                "role": "pullup_resistor",
+                "value": "10k",
+                "package": "0603",
+            }
+        ],
+    )
+    fake = FakePartResolutionService({
+        "ok": False,
+        "resolved": 0,
+        "downloaded": 0,
+        "needs_selection": 1,
+        "failed": 0,
+        "details": [
+            {
+                "ref": "R1",
+                "role": "pullup_resistor",
+                "value": "10k",
+                "reason": "missing_selected_part_lcsc_id",
+            }
+        ],
+    })
+
+    result = AgentWorkflowService(part_resolution_service=fake).run(
+        tmp_path,
+        template="full_build_v1",
+        model_path=model_path,
+    )
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["workflow_id"] == "lcsc_selection_v1"
+    assert result["workflow"]["active_workflow"] == "lcsc_selection_v1"
+    assert result["workflow"]["depth"] == 2
+    stack = result["workflow"]["stack"]
+    assert stack[0]["workflow_id"] == "full_build_v1"
+    assert stack[0]["status"] == "paused"
+    assert stack[0]["blocked_by"] == "lcsc_selection_v1"
+
+
+def test_repair_after_diagnose_emits_repair_and_review_tasks(tmp_path: Path) -> None:
+    _write_source_model(tmp_path, [])
+    diagnostics = {
+        "ok": False,
+        "counts": {"must_fix": 1, "review_required": 1, "library_noise": 0},
+        "diagnostics": {
+            "must_fix": [
+                {
+                    "source": "erc",
+                    "code": "POWER_INPUT_NOT_DRIVEN",
+                    "severity": "error",
+                    "message": "Power input pin is not driven.",
+                }
+            ],
+            "review_required": [
+                {
+                    "source": "ir_validation",
+                    "code": "FLOATING_NET",
+                    "severity": "warning",
+                    "message": "Net is floating.",
+                }
+            ],
+            "library_noise": [],
+        },
+    }
+
+    with patch("kicad_suite.orchestration.agent_workflow.build_agent_diagnostics", return_value=diagnostics):
+        result = AgentWorkflowService().run(
+            tmp_path,
+            template="repair_after_diagnose_v1",
+            model_path=tmp_path / "source" / "circuit-model.source.json",
+        )
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["task_count"] == 2
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert tasks[0]["type"] == "agent_repair"
+    assert tasks[0]["decision_schema"] == "repair_diagnostic_v1"
+    assert tasks[1]["type"] == "agent_review"
+    assert tasks[1]["decision_schema"] == "review_diagnostic_v1"
+
+
+def test_workflow_status_lists_main_and_problem_templates(tmp_path: Path) -> None:
+    result = AgentWorkflowService().status(tmp_path)
+    template_ids = {item["workflow_id"] for item in result["templates"]}
+
+    assert {"full_build_v1", "lcsc_selection_v1", "repair_after_diagnose_v1"} <= template_ids
