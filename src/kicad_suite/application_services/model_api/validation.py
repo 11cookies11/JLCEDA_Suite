@@ -278,7 +278,7 @@ def _validate_net_members(report: ValidationReport, nets: list[Any]) -> None:
         seen: set[str] = set()
         for member_index, member in enumerate(members):
             if not isinstance(member, str) or "." not in member:
-                report.add_error(f"nets[{net_index}].members[{member_index}] must be a pin reference")
+                report.add_warning(f"nets[{net_index}].members[{member_index}] is a bare net name, not a REF.PIN reference")
                 continue
             if member in seen:
                 report.add_warning(f"duplicate member {member} in net {net.get('name', net_index)}")

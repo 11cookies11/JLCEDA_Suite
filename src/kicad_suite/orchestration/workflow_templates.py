@@ -26,12 +26,13 @@ _TEMPLATES: dict[str, WorkflowTemplate] = {
         deterministic_steps=(
             "load_source_model",
             "check_parts_selected",
+            "resolve_libraries",
             "build_and_validate_ir",
             "export_kicad",
             "run_diagnose",
             "complete_when_clean",
         ),
-        agent_cut_points=("needs_selection", "ir_build_failed", "ir_validation_failed", "export_failed", "diagnose_must_fix", "diagnose_review_required"),
+        agent_cut_points=("needs_selection", "library_resolution_failed", "ir_build_failed", "ir_validation_failed", "export_failed", "diagnose_must_fix", "diagnose_review_required"),
         supported_task_types=("agent_decision", "agent_repair", "agent_review"),
     ),
     "lcsc_selection_v1": WorkflowTemplate(

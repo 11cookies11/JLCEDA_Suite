@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from ..application_services.agent_diagnostics import build_agent_diagnostics
+from ..application_services.part_resolution_service import PartResolutionService
 from ..domain.core.ir_compiler import build_ir
 from ..domain.core.ir_validator import validate_ir
 from ..domain.core.simulation_planner import load_circuit_model
@@ -79,7 +80,7 @@ class AgentWorkflowService:
                     "available_templates": [item["workflow_id"] for item in list_templates()],
                 }, stack)
             if workflow_template.workflow_id == "full_build_v1":
-                result = self._run_full_build(project, model_path=model_path)
+                result = self._run_full_build(project, model_path=model_path, timeout=timeout)
             elif workflow_template.workflow_id == "lcsc_selection_v1":
                 result = self._run_lcsc_selection(project, model_path=model_path, timeout=timeout)
             elif workflow_template.workflow_id == "repair_after_diagnose_v1":
@@ -341,6 +342,7 @@ class AgentWorkflowService:
         project_path: Path,
         *,
         model_path: str | Path | None,
+        timeout: int = 120,
     ) -> dict[str, Any]:
         workflow_id = "full_build_v1"
         model_file = Path(model_path) if model_path is not None else project_path / "source" / "circuit-model.source.json"
@@ -372,6 +374,40 @@ class AgentWorkflowService:
                     "source": "full_build_v1.parts_milestone",
                 },
             )
+
+        # Library resolution milestone — download symbols/footprints for selected parts
+        library_result = PartResolutionService().resolve_symbols(
+            project_path,
+            model,
+            timeout=timeout,
+            model_path=model_file,
+        )
+        if not library_result.get("ok"):
+            # Build per-component failure tasks so the agent knows exactly what to fix
+            tasks = _build_library_failure_tasks(library_result)
+            failed_count = len(tasks)
+            tasks_file = write_agent_tasks(
+                project_path,
+                workflow_id=workflow_id,
+                tasks=tasks,
+                reason="library_resolution_failed",
+            )
+            return {
+                "ok": False,
+                "stage": "workflow",
+                "workflow_id": workflow_id,
+                "status": "waiting_for_agent",
+                "reason": "library_resolution_failed",
+                "tasks_file": str(tasks_file),
+                "task_count": failed_count,
+                "rerun_after_agent": True,
+                "next_action": "fix failed selected_part data (retry download or choose alternative LCSC), then rerun this workflow",
+                "library": {
+                    "resolved": library_result.get("resolved", 0),
+                    "downloaded": library_result.get("downloaded", 0),
+                    "failed": failed_count,
+                },
+            }
 
         # IR build milestone
         try:
@@ -943,6 +979,49 @@ def _build_ir_diagnostic_tasks(report: Any) -> list[dict[str, Any]]:
                 "patch_model",
             ],
             "write_operation": "agent run or agent patch",
+        })
+    return tasks
+
+
+def _build_library_failure_tasks(result: dict[str, Any]) -> list[dict[str, Any]]:
+    """Build one agent task per failed library download with specific ref, LCSC, and reason."""
+    tasks: list[dict[str, Any]] = []
+    for item in result.get("details", []):
+        if not isinstance(item, dict):
+            continue
+        reason = str(item.get("reason", ""))
+        if reason not in {"failed", "timeout", "not_found", "network_error"}:
+            continue
+        ref = str(item.get("ref", "")).strip()
+        lcsc_id = str(item.get("lcsc_id", "")).strip()
+        message = str(item.get("message", f"Download failed for {ref} ({lcsc_id})"))
+        tasks.append({
+            "task_id": f"repair:library:{reason}:{ref or 'unknown'}",
+            "type": "agent_repair",
+            "decision_schema": "repair_diagnostic_v1",
+            "reason": "must_fix",
+            "diagnostic": {
+                "source": "library_resolution",
+                "code": reason.upper(),
+                "severity": "error",
+                "message": message,
+                "ref": ref,
+                "lcsc_id": lcsc_id,
+            },
+            "allowed_actions": [
+                "apply_model_operation",
+                "retry_download",
+                "search_alternative_lcsc",
+                "needs_human_review",
+                "skip_with_reason",
+            ],
+            "allowed_operations": [
+                "set_selected_part",
+                "update_component",
+                "patch_model",
+            ],
+            "write_operation": "agent run set_selected_part or agent jlc search",
+            "suggested_action": "retry_download" if reason == "timeout" else "search_alternative_lcsc",
         })
     return tasks
 

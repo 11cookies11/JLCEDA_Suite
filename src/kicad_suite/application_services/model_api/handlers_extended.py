@@ -261,7 +261,10 @@ class _ExtendedHandlers:
             if not isinstance(net, dict):
                 continue
             for member in net.get("members", []):
-                ref = str(member).split(".", 1)[0]
+                member_str = str(member)
+                if "." not in member_str:
+                    continue  # bare net name, not a component reference
+                ref = member_str.split(".", 1)[0]
                 if ref and ref not in refs:
                     message = f"net {net.get('name', '')} references missing component {ref}"
                     if strict:
