@@ -21,7 +21,61 @@ _SYM_LIB_TEMPLATE = """(sym_lib_table
 )
 """
 
-_installed_lcsc_cache: dict[str, bool] = {}
+_installed_lcsc_cache: dict[str, dict[str, str]] = {}
+_CACHE_FILENAME = "easyeda-download-cache.json"
+
+
+def _persistent_cache_path(project_path: Path) -> Path:
+    return project_path / "build" / _CACHE_FILENAME
+
+
+def _load_persistent_cache(project_path: Path) -> dict[str, dict[str, str]]:
+    """Load previously downloaded component metadata from disk into memory."""
+    global _installed_lcsc_cache
+    cache_file = _persistent_cache_path(project_path)
+    if not cache_file.exists():
+        return {}
+    try:
+        data = json.loads(cache_file.read_text(encoding="utf-8"))
+        if isinstance(data, dict):
+            # Merge into in-memory cache (only for entries not already loaded)
+            for key, value in data.items():
+                if isinstance(value, dict) and key not in _installed_lcsc_cache:
+                    _installed_lcsc_cache[key] = value
+            return {k: v for k, v in data.items() if isinstance(v, dict)}
+    except (json.JSONDecodeError, OSError):
+        return {}
+    return {}
+
+
+def _save_persistent_cache(project_path: Path, cache: dict[str, dict[str, str]]) -> None:
+    """Persist download cache to disk so subsequent runs skip already-downloaded parts."""
+    cache_file = _persistent_cache_path(project_path)
+    cache_file.parent.mkdir(parents=True, exist_ok=True)
+    # Only persist entries that have meaningful metadata (title + package)
+    slim: dict[str, dict[str, str]] = {}
+    for key, value in cache.items():
+        if isinstance(value, dict) and value.get("title"):
+            slim[key] = {
+                "title": str(value.get("title", "")),
+                "package": str(value.get("package", "")),
+                "pin_count": str(value.get("pin_count", "0")),
+                "symbol_ref": str(value.get("symbol_ref", "")),
+            }
+    cache_file.write_text(json.dumps(slim, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
+def _verify_cached_symbols_exist(project_path: Path, cache_entry: dict[str, str]) -> bool:
+    """Check that the locally-cached symbol and footprint files still exist on disk."""
+    sym_dir = project_path / "libraries" / "symbols"
+    fp_dir = project_path / "libraries" / "footprints" / "JLC-MCP.pretty"
+    # At least one .kicad_sym file must exist in the symbols directory
+    if not any(sym_dir.glob("*.kicad_sym")):
+        return False
+    # The footprint directory should have at least one .kicad_mod file
+    if not any(fp_dir.glob("*.kicad_mod")):
+        return False
+    return True
 
 
 def _looks_rate_limited(text: str) -> bool:
@@ -107,18 +161,52 @@ def install_by_lcsc_id(
     delay: float = 0.5,
     initial_delay_range: tuple[float, float] | None = None,
 ) -> dict[str, Any]:
-    """Download component data from EasyEDA and install symbol + footprint into *project_path*."""
+    """Download component data from EasyEDA and install symbol + footprint into *project_path*.
+
+    Cache hits (in-memory or persistent disk cache) skip the network call entirely.
+    Previously downloaded components are re-used across process invocations.
+    """
     global _installed_lcsc_cache
     cache_key = f"{project_path.resolve()}:{lcsc_id}"
+
+    # 1) In-memory cache (same process)
     cached = _installed_lcsc_cache.get(cache_key)
-    if cached is not None:
-        pkg = str(cached) if cached else ""
-        return {"ok": True, "lcsc_id": lcsc_id, "cached": True, "pin_count": 0, "package": pkg}
+    if cached is not None and isinstance(cached, dict):
+        if _verify_cached_symbols_exist(project_path, cached):
+            return {
+                "ok": True,
+                "lcsc_id": lcsc_id,
+                "cached": True,
+                "pin_count": int(cached.get("pin_count", 0)),
+                "package": str(cached.get("package", "")),
+                "title": str(cached.get("title", "")),
+                "symbol_ref": str(cached.get("symbol_ref", "")),
+            }
+        else:
+            # Library files missing — evict stale cache entry
+            del _installed_lcsc_cache[cache_key]
+
+    # 2) Persistent disk cache (survives process restarts)
+    _load_persistent_cache(project_path)
+    cached = _installed_lcsc_cache.get(cache_key)
+    if cached is not None and isinstance(cached, dict):
+        if _verify_cached_symbols_exist(project_path, cached):
+            return {
+                "ok": True,
+                "lcsc_id": lcsc_id,
+                "cached": True,
+                "pin_count": int(cached.get("pin_count", 0)),
+                "package": str(cached.get("package", "")),
+                "title": str(cached.get("title", "")),
+                "symbol_ref": str(cached.get("symbol_ref", "")),
+            }
+        else:
+            del _installed_lcsc_cache[cache_key]
 
     if initial_delay_range is not None:
         _time.sleep(random.uniform(*initial_delay_range))
 
-    # 1. Fetch from EasyEDA
+    # 3) Network fetch from EasyEDA
     comp_data = jlc_api.get_component(lcsc_id, retries=retries, delay=delay)
     if comp_data is None:
         return {"ok": False, "error": f"Component {lcsc_id} not found on EasyEDA"}
@@ -178,13 +266,21 @@ def install_by_lcsc_id(
             fp_file.write_text(_make_minimal_footprint(fp_name), encoding="utf-8")
     # If file already exists, keep it (footprints are shared across components)
 
-    _installed_lcsc_cache[cache_key] = comp_data.get("package_title", "")
+    # Cache both in-memory and on disk so subsequent runs skip the network call
+    cache_entry = {
+        "title": str(comp_data.get("title", "")),
+        "package": str(comp_data.get("package_title", "")),
+        "pin_count": str(pin_count),
+        "symbol_ref": str(symbol_name),
+    }
+    _installed_lcsc_cache[cache_key] = cache_entry
+    _save_persistent_cache(project_path, _installed_lcsc_cache)
     return {
         "ok": True,
         "lcsc_id": lcsc_id,
-        "title": comp_data.get("title", ""),
+        "title": cache_entry["title"],
         "symbol_ref": symbol_name,
-        "package": comp_data.get("package_title", ""),
+        "package": cache_entry["package"],
         "symbol_file": str(sym_file),
         "symbol_count": 1,
         "footprint_file": str(fp_file),
