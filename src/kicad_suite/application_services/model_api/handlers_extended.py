@@ -575,6 +575,12 @@ class _ExtendedHandlers:
                             result["postprocess"] = postprocess_result
                         except Exception as exc:
                             result["postprocess_error"] = str(exc)
+                        # Generate placement plan from pcb_layout.regions
+                        try:
+                            from ...application_services.placement_planner import write_placement_plan  # noqa: PLC0415
+                            write_placement_plan(source_project, self.model)
+                        except Exception:
+                            pass
                         # Generate PCB
                         pcb_result = generate_pcb(asdict(plan), project_path=source_project)
                         result["pcb"] = pcb_result
