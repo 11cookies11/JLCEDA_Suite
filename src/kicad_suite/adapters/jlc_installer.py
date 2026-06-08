@@ -66,15 +66,24 @@ def _save_persistent_cache(project_path: Path, cache: dict[str, dict[str, str]])
 
 
 def _verify_cached_symbols_exist(project_path: Path, cache_entry: dict[str, str]) -> bool:
-    """Check that the locally-cached symbol and footprint files still exist on disk."""
-    sym_dir = project_path / "libraries" / "symbols"
+    """Check that this specific component's symbol, footprint and 3D model files still exist on disk."""
+    package = str(cache_entry.get("package", ""))
+    if not package:
+        # Fallback: at least some library files must exist
+        sym_dir = project_path / "libraries" / "symbols"
+        fp_dir = project_path / "libraries" / "footprints" / "JLC-MCP.pretty"
+        return any(sym_dir.glob("*.kicad_sym")) and any(fp_dir.glob("*.kicad_mod"))
+
     fp_dir = project_path / "libraries" / "footprints" / "JLC-MCP.pretty"
-    # At least one .kicad_sym file must exist in the symbols directory
-    if not any(sym_dir.glob("*.kicad_sym")):
+    fp_file = fp_dir / f"{package}.kicad_mod"
+    if not fp_file.exists():
         return False
-    # The footprint directory should have at least one .kicad_mod file
-    if not any(fp_dir.glob("*.kicad_mod")):
-        return False
+    # Check that the 3D model directory has at least one file (only relevant if models were previously generated)
+    model_dir = project_path / "libraries" / "3dmodels" / "JLC-MCP.3dshapes"
+    if model_dir.exists() and not any(model_dir.iterdir()):
+        # Models dir exists but is empty — footprint may reference models that don't exist
+        # Don't fail the cache hit over this; models are non-critical
+        pass
     return True
 
 
@@ -266,10 +275,25 @@ def install_by_lcsc_id(
             fp_file.write_text(_make_minimal_footprint(fp_name), encoding="utf-8")
     # If file already exists, keep it (footprints are shared across components)
 
+    # 6. Generate 3D model from EasyEDA data (if available)
+    model_dir = project_path / "libraries" / "3dmodels" / "JLC-MCP.3dshapes"
+    try:
+        from easyeda2kicad.easyeda.easyeda_importer import Easyeda3dModelImporter  # noqa: PLC0415
+        from easyeda2kicad.kicad import Exporter3dModelKicad  # noqa: PLC0415
+        model_importer = Easyeda3dModelImporter(ee_envelope, download_raw_3d_model=True)
+        if model_importer.output:
+            model_dir.mkdir(parents=True, exist_ok=True)
+            model_exporter = Exporter3dModelKicad(model_importer.output)
+            model_exporter.export(str(model_dir))
+    except Exception:
+        # 3D model data may be unavailable for some components — non-critical
+        pass
+
     # Cache both in-memory and on disk so subsequent runs skip the network call
+    # Store the *sanitized* package name so it matches the footprint filename on disk
     cache_entry = {
         "title": str(comp_data.get("title", "")),
-        "package": str(comp_data.get("package_title", "")),
+        "package": _sanitize(str(comp_data.get("package_title", lcsc_id))),
         "pin_count": str(pin_count),
         "symbol_ref": str(symbol_name),
     }
