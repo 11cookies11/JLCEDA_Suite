@@ -382,10 +382,28 @@ class AgentWorkflowService:
             timeout=timeout,
             model_path=model_file,
         )
-        if not library_result.get("ok"):
-            # Build per-component failure tasks so the agent knows exactly what to fix
+        needs_sel = int(library_result.get("needs_selection", 0) or 0)
+        failed_dl = int(library_result.get("failed", 0) or 0)
+
+        # Components still missing LCSC → route back to selection workflow
+        if needs_sel:
+            return self._emit_route_task(
+                project_path,
+                workflow_id=workflow_id,
+                task_id="route:needs_selection",
+                reason="needs_selection",
+                summary=f"{needs_sel} components still need LCSC selection after library resolution.",
+                recommended_workflow="lcsc_selection_v1",
+                alternatives=["lcsc_selection_v1", "unknown_task_v1"],
+                context={
+                    "needs_selection": needs_sel,
+                    "source": "full_build_v1.library_milestone",
+                },
+            )
+
+        # Download failures → per-component tasks for agent to fix
+        if failed_dl:
             tasks = _build_library_failure_tasks(library_result)
-            failed_count = len(tasks)
             tasks_file = write_agent_tasks(
                 project_path,
                 workflow_id=workflow_id,
@@ -399,13 +417,13 @@ class AgentWorkflowService:
                 "status": "waiting_for_agent",
                 "reason": "library_resolution_failed",
                 "tasks_file": str(tasks_file),
-                "task_count": failed_count,
+                "task_count": len(tasks),
                 "rerun_after_agent": True,
                 "next_action": "fix failed selected_part data (retry download or choose alternative LCSC), then rerun this workflow",
                 "library": {
                     "resolved": library_result.get("resolved", 0),
                     "downloaded": library_result.get("downloaded", 0),
-                    "failed": failed_count,
+                    "failed": failed_dl,
                 },
             }
 
