@@ -38,6 +38,7 @@ _last_call_time: float = 0.0
 # swallowed and returned as {}).
 _empty_streak: int = 0
 _MAX_EMPTY_BEFORE_ESCALATE = 3      # streak length that triggers escalated backoff
+_ESCALATED_FAILURE_LIMIT = 3        # cap retries once we strongly suspect a block
 
 _LCSC_ID_RE = re.compile(r"/([A-Z]\d+)(?:\.html)?")
 
@@ -114,9 +115,13 @@ def get_component(lcsc_id: str, retries: int = 3, delay: float = 2.0) -> dict[st
     When the EasyEDA API returns 403 the easyeda2kicad library swallows the
     HTTP status and returns an empty dict — so we treat consecutive empty
     results as a likely rate-limit signal and escalate the backoff.
+
+    Once escalated, we cap the number of failed attempts so we do not burn
+    time on a request that is very likely still blocked.
     """
     api = _get_api()
     escalated = _empty_streak >= _MAX_EMPTY_BEFORE_ESCALATE
+    _escalated_failures = 0
 
     for attempt in range(retries):
         _rate_limit(escalated=escalated)
@@ -130,6 +135,15 @@ def get_component(lcsc_id: str, retries: int = 3, delay: float = 2.0) -> dict[st
                 logger.info("API recovered after escalated backoff — block appears lifted")
             break
         _note_result(False)
+        if escalated:
+            _escalated_failures += 1
+            if _escalated_failures >= _ESCALATED_FAILURE_LIMIT:
+                logger.warning(
+                    "Giving up on %s after %d escalated failures (streak=%d) – "
+                    "server block likely requires minutes-long cooldown",
+                    lcsc_id, _escalated_failures, _empty_streak,
+                )
+                return None
         if attempt < retries - 1:
             # Exponential backoff, multiplied when we suspect a 403 block
             backoff = delay * (2 ** attempt)
