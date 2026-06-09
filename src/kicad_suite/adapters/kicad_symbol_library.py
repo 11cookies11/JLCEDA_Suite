@@ -580,11 +580,26 @@ def symbol_unit_numbers(lib_id: str) -> list[int]:
         return [1]
     symbol_name = lib_id.split(":", 1)[1]
     block = symbol_block_for_lib_id(lib_id)
-    units = sorted({int(match.group(1)) for match in re.finditer(rf'\(symbol "{re.escape(symbol_name)}_(\d+)_', block)})
-    if not units:
-        units = [1]
-    SYMBOL_UNIT_CACHE[lib_id] = units
-    return units
+    try:
+        tree = parse_sexpr(block)
+    except Exception:
+        SYMBOL_UNIT_CACHE[lib_id] = [1]
+        return [1]
+    pattern = f"{symbol_name}_"
+    units: set[int] = set()
+    for child in tree:
+        if isinstance(child, list) and child and isinstance(child[0], str):
+            tag = child[0]
+            if tag == "symbol" and len(child) >= 2 and isinstance(child[1], str):
+                name = child[1]
+                if name.startswith(pattern):
+                    rest = name[len(pattern):]
+                    parts = rest.split("_")
+                    if len(parts) >= 2 and parts[0].isdigit():
+                        units.add(int(parts[0]))
+    units_list = sorted(units) if units else [1]
+    SYMBOL_UNIT_CACHE[lib_id] = units_list
+    return units_list
 
 
 def symbol_real_pin_numbers(lib_id: str, unit: int | None = None) -> list[str]:

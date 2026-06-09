@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from ..adapters.kicad_project_writer import find_matching_paren, sanitize_lib_symbols_section, sanitize_symbol_block
+from ..shared.sexpr_parser import parse as parse_sexpr, symbols_in_library
 
 
 class SymbolNormalizationService:
@@ -75,19 +76,30 @@ class SymbolNormalizationService:
             if lib_end < 0:
                 continue
             lib_section = text[lib_start:lib_end + 1]
-            for match in re.finditer(r'\(symbol\s+"([^":]+):([^"]+)"', lib_section):
-                start = match.start()
-                end = find_matching_paren(lib_section, start)
-                if end < 0:
+            try:
+                tree = parse_sexpr(lib_section)
+            except Exception:
+                continue
+            for sym in tree.find("symbol"):
+                if len(sym.values) < 1:
                     continue
-                library = match.group(1)
-                symbol_name = match.group(2)
+                full_name = sym.values[0]
+                if ":" not in full_name:
+                    continue
+                library, symbol_name = full_name.split(":", 1)
                 key = (library, symbol_name)
                 if key in seen:
                     continue
                 seen.add(key)
+                # Extract the raw S-expression block for this symbol
+                start = lib_section.find(f'(symbol "{full_name}"')
+                if start < 0:
+                    continue
+                end = find_matching_paren(lib_section, start)
+                if end < 0:
+                    continue
                 block = lib_section[start:end + 1]
-                block = block.replace(f'(symbol "{library}:{symbol_name}"', f'(symbol "{symbol_name}"', 1)
+                block = block.replace(f'(symbol "{full_name}"', f'(symbol "{symbol_name}"', 1)
                 block = "\n".join(line[4:] if line.startswith("    ") else line for line in block.splitlines())
                 by_library.setdefault(library, []).append(block)
 
@@ -102,18 +114,27 @@ class SymbolNormalizationService:
             existing_blocks: list[str] = []
             existing_names: set[str] = set()
             if path.exists():
-                existing_text = path.read_text(encoding="utf-8-sig")
-                for match in re.finditer(r'\(symbol\s+"([^":]+)"', existing_text):
-                    start = match.start()
+                try:
+                    existing_text = path.read_text(encoding="utf-8-sig")
+                    existing_symbols = symbols_in_library(existing_text)
+                except Exception:
+                    existing_symbols = {}
+                for sym_name, _ in existing_symbols.items():
+                    start = existing_text.find(f'(symbol "{sym_name}"')
+                    if start < 0:
+                        continue
                     end = find_matching_paren(existing_text, start)
                     if end < 0:
                         continue
-                    existing_names.add(match.group(1))
+                    existing_names.add(sym_name)
                     existing_blocks.append(existing_text[start:end + 1])
             merged_blocks = list(existing_blocks)
             for block in blocks:
-                match = re.search(r'\(symbol\s+"([^":]+)"', block)
-                symbol_name = match.group(1) if match else ""
+                try:
+                    sym_tree = parse_sexpr(block)
+                    symbol_name = sym_tree.values[0] if sym_tree.values else ""
+                except Exception:
+                    symbol_name = ""
                 if symbol_name and symbol_name in existing_names:
                     continue
                 if symbol_name:
@@ -212,14 +233,19 @@ def _inject_symbols_into_sheet(sch_path: Path, lib_name: str, lib_content: str) 
     lib_section = sch[lib_start:lib_end + 1]
 
     replaced = 0
-    for sym_match in re.finditer(r'\(symbol\s+"([^"]+)"', lib_content):
-        sym_name = sym_match.group(1)
-        if re.search(r"_\d+_\d+$", sym_name):
+    try:
+        lib_symbols = symbols_in_library(lib_content)
+    except Exception:
+        lib_symbols = {}
+    for sym_name in lib_symbols:
+        if not sym_name or sym_name.endswith("_0_1"):
             continue
         full_lib_id = lib_name + ":" + sym_name
         if '(symbol "' + full_lib_id + '"' not in lib_section:
             continue
-        start = sym_match.start()
+        start = lib_content.find(f'(symbol "{sym_name}"')
+        if start < 0:
+            continue
         end = find_matching_paren(lib_content, start)
         if end < 0:
             continue

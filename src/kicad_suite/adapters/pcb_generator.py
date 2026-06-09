@@ -35,12 +35,17 @@ def _footprint_library_dir(project_dir: Path, lib_name: str) -> Path | None:
     return None
 
 def _pin_tokens(pin_number: str) -> set[str]:
+    """Return the exact pin number as the sole match token.
+
+    Previously this function split compound pin numbers like "A1B12"
+    into ["A1", "B12"], creating false-positive matches against
+    unrelated pads.  The board script already passes the full pin
+    number to pad_map, so we only need the original text as key.
+    """
     text = str(pin_number).strip()
     if not text:
         return set()
-    tokens = set(re.findall(r"[A-Za-z]+\d+|\d+", text))
-    tokens.add(text)
-    return tokens
+    return {text}
 
 def _pad_net_map(symbol: dict[str, Any]) -> dict[str, str]:
     mapping: dict[str, str] = {}
