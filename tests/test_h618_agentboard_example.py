@@ -6,6 +6,8 @@ import json
 import re
 from pathlib import Path
 
+import pytest
+
 
 def test_h618_example_circuit_model_is_present_and_shaped():
     model_path = Path("examples/h618-agentboard-v1/source/circuit-model.source.json")
@@ -219,6 +221,9 @@ def test_h618_lpddr4_multi_unit_instances_keep_distinct_units():
         "examples/h618-agentboard-v1/output/v1/"
         "h618_agentboard_v1_initial/03_memory_ddr.kicad_sch"
     )
+    if not schematic_path.exists():
+        pytest.skip("generated H618 KiCad output is not tracked")
+
     schematic = schematic_path.read_text(encoding="utf-8")
 
     assert re.search(

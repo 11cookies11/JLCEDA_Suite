@@ -13,7 +13,6 @@ npm run text-to-kicad
 ```bash
 npm run pipeline
 npm run server:text-to-kicad
-EDA_TARGET=kicad npm run server:text-to-eda
 ```
 
 可以使用默认需求，也可以通过环境变量传入结构化需求：

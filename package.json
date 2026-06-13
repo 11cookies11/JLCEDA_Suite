@@ -2,7 +2,7 @@
   "name": "kicad-agent-suite",
   "version": "0.3.2",
   "private": true,
-  "description": "Agent-assisted KiCad hardware development pipeline. hwtool CLI converts circuit-model.json into complete KiCad projects.",
+  "description": "Agent-assisted KiCad hardware development pipeline. hwtool CLI converts source/circuit-model.source.json into complete KiCad projects.",
   "author": "KiCad Agent Suite contributors",
   "license": "MIT",
   "engines": {
@@ -15,7 +15,6 @@
     "pipeline": "python3 ./scripts/kas.py pipeline",
     "text-to-kicad": "python3 ./scripts/kas.py text-to-kicad",
     "server:text-to-kicad": "python3 ./scripts/kas.py text-to-kicad",
-    "server:text-to-eda": "python3 ./scripts/kas.py eda-target",
     "compile-plan": "python3 ./scripts/kas.py compile-plan",
     "write-project": "python3 ./scripts/kas.py write-project",
     "erc": "python3 ./scripts/kas.py erc",

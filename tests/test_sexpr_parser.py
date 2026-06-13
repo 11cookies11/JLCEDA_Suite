@@ -117,7 +117,7 @@ _REPO = Path(__file__).resolve().parent.parent
 def _find_symbol_lib() -> Path | None:
     for candidate in [
         _REPO / "tmp" / "nexdap-mini" / "libraries" / "symbols" / "JLC-MCP.kicad_sym",
-        _REPO / "packs" / "symbols" / "JLC-MCP-Connectors.kicad_sym",
+        _REPO / "resources" / "kicad" / "symbols" / "JLC-MCP-Connectors.kicad_sym",
     ]:
         if candidate.exists():
             return candidate

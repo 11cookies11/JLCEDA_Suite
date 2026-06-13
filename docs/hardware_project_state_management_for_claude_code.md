@@ -407,7 +407,7 @@ hwtool build
 | 命令 | 作用 |
 |---|---|
 | `hwtool status` | 返回项目当前状态、是否需要 validate/build |
-| `hwtool inspect` | 返回结构化摘要，包括 MCU、屏幕、packs、pinmap 等 |
+| `hwtool inspect` | 返回结构化摘要，包括 MCU、屏幕、KiCad resources、pinmap 等 |
 | `hwtool explain` | 返回自然语言摘要，方便 AI Agent 快速理解项目 |
 | `hwtool report` | 返回 diagnostics，包括 errors/warnings/suggestions |
 | `hwtool history` | 读取 operations.jsonl 操作历史 |

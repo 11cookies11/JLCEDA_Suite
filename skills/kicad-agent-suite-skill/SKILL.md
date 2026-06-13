@@ -250,7 +250,6 @@ A release package should include enough for agents and users to run `hwtool` wit
 - `schemas/`
 - `config/`
 - `resources/`
-- `packs/`
 - `skills/kicad-agent-suite-skill/`
 - verified examples only
 

@@ -1,49 +1,79 @@
 # KiCad Agent Suite
 
-这是一个面向硬件设计与自动化协作的 KiCad 工作流仓库。
+Agent-assisted KiCad hardware development pipeline.
 
-## 当前重点
+KiCad Agent Suite uses a structured source model to resolve parts, compile an
+intermediate representation, validate it, and export KiCad projects.
 
-- 以 `circuit-model.json` 作为统一输入，驱动器件选择、原理图生成和后续验证流程。
-- 为新的 example 硬件提供标准化目录、文档和可复用骨架。
-- 通过 `where` 进度文件跟踪托管实施状态。
+## Project Layout
 
-## H618 示例
+New projects use the split source/build layout:
 
-当前正在推进的示例是 `examples/h618-agentboard-v1`，目标是一块面向 AI Agent 工作流的 H618 Linux 控制开发板。
+```text
+project/
+  source/
+    circuit-model.source.json
+  build/
+    circuit-model.resolved.json
+    ir.v1.json
+    ir-validation.json
+    report.json
+    report.md
+  libraries/
+    symbols/
+    footprints/
+    3dmodels/
+  output/
+    <topology>/
+      <topology>.kicad_pro
+      <topology>.kicad_sch
+      <topology>.kicad_pcb
+      <topology>.erc.json
+      <topology>.erc.classification.json
+      agent-report.json
+```
 
-### 目录入口
+Edit `source/circuit-model.source.json`. Treat `build/`, `output/`, logs, and
+`project.state.json` as generated artifacts.
 
-- [示例总览](examples/h618-agentboard-v1/README.md)
-- [需求说明](examples/h618-agentboard-v1/docs/00_requirements.md)
-- [系统架构](examples/h618-agentboard-v1/docs/01_system_architecture.md)
-- [电源树](examples/h618-agentboard-v1/docs/02_power_tree.md)
-- [启动流程](examples/h618-agentboard-v1/docs/03_boot_flow.md)
-- [引脚复用](examples/h618-agentboard-v1/docs/04_pinmux.md)
-- [原理图模块拆分](examples/h618-agentboard-v1/docs/05_schematic_modules.md)
-- [PCB 约束](examples/h618-agentboard-v1/docs/06_pcb_constraints.md)
-- [Bring-up 计划](examples/h618-agentboard-v1/docs/07_bringup_plan.md)
-- [风险清单](examples/h618-agentboard-v1/docs/08_risks.md)
-- [实施计划](examples/h618-agentboard-v1/docs/09_implementation_plan.md)
-- [拓扑完整度清单](examples/h618-agentboard-v1/docs/10_topology_completeness_checklist.md)
-- [circuit-model 格式规范](examples/h618-agentboard-v1/docs/11_circuit_model_format.md)
-- [拓扑收口最后五项](examples/h618-agentboard-v1/docs/12_topology_final_items.md)
-- [PMIC 收口方案](examples/h618-agentboard-v1/docs/13_pmic_closure.md)
-- [DDR 收口方案](examples/h618-agentboard-v1/docs/14_ddr_closure.md)
-- [SoC pinmap 收口方案](examples/h618-agentboard-v1/docs/15_soc_pinmap_closure.md)
-- [启动与恢复闭环方案](examples/h618-agentboard-v1/docs/16_boot_recovery_closure.md)
-- [接口收口方案](examples/h618-agentboard-v1/docs/17_interface_closure.md)
-- [原理图模块输入](examples/h618-agentboard-v1/docs/18_schematic_module_inputs.md)
-- [原理图分图元件与网络清单](examples/h618-agentboard-v1/docs/19_schematic_sheet_parts_nets.md)
-- [原理图捕获顺序](examples/h618-agentboard-v1/docs/20_schematic_capture_order.md)
-- [原理图捕获模板](examples/h618-agentboard-v1/docs/21_schematic_capture_templates.md)
-- [初版原理图工程](examples/h618-agentboard-v1/output/v1/h618_agentboard_v1_initial/)
+## Common Workflow
 
-## 常用命令
+Run commands from a project directory:
 
-- `npm run scaffold:example -- demo-board --title "Demo Board"`
-- `python scripts/kas.py pipeline examples/h618-agentboard-v1/circuit-model.json examples/h618-agentboard-v1/output/v1`
+```powershell
+hwtool agent status --project .
+hwtool agent inspect --project .
+hwtool agent diagnose --project .
+hwtool agent resolve-symbols --project . --timeout 120
+hwtool agent build-ir --project .
+hwtool agent validate-ir --project .
+hwtool agent export-kicad --project .
+hwtool agent report --project . --markdown
+hwtool agent diagnose --project .
+```
 
-## 进度跟踪
+Do not export KiCad before IR validation passes.
 
-当前进度记录在 [`.where-agent-progress.md`](.where-agent-progress.md)。
+## Examples
+
+Editable example source models live under `examples/*/source/`.
+
+- `examples/stm32f103-minimal-system/source/circuit-model.source.json`
+- `examples/esp32c3-minimal-system/source/circuit-model.source.json`
+- `examples/refactor-layout-demo/source/circuit-model.source.json`
+- `examples/h618-agentboard-v1/source/circuit-model.source.json`
+
+Generated example `build/`, `output/`, and downloaded project-local libraries are
+not tracked in git. Regenerate them with the workflow above when needed.
+
+## Development
+
+Useful commands:
+
+```powershell
+python scripts/kas.py --help
+python -m pytest
+npm run jlc:search -- STM32F103C8T6
+```
+
+Repository-wide KiCad resource libraries live in `resources/kicad/`.

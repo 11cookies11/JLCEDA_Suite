@@ -15,7 +15,6 @@ a = Analysis(
         (str(_root / "schemas"), "schemas"),
         (str(_root / "config"), "config"),
         (str(_root / "resources"), "resources"),
-        (str(_root / "packs"), "packs"),
     ],
     hiddenimports=[],
     hookspath=[],
