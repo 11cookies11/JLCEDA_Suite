@@ -168,11 +168,12 @@ def ir_to_kicad(ir: dict[str, Any]) -> KiCadExecutionPlan:
     for sym in symbols:
         sheet = _symbol_sheet_name(sym, topology)
         sheet_groups.setdefault(sheet, []).append(sym)
+    overlap_passes = max(1, to_int_env("KICAD_SCH_OVERLAP_PASSES", 12))
     for sheet, group in sheet_groups.items():
         passes = _resolve_symbol_overlaps_for_group(
-            group, layout_numeric_setting("block_padding", 5.08), 5
+            group, layout_numeric_setting("block_padding", 5.08), overlap_passes
         )
-        if passes >= 5:
+        if passes >= overlap_passes:
             diagnostics.warnings.append(
                 f"Sheet '{sheet}': overlap resolution reached max passes."
             )
@@ -228,7 +229,7 @@ def _resolve_position(
     topology = ir.get("topology", "")
 
     # 1. Configured position (exact override from layout profiles).
-    configured = layout_engine.configured_topology_position(topology, ref)
+    configured = layout_engine.configured_schematic_position(topology, ref)
     if configured is not None:
         return configured
 

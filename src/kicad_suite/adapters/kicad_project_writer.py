@@ -947,6 +947,7 @@ def render_connectivity(
     plan: dict[str, Any],
     symbols: list[dict[str, Any]] | None = None,
     force_global_nets: set[str] | None = None,
+    force_hierarchical_nets: set[str] | None = None,
 ) -> str:
     kind_map = net_kind_by_name(plan)
     blocks: list[str] = []
@@ -954,7 +955,8 @@ def render_connectivity(
         symbols = [symbol for symbol in plan.get('symbols', []) if isinstance(symbol, dict)]
     if force_global_nets is None:
         force_global_nets = set()
-    nets = plan.get('nets', [])
+    if force_hierarchical_nets is None:
+        force_hierarchical_nets = set()
     rendered_labels: set[tuple[str, str, float, float]] = set()
     for symbol in symbols:
         ref = str(symbol.get('ref', '')).upper()
@@ -992,7 +994,12 @@ def render_connectivity(
             kind = effective_net_kind(net_name, kind_map.get(net_name, 'signal'))
             justify = 'right' if direction == 180.0 else 'left' if direction == 0.0 else 'center'
             justify_effect = f' (justify {justify})' if justify != 'center' else ''
-            if net_name in force_global_nets or kind in {'ground', 'power'}:
+            if net_name in force_hierarchical_nets:
+                blocks.append(f'''  (hierarchical_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(label_x)} {fmt(ly)} 0)
+    (effects (font (size 1.27 1.27)){justify_effect})
+    (uuid {q(new_uuid())})
+  )''')
+            elif net_name in force_global_nets or kind in {'ground', 'power'}:
                 blocks.append(f'''  (global_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(label_x)} {fmt(ly)} 0)
     (effects (font (size 1.27 1.27)){justify_effect})
     (uuid {q(new_uuid())})
@@ -1062,6 +1069,18 @@ def sanitize_sheet_name(value: str) -> str:
     cleaned = re.sub(r'[^A-Za-z0-9_.-]+', '_', value.strip().lower())
     cleaned = cleaned.strip('._-')
     return cleaned or 'sheet'
+
+
+def _sheet_file_stem(index: int, sheet_name: str) -> str:
+    """Build a stable child schematic stem without duplicating numeric prefixes."""
+    cleaned = sanitize_sheet_name(sheet_name)
+    while True:
+        stripped = re.sub(r'^\d+[_-]+', '', cleaned)
+        if stripped == cleaned:
+            break
+        cleaned = stripped
+    cleaned = cleaned.strip('._-') or 'sheet'
+    return f'{index:02d}_{cleaned}'
 
 
 def load_layout_profile_config() -> dict[str, Any]:
@@ -1302,11 +1321,44 @@ def render_sheet_pin(name: str, kind: str, x: float, y: float, angle: float) -> 
     )'''
 
 
+def render_sheet_pins(page: dict[str, Any], kind_map: dict[str, str]) -> str:
+    pins = [str(name).strip() for name in page.get('ports', []) if str(name).strip()]
+    if not pins:
+        return ''
+    x = float(page['x'])
+    y = float(page['y'])
+    w = float(page['w'])
+    h = float(page['h'])
+    left_count = (len(pins) + 1) // 2
+    right_count = len(pins) // 2
+    left_step = h / (left_count + 1) if left_count else h
+    right_step = h / (right_count + 1) if right_count else h
+    lines: list[str] = []
+    left_index = 0
+    right_index = 0
+    for index, pin_name in enumerate(pins):
+        kind = effective_net_kind(pin_name, kind_map.get(pin_name, 'signal'))
+        if index % 2 == 0 or right_count == 0:
+            left_index += 1
+            pin_x = x
+            pin_y = y + left_step * left_index
+            angle = 180.0
+        else:
+            right_index += 1
+            pin_x = x + w
+            pin_y = y + right_step * right_index
+            angle = 0.0
+        lines.append(render_sheet_pin(pin_name, kind, pin_x, pin_y, angle))
+    return '\n'.join(lines)
+
+
 def render_root_sheet(page: dict[str, Any], kind_map: dict[str, str]) -> str:
     x = float(page['x'])
     y = float(page['y'])
     w = float(page['w'])
     h = float(page['h'])
+    pins = render_sheet_pins(page, kind_map)
+    pins_block = f'\n{pins}' if pins else ''
     return f'''  (sheet
     (at {fmt(x)} {fmt(y)})
     (size {fmt(w)} {fmt(h)})
@@ -1319,6 +1371,7 @@ def render_root_sheet(page: dict[str, Any], kind_map: dict[str, str]) -> str:
     (property "Sheetfile" {q(page['file'])} (at {fmt(x)} {fmt(y + h + 1.27)} 0)
       (effects (font (size 1.27 1.27)) (justify left top))
     )
+{pins_block}
   )'''
 
 
@@ -1365,7 +1418,12 @@ def render_child_schematic(
     power_flag_nets = set(power_flag_nets) - driven_power_nets
     page_symbols.extend(automatic_power_flags_for_net_names(power_flag_nets, net_kind_by_name(plan), start_index=page_index * 100))
     instances = '\n'.join(render_symbol_instance_at_path(symbol, project_name, page['path']) for symbol in page_symbols)
-    connectivity = render_connectivity(plan, page_symbols, force_global_nets=cross_nets)
+    connectivity = render_connectivity(
+        plan,
+        page_symbols,
+        force_global_nets=set(),
+        force_hierarchical_nets=cross_nets,
+    )
     return sanitize_lib_symbols_section(f'''(kicad_sch
   (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
@@ -1423,10 +1481,10 @@ def write_hierarchical_project(
     cursor_y = 25.4
     max_x = 210.0
     for index, (name, symbols) in enumerate(pages.items(), start=1):
-        page_nets = sorted(set(net for net, net_pages in cross_net_pages.items() if name in net_pages) | local_power_nets.get(name, set()))
+        page_ports = sorted(net for net, net_pages in cross_net_pages.items() if name in net_pages)
+        page_nets = sorted(set(page_ports) | local_power_nets.get(name, set()))
         height = max(20.32, 15.24 + len(page_nets) * 7.62)
-        sheet_name = sanitize_sheet_name(name)
-        file_name = f'{index:02d}_{sheet_name}.kicad_sch'
+        file_name = f'{_sheet_file_stem(index, name)}.kicad_sch'
         if cursor_x > max_x:
             cursor_x = 25.4
             cursor_y += 45.72
@@ -1441,6 +1499,7 @@ def write_hierarchical_project(
                 'y': cursor_y,
                 'w': 48.26,
                 'h': height,
+                'ports': page_ports,
                 'pins': page_nets,
                 'symbols': symbols,
             }
@@ -1459,6 +1518,7 @@ def write_hierarchical_project(
         for net_name in power_flag_net_names(page_net_names, net_kind_lookup):
             flag_page_by_net.setdefault(net_name, str(page['name']))
 
+    _remove_stale_child_schematics(schematic_file.parent, [schematic_file.name, *(page['file'] for page in sheet_pages)])
     schematic_file.write_text(render_root_schematic(plan, sheet_pages) + '\n', encoding='utf-8')
     for page in sheet_pages:
         child_path = schematic_file.parent / page['file']
@@ -1484,6 +1544,20 @@ def write_hierarchical_project(
         'root_schematic_file': str(schematic_file),
         'sheet_files': [str(schematic_file.parent / page['file']) for page in sheet_pages],
     }
+
+
+def _remove_stale_child_schematics(directory: Path, keep_names: list[str]) -> None:
+    """Remove old child schematic files before rewriting a hierarchical project."""
+    if not directory.exists():
+        return
+    keep = {name for name in keep_names if name}
+    for file_path in directory.glob('*.kicad_sch'):
+        if file_path.name in keep:
+            continue
+        try:
+            file_path.unlink()
+        except OSError:
+            pass
 
 
 def render_project(output_dir: str | Path | None = None) -> str:

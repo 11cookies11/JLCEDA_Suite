@@ -6,6 +6,7 @@ from collections import defaultdict
 from typing import Any
 
 from ...shared.schema_versions import IR_SCHEMA_VERSION
+from ...shared.test_point_compat import normalize_test_point_selected_part
 
 
 def build_ir(model: dict[str, Any]) -> dict[str, Any]:
@@ -153,7 +154,9 @@ def _build_components(
         # Sort by pin number (numeric if possible).
         pins.sort(key=lambda p: _pin_sort_key(p["number"]))
 
-        # selected_part ???keep package as hardware fact.
+        # selected_part keeps the resolved hardware facts; test points are
+        # normalised to a standard compatibility representation so downstream
+        # EDA tools do not depend on project-local placeholder names.
         sp = component.get("selected_part")
         selected_part = dict(sp) if isinstance(sp, dict) else {}
         top_level_package = str(component.get("package", "")).strip()
@@ -162,6 +165,7 @@ def _build_components(
         top_level_mechanical_package = str(component.get("mechanical_package", "")).strip()
         if top_level_mechanical_package and not str(selected_part.get("mechanical_package", "")).strip():
             selected_part["mechanical_package"] = top_level_mechanical_package
+        selected_part = normalize_test_point_selected_part(component, selected_part)
 
         # Assigned sheet.
         assigned_sheet = str(component.get("sheet", ""))

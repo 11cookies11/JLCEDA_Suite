@@ -132,14 +132,14 @@ def _compute_block_layout(components: list[tuple[str, str, str]]) -> dict[str, t
     return layout
 
 
-def configured_topology_position(topology: str, ref: str) -> KiCadPoint | None:
+def _configured_profile_position(topology: str, ref: str, key: str) -> KiCadPoint | None:
     profiles = load_layout_profiles().get("profiles", {})
     if not isinstance(profiles, dict):
         return None
     profile = profiles.get(topology, {})
     if not isinstance(profile, dict):
         return None
-    positions = profile.get("positions", {})
+    positions = profile.get(key, {})
     if not isinstance(positions, dict):
         return None
     item = positions.get(ref)
@@ -153,6 +153,14 @@ def configured_topology_position(topology: str, ref: str) -> KiCadPoint | None:
         )
     except (TypeError, ValueError):
         return None
+
+
+def configured_topology_position(topology: str, ref: str) -> KiCadPoint | None:
+    return _configured_profile_position(topology, ref, "positions")
+
+
+def configured_schematic_position(topology: str, ref: str) -> KiCadPoint | None:
+    return _configured_profile_position(topology, ref, "schematic_positions") or configured_topology_position(topology, ref)
 
 
 def _auto_position(

@@ -1,6 +1,6 @@
 {
   "schema_version": "report.v1",
-  "generated_at": "2026-06-15T04:19:56.761111+00:00",
+  "generated_at": "2026-06-15T09:45:28.348255+00:00",
   "overall_status": "warning",
   "project": {
     "name": "ai_memory_badge_v1",
@@ -49,7 +49,7 @@
       "status": "ok",
       "data": {
         "last_build_ok": true,
-        "last_build_at": "2026-06-15T04:18:06.093056+00:00",
+        "last_build_at": "2026-06-15T09:28:55.139160+00:00",
         "input_dsl_hash": "9ca86719",
         "stale": false
       }
@@ -61,13 +61,7 @@
       "data": {
         "errors": 0,
         "warnings": 0,
-        "items": [
-          {
-            "timestamp": "2026-06-15T01:58:25.831750+00:00",
-            "level": "info",
-            "message": "agent:build-ir"
-          }
-        ]
+        "items": []
       }
     },
     {
@@ -688,97 +682,118 @@
       }
     },
     {
+      "key": "design_intent",
+      "title": "Design Intent",
+      "status": "warning",
+      "data": {
+        "status": "warning",
+        "active_domains": [
+          "power",
+          "mcu",
+          "rf",
+          "audio",
+          "storage",
+          "ui",
+          "security",
+          "debug"
+        ],
+        "baseline_counts": {
+          "design_decisions": 6,
+          "risks": 7,
+          "constraints": 6
+        },
+        "missing_baseline_sections": [],
+        "issues": [
+          {
+            "severity": "warning",
+            "code": "PLACEHOLDER_SIGNAL",
+            "message": "model still contains placeholder or tentative intent markers",
+            "details": [
+              "placeholder",
+              "verify"
+            ],
+            "suggestion": "Convert placeholder markers into explicit decisions, risks, or constraints before release."
+          }
+        ]
+      }
+    },
+    {
       "key": "erc",
       "title": "ERC",
       "status": "ok",
       "data": {
-        "finding_count": 89,
+        "finding_count": 240,
         "warnings": [],
         "violations": [
           {
-            "type": "pin_to_pin",
-            "count": 89,
+            "type": "endpoint_off_grid",
+            "count": 167,
             "severity": "warning",
-            "example": "类型为 Unspecified 和 Passive 的引脚已连接"
+            "example": "Symbol pin or wire end off connection grid"
+          },
+          {
+            "type": "pin_to_pin",
+            "count": 67,
+            "severity": "warning",
+            "example": "类型为 Unspecified 和 Unspecified 的引脚已连接"
+          },
+          {
+            "type": "multiple_net_names",
+            "count": 4,
+            "severity": "warning",
+            "example": "GND 和 USB_D_P 都连接到同一项上; 将使用 GND 作为网表中的网络名称"
+          },
+          {
+            "type": "hier_label_mismatch",
+            "count": 2,
+            "severity": "error",
+            "example": "图纸引脚 PSRAM_CS 在子图纸内没有匹配的层次标签"
           }
         ],
         "classification": {
           "schema_version": "erc-classification.v1",
-          "finding_count": 89,
+          "finding_count": 240,
           "counts": {
-            "must_fix": 0,
-            "library_noise": 89,
-            "review_required": 0
+            "must_fix": 2,
+            "library_noise": 67,
+            "review_required": 171
           },
           "by_type": {
-            "pin_to_pin": 89
+            "hier_label_mismatch": 2,
+            "endpoint_off_grid": 167,
+            "pin_to_pin": 67,
+            "multiple_net_names": 4
           },
           "by_severity": {
-            "warning": 89
+            "error": 2,
+            "warning": 238
           },
           "buckets": {
-            "must_fix": [],
+            "must_fix": [
+              {
+                "sheet": "/",
+                "type": "hier_label_mismatch",
+                "severity": "error",
+                "description": "图纸引脚 PSRAM_CS 在子图纸内没有匹配的层次标签",
+                "items": [
+                  "层次图纸引脚 'PSRAM_CS'"
+                ],
+                "reason": "KiCad reported an ERC error that does not match a known library-noise pattern.",
+                "suggested_action": "Inspect the model net membership and generated schematic."
+              },
+              {
+                "sheet": "/02_system_power/",
+                "type": "hier_label_mismatch",
+                "severity": "error",
+                "description": "层次标签 SYS_3V3_REG 在父图纸内没有匹配的图纸引脚",
+                "items": [
+                  "层次标签 'SYS_3V3_REG'"
+                ],
+                "reason": "KiCad reported an ERC error that does not match a known library-noise pattern.",
+                "suggested_action": "Inspect the model net membership and generated schematic."
+              }
+            ],
             "library_noise": [
-              {
-                "sheet": "/01_usb_and_charging/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U3 引脚 1 [STAT, Unspecified, Line]",
-                  "Symbol R19 引脚 2 [2, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/01_usb_and_charging/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U3 引脚 2 [VSS, Unspecified, Line]",
-                  "Symbol C14 引脚 2 [2, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/01_usb_and_charging/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
-                "items": [
-                  "Symbol U3 引脚 3 [VBAT, Unspecified, Line]",
-                  "Symbol #FLG100 引脚 1 [Power output, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/01_usb_and_charging/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U3 引脚 5 [PROG, Unspecified, Line]",
-                  "Symbol R3 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/01_usb_and_charging/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U3 引脚 4 [VDD, Unspecified, Line]",
-                  "Symbol C14 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
               {
                 "sheet": "/01_usb_and_charging/",
                 "type": "pin_to_pin",
@@ -855,22 +870,10 @@
                 "sheet": "/01_usb_and_charging/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol J1 引脚 B12 [GND, Unspecified, Line]",
-                  "Symbol U3 引脚 2 [VSS, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/01_usb_and_charging/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol J1 引脚 A12 [GND, Unspecified, Line]",
-                  "Symbol J1 引脚 B1 [GND, Unspecified, Line]"
+                  "Symbol R22 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -879,10 +882,22 @@
                 "sheet": "/01_usb_and_charging/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B12 [GND, Unspecified, Line]",
+                  "Symbol R1 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol J1 引脚 B9 [VBUS, Unspecified, Line]",
-                  "Symbol U3 引脚 4 [VDD, Unspecified, Line]"
+                  "Symbol U6 引脚 5 [5, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -915,18 +930,6 @@
                 "sheet": "/01_usb_and_charging/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol J1 引脚 B5 [CC2, Unspecified, Line]",
-                  "Symbol R2 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/01_usb_and_charging/",
-                "type": "pin_to_pin",
-                "severity": "warning",
                 "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
                   "Symbol J1 引脚 1 [EP, Unspecified, Line]",
@@ -939,10 +942,10 @@
                 "sheet": "/01_usb_and_charging/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
-                  "Symbol J1 引脚 B4 [VBUS, Unspecified, Line]",
-                  "Symbol J1 引脚 B9 [VBUS, Unspecified, Line]"
+                  "Symbol J1 引脚 B5 [CC2, Unspecified, Line]",
+                  "Symbol R2 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -965,6 +968,18 @@
                 "severity": "warning",
                 "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
+                  "Symbol J1 引脚 B4 [VBUS, Unspecified, Line]",
+                  "Symbol J1 引脚 B9 [VBUS, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
                   "Symbol J1 引脚 3 [EP, Unspecified, Line]",
                   "Symbol J1 引脚 4 [EP, Unspecified, Line]"
                 ],
@@ -975,10 +990,10 @@
                 "sheet": "/01_usb_and_charging/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol J1 引脚 4 [EP, Unspecified, Line]",
-                  "Symbol J1 引脚 B1 [GND, Unspecified, Line]"
+                  "Symbol R22 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -987,10 +1002,70 @@
                 "sheet": "/01_usb_and_charging/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol J1 引脚 B1 [GND, Unspecified, Line]",
-                  "Symbol J1 引脚 B12 [GND, Unspecified, Line]"
+                  "Symbol U6 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 1 [STAT, Unspecified, Line]",
+                  "Symbol R19 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 2 [VSS, Unspecified, Line]",
+                  "Symbol J2 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 3 [VBAT, Unspecified, Line]",
+                  "Symbol J2 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 5 [PROG, Unspecified, Line]",
+                  "Symbol R3 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 4 [VDD, Unspecified, Line]",
+                  "Symbol U6 引脚 5 [5, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1014,7 +1089,7 @@
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U4 引脚 8 [VCC, Unspecified, Line]",
-                  "Symbol C10 引脚 1 [1, Passive, Line]"
+                  "Symbol C11 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1027,30 +1102,6 @@
                 "items": [
                   "Symbol J4 引脚 1 [1, Unspecified, Line]",
                   "Symbol TP3 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/10_test_and_bringup/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol J4 引脚 2 [2, Unspecified, Line]",
-                  "Symbol U1 引脚 49 [U0TXD, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/10_test_and_bringup/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol J4 引脚 3 [3, Unspecified, Line]",
-                  "Symbol U1 引脚 50 [U0RXD, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1086,7 +1137,7 @@
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U2 引脚 2 [GND, Unspecified, Line]",
-                  "Symbol R9 引脚 2 [2, Passive, Line]"
+                  "Symbol C2 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1098,7 +1149,7 @@
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U2 引脚 3 [EN, Unspecified, Line]",
-                  "Symbol R8 引脚 1 [1, Passive, Line]"
+                  "Symbol C1 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1107,22 +1158,10 @@
                 "sheet": "/02_system_power/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
-                "items": [
-                  "Symbol U2 引脚 5 [VOUT, Unspecified, Line]",
-                  "Symbol #FLG201 引脚 1 [Power output, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/08_user_interface/",
-                "type": "pin_to_pin",
-                "severity": "warning",
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
-                  "Symbol Q1 引脚 3 [D, Unspecified, Line]",
-                  "Symbol C19 引脚 2 [2, Passive, Line]"
+                  "Symbol U2 引脚 5 [VOUT, Unspecified, Line]",
+                  "Symbol C2 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1135,6 +1174,18 @@
                 "items": [
                   "Symbol Q1 引脚 1 [G, Unspecified, Line]",
                   "Symbol R17 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/08_user_interface/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol Q1 引脚 3 [D, Unspecified, Line]",
+                  "Symbol C19 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1179,10 +1230,10 @@
                 "sheet": "/03_esp32s3_core/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
-                  "Symbol U1 引脚 1 [LNA_IN, Unspecified, Line]",
-                  "Symbol R10 引脚 1 [1, Passive, Line]"
+                  "Symbol U1 引脚 3 [VDD3P3, Unspecified, Line]",
+                  "Symbol U1 引脚 4 [CHIP_PU, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1193,20 +1244,8 @@
                 "severity": "warning",
                 "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
-                  "Symbol U1 引脚 3 [VDD3P3, Unspecified, Line]",
-                  "Symbol U1 引脚 20 [VDD3P3_RTC, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
                   "Symbol U1 引脚 4 [CHIP_PU, Unspecified, Line]",
-                  "Symbol SW1 引脚 1 [a, Passive, Line]"
+                  "Symbol U1 引脚 20 [VDD3P3_RTC, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1227,69 +1266,9 @@
                 "sheet": "/03_esp32s3_core/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 6 [GPIO1, Unspecified, Line]",
-                  "Symbol R9 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 7 [GPIO2, Unspecified, Line]",
-                  "Symbol R6 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 56 [VDDA, Unspecified, Line]",
-                  "Symbol R4 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 9 [GPIO4, Unspecified, Line]",
-                  "Symbol R7 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Input 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 54 [XTAL_P, Unspecified, Line]",
-                  "Symbol Y1 引脚 1 [1, Input, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
                 "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
-                  "Symbol U1 引脚 10 [GPIO5, Unspecified, Line]",
+                  "Symbol U1 引脚 7 [GPIO2, Unspecified, Line]",
                   "Symbol U7 引脚 6 [SCL, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
@@ -1299,94 +1278,10 @@
                 "sheet": "/03_esp32s3_core/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Input 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 53 [XTAL_N, Unspecified, Line]",
-                  "Symbol Y1 引脚 3 [3, Input, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 11 [GPIO6, Unspecified, Line]",
-                  "Symbol SW3 引脚 1 [a, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 12 [GPIO7, Unspecified, Line]",
-                  "Symbol R15 引脚 2 [2, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 13 [GPIO8, Unspecified, Line]",
-                  "Symbol TP11 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 14 [GPIO9, Unspecified, Line]",
-                  "Symbol TP10 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 15 [GPIO10, Unspecified, Line]",
-                  "Symbol TP8 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 16 [GPIO11, Unspecified, Line]",
-                  "Symbol TP9 引脚 1 [1, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
                 "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
-                  "Symbol U1 引脚 46 [VDD3P3_CPU, Unspecified, Line]",
-                  "Symbol U1 引脚 56 [VDDA, Unspecified, Line]"
+                  "Symbol U1 引脚 9 [GPIO4, Unspecified, Line]",
+                  "Symbol U7 引脚 5 [SDA, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1398,7 +1293,7 @@
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U1 引脚 17 [GPIO12, Unspecified, Line]",
-                  "Symbol TP5 引脚 1 [1, Passive, Line]"
+                  "Symbol R11 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1407,10 +1302,10 @@
                 "sheet": "/03_esp32s3_core/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
                   "Symbol U1 引脚 18 [GPIO13, Unspecified, Line]",
-                  "Symbol TP6 引脚 1 [1, Passive, Line]"
+                  "Symbol U7 引脚 4 [GND, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1422,7 +1317,7 @@
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U1 引脚 19 [GPIO14, Unspecified, Line]",
-                  "Symbol TP7 引脚 1 [1, Passive, Line]"
+                  "Symbol R11 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1431,10 +1326,10 @@
                 "sheet": "/03_esp32s3_core/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U1 引脚 20 [VDD3P3_RTC, Unspecified, Line]",
-                  "Symbol U1 引脚 29 [VDD_SPI, Unspecified, Line]"
+                  "Symbol C4 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1445,8 +1340,8 @@
                 "severity": "warning",
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
-                  "Symbol U1 引脚 23 [GPIO17, Unspecified, Line]",
-                  "Symbol TP12 引脚 1 [1, Passive, Line]"
+                  "Symbol U1 引脚 56 [VDDA, Unspecified, Line]",
+                  "Symbol R5 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1455,10 +1350,10 @@
                 "sheet": "/03_esp32s3_core/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
                   "Symbol U1 引脚 24 [GPIO18, Unspecified, Line]",
-                  "Symbol R17 引脚 1 [1, Passive, Line]"
+                  "Symbol U7 引脚 8 [VCC, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1469,104 +1364,8 @@
                 "severity": "warning",
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
-                  "Symbol U1 引脚 25 [GPIO19, Unspecified, Line]",
-                  "Symbol R23 引脚 2 [2, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 26 [GPIO20, Unspecified, Line]",
-                  "Symbol R22 引脚 2 [2, Passive, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 27 [GPIO21, Unspecified, Line]",
-                  "Symbol U7 引脚 5 [SDA, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 35 [SPID, Unspecified, Line]",
-                  "Symbol U4 引脚 5 [DI, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 34 [SPIQ, Unspecified, Line]",
-                  "Symbol U4 引脚 2 [DO, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 33 [SPICLK, Unspecified, Line]",
-                  "Symbol U4 引脚 6 [CLK, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 32 [SPICS0, Unspecified, Line]",
-                  "Symbol U4 引脚 1 [~{CS}, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 31 [SPIWP, Unspecified, Line]",
-                  "Symbol U4 引脚 7 [IO3, Unspecified, Line]"
-                ],
-                "reason": "Generated or imported symbol pin types look too generic for ERC.",
-                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
-              },
-              {
-                "sheet": "/03_esp32s3_core/",
-                "type": "pin_to_pin",
-                "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
-                "items": [
-                  "Symbol U1 引脚 30 [SPIHD, Unspecified, Line]",
-                  "Symbol U4 引脚 3 [IO2, Unspecified, Line]"
+                  "Symbol U1 引脚 46 [VDD3P3_CPU, Unspecified, Line]",
+                  "Symbol R5 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1578,7 +1377,7 @@
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U1 引脚 57 [GND, Unspecified, Line]",
-                  "Symbol SW2 引脚 2 [b, Passive, Line]"
+                  "Symbol R4 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1587,10 +1386,22 @@
                 "sheet": "/03_esp32s3_core/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 31 [SPIWP, Unspecified, Line]",
+                  "Symbol R13 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U1 引脚 29 [VDD_SPI, Unspecified, Line]",
-                  "Symbol U1 引脚 46 [VDD3P3_CPU, Unspecified, Line]"
+                  "Symbol C7 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1599,10 +1410,10 @@
                 "sheet": "/06_audio_front_end/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol MK1 引脚 1 [VDD, Unspecified, Line]",
-                  "Symbol #FLG600 引脚 1 [Power output, Line]"
+                  "Symbol R11 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1611,10 +1422,10 @@
                 "sheet": "/06_audio_front_end/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol MK1 引脚 2 [SCK, Unspecified, Line]",
-                  "Symbol MK2 引脚 2 [SCK, Unspecified, Line]"
+                  "Symbol R13 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1623,10 +1434,10 @@
                 "sheet": "/06_audio_front_end/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol MK1 引脚 3 [GND, Unspecified, Line]",
-                  "Symbol MK2 引脚 3 [GND, Unspecified, Line]"
+                  "Symbol R13 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1671,10 +1482,10 @@
                 "sheet": "/06_audio_front_end/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol MK2 引脚 1 [VDD, Unspecified, Line]",
-                  "Symbol #FLG600 引脚 1 [Power output, Line]"
+                  "Symbol R11 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1683,10 +1494,10 @@
                 "sheet": "/06_audio_front_end/",
                 "type": "pin_to_pin",
                 "severity": "warning",
-                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol MK2 引脚 2 [SCK, Unspecified, Line]",
-                  "Symbol U1 引脚 17 [GPIO12, Unspecified, Line]"
+                  "Symbol R13 引脚 2 [2, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1710,7 +1521,7 @@
                 "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
                   "Symbol MK2 引脚 6 [SD, Unspecified, Line]",
-                  "Symbol U1 引脚 19 [GPIO14, Unspecified, Line]"
+                  "Symbol U1 引脚 10 [GPIO5, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1722,7 +1533,7 @@
                 "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
                 "items": [
                   "Symbol MK2 引脚 5 [WS, Unspecified, Line]",
-                  "Symbol U1 引脚 18 [GPIO13, Unspecified, Line]"
+                  "Symbol U1 引脚 27 [GPIO21, Unspecified, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1758,7 +1569,7 @@
                 "description": "类型为 Unspecified 和 Passive 的引脚已连接",
                 "items": [
                   "Symbol U7 引脚 8 [VCC, Unspecified, Line]",
-                  "Symbol C18 引脚 1 [1, Passive, Line]"
+                  "Symbol R21 引脚 1 [1, Passive, Line]"
                 ],
                 "reason": "Generated or imported symbol pin types look too generic for ERC.",
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
@@ -1788,7 +1599,1893 @@
                 "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
               }
             ],
-            "review_required": []
+            "review_required": [
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R22 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R1 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol U6 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R19 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol J2 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R2 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C14 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol U3 引脚 5 [PROG, Unspecified, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R23 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R3 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol U5 引脚 1 [~{CE}, Unspecified, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol U4 引脚 1 [~{CS}, Unspecified, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C11 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C17 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R24 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R15 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R14 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R25 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol U2 引脚 3 [EN, Unspecified, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C2 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R9 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C1 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R8 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R26 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C9 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C8 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol J3 引脚 1 [SIG, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "垂直线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C12 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R10 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C13 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol SW2 引脚 1 [a, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C4 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R4 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R5 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C5 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol SW1 引脚 1 [a, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C7 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C6 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C3 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol MK1 引脚 3 [GND, Unspecified, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C15 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R13 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol C16 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol MK2 引脚 3 [GND, Unspecified, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R12 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R21 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol R20 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "Symbol U7 引脚 4 [GND, Unspecified, Line]"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/",
+                "type": "endpoint_off_grid",
+                "severity": "warning",
+                "description": "Symbol pin or wire end off connection grid",
+                "items": [
+                  "水平线, 长度 0.0381 mm"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "multiple_net_names",
+                "severity": "warning",
+                "description": "GND 和 USB_D_P 都连接到同一项上; 将使用 GND 作为网表中的网络名称",
+                "items": [
+                  "层次标签 'GND'",
+                  "层次标签 'USB_D_P'"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/04_memory/",
+                "type": "multiple_net_names",
+                "severity": "warning",
+                "description": "GND 和 SYS_3V3 都连接到同一项上; 将使用 GND 作为网表中的网络名称",
+                "items": [
+                  "层次标签 'GND'",
+                  "层次标签 'SYS_3V3'"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "multiple_net_names",
+                "severity": "warning",
+                "description": "ESP_EN 和 GND 都连接到同一项上; 将使用 ESP_EN 作为网表中的网络名称",
+                "items": [
+                  "标签 'ESP_EN'",
+                  "层次标签 'GND'"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "multiple_net_names",
+                "severity": "warning",
+                "description": "MIC_LR_SEL_R 和 I2S_BCLK 都连接到同一项上; 将使用 MIC_LR_SEL_R 作为网表中的网络名称",
+                "items": [
+                  "标签 'MIC_LR_SEL_R'",
+                  "层次标签 'I2S_BCLK'"
+                ],
+                "reason": "KiCad reported a warning that needs domain review.",
+                "suggested_action": "Review the connected pins and decide whether to fix the model or normalize the symbol."
+              }
+            ]
           }
         },
         "attempted": true,
@@ -1901,348 +3598,6 @@
         "count": 20,
         "entries": [
           {
-            "time": "2026-06-15T01:58:40.918893+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 4.74,
-            "erc_sec": 2.94,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T02:00:44.070043+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T02:00:52.017524+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 5.38,
-            "erc_sec": 3.28,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T02:02:47.052712+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T02:02:54.230041+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 4.84,
-            "erc_sec": 3.05,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T02:03:51.122816+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T02:03:58.897828+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 5.06,
-            "erc_sec": 3.24,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T02:04:09.490493+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T02:04:17.920806+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 5.33,
-            "erc_sec": 3.39,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T02:06:47.635671+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T02:06:56.595537+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 6.44,
-            "erc_sec": 3.31,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T04:14:49.031781+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T04:14:57.359043+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 6.14,
-            "erc_sec": 2.75,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T04:15:54.134567+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T04:16:00.165644+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 4.31,
-            "erc_sec": 2.24,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T04:17:04.002089+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
-            "time": "2026-06-15T04:17:11.499917+00:00",
-            "op": "mark_built",
-            "ok": true,
-            "hash": "9ca86719",
-            "operation": "export_kicad_project",
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "outputs": {
-              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
-              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
-            },
-            "erc_findings": 107,
-            "erc_violations": [
-              {
-                "type": "pin_to_pin",
-                "count": 86
-              },
-              {
-                "type": "pin_not_driven",
-                "count": 21
-              }
-            ],
-            "build_sec": 5.45,
-            "erc_sec": 2.69,
-            "report_status": "warning",
-            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
-          },
-          {
-            "time": "2026-06-15T04:17:56.995297+00:00",
-            "op": "build",
-            "ok": true,
-            "symbols": 82,
-            "nets": 51,
-            "sheets": 11,
-            "build_warnings": 0
-          },
-          {
             "time": "2026-06-15T04:18:06.093056+00:00",
             "op": "mark_built",
             "ok": true,
@@ -2275,13 +3630,301 @@
             "nets": 51,
             "sheets": 11,
             "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T04:19:56.782408+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 89,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 89
+              }
+            ],
+            "build_sec": 7.34,
+            "erc_sec": 2.39,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T08:11:07.027798+00:00",
+            "op": "mark_valid",
+            "ok": true
+          },
+          {
+            "time": "2026-06-15T08:11:21.592749+00:00",
+            "op": "mark_dirty",
+            "reason": "agent:build-ir",
+            "ok": true
+          },
+          {
+            "time": "2026-06-15T08:11:22.608858+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T08:11:37.389609+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 89,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 89
+              }
+            ],
+            "build_sec": 12.12,
+            "erc_sec": 3.17,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T08:26:20.521646+00:00",
+            "op": "mark_dirty",
+            "reason": "agent:build-ir",
+            "ok": true
+          },
+          {
+            "time": "2026-06-15T08:26:21.727998+00:00",
+            "op": "mark_valid",
+            "ok": true
+          },
+          {
+            "time": "2026-06-15T08:28:02.774990+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T08:28:14.776737+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 89,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 89
+              }
+            ],
+            "build_sec": 10.39,
+            "erc_sec": 2.11,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T08:39:23.768347+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T08:39:36.381904+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 89,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 89
+              }
+            ],
+            "build_sec": 10.92,
+            "erc_sec": 2.2,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T09:17:21.645764+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T09:17:34.137724+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 69,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 67
+              },
+              {
+                "type": "hier_label_mismatch",
+                "count": 2
+              }
+            ],
+            "build_sec": 10.69,
+            "erc_sec": 2.3,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T09:25:36.818146+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T09:25:49.359164+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 307,
+            "erc_violations": [
+              {
+                "type": "endpoint_off_grid",
+                "count": 234
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 67
+              },
+              {
+                "type": "multiple_net_names",
+                "count": 4
+              },
+              {
+                "type": "hier_label_mismatch",
+                "count": 2
+              }
+            ],
+            "build_sec": 10.76,
+            "erc_sec": 2.2,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T09:28:42.625203+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T09:28:55.139160+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 307,
+            "erc_violations": [
+              {
+                "type": "endpoint_off_grid",
+                "count": 234
+              },
+              {
+                "type": "pin_to_pin",
+                "count": 67
+              },
+              {
+                "type": "multiple_net_names",
+                "count": 4
+              },
+              {
+                "type": "hier_label_mismatch",
+                "count": 2
+              }
+            ],
+            "build_sec": 10.7,
+            "erc_sec": 2.22,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T09:45:15.597842+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
           }
         ]
       }
     }
   ],
   "timing": {
-    "build_sec": 7.34,
-    "erc_sec": 2.39
+    "build_sec": 11.0,
+    "erc_sec": 2.2
   }
 }

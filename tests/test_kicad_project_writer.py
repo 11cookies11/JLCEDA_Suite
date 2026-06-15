@@ -10,7 +10,13 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.adapters.kicad_project_writer import render_project
+from kicad_suite.adapters.kicad_project_writer import (
+    _sheet_file_stem,
+    render_child_schematic,
+    render_project,
+    render_root_schematic,
+)
+from kicad_suite.adapters.kicad_project_writer import _remove_stale_child_schematics
 from kicad_suite.orchestration.pipeline_postprocess import pin_project_libraries
 from kicad_suite.adapters.board_generator import (
     _load_source_model,
@@ -19,6 +25,7 @@ from kicad_suite.adapters.board_generator import (
 )
 from kicad_suite.adapters.kicad_symbol_library import parse_symbol_pin_map
 from kicad_suite.domain.core.netlist_builder import build_netlist
+from kicad_suite.domain.core.kicad_layout_engine import configured_schematic_position, configured_topology_position
 from kicad_suite.adapters.pcb_generator import _BOARD_SCRIPT, _convert_pad_block, _extract_pad_blocks, generate_pcb
 
 
@@ -32,6 +39,73 @@ class TestKicadProjectWriter(unittest.TestCase):
         self.assertEqual(erc["rule_severities"]["unconnected_wire_endpoint"], "ignore")
         self.assertEqual(erc["rule_severities"]["lib_symbol_issues"], "warning")
         self.assertEqual(erc["rule_severities"]["single_global_label"], "ignore")
+
+    def test_sheet_file_stem_strips_duplicate_numeric_prefix(self) -> None:
+        self.assertEqual(_sheet_file_stem(1, "01_usb_and_charging"), "01_usb_and_charging")
+        self.assertEqual(_sheet_file_stem(2, "02_02_system_power"), "02_system_power")
+        self.assertEqual(_sheet_file_stem(3, "audio_front_end"), "03_audio_front_end")
+
+    def test_remove_stale_child_schematics_keeps_expected_files_only(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            directory = Path(tmpdir)
+            keep = ["root.kicad_sch", "01_usb_and_charging.kicad_sch"]
+            (directory / "root.kicad_sch").write_text("root", encoding="utf-8")
+            (directory / "01_usb_and_charging.kicad_sch").write_text("new", encoding="utf-8")
+            (directory / "01_01_usb_and_charging.kicad_sch").write_text("old", encoding="utf-8")
+            (directory / "unrelated.txt").write_text("x", encoding="utf-8")
+
+            _remove_stale_child_schematics(directory, keep)
+
+            self.assertTrue((directory / "root.kicad_sch").exists())
+            self.assertTrue((directory / "01_usb_and_charging.kicad_sch").exists())
+            self.assertFalse((directory / "01_01_usb_and_charging.kicad_sch").exists())
+            self.assertTrue((directory / "unrelated.txt").exists())
+
+    def test_hierarchical_render_includes_sheet_ports_and_child_ports(self) -> None:
+        plan = {
+            "target": {"project_name": "demo"},
+            "nets": [
+                {"name": "SYS_3V3", "kind": "power", "members": ["U1.1", "U2.1"]},
+            ],
+            "symbols": [],
+        }
+        page = {
+            "name": "power",
+            "file": "01_power.kicad_sch",
+            "path": "/sheet-uuid",
+            "uuid": "sheet-uuid",
+            "x": 25.4,
+            "y": 25.4,
+            "w": 48.26,
+            "h": 30.48,
+            "ports": ["SYS_3V3"],
+            "pins": ["SYS_3V3"],
+            "symbols": [
+                {
+                    "ref": "U1",
+                    "lib_id": "power:PWR_FLAG",
+                    "value": "PWR_FLAG",
+                    "at": {"x": 50.8, "y": 50.8, "rotation": 0.0},
+                    "pins": [{"number": "1", "net": "SYS_3V3"}],
+                }
+            ],
+        }
+
+        root = render_root_schematic(plan, [page])
+        child = render_child_schematic(plan, page, page["symbols"], [page], {"SYS_3V3"})
+
+        self.assertIn('(pin "SYS_3V3"', root)
+        self.assertIn('(hierarchical_label "SYS_3V3"', child)
+        self.assertNotIn('(global_label "SYS_3V3"', child)
+
+    def test_ai_memory_badge_profile_exposes_schematic_positions(self) -> None:
+        pos = configured_topology_position("ai_memory_badge_v1", "U1")
+        self.assertIsNotNone(pos)
+        self.assertEqual((pos.x, pos.y, pos.rotation), (55.0, 35.0, 0.0))
+
+        schematic_pos = configured_schematic_position("ai_memory_badge_v1", "TP14")
+        self.assertIsNotNone(schematic_pos)
+        self.assertEqual((schematic_pos.x, schematic_pos.y, schematic_pos.rotation), (101.6, 127.0, 0.0))
 
     def test_pin_project_libraries_restores_default_erc_settings(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:

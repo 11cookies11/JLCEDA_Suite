@@ -13,6 +13,11 @@ from typing import Any
 
 from ..shared.env_utils import env
 from ..shared.env_utils import repo_root
+from ..shared.test_point_compat import (
+    is_test_point_role,
+    resolve_test_point_footprint,
+    resolve_test_point_symbol_ref,
+)
 
 REPO_ROOT = repo_root()
 
@@ -157,17 +162,29 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
     footprint = ""
     notes: list[str] = []
 
-    symbol_name = _selected_part_symbol_name(selected)
-    if symbol_name:
-        lib_id = f"JLC-MCP:{symbol_name}"
+    symbol_id = _selected_part_symbol_id(selected)
+    if is_test_point_role(role):
+        symbol_id = resolve_test_point_symbol_ref(component, selected) or symbol_id
+    if symbol_id:
+        lib_id = _normalize_symbol_lib_id(symbol_id)
         notes.append("Resolved from selected_part; shared symbol rule table is retired.")
-        return lib_id, resolve_footprint(package, str(selected.get("kicad_footprint_hint", ""))), notes
+        footprint_hint = str(selected.get("kicad_footprint_hint", "")).strip()
+        if is_test_point_role(role):
+            footprint_hint = resolve_test_point_footprint(component, selected) or footprint_hint
+        if not footprint_hint:
+            footprint_hint = resolve_test_point_footprint(component, selected)
+        return lib_id, resolve_footprint(package, footprint_hint), notes
 
     imported_symbol_name = _imported_jlc_symbol_name(component, selected)
     if imported_symbol_name:
         lib_id = f"JLC-MCP:{imported_symbol_name}"
         notes.append("Resolved from imported project-local JLC symbol library.")
-        return lib_id, resolve_footprint(package, str(selected.get("kicad_footprint_hint", ""))), notes
+        footprint_hint = str(selected.get("kicad_footprint_hint", "")).strip()
+        if is_test_point_role(role):
+            footprint_hint = resolve_test_point_footprint(component, selected) or footprint_hint
+        if not footprint_hint:
+            footprint_hint = resolve_test_point_footprint(component, selected)
+        return lib_id, resolve_footprint(package, footprint_hint), notes
 
     raise SymbolResolutionError(
         f'No explicit KiCad symbol found for component {ref or "<unknown>"} '
@@ -176,13 +193,21 @@ def symbol_mapping_for(component: dict[str, Any]) -> tuple[str, str, list[str]]:
     )
 
 
-def _selected_part_symbol_name(selected: dict[str, Any]) -> str:
-    """Derive a stable EasyEDA/JLC symbol name from selected_part."""
+def _selected_part_symbol_id(selected: dict[str, Any]) -> str:
+    """Derive a stable EasyEDA/JLC symbol id from selected_part."""
     for key in ("symbol_ref", "symbol_name", "kicad_symbol"):
         value = str(selected.get(key, "")).strip()
         if value:
-            return _sanitize_symbol_name(value)
+            return value
     return ""
+
+
+def _normalize_symbol_lib_id(symbol_id: str) -> str:
+    if not symbol_id:
+        return ""
+    if ":" in symbol_id and not symbol_id.startswith(("http:", "https:")):
+        return symbol_id
+    return f"JLC-MCP:{_sanitize_symbol_name(symbol_id)}"
 
 
 def _imported_jlc_symbol_name(component: dict[str, Any], selected: dict[str, Any]) -> str:
