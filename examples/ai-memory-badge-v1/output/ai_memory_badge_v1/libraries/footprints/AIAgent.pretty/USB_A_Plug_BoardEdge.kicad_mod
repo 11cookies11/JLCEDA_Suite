@@ -1,0 +1,130 @@
+(footprint "USB_A_Plug_BoardEdge"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "USB A male plug, board-edge style. 4-pad SMD for direct PCB insertion into USB A receptacle.")
+	(tags "USB A plug board-edge male")
+	(property "Reference" "REF**"
+		(at 0 -7 0)
+		(layer "F.SilkS")
+		(uuid "f11e146e-b872-4e90-9e94-41fd072f8139")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "USB_A_Plug_BoardEdge"
+		(at 0 5.5 0)
+		(layer "F.SilkS")
+		(uuid "82c799c3-983a-4ce4-821b-17ad8347d2fd")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d94c78d3-7bf2-4f6e-9c16-a178f32d4092")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3904345c-77e5-47d0-9224-093ee3017823")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -6 -3.5)
+		(end -6 1.3)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "bce5aba1-686f-4e21-8f95-2468ff5f3fda")
+	)
+	(fp_line
+		(start -6 -3.5)
+		(end 6 -3.5)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a7297d09-439d-4bd4-b0af-80fa6863551d")
+	)
+	(fp_line
+		(start -6 1.3)
+		(end 6 1.3)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "6acb1965-795c-48f2-8f62-34faf12233b2")
+	)
+	(fp_line
+		(start 6 -3.5)
+		(end 6 1.3)
+		(stroke
+			(width 0.12)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "baf2d254-1854-47e3-b0bf-95417a9d10b4")
+	)
+	(fp_rect
+		(start -5.5 -4)
+		(end 5.5 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.CrtYd")
+		(uuid "434d0230-9bad-482d-bd96-706e5d22bcff")
+	)
+	(pad "1" smd rect
+		(at -3.75 0.7)
+		(size 1.8 2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "2446b478-e7b5-4422-82c8-2016ad6e89ac")
+	)
+	(pad "2" smd rect
+		(at -1.25 0.7)
+		(size 1.8 2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "4b7663e1-f279-47b1-84b9-9462622618af")
+	)
+	(pad "3" smd rect
+		(at 1.25 0.7)
+		(size 1.8 2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "9b1419db-e538-4765-a137-941119cf03e2")
+	)
+	(pad "4" smd rect
+		(at 3.75 0.7)
+		(size 1.8 2)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "3df2914d-9107-46b9-a906-83299ca4f21f")
+	)
+	(embedded_fonts no)
+)

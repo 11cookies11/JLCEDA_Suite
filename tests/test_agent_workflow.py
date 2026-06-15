@@ -141,6 +141,62 @@ def test_lcsc_workflow_completed_clears_stale_tasks(tmp_path: Path) -> None:
     assert fake.calls == []
 
 
+def test_lcsc_workflow_skips_only_explicit_non_lcsc_components(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [
+            {
+                "ref": "TP1",
+                "role": "test_point",
+                "value": "TP",
+                "package": "TP-SMD",
+                "part_source": "internal",
+                "bom_exclude": True,
+                "selected_part": {"part_id": "tp-1p", "kicad_footprint_hint": "TP-SMD_1P"},
+            },
+            {
+                "ref": "C1",
+                "role": "rf_shunt_tune",
+                "value": "DNP",
+                "package": "C0402",
+                "assembly": "dnp",
+            },
+            {
+                "ref": "J1",
+                "role": "usb_c_connector",
+                "value": "USB-C",
+                "package": "USB-C-SMD",
+            },
+        ],
+    )
+
+    result = AgentWorkflowService().run(tmp_path, template="lcsc_selection_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["task_count"] == 1
+    assert result["selection"]["explicitly_lcsc_exempt"] == 2
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert [task["component"]["ref"] for task in tasks] == ["J1"]
+
+
+def test_lcsc_workflow_does_not_infer_exemption_from_text(tmp_path: Path) -> None:
+    model_path = _write_source_model(
+        tmp_path,
+        [
+            {"ref": "TP1", "role": "test_point", "value": "TP", "package": "TP-SMD"},
+            {"ref": "C1", "role": "rf_shunt_tune", "value": "DNP", "package": "C0402"},
+        ],
+    )
+
+    result = AgentWorkflowService().run(tmp_path, template="lcsc_selection_v1", model_path=model_path)
+
+    assert result["status"] == "waiting_for_agent"
+    assert result["task_count"] == 2
+    assert result["selection"]["explicitly_lcsc_exempt"] == 0
+    tasks = read_agent_tasks(tmp_path)["tasks"]
+    assert [task["component"]["ref"] for task in tasks] == ["TP1", "C1"]
+
+
 def test_workflow_status_summarizes_pending_tasks(tmp_path: Path) -> None:
     task_path = agent_tasks_path(tmp_path)
     task_path.parent.mkdir(parents=True, exist_ok=True)

@@ -15,6 +15,7 @@ from typing import Any
 # bundled Python (which has the pcbnew module).
 _BOARD_SCRIPT = r'''
 import json, re, sys
+import os
 from pathlib import Path
 from typing import Any
 import pcbnew
@@ -47,15 +48,115 @@ def _pin_tokens(pin_number: str) -> set[str]:
         return set()
     return {text}
 
-def _pad_net_map(symbol: dict[str, Any]) -> dict[str, str]:
+def _find_matching_paren(text: str, start: int) -> int:
+    depth = 0
+    in_string = False
+    escaped = False
+    for index in range(start, len(text)):
+        char = text[index]
+        if in_string:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                in_string = False
+            continue
+        if char == '"':
+            in_string = True
+        elif char == "(":
+            depth += 1
+        elif char == ")":
+            depth -= 1
+            if depth == 0:
+                return index
+    return -1
+
+def _symbol_library_roots(project_dir: Path) -> list[Path]:
+    roots: list[Path] = []
+    for base in [project_dir, project_dir.parent, project_dir.parent.parent]:
+        candidate = base / "libraries" / "symbols"
+        if candidate.is_dir():
+            roots.append(candidate)
+    return roots
+
+def _symbol_block_for_lib_id(project_dir: Path, lib_id: str) -> str:
+    if ":" not in lib_id:
+        return ""
+    library, symbol_name = lib_id.split(":", 1)
+    for root in _symbol_library_roots(project_dir):
+        path = root / f"{library}.kicad_sym"
+        if not path.is_file():
+            continue
+        text = path.read_text(encoding="utf-8", errors="replace")
+        anchor = f'(symbol "{symbol_name}"'
+        start = text.find(anchor)
+        if start == -1:
+            continue
+        end = _find_matching_paren(text, start)
+        if end != -1:
+            return text[start:end + 1]
+    return ""
+
+def _parse_symbol_pin_map(project_dir: Path, lib_id: str) -> dict[str, dict[str, Any]]:
+    block = _symbol_block_for_lib_id(project_dir, lib_id)
+    if not block:
+        return {}
+    pins: dict[str, dict[str, Any]] = {}
+    for pin_start in re.finditer(r'\\(pin\\b', block):
+        pin_end = _find_matching_paren(block, pin_start.start())
+        if pin_end == -1:
+            continue
+        pin_block = block[pin_start.start():pin_end + 1]
+        name_match = re.search(r'\\(name\\s+"([^"]+)"', pin_block)
+        number_match = re.search(r'\\(number\\s+"([^"]+)"', pin_block)
+        at_match = re.search(r'\\(at\\s+([-0-9.]+)\\s+([-0-9.]+)\\s+([-0-9.]+)\\)', pin_block)
+        length_match = re.search(r'\\(length\\s+([-0-9.]+)\\)', pin_block)
+        if not number_match:
+            continue
+        number = number_match.group(1).strip()
+        name = name_match.group(1).strip() if name_match else ""
+        aliases = {number, number.upper()}
+        if name:
+            name_upper = name.upper()
+            aliases.update({name, name_upper})
+            normalized = re.sub(r'[^A-Z0-9]+', '_', name_upper).strip('_')
+            if normalized:
+                aliases.add(normalized)
+        pin_info: dict[str, Any] = {
+            "name": name,
+            "number": number,
+            "x": float(at_match.group(1)) if at_match else 0.0,
+            "y": float(at_match.group(2)) if at_match else 0.0,
+            "rotation": float(at_match.group(3)) if at_match else 0.0,
+            "length": float(length_match.group(1)) if length_match else 0.0,
+        }
+        for alias in aliases:
+            pins[alias] = pin_info
+    return pins
+
+def _pad_net_map(symbol: dict[str, Any], project_dir: Path) -> dict[str, str]:
     mapping: dict[str, str] = {}
+    lib_id = str(symbol.get("lib_id", "")).strip()
+    pin_alias_map: dict[str, dict[str, Any]] = {}
+    if lib_id:
+        try:
+            pin_alias_map = _parse_symbol_pin_map(project_dir, lib_id)
+        except Exception:
+            pin_alias_map = {}
     for pin in symbol.get("pins", []):
         if not isinstance(pin, dict):
             continue
         net = str(pin.get("net", "")).strip()
         if not net:
             continue
-        for token in _pin_tokens(str(pin.get("number", ""))):
+        raw_pin = str(pin.get("number", "")).strip()
+        resolved = pin_alias_map.get(raw_pin) or pin_alias_map.get(raw_pin.upper())
+        if isinstance(resolved, dict):
+            pad_number = str(resolved.get("number", "")).strip() or raw_pin
+        else:
+            pad_number = raw_pin
+        for token in _pin_tokens(pad_number):
             mapping[token] = net
     return mapping
 
@@ -94,6 +195,8 @@ def _load_placement_map(project_dir: Path) -> dict[str, dict[str, float]]:
 def generate_board(plan_path, output_path, source_project_dir=None):
     plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
     project_dir = Path(source_project_dir) if source_project_dir else Path(output_path).parent
+    os.environ["KICAD_SOURCE_PROJECT_DIR"] = str(project_dir)
+    os.environ["KICAD_OUTPUT_DIR"] = str(Path(output_path).parent)
     placement_map = _load_placement_map(project_dir)
     board = pcbnew.BOARD()
     nets = {}
@@ -131,12 +234,12 @@ def generate_board(plan_path, output_path, source_project_dir=None):
         fp.SetPosition(pcbnew.VECTOR2I(pcbnew.FromMM(x_mm), pcbnew.FromMM(y_mm)))
         fp.SetOrientationDegrees(rotation_deg)
 
-        pad_map = _pad_net_map(symbol)
+        board.Add(fp)
+        pad_map = _pad_net_map(symbol, project_dir)
         for pad in fp.Pads():
             net_name = pad_map.get(str(pad.GetNumber()).strip())
             if net_name:
                 pad.SetNet(_net(board, nets, net_name))
-        board.Add(fp)
         loaded += 1
 
     board.BuildListOfNets()

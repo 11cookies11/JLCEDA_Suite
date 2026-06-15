@@ -491,6 +491,8 @@ def resolve_missing_symbols(
     resolved: list[dict[str, Any]] = []
     needs_selection: list[dict[str, Any]] = []
     failed: list[dict[str, Any]] = []
+    skipped: list[dict[str, Any]] = []
+    install_cache: dict[str, dict[str, Any]] = {}
 
     for comp in components:
         if not isinstance(comp, dict):
@@ -502,11 +504,19 @@ def resolve_missing_symbols(
         selected = comp.get("selected_part", {}) if isinstance(comp.get("selected_part"), dict) else {}
         selected_lcsc_id = str(selected.get("lcsc_id", "")).strip()
 
+        skip_reason = _lcsc_exemption_reason(comp)
+        if skip_reason and not selected_lcsc_id:
+            skipped.append({"ref": ref, "role": role, "value": value, "reason": skip_reason})
+            continue
+
         if selected_lcsc_id:
-            if _time.monotonic() > deadline:
+            inst = install_cache.get(selected_lcsc_id)
+            if inst is None and _time.monotonic() > deadline:
                 needs_selection.append({"ref": ref, "role": role, "value": value, "reason": "timeout"})
                 continue
-            inst = access.install(selected_lcsc_id, project_path)
+            if inst is None:
+                inst = access.install(selected_lcsc_id, project_path)
+                install_cache[selected_lcsc_id] = inst
             if inst.get("ok"):
                 resolved.append(
                     {
@@ -547,8 +557,9 @@ def resolve_missing_symbols(
         "downloaded": len(resolved),
         "needs_selection": len(needs_selection),
         "failed": len(failed),
+        "skipped": len(skipped),
         "model_updated": True,
-        "details": resolved + needs_selection + failed,
+        "details": resolved + skipped + needs_selection + failed,
     }
 
 
@@ -587,6 +598,31 @@ def _write_selected_part(
     if symbol_ref:
         sp["symbol_ref"] = symbol_ref
     component["selected_part"] = sp
+
+
+def _lcsc_exemption_reason(component: dict[str, Any]) -> str:
+    selected = component.get("selected_part", {}) if isinstance(component.get("selected_part"), dict) else {}
+    if _truthy(component.get("bom_exclude")) or _truthy(selected.get("bom_exclude")):
+        return "bom_exclude"
+    if _truthy(component.get("dnp")) or _truthy(component.get("do_not_populate")):
+        return "dnp"
+    assembly = str(component.get("assembly", selected.get("assembly", "")) or "").strip().lower()
+    if assembly in {"dnp", "do_not_populate", "do-not-populate", "not_populated", "not-fitted", "not_fitted"}:
+        return "dnp"
+    part_source = str(component.get("part_source", selected.get("part_source", "")) or "").strip().lower()
+    if part_source in {"internal", "local", "project_local", "project-local", "pcb"}:
+        return "internal"
+    return ""
+
+
+def _truthy(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+    return False
 
 
 def _extract_symbol_name(sym_str: str) -> str:

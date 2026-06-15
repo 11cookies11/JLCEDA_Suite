@@ -1,0 +1,367 @@
+(footprint "SOT-23-3_L3.0-W1.7-P0.95-LS2.9-BR"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "@(Ta) 1 240mV@(50mA) 250mA 3.3V 40dB@(1kHz) 7uA 8V Fixed Over Current Protection、Short Circuit Protection Positive SOT-23 Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROHS")
+	(tags "component")
+	(property "Reference" "REF**"
+		(at 0 -3.28 0)
+		(layer "F.SilkS")
+		(uuid "5545294b-5906-4ec0-8c6c-8218ed23f657")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "XC6206P332MR_C347376"
+		(at 0 3.28 0)
+		(layer "F.Fab")
+		(uuid "0be8368d-6438-4529-8fbe-7f174ddf733d")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9ea03618-1c9b-4e45-8977-b57649c9434f")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "@(Ta) 1 240mV@(50mA) 250mA 3.3V 40dB@(1kHz) 7uA 8V Fixed Over Current Protection、Short Circuit Protection Positive SOT-23 Voltage Regulators - Linear, Low Drop Out (LDO) Regulators ROHS"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "564943d6-7ac6-4596-9081-d1687e8a8ef3")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC" "C347376"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b5afc674-325e-4a1d-b8d1-3c86c38e5bb0")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "UMW(友台半导体)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d9cfa78c-246a-40d2-adbf-bbab8063c583")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Power Supply Rejection Ratio (PSRR)" "40dB@(1kHz)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e321c291-6a5d-4cdb-855a-8106c276e0c6")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Operating Temperature" "-25℃~+80℃@(Ta)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "e5405079-6ff9-42a1-9976-7f3b863d2973")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "standby current" "7uA"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f79d2663-2514-4a94-b185-84254b770d1e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage - Supply" "8V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "d8aed5eb-ca25-418d-93c9-e73bbfd5f683")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Output Type" "Fixed"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4c13a8fb-5b4f-4450-958e-a6d945c1606b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Output Current" "250mA"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f3060dd7-1e90-4dce-902a-e98a1c22deb9")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Output Configuration" "Positive"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2ffaf084-beb5-48c6-86ad-f2185dfe757d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Features" "Over Current Protection、Short Circuit Protection"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4d586433-4822-4538-875f-293372659459")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Output Voltage" "3.3V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "2eeb1c1e-74e4-4484-be2b-a9ba4ad46791")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage Dropout" "240mV@(50mA)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0c1df7d6-c291-4ef1-b9a9-876f9ffefc86")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Number of Outputs" "1"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "029e71d1-b415-46da-bcc9-2959346affad")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.8587 -1.5262)
+		(end -0.8587 -0.4946)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f93a5cc7-d9c5-43f4-82c6-9e607a53ed13")
+	)
+	(fp_line
+		(start -0.8587 1.5262)
+		(end -0.8587 0.4946)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "1c5de40a-2e5d-4f86-a660-d121df4d5f09")
+	)
+	(fp_line
+		(start 0.8587 -1.5262)
+		(end -0.8587 -1.5262)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "80c384d1-7f22-42c6-bc1e-992764327da5")
+	)
+	(fp_line
+		(start 0.8587 -0.4554)
+		(end 0.8587 0.4554)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "38b45923-2591-4ae3-9c50-e5db37982dec")
+	)
+	(fp_line
+		(start 0.8587 1.5262)
+		(end -0.8587 1.5262)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f0d261cc-eeff-4777-8bc9-459e2e9306e9")
+	)
+	(fp_circle
+		(center 1.65 0.95)
+		(end 1.7501 0.95)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "657d2b1a-cb5c-4235-bef8-451d98b9a70c")
+	)
+	(fp_line
+		(start -1.87 -1.78)
+		(end 2 -1.78)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "0a490f98-388c-4934-9f73-ff75e53fc787")
+	)
+	(fp_line
+		(start -1.87 1.78)
+		(end -1.87 -1.78)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "33a00133-e764-41cb-aef9-d58d28db7f9d")
+	)
+	(fp_line
+		(start 2 -1.78)
+		(end 2 1.78)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "2c3eaf98-e045-493f-8462-e2df33f778b2")
+	)
+	(fp_line
+		(start 2 1.78)
+		(end -1.87 1.78)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "084d09c9-4058-4b5c-87bb-faec0e2facba")
+	)
+	(fp_circle
+		(center 1.4249 1.4999)
+		(end 1.4549 1.4999)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "d4ac6ca0-77fc-46e7-b677-8aa6c916c094")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "64baddde-8498-4063-8b08-8c7391e2d0e6")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at 1.1013 0.95)
+		(size 1.0375 0.532)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "07d9fccf-6fd4-4912-8cf2-47eb81971ac4")
+	)
+	(pad "2" smd roundrect
+		(at 1.1013 -0.95)
+		(size 1.0375 0.532)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "16688ec0-9317-4c15-b9b8-fa682433ee8f")
+	)
+	(pad "3" smd roundrect
+		(at -1.1013 0)
+		(size 1.0375 0.532)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "42ecc70f-7a89-4bfa-8e91-983b343fb8c7")
+	)
+	(embedded_fonts no)
+	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/ai-memory-badge-v1/output/ai_memory_badge_v1/libraries/3dmodels/JLC-MCP.3dshapes/XC6206P332MR_C347376.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 270)
+		)
+	)
+)

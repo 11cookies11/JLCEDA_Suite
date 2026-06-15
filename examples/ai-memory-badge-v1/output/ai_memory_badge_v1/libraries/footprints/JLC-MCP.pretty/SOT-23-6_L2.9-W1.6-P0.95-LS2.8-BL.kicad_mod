@@ -1,0 +1,357 @@
+(footprint "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "0.6pF 12V 1uA 4.5A@8/20us 5V 60W@8/20us 9V ESD Four channels SOT-23-6 ESD and Surge Protection (TVS/ESD) ROHS")
+	(tags "component")
+	(property "Reference" "REF**"
+		(at 0 -3.44 0)
+		(layer "F.SilkS")
+		(uuid "6de1112a-6a26-4771-a4e6-990804cb8e96")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SRV05-4_C2836319"
+		(at 0 3.53 0)
+		(layer "F.Fab")
+		(uuid "3317ace0-bb9b-4628-8b25-1c589ee3fe8b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "03994520-5a0c-4912-a96c-9dd7010ec8f0")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "0.6pF 12V 1uA 4.5A@8/20us 5V 60W@8/20us 9V ESD Four channels SOT-23-6 ESD and Surge Protection (TVS/ESD) ROHS"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4b2c6760-ce11-428f-82ef-2dcbc0f0e110")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC" "C2836319"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "33e8f742-b292-4123-bcca-7669721b1720")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "MSKSEMI(美森科)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "22c00338-4f87-444c-92d3-3bd5295f0555")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Operating Temperature" "-40℃~+125℃"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8cf2a730-dfd0-442b-902c-e39cbe45bc38")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Type" "ESD"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "cd7fb12f-1f43-4648-9006-43d860ac01eb")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Junction Capacitance" "0.6pF"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a7e86855-aea4-43c9-9c28-1697cf72345b")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Peak Pulse Power Dissipation (Ppp)" "60W@8/20us"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8527967a-48f8-4857-b788-b3a60601e6f9")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Number of Channels" "Four channels"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "a9278c11-4d8d-4161-9fdd-d0311fdf7007")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Clamping Voltage" "12V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "98d0c756-d8d5-49cc-bbdb-6fd4ffe18115")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Peak Pulse Current (Ipp)" "4.5A@8/20us"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "936030dc-2980-4db0-8f76-7ab1b9fff7b0")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage - Breakdown" "9V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "01548721-03f9-449d-84c5-999329c7966d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Reverse Stand-Off Voltage (Vrwm)" "5V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "834acb97-de57-471c-9f98-dfe1d018674c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Reverse Leakage Current (Ir)" "1uA"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "3d0f332d-e2b8-4191-9622-094e96d7d9db")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -1.5392 0.8892)
+		(end -1.5392 -0.8892)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "286fa933-6241-45b2-b809-70aba9462bec")
+	)
+	(fp_line
+		(start 1.5392 0.8892)
+		(end 1.5392 -0.8892)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "c72b7585-afcc-48e1-b2b2-13970a5c7b29")
+	)
+	(fp_circle
+		(center -1.6683 1.3015)
+		(end -1.5182 1.3015)
+		(stroke
+			(width 0.3)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "55520561-9ee7-41a9-83b8-887436273113")
+	)
+	(fp_circle
+		(center -0.92 1.68)
+		(end -0.8199 1.68)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "3d0e436b-e8da-4061-8892-ac4c1af777ab")
+	)
+	(fp_line
+		(start -2.07 -1.94)
+		(end 1.79 -1.94)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "af0d4698-8843-4a2a-9fcc-ac6821a50fb9")
+	)
+	(fp_line
+		(start -2.07 2.03)
+		(end -2.07 -1.94)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "1b57ab71-a578-4f21-be39-c25f9ef42108")
+	)
+	(fp_line
+		(start 1.79 -1.94)
+		(end 1.79 2.03)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "1c06415d-5ccd-47a8-926c-a251bab4cc67")
+	)
+	(fp_line
+		(start 1.79 2.03)
+		(end -2.07 2.03)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "7a338841-e903-4b2d-abe5-917df42a23ee")
+	)
+	(fp_circle
+		(center -1.463 1.4)
+		(end -1.433 1.4)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "5c2249a9-bf88-4202-b261-4f063279c468")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "a2310721-1b65-4f1d-9c93-20c30a085e3c")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at -0.95 1.1491)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "e3890c34-670f-459c-841e-b50d180dfe2c")
+	)
+	(pad "2" smd roundrect
+		(at 0 1.1491)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "3468336c-9f4a-47db-88b3-652fd01db6c7")
+	)
+	(pad "3" smd roundrect
+		(at 0.95 1.1491)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "fe71590e-097c-4969-9a7e-6967d98dcb66")
+	)
+	(pad "4" smd roundrect
+		(at 0.95 -1.1491)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "7baa4f8b-9fdf-465b-92cb-f73548f4ae4c")
+	)
+	(pad "5" smd roundrect
+		(at 0 -1.1491)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "64db6a6b-e6d0-410f-a8cd-59d5442fc7df")
+	)
+	(pad "6" smd roundrect
+		(at -0.95 -1.1491)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "f1a86f82-48f9-47ab-bcd5-ae47d22f5e5f")
+	)
+	(embedded_fonts no)
+	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/ai-memory-badge-v1/output/ai_memory_badge_v1/libraries/3dmodels/JLC-MCP.3dshapes/SRV05-4_C2836319.step"
+		(offset
+			(xyz 0.838 -0.965 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 270)
+		)
+	)
+)

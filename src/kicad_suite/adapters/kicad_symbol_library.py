@@ -388,6 +388,22 @@ def normalize_connector_pin_types(block: str, symbol_name: str) -> str:
     return re.sub(r"\(pin\s+(input|output|bidirectional|tri_state|passive|power_in|power_out|open_collector|open_emitter|unspecified)\s+line", "(pin passive line", block)
 
 
+def normalize_passive_component_pin_types(block: str, symbol_name: str) -> str:
+    upper_name = symbol_name.upper()
+    passive_tokens = (
+        "R",
+        "C",
+        "D",
+        "L",
+        "Y",
+        "SW",
+        "TP",
+    )
+    if not upper_name.startswith(passive_tokens):
+        return block
+    return re.sub(r"\(pin\s+(input|output|bidirectional|tri_state|passive|power_in|power_out|open_collector|open_emitter|unspecified)\s+line", "(pin passive line", block)
+
+
 def local_h618_minimal_symbol(lib_id: str) -> str:
     symbol_name = lib_id.split(":", 1)[-1]
     half_count = (len(H618_MINIMAL_PINS) + 1) // 2
@@ -437,13 +453,16 @@ def symbol_block_for_lib_id(lib_id: str) -> str:
         if installed and symbol_name == "ALLWINNERH618" and "(pin " not in installed:
             return local_h618_minimal_symbol(lib_id)
         if installed:
-            return strip_symbol_lib_id(normalize_connector_pin_types(installed, symbol_name))
+            normalized = normalize_connector_pin_types(installed, symbol_name)
+            normalized = normalize_passive_component_pin_types(normalized, symbol_name)
+            return strip_symbol_lib_id(normalized)
         system_block = installed_symbol_block(library, symbol_name)
         if system_block:
             if symbol_name == "ALLWINNERH618" and "(pin " not in system_block:
                 return local_h618_minimal_symbol(lib_id)
             normalized = normalize_embedded_symbol_name(system_block, library, symbol_name)
             normalized = normalize_connector_pin_types(normalized, symbol_name)
+            normalized = normalize_passive_component_pin_types(normalized, symbol_name)
             return "\n".join(f"    {line}" if line.strip() else line for line in strip_symbol_lib_id(normalized).splitlines())
 
     raise ValueError(f"KiCad symbol not found: {lib_id}")

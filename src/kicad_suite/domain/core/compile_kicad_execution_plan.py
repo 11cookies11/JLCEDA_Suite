@@ -29,6 +29,7 @@ from ...adapters.symbol_footprint_resolver import (
     resolve_footprint as _resolve_footprint,
     symbol_mapping_for,
 )
+from ...adapters.kicad_symbol_library import parse_symbol_pin_map
 
 REPO_ROOT = repo_root()
 
@@ -525,9 +526,23 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
     for ref, role, lib_id, footprint, notes in preflight:
         component = component_by_ref[ref]
         net_component = netlist_by_ref.get(ref, {})
+        pin_alias_map: dict[str, dict[str, object]] = {}
+        if lib_id:
+            try:
+                pin_alias_map = parse_symbol_pin_map(lib_id)
+            except Exception:
+                pin_alias_map = {}
         pins = [
             KiCadPin(
-                number=str(pin.get('pin', '')),
+                number=str(
+                    (
+                        (
+                            pin_alias_map.get(str(pin.get('pin', '')).strip())
+                            or pin_alias_map.get(str(pin.get('pin', '')).strip().upper())
+                        )
+                        or {}
+                    ).get('number', pin.get('pin', ''))
+                ).strip(),
                 name=str(pin.get('pin_name', '')),
                 net=str(pin.get('net', '')),
             )

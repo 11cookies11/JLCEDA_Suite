@@ -1,0 +1,2287 @@
+{
+  "schema_version": "report.v1",
+  "generated_at": "2026-06-15T04:19:56.761111+00:00",
+  "overall_status": "warning",
+  "project": {
+    "name": "ai_memory_badge_v1",
+    "id": "ai-memory-badge-v1",
+    "status": "BUILT"
+  },
+  "sections": [
+    {
+      "key": "project",
+      "title": "Project Overview",
+      "status": "info",
+      "data": {
+        "project_name": "ai_memory_badge_v1",
+        "project_id": "ai-memory-badge-v1",
+        "status": "BUILT"
+      }
+    },
+    {
+      "key": "summary",
+      "title": "Summary",
+      "status": "info",
+      "data": {
+        "component_count": 82,
+        "net_count": 51,
+        "risk_count": 7,
+        "sheet_count": 10,
+        "calculation_count": 0,
+        "decision_count": 6,
+        "constraint_count": 6,
+        "power_rail_count": 3
+      }
+    },
+    {
+      "key": "dsl",
+      "title": "DSL Status",
+      "status": "ok",
+      "data": {
+        "path": "source/circuit-model.source.json",
+        "hash": "9ca86719",
+        "valid": true
+      }
+    },
+    {
+      "key": "build",
+      "title": "Build Status",
+      "status": "ok",
+      "data": {
+        "last_build_ok": true,
+        "last_build_at": "2026-06-15T04:18:06.093056+00:00",
+        "input_dsl_hash": "9ca86719",
+        "stale": false
+      }
+    },
+    {
+      "key": "diagnostics",
+      "title": "Diagnostics",
+      "status": "ok",
+      "data": {
+        "errors": 0,
+        "warnings": 0,
+        "items": [
+          {
+            "timestamp": "2026-06-15T01:58:25.831750+00:00",
+            "level": "info",
+            "message": "agent:build-ir"
+          }
+        ]
+      }
+    },
+    {
+      "key": "ir",
+      "title": "Resolved Hardware IR",
+      "status": "ok",
+      "data": {
+        "schema_version": "ir.v1",
+        "compiled": true,
+        "component_count": 82,
+        "net_count": 51,
+        "error": null
+      }
+    },
+    {
+      "key": "components",
+      "title": "Component Symbol Status",
+      "status": "warning",
+      "data": {
+        "status": "warning",
+        "total": 82,
+        "resolved": 68,
+        "placeholder": 14,
+        "items": [
+          {
+            "ref": "U1",
+            "role": "main_controller_bare_soc",
+            "value": "ESP32-S3R8 bare SoC",
+            "lcsc_id": "C2913194",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U2",
+            "role": "main_3v3_regulator",
+            "value": "AP2112K-3.3 600mA LDO",
+            "lcsc_id": "C51118",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U3",
+            "role": "single_cell_lipo_charger",
+            "value": "MCP73831 LiPo charger",
+            "lcsc_id": "C424093",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U4",
+            "role": "external_spi_flash",
+            "value": "W25Q128JVSIQ 16MB SPI flash",
+            "lcsc_id": "C97521",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U5",
+            "role": "external_psram",
+            "value": "8MB PSRAM reserve, DNP",
+            "lcsc_id": "C5333729",
+            "symbol_ok": true
+          },
+          {
+            "ref": "U6",
+            "role": "usb_esd_protection",
+            "value": "USB2.0 ESD protection",
+            "lcsc_id": "C7519",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J1",
+            "role": "usb_c_power_data_input",
+            "value": "KH-TYPE-C-16P USB-C USB2.0 receptacle",
+            "lcsc_id": "C709357",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J2",
+            "role": "lipo_battery_connector",
+            "value": "JST PH 2P SMD battery connector",
+            "lcsc_id": "C295747",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J3",
+            "role": "rf_antenna_connector",
+            "value": "U.FL/IPEX antenna connector",
+            "lcsc_id": "C88374",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J4",
+            "role": "uart_debug_header",
+            "value": "UART debug 4P",
+            "lcsc_id": "C91552",
+            "symbol_ok": true
+          },
+          {
+            "ref": "Y1",
+            "role": "esp32s3_main_crystal",
+            "value": "40MHz 12pF 10ppm crystal",
+            "lcsc_id": "C5380316",
+            "symbol_ok": true
+          },
+          {
+            "ref": "SW1",
+            "role": "reset_button",
+            "value": "Reset tactile switch",
+            "lcsc_id": "C128964",
+            "symbol_ok": true
+          },
+          {
+            "ref": "SW2",
+            "role": "boot_button",
+            "value": "BOOT tactile switch",
+            "lcsc_id": "C128964",
+            "symbol_ok": true
+          },
+          {
+            "ref": "D1",
+            "role": "power_status_led",
+            "value": "LED0603 green",
+            "lcsc_id": "C5139863",
+            "symbol_ok": true
+          },
+          {
+            "ref": "D2",
+            "role": "recording_privacy_led",
+            "value": "LED0603 red",
+            "lcsc_id": "C2286",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R1",
+            "role": "usb_cc1_rd",
+            "value": "5.1K",
+            "lcsc_id": "C23186",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R2",
+            "role": "usb_cc2_rd",
+            "value": "5.1K",
+            "lcsc_id": "C23186",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R3",
+            "role": "charger_prog_resistor",
+            "value": "2K",
+            "lcsc_id": "C22975",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R4",
+            "role": "esp_en_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R5",
+            "role": "esp_boot_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R6",
+            "role": "power_led_resistor",
+            "value": "1K",
+            "lcsc_id": "C14676",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R7",
+            "role": "recording_led_resistor",
+            "value": "1K",
+            "lcsc_id": "C14676",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R8",
+            "role": "vbat_sense_upper",
+            "value": "1M",
+            "lcsc_id": "C22935",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R9",
+            "role": "vbat_sense_lower",
+            "value": "330K",
+            "lcsc_id": "C23137",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R26",
+            "role": "sys_3v3_current_link",
+            "value": "0R",
+            "lcsc_id": "C21189",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R10",
+            "role": "rf_series_tune",
+            "value": "0R",
+            "lcsc_id": "C17168",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C1",
+            "role": "reg_input_bulk",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C2",
+            "role": "reg_output_bulk",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C3",
+            "role": "esp32s3_bulk_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C4",
+            "role": "esp32s3_decoupling_1",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C5",
+            "role": "esp32s3_decoupling_2",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C6",
+            "role": "esp32s3_decoupling_3",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C7",
+            "role": "esp_en_rc_cap",
+            "value": "1uF",
+            "lcsc_id": "C1592",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C8",
+            "role": "xtal_load_cap_1",
+            "value": "18pF",
+            "lcsc_id": "C1647",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C9",
+            "role": "xtal_load_cap_2",
+            "value": "18pF",
+            "lcsc_id": "C1647",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C10",
+            "role": "flash_decoupling",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C11",
+            "role": "psram_decoupling",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C12",
+            "role": "rf_shunt_tune_1",
+            "value": "DNP",
+            "lcsc_id": "C1548",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C13",
+            "role": "rf_shunt_tune_2",
+            "value": "DNP",
+            "lcsc_id": "C1548",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C14",
+            "role": "usb_vbus_bulk",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "TP1",
+            "role": "usb_5v_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP2",
+            "role": "battery_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP3",
+            "role": "system_3v3_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP4",
+            "role": "ground_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "U7",
+            "role": "secure_element_reserve",
+            "value": "I2C secure element, DNP",
+            "lcsc_id": "C616024",
+            "symbol_ok": true
+          },
+          {
+            "ref": "J5",
+            "role": "microsd_socket",
+            "value": "microSD socket push-push",
+            "lcsc_id": "C125617",
+            "symbol_ok": true
+          },
+          {
+            "ref": "MK1",
+            "role": "left_i2s_mem_microphone",
+            "value": "MSM261S3526Z0CM I2S MEMS microphone left",
+            "lcsc_id": "C966933",
+            "symbol_ok": true
+          },
+          {
+            "ref": "MK2",
+            "role": "right_i2s_mem_microphone",
+            "value": "MSM261S3526Z0CM I2S MEMS microphone right",
+            "lcsc_id": "C966933",
+            "symbol_ok": true
+          },
+          {
+            "ref": "SW3",
+            "role": "mark_button",
+            "value": "Mark tactile switch",
+            "lcsc_id": "C128964",
+            "symbol_ok": true
+          },
+          {
+            "ref": "SW4",
+            "role": "physical_mute_switch",
+            "value": "Mute SPDT slide switch",
+            "lcsc_id": "C431541",
+            "symbol_ok": true
+          },
+          {
+            "ref": "Q1",
+            "role": "vibration_motor_low_side_switch",
+            "value": "AO3400A NMOS low-side switch",
+            "lcsc_id": "C20917",
+            "symbol_ok": true
+          },
+          {
+            "ref": "M1",
+            "role": "vibration_motor",
+            "value": "LCM0827A3038F 3V flat vibration motor",
+            "lcsc_id": "C2759981",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R11",
+            "role": "mic_power_link",
+            "value": "0R",
+            "lcsc_id": "C21189",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R12",
+            "role": "mic_left_select",
+            "value": "0R",
+            "lcsc_id": "C21189",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R13",
+            "role": "mic_right_select",
+            "value": "0R",
+            "lcsc_id": "C21189",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R14",
+            "role": "microsd_cs_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R15",
+            "role": "microsd_cd_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R16",
+            "role": "mute_switch_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R17",
+            "role": "motor_gate_resistor",
+            "value": "100R",
+            "lcsc_id": "C22775",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R18",
+            "role": "motor_gate_pulldown",
+            "value": "100K",
+            "lcsc_id": "C25803",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C15",
+            "role": "mic_left_decoupling",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C16",
+            "role": "mic_right_decoupling",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C17",
+            "role": "microsd_bulk_cap",
+            "value": "10uF",
+            "lcsc_id": "C1713",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C18",
+            "role": "secure_element_decoupling",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "C19",
+            "role": "motor_suppression_cap",
+            "value": "100nF",
+            "lcsc_id": "C1590",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R19",
+            "role": "charger_stat_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R20",
+            "role": "i2c_sda_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R21",
+            "role": "i2c_scl_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R22",
+            "role": "usb_dp_series_option",
+            "value": "0R",
+            "lcsc_id": "C21189",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R23",
+            "role": "usb_dn_series_option",
+            "value": "0R",
+            "lcsc_id": "C21189",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R24",
+            "role": "microsd_cmd_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "R25",
+            "role": "microsd_dat0_pullup",
+            "value": "10K",
+            "lcsc_id": "C15401",
+            "symbol_ok": true
+          },
+          {
+            "ref": "TP5",
+            "role": "i2s_bclk_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP6",
+            "role": "i2s_lrclk_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP7",
+            "role": "i2s_data_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP8",
+            "role": "sd_sclk_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP9",
+            "role": "sd_mosi_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP10",
+            "role": "sd_miso_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP11",
+            "role": "sd_cs_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP12",
+            "role": "mute_switch_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP13",
+            "role": "charger_status_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          },
+          {
+            "ref": "TP14",
+            "role": "mic_3v3_test_point",
+            "value": "TP",
+            "lcsc_id": null,
+            "symbol_ok": false
+          }
+        ]
+      }
+    },
+    {
+      "key": "risks",
+      "title": "Risks",
+      "status": "ok",
+      "data": {
+        "total": 7,
+        "open": 0,
+        "items": [
+          "ESP32-S3 bare-chip symbol pin names are placeholders until exact variant and KiCad symbol are selected.",
+          "Flash/PSRAM interface nets must be verified against Espressif reference design before layout.",
+          "RF matching values are placeholders and require tuning.",
+          "LDO-based 3.3 V rail may not meet all-day efficiency goals.",
+          "I2S microphone left/right select polarity and data sharing must be verified after selecting the exact microphone.",
+          "microSD socket pinout and card-detect behavior are placeholders until the exact socket is selected.",
+          "Mute switch is GPIO-enforced in Rev A; a future revision may need hardware microphone power gating for stronger privacy."
+        ]
+      }
+    },
+    {
+      "key": "erc",
+      "title": "ERC",
+      "status": "ok",
+      "data": {
+        "finding_count": 89,
+        "warnings": [],
+        "violations": [
+          {
+            "type": "pin_to_pin",
+            "count": 89,
+            "severity": "warning",
+            "example": "类型为 Unspecified 和 Passive 的引脚已连接"
+          }
+        ],
+        "classification": {
+          "schema_version": "erc-classification.v1",
+          "finding_count": 89,
+          "counts": {
+            "must_fix": 0,
+            "library_noise": 89,
+            "review_required": 0
+          },
+          "by_type": {
+            "pin_to_pin": 89
+          },
+          "by_severity": {
+            "warning": 89
+          },
+          "buckets": {
+            "must_fix": [],
+            "library_noise": [
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 1 [STAT, Unspecified, Line]",
+                  "Symbol R19 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 2 [VSS, Unspecified, Line]",
+                  "Symbol C14 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 3 [VBAT, Unspecified, Line]",
+                  "Symbol #FLG100 引脚 1 [Power output, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 5 [PROG, Unspecified, Line]",
+                  "Symbol R3 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U3 引脚 4 [VDD, Unspecified, Line]",
+                  "Symbol C14 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 A1 [GND, Unspecified, Line]",
+                  "Symbol J1 引脚 A12 [GND, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 A4 [VBUS, Unspecified, Line]",
+                  "Symbol J1 引脚 A9 [VBUS, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 A5 [CC1, Unspecified, Line]",
+                  "Symbol R1 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 A6 [DP1, Unspecified, Line]",
+                  "Symbol J1 引脚 B6 [DP2, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 A7 [DN1, Unspecified, Line]",
+                  "Symbol J1 引脚 B7 [DN2, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 A9 [VBUS, Unspecified, Line]",
+                  "Symbol J1 引脚 B4 [VBUS, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B12 [GND, Unspecified, Line]",
+                  "Symbol U3 引脚 2 [VSS, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 A12 [GND, Unspecified, Line]",
+                  "Symbol J1 引脚 B1 [GND, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B9 [VBUS, Unspecified, Line]",
+                  "Symbol U3 引脚 4 [VDD, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B7 [DN2, Unspecified, Line]",
+                  "Symbol U6 引脚 3 [3, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B6 [DP2, Unspecified, Line]",
+                  "Symbol U6 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B5 [CC2, Unspecified, Line]",
+                  "Symbol R2 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 1 [EP, Unspecified, Line]",
+                  "Symbol J1 引脚 2 [EP, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B4 [VBUS, Unspecified, Line]",
+                  "Symbol J1 引脚 B9 [VBUS, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 2 [EP, Unspecified, Line]",
+                  "Symbol J1 引脚 3 [EP, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 3 [EP, Unspecified, Line]",
+                  "Symbol J1 引脚 4 [EP, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 4 [EP, Unspecified, Line]",
+                  "Symbol J1 引脚 B1 [GND, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/01_usb_and_charging/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J1 引脚 B1 [GND, Unspecified, Line]",
+                  "Symbol J1 引脚 B12 [GND, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/04_memory/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U4 引脚 4 [GND, Unspecified, Line]",
+                  "Symbol C10 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/04_memory/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U4 引脚 8 [VCC, Unspecified, Line]",
+                  "Symbol C10 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/10_test_and_bringup/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol J4 引脚 1 [1, Unspecified, Line]",
+                  "Symbol TP3 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/10_test_and_bringup/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J4 引脚 2 [2, Unspecified, Line]",
+                  "Symbol U1 引脚 49 [U0TXD, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/10_test_and_bringup/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol J4 引脚 3 [3, Unspecified, Line]",
+                  "Symbol U1 引脚 50 [U0RXD, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/10_test_and_bringup/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol J4 引脚 4 [4, Unspecified, Line]",
+                  "Symbol TP4 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/02_system_power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 1 [VIN, Unspecified, Line]",
+                  "Symbol U2 引脚 3 [EN, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/02_system_power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 2 [GND, Unspecified, Line]",
+                  "Symbol R9 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/02_system_power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 3 [EN, Unspecified, Line]",
+                  "Symbol R8 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/02_system_power/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "items": [
+                  "Symbol U2 引脚 5 [VOUT, Unspecified, Line]",
+                  "Symbol #FLG201 引脚 1 [Power output, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/08_user_interface/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol Q1 引脚 3 [D, Unspecified, Line]",
+                  "Symbol C19 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/08_user_interface/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol Q1 引脚 1 [G, Unspecified, Line]",
+                  "Symbol R17 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/08_user_interface/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol Q1 引脚 2 [S, Unspecified, Line]",
+                  "Symbol SW4 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/08_user_interface/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol M1 引脚 1 [1, Unspecified, Line]",
+                  "Symbol R16 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/08_user_interface/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol M1 引脚 2 [2, Unspecified, Line]",
+                  "Symbol Q1 引脚 3 [D, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 1 [LNA_IN, Unspecified, Line]",
+                  "Symbol R10 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 3 [VDD3P3, Unspecified, Line]",
+                  "Symbol U1 引脚 20 [VDD3P3_RTC, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 4 [CHIP_PU, Unspecified, Line]",
+                  "Symbol SW1 引脚 1 [a, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 5 [GPIO0, Unspecified, Line]",
+                  "Symbol SW2 引脚 1 [a, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 6 [GPIO1, Unspecified, Line]",
+                  "Symbol R9 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 7 [GPIO2, Unspecified, Line]",
+                  "Symbol R6 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 56 [VDDA, Unspecified, Line]",
+                  "Symbol R4 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 9 [GPIO4, Unspecified, Line]",
+                  "Symbol R7 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 54 [XTAL_P, Unspecified, Line]",
+                  "Symbol Y1 引脚 1 [1, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 10 [GPIO5, Unspecified, Line]",
+                  "Symbol U7 引脚 6 [SCL, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Input 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 53 [XTAL_N, Unspecified, Line]",
+                  "Symbol Y1 引脚 3 [3, Input, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 11 [GPIO6, Unspecified, Line]",
+                  "Symbol SW3 引脚 1 [a, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 12 [GPIO7, Unspecified, Line]",
+                  "Symbol R15 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 13 [GPIO8, Unspecified, Line]",
+                  "Symbol TP11 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 14 [GPIO9, Unspecified, Line]",
+                  "Symbol TP10 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 15 [GPIO10, Unspecified, Line]",
+                  "Symbol TP8 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 16 [GPIO11, Unspecified, Line]",
+                  "Symbol TP9 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 46 [VDD3P3_CPU, Unspecified, Line]",
+                  "Symbol U1 引脚 56 [VDDA, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 17 [GPIO12, Unspecified, Line]",
+                  "Symbol TP5 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 18 [GPIO13, Unspecified, Line]",
+                  "Symbol TP6 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 19 [GPIO14, Unspecified, Line]",
+                  "Symbol TP7 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 20 [VDD3P3_RTC, Unspecified, Line]",
+                  "Symbol U1 引脚 29 [VDD_SPI, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 23 [GPIO17, Unspecified, Line]",
+                  "Symbol TP12 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 24 [GPIO18, Unspecified, Line]",
+                  "Symbol R17 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 25 [GPIO19, Unspecified, Line]",
+                  "Symbol R23 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 26 [GPIO20, Unspecified, Line]",
+                  "Symbol R22 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 27 [GPIO21, Unspecified, Line]",
+                  "Symbol U7 引脚 5 [SDA, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 35 [SPID, Unspecified, Line]",
+                  "Symbol U4 引脚 5 [DI, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 34 [SPIQ, Unspecified, Line]",
+                  "Symbol U4 引脚 2 [DO, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 33 [SPICLK, Unspecified, Line]",
+                  "Symbol U4 引脚 6 [CLK, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 32 [SPICS0, Unspecified, Line]",
+                  "Symbol U4 引脚 1 [~{CS}, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 31 [SPIWP, Unspecified, Line]",
+                  "Symbol U4 引脚 7 [IO3, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 30 [SPIHD, Unspecified, Line]",
+                  "Symbol U4 引脚 3 [IO2, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 57 [GND, Unspecified, Line]",
+                  "Symbol SW2 引脚 2 [b, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/03_esp32s3_core/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol U1 引脚 29 [VDD_SPI, Unspecified, Line]",
+                  "Symbol U1 引脚 46 [VDD3P3_CPU, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "items": [
+                  "Symbol MK1 引脚 1 [VDD, Unspecified, Line]",
+                  "Symbol #FLG600 引脚 1 [Power output, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol MK1 引脚 2 [SCK, Unspecified, Line]",
+                  "Symbol MK2 引脚 2 [SCK, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol MK1 引脚 3 [GND, Unspecified, Line]",
+                  "Symbol MK2 引脚 3 [GND, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol MK1 引脚 6 [SD, Unspecified, Line]",
+                  "Symbol MK2 引脚 6 [SD, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol MK1 引脚 5 [WS, Unspecified, Line]",
+                  "Symbol MK2 引脚 5 [WS, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol MK1 引脚 4 [L/R, Unspecified, Line]",
+                  "Symbol R12 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                "items": [
+                  "Symbol MK2 引脚 1 [VDD, Unspecified, Line]",
+                  "Symbol #FLG600 引脚 1 [Power output, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol MK2 引脚 2 [SCK, Unspecified, Line]",
+                  "Symbol U1 引脚 17 [GPIO12, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol MK2 引脚 3 [GND, Unspecified, Line]",
+                  "Symbol R13 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol MK2 引脚 6 [SD, Unspecified, Line]",
+                  "Symbol U1 引脚 19 [GPIO14, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                "items": [
+                  "Symbol MK2 引脚 5 [WS, Unspecified, Line]",
+                  "Symbol U1 引脚 18 [GPIO13, Unspecified, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/06_audio_front_end/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol MK2 引脚 4 [L/R, Unspecified, Line]",
+                  "Symbol R13 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/09_security_reserve/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U7 引脚 4 [GND, Unspecified, Line]",
+                  "Symbol C18 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/09_security_reserve/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U7 引脚 8 [VCC, Unspecified, Line]",
+                  "Symbol C18 引脚 1 [1, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/09_security_reserve/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U7 引脚 6 [SCL, Unspecified, Line]",
+                  "Symbol R21 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              },
+              {
+                "sheet": "/09_security_reserve/",
+                "type": "pin_to_pin",
+                "severity": "warning",
+                "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                "items": [
+                  "Symbol U7 引脚 5 [SDA, Unspecified, Line]",
+                  "Symbol R20 引脚 2 [2, Passive, Line]"
+                ],
+                "reason": "Generated or imported symbol pin types look too generic for ERC.",
+                "suggested_action": "Normalize symbol pin types before treating this as a circuit error."
+              }
+            ],
+            "review_required": []
+          }
+        },
+        "attempted": true,
+        "success": true
+      }
+    },
+    {
+      "key": "placement",
+      "title": "PCB Placement Plan",
+      "status": "warning",
+      "data": {
+        "schema_version": "placement-plan.v1",
+        "plan_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\build\\placement-plan.json",
+        "report_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\build\\placement-plan.md",
+        "board": {
+          "width_mm": 252.0,
+          "height_mm": 230.0,
+          "source": "inferred"
+        },
+        "summary": {
+          "region_count": 11,
+          "synthetic_region_count": 1,
+          "component_count": 82,
+          "placed_count": 83,
+          "unassigned_count": 1,
+          "overlap_count": 10
+        },
+        "warnings": [
+          "some components were not assigned to pcb_layout.regions; they were packed into the fallback region",
+          "region overlap detected between 'usb_charge_edge' and 'power_regulation'",
+          "region overlap detected between 'usb_charge_edge' and 'esp32s3_core'",
+          "region overlap detected between 'usb_charge_edge' and 'memory_close_to_soc'",
+          "region overlap detected between 'usb_charge_edge' and 'quiet_clock'",
+          "region overlap detected between 'power_regulation' and 'esp32s3_core'",
+          "region overlap detected between 'esp32s3_core' and 'memory_close_to_soc'",
+          "region overlap detected between 'rf_corner' and 'unassigned'",
+          "region overlap detected between 'ui_debug' and 'audio_outward_edge'",
+          "region overlap detected between 'ui_debug' and 'storage_access_edge'",
+          "region overlap detected between 'ui_debug' and 'signal_test_points'"
+        ],
+        "regions": [
+          {
+            "name": "usb_charge_edge",
+            "placements": 10,
+            "warnings": []
+          },
+          {
+            "name": "power_regulation",
+            "placements": 6,
+            "warnings": []
+          },
+          {
+            "name": "esp32s3_core",
+            "placements": 10,
+            "warnings": []
+          },
+          {
+            "name": "memory_close_to_soc",
+            "placements": 4,
+            "warnings": []
+          },
+          {
+            "name": "rf_corner",
+            "placements": 4,
+            "warnings": []
+          },
+          {
+            "name": "quiet_clock",
+            "placements": 3,
+            "warnings": []
+          },
+          {
+            "name": "ui_debug",
+            "placements": 17,
+            "warnings": []
+          },
+          {
+            "name": "audio_outward_edge",
+            "placements": 8,
+            "warnings": []
+          },
+          {
+            "name": "storage_access_edge",
+            "placements": 6,
+            "warnings": []
+          },
+          {
+            "name": "security_dnp",
+            "placements": 4,
+            "warnings": []
+          },
+          {
+            "name": "signal_test_points",
+            "placements": 10,
+            "warnings": []
+          },
+          {
+            "name": "unassigned",
+            "placements": 1,
+            "warnings": []
+          }
+        ]
+      }
+    },
+    {
+      "key": "history",
+      "title": "Recent Operations",
+      "status": "info",
+      "data": {
+        "count": 20,
+        "entries": [
+          {
+            "time": "2026-06-15T01:58:40.918893+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 4.74,
+            "erc_sec": 2.94,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T02:00:44.070043+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T02:00:52.017524+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 5.38,
+            "erc_sec": 3.28,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T02:02:47.052712+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T02:02:54.230041+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 4.84,
+            "erc_sec": 3.05,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T02:03:51.122816+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T02:03:58.897828+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 5.06,
+            "erc_sec": 3.24,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T02:04:09.490493+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T02:04:17.920806+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 5.33,
+            "erc_sec": 3.39,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T02:06:47.635671+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T02:06:56.595537+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 6.44,
+            "erc_sec": 3.31,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T04:14:49.031781+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T04:14:57.359043+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 6.14,
+            "erc_sec": 2.75,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T04:15:54.134567+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T04:16:00.165644+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 4.31,
+            "erc_sec": 2.24,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T04:17:04.002089+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T04:17:11.499917+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 107,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 86
+              },
+              {
+                "type": "pin_not_driven",
+                "count": 21
+              }
+            ],
+            "build_sec": 5.45,
+            "erc_sec": 2.69,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T04:17:56.995297+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          },
+          {
+            "time": "2026-06-15T04:18:06.093056+00:00",
+            "op": "mark_built",
+            "ok": true,
+            "hash": "9ca86719",
+            "operation": "export_kicad_project",
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "outputs": {
+              "project": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
+              "schematic": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+            },
+            "erc_findings": 89,
+            "erc_violations": [
+              {
+                "type": "pin_to_pin",
+                "count": 89
+              }
+            ],
+            "build_sec": 7.28,
+            "erc_sec": 2.41,
+            "report_status": "warning",
+            "report_path": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\agent-report.json"
+          },
+          {
+            "time": "2026-06-15T04:19:47.695277+00:00",
+            "op": "build",
+            "ok": true,
+            "symbols": 82,
+            "nets": 51,
+            "sheets": 11,
+            "build_warnings": 0
+          }
+        ]
+      }
+    }
+  ],
+  "timing": {
+    "build_sec": 7.34,
+    "erc_sec": 2.39
+  }
+}

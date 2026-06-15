@@ -1,0 +1,333 @@
+(footprint "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR"
+	(version 20260206)
+	(generator "pcbnew")
+	(generator_version "10.0")
+	(layer "F.Cu")
+	(descr "1 1V~5.5V 2A 53mΩ Active High Load Switch SOT-23-6 Power Distribution Switches ROHS")
+	(tags "component")
+	(property "Reference" "REF**"
+		(at 0 -3.3 0)
+		(layer "F.SilkS")
+		(uuid "ea7b971c-57c8-4214-9076-bb97fee4b81e")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "TPS22918DBVR"
+		(at 0 3.53 0)
+		(layer "F.Fab")
+		(uuid "00f590e2-c04b-4e48-aacb-294cffaf15da")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "4d973e99-23df-474c-a131-a4a4b7a0ce33")
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+	)
+	(property "Description" "1 1V~5.5V 2A 53mΩ Active High Load Switch SOT-23-6 Power Distribution Switches ROHS"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "b297e6af-2d54-48eb-ae05-d3d098d416cc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC" "C131941"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c53977b6-94d5-441c-9939-11423f01773e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Manufacturer" "TI(德州仪器)"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "7c6eca7a-a199-42f4-8d0b-28918403111e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Type" "Load Switch"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "f44c2e6f-cff1-43d4-b309-fc5f761dadbe")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Number of Channels" "1"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1d7592d2-5e1d-4b33-84f6-daa7d893bedb")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Voltage - Supply" "1V~5.5V"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6c156190-1652-4eaf-8edd-16cdb01cc25d")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Operating Temperature	-" "-40℃~+105℃"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "c7e24074-4247-4201-855f-abde90efc6f2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Maximum Continuous Current" "2A"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fa3d8d87-8a5d-4f8c-91f1-e3a88cdedb24")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Features" "Output discharge function、Soft-start、Integrated charge pump"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fa1c0f13-069c-4953-8e23-343e382b3d41")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "RDS(on)" "53mΩ"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "791fb43b-d111-4d18-81d3-dc64308bcfd5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Control Input Logic" "Active High"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "6625fe3e-d6d4-4f69-9a3b-34011d13da6a")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(duplicate_pad_numbers_are_jumpers no)
+	(fp_line
+		(start -0.9 -1.5499)
+		(end 0.9 -1.5499)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "f0b30d70-3a64-4d0e-888e-759d169c3e89")
+	)
+	(fp_line
+		(start -0.9 1.5501)
+		(end 0.9 1.5501)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "58b870fa-f01a-4cfc-b652-ebb264ac6ff8")
+	)
+	(fp_circle
+		(center 1.397 1.651)
+		(end 1.524 1.651)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "d9b3c3cd-c625-47fc-99c1-d96736ba32a9")
+	)
+	(fp_circle
+		(center 1.4 0.95)
+		(end 1.5001 0.95)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "0f3c14f6-a933-4ea1-880a-1408bd6e30eb")
+	)
+	(fp_line
+		(start -2.15 -1.8)
+		(end 2.15 -1.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "2491c580-61b8-4bba-b9a1-c5052d26016f")
+	)
+	(fp_line
+		(start -2.15 2.03)
+		(end -2.15 -1.8)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "15f3f029-3e44-4aac-a4a5-108ff2b17863")
+	)
+	(fp_line
+		(start 2.15 -1.8)
+		(end 2.15 2.03)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "bc718f90-97a5-47de-bb64-cf1f84371684")
+	)
+	(fp_line
+		(start 2.15 2.03)
+		(end -2.15 2.03)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "4057406b-d2d7-446f-8bd2-f72c7701fcb8")
+	)
+	(fp_circle
+		(center 1.4 1.45)
+		(end 1.43 1.45)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.Fab")
+		(uuid "ddc25239-fab0-4d3c-8b78-ad824c7a34f7")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "6445febd-fd37-4f15-bcca-30889430840b")
+		(effects
+			(font
+				(size 0.5 0.5)
+				(thickness 0.08)
+			)
+		)
+	)
+	(pad "1" smd roundrect
+		(at 1.35 0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "8a2ce466-b791-4042-aa4d-af2844e75810")
+	)
+	(pad "2" smd roundrect
+		(at 1.35 0)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "ab347daf-615a-4b20-9b6f-4474ee54fef2")
+	)
+	(pad "3" smd roundrect
+		(at 1.35 -0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "ab77dab3-1643-49ae-9512-8c09548e81a7")
+	)
+	(pad "4" smd roundrect
+		(at -1.35 -0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "fc4e333e-52c0-4872-a1df-7516b7c82509")
+	)
+	(pad "5" smd roundrect
+		(at -1.35 0)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "9bb6660f-d911-40f1-a662-2b4abc48c6b1")
+	)
+	(pad "6" smd roundrect
+		(at -1.35 0.95)
+		(size 1.1 0.6)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(roundrect_rratio 0.25)
+		(uuid "de932ef4-48e2-49bc-9081-32d4af131cb8")
+	)
+	(embedded_fonts no)
+	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/ai-memory-badge-v1/output/ai_memory_badge_v1/libraries/3dmodels/JLC-MCP.3dshapes/TPS22918DBVR.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 180)
+		)
+	)
+)

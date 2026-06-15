@@ -599,6 +599,11 @@ class _ExtendedHandlers:
                                 dsl_sheets=self.model.get("sheets", []) if isinstance(self.model, dict) else None,
                             )
                             try:
+                                final_postprocess = apply_postprocess(schematic_file, project_out)
+                                result["postprocess_after_final_write"] = final_postprocess
+                            except Exception as exc:
+                                result["postprocess_after_final_write_error"] = str(exc)
+                            try:
                                 pin_result = pin_project_libraries(project_out)
                                 result["library_pins_after_final_write"] = pin_result
                             except Exception:

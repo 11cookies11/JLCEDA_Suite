@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 from ..adapters.kicad_project_writer import find_matching_paren, sanitize_lib_symbols_section, sanitize_symbol_block
+from .erc_classifier import PASSIVE_REFS
 from ..shared.sexpr_parser import parse as parse_sexpr, symbols_in_library
 
 
@@ -27,13 +28,13 @@ class SymbolNormalizationService:
         return {
             "symbol_sanitization": self.sanitize_copied_symbol_libraries(project),
             "pin_type_patches": self.patch_known_jlc_symbol_pin_types(project),
+            "symbols_injected": symbols_injected,
+            "symbol_injection_error": inject_error,
+            "schematic_sanitization": self.sanitize_generated_schematics(project, schematic),
             "symbol_cache_sync": self.sync_cached_symbol_libraries(schematic, project) if schematic else {
                 "attempted": False,
                 "reason": "no schematic file",
             },
-            "symbols_injected": symbols_injected,
-            "symbol_injection_error": inject_error,
-            "schematic_sanitization": self.sanitize_generated_schematics(project),
         }
 
     def inject_jlc_symbols(self, schematic_path: str | Path) -> bool:
@@ -207,16 +208,33 @@ class SymbolNormalizationService:
                 patched_files.append(str(path))
         return {"patched_files": patched_files, "count": len(patched_files)}
 
-    def sanitize_generated_schematics(self, project_dir: str | Path) -> dict[str, Any]:
+    def sanitize_generated_schematics(
+        self,
+        project_dir: str | Path,
+        schematic_file: str | Path | None = None,
+    ) -> dict[str, Any]:
         """Final pass to keep generated schematic lib_symbols parseable by KiCad."""
         project = Path(project_dir)
+        schematic = Path(schematic_file) if schematic_file is not None else None
         patched_files: list[str] = []
-        for path in sorted(project.glob("*.kicad_sch")):
-            text = path.read_text(encoding="utf-8")
-            patched = sanitize_lib_symbols_section(text)
-            if patched != text:
-                path.write_text(patched, encoding="utf-8")
-                patched_files.append(str(path))
+        schematic_roots: list[Path] = []
+        if schematic and schematic.exists():
+            schematic_roots.append(schematic.parent)
+        elif project.exists():
+            schematic_roots.append(project)
+
+        seen: set[Path] = set()
+        for root in schematic_roots:
+            for path in sorted(root.glob("*.kicad_sch")):
+                if path in seen:
+                    continue
+                seen.add(path)
+                text = path.read_text(encoding="utf-8")
+                patched = sanitize_lib_symbols_section(text)
+                patched = normalize_passive_symbol_pin_types(patched)
+                if patched != text:
+                    path.write_text(patched, encoding="utf-8")
+                    patched_files.append(str(path))
         return {"patched_files": patched_files, "count": len(patched_files)}
 
 
@@ -265,6 +283,52 @@ def _inject_symbols_into_sheet(sch_path: Path, lib_name: str, lib_content: str) 
     if replaced > 0:
         sch_path.write_text(sch[:lib_start] + lib_section + sch[lib_end + 1:], encoding="utf-8")
     return replaced
+
+
+def normalize_passive_symbol_pin_types(text: str) -> str:
+    """Normalize passive-style schematic cache symbols to passive pin types."""
+    lib_start = text.find("(lib_symbols")
+    if lib_start < 0:
+        return text
+    lib_end = find_matching_paren(text, lib_start)
+    if lib_end < 0:
+        return text
+
+    section = text[lib_start:lib_end + 1]
+    rebuilt: list[str] = []
+    cursor = 0
+    changed = False
+    while True:
+        symbol_start = section.find('(symbol "', cursor)
+        if symbol_start < 0:
+            break
+        symbol_end = find_matching_paren(section, symbol_start)
+        if symbol_end < 0:
+            break
+        block = section[symbol_start:symbol_end + 1]
+        reference = _reference_from_symbol_block(block)
+        if reference and reference.startswith(PASSIVE_REFS):
+            normalized = re.sub(
+                r'\(pin\s+(input|output|bidirectional|tri_state|passive|power_in|power_out|open_collector|open_emitter|unspecified)\s+line',
+                '(pin passive line',
+                block,
+            )
+            if normalized != block:
+                block = normalized
+                changed = True
+        rebuilt.append(section[cursor:symbol_start])
+        rebuilt.append(block)
+        cursor = symbol_end + 1
+    rebuilt.append(section[cursor:])
+
+    if not changed:
+        return text
+    return text[:lib_start] + ''.join(rebuilt) + text[lib_end + 1:]
+
+
+def _reference_from_symbol_block(block: str) -> str:
+    match = re.search(r'\(property\s+"Reference"\s+"([^"]+)"', block)
+    return match.group(1) if match else ""
 
 
 def _find_project_libraries_dir(project_dir: Path) -> Path | None:

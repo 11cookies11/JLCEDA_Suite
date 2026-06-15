@@ -229,6 +229,7 @@ def _render_and_postprocess_stage(state: PipelineRunState) -> Path:
         "project_file": state.final_write_result.get("project_file", ""),
         "schematic_file": state.final_write_result.get("schematic_file", ""),
     }
+    state.postprocess["final_normalization"] = apply_postprocess(final_schematic_path, final_project_dir)
     return project_dir
 
 

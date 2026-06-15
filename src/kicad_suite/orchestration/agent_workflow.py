@@ -301,6 +301,7 @@ class AgentWorkflowService:
                 "model": str(model_file),
             }
         missing = _components_missing_lcsc(model)
+        exempt = _components_lcsc_exempt(model)
         tasks = [_lcsc_selection_task(item) for item in missing]
         if tasks:
             tasks_file = write_agent_tasks(
@@ -321,6 +322,7 @@ class AgentWorkflowService:
                 "next_action": "read tasks_file, choose LCSC IDs through Model API, then rerun this workflow",
                 "selection": {
                     "missing_selected_part_lcsc_id": len(missing),
+                    "explicitly_lcsc_exempt": len(exempt),
                 },
             }
         clear_agent_tasks(project_path)
@@ -334,6 +336,7 @@ class AgentWorkflowService:
             "task_count": 0,
             "selection": {
                 "missing_selected_part_lcsc_id": 0,
+                "explicitly_lcsc_exempt": len(exempt),
             },
         }
 
@@ -359,6 +362,7 @@ class AgentWorkflowService:
             }
 
         missing = _components_missing_lcsc(model)
+        exempt = _components_lcsc_exempt(model)
         if missing:
             return self._emit_route_task(
                 project_path,
@@ -370,6 +374,7 @@ class AgentWorkflowService:
                 alternatives=["lcsc_selection_v1", "unknown_task_v1"],
                 context={
                     "missing_lcsc_count": len(missing),
+                    "explicitly_lcsc_exempt": len(exempt),
                     "sample_refs": [str(item.get("ref", "")) for item in missing[:10] if isinstance(item, dict)],
                     "source": "full_build_v1.parts_milestone",
                 },
@@ -879,10 +884,50 @@ def _components_missing_lcsc(model: dict[str, Any]) -> list[dict[str, Any]]:
     for component in components:
         if not isinstance(component, dict):
             continue
+        if _component_lcsc_exemption_reason(component):
+            continue
         selected = component.get("selected_part", {}) if isinstance(component.get("selected_part"), dict) else {}
         if not str(selected.get("lcsc_id", "")).strip():
             missing.append(component)
     return missing
+
+
+def _components_lcsc_exempt(model: dict[str, Any]) -> list[dict[str, Any]]:
+    components = model.get("components", [])
+    if not isinstance(components, list):
+        return []
+    return [component for component in components if isinstance(component, dict) and _component_lcsc_exemption_reason(component)]
+
+
+def _component_lcsc_exemption_reason(component: dict[str, Any]) -> str:
+    """Return why a component is explicitly exempt from LCSC selection.
+
+    This is intentionally conservative. Descriptive text such as value="DNP"
+    does not count; the model must opt out with explicit machine-readable
+    fields so real BOM parts are not silently skipped.
+    """
+    selected = component.get("selected_part", {}) if isinstance(component.get("selected_part"), dict) else {}
+    if _truthy(component.get("bom_exclude")) or _truthy(selected.get("bom_exclude")):
+        return "bom_exclude"
+    if _truthy(component.get("dnp")) or _truthy(component.get("do_not_populate")):
+        return "dnp"
+    assembly = str(component.get("assembly", selected.get("assembly", "")) or "").strip().lower()
+    if assembly in {"dnp", "do_not_populate", "do-not-populate", "not_populated", "not-fitted", "not_fitted"}:
+        return "dnp"
+    part_source = str(component.get("part_source", selected.get("part_source", "")) or "").strip().lower()
+    if part_source in {"internal", "local", "project_local", "project-local", "pcb"}:
+        return "internal"
+    return ""
+
+
+def _truthy(value: Any) -> bool:
+    if isinstance(value, bool):
+        return value
+    if isinstance(value, (int, float)):
+        return value != 0
+    if isinstance(value, str):
+        return value.strip().lower() in {"1", "true", "yes", "y", "on"}
+    return False
 
 
 def _build_diagnostic_tasks(diagnostics: dict[str, Any]) -> list[dict[str, Any]]:

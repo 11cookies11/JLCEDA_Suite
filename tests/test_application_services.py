@@ -63,6 +63,38 @@ def test_postprocess_uses_named_services(tmp_path) -> None:
     symbols.assert_called_once_with(tmp_path, schematic)
 
 
+def test_sanitize_generated_schematics_normalizes_passive_symbol_pins(tmp_path) -> None:
+    schematic = tmp_path / "demo.kicad_sch"
+    schematic.write_text(
+        """
+(kicad_sch
+  (lib_symbols
+    (symbol "JLC-MCP:R0603"
+      (property "Reference" "R1" (at 0 0 0))
+      (property "Value" "10k" (at 0 0 0))
+      (symbol "R0603_0_1"
+        (pin input line
+          (at 0 0 0)
+          (length 2.54)
+          (name "1")
+          (number "1")
+        )
+      )
+    )
+  )
+)
+""".strip(),
+        encoding="utf-8",
+    )
+
+    result = SymbolNormalizationService().sanitize_generated_schematics(tmp_path)
+
+    assert result["count"] == 1
+    patched = schematic.read_text(encoding="utf-8")
+    assert "(pin passive line" in patched
+    assert "(pin input line" not in patched
+
+
 def test_placement_planner_builds_plan_for_regions(tmp_path) -> None:
     model = {
         "project_id": "demo-board",
