@@ -34,6 +34,9 @@ Important manifest fields:
 - `project_files.agent_report`: `build/report.json`.
 - `project_files.human_report`: `build/report.md`.
 
+The manifest now also includes `assets`, which covers GUI-facing KiCad asset
+checks and 3D model path normalization.
+
 ## Project Lifecycle
 
 ### `agent create`
@@ -117,6 +120,31 @@ Interpretation:
 - Fix `must_fix` before export or release.
 - Treat `library_noise` as evidence, not a reason to blindly change the source model.
 - If `PROJECT_STATE_STALE` appears, rerun `build-ir` and `validate-ir`.
+
+### `agent assets validate`
+
+```powershell
+hwtool agent assets validate --project <dir> [--normalize]
+```
+
+Validates GUI-facing KiCad assets for a project. This checks:
+
+- symbol libraries are sanitized
+- `fp-lib-table` is present and registers `JLC-MCP`
+- footprint and PCB 3D model references resolve
+- model paths stay under project-local `${KIPRJMOD}/...` references
+
+When `--normalize` is set, the command rewrites 3D model references before
+checking them.
+
+### `agent assets normalize`
+
+```powershell
+hwtool agent assets normalize --project <dir>
+```
+
+Normalizes footprint and PCB 3D model paths to project-local `${KIPRJMOD}/...`
+references and reports the resulting validation status.
 
 ### `agent workflow run`
 
@@ -215,6 +243,27 @@ Outputs:
 
 Use this only when you explicitly want the legacy downloader. It is not required
 as a workflow step.
+
+## GUI Asset Workflow
+
+The postprocess layer includes a dedicated asset workflow for KiCad GUI-facing
+files. Use it after footprint/library generation or when 3D viewer paths look
+stale:
+
+```powershell
+hwtool agent assets validate --project <dir>
+hwtool agent assets normalize --project <dir>
+```
+
+Configuration:
+
+- `KICAD_AGENT_3DMODEL_DIRS`: semicolon, comma, or newline separated list of
+  extra 3D model search roots.
+- `KICAD_3DMODEL_DIRS`: compatible alias for the same setting.
+- `KICAD_AGENT_3DMODEL_DIR` / `KICAD_3DMODEL_DIR`: single-directory forms.
+
+If no override is set, the resolver falls back to the common KiCad system 3D
+model directories shipped with supported installs.
 
 ### `agent build-ir`
 

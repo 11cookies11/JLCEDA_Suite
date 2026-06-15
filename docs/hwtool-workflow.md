@@ -127,6 +127,27 @@ output/<topology>/
   agent-report.json
 ```
 
+## Step 6: Validate GUI Assets
+
+After export, run the asset workflow to make sure KiCad GUI operations have
+stable libraries and 3D references:
+
+```powershell
+hwtool agent assets validate --project .
+```
+
+If the project pulls 3D models from custom locations, set one of these before
+running the workflow:
+
+- `KICAD_AGENT_3DMODEL_DIRS`
+- `KICAD_3DMODEL_DIRS`
+- `KICAD_AGENT_3DMODEL_DIR`
+- `KICAD_3DMODEL_DIR`
+
+Use `hwtool agent assets normalize --project .` when you want the toolchain to
+rewrite footprint and PCB model paths into project-local `${KIPRJMOD}/...`
+references.
+
 ## Troubleshooting
 
 ### footprint not found
