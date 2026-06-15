@@ -409,6 +409,7 @@ class _ExtendedHandlers:
         overwrite = bool(request.payload.get("overwrite", False))
         should_initialize_state = bool(request.payload.get("initialize_state", True))
         should_validate_ir = bool(request.payload.get("validate_ir", True))
+        should_validate_intent = bool(request.payload.get("validate_intent", True))
         should_export_ir = bool(request.payload.get("export_ir", False))
 
         if not project_dir_value:
@@ -443,19 +444,55 @@ class _ExtendedHandlers:
                     output_path.write_text(json.dumps(ir, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
                     ir_path = str(output_path)
 
+            intent_result = check_design_intent(model, strict=False) if should_validate_intent else {
+                "attempted": False,
+                "success": True,
+                "status": "skipped",
+                "issues": [],
+                "active_domains": [],
+                "baseline_counts": {},
+                "missing_baseline_sections": [],
+                "domain_coverage": [],
+                "placeholder_hits": [],
+            }
+
+            if should_validate_intent:
+                for issue in intent_result.get("issues", []):
+                    message = str(issue.get("message", "design intent issue"))
+                    if issue.get("severity") == "error":
+                        validation.add_error(message)
+                    else:
+                        validation.add_warning(message)
+                validation.stats["design_intent"] = {
+                    "status": intent_result.get("status", "info"),
+                    "active_domains": intent_result.get("active_domains", []),
+                    "baseline_counts": intent_result.get("baseline_counts", {}),
+                    "missing_baseline_sections": intent_result.get("missing_baseline_sections", []),
+                    "placeholder_hits": intent_result.get("placeholder_hits", []),
+                }
+
             state_path = ""
+            report = validation if should_validate_ir else ValidationReport(checks=["project created"])
+            if should_validate_intent and report is not validation:
+                for issue in intent_result.get("issues", []):
+                    message = str(issue.get("message", "design intent issue"))
+                    if issue.get("severity") == "error":
+                        report.add_error(message)
+                    else:
+                        report.add_warning(message)
+            if should_validate_intent:
+                report.stats["design_intent"] = validation.stats.get("design_intent", {})
             if should_initialize_state:
                 state = ProjectState(project_dir)
                 state.recompute()
-                diagnostics = {"errors": validation.errors, "warnings": validation.warnings}
-                if should_validate_ir:
-                    if validation.ok:
+                diagnostics = {"errors": report.errors, "warnings": report.warnings}
+                if should_validate_ir or should_validate_intent:
+                    if report.ok:
                         state.mark_valid(diagnostics)
                     else:
                         state.mark_invalid(diagnostics)
                 state_path = str(state.state_path)
 
-            report = validation if should_validate_ir else ValidationReport(checks=["project created"])
             if not report.ok:
                 return self._failure(
                     request,
@@ -474,6 +511,7 @@ class _ExtendedHandlers:
                 "created": True,
                 "valid": report.ok,
                 "ir_stats": ir_stats,
+                "design_intent": intent_result,
             }
             return self._success(request, report, result, before, snapshot(self.model), [], [])
         except Exception as exc:

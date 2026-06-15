@@ -53,6 +53,11 @@ hwtool agent create <project_dir> `
 
 Creates a hardware project skeleton.
 
+As part of creation, the project model now runs a design-intent check by
+default and records any missing baseline intent or placeholder markers in the
+returned diagnostics and project state. This keeps new projects from silently
+starting out with an empty intent trail.
+
 Primary output:
 
 - `source/circuit-model.source.json`

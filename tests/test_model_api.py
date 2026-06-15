@@ -282,10 +282,14 @@ def test_model_api_creates_hardware_project_without_agent_scaffold(tmp_path):
     generated_state = json.loads((project_dir / "project.state.json").read_text(encoding="utf-8"))
 
     assert result["success"] is True
+    assert result["result"]["design_intent"]["status"] == "warning"
+    assert result["diagnostics"]["warnings"]
+    assert any("design intent section" in warning.lower() for warning in result["diagnostics"]["warnings"])
     assert generated_source["project_id"] == "generated-board"
     assert generated_resolved["project_id"] == "generated-board"
     assert generated_source["topology"] == "generated_board"
     assert generated_state["status"] == "VALID"
+    assert generated_state["diagnostics"]["warnings"] >= 1
     assert (project_dir / "build" / "ir.json").exists()
     assert not (project_dir / "agent").exists()
 
