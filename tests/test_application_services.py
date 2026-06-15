@@ -11,6 +11,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.application_services.erc_classification_service import ErcClassificationService
 from kicad_suite.application_services.footprint_resolution_service import FootprintResolutionService
+from kicad_suite.application_services.design_intent_service import check_design_intent
 from kicad_suite.application_services.placement_planner import build_placement_plan, write_placement_plan
 from kicad_suite.application_services.part_resolution_service import PartResolutionService
 from kicad_suite.application_services.symbol_normalization_service import SymbolNormalizationService
@@ -179,6 +180,32 @@ def test_footprint_resolution_service_uses_configured_3d_model_roots(tmp_path, m
     assert expected in pcb.read_text(encoding="utf-8")
     assert (project / "libraries" / "3dmodels" / "external-model.wrl").exists()
     assert str(external_root) in result["search_roots"]
+
+
+def test_design_intent_service_flags_incomplete_intent(tmp_path) -> None:
+    model = {
+        "schema_version": "circuit-model.v1",
+        "request_id": "demo",
+        "project_id": "demo",
+        "topology": "demo_topology",
+        "components": [
+            {"ref": "U1", "role": "main_controller_bare_soc", "value": "ESP32-S3"},
+            {"ref": "U2", "role": "single_cell_lipo_charger", "value": "MCP73831"},
+        ],
+        "nets": [],
+        "sheets": [],
+        "design_decisions": [],
+        "risks": [],
+        "constraints": [],
+    }
+
+    result = check_design_intent(model, strict=False)
+
+    assert result["success"] is True
+    assert result["status"] == "warning"
+    assert "design_decisions" in result["missing_baseline_sections"]
+    assert any(item["domain"] == "power" for item in result["domain_coverage"])
+    assert any(item["domain"] == "mcu" for item in result["domain_coverage"])
 
 
 def test_agent_assets_validate_command_reports_success(tmp_path, capsys) -> None:

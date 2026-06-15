@@ -194,6 +194,7 @@ SUPPORTED_OPERATIONS = {
     "validate_pinmap",
     "validate_power_budget",
     "validate_power_tree",
+    "validate_intent",
     "validate_readiness",
     "validate_references",
     "validate_risk_consistency",

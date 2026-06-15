@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from .erc_classification_service import ErcClassificationService
+from .design_intent_service import check_design_intent
 from .project_state import ProjectState
 from ..domain.core.circuit_model_io import load_dual_circuit_model, resolve_model_paths
 from ..domain.core.ir_compiler import build_ir
@@ -64,6 +65,7 @@ def build_agent_diagnostics(project_path: str | Path, model_path: str | Path | N
     if model_data:
         _add_ir_diagnostics(model_data, diagnostics, sources)
         _add_erc_diagnostics(project, model_data, diagnostics, sources)
+        _add_design_intent_diagnostics(model_data, diagnostics, sources)
 
     if state.is_stale():
         diagnostics["review_required"].append(_diag(
@@ -146,6 +148,33 @@ def _add_erc_diagnostics(
                 details=item,
                 suggested_action=item.get("suggested_action") or "",
             ))
+
+
+def _add_design_intent_diagnostics(
+    model: dict[str, Any],
+    diagnostics: dict[str, list[dict[str, Any]]],
+    sources: dict[str, Any],
+) -> None:
+    intent = check_design_intent(model, strict=False)
+    sources["design_intent"] = {
+        "status": intent.get("status", "info"),
+        "baseline_counts": intent.get("baseline_counts", {}),
+        "active_domains": intent.get("active_domains", []),
+        "missing_baseline_sections": intent.get("missing_baseline_sections", []),
+    }
+    for issue in intent.get("issues", []):
+        if not isinstance(issue, dict):
+            continue
+        severity = str(issue.get("severity", "warning"))
+        bucket = "review_required" if severity != "error" else "must_fix"
+        diagnostics[bucket].append(_diag(
+            source="design_intent",
+            code=str(issue.get("code", "DESIGN_INTENT")),
+            severity=severity,
+            message=str(issue.get("message", "")),
+            details={k: v for k, v in issue.items() if k not in {"message", "severity"}},
+            suggested_action=str(issue.get("suggestion", "")),
+        ))
 
 
 def _find_erc_file(project: Path, model: dict[str, Any]) -> Path | None:

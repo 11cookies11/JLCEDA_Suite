@@ -79,7 +79,7 @@ _VALIDATE_OPERATIONS = frozenset({
     "validate_connectivity", "validate_pinmap", "validate_power_tree",
     "validate_power_budget", "validate_sequence", "validate_sheet_boundary",
     "validate_sheet_inputs_outputs", "validate_part_availability",
-    "validate_risk_consistency", "validate_readiness",
+    "validate_risk_consistency", "validate_intent", "validate_readiness",
 })
 
 # operations that produce committed project build output.

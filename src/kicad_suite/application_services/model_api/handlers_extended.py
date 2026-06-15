@@ -23,6 +23,7 @@ from ...domain.core.ir_validator import validate_ir
 from ...domain.core.netlist_builder import build_netlist
 from ...orchestration.pipeline_postprocess import apply_postprocess, pin_project_libraries
 from ...application_services.report_system import build_report
+from ...application_services.design_intent_service import check_design_intent
 from ...domain.core.simulation_planner import write_simulation_artifacts
 from ...application_services.project_state import ProjectState
 from ...shared.schema_versions import CIRCUIT_MODEL_SCHEMA_VERSION, SPICE_NETLIST_SCHEMA_VERSION
@@ -230,6 +231,11 @@ class _ExtendedHandlers:
 
     def _validation_operation(self, request: OperationRequest, before: dict[str, Any]) -> OperationResult:
         report = self._validate_model_snapshot(self.model)
+        if request.operation == "validate_intent":
+            self._validate_design_intent(report, self.model, strict=True)
+            if not report.ok:
+                return self._failure(request, report, "VALIDATION_FAILED", report.errors[0], before=before)
+            return self._success(request, report, {"valid": True}, before, snapshot(self.model), [], [])
         strict_references = request.operation in {
             "validate_connectivity", "validate_readiness", "validate_references",
         }
@@ -249,9 +255,28 @@ class _ExtendedHandlers:
             self._validate_pinmaps(report, self.model)
         if request.operation in {"validate_risk_consistency", "validate_readiness"}:
             self._validate_risks(report, self.model)
+        if request.operation == "validate_readiness":
+            self._validate_design_intent(report, self.model, strict=True)
         if not report.ok:
             return self._failure(request, report, "VALIDATION_FAILED", report.errors[0], before=before)
         return self._success(request, report, {"valid": True}, before, snapshot(self.model), [], [])
+
+    def _validate_design_intent(self, report: ValidationReport, model: dict[str, Any], *, strict: bool) -> None:
+        self._apply_intent_report(report, check_design_intent(model, strict=strict))
+
+    def _apply_intent_report(self, report: ValidationReport, intent: dict[str, Any]) -> None:
+        for issue in intent.get("issues", []):
+            if not isinstance(issue, dict):
+                continue
+            severity = str(issue.get("severity", "warning"))
+            message = str(issue.get("message", ""))
+            code = str(issue.get("code", "DESIGN_INTENT"))
+            suggestion = str(issue.get("suggestion", ""))
+            full_message = message if not suggestion else f"{message} ({suggestion})"
+            if severity == "error":
+                report.add_error(f"{code}: {full_message}")
+            else:
+                report.add_warning(f"{code}: {full_message}")
 
     def _validate_references(
         self, report: ValidationReport, model: dict[str, Any], *, strict: bool = False,

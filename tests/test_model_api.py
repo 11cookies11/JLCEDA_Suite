@@ -509,6 +509,26 @@ def test_model_api_readiness_fails_on_broken_references():
     assert "references missing component" in result["diagnostics"]["errors"][0]
 
 
+def test_model_api_readiness_fails_on_missing_design_intent():
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "main_controller_bare_soc", "value": "ESP32-S3"}))
+
+    result = service.handle_dict(_request("validate_readiness", {}))
+
+    assert result["success"] is False
+    assert any("design intent" in message.lower() for message in result["diagnostics"]["warnings"] + result["diagnostics"]["errors"])
+
+
+def test_model_api_validate_intent_is_available_as_dedicated_gate():
+    service = ModelApiService()
+    service.handle_dict(_request("add_component", {"ref": "U1", "role": "main_controller_bare_soc", "value": "ESP32-S3"}))
+
+    result = service.handle_dict(_request("validate_intent", {}))
+
+    assert result["success"] is False
+    assert any("design_decisions" in message for message in result["diagnostics"]["errors"])
+
+
 def test_model_api_pinmap_validation_fails_on_missing_net():
     service = ModelApiService()
     service.handle_dict(_request("add_component", {"ref": "U1", "role": "mcu", "value": "GD32"}))

@@ -121,6 +121,12 @@ Interpretation:
 - Treat `library_noise` as evidence, not a reason to blindly change the source model.
 - If `PROJECT_STATE_STALE` appears, rerun `build-ir` and `validate-ir`.
 
+Readiness checks now also include a design-intent completeness gate. The gate
+looks for baseline `design_decisions`, `risks`, and `constraints`, then checks
+whether active domains such as power, RF, audio, storage, UI, security, and
+debugging have at least some explicit evidence in those sections. The model
+API also exposes a dedicated `validate_intent` operation for this gate.
+
 ### `agent assets validate`
 
 ```powershell

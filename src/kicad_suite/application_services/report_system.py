@@ -13,6 +13,7 @@ from typing import Any
 
 from .project_state import ProjectState
 from .erc_classification_service import ErcClassificationService
+from .design_intent_service import check_design_intent
 from .placement_planner import build_placement_plan, PLACEMENT_PLAN_SCHEMA_VERSION
 from ..domain.core.circuit_model_io import load_dual_circuit_model, resolve_model_paths
 from ..domain.core.ir_compiler import build_ir
@@ -139,7 +140,18 @@ def build_report(
         "items": risks[:20] if risks else [],
     }))
 
-    # 9. ERC details.
+    # 9. Design intent completeness.
+    intent = check_design_intent(model, strict=False)
+    intent_status = "error" if intent.get("status") == "error" else ("warning" if intent.get("issues") else "ok")
+    sections.append(_section("design_intent", "Design Intent", intent_status, {
+        "status": intent.get("status", "info"),
+        "active_domains": intent.get("active_domains", []),
+        "baseline_counts": intent.get("baseline_counts", {}),
+        "missing_baseline_sections": intent.get("missing_baseline_sections", []),
+        "issues": intent.get("issues", []),
+    }))
+
+    # 10. ERC details.
     if erc_result:
         erc_ok = erc_result.get("success", False)
         erc_data = _erc_details(erc_result)
@@ -147,20 +159,20 @@ def build_report(
         erc_data["success"] = erc_ok
         sections.append(_section("erc", "ERC", "ok" if erc_ok else "error", erc_data))
 
-    # 10. Simulation (optional).
+    # 11. Simulation (optional).
     if simulation_result:
         sections.append(_section("simulation", "Simulation", "info", {
             "plan_file": simulation_result.get("plan_file", ""),
             "scenario_count": simulation_result.get("plan", {}).get("summary", {}).get("scenario_count", 0),
         }))
 
-    # 10. Placement planning.
+    # 12. Placement planning.
     placement = _placement_details(root, model or {})
     if placement is not None:
         placement_status = "warning" if placement.get("warnings") else "ok"
         sections.append(_section("placement", "PCB Placement Plan", placement_status, placement))
 
-    # 11. Operation history.
+    # 13. Operation history.
     history = ps.get_history(limit=history_limit)
     sections.append(_section("history", "Recent Operations", "info", {
         "count": len(history),
