@@ -63,6 +63,74 @@ def test_postprocess_uses_named_services(tmp_path) -> None:
     symbols.assert_called_once_with(tmp_path, schematic)
 
 
+def test_footprint_resolution_service_normalizes_3d_model_paths(tmp_path) -> None:
+    project = tmp_path
+    fp_dir = project / "libraries" / "footprints" / "JLC-MCP.pretty"
+    model_dir = project / "libraries" / "3dmodels" / "JLC-MCP.3dshapes"
+    fp_dir.mkdir(parents=True)
+    model_dir.mkdir(parents=True)
+
+    model_file = model_dir / "demo-model.wrl"
+    model_file.write_text("dummy", encoding="utf-8")
+
+    footprint = fp_dir / "C0402.kicad_mod"
+    footprint.write_text(
+        """
+(footprint "C0402"
+  (model "/demo-model.wrl"
+    (offset (xyz 0 0 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+)
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    pcb = project / "demo.kicad_pcb"
+    pcb.write_text(
+        """
+(kicad_pcb
+  (footprint "C0402"
+    (model "/demo-model.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+  )
+)
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    fp_table = project / "fp-lib-table"
+    fp_table.write_text(
+        """
+(fp_lib_table
+  (version 7)
+  (lib (name "JLC-MCP")(type "KiCad")(uri "libraries/footprints/JLC-MCP.pretty")(options "")(descr ""))
+)
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    result = FootprintResolutionService().normalize_3d_model_paths(project)
+
+    expected = "${KIPRJMOD}/libraries/3dmodels/JLC-MCP.3dshapes/demo-model.wrl"
+    assert result["success"] is True
+    assert result["updated_references"] == 2
+    assert expected in footprint.read_text(encoding="utf-8")
+    assert expected in pcb.read_text(encoding="utf-8")
+
+    validation = FootprintResolutionService().validate_gui_assets(project, normalize=False)
+    assert validation["success"] is True
+    assert validation["missing_models"] == []
+    assert validation["non_project_model_refs"] == []
+
+
 def test_sanitize_generated_schematics_normalizes_passive_symbol_pins(tmp_path) -> None:
     schematic = tmp_path / "demo.kicad_sch"
     schematic.write_text(

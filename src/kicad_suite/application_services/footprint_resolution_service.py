@@ -28,9 +28,10 @@ class FootprintResolutionService:
             "library_sync": self.sync_source_libraries(project),
             "footprint_sanitization": self.sanitize_footprint_libraries(project),
             "footprint_upgrade": self.upgrade_footprint_libraries(project),
+            "model_path_normalization": self.normalize_3d_model_paths(project),
             "library_registration": self.register_jlc_libraries(project),
             "project_library_pins": self.pin_project_libraries(project),
-            "gui_asset_validation": self.validate_gui_assets(project),
+            "gui_asset_validation": self.validate_gui_assets(project, normalize=False),
         }
 
     def sync_source_libraries(self, project_dir: str | Path) -> dict[str, Any]:
@@ -164,6 +165,41 @@ class FootprintResolutionService:
             "results": results,
         }
 
+    def normalize_3d_model_paths(self, project_dir: str | Path) -> dict[str, Any]:
+        """Rewrite project-local 3D model references to stable ${KIPRJMOD} paths."""
+        project = Path(project_dir)
+        footprints_dir = project / "libraries" / "footprints"
+        changed_files: list[str] = []
+        updated_references = 0
+        unresolved_references: list[str] = []
+
+        if not footprints_dir.exists():
+            return {
+                "attempted": False,
+                "reason": "no project-local footprint libraries",
+                "changed_files": changed_files,
+                "updated_references": updated_references,
+                "unresolved_references": unresolved_references,
+            }
+
+        pcb_files = sorted(project.glob("*.kicad_pcb"))
+        for path in [*sorted(footprints_dir.glob("*.pretty/*.kicad_mod")), *pcb_files]:
+            original = path.read_text(encoding="utf-8", errors="replace")
+            rewritten, delta, unresolved = _rewrite_3d_model_paths(project, original)
+            if delta:
+                path.write_text(rewritten, encoding="utf-8")
+                changed_files.append(str(path))
+                updated_references += delta
+            unresolved_references.extend(f"{path.name}: {item}" for item in unresolved)
+
+        return {
+            "attempted": True,
+            "success": not unresolved_references,
+            "changed_files": changed_files,
+            "updated_references": updated_references,
+            "unresolved_references": unresolved_references,
+        }
+
     def register_jlc_libraries(self, project_dir: str | Path) -> dict[str, Any]:
         """Register JLC-MCP libraries after schematic generation."""
         project = Path(project_dir)
@@ -286,12 +322,20 @@ class FootprintResolutionService:
             "system_library_refs": sorted(ref_libs),
         }
 
-    def validate_gui_assets(self, project_dir: str | Path) -> dict[str, Any]:
+    def validate_gui_assets(self, project_dir: str | Path, *, normalize: bool = True) -> dict[str, Any]:
         """Check assets KiCad GUI needs for update-PCB and 3D viewer workflows."""
         project = Path(project_dir)
         issues: list[str] = []
         symbol_bom_files: list[str] = []
         missing_models: list[str] = []
+        non_project_model_refs: list[str] = []
+
+        normalization = self.normalize_3d_model_paths(project) if normalize else {
+            "attempted": False,
+            "changed_files": [],
+            "updated_references": 0,
+            "unresolved_references": [],
+        }
 
         symbols_dir = project / "libraries" / "symbols"
         if symbols_dir.exists():
@@ -310,23 +354,27 @@ class FootprintResolutionService:
             if 'name "JLC-MCP"' not in table_text:
                 issues.append("project fp-lib-table does not register JLC-MCP")
 
-        footprint_upgrade = self.upgrade_footprint_libraries(project)
-        if footprint_upgrade.get("attempted") and not footprint_upgrade.get("success", False):
-            issues.append("kicad-cli could not load/upgrade at least one footprint library")
-
         model_pattern = re.compile(r'\(model\s+"([^"]+)"')
-        for footprint in sorted((project / "libraries" / "footprints").glob("*.pretty/*.kicad_mod")):
-            text = footprint.read_text(encoding="utf-8", errors="replace")
+        model_sources = [
+            *sorted((project / "libraries" / "footprints").glob("*.pretty/*.kicad_mod")),
+            *sorted(project.glob("*.kicad_pcb")),
+        ]
+        for model_source in model_sources:
+            text = model_source.read_text(encoding="utf-8", errors="replace")
             for match in model_pattern.finditer(text):
                 model_path = match.group(1)
-                resolved = Path(model_path)
-                if not resolved.is_absolute():
-                    resolved = project / model_path
-                if not resolved.exists():
-                    missing_models.append(f"{footprint.name}: {model_path}")
+                resolved = _resolve_3d_model_reference(project, model_path)
+                if not model_path.startswith("${KIPRJMOD}/"):
+                    non_project_model_refs.append(f"{model_source.name}: {model_path}")
+                if resolved is None:
+                    missing_models.append(f"{model_source.name}: {model_path}")
 
         if symbol_bom_files:
             issues.append(f"symbol libraries still contain UTF-8 BOM: {len(symbol_bom_files)}")
+        if normalization.get("unresolved_references"):
+            missing_models.extend(str(item) for item in normalization["unresolved_references"])
+        if non_project_model_refs:
+            issues.append(f"non-project 3D model references: {len(non_project_model_refs)}")
         if missing_models:
             issues.append(f"missing 3D model references: {len(missing_models)}")
 
@@ -334,9 +382,10 @@ class FootprintResolutionService:
             "attempted": True,
             "success": not issues,
             "issues": issues,
+            "normalization": normalization,
             "symbol_bom_files": symbol_bom_files,
             "missing_models": missing_models,
-            "footprint_upgrade": footprint_upgrade,
+            "non_project_model_refs": non_project_model_refs,
         }
 
 
@@ -391,6 +440,104 @@ def _scan_schematic_libraries(project_dir: Path) -> set[str]:
         for match in re.finditer(r'\(symbol\s+"([^"]+):', text):
             lib_names.add(match.group(1))
     return lib_names
+
+
+def _known_system_3dmodel_dirs() -> list[Path]:
+    candidates = [
+        Path("D:/Program Files/KiCad/10.0/share/kicad/3dmodels"),
+        Path("C:/Program Files/KiCad/10.0/share/kicad/3dmodels"),
+        Path("D:/Program Files/KiCad/9.0/share/kicad/3dmodels"),
+        Path("C:/Program Files/KiCad/9.0/share/kicad/3dmodels"),
+        Path("/usr/share/kicad/3dmodels"),
+    ]
+    return [candidate for candidate in candidates if candidate.is_dir()]
+
+
+def _resolve_3d_model_reference(project_dir: Path, model_path: str) -> tuple[Path | None, Path | None]:
+    text = model_path.strip()
+    if not text:
+        return None, None
+
+    project_root = project_dir.resolve()
+    normalized = text
+    if normalized.startswith("${KIPRJMOD}/"):
+        candidate = project_root / normalized.removeprefix("${KIPRJMOD}/")
+        return (candidate, project_root) if candidate.exists() else (None, None)
+
+    candidate = Path(normalized)
+    if candidate.is_absolute():
+        if candidate.exists():
+            try:
+                candidate.resolve().relative_to(project_root)
+            except ValueError:
+                return candidate, None
+            return candidate, project_root
+
+    candidate = project_root / normalized.lstrip("/")
+    if candidate.exists():
+        return candidate, project_root
+
+    model_root = project_root / "libraries" / "3dmodels"
+    basename = Path(normalized).name
+    if basename:
+        for match in sorted(model_root.glob(f"**/{basename}")):
+            if match.is_file():
+                return match, project_root
+        stem = Path(basename).stem
+        if stem:
+            for match in sorted(model_root.glob(f"**/{stem}.*")):
+                if match.is_file():
+                    return match, project_root
+
+    for system_root in _known_system_3dmodel_dirs():
+        if basename:
+            for match in sorted(system_root.glob(f"**/{basename}")):
+                if match.is_file():
+                    return match, system_root
+            if stem:
+                for match in sorted(system_root.glob(f"**/{stem}.*")):
+                    if match.is_file():
+                        return match, system_root
+
+    return None, None
+
+
+def _rewrite_3d_model_paths(project_dir: Path, text: str) -> tuple[str, int, list[str]]:
+    pattern = re.compile(r'(\(model\s+")([^"]+)(")')
+    unresolved: list[str] = []
+    updates = 0
+
+    def _replace(match: re.Match[str]) -> str:
+        nonlocal updates
+        original = match.group(2)
+        resolved, source_root = _resolve_3d_model_reference(project_dir, original)
+        if resolved is None:
+            unresolved.append(original)
+            return match.group(0)
+        if source_root is None:
+            try:
+                relative = resolved.resolve().relative_to(project_dir.resolve()).as_posix()
+            except ValueError:
+                return match.group(0)
+        else:
+            if source_root != project_dir.resolve():
+                relative_to_source = resolved.resolve().relative_to(source_root.resolve())
+                target = project_dir.resolve() / "libraries" / "3dmodels" / relative_to_source
+                target.parent.mkdir(parents=True, exist_ok=True)
+                if not target.exists():
+                    shutil.copy2(resolved, target)
+                resolved = target
+            try:
+                relative = resolved.resolve().relative_to(project_dir.resolve()).as_posix()
+            except ValueError:
+                relative = resolved.as_posix()
+        rewritten = f"${{KIPRJMOD}}/{relative}"
+        if rewritten != original:
+            updates += 1
+        return f'{match.group(1)}{rewritten}{match.group(3)}'
+
+    rewritten = pattern.sub(_replace, text)
+    return rewritten, updates, unresolved
 
 
 def _sanitize_kicad_text_line(line: str) -> str:
