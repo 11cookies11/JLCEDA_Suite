@@ -185,8 +185,8 @@ class FootprintResolutionService:
         pcb_files = sorted(project.glob("*.kicad_pcb"))
         for path in [*sorted(footprints_dir.glob("*.pretty/*.kicad_mod")), *pcb_files]:
             original = path.read_text(encoding="utf-8", errors="replace")
-            rewritten, delta, unresolved = _rewrite_3d_model_paths(project, original)
-            if delta:
+            rewritten, delta, unresolved, changed = _rewrite_3d_model_paths(project, original)
+            if changed:
                 path.write_text(rewritten, encoding="utf-8")
                 changed_files.append(str(path))
                 updated_references += delta
@@ -502,23 +502,27 @@ def _resolve_3d_model_reference(project_dir: Path, model_path: str) -> tuple[Pat
     return None, None
 
 
-def _rewrite_3d_model_paths(project_dir: Path, text: str) -> tuple[str, int, list[str]]:
-    pattern = re.compile(r'(\(model\s+")([^"]+)(")')
+def _rewrite_3d_model_paths(project_dir: Path, text: str) -> tuple[str, int, list[str], bool]:
+    pattern = re.compile(r'(\n?\s*\(model\s+")([^"]+)(".*?\n\s*\)\s*\))', re.DOTALL)
     unresolved: list[str] = []
     updates = 0
+    changed = False
 
     def _replace(match: re.Match[str]) -> str:
-        nonlocal updates
+        nonlocal updates, changed
         original = match.group(2)
         resolved, source_root = _resolve_3d_model_reference(project_dir, original)
         if resolved is None:
             unresolved.append(original)
-            return match.group(0)
+            changed = True
+            return ""
         if source_root is None:
             try:
                 relative = resolved.resolve().relative_to(project_dir.resolve()).as_posix()
             except ValueError:
-                return match.group(0)
+                unresolved.append(original)
+                changed = True
+                return ""
         else:
             if source_root != project_dir.resolve():
                 relative_to_source = resolved.resolve().relative_to(source_root.resolve())
@@ -534,10 +538,11 @@ def _rewrite_3d_model_paths(project_dir: Path, text: str) -> tuple[str, int, lis
         rewritten = f"${{KIPRJMOD}}/{relative}"
         if rewritten != original:
             updates += 1
+            changed = True
         return f'{match.group(1)}{rewritten}{match.group(3)}'
 
     rewritten = pattern.sub(_replace, text)
-    return rewritten, updates, unresolved
+    return rewritten, updates, unresolved, changed
 
 
 def _sanitize_kicad_text_line(line: str) -> str:
