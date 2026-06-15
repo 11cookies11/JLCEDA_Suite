@@ -22,6 +22,13 @@ REPO_ROOT = repo_root()
 class FootprintResolutionService:
     """Normalize, upgrade, register, and validate project-local footprint assets."""
 
+    def get_3d_model_search_roots(self) -> list[Path]:
+        """Return the configured 3D model search roots in priority order."""
+        configured = _configured_3dmodel_dirs()
+        if configured:
+            return configured
+        return _known_system_3dmodel_dirs()
+
     def prepare_project_footprints(self, project_dir: str | Path) -> dict[str, Any]:
         project = Path(project_dir)
         return {
@@ -172,6 +179,7 @@ class FootprintResolutionService:
         changed_files: list[str] = []
         updated_references = 0
         unresolved_references: list[str] = []
+        search_roots = self.get_3d_model_search_roots()
 
         if not footprints_dir.exists():
             return {
@@ -180,12 +188,13 @@ class FootprintResolutionService:
                 "changed_files": changed_files,
                 "updated_references": updated_references,
                 "unresolved_references": unresolved_references,
+                "search_roots": [str(path) for path in search_roots],
             }
 
         pcb_files = sorted(project.glob("*.kicad_pcb"))
         for path in [*sorted(footprints_dir.glob("*.pretty/*.kicad_mod")), *pcb_files]:
             original = path.read_text(encoding="utf-8", errors="replace")
-            rewritten, delta, unresolved, changed = _rewrite_3d_model_paths(project, original)
+            rewritten, delta, unresolved, changed = _rewrite_3d_model_paths(project, original, search_roots=search_roots)
             if changed:
                 path.write_text(rewritten, encoding="utf-8")
                 changed_files.append(str(path))
@@ -198,6 +207,7 @@ class FootprintResolutionService:
             "changed_files": changed_files,
             "updated_references": updated_references,
             "unresolved_references": unresolved_references,
+            "search_roots": [str(path) for path in search_roots],
         }
 
     def register_jlc_libraries(self, project_dir: str | Path) -> dict[str, Any]:
@@ -322,19 +332,26 @@ class FootprintResolutionService:
             "system_library_refs": sorted(ref_libs),
         }
 
-    def validate_gui_assets(self, project_dir: str | Path, *, normalize: bool = True) -> dict[str, Any]:
+    def validate_gui_assets(
+        self,
+        project_dir: str | Path,
+        *,
+        normalize: bool = True,
+    ) -> dict[str, Any]:
         """Check assets KiCad GUI needs for update-PCB and 3D viewer workflows."""
         project = Path(project_dir)
         issues: list[str] = []
         symbol_bom_files: list[str] = []
         missing_models: list[str] = []
         non_project_model_refs: list[str] = []
+        search_roots = self.get_3d_model_search_roots()
 
         normalization = self.normalize_3d_model_paths(project) if normalize else {
             "attempted": False,
             "changed_files": [],
             "updated_references": 0,
             "unresolved_references": [],
+            "search_roots": [str(path) for path in search_roots],
         }
 
         symbols_dir = project / "libraries" / "symbols"
@@ -363,7 +380,7 @@ class FootprintResolutionService:
             text = model_source.read_text(encoding="utf-8", errors="replace")
             for match in model_pattern.finditer(text):
                 model_path = match.group(1)
-                resolved = _resolve_3d_model_reference(project, model_path)
+                resolved = _resolve_3d_model_reference(project, model_path, search_roots=search_roots)
                 if not model_path.startswith("${KIPRJMOD}/"):
                     non_project_model_refs.append(f"{model_source.name}: {model_path}")
                 if resolved is None:
@@ -386,6 +403,7 @@ class FootprintResolutionService:
             "symbol_bom_files": symbol_bom_files,
             "missing_models": missing_models,
             "non_project_model_refs": non_project_model_refs,
+            "search_roots": [str(path) for path in search_roots],
         }
 
 
@@ -442,6 +460,26 @@ def _scan_schematic_libraries(project_dir: Path) -> set[str]:
     return lib_names
 
 
+def _configured_3dmodel_dirs() -> list[Path]:
+    candidates: list[Path] = []
+    for name in (
+        "KICAD_AGENT_3DMODEL_DIRS",
+        "KICAD_3DMODEL_DIRS",
+        "KICAD_AGENT_3DMODEL_DIR",
+        "KICAD_3DMODEL_DIR",
+        "KICAD10_3DMODEL_DIR",
+        "KICAD9_3DMODEL_DIR",
+    ):
+        raw = env(name)
+        if not raw:
+            continue
+        for item in re.split(r"[,\n\r;]+", raw):
+            text = item.strip().strip('"').strip("'")
+            if text:
+                candidates.append(Path(text).expanduser())
+    return _unique_paths(candidates)
+
+
 def _known_system_3dmodel_dirs() -> list[Path]:
     candidates = [
         Path("D:/Program Files/KiCad/10.0/share/kicad/3dmodels"),
@@ -450,10 +488,27 @@ def _known_system_3dmodel_dirs() -> list[Path]:
         Path("C:/Program Files/KiCad/9.0/share/kicad/3dmodels"),
         Path("/usr/share/kicad/3dmodels"),
     ]
-    return [candidate for candidate in candidates if candidate.is_dir()]
+    return [candidate for candidate in _unique_paths(candidates) if candidate.is_dir()]
 
 
-def _resolve_3d_model_reference(project_dir: Path, model_path: str) -> tuple[Path | None, Path | None]:
+def _unique_paths(paths: list[Path]) -> list[Path]:
+    unique: list[Path] = []
+    seen: set[str] = set()
+    for path in paths:
+        key = str(path)
+        if key in seen:
+            continue
+        seen.add(key)
+        unique.append(path)
+    return unique
+
+
+def _resolve_3d_model_reference(
+    project_dir: Path,
+    model_path: str,
+    *,
+    search_roots: list[Path] | None = None,
+) -> tuple[Path | None, Path | None]:
     text = model_path.strip()
     if not text:
         return None, None
@@ -489,7 +544,8 @@ def _resolve_3d_model_reference(project_dir: Path, model_path: str) -> tuple[Pat
                 if match.is_file():
                     return match, project_root
 
-    for system_root in _known_system_3dmodel_dirs():
+    roots = search_roots if search_roots is not None else _known_system_3dmodel_dirs()
+    for system_root in roots:
         if basename:
             for match in sorted(system_root.glob(f"**/{basename}")):
                 if match.is_file():
@@ -502,7 +558,12 @@ def _resolve_3d_model_reference(project_dir: Path, model_path: str) -> tuple[Pat
     return None, None
 
 
-def _rewrite_3d_model_paths(project_dir: Path, text: str) -> tuple[str, int, list[str], bool]:
+def _rewrite_3d_model_paths(
+    project_dir: Path,
+    text: str,
+    *,
+    search_roots: list[Path] | None = None,
+) -> tuple[str, int, list[str], bool]:
     pattern = re.compile(r'(\n?\s*\(model\s+")([^"]+)(".*?\n\s*\)\s*\))', re.DOTALL)
     unresolved: list[str] = []
     updates = 0
@@ -511,7 +572,7 @@ def _rewrite_3d_model_paths(project_dir: Path, text: str) -> tuple[str, int, lis
     def _replace(match: re.Match[str]) -> str:
         nonlocal updates, changed
         original = match.group(2)
-        resolved, source_root = _resolve_3d_model_reference(project_dir, original)
+        resolved, source_root = _resolve_3d_model_reference(project_dir, original, search_roots=search_roots)
         if resolved is None:
             unresolved.append(original)
             changed = True

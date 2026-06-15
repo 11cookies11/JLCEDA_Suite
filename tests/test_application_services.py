@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import os
 import sys
 from unittest.mock import patch
@@ -13,6 +14,7 @@ from kicad_suite.application_services.footprint_resolution_service import Footpr
 from kicad_suite.application_services.placement_planner import build_placement_plan, write_placement_plan
 from kicad_suite.application_services.part_resolution_service import PartResolutionService
 from kicad_suite.application_services.symbol_normalization_service import SymbolNormalizationService
+from kicad_suite.cli import main as cli_main
 from kicad_suite.orchestration.pipeline_postprocess import apply_postprocess
 
 
@@ -129,6 +131,97 @@ def test_footprint_resolution_service_normalizes_3d_model_paths(tmp_path) -> Non
     assert validation["success"] is True
     assert validation["missing_models"] == []
     assert validation["non_project_model_refs"] == []
+    assert isinstance(validation["search_roots"], list)
+
+
+def test_footprint_resolution_service_uses_configured_3d_model_roots(tmp_path, monkeypatch) -> None:
+    project = tmp_path / "project"
+    project.mkdir()
+    footprints_dir = project / "libraries" / "footprints" / "Demo.pretty"
+    footprints_dir.mkdir(parents=True)
+    fp_table = project / "fp-lib-table"
+    fp_table.write_text(
+        """
+(fp_lib_table
+  (version 7)
+  (lib (name "Demo")(type "KiCad")(uri "libraries/footprints/Demo.pretty")(options "")(descr ""))
+)
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+    pcb = project / "demo.kicad_pcb"
+    pcb.write_text(
+        """
+(kicad_pcb
+  (footprint "Demo"
+    (model "/external-model.wrl"
+      (offset (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
+  )
+)
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    external_root = tmp_path / "shared-3d"
+    external_root.mkdir()
+    (external_root / "external-model.wrl").write_text("dummy", encoding="utf-8")
+    monkeypatch.setenv("KICAD_AGENT_3DMODEL_DIRS", str(external_root))
+
+    result = FootprintResolutionService().normalize_3d_model_paths(project)
+
+    expected = "${KIPRJMOD}/libraries/3dmodels/external-model.wrl"
+    assert result["success"] is True
+    assert expected in pcb.read_text(encoding="utf-8")
+    assert (project / "libraries" / "3dmodels" / "external-model.wrl").exists()
+    assert str(external_root) in result["search_roots"]
+
+
+def test_agent_assets_validate_command_reports_success(tmp_path, capsys) -> None:
+    project = tmp_path
+    fp_dir = project / "libraries" / "footprints" / "JLC-MCP.pretty"
+    fp_dir.mkdir(parents=True)
+    model_dir = project / "libraries" / "3dmodels" / "JLC-MCP.3dshapes"
+    model_dir.mkdir(parents=True)
+
+    (model_dir / "demo-model.wrl").write_text("dummy", encoding="utf-8")
+    (fp_dir / "Demo.kicad_mod").write_text(
+        """
+(footprint "Demo"
+  (model "${KIPRJMOD}/libraries/3dmodels/JLC-MCP.3dshapes/demo-model.wrl"
+    (offset (xyz 0 0 0))
+    (scale (xyz 1 1 1))
+    (rotate (xyz 0 0 0))
+  )
+)
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+    (project / "fp-lib-table").write_text(
+        """
+(fp_lib_table
+  (version 7)
+  (lib (name "JLC-MCP")(type "KiCad")(uri "libraries/footprints/JLC-MCP.pretty")(options "")(descr ""))
+  (lib (name "Demo")(type "KiCad")(uri "libraries/footprints/Demo.pretty")(options "")(descr ""))
+)
+""".strip()
+        + "\n",
+        encoding="utf-8",
+    )
+
+    code = cli_main(["agent", "assets", "validate", "--project", str(project)])
+    captured = capsys.readouterr()
+    payload = json.loads(captured.out)
+
+    assert code == 0
+    assert payload["ok"] is True
+    assert payload["stage"] == "assets_validate"
+    assert payload["result"]["success"] is True
 
 
 def test_sanitize_generated_schematics_normalizes_passive_symbol_pins(tmp_path) -> None:

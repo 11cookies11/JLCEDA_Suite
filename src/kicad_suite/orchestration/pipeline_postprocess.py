@@ -78,6 +78,13 @@ def sanitize_footprint_libraries(project_dir: Path) -> dict[str, Any]:
     return FootprintResolutionService().sanitize_footprint_libraries(project_dir)
 
 
+def normalize_3d_model_paths(project_dir: Path) -> dict[str, Any]:
+    """Rewrite 3D model references to project-stable ${KIPRJMOD} paths."""
+    from ..application_services.footprint_resolution_service import FootprintResolutionService
+
+    return FootprintResolutionService().normalize_3d_model_paths(project_dir)
+
+
 def upgrade_footprint_libraries(project_dir: Path) -> dict[str, Any]:
     """Best-effort KiCad CLI footprint library upgrade for copied local libs."""
     from ..application_services.footprint_resolution_service import FootprintResolutionService
@@ -85,11 +92,11 @@ def upgrade_footprint_libraries(project_dir: Path) -> dict[str, Any]:
     return FootprintResolutionService().upgrade_footprint_libraries(project_dir)
 
 
-def validate_gui_assets(project_dir: Path) -> dict[str, Any]:
+def validate_gui_assets(project_dir: Path, *, normalize: bool = True) -> dict[str, Any]:
     """Check the assets KiCad GUI needs for update-PCB and 3D viewer workflows."""
     from ..application_services.footprint_resolution_service import FootprintResolutionService
 
-    return FootprintResolutionService().validate_gui_assets(project_dir)
+    return FootprintResolutionService().validate_gui_assets(project_dir, normalize=normalize)
 
 
 def patch_known_jlc_symbol_pin_types(project_dir: Path) -> dict[str, Any]:

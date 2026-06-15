@@ -33,6 +33,7 @@ from .application_services.project_state import (
     is_build_operation,
 )
 from .application_services.agent_diagnostics import build_agent_diagnostics
+from .application_services.footprint_resolution_service import FootprintResolutionService
 from .application_services.part_resolution_service import PartResolutionService
 from .application_services.report_system import build_report, format_report, FORMAT_JSON, FORMAT_MARKDOWN, FORMAT_TEXT
 from .domain.core.simulation_planner import (
@@ -260,6 +261,7 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "inspect": "Return project, model, build, and summary details.",
             "explain": "Return a compact project explanation for an agent.",
             "diagnose": "Return unified structured diagnostics for agent repair loops.",
+            "assets": "Check and normalize GUI-facing assets, including 3D model paths.",
             "build-ir": "Compile source/circuit-model.source.json into build/ir.v1.json.",
             "validate-ir": "Compile and validate Hardware IR.",
             "rule-check": "Run project readiness checks.",
@@ -838,6 +840,25 @@ def _agent_diagnose_handler(args: argparse.Namespace) -> int:
     return _print_json(payload)
 
 
+def _agent_assets_validate_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    result = FootprintResolutionService().validate_gui_assets(project_path, normalize=args.normalize)
+    return _print_json({"ok": result.get("success", False), "stage": "assets_validate", "result": result})
+
+
+def _agent_assets_normalize_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    service = FootprintResolutionService()
+    normalization = service.normalize_3d_model_paths(project_path)
+    validation = service.validate_gui_assets(project_path, normalize=False)
+    return _print_json({
+        "ok": normalization.get("success", False) and validation.get("success", False),
+        "stage": "assets_normalize",
+        "normalization": normalization,
+        "validation": validation,
+    })
+
+
 def _agent_pins_free_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
@@ -1342,6 +1363,18 @@ def build_parser() -> argparse.ArgumentParser:
     agent_diagnose.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_diagnose.add_argument("--output", type=Path, default=None)
     agent_diagnose.set_defaults(handler=_agent_diagnose_handler)
+
+    agent_assets = agent_subs.add_parser("assets", help="Check and normalize GUI-facing KiCad assets.")
+    agent_assets_subs = agent_assets.add_subparsers(dest="assets_action")
+
+    assets_validate = agent_assets_subs.add_parser("validate", help="Validate project GUI assets and 3D model references.")
+    assets_validate.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    assets_validate.add_argument("--normalize", action="store_true", help="Rewrite 3D references before validating.")
+    assets_validate.set_defaults(handler=_agent_assets_validate_handler)
+
+    assets_normalize = agent_assets_subs.add_parser("normalize", help="Normalize project 3D model references.")
+    assets_normalize.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    assets_normalize.set_defaults(handler=_agent_assets_normalize_handler)
 
     agent_pins = agent_subs.add_parser("pins", help="Pin resource management.")
     agent_pins_subs = agent_pins.add_subparsers(dest="pins_action")
