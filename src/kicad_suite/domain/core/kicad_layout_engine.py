@@ -163,6 +163,86 @@ def configured_schematic_position(topology: str, ref: str) -> KiCadPoint | None:
     return _configured_profile_position(topology, ref, "schematic_positions") or configured_topology_position(topology, ref)
 
 
+def _profile_schematic_layout(topology: str) -> dict[str, Any]:
+    profiles = load_layout_profiles().get("profiles", {})
+    if not isinstance(profiles, dict):
+        return {}
+    profile = profiles.get(topology, {})
+    if not isinstance(profile, dict):
+        return {}
+    layout = profile.get("schematic_auto_layout", {})
+    return layout if isinstance(layout, dict) else {}
+
+
+def _sheet_layout_lane(ref: str, role: str) -> str:
+    ref_upper = ref.upper()
+    role_lower = role.lower()
+    if ref_upper.startswith("TP") or any(token in role_lower for token in ("test", "debug")):
+        return "test"
+    if any(token in role_lower for token in ("connector", "header", "socket")):
+        return "connector"
+    if ref_upper.startswith("U") or any(
+        token in role_lower
+        for token in ("controller", "module", "charger", "regulator", "microphone", "nfc", "driver")
+    ):
+        return "core"
+    return "support"
+
+
+def apply_sheet_aware_schematic_layout(
+    symbols: list[Any],
+    ref_to_sheet: dict[str, str],
+    topology: str,
+) -> bool:
+    """Lay out enabled profiles as readable, bounded per-sheet schematic lanes."""
+    layout = _profile_schematic_layout(topology)
+    if not layout.get("enabled", False):
+        return False
+
+    origin_x = float(layout.get("origin_x", 38.1))
+    origin_y = float(layout.get("origin_y", 50.8))
+    lane_gap = float(layout.get("lane_gap", 20.32))
+    support_columns = max(1, int(layout.get("support_columns", 4)))
+    test_columns = max(1, int(layout.get("test_columns", 5)))
+    sheet_symbols: dict[str, list[Any]] = {}
+    for symbol in symbols:
+        sheet_symbols.setdefault(ref_to_sheet.get(str(symbol.ref).upper(), ""), []).append(symbol)
+
+    for sheet in sheet_symbols.values():
+        lanes: dict[str, list[Any]] = {"connector": [], "core": [], "support": [], "test": []}
+        for symbol in sorted(sheet, key=lambda item: str(item.ref)):
+            lanes[_sheet_layout_lane(str(symbol.ref), str(symbol.role))].append(symbol)
+
+        def place_vertical(items: list[Any], x: float, start_y: float) -> float:
+            cursor_y = start_y
+            for item in items:
+                _width, height = _estimate_symbol_size(str(item.lib_id))
+                item.at.x = _snap(x)
+                item.at.y = _snap(cursor_y + height / 2.0)
+                cursor_y = item.at.y + height / 2.0 + lane_gap
+            return cursor_y
+
+        connector_end = place_vertical(lanes["connector"], origin_x, origin_y)
+        core_end = place_vertical(lanes["core"], origin_x + 68.58, origin_y)
+        support_start = _snap(max(connector_end, core_end, origin_y) + lane_gap)
+
+        for index, item in enumerate(lanes["support"]):
+            _width, height = _estimate_symbol_size(str(item.lib_id))
+            column = index % support_columns
+            row = index // support_columns
+            item.at.x = _snap(origin_x + column * 45.72)
+            item.at.y = _snap(support_start + row * max(20.32, height + lane_gap))
+
+        support_rows = (len(lanes["support"]) + support_columns - 1) // support_columns
+        test_start = _snap(support_start + support_rows * 27.94 + lane_gap)
+        for index, item in enumerate(lanes["test"]):
+            column = index % test_columns
+            row = index // test_columns
+            item.at.x = _snap(origin_x + column * 30.48)
+            item.at.y = _snap(test_start + row * 17.78)
+    return True
+
+
 def _auto_position(
     ref: str,
     role: str,

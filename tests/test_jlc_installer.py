@@ -63,6 +63,44 @@ class TestResolveMissingSymbols(unittest.TestCase):
         self.assertEqual(model["components"][0]["selected_part"]["symbol_ref"], "ESP32-C3FH4")
         self.assertEqual(model["components"][0]["selected_part"]["kicad_footprint_hint"], "QFN-32")
 
+    def test_explicit_footprint_hint_is_preserved_over_library_default(self) -> None:
+        model = {
+            "components": [
+                {
+                    "ref": "U9",
+                    "role": "load_switch",
+                    "value": "TPS22918 MIC_3V3 load switch",
+                    "selected_part": {
+                        "lcsc_id": "C131941",
+                        "display_name": "TPS22918DBVR",
+                        "kicad_footprint_hint": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+                    },
+                }
+            ]
+        }
+
+        with tempfile.TemporaryDirectory() as tmpdir:
+            project_path = Path(tmpdir)
+            model_path = project_path / "source" / "circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
+            model_path.write_text("{}", encoding="utf-8")
+
+            install_result = {
+                "ok": True,
+                "lcsc_id": "C131941",
+                "title": "TPS22918DBVR",
+                "package": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BR",
+                "symbol_ref": "TPS22918DBVR",
+                "pin_count": 6,
+            }
+
+            with patch("kicad_suite.adapters.jlc_installer.install_by_lcsc_id", return_value=install_result):
+                result = resolve_missing_symbols(project_path, model, timeout=5, model_path=model_path)
+
+        self.assertTrue(result["ok"])
+        self.assertEqual(model["components"][0]["selected_part"]["kicad_footprint_hint"], "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL")
+        self.assertEqual(model["components"][0]["selected_part"]["symbol_ref"], "TPS22918DBVR")
+
     def test_component_without_lcsc_id_needs_selection(self) -> None:
         model = {
             "components": [

@@ -589,13 +589,21 @@ def _write_selected_part(
     symbol_ref: str = "",
 ) -> None:
     """Write ``selected_part`` into *component* in-place so the build step finds it."""
-    sp: dict[str, str] = {
-        "lcsc_id": lcsc_id,
-        "display_name": display_name,
-    }
-    if fp_hint:
+    existing = component.get("selected_part", {})
+    sp: dict[str, Any] = dict(existing) if isinstance(existing, dict) else {}
+    sp["lcsc_id"] = lcsc_id
+    sp["display_name"] = display_name
+
+    existing_fp = str(sp.get("kicad_footprint_hint", "")).strip()
+    if existing_fp:
+        sp["kicad_footprint_hint"] = existing_fp
+    elif fp_hint:
         sp["kicad_footprint_hint"] = fp_hint
-    if symbol_ref:
+
+    existing_symbol_ref = str(sp.get("symbol_ref", "")).strip()
+    if existing_symbol_ref:
+        sp["symbol_ref"] = existing_symbol_ref
+    elif symbol_ref:
         sp["symbol_ref"] = symbol_ref
     component["selected_part"] = sp
 

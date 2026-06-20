@@ -92,6 +92,32 @@ class PinManager:
                                 if entry.get("locked"):
                                     self._locked_pins.add(full_pin)
 
+        # New split-layout projects keep resolved assignments on their IR
+        # component pins.  Retain pinmap support for legacy inputs, then fill
+        # any absent entries from the canonical component representation.
+        for component in ir.get("components", []):
+            if not isinstance(component, dict):
+                continue
+            ref = str(component.get("ref", "")).strip()
+            pins = component.get("pins", [])
+            if not ref or not isinstance(pins, list):
+                continue
+            for entry in pins:
+                if not isinstance(entry, dict):
+                    continue
+                pin = str(entry.get("number", "")).strip()
+                net = str(entry.get("net", "")).strip()
+                if not pin or not net:
+                    continue
+                full_pin = f"{ref}.{pin}"
+                if full_pin in self._pin_to_signal:
+                    continue
+                signal = str(entry.get("name", "")).strip() or net
+                self._signal_to_pin[signal] = full_pin
+                self._pin_to_signal[full_pin] = signal
+                if entry.get("locked"):
+                    self._locked_pins.add(full_pin)
+
     # -- queries ----------------------------------------------------------
 
     def list_all(self) -> list[dict[str, Any]]:

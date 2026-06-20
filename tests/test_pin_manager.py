@@ -49,6 +49,15 @@ def test_list_all_returns_assigned_pins():
     assert "led_r" in signals or "LED_R" in signals
 
 
+def test_component_pins_are_used_when_legacy_pinmap_is_absent():
+    ir = _make_ir()
+    ir.pop("pinmap")
+
+    pins = PinManager(ir).list_all()
+
+    assert {entry["pin"] for entry in pins} >= {"GPIO1", "GPIO2", "GPIO21"}
+
+
 def test_get_owner_returns_signal():
     pm = PinManager(_make_ir())
     owner = pm.get_owner("GPIO1", "U1")

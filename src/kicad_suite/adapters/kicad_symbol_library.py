@@ -543,6 +543,20 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, Any]]:
                 match = re.fullmatch(r"(DQS\d+)_[TC][AB]", normalized)
                 if match:
                     aliases.add(match.group(1))
+                gpio_match = re.fullmatch(r"IO(\d+)", normalized)
+                if gpio_match:
+                    aliases.add(f"GPIO{gpio_match.group(1)}")
+                gpio_match = re.fullmatch(r"GPIO(\d+)", normalized)
+                if gpio_match:
+                    aliases.add(f"IO{gpio_match.group(1)}")
+                if normalized == "RXD0":
+                    aliases.add("U0RXD")
+                elif normalized == "TXD0":
+                    aliases.add("U0TXD")
+                elif normalized == "U0RXD":
+                    aliases.add("RXD0")
+                elif normalized == "U0TXD":
+                    aliases.add("TXD0")
         return {alias for alias in aliases if alias}
 
     def visit(node: Any, current_unit: int = 1) -> None:

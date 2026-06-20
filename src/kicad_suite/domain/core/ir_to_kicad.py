@@ -163,12 +163,21 @@ def ir_to_kicad(ir: dict[str, Any]) -> KiCadExecutionPlan:
             )
         )
 
+    ref_to_sheet = {
+        str(comp.get("ref", "")).upper(): str(comp.get("assigned_sheet", ""))
+        for comp in ir.get("components", [])
+        if isinstance(comp, dict) and str(comp.get("ref", "")).strip()
+    }
+    layout_engine.apply_sheet_aware_schematic_layout(symbols, ref_to_sheet, topology)
+
     # ---- Sheet-aware overlap resolution --------------------------------
     sheet_groups: dict[str, list[KiCadSymbol]] = {}
     for sym in symbols:
-        sheet = _symbol_sheet_name(sym, topology)
+        # Functional layout blocks can coexist on the same source sheet, so
+        # only the source-model sheet assignment is a valid isolation boundary.
+        sheet = ref_to_sheet.get(sym.ref.upper(), _symbol_sheet_name(sym, topology))
         sheet_groups.setdefault(sheet, []).append(sym)
-    overlap_passes = max(1, to_int_env("KICAD_SCH_OVERLAP_PASSES", 12))
+    overlap_passes = max(1, to_int_env("KICAD_SCH_OVERLAP_PASSES", 64))
     for sheet, group in sheet_groups.items():
         passes = _resolve_symbol_overlaps_for_group(
             group, layout_numeric_setting("block_padding", 5.08), overlap_passes

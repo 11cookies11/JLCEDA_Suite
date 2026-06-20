@@ -10,6 +10,9 @@ import uuid
 from pathlib import Path
 from typing import Any
 
+from .kicad_symbol_library import parse_symbol_pin_map
+from ..domain.core.netlist_builder import build_netlist
+
 # The generate_pcb_from_plan.py script, embedded so it doesn't need to be
 # distributed separately.  Written to a temp file and executed by KiCad's
 # bundled Python (which has the pcbnew module).
@@ -326,6 +329,47 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
     project_name = str(target.get("project_name", "kicad_project"))
     board_file = output_dir / (project_name + ".kicad_pcb")
 
+    source_project_dir = Path(project_path) if project_path else None
+    preflight_warnings: list[str] = []
+    if source_project_dir is not None:
+        previous_source_dir = os.environ.get("KICAD_SOURCE_PROJECT_DIR")
+        previous_output_dir = os.environ.get("KICAD_OUTPUT_DIR")
+        try:
+            from .board_generator import _load_source_model, _source_netlist_symbol_pins
+
+            os.environ["KICAD_SOURCE_PROJECT_DIR"] = str(source_project_dir)
+            os.environ["KICAD_OUTPUT_DIR"] = str(output_dir)
+            source_model = _load_source_model(source_project_dir)
+            source_netlist = build_netlist(source_model) if source_model else {}
+            if source_netlist and isinstance(plan.get("symbols"), list):
+                for symbol in plan["symbols"]:
+                    if not isinstance(symbol, dict):
+                        continue
+                    ref = str(symbol.get("ref", "")).strip()
+                    lib_id = str(symbol.get("lib_id", "")).strip()
+                    if not ref:
+                        continue
+                    pin_alias_map: dict[str, dict[str, Any]] = {}
+                    if lib_id:
+                        try:
+                            pin_alias_map = parse_symbol_pin_map(lib_id)
+                        except Exception:
+                            pin_alias_map = {}
+                    source_pins = _source_netlist_symbol_pins(source_netlist, ref, lib_id, pin_alias_map)
+                    if source_pins:
+                        symbol["pins"] = source_pins
+        except Exception as exc:
+            preflight_warnings.append(f"PCB net preflight failed: {exc}")
+        finally:
+            if previous_source_dir is None:
+                os.environ.pop("KICAD_SOURCE_PROJECT_DIR", None)
+            else:
+                os.environ["KICAD_SOURCE_PROJECT_DIR"] = previous_source_dir
+            if previous_output_dir is None:
+                os.environ.pop("KICAD_OUTPUT_DIR", None)
+            else:
+                os.environ["KICAD_OUTPUT_DIR"] = previous_output_dir
+
     python_bin = _kicad_python()
     if not python_bin:
         return {
@@ -377,7 +421,7 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
         result["raw_output"] = proc.stdout
     result.setdefault("component_count", len(plan.get("symbols", [])) if isinstance(plan.get("symbols"), list) else 0)
     result.setdefault("placements", [])
-    warnings = []
+    warnings = list(preflight_warnings)
     if isinstance(result.get("warnings"), list):
         warnings.extend(str(item) for item in result["warnings"] if str(item))
     if isinstance(result.get("skipped"), list):
