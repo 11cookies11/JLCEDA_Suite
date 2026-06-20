@@ -4,9 +4,8 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / 'src'))
 
-from kicad_suite.ngspice_regression_test import run
+from kicad_suite.tooling.ngspice_regression_test import run
 
 
 if __name__ == '__main__':
     run()
-
