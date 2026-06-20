@@ -897,25 +897,6 @@
       }
     },
     {
-      "ref": "R16",
-      "role": "mute_switch_pullup",
-      "value": "10K",
-      "package": "R0603",
-      "sheet": "08_user_interface",
-      "search_hints": [
-        "10K resistor 0603 1%"
-      ],
-      "selected_part": {
-        "display_name": "0603WAJ0103T5E",
-        "lcsc_id": "C15401",
-        "package": "R0603"
-      },
-      "assembly": "dnp",
-      "notes": [
-        "DNP after mute switch redesign: GPIO17 now reads directly from MIC_PWR_EN."
-      ]
-    },
-    {
       "ref": "R17",
       "role": "motor_gate_resistor",
       "value": "100R",
@@ -1391,25 +1372,6 @@
         "package": "R0603",
         "symbol_ref": "0603WAJ0103T5E"
       }
-    },
-    {
-      "ref": "R32",
-      "role": "mode_button_pullup",
-      "value": "10K",
-      "package": "R0603",
-      "sheet": "08_user_interface",
-      "availability_status": "selected",
-      "selected_part": {
-        "lcsc_id": "C15401",
-        "display_name": "0603WAF1002T5E",
-        "manufacturer": "UNI-ROYAL",
-        "package": "R0603",
-        "symbol_ref": "0603WAJ0103T5E"
-      },
-      "assembly": "dnp",
-      "notes": [
-        "DNP: MODE pin not used. NFC config determines mode in Rev A."
-      ]
     },
     {
       "ref": "D3",
