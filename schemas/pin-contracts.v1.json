@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schemas/pin-contracts.v1.json",
+  "title": "KiCad Agent Suite Pin Contracts v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "contracts"],
+  "properties": {
+    "schema_version": {"const": "pin-contracts.v1"},
+    "project_id": {"type": "string", "minLength": 1},
+    "topology": {"type": "string"},
+    "source_model": {"type": "string"},
+    "derived_from_ir": {"type": "string"},
+    "contracts": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/component_contract"}
+    }
+  },
+  "$defs": {
+    "component_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["component_ref", "category", "pins"],
+      "properties": {
+        "component_ref": {"type": "string", "minLength": 1},
+        "part": {"type": ["string", "null"]},
+        "category": {"type": "string"},
+        "component_role": {"type": "string"},
+        "ruleset": {"type": "string"},
+        "pins": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/pin_contract"}
+        }
+      }
+    },
+    "pin_contract": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["pin", "name", "pin_type", "required", "connection", "allowed_nc"],
+      "properties": {
+        "pin": {"type": "string", "minLength": 1},
+        "name": {"type": "string", "minLength": 1},
+        "pin_type": {"type": "string"},
+        "required": {"type": "boolean"},
+        "connection": {"enum": ["net", "fixed_level", "passive_network", "explicit_nc", "unresolved"]},
+        "net": {"type": "string"},
+        "allowed_nc": {"type": "boolean"},
+        "nc_reason": {"type": "string"},
+        "default_state": {"type": "string"},
+        "external_bias": {"type": "object"},
+        "checks": {"type": "array", "items": {"type": "string"}},
+        "rationale": {"type": "string"},
+        "unresolved": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}
