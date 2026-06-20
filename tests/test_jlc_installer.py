@@ -11,10 +11,26 @@ from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from kicad_suite.adapters.jlc_installer import resolve_missing_symbols
+from kicad_suite.adapters.jlc_installer import (
+    _qualify_symbol_footprint_references,
+    resolve_missing_symbols,
+)
 
 
 class TestResolveMissingSymbols(unittest.TestCase):
+    def test_local_symbol_footprint_is_qualified_for_portable_projects(self) -> None:
+        content = '''(symbol "R"
+  (property
+    "Footprint"
+    ":R0603"
+  )
+)'''
+
+        normalized = _qualify_symbol_footprint_references(content, "JLC-MCP")
+
+        self.assertIn('"JLC-MCP:R0603"', normalized)
+        self.assertNotIn('":R0603"', normalized)
+
     def test_selected_part_lcsc_id_skips_search_path(self) -> None:
         model = {
             "components": [

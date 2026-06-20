@@ -259,7 +259,7 @@ def install_by_lcsc_id(
 
     # 4. Determine library name and write symbol
     lib_name, sym_file = _find_or_create_sym_lib(sym_dir)
-    _append_symbol_to_lib(sym_file, sym_str)
+    _append_symbol_to_lib(sym_file, sym_str, library_name=lib_name)
 
     # 5. Generate footprint via easyeda2kicad (real pads)
     from easyeda2kicad.easyeda.easyeda_importer import EasyedaFootprintImporter
@@ -667,7 +667,7 @@ def _find_or_create_sym_lib(sym_dir: Path) -> tuple[str, Path]:
     return "JLC-MCP", path
 
 
-def _append_symbol_to_lib(sym_file: Path, sym_content: str) -> bool:
+def _append_symbol_to_lib(sym_file: Path, sym_content: str, *, library_name: str = "") -> bool:
     """Append a symbol definition to an existing .kicad_sym library file.
 
     *sym_content* should be a ``(symbol ...)`` block.  It is inserted
@@ -686,17 +686,38 @@ def _append_symbol_to_lib(sym_file: Path, sym_content: str) -> bool:
         return False
 
     current = sym_file.read_text(encoding="utf-8").rstrip()
+    normalized_current = _qualify_symbol_footprint_references(current, library_name)
     if f'(symbol "{sym_name}"' in current:
+        if normalized_current != current:
+            sym_file.write_text(normalized_current + "\n", encoding="utf-8")
         return False  # already exists, skip
 
-    if current.endswith(")"):
-        current = current[:-1].rstrip()
-        current += "\n" + symbol_block + "\n)\n"
+    if normalized_current.endswith(")"):
+        normalized_current = normalized_current[:-1].rstrip()
+        normalized_current += "\n" + symbol_block + "\n)\n"
     else:
-        current += "\n" + symbol_block + "\n"
+        normalized_current += "\n" + symbol_block + "\n"
 
-    sym_file.write_text(current, encoding="utf-8")
+    sym_file.write_text(normalized_current, encoding="utf-8")
     return True
+
+
+def _qualify_symbol_footprint_references(text: str, library_name: str) -> str:
+    """Expand KiCad's local ``:footprint`` shorthand for portable exports."""
+    if not library_name:
+        return text
+    prefix = f"{library_name}:"
+    patched = re.sub(
+        r'(\(property\s+"Footprint"\s+"):(?=[^"]*")',
+        rf'\1{prefix}',
+        text,
+    )
+    return re.sub(
+        r'(^\s*"Footprint"\s*\r?\n\s*"):(?=[^"]*")',
+        rf'\1{prefix}',
+        patched,
+        flags=re.MULTILINE,
+    )
 
 
 def _sanitize(name: str) -> str:
