@@ -628,30 +628,6 @@
       }
     },
     {
-      "ref": "U7",
-      "role": "secure_element_reserve",
-      "value": "I2C secure element, DNP",
-      "package": "SOIC-8",
-      "sheet": "09_security_reserve",
-      "search_hints": [
-        "ATECC608 secure element SOIC-8 I2C"
-      ],
-      "availability_status": "unknown",
-      "assembly": "dnp",
-      "notes": [
-        "Reserved for device identity and local encryption key protection. DNP by default for Rev A bring-up.",
-        "DNP part has an LCSC candidate for KiCad CAD library generation only; do not assemble by default."
-      ],
-      "selected_part": {
-        "lcsc_id": "C616024",
-        "display_name": "ATECC608A-SSHDA-T",
-        "manufacturer": "Microchip Technology",
-        "package": "SOIC-8",
-        "symbol_ref": "ATECC608A-SSHDA-T_C616024",
-        "kicad_footprint_hint": "SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
-      }
-    },
-    {
       "ref": "J5",
       "role": "microsd_socket",
       "value": "microSD socket push-push",
@@ -1095,44 +1071,6 @@
       ]
     },
     {
-      "ref": "R24",
-      "role": "microsd_cmd_pullup",
-      "value": "10K",
-      "package": "R0603",
-      "sheet": "07_storage",
-      "search_hints": [
-        "10K resistor 0603 1%"
-      ],
-      "selected_part": {
-        "display_name": "0603WAJ0103T5E",
-        "lcsc_id": "C15401",
-        "package": "R0603"
-      },
-      "assembly": "dnp",
-      "notes": [
-        "DNP in SPI mode. CMD/DAT0 pullups only needed for native SD mode."
-      ]
-    },
-    {
-      "ref": "R25",
-      "role": "microsd_dat0_pullup",
-      "value": "10K",
-      "package": "R0603",
-      "sheet": "07_storage",
-      "search_hints": [
-        "10K resistor 0603 1%"
-      ],
-      "selected_part": {
-        "display_name": "0603WAJ0103T5E",
-        "lcsc_id": "C15401",
-        "package": "R0603"
-      },
-      "assembly": "dnp",
-      "notes": [
-        "DNP in SPI mode. CMD/DAT0 pullups only needed for native SD mode."
-      ]
-    },
-    {
       "ref": "U8",
       "role": "dynamic_nfc_tag",
       "value": "ST25DV04KC dynamic NFC tag",
@@ -1175,42 +1113,6 @@
       ],
       "part_source": "internal",
       "bom_exclude": true
-    },
-    {
-      "ref": "C20",
-      "role": "nfc_tuning_cap_1",
-      "value": "DNP",
-      "package": "C0402",
-      "sheet": "05_nfc_dynamic_tag",
-      "assembly": "dnp",
-      "availability_status": "selected",
-      "selected_part": {
-        "lcsc_id": "C1548",
-        "display_name": "0402CG150J500NT",
-        "manufacturer": "FH",
-        "package": "C0402"
-      },
-      "notes": [
-        "NFC antenna tuning placeholder. Final value after antenna measurement."
-      ]
-    },
-    {
-      "ref": "C21",
-      "role": "nfc_tuning_cap_2",
-      "value": "DNP",
-      "package": "C0402",
-      "sheet": "05_nfc_dynamic_tag",
-      "assembly": "dnp",
-      "availability_status": "selected",
-      "selected_part": {
-        "lcsc_id": "C1548",
-        "display_name": "0402CG150J500NT",
-        "manufacturer": "FH",
-        "package": "C0402"
-      },
-      "notes": [
-        "NFC antenna tuning placeholder. Final value after antenna measurement."
-      ]
     },
     {
       "ref": "J6",
@@ -1301,33 +1203,6 @@
         "User REC button. Long press starts/stops recording; short press may query status. Use wake-capable GPIO.",
         "Slide switch: ON position = recording active, OFF position = recording stopped. State visible to user."
       ]
-    },
-    {
-      "ref": "SW6",
-      "role": "mode_button",
-      "value": "MODE side tactile button",
-      "package": "SMD side tact",
-      "sheet": "08_user_interface",
-      "search_hints": [
-        "side tactile switch SMD",
-        "C40736"
-      ],
-      "availability_status": "selected",
-      "selected_part": {
-        "lcsc_id": "C40736",
-        "display_name": "DSHP04TSGER",
-        "manufacturer": "YE",
-        "package": "SMD,P=1.27mm,8P",
-        "symbol_ref": "DSHP04TSGER",
-        "kicad_footprint_hint": "SW-SMD_8P-L6.7-W5.4-P1.27-LS8.4",
-        "pin_count": 8,
-        "named_pin_count": 8
-      },
-      "notes": [
-        "User MODE button for display page changes and pairing/sync mode.",
-        "DNP: Mode selection handled by REC slide switch state. Rev A firmware determines mode from recording state and NFC config."
-      ],
-      "assembly": "dnp"
     },
     {
       "ref": "R27",
@@ -1447,7 +1322,6 @@
       "kind": "power",
       "members": [
         "U1.3V3",
-        "U7.VCC",
         "U8.VCC",
         "U9.IN",
         "U10.IN",
@@ -1495,7 +1369,6 @@
         "U2.GND",
         "U3.VSS",
         "U6.2",
-        "U7.GND",
         "J5.VSS",
         "J5.9",
         "J5.10",
@@ -1539,8 +1412,6 @@
         "U9.GND",
         "U10.GND",
         "J6.8",
-        "C20.2",
-        "C21.2",
         "R28.1",
         "C22.2"
       ]
@@ -1793,8 +1664,7 @@
       "kind": "signal",
       "members": [
         "U1.GPIO11",
-        "J5.3",
-        "R24.2"
+        "J5.3"
       ]
     },
     {
@@ -1802,8 +1672,7 @@
       "kind": "signal",
       "members": [
         "U1.GPIO9",
-        "J5.7",
-        "R25.2"
+        "J5.7"
       ]
     },
     {
@@ -1870,7 +1739,6 @@
       "kind": "signal",
       "members": [
         "U1.GPIO21",
-        "U7.SDA",
         "R20.2",
         "U8.SDA"
       ]
@@ -1880,7 +1748,6 @@
       "kind": "signal",
       "members": [
         "U1.GPIO5",
-        "U7.SCL",
         "R21.2",
         "U8.SCL"
       ]
@@ -1919,9 +1786,7 @@
         "J5.VDD",
         "C17.1",
         "R14.1",
-        "R15.1",
-        "R24.1",
-        "R25.1"
+        "R15.1"
       ],
       "notes": [
         "Switchable microSD supply rail for low-power and fault recovery experiments."
@@ -2061,8 +1926,7 @@
       "kind": "signal",
       "members": [
         "U8.AC0",
-        "J7.1",
-        "C20.1"
+        "J7.1"
       ],
       "notes": [
         "NFC antenna terminal and tuning node."
@@ -2073,8 +1937,7 @@
       "kind": "signal",
       "members": [
         "U8.AC1",
-        "J7.2",
-        "C21.1"
+        "J7.2"
       ],
       "notes": [
         "NFC antenna terminal and tuning node."
@@ -2268,8 +2131,6 @@
         "J5",
         "R14",
         "R15",
-        "R24",
-        "R25",
         "C17",
         "U10",
         "R28"
@@ -2323,7 +2184,6 @@
     {
       "name": "09_security_reserve",
       "components": [
-        "U7",
         "R20",
         "R21",
         "C18"
@@ -2408,9 +2268,7 @@
       "name": "05_nfc_dynamic_tag",
       "components": [
         "U8",
-        "J7",
-        "C20",
-        "C21"
+        "J7"
       ],
       "nets": [
         "SYS_3V3",
