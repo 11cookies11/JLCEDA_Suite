@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schemas/net-intents.v1.json",
+  "title": "KiCad Agent Suite Net Intents v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "nets"],
+  "properties": {
+    "schema_version": {"const": "net-intents.v1"},
+    "project_id": {"type": "string", "minLength": 1},
+    "topology": {"type": "string"},
+    "source_model": {"type": "string"},
+    "derived_from_ir": {"type": "string"},
+    "nets": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/net_intent"}
+    }
+  },
+  "$defs": {
+    "endpoint": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "component": {"type": "string"},
+        "pin": {"type": "string"},
+        "role": {"type": "string"}
+      }
+    },
+    "net_intent": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["name", "kind", "members", "net_intent"],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "kind": {"type": "string"},
+        "net_intent": {"type": "string"},
+        "voltage_nominal": {"type": "number"},
+        "current_budget_ma": {"type": "number"},
+        "default_state": {"type": "string"},
+        "controlled_by": {"type": "string"},
+        "members": {"type": "array", "items": {"type": "string"}},
+        "source_candidates": {"type": "array", "items": {"$ref": "#/$defs/endpoint"}},
+        "load_candidates": {"type": "array", "items": {"$ref": "#/$defs/endpoint"}},
+        "risks": {"type": "array", "items": {"type": "string"}},
+        "checks": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  }
+}
