@@ -272,7 +272,7 @@
       "role": "reset_button",
       "value": "Reset tactile switch",
       "package": "SW-SMD",
-      "sheet": "03_esp32s3_core",
+      "sheet": "10_test_and_bringup",
       "search_hints": [
         "SMD tactile switch 4 pin 3x4"
       ],
@@ -282,14 +282,17 @@
         "display_name": "K5-1617SA-02",
         "lcsc_id": "C128964",
         "package": "SW-SMD"
-      }
+      },
+      "notes": [
+        "Internal PCB tactile switch, not exposed to end-user through enclosure. Debug/post-assembly use only."
+      ]
     },
     {
       "ref": "SW2",
       "role": "boot_button",
       "value": "BOOT tactile switch",
       "package": "SW-SMD",
-      "sheet": "03_esp32s3_core",
+      "sheet": "10_test_and_bringup",
       "search_hints": [
         "SMD tactile switch 4 pin 3x4"
       ],
@@ -299,7 +302,10 @@
         "display_name": "K5-1617SA-02",
         "lcsc_id": "C128964",
         "package": "SW-SMD"
-      }
+      },
+      "notes": [
+        "Internal PCB tactile switch, not exposed to end-user through enclosure. Debug/post-assembly use only."
+      ]
     },
     {
       "ref": "D1",
@@ -745,13 +751,16 @@
         "display_name": "K5-1617SA-02",
         "lcsc_id": "C128964",
         "package": "SW-SMD"
-      }
+      },
+      "notes": [
+        "Mark/Bookmark tactile button. Only short-tap user button exposed on enclosure."
+      ]
     },
     {
       "ref": "SW4",
       "role": "physical_mute_switch",
       "value": "Mute SPDT slide switch",
-      "package": "SMD,8x2.8mm",
+      "package": "SMD",
       "sheet": "08_user_interface",
       "search_hints": [
         "SMD slide switch SPDT"
@@ -763,11 +772,12 @@
         "Mute state must be readable immediately after boot and wake."
       ],
       "selected_part": {
-        "lcsc_id": "C431541",
-        "display_name": "MSK12C02-HB",
+        "lcsc_id": "C49023767",
+        "display_name": "MST-12D18G4 SPDT SLIDE SWITCH",
         "manufacturer": "SHOU HAN",
-        "package": "SMD,8x2.8mm",
-        "kicad_footprint_hint": "SW-TH_MSK12C02-HB-1"
+        "package": "SMD",
+        "kicad_footprint_hint": "SW-SMD_MST-12D18G4-SPDT-SLIDE-SWITCH",
+        "symbol_ref": "MST-12D18G4SPDTSLIDESWITCH"
       }
     },
     {
@@ -1304,9 +1314,9 @@
     },
     {
       "ref": "SW5",
-      "role": "record_button",
-      "value": "REC side tactile button",
-      "package": "SMD side tact",
+      "role": "record_slide_switch",
+      "value": "REC slide switch SPDT",
+      "package": "SMD",
       "sheet": "08_user_interface",
       "search_hints": [
         "side tactile switch SMD",
@@ -1314,17 +1324,18 @@
       ],
       "availability_status": "selected",
       "selected_part": {
-        "lcsc_id": "C40735",
-        "display_name": "DSHP02TSGET",
-        "manufacturer": "YE",
-        "package": "SMD,P=1.27mm",
-        "symbol_ref": "DSHP02TSGET",
-        "kicad_footprint_hint": "SW-SMD_4P_DSHP02TSGET",
+        "lcsc_id": "C49023767",
+        "display_name": "MST-12D18G4 SPDT SLIDE SWITCH",
+        "manufacturer": "SHOU HAN",
+        "package": "SMD",
+        "symbol_ref": "MST-12D18G4SPDTSLIDESWITCH",
+        "kicad_footprint_hint": "SW-SMD_MST-12D18G4-SPDT-SLIDE-SWITCH",
         "pin_count": 4,
         "named_pin_count": 4
       },
       "notes": [
-        "User REC button. Long press starts/stops recording; short press may query status. Use wake-capable GPIO."
+        "User REC button. Long press starts/stops recording; short press may query status. Use wake-capable GPIO.",
+        "Slide switch: ON position = recording active, OFF position = recording stopped. State visible to user."
       ]
     },
     {
@@ -1349,8 +1360,10 @@
         "named_pin_count": 8
       },
       "notes": [
-        "User MODE button for display page changes and pairing/sync mode."
-      ]
+        "User MODE button for display page changes and pairing/sync mode.",
+        "DNP: Mode selection handled by REC slide switch state. Rev A firmware determines mode from recording state and NFC config."
+      ],
+      "assembly": "dnp"
     },
     {
       "ref": "R27",
@@ -1409,7 +1422,11 @@
         "manufacturer": "UNI-ROYAL",
         "package": "R0603",
         "symbol_ref": "0603WAJ0103T5E"
-      }
+      },
+      "assembly": "dnp",
+      "notes": [
+        "DNP: MODE pin not used. NFC config determines mode in Rev A."
+      ]
     },
     {
       "ref": "D3",
@@ -1493,7 +1510,6 @@
         "R21.1",
         "R27.1",
         "R31.1",
-        "R32.1",
         "M1.1",
         "C18.1",
         "C19.1",
@@ -1580,8 +1596,6 @@
         "U9.GND",
         "U10.GND",
         "J6.8",
-        "SW5.2",
-        "SW6.2",
         "C20.2",
         "C21.2",
         "R28.1",
@@ -2074,8 +2088,7 @@
       "kind": "signal",
       "members": [
         "U1.GPIO39",
-        "SW5.1",
-        "R31.2"
+        "SW5.1"
       ],
       "notes": [
         "Wake-capable REC user button."
@@ -2085,9 +2098,7 @@
       "name": "MODE_BTN",
       "kind": "signal",
       "members": [
-        "U1.GPIO40",
-        "SW6.1",
-        "R32.2"
+        "U1.GPIO40"
       ],
       "notes": [
         "MODE user button."
@@ -2150,6 +2161,14 @@
       "members": [
         "SW4.2",
         "R27.2"
+      ]
+    },
+    {
+      "name": "REC_STATE_NC",
+      "kind": "signal",
+      "members": [
+        "SW5.2",
+        "R31.2"
       ]
     }
   ],
@@ -2235,9 +2254,7 @@
         "C4",
         "C5",
         "C6",
-        "C7",
-        "SW1",
-        "SW2"
+        "C7"
       ],
       "nets": [
         "SYS_3V3",
@@ -2343,9 +2360,7 @@
         "R18",
         "C19",
         "SW5",
-        "SW6",
         "R31",
-        "R32",
         "D3"
       ],
       "nets": [
@@ -2360,7 +2375,8 @@
         "REC_BTN",
         "MODE_BTN",
         "LED_POWER_DRV",
-        "LED_RECORD_DRV"
+        "LED_RECORD_DRV",
+        "REC_STATE_NC"
       ]
     },
     {
@@ -2381,37 +2397,41 @@
     {
       "name": "10_test_and_bringup",
       "components": [
-        "J4"
+        "J4",
+        "SW1",
+        "SW2"
       ],
       "nets": [
-        "USB_5V",
-        "BAT_P",
-        "SYS_3V3",
-        "GND",
-        "UART0_TX",
-        "UART0_RX",
-        "I2S_BCLK",
-        "I2S_LRCLK",
-        "I2S_DIN",
-        "SD_SCLK",
-        "SD_MOSI",
-        "SD_MISO",
-        "SD_CS",
-        "CHG_STAT",
-        "MIC_3V3",
-        "USB_D_P",
-        "USB_D_N",
-        "SD_CD",
         "EPD_BUSY",
-        "EPD_CS",
-        "NFC_GPO",
         "REC_BTN",
-        "MODE_BTN",
-        "EPD_3V3",
+        "USB_D_N",
+        "GND",
+        "BTN_MARK",
+        "SD_MOSI",
+        "I2C_SDA",
+        "I2S_LRCLK",
+        "SD_SCLK",
+        "SD_CS",
+        "MIC_3V3",
+        "SD_MISO",
+        "USB_D_P",
+        "CHG_STAT",
+        "I2S_DIN",
+        "BAT_P",
+        "UART0_TX",
+        "SD_CD",
+        "ESP_BOOT",
         "MIC_PWR_EN",
         "SD_3V3",
-        "BTN_MARK",
-        "I2C_SDA"
+        "I2S_BCLK",
+        "MODE_BTN",
+        "USB_5V",
+        "EPD_CS",
+        "ESP_EN",
+        "UART0_RX",
+        "NFC_GPO",
+        "EPD_3V3",
+        "SYS_3V3"
       ]
     },
     {
