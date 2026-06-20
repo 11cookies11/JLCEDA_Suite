@@ -26,6 +26,7 @@ from .orchestration.pipeline_postprocess import apply_postprocess, pin_project_l
 from .orchestration.pipeline_summary import build_run_pipeline_summary
 from .orchestration.project_resolution import write_project_resolution
 from .domain.core.simulation_planner import write_simulation_artifacts
+from .domain.core.validation.circuit_sanity import run as run_circuit_sanity
 
 
 @dataclass
@@ -40,6 +41,7 @@ class PipelineRunState:
     simulation_result: dict[str, Any] = field(default_factory=dict)
     parts_result: dict[str, Any] = field(default_factory=dict)
     resolved_model: dict[str, Any] = field(default_factory=dict)
+    sanity_result: dict[str, Any] = field(default_factory=dict)
     plan: KiCadExecutionPlan | None = None
     plan_file: str = ""
     placement_result: dict[str, Any] = field(default_factory=dict)
@@ -138,6 +140,34 @@ def _run_parts_stage(state: PipelineRunState) -> None:
             "error": state.parts_result.get("error", ""),
         },
     )
+
+
+def _circuit_sanity_stage(state: PipelineRunState) -> None:
+    """Gate: catch obviously-wrong connections before we spend time on IR/KiCad."""
+    report = run_circuit_sanity(
+        state.resolved_model.get("components", []),
+        state.resolved_model.get("nets", []),
+    )
+    state.sanity_result = {
+        "ok": report.ok,
+        "errors": list(report.errors),
+        "warnings": list(report.warnings),
+        "checks": list(report.checks),
+    }
+    append_pipeline_event(
+        state.event_log,
+        "circuit-sanity",
+        "circuit sanity check completed",
+        {
+            "ok": report.ok,
+            "error_count": len(report.errors),
+            "warning_count": len(report.warnings),
+        },
+    )
+    if not report.ok:
+        raise ValueError(
+            "Circuit sanity check failed:\n" + "\n".join(f"  - {e}" for e in report.errors)
+        )
 
 
 def _resolve_model_stage(state: PipelineRunState) -> None:
@@ -307,6 +337,7 @@ def run_pipeline(model_path: str, output_dir: str) -> dict[str, Any]:
     _run_simulation_stage(state)
     _run_parts_stage(state)
     _resolve_model_stage(state)
+    _circuit_sanity_stage(state)
     _run_placement_stage(state)
     _build_ir_and_plan_stage(state)
     project_dir = _render_and_postprocess_stage(state)

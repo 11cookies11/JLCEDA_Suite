@@ -255,6 +255,18 @@ class _ExtendedHandlers:
             self._validate_pinmaps(report, self.model)
         if request.operation in {"validate_risk_consistency", "validate_readiness"}:
             self._validate_risks(report, self.model)
+        if request.operation == "validate_circuit_sanity":
+            from ...domain.core.validation.circuit_sanity import run as run_circuit_sanity
+            sanity = run_circuit_sanity(
+                self.model.get("components", []),
+                self.model.get("nets", []),
+            )
+            for err in sanity.errors:
+                report.add_error(str(err))
+            for warn in sanity.warnings:
+                report.add_warning(str(warn))
+            for check in sanity.checks:
+                report.add_check(str(check))
         if request.operation == "validate_readiness":
             self._validate_design_intent(report, self.model, strict=True)
         if not report.ok:

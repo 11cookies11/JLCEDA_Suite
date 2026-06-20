@@ -264,6 +264,7 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "assets": "Check and normalize GUI-facing assets, including 3D model paths.",
             "build-ir": "Compile source/circuit-model.source.json into build/ir.v1.json.",
             "validate-ir": "Compile and validate Hardware IR.",
+            "circuit-sanity": "Run circuit sanity checks (shorts, floating pins, suspicious passives).",
             "rule-check": "Run project readiness checks.",
             "build-kicad-plan": "Compile the KiCad execution plan from the validated IR.",
             "build-kicad": "Generate KiCad project files from the execution plan.",
@@ -654,6 +655,30 @@ def _agent_validation_payload(
         + [_parse_diagnostic(str(item), "warning") for item in warnings],
         "stats": stats or {},
     }
+
+
+def _agent_circuit_sanity_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    model_path = _agent_model_path(args)
+    source_path, resolved_path = resolve_model_paths(model_path)
+    model = load_circuit_model(model_path) if source_path.exists() or resolved_path.exists() or model_path.exists() else {}
+    from .domain.core.validation.circuit_sanity import run as run_circuit_sanity
+
+    report = run_circuit_sanity(
+        model.get("components", []),
+        model.get("nets", []),
+    )
+    payload = _agent_validation_payload(
+        "circuit_sanity",
+        report.ok,
+        list(report.errors),
+        list(report.warnings),
+        {},
+    )
+    output = Path(args.output).resolve() if getattr(args, "output", None) else project_path / "build" / "circuit-sanity.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    return _print_json(payload | {"output": str(output)})
 
 
 def _agent_rule_check_handler(args: argparse.Namespace) -> int:
@@ -1247,6 +1272,12 @@ def build_parser() -> argparse.ArgumentParser:
     agent_validate_ir.add_argument("--model", dest="model_path", type=Path, default=None)
     agent_validate_ir.add_argument("--output", type=Path, default=None)
     agent_validate_ir.set_defaults(handler=_agent_validate_ir_handler)
+
+    agent_circuit_sanity = agent_subs.add_parser("circuit-sanity", help="Run circuit sanity checks (shorts, floating pins, suspicious passives).")
+    agent_circuit_sanity.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    agent_circuit_sanity.add_argument("--model", dest="model_path", type=Path, default=None)
+    agent_circuit_sanity.add_argument("--output", type=Path, default=None)
+    agent_circuit_sanity.set_defaults(handler=_agent_circuit_sanity_handler)
 
     agent_rule_check = agent_subs.add_parser("rule-check", help="Run project readiness checks.")
     agent_rule_check.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())

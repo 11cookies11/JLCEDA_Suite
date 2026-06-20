@@ -187,6 +187,7 @@ SUPPORTED_OPERATIONS = {
     "update_risk",
     "update_selected_part",
     "update_sheet",
+    "validate_circuit_sanity",
     "validate_connectivity",
     "validate_model",
     "validate_part_availability",
@@ -239,8 +240,6 @@ def validate_model_snapshot(model: dict[str, Any]) -> ValidationReport:
     if isinstance(model.get("nets"), list):
         _validate_unique_object_key(report, model["nets"], "nets", "name")
         _validate_net_members(report, model["nets"])
-    if isinstance(model.get("components"), list) and isinstance(model.get("nets"), list):
-        _validate_circuit_sanity(report, model["components"], model["nets"])
     if report.ok:
         report.add_check("model snapshot ok")
     report.stats["component_count"] = (
@@ -286,161 +285,3 @@ def _validate_net_members(report: ValidationReport, nets: list[Any]) -> None:
             if member in seen:
                 report.add_warning(f"duplicate member {member} in net {net.get('name', net_index)}")
             seen.add(member)
-
-
-# ---------------------------------------------------------------------------
-# Circuit sanity checks — catch obviously-wrong connections in DSL models
-# ---------------------------------------------------------------------------
-
-_POWER_NET_KINDS = {"power", "ground"}
-
-
-def _is_intentional_link(value: str, role: str) -> bool:
-    """Return True if a two-pin passive between power rails is an intentional link."""
-    value_lower = value.lower()
-    role_lower = role.lower()
-    # 0R jumpers and current-measurement links
-    if value_lower in {"0r", "0ω", "0 ohm", "0ohm", "0r0", "0"}:
-        return True
-    for keyword in ("link", "jumper", "current_meas", "current-meas", "isolation"):
-        if keyword in role_lower:
-            return True
-    return False
-
-
-def _validate_circuit_sanity(
-    report: ValidationReport,
-    components: list[Any],
-    nets: list[Any],
-) -> None:
-    """Run basic electrical sanity checks on the netlist.
-
-    These catch copy-paste errors and logically impossible connections
-    *before* they propagate into generated KiCad output.
-    """
-
-    # ---- build lookup tables ----
-    refs: dict[str, dict[str, Any]] = {}
-    for c in components:
-        if isinstance(c, dict) and c.get("ref"):
-            refs[str(c["ref"])] = c
-
-    net_by_name: dict[str, dict[str, Any]] = {}
-    pin_to_nets: dict[str, list[str]] = {}  # "REF.PIN" → [net_name, ...]
-    for net in nets:
-        if not isinstance(net, dict):
-            continue
-        name = str(net.get("name", ""))
-        if not name:
-            continue
-        net_by_name[name] = net
-        for member in net.get("members", []):
-            member_str = str(member)
-            if "." not in member_str:
-                continue
-            pin_to_nets.setdefault(member_str, []).append(name)
-
-    # ---- 1. Pin assigned to multiple different nets (short circuit) ----
-    errors_found = 0
-    for pin_ref, assigned_nets in pin_to_nets.items():
-        unique = list(dict.fromkeys(assigned_nets))  # preserve order, dedupe
-        if len(unique) > 1:
-            report.add_error(
-                f"SHORT CIRCUIT: {pin_ref} is connected to multiple nets: {', '.join(unique)}. "
-                f"Remove it from all but one net."
-            )
-            errors_found += 1
-
-    # ---- 2. Passive two-pin components with suspicious connections ----
-    passive_kinds = {"resistor", "capacitor", "inductor", "ferrite_bead", "fuse", "jumper"}
-    for comp in components:
-        if not isinstance(comp, dict):
-            continue
-        ref = str(comp.get("ref", ""))
-        role = str(comp.get("role", "")).lower()
-        value = str(comp.get("value", "")).lower()
-
-        # Determine if this looks like a 2-pin passive
-        is_passive = any(kw in role for kw in passive_kinds)
-        if not is_passive:
-            # Also check by ref prefix
-            if ref and ref[0] in "RCL":
-                is_passive = True
-        if not is_passive:
-            continue
-
-        # Collect which nets this component's pins are in
-        comp_pins: dict[str, str] = {}
-        for net_name, net in net_by_name.items():
-            prefix = f"{ref}."
-            for member in net.get("members", []):
-                if str(member).startswith(prefix):
-                    pin = str(member).split(".", 1)[1]
-                    comp_pins[pin] = net_name
-
-        nets_on_component = list(comp_pins.values())
-        unique_nets = list(dict.fromkeys(nets_on_component))
-
-        # 2a. Both pins on the same net → component is bypassed
-        if len(nets_on_component) >= 2 and len(unique_nets) == 1:
-            report.add_error(
-                f"BYPASSED {ref}: all pins connected to the same net [{unique_nets[0]}]. "
-                f"The component is electrically meaningless."
-            )
-            errors_found += 1
-
-        # 2b. Resistor/pullup/pulldown connecting two power rails (or power to GND)
-        # with no signal net → useless power drain
-        if "pullup" in role or "pulldown" in role or (
-            ref.startswith("R") and len(unique_nets) == 2
-        ):
-            net_kinds = []
-            for net_name in unique_nets:
-                net_info = net_by_name.get(net_name, {})
-                net_kinds.append(str(net_info.get("kind", "")).lower())
-
-            both_power = all(k in _POWER_NET_KINDS for k in net_kinds if k)
-            if both_power and len(unique_nets) >= 2:
-                # 0R links and intentional power jumpers are fine
-                if _is_intentional_link(value, role):
-                    pass
-                elif len(unique_nets) == 2:
-                    report.add_warning(
-                        f"SUSPICIOUS {ref} ({role}): connects {unique_nets[0]} directly to "
-                        f"{unique_nets[1]} with no signal path. "
-                        f"If intended as pull-up/down, one pin must go to a signal net."
-                    )
-
-        # 2c. Pullup/pulldown role sanity
-        if "pullup" in role:
-            pin_nets = list(comp_pins.items())
-            on_power = any(
-                str(net_by_name.get(n, {}).get("kind", "")).lower() == "power"
-                for _, n in pin_nets
-            )
-            if not on_power:
-                report.add_warning(
-                    f"PULLUP WITHOUT POWER: {ref} role is pullup but neither pin is on a power net."
-                )
-        if "pulldown" in role:
-            pin_nets = list(comp_pins.items())
-            on_gnd = any(
-                str(net_by_name.get(n, {}).get("kind", "")).lower() == "ground"
-                for _, n in pin_nets
-            )
-            if not on_gnd:
-                report.add_warning(
-                    f"PULLDOWN WITHOUT GND: {ref} role is pulldown but neither pin is on a ground net."
-                )
-
-        # 2d. Decoupling capacitor between power and ground → normal, skip
-        #     But capacitor between two different power rails → flag
-        if ref.startswith("C") and len(unique_nets) == 2:
-            net_kinds = [str(net_by_name.get(n, {}).get("kind", "")).lower() for n in unique_nets]
-            if "power" in net_kinds and "power" in [k for k in net_kinds if k != "power"]:
-                # Both nets report as power — suspicious unless one is actually ground
-                pass  # already caught by _POWER_NET_KINDS check above
-
-    # ---- 3. Floating pins (warning only — NC pins are legitimate) ----
-    if errors_found == 0:
-        report.add_check("circuit sanity ok")
