@@ -1,0 +1,3745 @@
+{
+    "$schema": "https://schemas.kicad.org/erc.v1.json",
+    "coordinate_units": "mm",
+    "date": "2026-06-20T18:47:36",
+    "ignored_checks": [
+        {
+            "description": "Pin not connected",
+            "key": "pin_not_connected"
+        },
+        {
+            "description": "Unconnected \"no connection\" flag",
+            "key": "no_connect_dangling"
+        },
+        {
+            "description": "Label not connected",
+            "key": "label_dangling"
+        },
+        {
+            "description": "Label connected to only one pin",
+            "key": "isolated_pin_label"
+        },
+        {
+            "description": "Global label only appears once in the schematic",
+            "key": "single_global_label"
+        },
+        {
+            "description": "Four connection points are joined together",
+            "key": "four_way_junction"
+        },
+        {
+            "description": "Unconnected wire endpoint",
+            "key": "unconnected_wire_endpoint"
+        },
+        {
+            "description": "SPICE model issue",
+            "key": "simulation_model_issue"
+        },
+        {
+            "description": "Symbol doesn't match copy in library",
+            "key": "lib_symbol_mismatch"
+        },
+        {
+            "description": "Assigned footprint doesn't match footprint filters",
+            "key": "footprint_filter"
+        }
+    ],
+    "included_severities": [
+        "error",
+        "warning"
+    ],
+    "kicad_version": "10.0.1",
+    "sheets": [
+        {
+            "path": "/",
+            "uuid_path": "/372ab6aa-57f9-4bc8-a7a8-50a0837935b0",
+            "violations": [
+                {
+                    "description": "类型为 Unspecified 和 Power input 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 1 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 0.9906
+                            },
+                            "uuid": "8ef72087-b2ac-4c8e-a099-ae8ea189904d"
+                        },
+                        {
+                            "description": "Symbol U3 引脚 8 [VSS, Power input, Line]",
+                            "pos": {
+                                "x": 1.905,
+                                "y": 1.2319
+                            },
+                            "uuid": "13634349-672c-4bee-a45e-5fc7d68fda40"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 2 [3V3, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.016
+                            },
+                            "uuid": "d7bf5cae-968d-4d76-a8ad-dc8899a1b6e1"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 7 [3V3, Passive, Line]",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 3.8735
+                            },
+                            "uuid": "94d1a107-1a8c-475b-8615-d91a84372890"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 3 [EN, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.0414
+                            },
+                            "uuid": "1143f0f2-a85c-4449-be73-263f33065be1"
+                        },
+                        {
+                            "description": "Symbol SW1 引脚 1 [a, Passive, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 5.9436
+                            },
+                            "uuid": "000273b5-de3e-4996-969f-3c9332370326"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 4 [IO4, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.0668
+                            },
+                            "uuid": "b2e52030-5653-47d5-9258-69b4efd0da49"
+                        },
+                        {
+                            "description": "Symbol R7 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 6.7564
+                            },
+                            "uuid": "778b4129-9c8f-4e7a-9439-5a32b272ca24"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 5 [IO5, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.0922
+                            },
+                            "uuid": "033eb63a-1985-4b8d-a139-8f7b392d87da"
+                        },
+                        {
+                            "description": "Symbol U8 引脚 6 [SCL, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 4.6101
+                            },
+                            "uuid": "0c6514fb-8db6-4ab5-92e3-0385294ce4ca"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 6 [IO6, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.1176
+                            },
+                            "uuid": "39778d1d-2e28-4157-b2dc-af5a78b1b781"
+                        },
+                        {
+                            "description": "Symbol SW3 引脚 1 [a, Passive, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 5.5118
+                            },
+                            "uuid": "487d1d0b-7186-447a-b172-3cb847aad08e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 7 [IO7, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.143
+                            },
+                            "uuid": "1675282a-1c23-4379-abf6-6dfd61abbcff"
+                        },
+                        {
+                            "description": "Symbol J5 引脚 11 [SW, Passive, Line]",
+                            "pos": {
+                                "x": 1.4986,
+                                "y": 2.9845
+                            },
+                            "uuid": "a4063264-9498-4120-b4d3-dd33cdb525d5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 8 [IO15, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.1684
+                            },
+                            "uuid": "dcbf14e2-64f5-4ae1-b988-06b6623e20cb"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 9 [PWR_EN, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.937
+                            },
+                            "uuid": "f270a4ff-4514-4141-9b97-fbee12475fe1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 9 [IO16, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.1938
+                            },
+                            "uuid": "29802afd-90c1-41af-a64d-85abacd8a7ac"
+                        },
+                        {
+                            "description": "Symbol U10 引脚 3 [ON, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.4798
+                            },
+                            "uuid": "ab993863-c895-4ab1-9c48-4156bb608c30"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 10 [IO17, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.2192
+                            },
+                            "uuid": "9a27a55e-33b3-4de6-a731-8211a822187b"
+                        },
+                        {
+                            "description": "Symbol U9 引脚 3 [ON, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 3.4798
+                            },
+                            "uuid": "b1e4cc1f-bbed-4df4-8561-565c9df50af5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 11 [IO18, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.2446
+                            },
+                            "uuid": "489d6fc9-0c70-4209-bd74-d9970f19e2e7"
+                        },
+                        {
+                            "description": "Symbol R17 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 10.033
+                            },
+                            "uuid": "40da6013-d46c-4588-8c6f-ad91e39e0461"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 12 [IO8, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.27
+                            },
+                            "uuid": "8f1dc610-f280-4604-b456-f339479bdc47"
+                        },
+                        {
+                            "description": "Symbol J5 引脚 2 [CD/DAT3, Passive, Line]",
+                            "pos": {
+                                "x": 1.4986,
+                                "y": 2.7559
+                            },
+                            "uuid": "2ac04c17-5255-4961-a8e4-477f41d12279"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 39 [IO1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.016
+                            },
+                            "uuid": "24881b6b-a5cd-4e9b-a7b7-242d51154793"
+                        },
+                        {
+                            "description": "Symbol R9 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 6.35
+                            },
+                            "uuid": "d5517393-d17e-43bb-ab45-331590b91120"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 13 [IO19, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.2954
+                            },
+                            "uuid": "83963daa-5a2a-4e92-9b7e-b1fb3a212803"
+                        },
+                        {
+                            "description": "Symbol R23 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 8.4074
+                            },
+                            "uuid": "574ba826-007c-4a13-85ba-b50979c4ffdb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 U1 [ESP32-S3-WROOM-1]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 1.1938
+                            },
+                            "uuid": "baf29eb1-0476-4b26-870c-46f149254702"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 U1 [ESP32-S3-WROOM-1]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 1.1938
+                            },
+                            "uuid": "baf29eb1-0476-4b26-870c-46f149254702"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 38 [IO2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.0414
+                            },
+                            "uuid": "63186669-b345-407e-baa7-0824606c799e"
+                        },
+                        {
+                            "description": "Symbol R6 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 6.7564
+                            },
+                            "uuid": "cff765e6-bf22-48df-9c67-7be617221d2a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 14 [IO20, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 1.3208
+                            },
+                            "uuid": "94e781ae-c904-411e-95d0-53458bf6bf88"
+                        },
+                        {
+                            "description": "Symbol R22 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 8.8138
+                            },
+                            "uuid": "963c2ad2-39f3-4317-a253-7f5d506f8cc7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 34 [IO41, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.143
+                            },
+                            "uuid": "11af8af5-dee2-4f76-9991-12b14a674a60"
+                        },
+                        {
+                            "description": "Symbol U8 引脚 7 [GPO, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 4.5847
+                            },
+                            "uuid": "6f8b7183-0041-4210-80ca-ee77603f118b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 32 [IO39, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.1938
+                            },
+                            "uuid": "d07f5917-3297-4dc1-b498-1a1550a13d32"
+                        },
+                        {
+                            "description": "Symbol SW5 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 15.0368
+                            },
+                            "uuid": "f815b594-7474-4317-85f9-f54fdd5d5249"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 31 [IO38, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.2192
+                            },
+                            "uuid": "e43b5690-92c9-434e-84b3-d3b9df3ef9ea"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 6 [EPD_BUSY, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.9243
+                            },
+                            "uuid": "02dfa0f6-5dc3-41e2-b271-7f8fef265e00"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 30 [IO37, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.2446
+                            },
+                            "uuid": "9b44db3c-dabe-4d7c-8e07-5d8956631b81"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 5 [EPD_RST, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.9116
+                            },
+                            "uuid": "b3f39c5a-3a7d-497b-9a2d-d9ada4fe184e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 17 [IO9, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 1.4478
+                            },
+                            "uuid": "aeee501e-9799-4715-a82f-1ed553c365e0"
+                        },
+                        {
+                            "description": "Symbol J5 引脚 7 [DAT0, Passive, Line]",
+                            "pos": {
+                                "x": 1.4986,
+                                "y": 2.8829
+                            },
+                            "uuid": "dc4206a6-b6cb-4689-be97-487e102d3553"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 29 [IO36, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.27
+                            },
+                            "uuid": "83288df5-b83d-4800-b150-5450342ba618"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 4 [EPD_DC, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.8989
+                            },
+                            "uuid": "2c29ce9f-a87b-44b3-ad58-12197baf925b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 18 [IO10, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7239,
+                                "y": 1.4478
+                            },
+                            "uuid": "347167d7-f77b-4ea9-a7f9-e38ade6aed2e"
+                        },
+                        {
+                            "description": "Symbol J5 引脚 5 [CLK, Passive, Line]",
+                            "pos": {
+                                "x": 1.4986,
+                                "y": 2.8321
+                            },
+                            "uuid": "02a991a0-af1c-4970-a846-8d027545d6af"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 19 [IO11, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7493,
+                                "y": 1.4478
+                            },
+                            "uuid": "1a82dea8-7500-410e-9bd7-67bbfdbe9b72"
+                        },
+                        {
+                            "description": "Symbol J5 引脚 3 [CMD, Passive, Line]",
+                            "pos": {
+                                "x": 1.4986,
+                                "y": 2.7813
+                            },
+                            "uuid": "5fc7cf8e-0bc5-41f5-b954-fa326d3d5fd2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 28 [IO35, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.2954
+                            },
+                            "uuid": "59c9986f-a7da-4ebd-a0ae-3888473d2632"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 3 [EPD_CS, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.8862
+                            },
+                            "uuid": "81bca19d-b127-40e4-af1f-3005c0ed3bf8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 27 [IO0, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9906,
+                                "y": 1.3208
+                            },
+                            "uuid": "86252bb7-111a-4bf7-b8b1-54dd0b78e56b"
+                        },
+                        {
+                            "description": "Symbol SW2 引脚 1 [a, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 5.5118
+                            },
+                            "uuid": "07cbf1a9-67be-4c2a-9ee0-18b1299f3aa8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 23 [IO21, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8509,
+                                "y": 1.4478
+                            },
+                            "uuid": "9d702c76-7772-45f7-baa6-1dee9288fba4"
+                        },
+                        {
+                            "description": "Symbol U8 引脚 5 [SDA, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 4.6355
+                            },
+                            "uuid": "a71fb416-c825-471e-b812-0dbde5de280b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 24 [IO47, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 1.4478
+                            },
+                            "uuid": "43a575f5-b442-4729-9c7a-9217976b5fb3"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 1 [EPD_SCLK, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.8608
+                            },
+                            "uuid": "afb6c242-9213-4836-9d65-fd3212bc1057"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U1 引脚 25 [IO48, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.9017,
+                                "y": 1.4478
+                            },
+                            "uuid": "58be5665-dde1-4eb8-9f1a-c7b1f1677556"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 2 [EPD_MOSI, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.8735
+                            },
+                            "uuid": "1e0967ee-f3a6-4e05-b671-dc79bb59d32c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 U3 [BQ24074RGTR]",
+                            "pos": {
+                                "x": 1.7526,
+                                "y": 1.0414
+                            },
+                            "uuid": "0e31bea4-4c19-4b04-8536-ed31566a1f7c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 U3 [BQ24074RGTR]",
+                            "pos": {
+                                "x": 1.7526,
+                                "y": 1.0414
+                            },
+                            "uuid": "0e31bea4-4c19-4b04-8536-ed31566a1f7c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 A1 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.0066
+                            },
+                            "uuid": "f895a541-0084-4d39-b918-78ee48c5862e"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 A12 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.2352
+                            },
+                            "uuid": "ee898c2d-e6b1-44d2-ba01-64ba93e52c87"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 A4 [VBUS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.0574
+                            },
+                            "uuid": "01efd8d1-7225-4e4a-97bc-af459d3f1441"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 A9 [VBUS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.1844
+                            },
+                            "uuid": "beac69be-75b5-4b8e-8d55-743673fb2318"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 A5 [CC1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.0828
+                            },
+                            "uuid": "dc121eb1-848a-407f-8032-f1b2ebe9d66f"
+                        },
+                        {
+                            "description": "Symbol R1 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 11.2776
+                            },
+                            "uuid": "20731a01-7da5-43ab-ad7a-423514d7e614"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 B12 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.0066
+                            },
+                            "uuid": "91c798b5-e8cb-45bd-8670-9a2089562d44"
+                        },
+                        {
+                            "description": "Symbol #FLG017 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 2.3622
+                            },
+                            "uuid": "e34b5e99-430f-4370-86d7-5793070e5d81"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 A6 [DP1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.1082
+                            },
+                            "uuid": "e3254e85-d9ba-4d5a-a711-bf0833a780b2"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B6 [DP2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.1336
+                            },
+                            "uuid": "41b013e8-638b-480e-9093-6974f35c96b9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 A7 [DN1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.1336
+                            },
+                            "uuid": "44fb02a7-fb0b-4f63-b6ca-21442586fc56"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B7 [DN2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.1082
+                            },
+                            "uuid": "a0193cdf-724a-4673-b228-d6b9634e5044"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 B9 [VBUS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.0574
+                            },
+                            "uuid": "4026a4a4-7374-41fc-87d7-3ad55f0fd875"
+                        },
+                        {
+                            "description": "Symbol U6 引脚 5 [5, Passive, Line]",
+                            "pos": {
+                                "x": 1.9177,
+                                "y": 2.0066
+                            },
+                            "uuid": "1090899d-7ee9-4c2f-9423-85182ad42389"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 J1 [KH-TYPE-C-16P]",
+                            "pos": {
+                                "x": 0.7366,
+                                "y": 2.1336
+                            },
+                            "uuid": "a6d9970b-c785-4238-af70-5a0825cf0b29"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 J1 [KH-TYPE-C-16P]",
+                            "pos": {
+                                "x": 0.7366,
+                                "y": 2.1336
+                            },
+                            "uuid": "a6d9970b-c785-4238-af70-5a0825cf0b29"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 A9 [VBUS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.1844
+                            },
+                            "uuid": "beac69be-75b5-4b8e-8d55-743673fb2318"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B4 [VBUS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.1844
+                            },
+                            "uuid": "b9b98f95-cb49-4927-93a4-d5d589ec453c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 B7 [DN2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.1082
+                            },
+                            "uuid": "a0193cdf-724a-4673-b228-d6b9634e5044"
+                        },
+                        {
+                            "description": "Symbol U6 引脚 3 [3, Passive, Line]",
+                            "pos": {
+                                "x": 1.5875,
+                                "y": 2.0828
+                            },
+                            "uuid": "ce486fbd-07ae-4c3e-9330-49ae8dff39ed"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 B6 [DP2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.1336
+                            },
+                            "uuid": "41b013e8-638b-480e-9093-6974f35c96b9"
+                        },
+                        {
+                            "description": "Symbol U6 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.5875,
+                                "y": 1.9304
+                            },
+                            "uuid": "a8b324b4-799a-449b-809b-217be13c6d0c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 A12 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 2.2352
+                            },
+                            "uuid": "ee898c2d-e6b1-44d2-ba01-64ba93e52c87"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B1 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.2352
+                            },
+                            "uuid": "955ee3c3-4f0f-4092-89dc-2a6fddf0a4a6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 B5 [CC2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.159
+                            },
+                            "uuid": "26eb50d4-bf20-4c12-9706-22557ebf6642"
+                        },
+                        {
+                            "description": "Symbol R2 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 9.2202
+                            },
+                            "uuid": "dd288259-085d-4443-8b72-16cfe6dc1e29"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 B4 [VBUS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.1844
+                            },
+                            "uuid": "b9b98f95-cb49-4927-93a4-d5d589ec453c"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B9 [VBUS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.0574
+                            },
+                            "uuid": "4026a4a4-7374-41fc-87d7-3ad55f0fd875"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 B1 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.2352
+                            },
+                            "uuid": "955ee3c3-4f0f-4092-89dc-2a6fddf0a4a6"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B12 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.0066
+                            },
+                            "uuid": "91c798b5-e8cb-45bd-8670-9a2089562d44"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 1 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6985,
+                                "y": 2.3114
+                            },
+                            "uuid": "8b8137b7-befe-42e2-9228-eaa7b6213554"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 2 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7239,
+                                "y": 2.3114
+                            },
+                            "uuid": "ff6c617e-1262-4cdc-b853-429b2e31b10f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 2 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7239,
+                                "y": 2.3114
+                            },
+                            "uuid": "ff6c617e-1262-4cdc-b853-429b2e31b10f"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 3 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7493,
+                                "y": 2.3114
+                            },
+                            "uuid": "c8700f17-89d8-4155-994d-9c4069de4805"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 3 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7493,
+                                "y": 2.3114
+                            },
+                            "uuid": "c8700f17-89d8-4155-994d-9c4069de4805"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 4 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 2.3114
+                            },
+                            "uuid": "3341c9f4-fa53-4d1a-a107-f6213fd44558"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol J1 引脚 4 [EP, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 2.3114
+                            },
+                            "uuid": "3341c9f4-fa53-4d1a-a107-f6213fd44558"
+                        },
+                        {
+                            "description": "Symbol J1 引脚 B1 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8763,
+                                "y": 2.2352
+                            },
+                            "uuid": "955ee3c3-4f0f-4092-89dc-2a6fddf0a4a6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 U6 [USBLC6-2SC6]",
+                            "pos": {
+                                "x": 1.7526,
+                                "y": 2.0066
+                            },
+                            "uuid": "7682a9e1-62f5-4ab8-87ff-afd87d048317"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 U6 [USBLC6-2SC6]",
+                            "pos": {
+                                "x": 1.7526,
+                                "y": 2.0066
+                            },
+                            "uuid": "7682a9e1-62f5-4ab8-87ff-afd87d048317"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 J2 [S2B-PH-SM4-TB]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 2.8702
+                            },
+                            "uuid": "4ecf8899-403f-470f-bd1b-54d59ddcd5a9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 J2 [S2B-PH-SM4-TB]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 2.8702
+                            },
+                            "uuid": "4ecf8899-403f-470f-bd1b-54d59ddcd5a9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 J5 [TF-001B]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 2.8702
+                            },
+                            "uuid": "1d1f8b5c-24d9-4a44-8b0c-b0260ecbf835"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 J5 [TF-001B]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 2.8702
+                            },
+                            "uuid": "1d1f8b5c-24d9-4a44-8b0c-b0260ecbf835"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U9 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 3.4544
+                            },
+                            "uuid": "bf2fa6e7-1088-46e8-8a2f-c1e74015f8c4"
+                        },
+                        {
+                            "description": "Symbol J2 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.5461,
+                                "y": 2.8829
+                            },
+                            "uuid": "f7e636bc-bc5f-4f78-a58d-1caab9353736"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U9 引脚 3 [ON, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 3.4798
+                            },
+                            "uuid": "b1e4cc1f-bbed-4df4-8561-565c9df50af5"
+                        },
+                        {
+                            "description": "Symbol SW4 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.5113,
+                                "y": 15.0368
+                            },
+                            "uuid": "827e789a-187b-4c40-b919-c7431bc806ab"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 U9 [TPS22918DBVR]",
+                            "pos": {
+                                "x": 0.7366,
+                                "y": 3.4544
+                            },
+                            "uuid": "717b71d9-bfba-410b-a735-ad154331ee1b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 U9 [TPS22918DBVR]",
+                            "pos": {
+                                "x": 0.7366,
+                                "y": 3.4544
+                            },
+                            "uuid": "717b71d9-bfba-410b-a735-ad154331ee1b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U10 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.4544
+                            },
+                            "uuid": "1c3cdb71-3812-40dd-8e24-c5e747f2620d"
+                        },
+                        {
+                            "description": "Symbol J5 引脚 12 [SW, Passive, Line]",
+                            "pos": {
+                                "x": 1.4986,
+                                "y": 3.0099
+                            },
+                            "uuid": "5c31b37b-8f38-4ca6-b966-54ab5be1ace0"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U10 引脚 3 [ON, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 3.4798
+                            },
+                            "uuid": "ab993863-c895-4ab1-9c48-4156bb608c30"
+                        },
+                        {
+                            "description": "Symbol R28 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 8.001
+                            },
+                            "uuid": "534de069-6bfe-4ec2-a80f-aa5f7d80eaeb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 U10 [TPS22918DBVR]",
+                            "pos": {
+                                "x": 1.7526,
+                                "y": 3.4544
+                            },
+                            "uuid": "10d1ba73-ecc0-4a61-9757-fececbc5778d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 U10 [TPS22918DBVR]",
+                            "pos": {
+                                "x": 1.7526,
+                                "y": 3.4544
+                            },
+                            "uuid": "10d1ba73-ecc0-4a61-9757-fececbc5778d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q1 引脚 3 [D, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6096,
+                                "y": 3.9624
+                            },
+                            "uuid": "316d192a-d5a2-444b-8602-e8c933cd3b35"
+                        },
+                        {
+                            "description": "Symbol D3 引脚 1 [A, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 5.9182
+                            },
+                            "uuid": "e2bf54d2-89e4-4e2a-a643-1f9ac89acfe6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q1 引脚 1 [G, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5334,
+                                "y": 4.0132
+                            },
+                            "uuid": "7b652526-b8f6-41de-959b-59c711c7a375"
+                        },
+                        {
+                            "description": "Symbol R18 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 9.6266
+                            },
+                            "uuid": "ea7a44a5-16c7-4150-84cd-2ebcba6173bc"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 Q1 [AO3400A]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.0132
+                            },
+                            "uuid": "4d02798e-b9b1-4375-8ef1-9fa2154a2a54"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 Q1 [AO3400A]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.0132
+                            },
+                            "uuid": "4d02798e-b9b1-4375-8ef1-9fa2154a2a54"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol Q1 引脚 2 [S, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.6096,
+                                "y": 4.064
+                            },
+                            "uuid": "382f423e-66de-4d3a-aa52-da8101549570"
+                        },
+                        {
+                            "description": "Symbol U8 引脚 4 [VSS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.6355
+                            },
+                            "uuid": "80b84c40-3c64-4678-bef4-46edc882c304"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 J6 [EPD_SPI_CONN_10P]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 3.9116
+                            },
+                            "uuid": "0f7201f9-df27-42c1-ac7f-6a7752c9b99b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 J6 [EPD_SPI_CONN_10P]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 3.9116
+                            },
+                            "uuid": "0f7201f9-df27-42c1-ac7f-6a7752c9b99b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U8 引脚 2 [AC0, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.5847
+                            },
+                            "uuid": "21b3c95d-87b1-461d-9bae-855b5195d03f"
+                        },
+                        {
+                            "description": "Symbol J7 引脚 1 [AC0, Passive, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 11.2776
+                            },
+                            "uuid": "b57017f1-0521-4f1c-99af-7cd6e81f3854"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U8 引脚 8 [VCC, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 4.5593
+                            },
+                            "uuid": "cf83c705-dac0-4c48-ba94-958fd3478e0d"
+                        },
+                        {
+                            "description": "Symbol #FLG048 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 4.7244
+                            },
+                            "uuid": "41969976-82fb-4ae1-b764-145144788002"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U8 引脚 3 [AC1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.6101
+                            },
+                            "uuid": "c706beec-84e7-4652-b14d-1fcd636ab4da"
+                        },
+                        {
+                            "description": "Symbol J7 引脚 2 [AC1, Passive, Line]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 11.2776
+                            },
+                            "uuid": "58417712-12b1-47f4-a0ae-3a38b0312123"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 U8 [ST25DV04KC-IE8S3]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 4.5974
+                            },
+                            "uuid": "a141ec9f-13b3-40a0-b90e-bfca48f007f2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 U8 [ST25DV04KC-IE8S3]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 4.5974
+                            },
+                            "uuid": "a141ec9f-13b3-40a0-b90e-bfca48f007f2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U8 引脚 4 [VSS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.6355
+                            },
+                            "uuid": "80b84c40-3c64-4678-bef4-46edc882c304"
+                        },
+                        {
+                            "description": "Symbol SW3 引脚 2 [b, Passive, Line]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 5.5118
+                            },
+                            "uuid": "7f6022af-38dd-4b2e-ac22-9dcfe4a268e6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U8 引脚 6 [SCL, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 4.6101
+                            },
+                            "uuid": "0c6514fb-8db6-4ab5-92e3-0385294ce4ca"
+                        },
+                        {
+                            "description": "Symbol R21 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 8.8138
+                            },
+                            "uuid": "3bef33a1-7754-4fde-aa7f-ffe67cd69f3a"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U8 引脚 5 [SDA, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7874,
+                                "y": 4.6355
+                            },
+                            "uuid": "a71fb416-c825-471e-b812-0dbde5de280b"
+                        },
+                        {
+                            "description": "Symbol R20 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 9.2202
+                            },
+                            "uuid": "ff0ece4c-cb70-48c1-868d-666c05518822"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 1 [VIN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 4.5466
+                            },
+                            "uuid": "68e1115b-05cd-4c1f-8fe8-c926627dc248"
+                        },
+                        {
+                            "description": "Symbol U2 引脚 3 [EN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 4.5974
+                            },
+                            "uuid": "b618667a-f8a8-4c24-a23a-29964c677612"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 2 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 4.572
+                            },
+                            "uuid": "aaa46571-4367-481c-9b84-dee00d6e39b2"
+                        },
+                        {
+                            "description": "Symbol J6 引脚 8 [GND, Passive, Line]",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 3.8862
+                            },
+                            "uuid": "5f8029ce-811a-448d-9123-3422d861e823"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 3 [EN, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.6002,
+                                "y": 4.5974
+                            },
+                            "uuid": "b618667a-f8a8-4c24-a23a-29964c677612"
+                        },
+                        {
+                            "description": "Symbol #FLG060 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 5.6388
+                            },
+                            "uuid": "22672225-b2a1-4727-93df-da0879a66504"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 U2 [AP2112K-3.3TRG1]",
+                            "pos": {
+                                "x": 1.7272,
+                                "y": 4.572
+                            },
+                            "uuid": "6bcfef0a-542d-4c35-9cc0-0590f48a9cb7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 U2 [AP2112K-3.3TRG1]",
+                            "pos": {
+                                "x": 1.7272,
+                                "y": 4.572
+                            },
+                            "uuid": "6bcfef0a-542d-4c35-9cc0-0590f48a9cb7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol U2 引脚 5 [VOUT, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.8542,
+                                "y": 4.5466
+                            },
+                            "uuid": "65307c91-44bc-49c8-960f-61c2ca9d398b"
+                        },
+                        {
+                            "description": "Symbol #FLG049 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 4.8006
+                            },
+                            "uuid": "abfc0055-3840-4ee1-b10a-1130cf34deaa"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Power output 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK2 引脚 1 [VDD, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 5.0292
+                            },
+                            "uuid": "441031f5-49a2-4325-ab56-afe6f38ae548"
+                        },
+                        {
+                            "description": "Symbol #FLG027 引脚 1 [Power output, Line]",
+                            "pos": {
+                                "x": 0.3048,
+                                "y": 3.1242
+                            },
+                            "uuid": "848a7a9a-4edb-4107-b2e4-4bff66d12b0b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK2 引脚 6 [SD, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 5.0292
+                            },
+                            "uuid": "dc131d0a-000b-402d-a618-8a5374f53176"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 22 [IO14, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8255,
+                                "y": 1.4478
+                            },
+                            "uuid": "969a5590-58e5-4951-a992-4be33a05fc3c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK2 引脚 2 [SCK, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 5.0546
+                            },
+                            "uuid": "2bdb896e-0776-40fa-80fc-63ac4e6e052d"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 20 [IO12, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 1.4478
+                            },
+                            "uuid": "c8c964d6-1434-41b6-8840-6af9bbb6e469"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 MK2 [MSM261S3526Z0CM]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 5.0546
+                            },
+                            "uuid": "5709b79d-3bc6-4a66-b866-8f6527b2a504"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 MK2 [MSM261S3526Z0CM]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 5.0546
+                            },
+                            "uuid": "5709b79d-3bc6-4a66-b866-8f6527b2a504"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK2 引脚 5 [WS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 5.0546
+                            },
+                            "uuid": "8c94e81c-54ec-4047-8e85-548bd2fef082"
+                        },
+                        {
+                            "description": "Symbol U1 引脚 21 [IO13, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.8001,
+                                "y": 1.4478
+                            },
+                            "uuid": "09380722-a604-4764-87b2-f542bd7e7644"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK2 引脚 3 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 5.08
+                            },
+                            "uuid": "2266d585-ccd7-4a43-9808-7e88d04e061b"
+                        },
+                        {
+                            "description": "Symbol U8 引脚 4 [VSS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 4.6355
+                            },
+                            "uuid": "80b84c40-3c64-4678-bef4-46edc882c304"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK2 引脚 4 [L/R, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 5.08
+                            },
+                            "uuid": "c70ba640-6bbd-4715-9a9c-bd43e4f0dbe7"
+                        },
+                        {
+                            "description": "Symbol R13 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 10.4648
+                            },
+                            "uuid": "31839139-2887-467a-93e0-528646fadd86"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK1 引脚 1 [VDD, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.5875,
+                                "y": 5.0292
+                            },
+                            "uuid": "b2179592-371d-4b11-8c89-9b1bac8aceb5"
+                        },
+                        {
+                            "description": "Symbol MK2 引脚 1 [VDD, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 5.0292
+                            },
+                            "uuid": "441031f5-49a2-4325-ab56-afe6f38ae548"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK1 引脚 2 [SCK, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.5875,
+                                "y": 5.0546
+                            },
+                            "uuid": "337f12f4-c71a-456a-bbe4-07003c35e5b2"
+                        },
+                        {
+                            "description": "Symbol MK2 引脚 2 [SCK, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 5.0546
+                            },
+                            "uuid": "2bdb896e-0776-40fa-80fc-63ac4e6e052d"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK1 引脚 3 [GND, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.5875,
+                                "y": 5.08
+                            },
+                            "uuid": "b913e027-0a96-4b26-8e40-daf192014cab"
+                        },
+                        {
+                            "description": "Symbol SW2 引脚 2 [b, Passive, Line]",
+                            "pos": {
+                                "x": 1.8034,
+                                "y": 5.5118
+                            },
+                            "uuid": "0ce80b4c-60be-4cbb-8771-066acf77e8c2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 MK1 [MSM261S3526Z0CM]",
+                            "pos": {
+                                "x": 1.6764,
+                                "y": 5.0546
+                            },
+                            "uuid": "9b250b87-6c9c-4fbd-942a-7680f70dedd1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 MK1 [MSM261S3526Z0CM]",
+                            "pos": {
+                                "x": 1.6764,
+                                "y": 5.0546
+                            },
+                            "uuid": "9b250b87-6c9c-4fbd-942a-7680f70dedd1"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK1 引脚 6 [SD, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7653,
+                                "y": 5.0292
+                            },
+                            "uuid": "3f470209-99b9-4c89-8bbb-10b23d3956b0"
+                        },
+                        {
+                            "description": "Symbol MK2 引脚 6 [SD, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 5.0292
+                            },
+                            "uuid": "dc131d0a-000b-402d-a618-8a5374f53176"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Unspecified 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK1 引脚 5 [WS, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7653,
+                                "y": 5.0546
+                            },
+                            "uuid": "67869cea-30fe-49b2-b8f8-b6256a5e9b0c"
+                        },
+                        {
+                            "description": "Symbol MK2 引脚 5 [WS, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.7747,
+                                "y": 5.0546
+                            },
+                            "uuid": "8c94e81c-54ec-4047-8e85-548bd2fef082"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol MK1 引脚 4 [L/R, Unspecified, Line]",
+                            "pos": {
+                                "x": 1.7653,
+                                "y": 5.08
+                            },
+                            "uuid": "e1e44bac-cf7f-4032-ba17-29c7cc13a059"
+                        },
+                        {
+                            "description": "Symbol R12 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.5842,
+                                "y": 10.8712
+                            },
+                            "uuid": "2e0ec94f-f769-4285-8469-b7496739375f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 SW3 [K5-1617SA-02]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 5.5118
+                            },
+                            "uuid": "ac440d99-04d5-4b81-82a8-665114a0cb0e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 SW3 [K5-1617SA-02]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 5.5118
+                            },
+                            "uuid": "ac440d99-04d5-4b81-82a8-665114a0cb0e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 SW2 [K5-1617SA-02]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 5.5118
+                            },
+                            "uuid": "697d7070-906e-4f7a-bedd-6053b3b9cc72"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 SW2 [K5-1617SA-02]",
+                            "pos": {
+                                "x": 1.7018,
+                                "y": 5.5118
+                            },
+                            "uuid": "697d7070-906e-4f7a-bedd-6053b3b9cc72"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 SW1 [K5-1617SA-02]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 5.9436
+                            },
+                            "uuid": "d0339742-4203-4716-9c55-04dd45ebf3ce"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 SW1 [K5-1617SA-02]",
+                            "pos": {
+                                "x": 0.6858,
+                                "y": 5.9436
+                            },
+                            "uuid": "d0339742-4203-4716-9c55-04dd45ebf3ce"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 D3 [BAT54C_FLYBACK]",
+                            "pos": {
+                                "x": 1.6764,
+                                "y": 5.9182
+                            },
+                            "uuid": "18ddce4d-0a7f-4b36-b1af-0f2b393f8019"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 D3 [BAT54C_FLYBACK]",
+                            "pos": {
+                                "x": 1.6764,
+                                "y": 5.9182
+                            },
+                            "uuid": "18ddce4d-0a7f-4b36-b1af-0f2b393f8019"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R9 [0603WAF3303T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 6.35
+                            },
+                            "uuid": "4245f71b-b745-4747-a4d8-9645b76c4c69"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R9 [0603WAF3303T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 6.35
+                            },
+                            "uuid": "4245f71b-b745-4747-a4d8-9645b76c4c69"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R8 [0603WAF1004T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 6.35
+                            },
+                            "uuid": "5b17d1fa-18ba-4bf5-8328-bbd8e59b9a38"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R8 [0603WAF1004T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 6.35
+                            },
+                            "uuid": "5b17d1fa-18ba-4bf5-8328-bbd8e59b9a38"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R7 [RC0603JR-071KL]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 6.7564
+                            },
+                            "uuid": "41879d94-d3e1-4aae-9a0f-4d2cb5529b58"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R7 [RC0603JR-071KL]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 6.7564
+                            },
+                            "uuid": "41879d94-d3e1-4aae-9a0f-4d2cb5529b58"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R6 [RC0603JR-071KL]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 6.7564
+                            },
+                            "uuid": "e8377eb3-c4ce-4b68-9e56-88a0cea5f60b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R6 [RC0603JR-071KL]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 6.7564
+                            },
+                            "uuid": "e8377eb3-c4ce-4b68-9e56-88a0cea5f60b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R5 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 7.1628
+                            },
+                            "uuid": "68f76419-1613-45c5-8643-75107401ddf6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R5 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 7.1628
+                            },
+                            "uuid": "68f76419-1613-45c5-8643-75107401ddf6"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R4 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 7.1628
+                            },
+                            "uuid": "43da14c9-294b-4942-9865-66c20435cc2b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R4 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 7.1628
+                            },
+                            "uuid": "43da14c9-294b-4942-9865-66c20435cc2b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R31 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 7.5946
+                            },
+                            "uuid": "6e984b6e-9b20-48e7-8b96-76a5280bac72"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R31 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 7.5946
+                            },
+                            "uuid": "6e984b6e-9b20-48e7-8b96-76a5280bac72"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R3 [0603WAF2001T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 7.5946
+                            },
+                            "uuid": "e9e1a4ba-e778-4a7e-9dcf-b9e2e6b45c38"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R3 [0603WAF2001T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 7.5946
+                            },
+                            "uuid": "e9e1a4ba-e778-4a7e-9dcf-b9e2e6b45c38"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R28 [0603WAF1003T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 8.001
+                            },
+                            "uuid": "9f281d3a-06b1-4aff-9a0c-53c6a8abeac5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R28 [0603WAF1003T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 8.001
+                            },
+                            "uuid": "9f281d3a-06b1-4aff-9a0c-53c6a8abeac5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R27 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 8.001
+                            },
+                            "uuid": "d0a6f6ac-dd42-4ce5-95c1-479c079e79f3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R27 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 8.001
+                            },
+                            "uuid": "d0a6f6ac-dd42-4ce5-95c1-479c079e79f3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R26 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 8.4074
+                            },
+                            "uuid": "2e11b235-df83-4343-b639-0e4b2f8cfc05"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R26 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 8.4074
+                            },
+                            "uuid": "2e11b235-df83-4343-b639-0e4b2f8cfc05"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R23 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 8.4074
+                            },
+                            "uuid": "753ed24b-d941-434e-ad67-38e4f6711bc8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R23 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 8.4074
+                            },
+                            "uuid": "753ed24b-d941-434e-ad67-38e4f6711bc8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R22 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 8.8138
+                            },
+                            "uuid": "e0c193ce-82a5-4728-a1cc-753fee2e1844"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R22 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 8.8138
+                            },
+                            "uuid": "e0c193ce-82a5-4728-a1cc-753fee2e1844"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R21 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 8.8138
+                            },
+                            "uuid": "47d4f2c3-02f1-4de0-9894-f5584a286bc4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R21 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 8.8138
+                            },
+                            "uuid": "47d4f2c3-02f1-4de0-9894-f5584a286bc4"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R20 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 9.2202
+                            },
+                            "uuid": "89790bbf-ee8e-4f62-88fd-95db094fc766"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R20 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 9.2202
+                            },
+                            "uuid": "89790bbf-ee8e-4f62-88fd-95db094fc766"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R2 [0603WAF5101T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 9.2202
+                            },
+                            "uuid": "8400dee5-fca9-4179-93dc-5d4fd702e9eb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R2 [0603WAF5101T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 9.2202
+                            },
+                            "uuid": "8400dee5-fca9-4179-93dc-5d4fd702e9eb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R19 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 9.6266
+                            },
+                            "uuid": "b13b6d86-ec3c-4e12-a1b7-997f89368b3e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R19 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 9.6266
+                            },
+                            "uuid": "b13b6d86-ec3c-4e12-a1b7-997f89368b3e"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R18 [0603WAF1003T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 9.6266
+                            },
+                            "uuid": "04c18aa9-ee36-4698-b062-55d369516856"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R18 [0603WAF1003T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 9.6266
+                            },
+                            "uuid": "04c18aa9-ee36-4698-b062-55d369516856"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R17 [0603WAF1000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 10.033
+                            },
+                            "uuid": "497682de-2854-4e15-b2ce-607982d941e9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R17 [0603WAF1000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 10.033
+                            },
+                            "uuid": "497682de-2854-4e15-b2ce-607982d941e9"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R15 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 10.033
+                            },
+                            "uuid": "4edf3380-5907-420a-84eb-8621d3d16376"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R15 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 10.033
+                            },
+                            "uuid": "4edf3380-5907-420a-84eb-8621d3d16376"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R14 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 10.4648
+                            },
+                            "uuid": "66381c9e-7a00-49eb-9236-b23bdb8fd025"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R14 [0603WAJ0103T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 10.4648
+                            },
+                            "uuid": "66381c9e-7a00-49eb-9236-b23bdb8fd025"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R13 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 10.4648
+                            },
+                            "uuid": "120938e8-6816-4d53-ba05-c39afc977806"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R13 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 10.4648
+                            },
+                            "uuid": "120938e8-6816-4d53-ba05-c39afc977806"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R12 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 10.8712
+                            },
+                            "uuid": "9ac49f17-2515-435e-b15d-9415d5a3219f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R12 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 10.8712
+                            },
+                            "uuid": "9ac49f17-2515-435e-b15d-9415d5a3219f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R11 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 10.8712
+                            },
+                            "uuid": "308ecb5c-f6ee-4e5d-8695-82f050a8478b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R11 [0603WAF0000T5E]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 10.8712
+                            },
+                            "uuid": "308ecb5c-f6ee-4e5d-8695-82f050a8478b"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 R1 [0603WAF5101T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 11.2776
+                            },
+                            "uuid": "fe0bb547-d2d8-41a0-a8bd-e856fdd8bce2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 R1 [0603WAF5101T5E]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 11.2776
+                            },
+                            "uuid": "fe0bb547-d2d8-41a0-a8bd-e856fdd8bce2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 J7 [NFC_ANT_2P]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 11.2776
+                            },
+                            "uuid": "766547b5-3835-4d58-ab16-4a65de1e7241"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 J7 [NFC_ANT_2P]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 11.2776
+                            },
+                            "uuid": "766547b5-3835-4d58-ab16-4a65de1e7241"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 D2 [KT-0603R]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 11.684
+                            },
+                            "uuid": "eea817c8-0cf0-4b79-abad-a5caf8b80d59"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 D2 [KT-0603R]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 11.684
+                            },
+                            "uuid": "eea817c8-0cf0-4b79-abad-a5caf8b80d59"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 D1 [APHD1608LCGCK]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 11.684
+                            },
+                            "uuid": "e6503563-84f7-4c7b-901c-4e95fe43de6f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 D1 [APHD1608LCGCK]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 11.684
+                            },
+                            "uuid": "e6503563-84f7-4c7b-901c-4e95fe43de6f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C3 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 12.0904
+                            },
+                            "uuid": "0695090a-5b72-48e3-ab95-1b58a0e5ff03"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C3 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 12.0904
+                            },
+                            "uuid": "0695090a-5b72-48e3-ab95-1b58a0e5ff03"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C2 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 12.0904
+                            },
+                            "uuid": "310622c0-04e1-42da-9819-f9db225a5891"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C2 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 12.0904
+                            },
+                            "uuid": "310622c0-04e1-42da-9819-f9db225a5891"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C17 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 12.4968
+                            },
+                            "uuid": "0d4f4159-c527-4e82-b950-21b567789a11"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C17 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 12.4968
+                            },
+                            "uuid": "0d4f4159-c527-4e82-b950-21b567789a11"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C14 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 12.4968
+                            },
+                            "uuid": "bb228547-ee4a-4e6d-8f5c-26bce15dc5e7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C14 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 1.651,
+                                "y": 12.4968
+                            },
+                            "uuid": "bb228547-ee4a-4e6d-8f5c-26bce15dc5e7"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C1 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 12.9286
+                            },
+                            "uuid": "c8cf412e-d3dc-4b97-b7f2-1eac6e950ab8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C1 [CL10A106KP8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 12.9286
+                            },
+                            "uuid": "c8cf412e-d3dc-4b97-b7f2-1eac6e950ab8"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C7 [CL10A105KO8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 12.9286
+                            },
+                            "uuid": "22c86ae1-aa07-4350-bb46-d3e7d3c4c23c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C7 [CL10A105KO8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 12.9286
+                            },
+                            "uuid": "22c86ae1-aa07-4350-bb46-d3e7d3c4c23c"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C6 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 13.335
+                            },
+                            "uuid": "2d64f4c8-e6a4-4c35-a1eb-1d118c88a4ae"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C6 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 13.335
+                            },
+                            "uuid": "2d64f4c8-e6a4-4c35-a1eb-1d118c88a4ae"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C5 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 13.335
+                            },
+                            "uuid": "cd071610-2148-4b19-8a65-d07ba2b78652"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C5 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 13.335
+                            },
+                            "uuid": "cd071610-2148-4b19-8a65-d07ba2b78652"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C4 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 13.7414
+                            },
+                            "uuid": "188638dd-cd5c-49c7-997d-62a9e67666b5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C4 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 13.7414
+                            },
+                            "uuid": "188638dd-cd5c-49c7-997d-62a9e67666b5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C22 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 13.7414
+                            },
+                            "uuid": "731f287f-b189-4359-bbb6-878e8f2e24c5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C22 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 13.7414
+                            },
+                            "uuid": "731f287f-b189-4359-bbb6-878e8f2e24c5"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C19 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 14.1478
+                            },
+                            "uuid": "e14ab4b4-4674-4dda-b8bb-908cb1f60ccb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C19 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 14.1478
+                            },
+                            "uuid": "e14ab4b4-4674-4dda-b8bb-908cb1f60ccb"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C18 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 14.1478
+                            },
+                            "uuid": "f2d8ca22-c107-47a4-8d44-120b1ae04b29"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C18 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 14.1478
+                            },
+                            "uuid": "f2d8ca22-c107-47a4-8d44-120b1ae04b29"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C16 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 14.5542
+                            },
+                            "uuid": "c11a3d76-982d-4291-805b-1b88d8a07368"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C16 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 0.635,
+                                "y": 14.5542
+                            },
+                            "uuid": "c11a3d76-982d-4291-805b-1b88d8a07368"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 C15 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 14.5542
+                            },
+                            "uuid": "7a0e423b-4053-485e-b4af-c8ae3acd1850"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 C15 [CL10B104KA8NNNC]",
+                            "pos": {
+                                "x": 1.6256,
+                                "y": 14.5542
+                            },
+                            "uuid": "7a0e423b-4053-485e-b4af-c8ae3acd1850"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 SW5 [MST-12D18G4SPDTSLIDESWITCH]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 15.0114
+                            },
+                            "uuid": "c541efe7-aa91-4e56-809c-b60ba72eac7f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 SW5 [MST-12D18G4SPDTSLIDESWITCH]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 15.0114
+                            },
+                            "uuid": "c541efe7-aa91-4e56-809c-b60ba72eac7f"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 SW4 [MST-12D18G4SPDTSLIDESWITCH]",
+                            "pos": {
+                                "x": 1.5494,
+                                "y": 15.0114
+                            },
+                            "uuid": "acc54ab5-0f32-43fe-b6cd-4d562aa677a3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 SW4 [MST-12D18G4SPDTSLIDESWITCH]",
+                            "pos": {
+                                "x": 1.5494,
+                                "y": 15.0114
+                            },
+                            "uuid": "acc54ab5-0f32-43fe-b6cd-4d562aa677a3"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol M1 引脚 1 [1, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 15.4559
+                            },
+                            "uuid": "45e75a5a-f99b-4cad-a1c2-b90b1c3ad688"
+                        },
+                        {
+                            "description": "Symbol C19 引脚 1 [1, Passive, Line]",
+                            "pos": {
+                                "x": 0.5969,
+                                "y": 14.1478
+                            },
+                            "uuid": "f65b3a99-2f2f-4c11-8d8a-57414f17e9d2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                },
+                {
+                    "description": "当前配置中不包含封装库 ''",
+                    "items": [
+                        {
+                            "description": "符号 M1 [LCM0827A3038F]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 15.4686
+                            },
+                            "uuid": "55fc9f4d-6399-4942-b77a-6b660151d8f2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "footprint_link_issues"
+                },
+                {
+                    "description": "在 'libraries/symbols/JLC-MCP.kicad_sym' 中找不到符号库 'JLC-MCP'",
+                    "items": [
+                        {
+                            "description": "符号 M1 [LCM0827A3038F]",
+                            "pos": {
+                                "x": 0.5588,
+                                "y": 15.4686
+                            },
+                            "uuid": "55fc9f4d-6399-4942-b77a-6b660151d8f2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "lib_symbol_issues"
+                },
+                {
+                    "description": "类型为 Unspecified 和 Passive 的引脚已连接",
+                    "items": [
+                        {
+                            "description": "Symbol M1 引脚 2 [2, Unspecified, Line]",
+                            "pos": {
+                                "x": 0.5207,
+                                "y": 15.4813
+                            },
+                            "uuid": "1dad964e-21ef-4d54-95d8-53657d8dc27c"
+                        },
+                        {
+                            "description": "Symbol C19 引脚 2 [2, Passive, Line]",
+                            "pos": {
+                                "x": 0.6731,
+                                "y": 14.1478
+                            },
+                            "uuid": "74537780-a6b8-4326-8787-9e67025d93b2"
+                        }
+                    ],
+                    "severity": "warning",
+                    "type": "pin_to_pin"
+                }
+            ]
+        }
+    ],
+    "source": "ai_memory_badge_v1.kicad_sch"
+}

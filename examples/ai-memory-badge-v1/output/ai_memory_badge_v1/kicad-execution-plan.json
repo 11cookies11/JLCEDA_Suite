@@ -1,0 +1,3087 @@
+{
+  "schema_version": "kicad-execution-plan.v1",
+  "request_id": "ai-memory-badge-v1-rev-a-module",
+  "target": {
+    "project_name": "ai_memory_badge_v1",
+    "output_dir": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1",
+    "schematic_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch",
+    "project_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro"
+  },
+  "symbols": [
+    {
+      "ref": "U1",
+      "role": "main_controller_wroom_module",
+      "value": "ESP32-S3-WROOM-1-N8R8 module",
+      "lib_id": "JLC-MCP:ESP32-S3-WROOM-1",
+      "footprint": "WIRELM-SMD_ESP32-S3-WROOM-1",
+      "at": {
+        "x": 106.68,
+        "y": 88.9,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "3V3",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "EN",
+          "name": "",
+          "net": "ESP_EN"
+        },
+        {
+          "number": "GND",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "GPIO0",
+          "name": "",
+          "net": "ESP_BOOT"
+        },
+        {
+          "number": "GPIO1",
+          "name": "",
+          "net": "VBAT_SENSE"
+        },
+        {
+          "number": "GPIO10",
+          "name": "",
+          "net": "SD_SCLK"
+        },
+        {
+          "number": "GPIO11",
+          "name": "",
+          "net": "SD_MOSI"
+        },
+        {
+          "number": "GPIO12",
+          "name": "",
+          "net": "I2S_BCLK"
+        },
+        {
+          "number": "GPIO13",
+          "name": "",
+          "net": "I2S_LRCLK"
+        },
+        {
+          "number": "GPIO14",
+          "name": "",
+          "net": "I2S_DIN"
+        },
+        {
+          "number": "GPIO15",
+          "name": "",
+          "net": "EPD_PWR_EN"
+        },
+        {
+          "number": "GPIO16",
+          "name": "",
+          "net": "SD_PWR_EN"
+        },
+        {
+          "number": "GPIO17",
+          "name": "",
+          "net": "MIC_PWR_EN"
+        },
+        {
+          "number": "GPIO18",
+          "name": "",
+          "net": "MOTOR_DRV"
+        },
+        {
+          "number": "GPIO19",
+          "name": "",
+          "net": "USB_D_N"
+        },
+        {
+          "number": "GPIO2",
+          "name": "",
+          "net": "LED_POWER_DRV"
+        },
+        {
+          "number": "GPIO20",
+          "name": "",
+          "net": "USB_D_P"
+        },
+        {
+          "number": "GPIO21",
+          "name": "",
+          "net": "I2C_SDA"
+        },
+        {
+          "number": "GPIO33",
+          "name": "",
+          "net": ""
+        },
+        {
+          "number": "GPIO34",
+          "name": "",
+          "net": ""
+        },
+        {
+          "number": "GPIO35",
+          "name": "",
+          "net": "EPD_CS"
+        },
+        {
+          "number": "GPIO36",
+          "name": "",
+          "net": "EPD_DC"
+        },
+        {
+          "number": "GPIO37",
+          "name": "",
+          "net": "EPD_RST"
+        },
+        {
+          "number": "GPIO38",
+          "name": "",
+          "net": "EPD_BUSY"
+        },
+        {
+          "number": "GPIO39",
+          "name": "",
+          "net": "REC_BTN"
+        },
+        {
+          "number": "GPIO4",
+          "name": "",
+          "net": "LED_RECORD_DRV"
+        },
+        {
+          "number": "GPIO40",
+          "name": "",
+          "net": "MODE_BTN"
+        },
+        {
+          "number": "GPIO41",
+          "name": "",
+          "net": "NFC_GPO"
+        },
+        {
+          "number": "GPIO47",
+          "name": "",
+          "net": "EPD_SCLK"
+        },
+        {
+          "number": "GPIO48",
+          "name": "",
+          "net": "EPD_MOSI"
+        },
+        {
+          "number": "GPIO5",
+          "name": "",
+          "net": "I2C_SCL"
+        },
+        {
+          "number": "GPIO6",
+          "name": "",
+          "net": "BTN_MARK"
+        },
+        {
+          "number": "GPIO7",
+          "name": "",
+          "net": "SD_CD"
+        },
+        {
+          "number": "GPIO8",
+          "name": "",
+          "net": "SD_CS"
+        },
+        {
+          "number": "GPIO9",
+          "name": "",
+          "net": "SD_MISO"
+        },
+        {
+          "number": "U0RXD",
+          "name": "",
+          "net": "UART0_RX"
+        },
+        {
+          "number": "U0TXD",
+          "name": "",
+          "net": "UART0_TX"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C2913201",
+      "mpn": "",
+      "manufacturer": "Espressif Systems",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "U2",
+      "role": "main_3v3_regulator",
+      "value": "AP2112K-3.3 600mA LDO",
+      "lib_id": "JLC-MCP:AP2112K-3.3TRG1",
+      "footprint": "SOT-25-5_L2.9-W1.6-P0.95-LS2.8-BL",
+      "at": {
+        "x": 106.68,
+        "y": 55.88,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "EN",
+          "name": "",
+          "net": "VSYS"
+        },
+        {
+          "number": "GND",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "VIN",
+          "name": "",
+          "net": "VSYS"
+        },
+        {
+          "number": "VOUT",
+          "name": "",
+          "net": "SYS_3V3_REG"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C51118",
+      "mpn": "",
+      "manufacturer": "Diodes Incorporated",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "U3",
+      "role": "single_cell_lipo_power_path_charger",
+      "value": "BQ24074 LiPo charger with power-path",
+      "lib_id": "JLC-MCP:BQ24074RGTR",
+      "footprint": "QFN-16_L3.0-W3.0-P0.50-TL-EP1.7",
+      "at": {
+        "x": 106.68,
+        "y": 132.08,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "BAT",
+          "name": "",
+          "net": "BAT_P"
+        },
+        {
+          "number": "IN",
+          "name": "",
+          "net": "USB_5V"
+        },
+        {
+          "number": "OUT",
+          "name": "",
+          "net": "VSYS"
+        },
+        {
+          "number": "PROG",
+          "name": "",
+          "net": "CHG_PROG"
+        },
+        {
+          "number": "STAT",
+          "name": "",
+          "net": "CHG_STAT"
+        },
+        {
+          "number": "VSS",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C54313",
+      "mpn": "",
+      "manufacturer": "Texas Instruments",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "U6",
+      "role": "usb_esd_protection",
+      "value": "USB2.0 ESD protection",
+      "lib_id": "JLC-MCP:USBLC6-2SC6",
+      "footprint": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "at": {
+        "x": 106.68,
+        "y": 187.96,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_D_P_CONN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "USB_D_N_CONN"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "USB_D_N_ESD"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "USB_5V"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "USB_D_P_ESD"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C7519",
+      "mpn": "",
+      "manufacturer": "STMicroelectronics",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "J1",
+      "role": "usb_c_power_data_input",
+      "value": "KH-TYPE-C-16P USB-C USB2.0 receptacle",
+      "lib_id": "JLC-MCP:KH-TYPE-C-16P",
+      "footprint": "USB-C-SMD_KH-TYPE-C-16P",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 302.26,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "A1",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "A12",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "A4",
+          "name": "",
+          "net": "USB_5V"
+        },
+        {
+          "number": "A5",
+          "name": "",
+          "net": "CC1"
+        },
+        {
+          "number": "A6",
+          "name": "",
+          "net": "USB_D_P_CONN"
+        },
+        {
+          "number": "A7",
+          "name": "",
+          "net": "USB_D_N_CONN"
+        },
+        {
+          "number": "A9",
+          "name": "",
+          "net": "USB_5V"
+        },
+        {
+          "number": "B1",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "B12",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "B4",
+          "name": "",
+          "net": "USB_5V"
+        },
+        {
+          "number": "B5",
+          "name": "",
+          "net": "CC2"
+        },
+        {
+          "number": "B6",
+          "name": "",
+          "net": "USB_D_P_CONN"
+        },
+        {
+          "number": "B7",
+          "name": "",
+          "net": "USB_D_N_CONN"
+        },
+        {
+          "number": "B9",
+          "name": "",
+          "net": "USB_5V"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C709357",
+      "mpn": "",
+      "manufacturer": "Kinghelm",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "J2",
+      "role": "lipo_battery_connector",
+      "value": "JST PH 2P SMD battery connector",
+      "lib_id": "JLC-MCP:S2B-PH-SM4-TB",
+      "footprint": "CONN-SMD_P2.00_S2B-PH-SM4-TB-LF-SN",
+      "at": {
+        "x": 38.1,
+        "y": 68.58,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "BAT_P"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C295747",
+      "mpn": "",
+      "manufacturer": "JST",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "SW1",
+      "role": "reset_button",
+      "value": "Reset pushbutton",
+      "lib_id": "JLC-MCP:K5-1617SA-02",
+      "footprint": "SW-SMD_K5-1617SA-02",
+      "at": {
+        "x": 38.1,
+        "y": 71.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_EN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C128964",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "SW2",
+      "role": "boot_button",
+      "value": "BOOT pushbutton",
+      "lib_id": "JLC-MCP:K5-1617SA-02",
+      "footprint": "SW-SMD_K5-1617SA-02",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 96.52,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_BOOT"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C128964",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "D1",
+      "role": "power_status_led",
+      "value": "LED0603 green",
+      "lib_id": "JLC-MCP:APHD1608LCGCK",
+      "footprint": "LED-SMD_L1.6-W0.8-RD_GREEN-1",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 71.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "A",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "K",
+          "name": "",
+          "net": "LED_POWER"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C5139863",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "D2",
+      "role": "recording_privacy_led",
+      "value": "LED0603 red",
+      "lib_id": "JLC-MCP:KT-0603R",
+      "footprint": "LED-SMD_L1.6-W0.8-R-RD",
+      "at": {
+        "x": 129.54,
+        "y": 71.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "A",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "K",
+          "name": "",
+          "net": "LED_RECORD"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C2286",
+      "mpn": "",
+      "manufacturer": "Hubei KENTO Elec",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R1",
+      "role": "usb_cc1_rd",
+      "value": "5.1K",
+      "lib_id": "JLC-MCP:0603WAF5101T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 129.54,
+        "y": 259.08,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "CC1"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C23186",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R2",
+      "role": "usb_cc2_rd",
+      "value": "5.1K",
+      "lib_id": "JLC-MCP:0603WAF5101T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 175.26,
+        "y": 238.76,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "CC2"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C23186",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R3",
+      "role": "charger_prog_resistor",
+      "value": "2K",
+      "lib_id": "JLC-MCP:0603WAF2001T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 106.68,
+        "y": 83.82000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "CHG_PROG"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C22975",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R4",
+      "role": "esp_en_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 195.58,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_EN"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R5",
+      "role": "esp_boot_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 129.54,
+        "y": 195.58,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "ESP_BOOT"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R6",
+      "role": "power_led_resistor",
+      "value": "1K",
+      "lib_id": "JLC-MCP:RC0603JR-071KL",
+      "footprint": "R0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 160.02,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "LED_POWER"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "LED_POWER_DRV"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C14676",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R7",
+      "role": "recording_led_resistor",
+      "value": "1K",
+      "lib_id": "JLC-MCP:RC0603JR-071KL",
+      "footprint": "R0603",
+      "at": {
+        "x": 129.54,
+        "y": 139.7,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "LED_RECORD"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "LED_RECORD_DRV"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C14676",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R8",
+      "role": "vbat_sense_upper",
+      "value": "1M",
+      "lib_id": "JLC-MCP:0603WAF1004T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 38.1,
+        "y": 129.54,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VSYS"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "VBAT_SENSE"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C22935",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R9",
+      "role": "vbat_sense_lower",
+      "value": "330K",
+      "lib_id": "JLC-MCP:0603WAF3303T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 129.54,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VBAT_SENSE"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C23137",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R26",
+      "role": "sys_3v3_current_link",
+      "value": "0R",
+      "lib_id": "JLC-MCP:0603WAF0000T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 175.26,
+        "y": 101.6,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3_REG"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "SYS_3V3"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C21189",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C1",
+      "role": "reg_input_bulk",
+      "value": "10uF",
+      "lib_id": "JLC-MCP:CL10A106KP8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 101.6,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VSYS"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C19702",
+      "mpn": "",
+      "manufacturer": "Samsung Electro-Mechanics",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C2",
+      "role": "reg_output_bulk",
+      "value": "10uF",
+      "lib_id": "JLC-MCP:CL10A106KP8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 101.6,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3_REG"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C19702",
+      "mpn": "",
+      "manufacturer": "Samsung Electro-Mechanics",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C3",
+      "role": "esp32s3_bulk_cap",
+      "value": "10uF",
+      "lib_id": "JLC-MCP:CL10A106KP8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C19702",
+      "mpn": "",
+      "manufacturer": "Samsung Electro-Mechanics",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C4",
+      "role": "esp32s3_decoupling_1",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C5",
+      "role": "esp32s3_decoupling_2",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 129.54,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C6",
+      "role": "esp32s3_decoupling_3",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 175.26,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C7",
+      "role": "esp_en_rc_cap",
+      "value": "1uF",
+      "lib_id": "JLC-MCP:CL10A105KO8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 195.58,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "ESP_EN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1592",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C14",
+      "role": "usb_vbus_bulk",
+      "value": "10uF",
+      "lib_id": "JLC-MCP:CL10A106KP8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 238.76,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_5V"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C19702",
+      "mpn": "",
+      "manufacturer": "Samsung Electro-Mechanics",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "J5",
+      "role": "microsd_socket",
+      "value": "microSD socket push-push",
+      "lib_id": "JLC-MCP:TF-001B",
+      "footprint": "TF-SMD_TF-001B",
+      "at": {
+        "x": 38.1,
+        "y": 68.58,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "2",
+          "name": "",
+          "net": "SD_CS"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "SD_MOSI"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "SD_SCLK"
+        },
+        {
+          "number": "7",
+          "name": "",
+          "net": "SD_MISO"
+        },
+        {
+          "number": "9",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "10",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "11",
+          "name": "",
+          "net": "SD_CD"
+        },
+        {
+          "number": "12",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "VDD",
+          "name": "",
+          "net": "SD_3V3"
+        },
+        {
+          "number": "VSS",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C125617",
+      "mpn": "",
+      "manufacturer": "SOFNG",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "MK1",
+      "role": "left_i2s_mem_microphone",
+      "value": "MSM261S3526Z0CM I2S MEMS microphone left",
+      "lib_id": "JLC-MCP:MSM261S3526Z0CM",
+      "footprint": "MIC-SMD_6P-L3.5-W2.7-P0.90-TR",
+      "at": {
+        "x": 106.68,
+        "y": 55.88,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "GND",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "L/R",
+          "name": "",
+          "net": "MIC_LR_SEL_L"
+        },
+        {
+          "number": "SCK",
+          "name": "",
+          "net": "I2S_BCLK"
+        },
+        {
+          "number": "SD",
+          "name": "",
+          "net": "I2S_DIN"
+        },
+        {
+          "number": "VDD",
+          "name": "",
+          "net": "MIC_3V3"
+        },
+        {
+          "number": "WS",
+          "name": "",
+          "net": "I2S_LRCLK"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C966933",
+      "mpn": "",
+      "manufacturer": "MEMSensing Microsystems",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "MK2",
+      "role": "right_i2s_mem_microphone",
+      "value": "MSM261S3526Z0CM I2S MEMS microphone right",
+      "lib_id": "JLC-MCP:MSM261S3526Z0CM",
+      "footprint": "MIC-SMD_6P-L3.5-W2.7-P0.90-TR",
+      "at": {
+        "x": 106.68,
+        "y": 88.9,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "GND",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "L/R",
+          "name": "",
+          "net": "MIC_LR_SEL_R"
+        },
+        {
+          "number": "SCK",
+          "name": "",
+          "net": "I2S_BCLK"
+        },
+        {
+          "number": "SD",
+          "name": "",
+          "net": "I2S_DIN"
+        },
+        {
+          "number": "VDD",
+          "name": "",
+          "net": "MIC_3V3"
+        },
+        {
+          "number": "WS",
+          "name": "",
+          "net": "I2S_LRCLK"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C966933",
+      "mpn": "",
+      "manufacturer": "MEMSensing Microsystems",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "SW3",
+      "role": "mark_button",
+      "value": "Mark tactile switch",
+      "lib_id": "JLC-MCP:K5-1617SA-02",
+      "footprint": "SW-SMD_K5-1617SA-02",
+      "at": {
+        "x": 175.26,
+        "y": 165.1,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "BTN_MARK"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C128964",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "SW4",
+      "role": "physical_mute_switch",
+      "value": "Mute SPDT slide switch",
+      "lib_id": "JLC-MCP:MST-12D18G4SPDTSLIDESWITCH",
+      "footprint": "SW-SMD_MST-12D18G4-SPDT-SLIDE-SWITCH",
+      "at": {
+        "x": 38.1,
+        "y": 238.76,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "MIC_PWR_EN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "MIC_PWR_NC"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C49023767",
+      "mpn": "",
+      "manufacturer": "SHOU HAN",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "Q1",
+      "role": "vibration_motor_low_side_switch",
+      "value": "AO3400A NMOS low-side switch",
+      "lib_id": "JLC-MCP:AO3400A",
+      "footprint": "SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 124.46000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "D",
+          "name": "",
+          "net": "MOTOR_LOW"
+        },
+        {
+          "number": "G",
+          "name": "",
+          "net": "MOTOR_GATE"
+        },
+        {
+          "number": "S",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C20917",
+      "mpn": "",
+      "manufacturer": "AOS",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "M1",
+      "role": "vibration_motor",
+      "value": "LCM0827A3038F 3V flat vibration motor",
+      "lib_id": "JLC-MCP:LCM0827A3038F",
+      "footprint": "VIBRATIONMOTOR-TH_LCM0827A3038F",
+      "at": {
+        "x": 38.1,
+        "y": 101.6,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "MOTOR_LOW"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C2759981",
+      "mpn": "",
+      "manufacturer": "LEADER",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R11",
+      "role": "mic_power_link",
+      "value": "0R",
+      "lib_id": "JLC-MCP:0603WAF0000T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 129.54,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "MIC_3V3"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C21189",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R12",
+      "role": "mic_left_select",
+      "value": "0R",
+      "lib_id": "JLC-MCP:0603WAF0000T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 175.26,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "MIC_LR_SEL_L"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C21189",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R13",
+      "role": "mic_right_select",
+      "value": "0R",
+      "lib_id": "JLC-MCP:0603WAF0000T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 38.1,
+        "y": 195.58,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "MIC_LR_SEL_R"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C21189",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R14",
+      "role": "microsd_cs_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 127.0,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SD_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "SD_CS"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R15",
+      "role": "microsd_cd_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 129.54,
+        "y": 127.0,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SD_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "SD_CD"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R17",
+      "role": "motor_gate_resistor",
+      "value": "100R",
+      "lib_id": "JLC-MCP:0603WAF1000T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 129.54,
+        "y": 116.84,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "MOTOR_DRV"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "MOTOR_GATE"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C22775",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R18",
+      "role": "motor_gate_pulldown",
+      "value": "100K",
+      "lib_id": "JLC-MCP:0603WAF1003T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 175.26,
+        "y": 116.84,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "MOTOR_GATE"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C25803",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C15",
+      "role": "mic_left_decoupling",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "MIC_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C16",
+      "role": "mic_right_decoupling",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 167.64000000000001,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "MIC_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C17",
+      "role": "microsd_bulk_cap",
+      "value": "10uF",
+      "lib_id": "JLC-MCP:CL10A106KP8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 127.0,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SD_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C19702",
+      "mpn": "",
+      "manufacturer": "Samsung Electro-Mechanics",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C18",
+      "role": "secure_element_decoupling",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 71.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C19",
+      "role": "motor_suppression_cap",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 38.1,
+        "y": 71.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "MOTOR_LOW"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R19",
+      "role": "charger_stat_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 106.68,
+        "y": 55.88,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_5V"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "CHG_STAT"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R20",
+      "role": "i2c_sda_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 71.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "I2C_SDA"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R21",
+      "role": "i2c_scl_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 129.54,
+        "y": 71.12,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "I2C_SCL"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R22",
+      "role": "usb_dp_series_option",
+      "value": "0R",
+      "lib_id": "JLC-MCP:0603WAF0000T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 38.1,
+        "y": 345.44,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_D_P_ESD"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "USB_D_P"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C21189",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R23",
+      "role": "usb_dn_series_option",
+      "value": "0R",
+      "lib_id": "JLC-MCP:0603WAF0000T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 345.44,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "USB_D_N_ESD"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "USB_D_N"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C21189",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "U8",
+      "role": "dynamic_nfc_tag",
+      "value": "ST25DV04KC dynamic NFC tag",
+      "lib_id": "JLC-MCP:ST25DV04KC-IE8S3",
+      "footprint": "SO-8_L4.9-W3.9-P1.27-LS6.0-BL",
+      "at": {
+        "x": 106.68,
+        "y": 58.42,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "AC0",
+          "name": "",
+          "net": "NFC_ANT1"
+        },
+        {
+          "number": "AC1",
+          "name": "",
+          "net": "NFC_ANT2"
+        },
+        {
+          "number": "GND",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "GPO",
+          "name": "",
+          "net": "NFC_GPO"
+        },
+        {
+          "number": "SCL",
+          "name": "",
+          "net": "I2C_SCL"
+        },
+        {
+          "number": "SDA",
+          "name": "",
+          "net": "I2C_SDA"
+        },
+        {
+          "number": "VCC",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "VSS",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C5221752",
+      "mpn": "",
+      "manufacturer": "STMicroelectronics",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "J7",
+      "role": "nfc_antenna_connector",
+      "value": "NFC antenna coil pads / connector",
+      "lib_id": "JLC-MCP:NFC_ANT_2P",
+      "footprint": "SMD-2P",
+      "at": {
+        "x": 38.1,
+        "y": 55.88,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "NFC_ANT1"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "NFC_ANT2"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": false,
+      "on_board": false
+    },
+    {
+      "ref": "J6",
+      "role": "epaper_spi_connector",
+      "value": "2.13 inch black-white e-paper SPI connector",
+      "lib_id": "JLC-MCP:EPD_SPI_CONN_10P",
+      "footprint": "FPC-SMD_24P-P0.50-L6.1-W16.4",
+      "at": {
+        "x": 38.1,
+        "y": 58.42,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "EPD_SCLK"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "EPD_MOSI"
+        },
+        {
+          "number": "3",
+          "name": "",
+          "net": "EPD_CS"
+        },
+        {
+          "number": "4",
+          "name": "",
+          "net": "EPD_DC"
+        },
+        {
+          "number": "5",
+          "name": "",
+          "net": "EPD_RST"
+        },
+        {
+          "number": "6",
+          "name": "",
+          "net": "EPD_BUSY"
+        },
+        {
+          "number": "7",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "8",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "9",
+          "name": "",
+          "net": "EPD_PWR_EN"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C20688",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "U9",
+      "role": "mic_3v3_load_switch",
+      "value": "TPS22918 MIC_3V3 load switch",
+      "lib_id": "JLC-MCP:TPS22918DBVR",
+      "footprint": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "at": {
+        "x": 106.68,
+        "y": 121.92,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "GND",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "IN",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "ON",
+          "name": "",
+          "net": "MIC_PWR_EN"
+        },
+        {
+          "number": "OUT",
+          "name": "",
+          "net": "MIC_3V3"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C131941",
+      "mpn": "",
+      "manufacturer": "Texas Instruments",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "U10",
+      "role": "sd_3v3_load_switch",
+      "value": "TPS22918 SD_3V3 load switch",
+      "lib_id": "JLC-MCP:TPS22918DBVR",
+      "footprint": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+      "at": {
+        "x": 106.68,
+        "y": 55.88,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "GND",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "IN",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "ON",
+          "name": "",
+          "net": "SD_PWR_EN"
+        },
+        {
+          "number": "OUT",
+          "name": "",
+          "net": "SD_3V3"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C131941",
+      "mpn": "",
+      "manufacturer": "Texas Instruments",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "SW5",
+      "role": "record_slide_switch",
+      "value": "REC slide switch SPDT",
+      "lib_id": "JLC-MCP:MST-12D18G4SPDTSLIDESWITCH",
+      "footprint": "SW-SMD_MST-12D18G4-SPDT-SLIDE-SWITCH",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 238.76,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "REC_BTN"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "REC_STATE_NC"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C49023767",
+      "mpn": "",
+      "manufacturer": "SHOU HAN",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R27",
+      "role": "mic_power_enable_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 83.82000000000001,
+        "y": 195.58,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "MIC_PWR_NC"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R28",
+      "role": "sd_power_enable_pulldown",
+      "value": "100K",
+      "lib_id": "JLC-MCP:0603WAF1003T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 175.26,
+        "y": 127.0,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "GND"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "SD_PWR_EN"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C25803",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "R31",
+      "role": "rec_button_pullup",
+      "value": "10K",
+      "lib_id": "JLC-MCP:0603WAJ0103T5E",
+      "footprint": "R0603",
+      "at": {
+        "x": 38.1,
+        "y": 127.0,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "SYS_3V3"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "REC_STATE_NC"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C15401",
+      "mpn": "",
+      "manufacturer": "UNI-ROYAL",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "D3",
+      "role": "motor_flyback_diode",
+      "value": "BAT54 Schottky flyback",
+      "lib_id": "JLC-MCP:BAT54C_FLYBACK",
+      "footprint": "SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR",
+      "at": {
+        "x": 175.26,
+        "y": 93.98,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "A",
+          "name": "",
+          "net": "MOTOR_LOW"
+        },
+        {
+          "number": "K",
+          "name": "",
+          "net": "SYS_3V3"
+        }
+      ],
+      "notes": [
+        "Resolved from selected_part; shared symbol rule table is retired."
+      ],
+      "lcsc": "C131213",
+      "mpn": "",
+      "manufacturer": "Jiangsu Changjing",
+      "in_bom": true,
+      "on_board": true
+    },
+    {
+      "ref": "C22",
+      "role": "vbat_sense_filter_cap",
+      "value": "100nF",
+      "lib_id": "JLC-MCP:CL10B104KA8NNNC",
+      "footprint": "C0603",
+      "at": {
+        "x": 129.54,
+        "y": 101.6,
+        "rotation": 0.0
+      },
+      "pins": [
+        {
+          "number": "1",
+          "name": "",
+          "net": "VBAT_SENSE"
+        },
+        {
+          "number": "2",
+          "name": "",
+          "net": "GND"
+        }
+      ],
+      "notes": [
+        "Resolved from imported project-local JLC symbol library."
+      ],
+      "lcsc": "C1590",
+      "mpn": "",
+      "manufacturer": "",
+      "in_bom": true,
+      "on_board": true
+    }
+  ],
+  "nets": [
+    {
+      "name": "USB_5V",
+      "kind": "power",
+      "members": [
+        "J1.A4",
+        "J1.A9",
+        "J1.B4",
+        "J1.B9",
+        "U6.5",
+        "U3.IN",
+        "C14.1",
+        "R19.1"
+      ]
+    },
+    {
+      "name": "BAT_P",
+      "kind": "power",
+      "members": [
+        "U3.BAT",
+        "J2.1"
+      ]
+    },
+    {
+      "name": "SYS_3V3",
+      "kind": "power",
+      "members": [
+        "U1.3V3",
+        "U8.VCC",
+        "U9.IN",
+        "U10.IN",
+        "R20.1",
+        "R21.1",
+        "R27.1",
+        "R31.1",
+        "M1.1",
+        "C18.1",
+        "C19.1",
+        "R4.1",
+        "R5.1",
+        "D1.A",
+        "D2.A",
+        "R26.2",
+        "C3.1",
+        "C4.1",
+        "C5.1",
+        "C6.1",
+        "R11.1",
+        "J6.7",
+        "D3.K"
+      ]
+    },
+    {
+      "name": "SYS_3V3_REG",
+      "kind": "power",
+      "members": [
+        "U2.VOUT",
+        "C2.1",
+        "R26.1"
+      ]
+    },
+    {
+      "name": "GND",
+      "kind": "ground",
+      "members": [
+        "U1.GND",
+        "U2.GND",
+        "U3.VSS",
+        "U6.2",
+        "J5.VSS",
+        "J5.9",
+        "J5.10",
+        "J5.12",
+        "MK1.GND",
+        "MK2.GND",
+        "J1.A1",
+        "J1.A12",
+        "J1.B1",
+        "J1.B12",
+        "J1.1",
+        "J1.2",
+        "J1.3",
+        "J1.4",
+        "J2.2",
+        "SW1.2",
+        "SW2.2",
+        "SW3.2",
+        "Q1.S",
+        "R1.2",
+        "R2.2",
+        "R3.2",
+        "R9.2",
+        "R12.2",
+        "R13.1",
+        "R18.2",
+        "C1.2",
+        "C2.2",
+        "C3.2",
+        "C4.2",
+        "C5.2",
+        "C6.2",
+        "C7.2",
+        "C14.2",
+        "C15.2",
+        "C16.2",
+        "C17.2",
+        "C18.2",
+        "U8.GND",
+        "U8.VSS",
+        "U9.GND",
+        "U10.GND",
+        "J6.8",
+        "R28.1",
+        "C22.2"
+      ]
+    },
+    {
+      "name": "USB_D_P_CONN",
+      "kind": "signal",
+      "members": [
+        "J1.A6",
+        "J1.B6",
+        "U6.1"
+      ]
+    },
+    {
+      "name": "USB_D_P_ESD",
+      "kind": "signal",
+      "members": [
+        "U6.6",
+        "R22.1"
+      ]
+    },
+    {
+      "name": "USB_D_P",
+      "kind": "signal",
+      "members": [
+        "R22.2",
+        "U1.GPIO20"
+      ]
+    },
+    {
+      "name": "USB_D_N_CONN",
+      "kind": "signal",
+      "members": [
+        "J1.A7",
+        "J1.B7",
+        "U6.3"
+      ]
+    },
+    {
+      "name": "USB_D_N_ESD",
+      "kind": "signal",
+      "members": [
+        "U6.4",
+        "R23.1"
+      ]
+    },
+    {
+      "name": "USB_D_N",
+      "kind": "signal",
+      "members": [
+        "R23.2",
+        "U1.GPIO19"
+      ]
+    },
+    {
+      "name": "CC1",
+      "kind": "signal",
+      "members": [
+        "J1.A5",
+        "R1.1"
+      ]
+    },
+    {
+      "name": "CC2",
+      "kind": "signal",
+      "members": [
+        "J1.B5",
+        "R2.1"
+      ]
+    },
+    {
+      "name": "CHG_STAT",
+      "kind": "signal",
+      "members": [
+        "U3.STAT",
+        "R19.2"
+      ]
+    },
+    {
+      "name": "CHG_PROG",
+      "kind": "signal",
+      "members": [
+        "U3.PROG",
+        "R3.1"
+      ]
+    },
+    {
+      "name": "ESP_EN",
+      "kind": "signal",
+      "members": [
+        "U1.EN",
+        "R4.2",
+        "C7.1",
+        "SW1.1"
+      ]
+    },
+    {
+      "name": "ESP_BOOT",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO0",
+        "R5.2",
+        "SW2.1"
+      ]
+    },
+    {
+      "name": "VBAT_SENSE",
+      "kind": "signal",
+      "members": [
+        "R8.2",
+        "R9.1",
+        "U1.GPIO1",
+        "C22.1"
+      ]
+    },
+    {
+      "name": "LED_POWER",
+      "kind": "signal",
+      "members": [
+        "D1.K",
+        "R6.1"
+      ]
+    },
+    {
+      "name": "LED_RECORD",
+      "kind": "signal",
+      "members": [
+        "D2.K",
+        "R7.1"
+      ]
+    },
+    {
+      "name": "UART0_TX",
+      "kind": "signal",
+      "members": [
+        "U1.U0TXD"
+      ]
+    },
+    {
+      "name": "UART0_RX",
+      "kind": "signal",
+      "members": [
+        "U1.U0RXD"
+      ]
+    },
+    {
+      "name": "MIC_3V3",
+      "kind": "power",
+      "members": [
+        "U9.OUT",
+        "MK1.VDD",
+        "MK2.VDD",
+        "C15.1",
+        "C16.1",
+        "R11.2"
+      ]
+    },
+    {
+      "name": "I2S_BCLK",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO12",
+        "MK1.SCK",
+        "MK2.SCK"
+      ]
+    },
+    {
+      "name": "I2S_LRCLK",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO13",
+        "MK1.WS",
+        "MK2.WS"
+      ]
+    },
+    {
+      "name": "I2S_DIN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO14",
+        "MK1.SD",
+        "MK2.SD"
+      ]
+    },
+    {
+      "name": "MIC_LR_SEL_L",
+      "kind": "signal",
+      "members": [
+        "MK1.L/R",
+        "R12.1"
+      ]
+    },
+    {
+      "name": "MIC_LR_SEL_R",
+      "kind": "signal",
+      "members": [
+        "MK2.L/R",
+        "R13.2"
+      ]
+    },
+    {
+      "name": "SD_SCLK",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO10",
+        "J5.5"
+      ]
+    },
+    {
+      "name": "SD_MOSI",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO11",
+        "J5.3"
+      ]
+    },
+    {
+      "name": "SD_MISO",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO9",
+        "J5.7"
+      ]
+    },
+    {
+      "name": "SD_CS",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO8",
+        "J5.2",
+        "R14.2"
+      ]
+    },
+    {
+      "name": "SD_CD",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO7",
+        "J5.11",
+        "R15.2"
+      ]
+    },
+    {
+      "name": "BTN_MARK",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO6",
+        "SW3.1"
+      ]
+    },
+    {
+      "name": "MOTOR_DRV",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO18",
+        "R17.1"
+      ]
+    },
+    {
+      "name": "MOTOR_GATE",
+      "kind": "signal",
+      "members": [
+        "R17.2",
+        "R18.1",
+        "Q1.G"
+      ]
+    },
+    {
+      "name": "MOTOR_LOW",
+      "kind": "signal",
+      "members": [
+        "M1.2",
+        "Q1.D",
+        "C19.2",
+        "D3.A"
+      ]
+    },
+    {
+      "name": "I2C_SDA",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO21",
+        "R20.2",
+        "U8.SDA"
+      ]
+    },
+    {
+      "name": "I2C_SCL",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO5",
+        "R21.2",
+        "U8.SCL"
+      ]
+    },
+    {
+      "name": "VSYS",
+      "kind": "power",
+      "members": [
+        "U3.OUT",
+        "U2.VIN",
+        "U2.EN",
+        "C1.1",
+        "R8.1"
+      ]
+    },
+    {
+      "name": "MIC_PWR_EN",
+      "kind": "signal",
+      "members": [
+        "U9.ON",
+        "SW4.1",
+        "U1.GPIO17"
+      ]
+    },
+    {
+      "name": "SD_3V3",
+      "kind": "power",
+      "members": [
+        "U10.OUT",
+        "J5.VDD",
+        "C17.1",
+        "R14.1",
+        "R15.1"
+      ]
+    },
+    {
+      "name": "SD_PWR_EN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO16",
+        "U10.ON",
+        "R28.2"
+      ]
+    },
+    {
+      "name": "EPD_3V3",
+      "kind": "power",
+      "members": []
+    },
+    {
+      "name": "EPD_SCLK",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO47",
+        "J6.1"
+      ]
+    },
+    {
+      "name": "EPD_MOSI",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO48",
+        "J6.2"
+      ]
+    },
+    {
+      "name": "EPD_CS",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO35",
+        "J6.3"
+      ]
+    },
+    {
+      "name": "EPD_DC",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO36",
+        "J6.4"
+      ]
+    },
+    {
+      "name": "EPD_RST",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO37",
+        "J6.5"
+      ]
+    },
+    {
+      "name": "EPD_BUSY",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO38",
+        "J6.6"
+      ]
+    },
+    {
+      "name": "EPD_PWR_EN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO15",
+        "J6.9"
+      ]
+    },
+    {
+      "name": "REC_BTN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO39",
+        "SW5.1"
+      ]
+    },
+    {
+      "name": "MODE_BTN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO40"
+      ]
+    },
+    {
+      "name": "NFC_GPO",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO41",
+        "U8.GPO"
+      ]
+    },
+    {
+      "name": "NFC_ANT1",
+      "kind": "signal",
+      "members": [
+        "U8.AC0",
+        "J7.1"
+      ]
+    },
+    {
+      "name": "NFC_ANT2",
+      "kind": "signal",
+      "members": [
+        "U8.AC1",
+        "J7.2"
+      ]
+    },
+    {
+      "name": "LED_POWER_DRV",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO2",
+        "R6.2"
+      ]
+    },
+    {
+      "name": "LED_RECORD_DRV",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO4",
+        "R7.2"
+      ]
+    },
+    {
+      "name": "MIC_PWR_NC",
+      "kind": "signal",
+      "members": [
+        "SW4.2",
+        "R27.2"
+      ]
+    },
+    {
+      "name": "REC_STATE_NC",
+      "kind": "signal",
+      "members": [
+        "SW5.2",
+        "R31.2"
+      ]
+    }
+  ],
+  "diagnostics": {
+    "warnings": [],
+    "unsupported": []
+  }
+}

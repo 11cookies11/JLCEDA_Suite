@@ -1,0 +1,141 @@
+{
+  "schema_version": "simulation-plan.v1",
+  "request_id": "ai-memory-badge-v1-rev-a-module",
+  "project_id": "ai-memory-badge-v1",
+  "project_name": "ai_memory_badge_v1",
+  "topology": "ai_memory_badge_v1",
+  "source_profile": {
+    "schema_version": "simulation-profile.v1",
+    "profile_id": "ai_memory_badge_v1-profile"
+  },
+  "scenarios": [
+    {
+      "scenario_id": "power-startup",
+      "title": "Power startup check",
+      "backend": "ngspice",
+      "analysis_kind": "tran",
+      "focus": "Validate power rail startup and regulation.",
+      "focus_components": [],
+      "focus_nets": [
+        "USB_5V",
+        "SYS_3V3",
+        "SYS_3V3_REG",
+        "MIC_3V3",
+        "SD_3V3",
+        "EPD_3V3"
+      ],
+      "stimuli": [
+        "Input supply sweep",
+        "Load step"
+      ],
+      "success_criteria": [
+        "Primary rail reaches nominal voltage.",
+        "Startup does not overshoot excessively.",
+        "Output remains stable under a modest load step."
+      ],
+      "notes": [
+        "Prefer a vendor model when the regulator is a switching IC."
+      ]
+    },
+    {
+      "scenario_id": "usb-input-protection",
+      "title": "USB input protection check",
+      "backend": "ngspice",
+      "analysis_kind": "op",
+      "focus": "Confirm VBUS protection and idle biasing.",
+      "focus_components": [
+        "U6"
+      ],
+      "focus_nets": [],
+      "stimuli": [
+        "Apply nominal VBUS",
+        "Observe clamp and fuse behavior"
+      ],
+      "success_criteria": [
+        "Normal VBUS is not clamped under nominal conditions.",
+        "Protection parts do not distort the rail during idle bias."
+      ],
+      "notes": [
+        "Use DC operating point first; transient only if the model supports it."
+      ]
+    },
+    {
+      "scenario_id": "esp32-startup-and-strap",
+      "title": "ESP32 startup and strap check",
+      "backend": "ngspice",
+      "analysis_kind": "op",
+      "focus": "Check ESP32 reset, boot, strap, clock, and supply bias states at power-up.",
+      "focus_components": [],
+      "focus_nets": [],
+      "stimuli": [
+        "Power applied at nominal input",
+        "Observe strap sampling window",
+        "Check crystal bias and decoupling"
+      ],
+      "success_criteria": [
+        "Reset remains asserted long enough during startup.",
+        "Boot strap pins settle to the intended logic state.",
+        "Crystal and decoupling nets bias correctly at startup."
+      ],
+      "notes": [
+        "This is a functional check, not a full timing-accuracy proof."
+      ]
+    },
+    {
+      "scenario_id": "indicator-current",
+      "title": "Indicator current check",
+      "backend": "ngspice",
+      "analysis_kind": "op",
+      "focus": "Verify LED bias current and resistor sizing.",
+      "focus_components": [
+        "R6"
+      ],
+      "focus_nets": [],
+      "stimuli": [
+        "DC operating point"
+      ],
+      "success_criteria": [
+        "LED current stays within the target range.",
+        "Series resistor dissipation is safe."
+      ],
+      "notes": [
+        "Useful as a quick sanity check for visible indicators."
+      ]
+    },
+    {
+      "scenario_id": "interface-bias",
+      "title": "Interface bias and coupling check",
+      "backend": "ngspice",
+      "analysis_kind": "op",
+      "focus": "Validate interface biasing, VTREF sensing, and basic connectivity.",
+      "focus_components": [],
+      "focus_nets": [
+        "UART0_TX",
+        "UART0_RX"
+      ],
+      "stimuli": [
+        "DC operating point"
+      ],
+      "success_criteria": [
+        "Interface bias nets sit at intended levels.",
+        "No obvious floating interface supply is detected.",
+        "VTREF sensing remains stable across the interface network."
+      ],
+      "notes": [
+        "This is a lightweight pre-check, not a high-frequency RF simulation."
+      ]
+    }
+  ],
+  "summary": {
+    "scenario_count": 5,
+    "analysis_kinds": [
+      "op",
+      "tran"
+    ],
+    "backend": "ngspice"
+  },
+  "recommendations": [
+    "Start with the baseline operating-point check.",
+    "Prefer transient analysis for startup behavior and DC operating point for bias checks."
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "kicad-erc-result.v1",
+  "enabled": true,
+  "attempted": true,
+  "success": false,
+  "return_code": 3,
+  "executable": "D:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+  "version": "10.0.1",
+  "command": [
+    "D:\\Program Files\\KiCad\\10.0\\bin\\kicad-cli.EXE",
+    "sch",
+    "erc",
+    "--format",
+    "json",
+    "--output",
+    "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.erc.json",
+    "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch"
+  ],
+  "schematic_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch",
+  "output_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.erc.json",
+  "summary_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.erc.summary.json",
+  "finding_count": 204,
+  "stdout": "",
+  "stderr": "加载原理图失败\n",
+  "warnings": [],
+  "error": "KICAD_ERC_FAILED"
+}

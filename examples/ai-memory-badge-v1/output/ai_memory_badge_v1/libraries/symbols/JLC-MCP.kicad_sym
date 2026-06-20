@@ -1,7 +1,3 @@
-(kicad_symbol_lib
-  (version 20251024)
-  (generator "kicad_symbol_editor")
-  (generator_version "10.0")
 (symbol "ESP32-S3"
     (in_bom yes)
     (on_board yes)
@@ -3450,49 +3446,6 @@
       )
     )
   )
-  (symbol "TP_1P"
-    (pin_numbers hide)
-    (pin_names
-      (offset 0.508)
-    )
-    (exclude_from_sim no)
-    (in_bom no)
-    (on_board yes)
-    (property "Reference" "TP"
-      (id 0)
-      (at 0 2.54 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Value" "TP_1P"
-      (id 1)
-      (at 0 -2.54 0)
-      (effects (font (size 1.27 1.27)))
-    )
-    (property "Footprint" "JLC-MCP:TP-SMD_1P"
-      (id 2)
-      (at 0 -5.08 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (property "Datasheet" ""
-      (id 3)
-      (at 0 -7.62 0)
-      (effects (font (size 1.27 1.27)) hide)
-    )
-    (symbol "TP_1P_0_1"
-      (circle
-        (center 0 0)
-        (radius 0.635)
-        (stroke (width 0.1524) (type default))
-        (fill (type none))
-      )
-      (pin passive line
-        (at -3.81 0 0)
-        (length 3.175)
-        (name "1" (effects (font (size 1.27 1.27))))
-        (number "1" (effects (font (size 1.27 1.27))))
-      )
-    )
-  )
 (symbol "KH-TYPE-C-16P"
     (in_bom yes)
     (on_board yes)
@@ -4215,8 +4168,6 @@
       )
     )
   )
-)
-
 (symbol "NFC_ANT_2P"
   (pin_numbers hide)
   (pin_names (offset 1.016) hide)
@@ -4798,7 +4749,6 @@
       )
     )
   )
-)
 (symbol "EPD_SPI_CONN_10P"
 
     (pin_names (offset 0.508))
@@ -4840,6 +4790,7 @@
       (pin passive line (at -10.16 -3.81 0) (length 5.08) (name "MODE" (effects (font (size 1.27 1.27)))) (number "10" (effects (font (size 1.27 1.27)))))
 
     )
+  )
 (symbol "PZT3904T1G"
     (in_bom yes)
     (on_board yes)
@@ -5035,8 +4986,6 @@
       )
     )
   )
-)
-
 (symbol "BAT54C_FLYBACK"
   (pin_numbers hide)
   (pin_names (offset 1.016) hide)
@@ -5082,6 +5031,7 @@
       (number "2" (effects (font (size 1.27 1.27))))
     )
   )
+)
 (symbol "CL10A106KP8NNNC"
     (in_bom yes)
     (on_board yes)
@@ -5182,7 +5132,7 @@
     )
     (property
       "Footprint"
-      ":SW-SMD_MST-12D18G4-SPDT-SLIDE-SWITCH"
+      "JLC-MCP:SW-SMD_MST-12D18G4-SPDT-SLIDE-SWITCH"
       (id 2)
       (at 0 -10.16 0)
       (effects (font (size 1.27 1.27) ) hide)
@@ -5293,6 +5243,297 @@
         (length 2.54)
         (name "3" (effects (font (size 1.27 1.27))))
         (number "3" (effects (font (size 1.27 1.27))))
+      )
+    )
+(symbol "TK-6580DS-2"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "SW"
+      (id 0)
+      (at 0 12.70 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "TK-6580DS-2"
+      (id 1)
+      (at 0 -12.70 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "JLC-MCP:SW-SMD_TK-6580DS-2"
+      (id 2)
+      (at 0 -15.24 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "Yuandi(元迪)"
+      (id 4)
+      (at 0 -17.78 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "TK-6580DS-2"
+      (id 5)
+      (at 0 -20.32 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "TK-6580DS-2_0_1"
+      (rectangle
+        (start 0.76 -1.02)
+        (end 4.32 -1.78)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (rectangle
+        (start -1.78 2.03)
+        (end 1.78 1.27)
+        (stroke (width 0) (type default))
+        (fill (type background))
+      )
+      (polyline
+        (pts
+          (xy 3.81 -2.03) (xy 3.56 -2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 3.81 -5.08) (xy 3.81 -2.03) (xy 4.06 -2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.27 -2.03) (xy 1.02 -2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.27 -5.08) (xy 1.27 -2.03) (xy 1.52 -2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -1.27 -2.03) (xy -1.52 -2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -1.27 -5.08) (xy -1.27 -2.03) (xy -1.02 -2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 3.81 2.03) (xy 3.56 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 3.81 5.08) (xy 3.81 2.03) (xy 4.06 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.27 2.03) (xy 1.02 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 1.27 5.08) (xy 1.27 2.03) (xy 1.52 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -1.27 2.03) (xy -1.52 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -1.27 5.08) (xy -1.27 2.03) (xy -1.02 2.79)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -1.78 -0.00) (xy 5.08 -0.00) (xy 3.56 0.25)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (pin unspecified line
+        (at 3.81 7.62 270)
+        (length 2.54)
+        (name "6" (effects (font (size 1.27 1.27))))
+        (number "6" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at 1.27 7.62 270)
+        (length 2.54)
+        (name "5" (effects (font (size 1.27 1.27))))
+        (number "5" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at -1.27 7.62 270)
+        (length 2.54)
+        (name "4" (effects (font (size 1.27 1.27))))
+        (number "4" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at 3.81 -7.62 90)
+        (length 2.54)
+        (name "3" (effects (font (size 1.27 1.27))))
+        (number "3" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at 1.27 -7.62 90)
+        (length 2.54)
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at -1.27 -7.62 90)
+        (length 2.54)
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+    )
+  )
+(symbol "EVQP7A01P"
+    (in_bom yes)
+    (on_board yes)
+    (property
+      "Reference"
+      "SW"
+      (id 0)
+      (at 0 6.35 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Value"
+      "EVQP7A01P"
+      (id 1)
+      (at 0 -8.89 0)
+      (effects (font (size 1.27 1.27) ) )
+    )
+    (property
+      "Footprint"
+      "JLC-MCP:SW-SMD_EVQP7A01P"
+      (id 2)
+      (at 0 -11.43 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "Manufacturer"
+      "PANASONIC(松下)"
+      (id 4)
+      (at 0 -13.97 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (property
+      "MPN"
+      "EVQP7A01P"
+      (id 5)
+      (at 0 -16.51 0)
+      (effects (font (size 1.27 1.27) ) hide)
+    )
+    (symbol "EVQP7A01P_0_1"
+      (circle
+        (center 0.00 -2.54)
+        (radius 0.38)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (circle
+        (center 0.00 -0.00)
+        (radius 0.38)
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 0.51 -2.54) (xy 1.52 -0.51)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy -2.54 -3.81) (xy 2.54 -3.81)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 2.54 1.27) (xy -2.54 1.27)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 0.00 -3.81) (xy 0.00 -3.05) (xy 0.00 -3.05)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (polyline
+        (pts
+          (xy 0.00 0.51) (xy 0.00 1.27)
+        )
+        (stroke (width 0) (type default))
+        (fill (type none))
+      )
+      (pin unspecified line
+        (at -7.62 -3.81 0)
+        (length 5.08)
+        (name "2" (effects (font (size 1.27 1.27))))
+        (number "2" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at -7.62 1.27 0)
+        (length 5.08)
+        (name "1" (effects (font (size 1.27 1.27))))
+        (number "1" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at 7.62 -3.81 180)
+        (length 5.08)
+        (name "2'" (effects (font (size 1.27 1.27))))
+        (number "2'" (effects (font (size 1.27 1.27))))
+      )
+      (pin unspecified line
+        (at 7.62 1.27 180)
+        (length 5.08)
+        (name "1'" (effects (font (size 1.27 1.27))))
+        (number "1'" (effects (font (size 1.27 1.27))))
       )
     )
   )
