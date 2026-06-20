@@ -265,7 +265,11 @@
         "display_name": "2.54-1*4P",
         "lcsc_id": "C91552",
         "package": "HDR-TH_4P"
-      }
+      },
+      "assembly": "dnp",
+      "notes": [
+        "DNP in production. Populate only for bring-up/debug. UART pads available as test points on PCB."
+      ]
     },
     {
       "ref": "SW1",
@@ -1517,7 +1521,6 @@
         "R5.1",
         "D1.A",
         "D2.A",
-        "J4.1",
         "R26.2",
         "C3.1",
         "C4.1",
@@ -1567,7 +1570,6 @@
         "J1.3",
         "J1.4",
         "J2.2",
-        "J4.4",
         "SW1.2",
         "SW2.2",
         "SW3.2",
@@ -1763,16 +1765,14 @@
       "name": "UART0_TX",
       "kind": "signal",
       "members": [
-        "U1.U0TXD",
-        "J4.2"
+        "U1.U0TXD"
       ]
     },
     {
       "name": "UART0_RX",
       "kind": "signal",
       "members": [
-        "U1.U0RXD",
-        "J4.3"
+        "U1.U0RXD"
       ]
     },
     {
