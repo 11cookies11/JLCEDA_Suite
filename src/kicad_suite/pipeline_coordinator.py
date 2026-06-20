@@ -16,7 +16,7 @@ from .shared.env_utils import is_truthy_env
 from .domain.core.ir_compiler import build_ir
 from .domain.core.ir_to_kicad import ir_to_kicad
 from .adapters.kicad_erc_runner import run as run_erc
-from .adapters.kicad_project_writer import write_hierarchical_project, write_project
+from .adapters.kicad_project_writer import write_project
 from .domain.core.netlist_builder import build_netlist
 from .application_services.placement_planner import write_placement_plan
 from .domain.core.parts.resolve import apply_selected_parts_to_model
@@ -216,20 +216,7 @@ def _render_and_postprocess_stage(state: PipelineRunState) -> Path:
     elif board_result.get("warnings"):
         state.write_result.setdefault("board_warnings", []).extend(board_result.get("warnings", []))
 
-    final_schematic_path = Path(str(state.write_result.get("schematic_file", "")) or str(schematic_file))
-    final_project_dir = final_schematic_path.parent if str(final_schematic_path.parent) != "." else project_dir
-    final_project_dir.mkdir(parents=True, exist_ok=True)
-    state.final_write_result = write_hierarchical_project(
-        asdict(state.plan) if state.plan is not None else {},
-        final_project_dir,
-        final_schematic_path,
-        dsl_sheets=state.model.get("sheets", []) if isinstance(state.model, dict) else None,
-    )
-    state.postprocess["final_write"] = {
-        "project_file": state.final_write_result.get("project_file", ""),
-        "schematic_file": state.final_write_result.get("schematic_file", ""),
-    }
-    state.postprocess["final_normalization"] = apply_postprocess(final_schematic_path, final_project_dir)
+    state.postprocess["final_normalization"] = apply_postprocess(schematic_file, project_dir)
     return project_dir
 
 

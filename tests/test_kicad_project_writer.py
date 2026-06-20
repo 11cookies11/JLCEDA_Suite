@@ -6,15 +6,18 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from types import SimpleNamespace
 from unittest.mock import patch
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.adapters.kicad_project_writer import (
     _sheet_file_stem,
+    render_connectivity,
     render_child_schematic,
     render_project,
     render_root_schematic,
+    write_project,
 )
 from kicad_suite.adapters.kicad_project_writer import _remove_stale_child_schematics
 from kicad_suite.orchestration.pipeline_postprocess import pin_project_libraries
@@ -25,7 +28,9 @@ from kicad_suite.adapters.board_generator import (
 )
 from kicad_suite.adapters.kicad_symbol_library import parse_symbol_pin_map
 from kicad_suite.domain.core.netlist_builder import build_netlist
+from kicad_suite.domain.core.ir_to_kicad import ir_to_kicad
 from kicad_suite.domain.core.kicad_layout_engine import configured_schematic_position, configured_topology_position
+from kicad_suite.domain.core.kicad_layout_engine import apply_sheet_aware_schematic_layout
 from kicad_suite.adapters.pcb_generator import _BOARD_SCRIPT, _convert_pad_block, _extract_pad_blocks, generate_pcb
 
 
@@ -61,6 +66,41 @@ class TestKicadProjectWriter(unittest.TestCase):
             self.assertFalse((directory / "01_01_usb_and_charging.kicad_sch").exists())
             self.assertTrue((directory / "unrelated.txt").exists())
 
+    def test_write_project_always_emits_one_standard_schematic(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            project_dir = Path(tmpdir) / "project"
+            output_dir = project_dir / "output" / "demo"
+            project_dir.mkdir(parents=True)
+            # A former EasyEDA-only marker must not alter the standard export.
+            (project_dir / ".kicad-flat-schematic").write_text("obsolete", encoding="utf-8")
+            plan = {
+                "request_id": "demo",
+                "target": {
+                    "project_name": "demo",
+                    "output_dir": str(output_dir),
+                    "schematic_file": str(output_dir / "demo.kicad_sch"),
+                    "project_file": str(output_dir / "demo.kicad_pro"),
+                },
+                "sheets": [{"name": "power", "components": ["R1"]}],
+                "symbols": [{
+                    "ref": "R1",
+                    "lib_id": "Device:R",
+                    "value": "10K",
+                    "footprint": "JLC-MCP:R0603",
+                    "at": {"x": 10.0, "y": 10.0, "rotation": 0.0},
+                    "pins": [],
+                }],
+                "nets": [],
+            }
+
+            result = write_project(plan, project_path=project_dir)
+            schematic = output_dir / "demo.kicad_sch"
+            self.assertTrue(result["single_page"])
+            self.assertEqual(result["section_count"], 1)
+            self.assertTrue(schematic.exists())
+            self.assertEqual([path.name for path in output_dir.glob("*.kicad_sch")], ["demo.kicad_sch"])
+            self.assertIn("JLC-MCP:R0603", schematic.read_text(encoding="utf-8"))
+
     def test_hierarchical_render_includes_sheet_ports_and_child_ports(self) -> None:
         plan = {
             "target": {"project_name": "demo"},
@@ -78,8 +118,8 @@ class TestKicadProjectWriter(unittest.TestCase):
             "y": 25.4,
             "w": 48.26,
             "h": 30.48,
-            "ports": ["SYS_3V3"],
-            "pins": ["SYS_3V3"],
+            "ports": ["SYS_3V3", "UNPOPULATED_PORT"],
+            "pins": ["SYS_3V3", "UNPOPULATED_PORT"],
             "symbols": [
                 {
                     "ref": "U1",
@@ -96,7 +136,39 @@ class TestKicadProjectWriter(unittest.TestCase):
 
         self.assertIn('(pin "SYS_3V3"', root)
         self.assertIn('(hierarchical_label "SYS_3V3"', child)
+        self.assertGreaterEqual(child.count('(hierarchical_label "SYS_3V3"'), 1)
+        self.assertIn('(hierarchical_label "UNPOPULATED_PORT"', child)
         self.assertNotIn('(global_label "SYS_3V3"', child)
+
+    def test_render_connectivity_keeps_collided_horizontal_labels_orthogonal(self) -> None:
+        plan = {
+            "nets": [
+                {"name": "NET_A", "kind": "signal"},
+                {"name": "NET_B", "kind": "signal"},
+            ],
+        }
+        symbols = [
+            {
+                "ref": "U1",
+                "lib_id": "power:PWR_FLAG",
+                "value": "PWR_FLAG",
+                "at": {"x": 50.8, "y": 50.8, "rotation": 0.0},
+                "pins": [{"number": "1", "net": "NET_A"}],
+            },
+            {
+                "ref": "U2",
+                "lib_id": "power:PWR_FLAG",
+                "value": "PWR_FLAG",
+                "at": {"x": 50.8, "y": 50.8, "rotation": 0.0},
+                "pins": [{"number": "1", "net": "NET_B"}],
+            },
+        ]
+
+        schematic = render_connectivity(plan, symbols)
+
+        self.assertIn('(label "NET_A"', schematic)
+        self.assertIn('(label "NET_B"', schematic)
+        self.assertNotIn('(xy 50.8 50.8) (xy 46.99 53.34)', schematic)
 
     def test_ai_memory_badge_profile_exposes_schematic_positions(self) -> None:
         pos = configured_topology_position("ai_memory_badge_v1", "U1")
@@ -106,6 +178,63 @@ class TestKicadProjectWriter(unittest.TestCase):
         schematic_pos = configured_schematic_position("ai_memory_badge_v1", "TP14")
         self.assertIsNotNone(schematic_pos)
         self.assertEqual((schematic_pos.x, schematic_pos.y, schematic_pos.rotation), (101.6, 127.0, 0.0))
+
+    def test_ai_memory_badge_sheet_layout_separates_symbol_lanes(self) -> None:
+        def symbol(ref: str, role: str) -> SimpleNamespace:
+            return SimpleNamespace(
+                ref=ref,
+                role=role,
+                lib_id="",
+                at=SimpleNamespace(x=0.0, y=0.0, rotation=0.0),
+            )
+
+        symbols = [
+            symbol("J1", "usb_connector"),
+            symbol("U1", "main_controller_wroom_module"),
+            symbol("R1", "pullup_resistor"),
+            symbol("TP1", "test_point"),
+        ]
+        applied = apply_sheet_aware_schematic_layout(
+            symbols,
+            {item.ref: "demo" for item in symbols},
+            "ai_memory_badge_v1",
+        )
+        positions = {item.ref: (item.at.x, item.at.y) for item in symbols}
+
+        self.assertTrue(applied)
+        self.assertEqual(positions["J1"][0], 38.1)
+        self.assertEqual(positions["U1"][0], 106.68)
+        self.assertEqual(positions["R1"][0], 38.1)
+        self.assertGreater(positions["TP1"][1], positions["R1"][1])
+
+    def test_ai_memory_badge_overlap_resolution_uses_source_sheet_assignment(self) -> None:
+        ir = {
+            "topology": "ai_memory_badge_v1",
+            "project_name": "demo",
+            "components": [
+                {
+                    "ref": "Q1",
+                    "role": "vibration_motor_driver",
+                    "value": "switch",
+                    "assigned_sheet": "08_user_interface",
+                    "selected_part": {"symbol_ref": "power:PWR_FLAG"},
+                },
+                {
+                    "ref": "R31",
+                    "role": "rec_button_pullup",
+                    "value": "10K",
+                    "assigned_sheet": "08_user_interface",
+                    "selected_part": {"symbol_ref": "power:PWR_FLAG"},
+                },
+            ],
+            "nets": [],
+        }
+        with patch("kicad_suite.domain.core.ir_to_kicad._resolve_symbol_overlaps_for_group") as resolve:
+            resolve.return_value = 0
+            ir_to_kicad(ir)
+
+        groups = [call.args[0] for call in resolve.call_args_list]
+        self.assertTrue(any({symbol.ref for symbol in group} == {"Q1", "R31"} for group in groups))
 
     def test_pin_project_libraries_restores_default_erc_settings(self) -> None:
         with tempfile.TemporaryDirectory() as tmpdir:
@@ -257,7 +386,7 @@ class TestKicadProjectWriter(unittest.TestCase):
         source_model = _load_source_model(project_dir)
         source_netlist = build_netlist(source_model)
 
-        u5_lib_id = "JLC-MCP:APS6404L-3SQR-SN_C5333729"
+        u1_lib_id = "JLC-MCP:ESP32-S3-WROOM-1"
         u6_lib_id = "JLC-MCP:USBLC6-2SC6"
         with patch.dict(
             os.environ,
@@ -267,11 +396,11 @@ class TestKicadProjectWriter(unittest.TestCase):
             },
             clear=False,
         ):
-            u5_pins = _source_netlist_symbol_pins(
+            u1_pins = _source_netlist_symbol_pins(
                 source_netlist,
-                "U5",
-                u5_lib_id,
-                parse_symbol_pin_map(u5_lib_id),
+                "U1",
+                u1_lib_id,
+                parse_symbol_pin_map(u1_lib_id),
             )
             u6_pins = _source_netlist_symbol_pins(
                 source_netlist,
@@ -280,10 +409,58 @@ class TestKicadProjectWriter(unittest.TestCase):
                 parse_symbol_pin_map(u6_lib_id),
             )
 
-        self.assertEqual([pin["number"] for pin in u5_pins], ["1", "4", "8"])
+        u1_pin_nets = {pin["number"]: pin["net"] for pin in u1_pins}
+        self.assertEqual(u1_pin_nets["3"], "ESP_EN")
+        self.assertEqual(u1_pin_nets["13"], "USB_D_N")
+        self.assertEqual(u1_pin_nets["14"], "USB_D_P")
+        self.assertEqual(u1_pin_nets["34"], "NFC_GPO")
         self.assertEqual([pin["number"] for pin in u6_pins], ["1", "2", "3", "4", "5", "6"])
-        self.assertEqual(u5_pins[0]["net"], "PSRAM_CS")
         self.assertEqual(u6_pins[1]["net"], "GND")
+
+    def test_generate_pcb_preflights_semantic_pins_to_physical_pads(self) -> None:
+        project_dir = Path("examples/ai-memory-badge-v1")
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output_dir = Path(tmpdir) / "out"
+            output_dir.mkdir(parents=True, exist_ok=True)
+            plan = {
+                "target": {
+                    "output_dir": str(output_dir),
+                    "project_name": "demo",
+                },
+                "symbols": [
+                    {
+                        "ref": "U1",
+                        "lib_id": "JLC-MCP:ESP32-S3-WROOM-1",
+                        "footprint": "JLC-MCP:WIRELM-SMD_ESP32-S3-WROOM-1",
+                        "value": "ESP32-S3-WROOM-1-N8R8 module",
+                        "pins": [{"number": "GPIO20", "net": "USB_D_P"}],
+                    }
+                ],
+            }
+            captured: dict[str, object] = {}
+
+            def _run_side_effect(args, **kwargs):
+                plan_file = Path(args[2])
+                payload = json.loads(plan_file.read_text(encoding="utf-8"))
+                captured["pins"] = payload["symbols"][0]["pins"]
+
+                class _Proc:
+                    returncode = 0
+                    stdout = json.dumps({"board": str(output_dir / "demo.kicad_pcb"), "footprints": 1, "nets": 1})
+                    stderr = ""
+
+                return _Proc()
+
+            with patch("kicad_suite.adapters.pcb_generator._kicad_python", return_value="fake-kicad-python"):
+                with patch("kicad_suite.adapters.pcb_generator.subprocess.run", side_effect=_run_side_effect):
+                    result = generate_pcb(plan, project_path=project_dir)
+
+        self.assertTrue(result["ok"])
+        pin_nets = {pin["number"]: pin["net"] for pin in captured["pins"] if pin.get("net")}
+        self.assertEqual(pin_nets["3"], "ESP_EN")
+        self.assertEqual(pin_nets["13"], "USB_D_N")
+        self.assertEqual(pin_nets["14"], "USB_D_P")
+        self.assertEqual(pin_nets["1"], "GND")
 
     def test_board_script_does_not_depend_on_repo_src_imports(self) -> None:
         self.assertNotIn("src.kicad_suite", _BOARD_SCRIPT)

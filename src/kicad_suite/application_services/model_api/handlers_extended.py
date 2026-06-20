@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 from ...adapters.kicad_erc_runner import run as run_erc
-from ...adapters.kicad_project_writer import write_hierarchical_project, write_project
+from ...adapters.kicad_project_writer import write_project
 from ...adapters.pcb_generator import generate_pcb
 from ...tooling.example_scaffold import scaffold_example
 from ...domain.core.circuit_model_io import (
@@ -655,12 +655,7 @@ class _ExtendedHandlers:
                         try:
                             # Final overwrite: keep the generated schematic text in the
                             # clean renderer format after any intermediate post-processing.
-                            write_hierarchical_project(
-                                asdict(plan),
-                                project_out,
-                                schematic_file,
-                                dsl_sheets=self.model.get("sheets", []) if isinstance(self.model, dict) else None,
-                            )
+                            write_project(asdict(plan), project_path=source_project)
                             try:
                                 final_postprocess = apply_postprocess(schematic_file, project_out)
                                 result["postprocess_after_final_write"] = final_postprocess

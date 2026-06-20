@@ -591,6 +591,20 @@ def parse_symbol_pin_map(lib_id: str) -> dict[str, dict[str, Any]]:
                 match = re.fullmatch(r'(DQS\d+)_[TC][AB]', normalized)
                 if match:
                     aliases.add(match.group(1))
+                gpio_match = re.fullmatch(r'IO(\d+)', normalized)
+                if gpio_match:
+                    aliases.add(f'GPIO{gpio_match.group(1)}')
+                gpio_match = re.fullmatch(r'GPIO(\d+)', normalized)
+                if gpio_match:
+                    aliases.add(f'IO{gpio_match.group(1)}')
+                if normalized == 'RXD0':
+                    aliases.add('U0RXD')
+                elif normalized == 'TXD0':
+                    aliases.add('U0TXD')
+                elif normalized == 'U0RXD':
+                    aliases.add('RXD0')
+                elif normalized == 'U0TXD':
+                    aliases.add('TXD0')
         return {alias for alias in aliases if alias}
 
     def visit(node: Any, current_unit: int = 1) -> None:
@@ -958,6 +972,7 @@ def render_connectivity(
     if force_hierarchical_nets is None:
         force_hierarchical_nets = set()
     rendered_labels: set[tuple[str, str, float, float]] = set()
+    rendered_hierarchical_nets: set[str] = set()
     for symbol in symbols:
         ref = str(symbol.get('ref', '')).upper()
         pins = symbol.get('pins', [])
@@ -984,28 +999,43 @@ def render_connectivity(
             offset = 0.0
             while pos_key in rendered_labels:
                 offset += 2.54
-                pos_key = (round(label_x, 3), round(label_y + offset, 3))
+                if direction in {0.0, 180.0}:
+                    shifted_x = label_x + offset if direction == 0.0 else label_x - offset
+                    pos_key = (round(shifted_x, 3), round(label_y, 3))
+                else:
+                    shifted_y = label_y + offset if direction == 90.0 else label_y - offset
+                    pos_key = (round(label_x, 3), round(shifted_y, 3))
             rendered_labels.add(pos_key)
-            ly = label_y + offset
-            blocks.append(f'''  (wire (pts (xy {fmt(x)} {fmt(y)}) (xy {fmt(label_x)} {fmt(ly)}))
+            lx = pos_key[0]
+            ly = pos_key[1]
+            blocks.append(f'''  (wire (pts (xy {fmt(x)} {fmt(y)}) (xy {fmt(lx)} {fmt(ly)}))
     (stroke (width 0) (type default))
     (uuid {q(new_uuid())})
   )''')
             kind = effective_net_kind(net_name, kind_map.get(net_name, 'signal'))
             justify = 'right' if direction == 180.0 else 'left' if direction == 0.0 else 'center'
             justify_effect = f' (justify {justify})' if justify != 'center' else ''
-            if net_name in force_hierarchical_nets:
-                blocks.append(f'''  (hierarchical_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(label_x)} {fmt(ly)} 0)
+            if net_name in force_hierarchical_nets and net_name not in rendered_hierarchical_nets:
+                blocks.append(f'''  (hierarchical_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(lx)} {fmt(ly)} 0)
+    (effects (font (size 1.27 1.27)){justify_effect})
+    (uuid {q(new_uuid())})
+  )''')
+                rendered_hierarchical_nets.add(net_name)
+            elif net_name in force_hierarchical_nets:
+                # The first attached hierarchical label joins the child sheet
+                # to its parent pin.  Other occurrences stay local so the
+                # page does not become a field of duplicate port diamonds.
+                blocks.append(f'''  (label {q(net_name)} (at {fmt(lx)} {fmt(ly)} 0)
     (effects (font (size 1.27 1.27)){justify_effect})
     (uuid {q(new_uuid())})
   )''')
             elif net_name in force_global_nets or kind in {'ground', 'power'}:
-                blocks.append(f'''  (global_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(label_x)} {fmt(ly)} 0)
+                blocks.append(f'''  (global_label {q(net_name)} (shape {label_shape(kind)}) (at {fmt(lx)} {fmt(ly)} 0)
     (effects (font (size 1.27 1.27)){justify_effect})
     (uuid {q(new_uuid())})
   )''')
             else:
-                blocks.append(f'''  (label {q(net_name)} (at {fmt(label_x)} {fmt(ly)} 0)
+                blocks.append(f'''  (label {q(net_name)} (at {fmt(lx)} {fmt(ly)} 0)
     (effects (font (size 1.27 1.27)){justify_effect})
     (uuid {q(new_uuid())})
   )''')
@@ -1284,22 +1314,51 @@ def render_sheet_instances(sheet_pages: list[dict[str, Any]]) -> str:
     return '\n'.join(lines)
 
 
-def render_schematic(plan: dict[str, Any]) -> str:
+
+def render_schematic_decorations(plan: dict[str, Any]) -> str:
+    """Render optional flat-sheet frames and section titles."""
+    blocks: list[str] = []
+    for item in plan.get('decorations', []):
+        if not isinstance(item, dict):
+            continue
+        kind = str(item.get('type', ''))
+        if kind == 'frame':
+            x1, y1 = float(item['x1']), float(item['y1'])
+            x2, y2 = float(item['x2']), float(item['y2'])
+            blocks.append(f'''  (polyline
+    (pts (xy {fmt(x1)} {fmt(y1)}) (xy {fmt(x2)} {fmt(y1)}) (xy {fmt(x2)} {fmt(y2)}) (xy {fmt(x1)} {fmt(y2)}) (xy {fmt(x1)} {fmt(y1)}))
+    (stroke (width 0.5) (type dash) (color 80 80 80 0))
+    (fill (type none))
+    (uuid {q(new_uuid())})
+  )''')
+        elif kind == 'title':
+            blocks.append(f'''  (text {q(str(item.get('text', '')))}
+    (exclude_from_sim no)
+    (at {fmt(float(item['x']))} {fmt(float(item['y']))} 0)
+    (effects (font (size 2 2) (bold yes)) (justify left bottom))
+    (uuid {q(new_uuid())})
+  )''')
+    return '\n'.join(blocks)
+
+def render_schematic(plan: dict[str, Any], include_power_flags: bool = True) -> str:
     symbols = add_missing_unit_placeholders([symbol for symbol in plan.get('symbols', []) if isinstance(symbol, dict)])
-    symbols.extend(automatic_power_flags(plan))
+    if include_power_flags:
+        symbols.extend(automatic_power_flags(plan))
     target = plan.get('target', {})
     project_name = str(target.get('project_name', 'kicad_agent_project')) if isinstance(target, dict) else 'kicad_agent_project'
     instances = '\n'.join(render_symbol_instance(symbol, project_name) for symbol in symbols)
     connectivity = render_connectivity(plan, symbols)
+    decorations = render_schematic_decorations(plan)
     return f'''(kicad_sch
   (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
   (generator_version "10.0")
   (uuid {q(new_uuid())})
-  (paper "A4")
+  (paper {q(str(plan.get('paper', 'A4')))} )
 {local_symbol_library(symbols)}
 {instances}
 {connectivity}
+{decorations}
   (sheet_instances
     (path "/" (page "1"))
   )
@@ -1331,8 +1390,8 @@ def render_sheet_pins(page: dict[str, Any], kind_map: dict[str, str]) -> str:
     h = float(page['h'])
     left_count = (len(pins) + 1) // 2
     right_count = len(pins) // 2
-    left_step = h / (left_count + 1) if left_count else h
-    right_step = h / (right_count + 1) if right_count else h
+    step = 7.62
+    start_offset = 7.62
     lines: list[str] = []
     left_index = 0
     right_index = 0
@@ -1341,14 +1400,29 @@ def render_sheet_pins(page: dict[str, Any], kind_map: dict[str, str]) -> str:
         if index % 2 == 0 or right_count == 0:
             left_index += 1
             pin_x = x
-            pin_y = y + left_step * left_index
+            pin_y = y + start_offset + step * (left_index - 1)
             angle = 180.0
         else:
             right_index += 1
             pin_x = x + w
-            pin_y = y + right_step * right_index
+            pin_y = y + start_offset + step * (right_index - 1)
             angle = 0.0
         lines.append(render_sheet_pin(pin_name, kind, pin_x, pin_y, angle))
+    return '\n'.join(lines)
+
+
+def render_child_sheet_port_labels(page: dict[str, Any], kind_map: dict[str, str]) -> str:
+    """Render unmatched child ports as a compact rail at the left page edge."""
+    pins = [str(name).strip() for name in page.get('ports', []) if str(name).strip()]
+    if not pins:
+        return ''
+    x = 5.08
+    y0 = 20.32
+    step = 5.08
+    lines: list[str] = []
+    for index, pin_name in enumerate(sorted(set(pins))):
+        kind = effective_net_kind(pin_name, kind_map.get(pin_name, 'signal'))
+        lines.append(render_hierarchical_label(pin_name, kind, x, y0 + index * step, 0.0, justify='left'))
     return '\n'.join(lines)
 
 
@@ -1424,6 +1498,7 @@ def render_child_schematic(
         force_global_nets=set(),
         force_hierarchical_nets=cross_nets,
     )
+    sheet_port_labels = render_child_sheet_port_labels(page, net_kind_by_name(plan))
     return sanitize_lib_symbols_section(f'''(kicad_sch
   (version {KICAD_SCHEMATIC_FILE_VERSION})
   (generator "kicad-agent-suite")
@@ -1433,6 +1508,7 @@ def render_child_schematic(
 {local_symbol_library(page_symbols)}
 {instances}
 {connectivity}
+{sheet_port_labels}
 {render_sheet_instances(sheet_pages)}
 )''')
 
@@ -1533,7 +1609,7 @@ def write_hierarchical_project(
                 page=page,
                 symbols=page['symbols'],
                 sheet_pages=sheet_pages,
-                cross_nets=set(page['pins']),
+                cross_nets=set(page['ports']),
                 power_flag_nets=page_power_flags,
             ) + '\n',
             encoding='utf-8',
@@ -1625,6 +1701,114 @@ def render_project(output_dir: str | Path | None = None) -> str:
     return json.dumps(project_json, ensure_ascii=False, indent=2) + '\n'
 
 
+def write_single_page_project(
+    plan: dict[str, Any],
+    output_dir: Path,
+    schematic_file: Path,
+    dsl_sheets: list[dict[str, Any]] | None = None,
+) -> dict[str, Any]:
+    """Write the standard single-page KiCad schematic.
+
+    Source sheets remain a useful way to group design intent, but the exported
+    project is deliberately a single KiCad sheet.  Each source group is packed
+    into a separate framed area so sheet-local coordinates cannot overlap.
+    """
+    ref_to_sheet: dict[str, str] = {}
+    for sheet in dsl_sheets or []:
+        if not isinstance(sheet, dict):
+            continue
+        sheet_name = str(sheet.get('name', 'ungrouped'))
+        for ref in sheet.get('components', []):
+            ref_to_sheet[str(ref)] = sheet_name
+
+    by_sheet: dict[str, list[dict[str, Any]]] = {}
+    for symbol in plan.get('symbols', []):
+        if not isinstance(symbol, dict):
+            continue
+        copied = dict(symbol)
+        copied['assigned_sheet'] = ref_to_sheet.get(str(copied.get('ref', '')), 'ungrouped')
+        by_sheet.setdefault(copied['assigned_sheet'], []).append(copied)
+
+    from ..domain.core.compile_kicad_execution_plan import _estimate_symbol_size
+
+    group_layouts: list[dict[str, Any]] = []
+    for sheet_name in sorted(by_sheet):
+        source_group = by_sheet[sheet_name]
+        measured: list[tuple[dict[str, Any], float, float]] = []
+        for item in source_group:
+            width, height = _estimate_symbol_size(str(item.get('lib_id', '')))
+            measured.append((item, width + 22.86, height + 20.32))
+        measured.sort(key=lambda entry: (entry[1] * entry[2], str(entry[0].get('ref', ''))), reverse=True)
+        widest = max((entry[1] for entry in measured), default=0.0)
+        columns = 2 if widest >= 55.0 else 3
+        rows = (len(measured) + columns - 1) // columns
+        column_widths = [0.0] * columns
+        row_heights = [0.0] * rows
+        for index, (_item, width, height) in enumerate(measured):
+            column_widths[index % columns] = max(column_widths[index % columns], width)
+            row_heights[index // columns] = max(row_heights[index // columns], height)
+        column_gap = 12.7
+        row_gap = 12.7
+        local_width = sum(column_widths) + max(0, columns - 1) * column_gap
+        local_height = sum(row_heights) + max(0, rows - 1) * row_gap
+        x_offsets: list[float] = []
+        cursor_x = 0.0
+        for width in column_widths:
+            x_offsets.append(cursor_x)
+            cursor_x += width + column_gap
+        y_offsets: list[float] = []
+        cursor_y = 15.24
+        for height in row_heights:
+            y_offsets.append(cursor_y)
+            cursor_y += height + row_gap
+        placed: list[dict[str, Any]] = []
+        for index, (item, width, height) in enumerate(measured):
+            copied = dict(item)
+            at = dict(item.get('at', {}))
+            column, row = index % columns, index // columns
+            at['x'] = round((x_offsets[column] + width / 2.0) / 2.54) * 2.54
+            at['y'] = round((y_offsets[row] + height / 2.0) / 2.54) * 2.54
+            copied['at'] = at
+            placed.append(copied)
+        group_layouts.append({
+            'name': sheet_name,
+            'symbols': placed,
+            'width': local_width + 20.32,
+            'height': local_height + 35.56,
+        })
+
+    flat_symbols: list[dict[str, Any]] = []
+    decorations: list[dict[str, Any]] = []
+    page_x, page_y = 25.4, 38.1
+    group_gap_x, group_gap_y = 15.24, 20.32
+    for row_start in range(0, len(group_layouts), 3):
+        row_groups = group_layouts[row_start:row_start + 3]
+        row_height = max(float(group['height']) for group in row_groups)
+        cursor_x = page_x
+        for group in row_groups:
+            group_width = float(group['width'])
+            group_height = float(group['height'])
+            x1, y1 = cursor_x, page_y
+            for symbol in group['symbols']:
+                at = dict(symbol.get('at', {}))
+                at['x'] = round((float(at.get('x', 0.0)) + x1 + 10.16) / 2.54) * 2.54
+                at['y'] = round((float(at.get('y', 0.0)) + y1 + 17.78) / 2.54) * 2.54
+                symbol['at'] = at
+                flat_symbols.append(symbol)
+            decorations.append({'type': 'frame', 'x1': x1, 'y1': y1, 'x2': x1 + group_width, 'y2': y1 + group_height})
+            decorations.append({'type': 'title', 'text': str(group['name']).replace('_', ' ').upper(), 'x': x1 + 5.08, 'y': y1 + 7.62})
+            cursor_x += group_width + group_gap_x
+        page_y += row_height + group_gap_y
+
+    single_page_plan = dict(plan)
+    single_page_plan['symbols'] = flat_symbols
+    single_page_plan['paper'] = 'A0'
+    single_page_plan['decorations'] = decorations
+    _remove_stale_child_schematics(output_dir, [schematic_file.name])
+    schematic_file.write_text(render_schematic(single_page_plan) + '\n', encoding='utf-8')
+    return {'single_page': True, 'section_count': len(group_layouts)}
+
+
 def write_project(plan: dict[str, Any], project_path: str | Path | None = None) -> dict[str, Any]:
     global _PROJECT_PATH
     if project_path:
@@ -1650,12 +1834,7 @@ def write_project(plan: dict[str, Any], project_path: str | Path | None = None) 
     elif _PROJECT_PATH:
         dsl_sheets = load_project_dsl_sheets(_PROJECT_PATH)
 
-    hierarchical = env('KICAD_HIERARCHICAL_SHEETS', 'true').strip().lower() in {'1', 'true', 'yes', 'on'}
-    hierarchical_summary: dict[str, Any] = {}
-    if hierarchical:
-        hierarchical_summary = write_hierarchical_project(plan, output_dir, schematic_file, dsl_sheets=dsl_sheets)
-    else:
-        schematic_file.write_text(render_schematic(plan) + '\n', encoding='utf-8')
+    single_page_summary = write_single_page_project(plan, output_dir, schematic_file, dsl_sheets=dsl_sheets)
 
     summary = {
         'schema_version': KICAD_PROJECT_WRITE_RESULT_SCHEMA_VERSION,
@@ -1666,8 +1845,7 @@ def write_project(plan: dict[str, Any], project_path: str | Path | None = None) 
         'net_count': len([item for item in plan.get('nets', []) if isinstance(item, dict)]),
         'diagnostics': plan.get('diagnostics', {}),
     }
-    if hierarchical_summary:
-        summary['hierarchical_sheets'] = hierarchical_summary
+    summary.update(single_page_summary)
     summary_file = output_dir / 'kicad-write-summary.json'
     summary_file.write_text(json.dumps(summary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
     summary['summary_file'] = str(summary_file)

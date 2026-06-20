@@ -121,23 +121,21 @@ class TestCoreGuardrails(unittest.TestCase):
                         with patch("kicad_suite.pipeline_coordinator.ir_to_kicad", return_value=fake_plan) as ir_to_kicad:
                             with patch("kicad_suite.pipeline_coordinator.write_output", return_value=str(output_dir / "smoke_topology" / "kicad-plan.json")) as write_output:
                                 with patch("kicad_suite.pipeline_coordinator.write_project", return_value=fake_write_result) as write_project:
-                                    with patch("kicad_suite.pipeline_coordinator.write_hierarchical_project", return_value=fake_write_result) as write_hierarchical_project:
-                                        with patch("kicad_suite.pipeline_coordinator.generate_board_from_plan", return_value={"attempted": False, "enabled": False}) as generate_board:
-                                            with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": False}) as postprocess:
-                                                with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
-                                                    with patch("kicad_suite.pipeline_coordinator.pin_project_libraries", return_value={"symbol_pins": 0}) as pin_project_libraries:
-                                                        with patch("kicad_suite.pipeline_coordinator.write_project_resolution", return_value={"path": str(output_dir / "smoke_topology" / "build" / "project-resolution.json"), "manifest": {"summary": {"component_count": 0, "verified_count": 0, "needs_reselection_count": 0}}}) as write_project_resolution:
-                                                            with patch("kicad_suite.pipeline_coordinator.build_run_pipeline_summary", return_value=fake_summary) as build_summary:
-                                                                summary = run_pipeline_core(str(model_path), str(output_dir))
+                                    with patch("kicad_suite.pipeline_coordinator.generate_board_from_plan", return_value={"attempted": False, "enabled": False}) as generate_board:
+                                        with patch("kicad_suite.pipeline_coordinator.apply_postprocess", return_value={"symbols_injected": False}) as postprocess:
+                                            with patch("kicad_suite.pipeline_coordinator.run_erc", return_value={"enabled": False, "attempted": True, "success": True, "finding_count": 0, "summary_file": "", "output_file": ""}) as run_erc:
+                                                with patch("kicad_suite.pipeline_coordinator.pin_project_libraries", return_value={"symbol_pins": 0}) as pin_project_libraries:
+                                                    with patch("kicad_suite.pipeline_coordinator.write_project_resolution", return_value={"path": str(output_dir / "smoke_topology" / "build" / "project-resolution.json"), "manifest": {"summary": {"component_count": 0, "verified_count": 0, "needs_reselection_count": 0}}}) as write_project_resolution:
+                                                        with patch("kicad_suite.pipeline_coordinator.build_run_pipeline_summary", return_value=fake_summary) as build_summary:
+                                                            summary = run_pipeline_core(str(model_path), str(output_dir))
 
         self.assertEqual(summary["files"]["summary"], fake_summary["files"]["summary"])
         build_ir.assert_called_once()
         ir_to_kicad.assert_called_once()
         write_output.assert_called_once()
         write_project.assert_called()
-        write_hierarchical_project.assert_called()
         generate_board.assert_called_once()
-        postprocess.assert_called_once()
+        self.assertEqual(postprocess.call_count, 2)
         run_erc.assert_called_once()
         pin_project_libraries.assert_called_once()
         write_project_resolution.assert_called_once()
