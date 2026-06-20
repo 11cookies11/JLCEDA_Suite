@@ -1,238 +1,34 @@
-(footprint "LED-SMD_L1.6-W0.8-R-RD"
-	(version 20260206)
-	(generator "pcbnew")
-	(generator_version "10.0")
-	(layer "F.Cu")
-	(property "Reference" "REF**"
-		(at 0 -4 0)
-		(layer "F.SilkS")
-		(uuid "026a1955-315c-4b4e-aacd-c387285fc8b0")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Value" "LED-SMD_L1.6-W0.8-R-RD"
-		(at 0 4 0)
-		(layer "F.Fab")
-		(uuid "9b1f9061-87c4-4723-8b02-fff98201b943")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
-	(property "Datasheet" ""
-		(at 0 0 0)
-		(layer "F.Fab")
-		(hide yes)
-		(uuid "6b4a055a-65ab-466e-b9b5-5aa20a89aebe")
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-	)
-	(property "Description" ""
-		(at 0 0 0)
-		(layer "F.Fab")
-		(hide yes)
-		(uuid "1185c2fc-9015-4e7a-8f73-88d238bd3815")
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-		)
-	)
+(module easyeda2kicad:LED-SMD_L1.6-W0.8-R-RD (layer F.Cu) (tedit 5DC5F6A4)
 	(attr through_hole)
-	(duplicate_pad_numbers_are_jumpers no)
-	(fp_line
-		(start -1.7 -0.4)
-		(end -1.7 0.4)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "09b23f84-2712-41f6-a64b-1d5fa6e88d50")
+	(fp_text reference REF** (at 0.000 -4.000) (layer F.SilkS)
+		(effects (font (size 1 1) (thickness 0.15)))
 	)
-	(fp_line
-		(start -1.7 0.4)
-		(end -1.4 0.7)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "bec105c0-7b44-458e-a803-7d7a022729dc")
+	(fp_text value LED-SMD_L1.6-W0.8-R-RD (at 0.000 4.000) (layer F.Fab)
+		(effects (font (size 1 1) (thickness 0.15)))
 	)
-	(fp_line
-		(start -1.4 -0.7)
-		(end -1.7 -0.4)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "f0188bf1-4dad-4254-acc2-0578676824a7")
+	(fp_text user %R (at 0 0) (layer F.Fab)
+		(effects (font (size 1 1) (thickness 0.15)))
 	)
-	(fp_line
-		(start -1.4 0.7)
-		(end -0.3 0.7)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "3b323e2b-5555-4c9d-a6ef-108dbb460d6b")
-	)
-	(fp_line
-		(start -0.3 -0.7)
-		(end -1.4 -0.7)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "937c2259-ca5f-48f2-a03e-a2c521ea8d6c")
-	)
-	(fp_line
-		(start 0.09 -0.4)
-		(end 0.09 0.38)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "82915a24-e548-480d-9924-337728ed79d6")
-	)
-	(fp_line
-		(start 0.09 0)
-		(end -0.12 0)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "006caef2-5792-4d92-834b-79aadb4abcbb")
-	)
-	(fp_line
-		(start 0.2 -0.7)
-		(end 1.47 -0.7)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "c897516c-6c29-47fc-bb3b-d900abcd0f15")
-	)
-	(fp_line
-		(start 1.47 -0.7)
-		(end 1.47 0.7)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "99ce682f-b3fd-48be-89dc-73ceb146129f")
-	)
-	(fp_line
-		(start 1.47 0.7)
-		(end 0.2 0.7)
-		(stroke
-			(width 0.25)
-			(type solid)
-		)
-		(layer "F.SilkS")
-		(uuid "16fa1536-56be-43de-8516-c6158cae7c34")
-	)
-	(fp_circle
-		(center 0.8 -0.4)
-		(end 0.85 -0.4)
-		(stroke
-			(width 0.1)
-			(type solid)
-		)
-		(fill no)
-		(layer "F.SilkS")
-		(uuid "852a3177-d0a7-4d37-b8da-410ba30933c0")
-	)
-	(fp_line
-		(start -0.8 -0.4)
-		(end 0.8 -0.4)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(layer "F.CrtYd")
-		(uuid "af4d6d89-8701-4ce2-b2b9-7fdbd7839484")
-	)
-	(fp_line
-		(start -0.8 0.4)
-		(end -0.8 -0.4)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(layer "F.CrtYd")
-		(uuid "3a35d624-5f91-49c1-9f3f-4587ff114a6b")
-	)
-	(fp_line
-		(start 0.8 -0.4)
-		(end 0.8 0.4)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(layer "F.CrtYd")
-		(uuid "96a29c49-8151-4cfd-accb-f959124b49bc")
-	)
-	(fp_line
-		(start 0.8 0.4)
-		(end -0.8 0.4)
-		(stroke
-			(width 0.05)
-			(type solid)
-		)
-		(layer "F.CrtYd")
-		(uuid "537c82c0-913c-4177-ad8c-86fb6f3624d6")
-	)
-	(fp_text user "${REFERENCE}"
-		(at 0 0 0)
-		(layer "F.Fab")
-		(uuid "1f66d58c-72f2-4d42-931e-ddff98c60b1f")
-		(effects
-			(font
-				(size 1 1)
-				(thickness 0.15)
-			)
-		)
-	)
-	(pad "1" smd rect
-		(at 0.75 0)
-		(size 0.8 0.8)
-		(layers "F.Cu" "F.Mask" "F.Paste")
-		(uuid "e3e3c734-ea74-404c-b0ac-d331a3e5e2b4")
-	)
-	(pad "2" smd rect
-		(at -0.75 0)
-		(size 0.8 0.8)
-		(layers "F.Cu" "F.Mask" "F.Paste")
-		(uuid "6c516e4d-4365-4fca-8669-80f822c7d60d")
-	)
-	(embedded_fonts no)
-	(model "D:/GitRepository/AI/KiCadAgentSuite/examples/ai-memory-badge-v1/output/ai_memory_badge_v1/libraries/3dmodels/JLC-MCP.3dshapes/LED0603_L1.6-W0.8-H0.6.wrl"
-		(offset
-			(xyz 0 0 0)
-		)
-		(scale
-			(xyz 1 1 1)
-		)
-		(rotate
-			(xyz 0 0 0)
-		)
+	(fp_line (start 0.20 -0.70) (end 1.47 -0.70) (layer F.SilkS) (width 0.25))
+	(fp_line (start 1.47 -0.70) (end 1.47 0.70) (layer F.SilkS) (width 0.25))
+	(fp_line (start 1.47 0.70) (end 0.20 0.70) (layer F.SilkS) (width 0.25))
+	(fp_line (start 0.09 -0.00) (end -0.12 -0.00) (layer F.SilkS) (width 0.25))
+	(fp_line (start -0.30 -0.70) (end -1.40 -0.70) (layer F.SilkS) (width 0.25))
+	(fp_line (start -1.40 -0.70) (end -1.70 -0.40) (layer F.SilkS) (width 0.25))
+	(fp_line (start -1.70 -0.40) (end -1.70 0.40) (layer F.SilkS) (width 0.25))
+	(fp_line (start -1.70 0.40) (end -1.40 0.70) (layer F.SilkS) (width 0.25))
+	(fp_line (start -1.40 0.70) (end -0.30 0.70) (layer F.SilkS) (width 0.25))
+	(fp_line (start 0.09 -0.40) (end 0.09 0.38) (layer F.SilkS) (width 0.25))
+	(pad 2 smd rect (at -0.75 0.00 0.00) (size 0.800 0.800) (layers F.Cu F.Paste F.Mask))
+	(pad 1 smd rect (at 0.75 0.00 0.00) (size 0.800 0.800) (layers F.Cu F.Paste F.Mask))
+	(fp_circle (center 0.80 -0.40) (end 0.85 -0.40) (layer F.SilkS) (width 0.10))
+	(fp_line (start -0.80 -0.40) (end 0.80 -0.40) (layer F.CrtYd) (width 0.05))
+	(fp_line (start 0.80 -0.40) (end 0.80 0.40) (layer F.CrtYd) (width 0.05))
+	(fp_line (start 0.80 0.40) (end -0.80 0.40) (layer F.CrtYd) (width 0.05))
+	(fp_line (start -0.80 0.40) (end -0.80 -0.40) (layer F.CrtYd) (width 0.05))
+	(model "${KIPRJMOD}/libraries/3dmodels/JLC-MCP.3dshapes/LED0603_L1.6-W0.8-H0.6.wrl"
+		(offset (xyz 0.000 0.000 0.000))
+		(scale (xyz 1 1 1))
+		(rotate (xyz 0 0 0))
 	)
 )

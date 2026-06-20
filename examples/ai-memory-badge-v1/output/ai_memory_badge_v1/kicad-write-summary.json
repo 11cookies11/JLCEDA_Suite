@@ -1,28 +1,18 @@
 {
   "schema_version": "kicad-project-write-result.v1",
-  "request_id": "ai-memory-badge-v1-rev-a-minimal-boot-chain",
+  "request_id": "ai-memory-badge-v1-rev-a-module",
   "project_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_pro",
   "schematic_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch",
-  "symbol_count": 82,
-  "net_count": 51,
+  "symbol_count": 71,
+  "net_count": 60,
   "diagnostics": {
-    "warnings": [],
+    "warnings": [
+      "R16 has no net pins; symbol will be placed without connectivity labels.",
+      "SW6 has no net pins; symbol will be placed without connectivity labels.",
+      "R32 has no net pins; symbol will be placed without connectivity labels."
+    ],
     "unsupported": []
   },
-  "hierarchical_sheets": {
-    "sheet_count": 11,
-    "root_schematic_file": "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\ai_memory_badge_v1.kicad_sch",
-    "sheet_files": [
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\01_usb_and_charging.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\02_system_power.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\03_esp32s3_core.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\04_memory.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\05_clock_and_rf.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\06_audio_front_end.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\07_storage.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\08_user_interface.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\09_security_reserve.kicad_sch",
-      "D:\\GitRepository\\AI\\KiCadAgentSuite\\examples\\ai-memory-badge-v1\\output\\ai_memory_badge_v1\\10_test_and_bringup.kicad_sch"
-    ]
-  }
+  "single_page": true,
+  "section_count": 11
 }
