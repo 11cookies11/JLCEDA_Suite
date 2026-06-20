@@ -22,8 +22,13 @@ jobs:
           cache: "pip"
       - run: npm ci
       - run: python -m py_compile src/kicad_suite/*.py scripts/*.py
-      - run: python -m pytest
       - run: mkdir -p .where
+      - run: python -m pytest -vv > .where/pytest.log 2>&1
+      - if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pytest-log
+          path: .where/pytest.log
       - run: python scripts/kas.py pipeline examples/nema23-industrial-stepper-driver-v0.1/nema23-industrial-stepper-driver-v0.1.circuit-model.json .where/ci-nema23 > .where/ci-nema23-run-summary.json
       - run: python scripts/kas.py validate-artifacts --summary .where/ci-nema23-run-summary.json
 
