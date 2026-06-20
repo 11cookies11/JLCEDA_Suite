@@ -14,7 +14,10 @@ from kicad_suite.application_services.footprint_resolution_service import Footpr
 from kicad_suite.application_services.design_intent_service import check_design_intent
 from kicad_suite.application_services.placement_planner import build_placement_plan, write_placement_plan
 from kicad_suite.application_services.part_resolution_service import PartResolutionService
-from kicad_suite.application_services.symbol_normalization_service import SymbolNormalizationService
+from kicad_suite.application_services.symbol_normalization_service import (
+    SymbolNormalizationService,
+    _qualify_library_footprint_references,
+)
 from kicad_suite.cli import main as cli_main
 from kicad_suite.orchestration.pipeline_postprocess import apply_postprocess
 
@@ -64,6 +67,22 @@ def test_postprocess_uses_named_services(tmp_path) -> None:
     assert result == {"footprint_step": {"ok": True}, "symbol_step": {"ok": True}}
     footprints.assert_called_once_with(tmp_path)
     symbols.assert_called_once_with(tmp_path, schematic)
+
+
+def test_symbol_normalization_qualifies_library_local_footprints() -> None:
+    symbol_library = '''(kicad_symbol_lib
+  (symbol "R"
+    (property
+      "Footprint"
+      ":R0603"
+    )
+  )
+)'''
+
+    normalized = _qualify_library_footprint_references(symbol_library, "JLC-MCP")
+
+    assert '"JLC-MCP:R0603"' in normalized
+    assert '":R0603"' not in normalized
 
 
 def test_footprint_resolution_service_normalizes_3d_model_paths(tmp_path) -> None:

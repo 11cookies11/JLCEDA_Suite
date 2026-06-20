@@ -518,6 +518,21 @@ def symbol_block_with_default_footprint(block: str, footprint: str) -> str:
             lines[index] = re.sub(r'\(property "Footprint" "([^"]*)"', f'(property "Footprint" {q(footprint)}', line, count=1)
             return '\n'.join(lines)
 
+        # KiCad's formatted library symbols commonly split a property across
+        # three lines: ``(property``, ``"Footprint"``, then its value.  The
+        # previous code only handled the compact form above, leaving the
+        # library default as e.g. ``:R0603``.  EasyEDA consults that default
+        # during PCB update, so it must carry the fully qualified footprint.
+        if line.strip() == '"Footprint"':
+            for value_index in range(index + 1, len(lines)):
+                candidate = lines[value_index]
+                match = re.match(r'^(\s*)"[^"]*"(.*)$', candidate)
+                if match:
+                    lines[value_index] = f'{match.group(1)}{q(footprint)}{match.group(2)}'
+                    return '\n'.join(lines)
+                if candidate.strip().startswith(')'):
+                    break
+
     # No Footprint property ?? insert one after the Value property block
     result: list[str] = []
     depth = 0
@@ -873,6 +888,8 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
     lcsc = str(symbol.get('lcsc', ''))
     mpn = str(symbol.get('mpn', ''))
     manufacturer = str(symbol.get('manufacturer', ''))
+    in_bom = 'yes' if bool(symbol.get('in_bom', True)) else 'no'
+    on_board = 'yes' if bool(symbol.get('on_board', True)) else 'no'
     extra_props = ""
     if lcsc:
         extra_props += f'\n      (property "LCSC" {q(lcsc)} (at 0 0 0)\n        (hide yes)\n        (effects (font (size 1.27 1.27)))\n      )'
@@ -885,8 +902,8 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
     (at {fmt(x)} {fmt(y)} {fmt(rotation)})
     (unit {unit})
     (exclude_from_sim no)
-    (in_bom yes)
-    (on_board yes)
+    (in_bom {in_bom})
+    (on_board {on_board})
     (dnp no)
     (uuid {q(new_uuid())})
     (property "Reference" {q(ref)} (at {fmt(x)} {fmt(ref_y)} 0)
@@ -928,6 +945,10 @@ def automatic_power_flags_for_net_names(
                 'value': 'PWR_FLAG',
                 'lib_id': 'power:PWR_FLAG',
                 'footprint': '',
+                # ERC markers are schematic-only helpers, never purchasable
+                # parts or PCB footprints.
+                'in_bom': False,
+                'on_board': False,
                 'at': {'x': 30.48, 'y': 106.68 + position_index * 7.62, 'rotation': 0.0},
                 'pins': [{'number': '1', 'net': name}],
             }

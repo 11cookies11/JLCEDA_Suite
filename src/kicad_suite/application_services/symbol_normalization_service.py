@@ -17,6 +17,10 @@ class SymbolNormalizationService:
     def normalize_project_symbols(self, project_dir: str | Path, schematic_file: str | Path | None = None) -> dict[str, Any]:
         project = Path(project_dir)
         schematic = Path(schematic_file) if schematic_file is not None else _first_schematic(project)
+        # Normalize project libraries before injecting their symbols into the
+        # schematic cache.  Otherwise an imported ``:R0603`` default is copied
+        # back after the renderer has already written ``JLC-MCP:R0603``.
+        symbol_sanitization = self.sanitize_copied_symbol_libraries(project)
         symbols_injected = False
         inject_error = ""
         if schematic and schematic.exists():
@@ -26,7 +30,7 @@ class SymbolNormalizationService:
                 inject_error = str(exc)
 
         return {
-            "symbol_sanitization": self.sanitize_copied_symbol_libraries(project),
+            "symbol_sanitization": symbol_sanitization,
             "pin_type_patches": self.patch_known_jlc_symbol_pin_types(project),
             "symbols_injected": symbols_injected,
             "symbol_injection_error": inject_error,
@@ -173,6 +177,7 @@ class SymbolNormalizationService:
             had_bom = raw.startswith(b"\xef\xbb\xbf")
             text = path.read_text(encoding="utf-8-sig")
             patched = sanitize_symbol_block(text)
+            patched = _qualify_library_footprint_references(patched, path.stem)
             if had_bom or patched != text:
                 path.write_text(patched, encoding="utf-8")
                 patched_files.append(str(path))
@@ -236,6 +241,30 @@ class SymbolNormalizationService:
                     path.write_text(patched, encoding="utf-8")
                     patched_files.append(str(path))
         return {"patched_files": patched_files, "count": len(patched_files)}
+
+
+def _qualify_library_footprint_references(text: str, library_name: str) -> str:
+    """Expand ``:Footprint`` defaults to a stable project-library reference.
+
+    EasyEDA accepts a KiCad footprint only when its library name is present.
+    KiCad symbols imported from EasyEDA often omit that name for a library's
+    own footprint (for example ``:R0603``), which is legal shorthand in KiCad
+    but loses the footprint during an EasyEDA PCB update.
+    """
+    if not library_name:
+        return text
+    prefix = f'{library_name}:'
+    patched = re.sub(
+        r'(\(property\s+"Footprint"\s+"):(?=[^"]*")',
+        rf'\1{prefix}',
+        text,
+    )
+    return re.sub(
+        r'(^\s*"Footprint"\s*\r?\n\s*"):(?=[^"]*")',
+        rf'\1{prefix}',
+        patched,
+        flags=re.MULTILINE,
+    )
 
 
 def _inject_symbols_into_sheet(sch_path: Path, lib_name: str, lib_content: str) -> int:

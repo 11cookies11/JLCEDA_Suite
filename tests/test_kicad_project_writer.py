@@ -13,10 +13,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.adapters.kicad_project_writer import (
     _sheet_file_stem,
+    automatic_power_flags_for_net_names,
     render_connectivity,
     render_child_schematic,
     render_project,
     render_root_schematic,
+    render_symbol_instance,
+    symbol_block_with_default_footprint,
     write_project,
 )
 from kicad_suite.adapters.kicad_project_writer import _remove_stale_child_schematics
@@ -100,6 +103,26 @@ class TestKicadProjectWriter(unittest.TestCase):
             self.assertTrue(schematic.exists())
             self.assertEqual([path.name for path in output_dir.glob("*.kicad_sch")], ["demo.kicad_sch"])
             self.assertIn("JLC-MCP:R0603", schematic.read_text(encoding="utf-8"))
+
+    def test_default_footprint_replaces_multiline_library_property(self) -> None:
+        block = '''(symbol "JLC-MCP:Example"
+  (property
+    "Footprint"
+    ":R0603"
+  )
+)'''
+
+        rendered = symbol_block_with_default_footprint(block, "JLC-MCP:R0603")
+
+        self.assertIn('"JLC-MCP:R0603"', rendered)
+        self.assertNotIn('":R0603"', rendered)
+
+    def test_automatic_power_flags_are_not_bom_or_pcb_parts(self) -> None:
+        flags = automatic_power_flags_for_net_names({"GND"}, {"GND": "ground"})
+        rendered = render_symbol_instance(flags[0], "demo")
+
+        self.assertIn("(in_bom no)", rendered)
+        self.assertIn("(on_board no)", rendered)
 
     def test_hierarchical_render_includes_sheet_ports_and_child_ports(self) -> None:
         plan = {
