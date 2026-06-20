@@ -251,27 +251,6 @@
       ]
     },
     {
-      "ref": "J4",
-      "role": "uart_debug_header",
-      "value": "UART debug 4P",
-      "package": "HDR-TH_4P",
-      "sheet": "10_test_and_bringup",
-      "search_hints": [
-        "2.54mm 1x4 pin header"
-      ],
-      "availability_status": "unknown",
-      "selected_part": {
-        "kicad_footprint_hint": "HDR-TH_4P-P2.54-H-M-W10.4",
-        "display_name": "2.54-1*4P",
-        "lcsc_id": "C91552",
-        "package": "HDR-TH_4P"
-      },
-      "assembly": "dnp",
-      "notes": [
-        "DNP in production. Populate only for bring-up/debug. UART pads available as test points on PCB."
-      ]
-    },
-    {
       "ref": "SW1",
       "role": "reset_button",
       "value": "Reset tactile switch",
@@ -2397,7 +2376,6 @@
     {
       "name": "10_test_and_bringup",
       "components": [
-        "J4",
         "SW1",
         "SW2"
       ],
