@@ -95,10 +95,10 @@
         "GPIO21": {
           "function": "I2C_SDA"
         },
-        "GPIO33": {
+        "GPIO47": {
           "function": "EPD_SCLK"
         },
-        "GPIO34": {
+        "GPIO48": {
           "function": "EPD_MOSI"
         },
         "GPIO35": {
@@ -253,41 +253,43 @@
     {
       "ref": "SW1",
       "role": "reset_button",
-      "value": "Reset tactile switch",
+      "value": "Reset pushbutton",
       "package": "SW-SMD",
       "sheet": "10_test_and_bringup",
       "search_hints": [
-        "SMD tactile switch 4 pin 3x4"
+        "SMD pushbutton 2 pin"
       ],
-      "availability_status": "unknown",
+      "availability_status": "selected",
       "selected_part": {
-        "kicad_footprint_hint": "SW-SMD_K5-1617SA-02",
-        "display_name": "K5-1617SA-02",
-        "lcsc_id": "C128964",
-        "package": "SW-SMD"
+          "kicad_footprint_hint": "SW-SMD_K5-1617SA-02",
+          "display_name": "K5-1617SA-02",
+          "lcsc_id": "C128964",
+          "package": "SW-SMD_K5-1617SA-02",
+          "symbol_ref": "K5-1617SA-02"
       },
       "notes": [
-        "Internal PCB tactile switch, not exposed to end-user through enclosure. Debug/post-assembly use only."
+        "Momentary pushbutton for reset, not exposed to the end user through the enclosure. Debug/post-assembly use only."
       ]
     },
     {
       "ref": "SW2",
       "role": "boot_button",
-      "value": "BOOT tactile switch",
+      "value": "BOOT pushbutton",
       "package": "SW-SMD",
       "sheet": "10_test_and_bringup",
       "search_hints": [
-        "SMD tactile switch 4 pin 3x4"
+        "SMD pushbutton 2 pin"
       ],
-      "availability_status": "unknown",
+      "availability_status": "selected",
       "selected_part": {
-        "kicad_footprint_hint": "SW-SMD_K5-1617SA-02",
-        "display_name": "K5-1617SA-02",
-        "lcsc_id": "C128964",
-        "package": "SW-SMD"
+          "kicad_footprint_hint": "SW-SMD_K5-1617SA-02",
+          "display_name": "K5-1617SA-02",
+          "lcsc_id": "C128964",
+          "package": "SW-SMD_K5-1617SA-02",
+          "symbol_ref": "K5-1617SA-02"
       },
       "notes": [
-        "Internal PCB tactile switch, not exposed to end-user through enclosure. Debug/post-assembly use only."
+        "Momentary pushbutton for boot, not exposed to the end user through the enclosure. Debug/post-assembly use only."
       ]
     },
     {
@@ -1816,7 +1818,7 @@
       "name": "EPD_SCLK",
       "kind": "signal",
       "members": [
-        "U1.GPIO33",
+        "U1.GPIO47",
         "J6.1"
       ],
       "notes": [
@@ -1827,7 +1829,7 @@
       "name": "EPD_MOSI",
       "kind": "signal",
       "members": [
-        "U1.GPIO34",
+        "U1.GPIO48",
         "J6.2"
       ],
       "notes": [
