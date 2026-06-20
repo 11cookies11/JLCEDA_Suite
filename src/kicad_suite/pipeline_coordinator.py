@@ -221,6 +221,19 @@ def _render_and_postprocess_stage(state: PipelineRunState) -> Path:
     schematic_file = Path(state.write_result.get("schematic_file", ""))
     project_dir = schematic_file.parent if schematic_file.exists() else state.output_dir / state.project_name
     state.postprocess = apply_postprocess(schematic_file, project_dir)
+    # Log 3D model handling
+    sync_status = state.postprocess.get("library_sync", {})
+    norm_status = state.postprocess.get("model_path_normalization", {})
+    append_pipeline_event(
+        state.event_log,
+        "kicad-3dmodels",
+        "3D model sync and path normalization",
+        {
+            "models_copied": int(sync_status.get("counts", {}).get("3dmodels", 0) or 0),
+            "paths_normalized": int(norm_status.get("updated_references", 0) or 0),
+            "unresolved": len(norm_status.get("unresolved_references", []) or []),
+        },
+    )
     board_result = generate_board_from_plan(
         str(state.plan_file),
         project_dir,

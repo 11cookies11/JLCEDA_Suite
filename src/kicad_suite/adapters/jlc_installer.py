@@ -289,6 +289,10 @@ def install_by_lcsc_id(
         # 3D model data may be unavailable for some components — non-critical
         pass
 
+    # 6b. Normalize 3D model paths in the footprint to ${KIPRJMOD} relative format
+    if fp_file.exists():
+        _normalize_footprint_3d_paths(fp_file)
+
     # Cache both in-memory and on disk so subsequent runs skip the network call
     # Store the *sanitized* package name so it matches the footprint filename on disk
     cache_entry = {
@@ -732,3 +736,27 @@ def _make_minimal_footprint(name: str) -> str:
   (fp_text reference "REF**" (at 0 0) (layer "F.SilkS") (effects (font (size 1 1) (thickness 0.15))))
   (fp_text value "{name}" (at 0 2) (layer "F.Fab") (effects (font (size 1 1) (thickness 0.15))))
 )"""
+
+
+def _normalize_footprint_3d_paths(fp_file: Path) -> None:
+    """Rewrite 3D model paths in *fp_file* to ${KIPRJMOD} relative format.
+
+    EasyEDA/kicad converters often emit absolute or bare-filename paths;
+    this normalizes them so KiCad can resolve models from the project root.
+    """
+    raw = fp_file.read_text(encoding="utf-8")
+    if '(model "' not in raw:
+        return
+
+    def _rewrite(m: re.Match) -> str:
+        full = m.group(1)
+        if full.startswith("${KIPRJMOD}"):
+            return m.group(0)  # already normalized
+        basename = Path(full).name
+        if not basename or not basename.endswith((".step", ".wrl", ".stp")):
+            return m.group(0)  # not a 3D model reference
+        return f'(model "${{KIPRJMOD}}/libraries/3dmodels/JLC-MCP.3dshapes/{basename}"'
+
+    patched = re.sub(r'\(model\s+"([^"]+)"', _rewrite, raw)
+    if patched != raw:
+        fp_file.write_text(patched, encoding="utf-8")
