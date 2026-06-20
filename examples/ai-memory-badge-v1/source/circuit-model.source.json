@@ -1123,7 +1123,11 @@
         "display_name": "0603WAJ0103T5E",
         "lcsc_id": "C15401",
         "package": "R0603"
-      }
+      },
+      "assembly": "dnp",
+      "notes": [
+        "DNP in SPI mode. CMD/DAT0 pullups only needed for native SD mode."
+      ]
     },
     {
       "ref": "R25",
@@ -1138,7 +1142,11 @@
         "display_name": "0603WAJ0103T5E",
         "lcsc_id": "C15401",
         "package": "R0603"
-      }
+      },
+      "assembly": "dnp",
+      "notes": [
+        "DNP in SPI mode. CMD/DAT0 pullups only needed for native SD mode."
+      ]
     },
     {
       "ref": "U8",
@@ -1392,6 +1400,45 @@
         "package": "R0603",
         "symbol_ref": "0603WAJ0103T5E"
       }
+    },
+    {
+      "ref": "D3",
+      "role": "motor_flyback_diode",
+      "value": "BAT54 Schottky flyback",
+      "package": "SOT-23-3",
+      "sheet": "08_user_interface",
+      "search_hints": [
+        "BAT54 Schottky diode SOT-23",
+        "1N5819HW-7-F"
+      ],
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C131213",
+        "display_name": "BAT54C",
+        "manufacturer": "Jiangsu Changjing",
+        "package": "SOT-23-3",
+        "symbol_ref": "BAT54C_FLYBACK",
+        "kicad_footprint_hint": "SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR"
+      },
+      "notes": [
+        "Flyback protection for vibration motor M1. Cathode to SYS_3V3, anode to MOTOR_LOW."
+      ]
+    },
+    {
+      "ref": "C22",
+      "role": "vbat_sense_filter_cap",
+      "value": "100nF",
+      "package": "C0603",
+      "sheet": "02_system_power",
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C1590",
+        "display_name": "CL10B104KA8NNNC",
+        "package": "C0603"
+      },
+      "notes": [
+        "ADC input filter for battery voltage sensing. Forms low-pass with R8/R9 divider."
+      ]
     }
   ],
   "nets": [
@@ -1451,7 +1498,8 @@
         "C5.1",
         "C6.1",
         "R11.1",
-        "J6.7"
+        "J6.7",
+        "D3.K"
       ],
       "notes": [
         "Main 3.3 V rail after R26 current-measurement link. Keep module decoupling close to U1."
@@ -1526,7 +1574,8 @@
         "SW6.2",
         "C20.2",
         "C21.2",
-        "R28.1"
+        "R28.1",
+        "C22.2"
       ]
     },
     {
@@ -1663,7 +1712,8 @@
       "members": [
         "R8.2",
         "R9.1",
-        "U1.GPIO1"
+        "U1.GPIO1",
+        "C22.1"
       ],
       "notes": [
         "Battery ADC sense. Rev A keeps the divider; Rev B should gate it with a GPIO/MOSFET and add 100nF at ADC if needed."
@@ -1846,7 +1896,8 @@
       "members": [
         "M1.2",
         "Q1.D",
-        "C19.2"
+        "C19.2",
+        "D3.A"
       ]
     },
     {
@@ -2145,7 +2196,8 @@
         "C2",
         "R8",
         "R9",
-        "R26"
+        "R26",
+        "C22"
       ],
       "nets": [
         "BAT_P",
@@ -2283,7 +2335,8 @@
         "SW5",
         "SW6",
         "R31",
-        "R32"
+        "R32",
+        "D3"
       ],
       "nets": [
         "SYS_3V3",
