@@ -1,0 +1,107 @@
+schema_version: hardware-semantic-rules.v0.1
+name: Hardware Semantic Rules v0.1
+purpose: >
+  Topology-first checks for hardware agents before KiCad export. These rules
+  complement KiCad ERC; they catch design-intent gaps that ordinary ERC often
+  cannot prove.
+
+severity_policy:
+  BLOCKER: Do not export KiCad until resolved.
+  WARNING: Export may continue only after review or explicit waiver.
+  INFO: Improvement or layout/DFT recommendation.
+
+global_rules:
+  - id: REQUIRED_PIN_UNRESOLVED
+    severity: BLOCKER
+    statement: Every required IC pin must have a resolved connection or explicit configuration.
+  - id: PIN_MARKED_NC_WITHOUT_REASON
+    severity: BLOCKER
+    statement: Unknown pins must never be marked NC without datasheet/module evidence.
+  - id: POWER_INPUT_WITHOUT_SOURCE
+    severity: BLOCKER
+    statement: Every power input must trace to an upstream source.
+  - id: POWER_OUTPUT_WITHOUT_LOAD
+    severity: BLOCKER
+    statement: Every power output or switched rail must have a real downstream load.
+  - id: ENABLE_MODE_BOOT_FLOATING
+    severity: BLOCKER
+    statement: EN, CE, MODE, BOOT, RESET, CS, ILIM, ISET, TS, TMR pins need defined states.
+  - id: EXPOSED_PAD_NOT_TIED
+    severity: BLOCKER
+    statement: Exposed pads default to GND/VSS copper unless the datasheet says otherwise.
+  - id: EXTERNAL_PORT_PROTECTION_REVIEW
+    severity: WARNING
+    statement: External ports require ESD, TVS, current limit, reverse-polarity, or waiver review.
+
+categories:
+  load_switch:
+    required_pins: [VIN, VOUT, GND, ON]
+    rules:
+      - VIN must connect to an upstream power rail.
+      - VOUT must connect to a distinct switched load rail.
+      - VOUT must have at least one real load.
+      - ON/EN must not float and must have a reset-safe default state.
+      - CT/SS/QOD optional pins must have an explicit strategy: NC with reason, capacitor, or discharge path.
+      - Check backfeed risk from signal pins when the switched rail is off.
+    typical_bias:
+      ON: pulldown_100k
+
+  charger_power_path:
+    required_pin_groups: [input_power, battery, system_output, ground, program_pins, temperature_sense, enable_mode]
+    rules:
+      - All BAT pins must connect to the same battery positive net.
+      - All OUT/SYS pins must connect to the same system rail.
+      - IN must have input decoupling.
+      - BAT and OUT/SYS must have required capacitors.
+      - ILIM and ISET must be programmed with resistors or a documented equivalent.
+      - TS must connect to battery NTC or a valid fixed-temperature strategy.
+      - CE/EN pins must not float.
+      - EP must connect to VSS/GND copper.
+
+  usb_c_sink_usb2:
+    rules:
+      - A4, A9, B4, B9 must all join VBUS.
+      - A1, A12, B1, B12 must all join GND.
+      - A6 and B6 must join D+.
+      - A7 and B7 must join D-.
+      - CC1 and CC2 must each have Rd to GND for sink/UFP operation.
+      - SBU pins may be explicit NC for USB2-only designs.
+      - VBUS, D+/D-, and CC pins need ESD/TVS review.
+    rd_value: 5.1k
+
+  epaper_spi_connector:
+    rules:
+      - VCC and GND must be defined.
+      - SCLK, MOSI, CS, DC, RST, BUSY must be connected.
+      - MISO is usually not required for display-only e-paper modules.
+      - CS should default inactive, usually pullup.
+      - RST should default not-reset, usually pullup.
+      - BUSY pullup requirement must be confirmed from module data.
+      - MODE/PWR_EN pins are module-specific and need explicit strategy.
+      - Battery products should define sleep or load-switch power-off behavior.
+    typical_bias:
+      CS: pullup_10k
+      RST: pullup_10k
+
+  regulator_ldo_dc_dc:
+    rules:
+      - VIN voltage range must cover upstream source tolerance.
+      - VOUT must match all downstream load voltage limits.
+      - Input and output capacitors must meet stability requirements.
+      - Feedback divider must produce the requested output voltage.
+      - EN must have a reset-safe default state.
+      - Thermal dissipation must be estimated for LDOs.
+
+  i2c_bus:
+    rules:
+      - SCL/SDA require pullups to a valid logic rail.
+      - All devices must tolerate the pullup voltage.
+      - Address conflicts must be checked.
+      - Level shifting is required across incompatible voltage domains.
+
+  spi_bus:
+    rules:
+      - Each slave needs an independent CS.
+      - All CS nets should default inactive.
+      - MISO may be omitted only with explicit reason.
+      - Fast or off-board lines should review series resistors and ESD.
