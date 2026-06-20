@@ -52,10 +52,18 @@ def _normalize_pin_key(value: str) -> str:
 def _semantic_pin_aliases(lib_id: str, pin_name: str) -> set[str]:
     normalized = _normalize_pin_key(pin_name)
     aliases = {normalized}
+    if normalized.startswith("GPIO") and normalized[4:].isdigit():
+        # Espressif module symbols name these pins IOxx while the circuit DSL
+        # deliberately uses the MCU-facing GPIOxx names.
+        aliases.add("IO" + normalized[4:])
     if normalized in {"GND", "VSS"}:
         aliases.update({"GND", "VSS"})
     elif normalized in {"VCC", "VDD"}:
         aliases.update({"VCC", "VDD"})
+    elif normalized in {"IN", "VIN"}:
+        aliases.update({"IN", "VIN"})
+    elif normalized in {"OUT", "VOUT"}:
+        aliases.update({"OUT", "VOUT"})
     elif normalized in {"CS", "CE"}:
         aliases.update({"CS", "CE"})
     elif normalized in {"IO1", "I1"}:
@@ -70,6 +78,11 @@ def _semantic_pin_aliases(lib_id: str, pin_name: str) -> set[str]:
             aliases.update({"VCC", "VDD"})
         elif normalized in {"GND", "VSS"}:
             aliases.update({"GND", "VSS"})
+    if lib_id.endswith("BQ24074RGTR"):
+        if normalized == "PROG":
+            aliases.add("ISET")
+        elif normalized == "STAT":
+            aliases.add("CHG")
     return aliases
 
 
@@ -160,6 +173,8 @@ def _expected_board_nets(plan: dict[str, Any]) -> dict[str, dict[str, str]]:
     for symbol in plan.get("symbols", []):
         if not isinstance(symbol, dict):
             continue
+        if not bool(symbol.get("on_board", True)):
+            continue
         ref = str(symbol.get("ref", "")).strip()
         if not ref:
             continue
@@ -248,6 +263,8 @@ def generate_board_from_plan(
         os.environ["KICAD_OUTPUT_DIR"] = str(project_dir)
         for symbol in board_plan["symbols"]:
             if not isinstance(symbol, dict):
+                continue
+            if not bool(symbol.get("on_board", True)):
                 continue
             ref = str(symbol.get("ref", "")).strip()
             lib_id = str(symbol.get("lib_id", "")).strip()

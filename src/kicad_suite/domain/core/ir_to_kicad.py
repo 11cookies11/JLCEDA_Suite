@@ -160,6 +160,8 @@ def ir_to_kicad(ir: dict[str, Any]) -> KiCadExecutionPlan:
                 lcsc=str(sp.get("lcsc_id", "")),
                 mpn=str(sp.get("mpn", "")),
                 manufacturer=str(sp.get("manufacturer", "")),
+                in_bom=bool(comp.get("in_bom", True)),
+                on_board=bool(comp.get("on_board", True)),
             )
         )
 

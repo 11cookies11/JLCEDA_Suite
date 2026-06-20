@@ -22,10 +22,26 @@ from kicad_suite.domain.core.compile_kicad_execution_plan import (
 )
 from kicad_suite.domain.core.part_selector import SelectedPart
 from kicad_suite.domain.core.netlist_builder import build_netlist
-from kicad_suite.pipeline_coordinator import run_pipeline
+from kicad_suite.pipeline_coordinator import _clean_project_output_dir, run_pipeline
 
 
 class TestBuildNetlist(unittest.TestCase):
+    def test_clean_project_output_preserves_kicad_history(self):
+        with tempfile.TemporaryDirectory() as tmpdir:
+            output = Path(tmpdir) / "output"
+            project_dir = output / "demo"
+            history_file = project_dir / ".history" / "keep.txt"
+            history_file.parent.mkdir(parents=True)
+            history_file.write_text("keep", encoding="utf-8")
+            board = project_dir / "demo.kicad_pcb"
+            board.write_text("stale", encoding="utf-8")
+
+            cleaned = _clean_project_output_dir(output, "demo")
+
+            self.assertEqual(cleaned, project_dir)
+            self.assertTrue(history_file.exists())
+            self.assertFalse(board.exists())
+
     def test_build_netlist_uses_model_fields(self):
         model = {
             "schema_version": "circuit-model.v1",

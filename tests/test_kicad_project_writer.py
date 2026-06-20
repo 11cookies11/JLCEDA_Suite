@@ -34,7 +34,13 @@ from kicad_suite.domain.core.netlist_builder import build_netlist
 from kicad_suite.domain.core.ir_to_kicad import ir_to_kicad
 from kicad_suite.domain.core.kicad_layout_engine import configured_schematic_position, configured_topology_position
 from kicad_suite.domain.core.kicad_layout_engine import apply_sheet_aware_schematic_layout
-from kicad_suite.adapters.pcb_generator import _BOARD_SCRIPT, _convert_pad_block, _extract_pad_blocks, generate_pcb
+from kicad_suite.adapters.pcb_generator import (
+    _BOARD_SCRIPT,
+    _convert_pad_block,
+    _extract_pad_blocks,
+    _validate_generated_board_nets,
+    generate_pcb,
+)
 
 
 class TestKicadProjectWriter(unittest.TestCase):
@@ -421,6 +427,32 @@ class TestKicadProjectWriter(unittest.TestCase):
         self.assertFalse(result["success"])
         self.assertTrue(any("U1 pad 17" in warning for warning in result["warnings"]))
         self.assertTrue(result["verification_errors"])
+
+    def test_generate_pcb_rejects_board_with_missing_pad_nets(self) -> None:
+        with tempfile.TemporaryDirectory() as tmpdir:
+            board_file = Path(tmpdir) / "demo.kicad_pcb"
+            board_file.write_text(
+                """
+(kicad_pcb
+  (version 20260206)
+  (generator "pcbnew")
+  (footprint "R0603"
+    (layer "F.Cu")
+    (property "Reference" "R3" (at 0 0 0))
+    (pad "1" smd rect (at 0 0) (size 1 1) (layers "F.Cu"))
+    (pad "2" smd rect (at 1 0) (size 1 1) (layers "F.Cu") (net "GND"))
+  )
+)
+""".strip(),
+                encoding="utf-8",
+            )
+            issues = _validate_generated_board_nets(
+                {"symbols": [{"ref": "R3", "pins": [{"number": "1", "net": "CHG_PROG"}, {"number": "2", "net": "GND"}]}]},
+                board_file,
+            )
+
+        self.assertEqual(len(issues), 1)
+        self.assertIn("R3 pad 1 expected net CHG_PROG", issues[0])
 
     def test_source_netlist_symbol_pins_resolve_semantic_and_numeric_pins(self) -> None:
         project_dir = Path("examples/ai-memory-badge-v1")

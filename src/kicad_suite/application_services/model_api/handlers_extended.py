@@ -659,6 +659,9 @@ class _ExtendedHandlers:
                         # Generate PCB
                         pcb_result = generate_pcb(asdict(plan), project_path=source_project)
                         result["pcb"] = pcb_result
+                        if not pcb_result.get("ok", False):
+                            details = "; ".join(str(item) for item in pcb_result.get("verification_errors", [])[:3])
+                            raise RuntimeError(details or str(pcb_result.get("error", "PCB generation failed")))
                         try:
                             pin_result = pin_project_libraries(project_out)
                             result["library_pins"] = pin_result

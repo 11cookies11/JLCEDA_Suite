@@ -12,6 +12,7 @@ from typing import Any
 
 from .kicad_symbol_library import parse_symbol_pin_map
 from ..domain.core.netlist_builder import build_netlist
+from ..shared.sexpr_parser import parse
 
 # The generate_pcb_from_plan.py script, embedded so it doesn't need to be
 # distributed separately.  Written to a temp file and executed by KiCad's
@@ -209,6 +210,8 @@ def generate_board(plan_path, output_path, source_project_dir=None):
     for index, symbol in enumerate(plan.get("symbols", [])):
         if not isinstance(symbol, dict):
             continue
+        if not bool(symbol.get("on_board", True)):
+            continue
         ref = str(symbol.get("ref", "")).strip()
         footprint = str(symbol.get("footprint", "")).strip()
         if not ref or not footprint:
@@ -327,6 +330,75 @@ def _kicad_python() -> str | None:
     return None
 
 
+def _footprint_reference(footprint: Any) -> str:
+    """Return a footprint reference from a parsed KiCad board node."""
+    for child in getattr(footprint, "children", []):
+        if getattr(child, "tag", "") != "property":
+            continue
+        values = list(getattr(child, "values", []))
+        if len(values) >= 2 and values[0] == "Reference":
+            return str(values[1]).strip()
+    return ""
+
+
+def _expected_board_nets(plan: dict[str, Any]) -> dict[str, dict[str, str]]:
+    expected: dict[str, dict[str, str]] = {}
+    for symbol in plan.get("symbols", []):
+        if not isinstance(symbol, dict):
+            continue
+        ref = str(symbol.get("ref", "")).strip()
+        pin_nets = {
+            str(pin.get("number", "")).strip(): str(pin.get("net", "")).strip()
+            for pin in symbol.get("pins", [])
+            if isinstance(pin, dict)
+            and str(pin.get("number", "")).strip()
+            and str(pin.get("net", "")).strip()
+        }
+        if ref and pin_nets:
+            expected[ref] = pin_nets
+    return expected
+
+
+def _actual_board_nets(board_file: Path) -> dict[str, dict[str, str]]:
+    root = parse(board_file.read_text(encoding="utf-8"))
+    actual: dict[str, dict[str, str]] = {}
+    for footprint in root.find_all("footprint"):
+        ref = _footprint_reference(footprint)
+        if not ref:
+            continue
+        pin_nets: dict[str, str] = {}
+        for pad in footprint.find("pad"):
+            number = str(pad.values[0]).strip() if getattr(pad, "values", []) else ""
+            net = str(pad.get("net") or "").strip()
+            if number and net:
+                pin_nets[number] = net
+        if pin_nets:
+            actual[ref] = pin_nets
+    return actual
+
+
+def _validate_generated_board_nets(plan: dict[str, Any], board_file: Path) -> list[str]:
+    """Reject a PCB that contains footprints but silently lost net bindings."""
+    if not board_file.is_file():
+        return [f"PCB verification failed: board file not found at {board_file}."]
+    expected = _expected_board_nets(plan)
+    if not expected:
+        return []
+    actual = _actual_board_nets(board_file)
+    issues: list[str] = []
+    for ref, expected_pads in expected.items():
+        actual_pads = actual.get(ref, {})
+        for pad_number, expected_net in expected_pads.items():
+            actual_net = actual_pads.get(pad_number, "")
+            if not actual_net:
+                issues.append(f"{ref} pad {pad_number} expected net {expected_net} but the board file has no net.")
+            elif actual_net != expected_net:
+                issues.append(
+                    f"{ref} pad {pad_number} expected net {expected_net} but the board file has {actual_net}."
+                )
+    return issues
+
+
 def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -> dict[str, Any]:
     """Create a ``.kicad_pcb`` file via KiCad pcbnew.
 
@@ -437,6 +509,18 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
         warnings.extend(str(item) for item in result["warnings"] if str(item))
     if isinstance(result.get("skipped"), list):
         warnings.extend(str(item) for item in result["skipped"] if str(item))
+    # Unit-test doubles may intentionally omit a board file. A real pcbnew
+    # invocation always writes one, and then its pad-to-net bindings are a
+    # release gate rather than an advisory warning.
+    verification_errors = _validate_generated_board_nets(plan, board_file) if board_file.is_file() else []
+    if verification_errors:
+        warnings.extend(verification_errors)
+        result["verification_errors"] = verification_errors
+        result["ok"] = False
+        try:
+            board_file.unlink()
+        except OSError:
+            pass
     if warnings:
         result["warnings"] = warnings
     else:

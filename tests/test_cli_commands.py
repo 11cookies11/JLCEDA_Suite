@@ -294,19 +294,15 @@ class TestCliDispatch(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            with patch("kicad_suite.cli.ModelApiService") as service_cls:
-                service = service_cls.from_repository.return_value
-                service.handle_dict.return_value = {"success": True}
-                with patch("kicad_suite.cli.ProjectState"):
+            with patch("kicad_suite.cli.run_pipeline", return_value={"counts": {"symbols": 0, "nets": 0}}) as run:
+                with patch("kicad_suite.cli.ProjectState") as state_cls:
                     buffer = io.StringIO()
                     with redirect_stdout(buffer):
                         code = cli.main(["agent", "export-kicad", "--project", str(project_path)])
 
         self.assertEqual(code, 0)
-        sent_request = service.handle_dict.call_args.args[0]
-        self.assertEqual(sent_request["operation"], "export_kicad_project")
-        self.assertEqual(sent_request["payload"]["project_name"], "agent_board")
-        self.assertEqual(Path(sent_request["payload"]["output_dir"]), project_path / "output")
+        run.assert_called_once_with(str(model_path), str(project_path / "output"))
+        state_cls.return_value.mark_built.assert_called_once()
 
     def test_agent_build_ir_writes_structured_ir_file(self):
         with tempfile.TemporaryDirectory() as tmp_dir:

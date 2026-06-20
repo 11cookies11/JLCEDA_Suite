@@ -10,10 +10,19 @@ from unittest.mock import patch
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
 from kicad_suite.domain.core.part_selector import SelectedPart
-from kicad_suite.orchestration.project_resolution import build_project_resolution
+from kicad_suite.orchestration.project_resolution import _clean_part, build_project_resolution
 
 
 class TestProjectResolution(unittest.TestCase):
+    def test_clean_part_preserves_symbol_reference(self) -> None:
+        cleaned = _clean_part({
+            "display_name": "ESP32-S3-WROOM-1-N8R8",
+            "symbol_ref": "ESP32-S3-WROOM-1",
+            "kicad_footprint_hint": "WIRELM-SMD_ESP32-S3-WROOM-1",
+        })
+
+        self.assertEqual(cleaned["symbol_ref"], "ESP32-S3-WROOM-1")
+
     def test_build_project_resolution_merges_parts_pipeline_selection(self) -> None:
         model = {
             "schema_version": "circuit-model.v1",
@@ -165,7 +174,11 @@ class TestProjectResolution(unittest.TestCase):
         }
 
         with patch("kicad_suite.orchestration.project_resolution.footprint_exists", return_value=False):
-            manifest = build_project_resolution(model, parts_result=parts_result)
+            with patch(
+                "kicad_suite.orchestration.project_resolution.symbol_mapping_for",
+                return_value=("JLC-MCP:STM32F103C8T6", "LQFP-48", []),
+            ):
+                manifest = build_project_resolution(model, parts_result=parts_result)
 
         self.assertEqual(manifest["components"][0]["resolution_result"]["recommended_candidates"][0]["part_id"], "candidate-a")
         self.assertEqual(manifest["components"][0]["verification"]["best_candidate"]["part_id"], "candidate-a")

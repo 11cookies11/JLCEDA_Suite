@@ -762,26 +762,42 @@ def _agent_create_handler(args: argparse.Namespace) -> int:
 def _agent_export_kicad_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
-    project_id, topology = _agent_model_metadata(model_path, project_path)
     output_dir = Path(args.output_dir).resolve() if args.output_dir else project_path / "output"
-    payload = {
-        "output_dir": str(output_dir),
-        "project_name": args.project_name or project_path.name.replace("-", "_"),
-    }
-    payload.update(_load_payload_args(args))
-    request = _agent_request(
-        operation="export_kicad_project",
-        project_id=args.project_id or project_id,
-        topology=args.topology or topology,
-        payload=payload,
-        request_id=args.request_id,
-        options=_agent_options_from_args(args),
+    if args.dry_run:
+        return _print_json({
+            "ok": True,
+            "stage": "export_kicad",
+            "mode": "pipeline",
+            "dry_run": True,
+            "model": str(model_path),
+            "output_dir": str(output_dir),
+        })
+
+    try:
+        summary = run_pipeline(str(model_path), str(output_dir))
+    except Exception as exc:  # noqa: BLE001
+        ProjectState(project_path).mark_build_failed({"errors": [str(exc)]})
+        _print_json({
+            "ok": False,
+            "stage": "export_kicad",
+            "mode": "pipeline",
+            "error": str(exc),
+        })
+        return 1
+
+    ProjectState(project_path).mark_built(
+        {"output_dir": str(output_dir)},
+        op_data={
+            "operation": "export-kicad",
+            "mode": "pipeline",
+            "symbols": summary.get("counts", {}).get("symbols", 0),
+            "nets": summary.get("counts", {}).get("nets", 0),
+            "board_footprints": summary.get("counts", {}).get("board_footprints", 0),
+            "board_warnings": summary.get("counts", {}).get("board_warnings", 0),
+            "erc_findings": summary.get("erc", {}).get("findings", 0),
+        },
     )
-    service = ModelApiService.from_repository(CircuitModelRepository(model_path))
-    result = service.handle_dict(request)
-    _print_json(result)
-    _update_project_state_from_request(request, result, project_path)
-    return 0 if result.get("success") else 1
+    return _print_json({"ok": True, "stage": "export_kicad", "mode": "pipeline", "summary": summary})
 
 
 def _agent_report_handler(args: argparse.Namespace) -> int:

@@ -4,7 +4,6 @@
 from __future__ import annotations
 
 import os
-import shutil
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any
@@ -53,11 +52,21 @@ class PipelineRunState:
 
 
 def _clean_project_output_dir(output: Path, project_name: str) -> Path:
-    """Remove stale generated KiCad project files before a fresh pipeline run."""
+    """Remove generated artifacts without touching KiCad history or user files."""
     project_dir = output / project_name
-    if project_dir.exists():
-        shutil.rmtree(project_dir)
     project_dir.mkdir(parents=True, exist_ok=True)
+    generated_names = {
+        "fp-lib-table",
+        "sym-lib-table",
+        "kicad-write-summary.json",
+        "agent-report.json",
+        "jlc-mcp-install-report.json",
+    }
+    for path in project_dir.iterdir():
+        if not path.is_file():
+            continue
+        if path.name in generated_names or path.suffix in {".kicad_pro", ".kicad_sch", ".kicad_pcb", ".kicad_prl"}:
+            path.unlink()
     return project_dir
 
 
@@ -256,8 +265,10 @@ def _render_and_postprocess_stage(state: PipelineRunState) -> Path:
         state.write_result["board_file"] = board_result.get("board_file", "")
         state.write_result["board_footprints"] = board_result.get("footprints", 0)
         state.write_result["net_count"] = board_result.get("nets", 0)
-    elif board_result.get("warnings"):
-        state.write_result.setdefault("board_warnings", []).extend(board_result.get("warnings", []))
+    elif board_result.get("attempted"):
+        warnings = [str(item) for item in board_result.get("warnings", []) if str(item)]
+        state.write_result.setdefault("board_warnings", []).extend(warnings)
+        raise ValueError("PCB generation failed validation: " + "; ".join(warnings[:3]))
 
     state.postprocess["final_normalization"] = apply_postprocess(schematic_file, project_dir)
     return project_dir

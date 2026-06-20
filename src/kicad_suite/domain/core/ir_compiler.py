@@ -188,6 +188,10 @@ def _build_components(
             "pins": pins,
             "assigned_sheet": assigned_sheet,
             "availability_status": str(component.get("availability_status", "unknown")),
+            # Internal constructs such as a PCB NFC antenna feed are valid
+            # schematic endpoints but are not purchasable footprints.
+            "in_bom": not bool(component.get("bom_exclude", False)),
+            "on_board": not bool(component.get("bom_exclude", False)),
             "notes": [str(n) for n in component.get("notes", [])] if isinstance(component.get("notes"), list) else [],
             "search_hints": [str(h) for h in component.get("search_hints", [])] if isinstance(component.get("search_hints"), list) else [],
         })

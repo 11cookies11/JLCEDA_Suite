@@ -61,6 +61,8 @@ class KiCadSymbol:
     lcsc: str = ""
     mpn: str = ""
     manufacturer: str = ""
+    in_bom: bool = True
+    on_board: bool = True
 
 
 @dataclass
@@ -588,6 +590,8 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
                 lcsc=str(sp.get('lcsc_id', '')),
                 mpn=str(sp.get('mpn', '')),
                 manufacturer=str(sp.get('manufacturer', '')),
+                in_bom=bool(component.get('in_bom', True)),
+                on_board=bool(component.get('on_board', True)),
             )
         )
 
