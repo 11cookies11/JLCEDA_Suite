@@ -91,7 +91,12 @@ def run(components: list[dict[str, Any]], nets: list[dict[str, Any]]) -> Validat
                     f"neither pin is on a ground net."
                 )
 
-    # ---- 3. Done ----
+    # ---- 3. Symbol library paren balance ----
+    sym_lib_ok = _check_symbol_library_parens(report)
+    if not sym_lib_ok:
+        errors_found += 1
+
+    # ---- 4. Done ----
     if errors_found == 0:
         report.add_check("circuit sanity ok")
     return report
@@ -199,3 +204,47 @@ def _is_intentional_link(value: str, role: str) -> bool:
         if keyword in role_lower:
             return True
     return False
+
+
+def _check_symbol_library_parens(report: ValidationReport) -> bool:
+    """Check each symbol in JLC-MCP.kicad_sym for paren balance.
+
+    Returns True if all symbols are balanced.
+    """
+    import os as _os
+    from pathlib import Path as _Path
+    source = _os.environ.get("KICAD_SOURCE_PROJECT_DIR", "")
+    if not source:
+        return True
+    lib_path = _Path(source) / "libraries" / "symbols" / "JLC-MCP.kicad_sym"
+    if not lib_path.exists():
+        return True
+    text = lib_path.read_text(encoding="utf-8", errors="replace")
+
+    broken = []
+    pos = 0
+    while True:
+        start = text.find('(symbol "', pos)
+        if start < 0:
+            break
+        depth = 0
+        i = start
+        while i < len(text):
+            if text[i] == "(":
+                depth += 1
+            elif text[i] == ")":
+                depth -= 1
+                if depth == 0:
+                    break
+            i += 1
+        if depth != 0:
+            name_end = text.find('"', start + 9)
+            name = text[start + 8 : name_end] if name_end > start else "?"
+            broken.append(f"{name}: unmatched paren (depth={depth})")
+        pos = i + 1 if depth == 0 else start + 1
+
+    if broken:
+        for msg in broken:
+            report.add_error(f"SYMBOL LIBRARY PAREN: {msg}")
+        return False
+    return True
