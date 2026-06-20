@@ -908,7 +908,11 @@
         "display_name": "0603WAJ0103T5E",
         "lcsc_id": "C15401",
         "package": "R0603"
-      }
+      },
+      "assembly": "dnp",
+      "notes": [
+        "DNP after mute switch redesign: GPIO17 now reads directly from MIC_PWR_EN."
+      ]
     },
     {
       "ref": "R17",
@@ -1428,7 +1432,6 @@
         "U8.VCC",
         "U9.IN",
         "U10.IN",
-        "R16.1",
         "R20.1",
         "R21.1",
         "R27.1",
@@ -1494,7 +1497,6 @@
         "SW1.2",
         "SW2.2",
         "SW3.2",
-        "SW4.2",
         "Q1.S",
         "R1.2",
         "R2.2",
@@ -1822,18 +1824,6 @@
       ]
     },
     {
-      "name": "SW_MUTE",
-      "kind": "signal",
-      "members": [
-        "U1.GPIO17",
-        "SW4.1",
-        "R16.2"
-      ],
-      "notes": [
-        "MCU-readable physical mute state; firmware must block audio capture/writes whenever mute is active."
-      ]
-    },
-    {
       "name": "MOTOR_DRV",
       "kind": "signal",
       "members": [
@@ -1897,9 +1887,9 @@
       "name": "MIC_PWR_EN",
       "kind": "signal",
       "members": [
-        "SW4.3",
         "U9.ON",
-        "R27.2"
+        "SW4.1",
+        "U1.GPIO17"
       ],
       "notes": [
         "Hardware mute control for microphone load switch; verify final switch polarity against enclosure MIC ON/OFF direction."
@@ -2092,6 +2082,14 @@
         "U1.GPIO4",
         "R7.2"
       ]
+    },
+    {
+      "name": "MIC_PWR_NC",
+      "kind": "signal",
+      "members": [
+        "SW4.2",
+        "R27.2"
+      ]
     }
   ],
   "sheets": [
@@ -2232,7 +2230,8 @@
         "I2S_LRCLK",
         "I2S_DIN",
         "MIC_LR_SEL_L",
-        "MIC_LR_SEL_R"
+        "MIC_LR_SEL_R",
+        "MIC_PWR_NC"
       ],
       "inputs": [
         "SYS_3V3",
@@ -2278,7 +2277,6 @@
         "SW4",
         "Q1",
         "M1",
-        "R16",
         "R17",
         "R18",
         "C19",
@@ -2293,7 +2291,6 @@
         "LED_POWER",
         "LED_RECORD",
         "BTN_MARK",
-        "SW_MUTE",
         "MOTOR_DRV",
         "MOTOR_GATE",
         "MOTOR_LOW",
@@ -2337,7 +2334,6 @@
         "SD_MOSI",
         "SD_MISO",
         "SD_CS",
-        "SW_MUTE",
         "CHG_STAT",
         "MIC_3V3",
         "USB_D_P",

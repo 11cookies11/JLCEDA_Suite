@@ -47,6 +47,9 @@ def run(components: list[dict[str, Any]], nets: list[dict[str, Any]]) -> Validat
 
         if not _looks_like_passive(ref, role):
             continue
+        # Skip DNP and BOM-excluded components
+        if _is_excluded(comp):
+            continue
 
         comp_pins = _component_pin_nets(ref, net_by_name)
         nets_on_comp = list(comp_pins.values())
@@ -165,6 +168,23 @@ def _any_pin_on_kind(
     for net_name in comp_pins.values():
         net_kind = str(net_by_name.get(net_name, {}).get("kind", "")).lower()
         if net_kind == kind:
+            return True
+    return False
+
+
+def _is_excluded(comp: dict[str, Any]) -> bool:
+    """Return True for DNP, BOM-excluded, or internal components."""
+    if comp.get("assembly", "") == "dnp":
+        return True
+    if comp.get("bom_exclude") or comp.get("dnp"):
+        return True
+    if comp.get("part_source") == "internal":
+        return True
+    selected = comp.get("selected_part", {})
+    if isinstance(selected, dict):
+        if selected.get("assembly", "") == "dnp":
+            return True
+        if selected.get("bom_exclude"):
             return True
     return False
 
