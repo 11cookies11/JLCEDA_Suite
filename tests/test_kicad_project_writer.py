@@ -124,6 +124,24 @@ class TestKicadProjectWriter(unittest.TestCase):
         self.assertIn("(in_bom no)", rendered)
         self.assertIn("(on_board no)", rendered)
 
+    def test_footprint_property_is_preserved_for_kicad_importers(self) -> None:
+        rendered = render_symbol_instance(
+            {
+                "ref": "R1",
+                "lib_id": "Device:R",
+                "value": "10K",
+                "footprint": "JLC-MCP:R0603",
+                "at": {"x": 10.0, "y": 10.0, "rotation": 0.0},
+                "pins": [],
+            },
+            "demo",
+        )
+
+        footprint_start = rendered.index('(property "Footprint"')
+        footprint_block = rendered[footprint_start:footprint_start + 220]
+        self.assertNotIn("(hide yes)", footprint_block)
+        self.assertIn("(size 0.01 0.01)", footprint_block)
+
     def test_hierarchical_render_includes_sheet_ports_and_child_ports(self) -> None:
         plan = {
             "target": {"project_name": "demo"},

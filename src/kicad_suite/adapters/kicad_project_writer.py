@@ -913,8 +913,7 @@ def render_symbol_instance_at_path(symbol: dict[str, Any], project_name: str, sh
       (effects (font (size 1.27 1.27)))
     )
     (property "Footprint" {q(footprint)} (at {fmt(x)} {fmt(y)} 0)
-      (hide yes)
-      (effects (font (size 1.27 1.27)))
+      (effects (font (size 0.01 0.01)))
     ){extra_props}
 {chr(10).join(pin_lines)}
     (instances
