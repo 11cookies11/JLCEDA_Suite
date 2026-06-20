@@ -211,11 +211,22 @@ def generate_board(plan_path, output_path, source_project_dir=None):
             continue
         ref = str(symbol.get("ref", "")).strip()
         footprint = str(symbol.get("footprint", "")).strip()
-        if not ref or ":" not in footprint:
+        if not ref or not footprint:
             skipped.append(f"{ref or '<unknown>'}: no footprint")
             continue
-        lib_name, footprint_name = footprint.split(":", 1)
-        lib_dir = _footprint_library_dir(project_dir, lib_name)
+        if ":" in footprint:
+            lib_name, footprint_name = footprint.split(":", 1)
+            lib_dir = _footprint_library_dir(project_dir, lib_name)
+        else:
+            # Bare footprint name — search JLC-MCP library first, then other known dirs
+            footprint_name = footprint
+            lib_dir = _footprint_library_dir(project_dir, "JLC-MCP")
+            if lib_dir is None or not lib_dir.exists():
+                # Try any footprint library directory under the project
+                fp_root = project_dir / "libraries" / "footprints"
+                for d in sorted(fp_root.glob("*.pretty")) if fp_root.exists() else []:
+                    lib_dir = d
+                    break
         if lib_dir is None or not lib_dir.exists():
             skipped.append(f"{ref}: footprint library not found: {footprint}")
             continue

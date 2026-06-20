@@ -155,7 +155,8 @@
         "lcsc_id": "C51118",
         "display_name": "AP2112K-3.3TRG1",
         "manufacturer": "Diodes Incorporated",
-        "package": "SOT-25-5"
+        "package": "SOT-25-5",
+        "kicad_footprint_hint": "SOT-25-5_L2.9-W1.6-P0.95-LS2.8-BL"
       },
       "notes": [
         "AP2112K-3.3 is retained as a Rev A bring-up LDO for first-board success.",
@@ -178,7 +179,8 @@
         "lcsc_id": "C54313",
         "display_name": "BQ24074RGTR",
         "manufacturer": "Texas Instruments",
-        "package": "QFN-16-EP(3x3)"
+        "package": "QFN-16-EP(3x3)",
+        "kicad_footprint_hint": "QFN-16_L3.0-W3.0-P0.50-TL-EP1.7"
       },
       "notes": [
         "Rev A Module preferred charger: single-cell Li-ion charger with power-path/load sharing.",
@@ -201,7 +203,8 @@
         "lcsc_id": "C7519",
         "display_name": "USBLC6-2SC6",
         "manufacturer": "STMicroelectronics",
-        "package": "SOT-23-6"
+        "package": "SOT-23-6",
+        "kicad_footprint_hint": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"
       }
     },
     {
@@ -239,7 +242,9 @@
         "lcsc_id": "C295747",
         "display_name": "S2B-PH-SM4-TB(LF)(SN)",
         "manufacturer": "JST",
-        "package": "SMD,P=2mm,Surface Mount,Right Angle"
+        "package": "SMD,P=2mm,Surface Mount,Right Angle",
+        "symbol_ref": "S2B-PH-SM4-TB",
+        "kicad_footprint_hint": "CONN-SMD_P2.00_S2B-PH-SM4-TB-LF-SN"
       },
       "notes": [
         "Rev A uses JST PH 2.0mm right-angle SMD connector; confirm battery cable polarity before layout release."
@@ -330,7 +335,8 @@
         "lcsc_id": "C2286",
         "display_name": "KT-0603R",
         "manufacturer": "Hubei KENTO Elec",
-        "package": "LED0603"
+        "package": "LED0603",
+        "kicad_footprint_hint": "LED-SMD_L1.6-W0.8-R-RD"
       }
     },
     {
@@ -643,7 +649,9 @@
         "lcsc_id": "C616024",
         "display_name": "ATECC608A-SSHDA-T",
         "manufacturer": "Microchip Technology",
-        "package": "SOIC-8"
+        "package": "SOIC-8",
+        "symbol_ref": "ATECC608A-SSHDA-T_C616024",
+        "kicad_footprint_hint": "SOIC-8_L4.9-W3.9-P1.27-LS6.0-BL"
       }
     },
     {
@@ -664,7 +672,8 @@
         "lcsc_id": "C125617",
         "display_name": "TF-001B",
         "manufacturer": "SOFNG",
-        "package": "TF-SMD"
+        "package": "TF-SMD",
+        "kicad_footprint_hint": "TF-SMD_TF-001B"
       }
     },
     {
@@ -686,7 +695,8 @@
         "lcsc_id": "C966933",
         "display_name": "MSM261S3526Z0CM",
         "manufacturer": "MEMSensing Microsystems",
-        "package": "MEMS-MIC-SMD"
+        "package": "MEMS-MIC-SMD",
+        "kicad_footprint_hint": "MIC-SMD_6P-L3.5-W2.7-P0.90-TR"
       }
     },
     {
@@ -708,7 +718,8 @@
         "lcsc_id": "C966933",
         "display_name": "MSM261S3526Z0CM",
         "manufacturer": "MEMSensing Microsystems",
-        "package": "MEMS-MIC-SMD"
+        "package": "MEMS-MIC-SMD",
+        "kicad_footprint_hint": "MIC-SMD_6P-L3.5-W2.7-P0.90-TR"
       }
     },
     {
@@ -747,7 +758,8 @@
         "lcsc_id": "C431541",
         "display_name": "MSK12C02-HB",
         "manufacturer": "SHOU HAN",
-        "package": "SMD,8x2.8mm"
+        "package": "SMD,8x2.8mm",
+        "kicad_footprint_hint": "SW-TH_MSK12C02-HB-1"
       }
     },
     {
@@ -764,7 +776,8 @@
         "lcsc_id": "C20917",
         "display_name": "AO3400A",
         "manufacturer": "AOS",
-        "package": "SOT-23-3"
+        "package": "SOT-23-3",
+        "kicad_footprint_hint": "SOT-23-3_L2.9-W1.3-P1.90-LS2.4-BR"
       },
       "notes": [
         "Logic-level NMOS for vibration motor low-side drive; verify flyback/EMI strategy after motor selection."
@@ -784,7 +797,8 @@
         "lcsc_id": "C2759981",
         "display_name": "LCM0827A3038F",
         "manufacturer": "LEADER",
-        "package": "Flat vibration motor"
+        "package": "Flat vibration motor",
+        "kicad_footprint_hint": "VIBRATIONMOTOR-TH_LCM0827A3038F"
       },
       "notes": [
         "Short haptic alerts only; avoid frequent vibration during recording and place far from microphones."
@@ -1137,7 +1151,8 @@
         "lcsc_id": "C5221752",
         "display_name": "ST25DV04KC-IE8S3",
         "manufacturer": "STMicroelectronics",
-        "package": "SO-8"
+        "package": "SO-8",
+        "kicad_footprint_hint": "SO-8_L4.9-W3.9-P1.27-LS6.0-BL"
       },
       "notes": [
         "Dynamic NFC tag, not a PN532 reader. Used for badge URL, device identity, pairing/configuration and low-power readable identity data."
@@ -1213,7 +1228,7 @@
       "selected_part": {
         "lcsc_id": "C20688",
         "display_name": "FPC-Pitch0.5-24P-Bottom-Contact-Flip-Lock",
-        "symbol_ref": "FPC-Pitch0.5-24P-Bottom-Contact-Flip-Lock",
+        "symbol_ref": "EPD_SPI_CONN_10P",
         "kicad_footprint_hint": "FPC-SMD_24P-P0.50-L6.1-W16.4",
         "package": "FPC-SMD_24P-P0.50-L6.1-W16.4"
       },
@@ -1326,7 +1341,8 @@
         "lcsc_id": "C15401",
         "display_name": "0603WAF1002T5E",
         "manufacturer": "UNI-ROYAL",
-        "package": "R0603"
+        "package": "R0603",
+        "symbol_ref": "0603WAJ0103T5E"
       }
     },
     {
@@ -1354,7 +1370,8 @@
         "lcsc_id": "C15401",
         "display_name": "0603WAF1002T5E",
         "manufacturer": "UNI-ROYAL",
-        "package": "R0603"
+        "package": "R0603",
+        "symbol_ref": "0603WAJ0103T5E"
       }
     },
     {
@@ -1368,7 +1385,8 @@
         "lcsc_id": "C15401",
         "display_name": "0603WAF1002T5E",
         "manufacturer": "UNI-ROYAL",
-        "package": "R0603"
+        "package": "R0603",
+        "symbol_ref": "0603WAJ0103T5E"
       }
     }
   ],
