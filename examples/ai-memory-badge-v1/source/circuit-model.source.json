@@ -1,82 +1,141 @@
 {
   "schema_version": "circuit-model.v1",
-  "request_id": "ai-memory-badge-v1-rev-a-minimal-boot-chain",
+  "request_id": "ai-memory-badge-v1-rev-a-module",
   "project_id": "ai-memory-badge-v1",
   "topology": "ai_memory_badge_v1",
   "components": [
     {
       "ref": "U1",
-      "role": "main_controller_bare_soc",
-      "value": "ESP32-S3R8 bare SoC",
-      "package": "QFN-56",
+      "role": "main_controller_wroom_module",
+      "value": "ESP32-S3-WROOM-1-N8R8 module",
+      "package": "SMD,25.5x18mm",
       "sheet": "03_esp32s3_core",
       "search_hints": [
-        "ESP32-S3R8 bare chip QFN-56",
-        "C2913194"
+        "ESP32-S3-WROOM-1-N8R8",
+        "ESP32-S3-WROOM-1-N16R8",
+        "C2913201"
       ],
       "availability_status": "selected",
       "selected_part": {
-        "lcsc_id": "C2913194",
-        "display_name": "ESP32-S3R8",
+        "lcsc_id": "C2913201",
+        "display_name": "ESP32-S3-WROOM-1-N8R8",
         "manufacturer": "Espressif Systems",
-        "package": "QFN-56"
+        "package": "SMD,25.5x18mm",
+        "symbol_ref": "ESP32-S3-WROOM-1",
+        "kicad_footprint_hint": "WIRELM-SMD_ESP32-S3-WROOM-1",
+        "pin_count": 41,
+        "named_pin_count": 41
       },
       "notes": [
-        "Rev A leading controller choice. Bare-chip QFN-56 with in-package 8 MB Octal SPI PSRAM and no in-package flash.",
-        "Requires external SPI flash, 40 MHz crystal, RF matching, boot straps and dense local decoupling.",
-        "Seventeen symbol pins are still intentionally unconnected pending final NC/strap/debug review; do not treat the current pin map as final PCB-ready pin closure."
+        "Rev A Module version uses ESP32-S3-WROOM-1-N8R8 instead of a bare ESP32-S3R8 QFN to reduce first-board risk.",
+        "External flash, PSRAM, 40 MHz crystal and RF pi-network are removed from the assembled Rev A design.",
+        "Place the module on the top PCB edge with the PCB antenna facing outward and keep copper, battery, NFC antenna, metal clip and enclosure metal out of the antenna keep-out."
       ],
       "pinmap": {
-        "GPIO3": {
-          "no_connect": true
+        "GPIO0": {
+          "function": "ESP_BOOT"
+        },
+        "GPIO1": {
+          "function": "VBAT_SENSE"
+        },
+        "GPIO2": {
+          "function": "LED_POWER"
+        },
+        "GPIO4": {
+          "function": "LED_RECORD"
+        },
+        "GPIO5": {
+          "function": "I2C_SCL"
+        },
+        "GPIO6": {
+          "function": "BTN_MARK"
+        },
+        "GPIO7": {
+          "function": "SD_CD"
+        },
+        "GPIO8": {
+          "function": "SD_CS"
+        },
+        "GPIO9": {
+          "function": "SD_MISO"
+        },
+        "GPIO10": {
+          "function": "SD_SCLK"
+        },
+        "GPIO11": {
+          "function": "SD_MOSI"
+        },
+        "GPIO12": {
+          "function": "I2S_BCLK"
+        },
+        "GPIO13": {
+          "function": "I2S_LRCLK"
+        },
+        "GPIO14": {
+          "function": "I2S_DIN"
+        },
+        "GPIO15": {
+          "function": "EPD_PWR_EN"
+        },
+        "GPIO16": {
+          "function": "SD_PWR_EN"
+        },
+        "GPIO17": {
+          "function": "SW_MUTE"
+        },
+        "GPIO18": {
+          "function": "MOTOR_DRV"
+        },
+        "GPIO19": {
+          "function": "USB_D_N"
+        },
+        "GPIO20": {
+          "function": "USB_D_P"
+        },
+        "GPIO21": {
+          "function": "I2C_SDA"
         },
         "GPIO33": {
-          "no_connect": true
+          "function": "EPD_SCLK"
         },
         "GPIO34": {
-          "no_connect": true
+          "function": "EPD_MOSI"
         },
         "GPIO35": {
-          "no_connect": true
+          "function": "EPD_CS"
         },
         "GPIO36": {
-          "no_connect": true
+          "function": "EPD_DC"
         },
         "GPIO37": {
-          "no_connect": true
+          "function": "EPD_RST"
         },
         "GPIO38": {
-          "no_connect": true
+          "function": "EPD_BUSY"
         },
-        "GPIO45": {
-          "no_connect": true
+        "GPIO39": {
+          "function": "REC_BTN"
         },
-        "GPIO46": {
-          "no_connect": true
+        "GPIO40": {
+          "function": "MODE_BTN"
         },
-        "MTMS": {
-          "no_connect": true
+        "GPIO41": {
+          "function": "NFC_GPO"
         },
-        "MTDI": {
-          "no_connect": true
+        "U0TXD": {
+          "function": "UART0_TX"
         },
-        "MTDO": {
-          "no_connect": true
+        "U0RXD": {
+          "function": "UART0_RX"
         },
-        "MTCK": {
-          "no_connect": true
+        "EN": {
+          "function": "ESP_EN"
         },
-        "SPICLK_P": {
-          "no_connect": true
+        "3V3": {
+          "function": "SYS_3V3"
         },
-        "SPICLK_N": {
-          "no_connect": true
-        },
-        "XTAL_32K_P": {
-          "no_connect": true
-        },
-        "XTAL_32K_N": {
-          "no_connect": true
+        "GND": {
+          "function": "GND"
         }
       }
     },
@@ -99,77 +158,33 @@
         "package": "SOT-25-5"
       },
       "notes": [
-        "Rev A bring-up LDO. Rev B should evaluate buck or buck-boost for battery life."
+        "AP2112K-3.3 is retained as a Rev A bring-up LDO for first-board success.",
+        "Reserve PCB area and pin-compatible planning space for a higher-efficiency buck or buck-boost in Rev B.",
+        "ESP32-S3-WROOM supply entry needs close 10uF, 1uF and 100nF local decoupling for Wi-Fi current peaks."
       ]
     },
     {
       "ref": "U3",
-      "role": "single_cell_lipo_charger",
-      "value": "MCP73831 LiPo charger",
-      "package": "SOT-23-5",
+      "role": "single_cell_lipo_power_path_charger",
+      "value": "BQ24074 LiPo charger with power-path",
+      "package": "QFN-16-EP(3x3)",
       "sheet": "01_usb_and_charging",
       "search_hints": [
-        "MCP73831 LiPo charger SOT-23-5",
-        "single cell lithium charger SOT-23-5",
-        "C424093"
+        "BQ24074RGTR single cell LiPo power path charger",
+        "C54313"
       ],
       "availability_status": "selected",
       "selected_part": {
-        "lcsc_id": "C424093",
-        "display_name": "MCP73831T-2ACI/OT",
-        "manufacturer": "Microchip Technology",
-        "package": "SOT-23-5"
+        "lcsc_id": "C54313",
+        "display_name": "BQ24074RGTR",
+        "manufacturer": "Texas Instruments",
+        "package": "QFN-16-EP(3x3)"
       },
       "notes": [
-        "Simple Rev A charger. Future revision may use a power-path charger.",
-        "R3 sets charge current and must be reviewed against final battery capacity."
+        "Rev A Module preferred charger: single-cell Li-ion charger with power-path/load sharing.",
+        "Set charge current from final protected battery capacity; do not reuse the former MCP73831 2K program value without calculation.",
+        "Use the USB connector, J4 debug header and nearby component pads for charger bring-up measurements."
       ]
-    },
-    {
-      "ref": "U4",
-      "role": "external_spi_flash",
-      "value": "W25Q128JVSIQ 16MB SPI flash",
-      "package": "SOIC-8-208mil",
-      "sheet": "04_memory",
-      "search_hints": [
-        "SPI NOR flash 16MB SOIC-8 3.3V",
-        "W25Q128 SOIC-8",
-        "C97521"
-      ],
-      "availability_status": "selected",
-      "selected_part": {
-        "lcsc_id": "C97521",
-        "display_name": "W25Q128JVSIQ",
-        "manufacturer": "Winbond Electronics",
-        "package": "SOIC-8-208mil"
-      },
-      "notes": [
-        "External SPI flash for ESP32-S3R8 boot and firmware/storage use."
-      ]
-    },
-    {
-      "ref": "U5",
-      "role": "external_psram",
-      "value": "8MB PSRAM reserve, DNP",
-      "package": "SOIC-8",
-      "sheet": "04_memory",
-      "assembly": "dnp",
-      "search_hints": [
-        "ESP32-S3 PSRAM 8MB 3.3V",
-        "APS6404 PSRAM"
-      ],
-      "availability_status": "dnp",
-      "notes": [
-        "DNP by default for Rev A because ESP32-S3R8 provides in-package 8 MB PSRAM.",
-        "Keep pads/nets as a risk fallback until the memory architecture is proven.",
-        "DNP part has an LCSC candidate for KiCad CAD library generation only; do not assemble by default."
-      ],
-      "selected_part": {
-        "lcsc_id": "C5333729",
-        "display_name": "APS6404L-3SQR-SN",
-        "manufacturer": "AP Memory",
-        "package": "SOP-8"
-      }
     },
     {
       "ref": "U6",
@@ -231,27 +246,6 @@
       ]
     },
     {
-      "ref": "J3",
-      "role": "rf_antenna_connector",
-      "value": "U.FL/IPEX antenna connector",
-      "package": "U.FL-SMD",
-      "sheet": "05_clock_and_rf",
-      "search_hints": [
-        "U.FL IPEX antenna connector SMD"
-      ],
-      "availability_status": "selected",
-      "notes": [
-        "Rev A uses an antenna connector or selectable RF path to reduce RF bring-up risk.",
-        "Rev A uses board-side U.FL/IPEX 50 ohm connector for RF bring-up."
-      ],
-      "selected_part": {
-        "lcsc_id": "C88374",
-        "display_name": "U.FL-R-SMT-1(80)",
-        "manufacturer": "HRS",
-        "package": "SMD"
-      }
-    },
-    {
       "ref": "J4",
       "role": "uart_debug_header",
       "value": "UART debug 4P",
@@ -266,27 +260,6 @@
         "display_name": "2.54-1*4P",
         "lcsc_id": "C91552",
         "package": "HDR-TH_4P"
-      }
-    },
-    {
-      "ref": "Y1",
-      "role": "esp32s3_main_crystal",
-      "value": "40MHz 12pF 10ppm crystal",
-      "package": "SMD3225-4P",
-      "sheet": "05_clock_and_rf",
-      "search_hints": [
-        "40MHz crystal 3225 ESP32"
-      ],
-      "availability_status": "selected",
-      "notes": [
-        "Load capacitors must be recalculated after exact crystal CL and PCB parasitics are known.",
-        "Rev A crystal candidate: 40 MHz, 12 pF load, 10 ppm, 3225 4-pad package."
-      ],
-      "selected_part": {
-        "lcsc_id": "C5380316",
-        "display_name": "3225 40M 12PF 10PPM",
-        "manufacturer": "SOSET",
-        "package": "SMD3225-4P"
       }
     },
     {
@@ -351,7 +324,7 @@
       ],
       "availability_status": "selected",
       "notes": [
-        "Dedicated privacy/recording indicator. Firmware must not repurpose it as decorative status."
+        "Dedicated recording/privacy LED only. Firmware must not repurpose it as decorative status."
       ],
       "selected_part": {
         "lcsc_id": "C2286",
@@ -532,26 +505,6 @@
       "availability_status": "selected"
     },
     {
-      "ref": "R10",
-      "role": "rf_series_tune",
-      "value": "0R",
-      "package": "R0402",
-      "sheet": "05_clock_and_rf",
-      "search_hints": [
-        "0R resistor 0402"
-      ],
-      "notes": [
-        "RF pi-network series element. Final value after RF tuning."
-      ],
-      "selected_part": {
-        "lcsc_id": "C17168",
-        "display_name": "0402WGF0000TCE",
-        "manufacturer": "UNI-ROYAL",
-        "package": "R0402"
-      },
-      "availability_status": "selected"
-    },
-    {
       "ref": "C1",
       "role": "reg_input_bulk",
       "value": "10uF",
@@ -657,120 +610,6 @@
       }
     },
     {
-      "ref": "C8",
-      "role": "xtal_load_cap_1",
-      "value": "18pF",
-      "package": "C0603",
-      "sheet": "05_clock_and_rf",
-      "search_hints": [
-        "crystal load capacitor 0603"
-      ],
-      "notes": [
-        "Calculate after selecting exact 40 MHz crystal.",
-        "Initial load capacitor for 12 pF crystal assuming about 2-3 pF stray capacitance; tune after PCB bring-up if needed."
-      ],
-      "availability_status": "selected",
-      "selected_part": {
-        "lcsc_id": "C1647",
-        "display_name": "CL10C180JB8NNNC",
-        "manufacturer": "Samsung Electro-Mechanics",
-        "package": "C0603"
-      }
-    },
-    {
-      "ref": "C9",
-      "role": "xtal_load_cap_2",
-      "value": "18pF",
-      "package": "C0603",
-      "sheet": "05_clock_and_rf",
-      "search_hints": [
-        "crystal load capacitor 0603"
-      ],
-      "notes": [
-        "Calculate after selecting exact 40 MHz crystal.",
-        "Initial load capacitor paired with C8; tune after clock startup and frequency validation."
-      ],
-      "availability_status": "selected",
-      "selected_part": {
-        "lcsc_id": "C1647",
-        "display_name": "CL10C180JB8NNNC",
-        "manufacturer": "Samsung Electro-Mechanics",
-        "package": "C0603"
-      }
-    },
-    {
-      "ref": "C10",
-      "role": "flash_decoupling",
-      "value": "100nF",
-      "package": "C0603",
-      "sheet": "04_memory",
-      "search_hints": [
-        "100nF capacitor 0603 X7R"
-      ],
-      "selected_part": {
-        "display_name": "CL10B104KA8NNNC",
-        "lcsc_id": "C1590",
-        "package": "C0603"
-      }
-    },
-    {
-      "ref": "C11",
-      "role": "psram_decoupling",
-      "value": "100nF",
-      "package": "C0603",
-      "sheet": "04_memory",
-      "search_hints": [
-        "100nF capacitor 0603 X7R"
-      ],
-      "selected_part": {
-        "display_name": "CL10B104KA8NNNC",
-        "lcsc_id": "C1590",
-        "package": "C0603"
-      }
-    },
-    {
-      "ref": "C12",
-      "role": "rf_shunt_tune_1",
-      "value": "DNP",
-      "package": "C0402",
-      "sheet": "05_clock_and_rf",
-      "assembly": "dnp",
-      "search_hints": [
-        "RF capacitor 0402"
-      ],
-      "notes": [
-        "RF pi-network shunt element. DNP until RF tuning.",
-        "DNP part has an LCSC candidate for KiCad CAD library generation only; do not assemble by default."
-      ],
-      "selected_part": {
-        "lcsc_id": "C1548",
-        "display_name": "0402CG150J500NT",
-        "manufacturer": "FH",
-        "package": "C0402"
-      }
-    },
-    {
-      "ref": "C13",
-      "role": "rf_shunt_tune_2",
-      "value": "DNP",
-      "package": "C0402",
-      "sheet": "05_clock_and_rf",
-      "assembly": "dnp",
-      "search_hints": [
-        "RF capacitor 0402"
-      ],
-      "notes": [
-        "RF pi-network shunt element. DNP until RF tuning.",
-        "DNP part has an LCSC candidate for KiCad CAD library generation only; do not assemble by default."
-      ],
-      "selected_part": {
-        "lcsc_id": "C1548",
-        "display_name": "0402CG150J500NT",
-        "manufacturer": "FH",
-        "package": "C0402"
-      }
-    },
-    {
       "ref": "C14",
       "role": "usb_vbus_bulk",
       "value": "10uF",
@@ -783,70 +622,6 @@
         "display_name": "CL21A106KOQNNNE",
         "lcsc_id": "C1713",
         "package": "C0805"
-      }
-    },
-    {
-      "ref": "TP1",
-      "role": "usb_5v_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP2",
-      "role": "battery_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP3",
-      "role": "system_3v3_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP4",
-      "role": "ground_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
       }
     },
     {
@@ -964,8 +739,9 @@
       ],
       "availability_status": "selected",
       "notes": [
-        "Physical privacy control. Firmware must treat muted state as a hard audio-write disable.",
-        "Rev A right-angle SPDT slide switch; final actuator direction must match enclosure label."
+        "Side slide switch for physical privacy. It must both control MIC_3V3 hardware power and expose SW_MUTE to firmware.",
+        "Actuator direction and silkscreen/enclosure labels must match MIC ON / MIC OFF or REC / PRIVACY semantics.",
+        "Mute state must be readable immediately after boot and wake."
       ],
       "selected_part": {
         "lcsc_id": "C431541",
@@ -1011,7 +787,7 @@
         "package": "Flat vibration motor"
       },
       "notes": [
-        "Rev A 3 V flat vibration motor candidate; confirm attachment method and solder/pad geometry before PCB layout."
+        "Short haptic alerts only; avoid frequent vibration during recording and place far from microphones."
       ]
     },
     {
@@ -1024,7 +800,8 @@
         "0R resistor 0603"
       ],
       "notes": [
-        "Power isolation link from SYS_3V3 to MIC_3V3 for current/noise experiments."
+        "Power isolation link from SYS_3V3 to MIC_3V3 for current/noise experiments.",
+        "MIC_3V3 current link retained; U9 provides hard mute power switching."
       ],
       "selected_part": {
         "lcsc_id": "C21189",
@@ -1049,7 +826,10 @@
         "manufacturer": "UNI-ROYAL",
         "package": "R0603"
       },
-      "availability_status": "selected"
+      "availability_status": "selected",
+      "notes": [
+        "Left microphone L/R strap. Verify MSM261S3526Z0CM polarity before PCB release."
+      ]
     },
     {
       "ref": "R13",
@@ -1066,7 +846,10 @@
         "manufacturer": "UNI-ROYAL",
         "package": "R0603"
       },
-      "availability_status": "selected"
+      "availability_status": "selected",
+      "notes": [
+        "Right microphone L/R strap. Must not short to I2S_BCLK in generated schematic."
+      ]
     },
     {
       "ref": "R14",
@@ -1217,7 +1000,7 @@
         "100nF capacitor 0603 X7R"
       ],
       "notes": [
-        "DNP or tune after selected vibration motor is known."
+        "Motor suppression/debug capacitor. Keep as Rev A tuning/DNP option if motor noise affects audio or system stability."
       ],
       "selected_part": {
         "display_name": "CL10B104KA8NNNC",
@@ -1340,163 +1123,252 @@
       }
     },
     {
-      "ref": "TP5",
-      "role": "i2s_bclk_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
+      "ref": "U8",
+      "role": "dynamic_nfc_tag",
+      "value": "ST25DV04KC dynamic NFC tag",
+      "package": "SO-8",
+      "sheet": "05_nfc_dynamic_tag",
+      "search_hints": [
+        "ST25DV04KC dynamic NFC tag I2C",
+        "C5221752"
+      ],
+      "availability_status": "selected",
       "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
+        "lcsc_id": "C5221752",
+        "display_name": "ST25DV04KC-IE8S3",
+        "manufacturer": "STMicroelectronics",
+        "package": "SO-8"
+      },
+      "notes": [
+        "Dynamic NFC tag, not a PN532 reader. Used for badge URL, device identity, pairing/configuration and low-power readable identity data."
+      ]
+    },
+    {
+      "ref": "J7",
+      "role": "nfc_antenna_connector",
+      "value": "NFC antenna coil pads / connector",
+      "package": "SMD-2P",
+      "sheet": "05_nfc_dynamic_tag",
+      "availability_status": "internal",
+      "selected_part": {
+        "lcsc_id": "",
+        "display_name": "NFC antenna coil connector or PCB coil pads",
+        "package": "SMD-2P",
+        "symbol_ref": "NFC_ANT_2P",
+        "kicad_footprint_hint": "",
+        "pin_count": 2,
+        "named_pin_count": 2
+      },
+      "notes": [
+        "Use PCB coil or external antenna pads. Keep antenna away from battery protection board, metal clip and wireless-charge reserved area."
+      ],
+      "part_source": "internal",
+      "bom_exclude": true
+    },
+    {
+      "ref": "C20",
+      "role": "nfc_tuning_cap_1",
+      "value": "DNP",
+      "package": "C0402",
+      "sheet": "05_nfc_dynamic_tag",
+      "assembly": "dnp",
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C1548",
+        "display_name": "0402CG150J500NT",
+        "manufacturer": "FH",
+        "package": "C0402"
+      },
+      "notes": [
+        "NFC antenna tuning placeholder. Final value after antenna measurement."
+      ]
+    },
+    {
+      "ref": "C21",
+      "role": "nfc_tuning_cap_2",
+      "value": "DNP",
+      "package": "C0402",
+      "sheet": "05_nfc_dynamic_tag",
+      "assembly": "dnp",
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C1548",
+        "display_name": "0402CG150J500NT",
+        "manufacturer": "FH",
+        "package": "C0402"
+      },
+      "notes": [
+        "NFC antenna tuning placeholder. Final value after antenna measurement."
+      ]
+    },
+    {
+      "ref": "J6",
+      "role": "epaper_spi_connector",
+      "value": "2.13 inch black-white e-paper SPI connector",
+      "package": "FPC-0.5mm",
+      "sheet": "04_display_epaper",
+      "search_hints": [
+        "24 pin FPC connector 0.5mm e-paper"
+      ],
+      "selected_part": {
+        "lcsc_id": "C20688",
+        "display_name": "FPC-Pitch0.5-24P-Bottom-Contact-Flip-Lock",
+        "symbol_ref": "FPC-Pitch0.5-24P-Bottom-Contact-Flip-Lock",
+        "kicad_footprint_hint": "FPC-SMD_24P-P0.50-L6.1-W16.4",
+        "package": "FPC-SMD_24P-P0.50-L6.1-W16.4"
+      },
+      "notes": [
+        "Rev A screen interface only; supports 2.13 inch black-white e-paper module or bare-panel adapter board."
+      ]
+    },
+    {
+      "ref": "U9",
+      "role": "mic_3v3_load_switch",
+      "value": "TPS22918 MIC_3V3 load switch",
+      "package": "SOT-23-6",
+      "sheet": "06_audio_front_end",
+      "search_hints": [
+        "TPS22918 load switch SOT-23-6",
+        "C131941"
+      ],
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C131941",
+        "display_name": "TPS22918DBVR",
+        "kicad_footprint_hint": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+        "manufacturer": "Texas Instruments",
+        "package": "SOT-23-6"
+      },
+      "notes": [
+        "Hardware microphone power cut controlled by the physical mute switch. Verify ON polarity and default state before PCB release."
+      ]
+    },
+    {
+      "ref": "U10",
+      "role": "sd_3v3_load_switch",
+      "value": "TPS22918 SD_3V3 load switch",
+      "package": "SOT-23-6",
+      "sheet": "07_storage",
+      "search_hints": [
+        "TPS22918 load switch SOT-23-6",
+        "C131941"
+      ],
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C131941",
+        "display_name": "TPS22918DBVR",
+        "kicad_footprint_hint": "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL",
+        "manufacturer": "Texas Instruments",
+        "package": "SOT-23-6"
+      },
+      "notes": [
+        "Optional Rev A microSD power control for low-power testing and card fault recovery."
+      ]
+    },
+    {
+      "ref": "SW5",
+      "role": "record_button",
+      "value": "REC side tactile button",
+      "package": "SMD side tact",
+      "sheet": "08_user_interface",
+      "search_hints": [
+        "side tactile switch SMD",
+        "C40735"
+      ],
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C40735",
+        "display_name": "DSHP02TSGET",
+        "manufacturer": "YE",
+        "package": "SMD,P=1.27mm",
+        "symbol_ref": "DSHP02TSGET",
+        "kicad_footprint_hint": "SW-SMD_4P_DSHP02TSGET",
+        "pin_count": 4,
+        "named_pin_count": 4
+      },
+      "notes": [
+        "User REC button. Long press starts/stops recording; short press may query status. Use wake-capable GPIO."
+      ]
+    },
+    {
+      "ref": "SW6",
+      "role": "mode_button",
+      "value": "MODE side tactile button",
+      "package": "SMD side tact",
+      "sheet": "08_user_interface",
+      "search_hints": [
+        "side tactile switch SMD",
+        "C40736"
+      ],
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C40736",
+        "display_name": "DSHP04TSGER",
+        "manufacturer": "YE",
+        "package": "SMD,P=1.27mm,8P",
+        "symbol_ref": "DSHP04TSGER",
+        "kicad_footprint_hint": "SW-SMD_8P-L6.7-W5.4-P1.27-LS8.4",
+        "pin_count": 8,
+        "named_pin_count": 8
+      },
+      "notes": [
+        "User MODE button for display page changes and pairing/sync mode."
+      ]
+    },
+    {
+      "ref": "R27",
+      "role": "mic_power_enable_pullup",
+      "value": "10K",
+      "package": "R0603",
+      "sheet": "06_audio_front_end",
+      "availability_status": "selected",
+      "selected_part": {
+        "lcsc_id": "C15401",
+        "display_name": "0603WAF1002T5E",
+        "manufacturer": "UNI-ROYAL",
+        "package": "R0603"
       }
     },
     {
-      "ref": "TP6",
-      "role": "i2s_lrclk_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
+      "ref": "R28",
+      "role": "sd_power_enable_pulldown",
+      "value": "100K",
+      "package": "R0603",
+      "sheet": "07_storage",
+      "availability_status": "selected",
       "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
+        "lcsc_id": "C25803",
+        "display_name": "0603WAF1003T5E",
+        "manufacturer": "UNI-ROYAL",
+        "package": "R0603"
       }
     },
     {
-      "ref": "TP7",
-      "role": "i2s_data_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
+      "ref": "R31",
+      "role": "rec_button_pullup",
+      "value": "10K",
+      "package": "R0603",
+      "sheet": "08_user_interface",
+      "availability_status": "selected",
       "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
+        "lcsc_id": "C15401",
+        "display_name": "0603WAF1002T5E",
+        "manufacturer": "UNI-ROYAL",
+        "package": "R0603"
       }
     },
     {
-      "ref": "TP8",
-      "role": "sd_sclk_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
+      "ref": "R32",
+      "role": "mode_button_pullup",
+      "value": "10K",
+      "package": "R0603",
+      "sheet": "08_user_interface",
+      "availability_status": "selected",
       "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP9",
-      "role": "sd_mosi_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP10",
-      "role": "sd_miso_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP11",
-      "role": "sd_cs_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP12",
-      "role": "mute_switch_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP13",
-      "role": "charger_status_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
-      }
-    },
-    {
-      "ref": "TP14",
-      "role": "mic_3v3_test_point",
-      "value": "TP",
-      "package": "TP-SMD",
-      "sheet": "10_test_and_bringup",
-      "part_source": "internal",
-      "bom_exclude": true,
-      "selected_part": {
-        "part_id": "tp-1p",
-        "display_name": "TP_1P",
-        "symbol_ref": "TP_1P",
-        "kicad_footprint_hint": "TP-SMD_1P",
-        "package": "TP-SMD"
+        "lcsc_id": "C15401",
+        "display_name": "0603WAF1002T5E",
+        "manufacturer": "UNI-ROYAL",
+        "package": "R0603"
       }
     }
   ],
@@ -1510,56 +1382,47 @@
         "J1.B4",
         "J1.B9",
         "U6.5",
-        "U3.VDD",
+        "U3.IN",
         "C14.1",
-        "R19.1",
-        "TP1.1"
+        "R19.1"
       ],
       "notes": [
-        "USB-C VBUS input before battery charger."
+        "USB-C VBUS input to ESD/bulk capacitance and BQ24074 power-path charger input."
       ]
     },
     {
       "name": "BAT_P",
       "kind": "power",
       "members": [
-        "U3.VBAT",
-        "J2.1",
-        "U2.VIN",
-        "U2.EN",
-        "C1.1",
-        "R8.1",
-        "TP2.1"
+        "U3.BAT",
+        "J2.1"
       ],
       "notes": [
-        "Single-cell LiPo positive rail. Use protected cell for Rev A unless a protection IC is added."
+        "Protected single-cell Li-ion battery positive. Mark BAT+ / BAT- on schematic and silkscreen."
       ]
     },
     {
       "name": "SYS_3V3",
       "kind": "power",
       "members": [
-        "U1.VDD3P3_CPU",
-        "U1.VDD3P3_RTC",
-        "U1.VDD3P3",
-        "U1.VDDA",
-        "U1.VDD_SPI",
-        "U4.VCC",
-        "U5.VCC",
+        "U1.3V3",
         "U7.VCC",
-        "J5.VDD",
-        "R11.1",
-        "R14.1",
-        "R15.1",
+        "U8.VCC",
+        "U9.IN",
+        "U10.IN",
+        "J6.7",
         "R16.1",
         "R20.1",
         "R21.1",
-        "R24.1",
-        "R25.1",
+        "R27.1",
+        "R28.1",
+        "R31.1",
+        "R32.1",
         "M1.1",
-        "C17.1",
         "C18.1",
         "C19.1",
+        "C20.1",
+        "C21.1",
         "R4.1",
         "R5.1",
         "D1.A",
@@ -1569,10 +1432,10 @@
         "C3.1",
         "C4.1",
         "C5.1",
-        "C6.1",
-        "C10.1",
-        "C11.1",
-        "TP3.1"
+        "C6.1"
+      ],
+      "notes": [
+        "Main 3.3 V rail after R26 current-measurement link. Keep module decoupling close to U1."
       ]
     },
     {
@@ -1594,8 +1457,6 @@
         "U1.GND",
         "U2.GND",
         "U3.VSS",
-        "U4.GND",
-        "U5.GND",
         "U6.2",
         "U7.GND",
         "J5.VSS",
@@ -1613,9 +1474,7 @@
         "J1.3",
         "J1.4",
         "J2.2",
-        "J3.GND",
         "J4.4",
-        "Y1.GND",
         "SW1.2",
         "SW2.2",
         "SW3.2",
@@ -1639,18 +1498,25 @@
         "C5.2",
         "C6.2",
         "C7.2",
-        "C8.2",
-        "C9.2",
-        "C10.2",
-        "C11.2",
-        "C12.2",
-        "C13.2",
         "C14.2",
         "C15.2",
         "C16.2",
         "C17.2",
         "C18.2",
-        "TP4.1"
+        "U8.GND",
+        "U8.VSS",
+        "U9.GND",
+        "U10.GND",
+        "J6.8",
+        "J7.2",
+        "SW5.2",
+        "SW6.2",
+        "R27.2",
+        "R28.2",
+        "R31.2",
+        "R32.2",
+        "C20.2",
+        "C21.2"
       ]
     },
     {
@@ -1742,8 +1608,7 @@
       "kind": "signal",
       "members": [
         "U3.STAT",
-        "R19.2",
-        "TP13.1"
+        "R19.2"
       ],
       "notes": [
         "MCP73831 open-drain charge status, active low while charging."
@@ -1761,7 +1626,7 @@
       "name": "ESP_EN",
       "kind": "signal",
       "members": [
-        "U1.CHIP_PU",
+        "U1.EN",
         "R4.2",
         "C7.1",
         "SW1.1"
@@ -1783,107 +1648,6 @@
       ]
     },
     {
-      "name": "XTAL_P",
-      "kind": "signal",
-      "members": [
-        "U1.XTAL_P",
-        "Y1.1",
-        "C8.1"
-      ]
-    },
-    {
-      "name": "XTAL_N",
-      "kind": "signal",
-      "members": [
-        "U1.XTAL_N",
-        "Y1.3",
-        "C9.1"
-      ]
-    },
-    {
-      "name": "RF_IO",
-      "kind": "signal",
-      "members": [
-        "U1.LNA_IN",
-        "C12.1",
-        "R10.1"
-      ],
-      "notes": [
-        "RF feed to pi matching network. Requires controlled impedance layout."
-      ]
-    },
-    {
-      "name": "ANT_FEED",
-      "kind": "signal",
-      "members": [
-        "R10.2",
-        "C13.1",
-        "J3.1"
-      ],
-      "notes": [
-        "Antenna feed after RF matching. Rev A uses U.FL/IPEX for lower RF risk."
-      ]
-    },
-    {
-      "name": "FLASH_CS",
-      "kind": "signal",
-      "members": [
-        "U1.SPICS0",
-        "U4.1"
-      ]
-    },
-    {
-      "name": "FLASH_CLK",
-      "kind": "signal",
-      "members": [
-        "U1.SPICLK",
-        "U4.CLK"
-      ]
-    },
-    {
-      "name": "FLASH_D0",
-      "kind": "signal",
-      "members": [
-        "U1.SPIQ",
-        "U4.DO"
-      ]
-    },
-    {
-      "name": "FLASH_D1",
-      "kind": "signal",
-      "members": [
-        "U1.SPID",
-        "U4.DI"
-      ]
-    },
-    {
-      "name": "FLASH_D2",
-      "kind": "signal",
-      "members": [
-        "U1.SPIHD",
-        "U4.IO2"
-      ]
-    },
-    {
-      "name": "FLASH_D3",
-      "kind": "signal",
-      "members": [
-        "U1.SPIWP",
-        "U4.IO3"
-      ]
-    },
-    {
-      "name": "PSRAM_CS",
-      "kind": "signal",
-      "members": [
-        "U1.SPICS1",
-        "U5.CS"
-      ],
-      "notes": [
-        "Placeholder PSRAM chip select. Verify bus mode with selected ESP32-S3 and PSRAM."
-      ]
-    },
-    {
       "name": "VBAT_SENSE",
       "kind": "signal",
       "members": [
@@ -1892,7 +1656,7 @@
         "U1.GPIO1"
       ],
       "notes": [
-        "Battery divider placeholder. GPIO-controlled divider enable may be added in next model pass."
+        "Battery ADC sense. Rev A keeps the divider; Rev B should gate it with a GPIO/MOSFET and add 100nF at ADC if needed."
       ]
     },
     {
@@ -1931,15 +1695,15 @@
       "name": "MIC_3V3",
       "kind": "power",
       "members": [
-        "R11.2",
+        "U9.OUT",
         "MK1.VDD",
         "MK2.VDD",
         "C15.1",
         "C16.1",
-        "TP14.1"
+        "R11.2"
       ],
       "notes": [
-        "Microphone rail isolated through 0R link for current/noise experiments."
+        "Microphone rail physically switchable by mute-controlled load switch."
       ]
     },
     {
@@ -1948,8 +1712,7 @@
       "members": [
         "U1.GPIO12",
         "MK1.SCK",
-        "MK2.SCK",
-        "TP5.1"
+        "MK2.SCK"
       ]
     },
     {
@@ -1958,8 +1721,7 @@
       "members": [
         "U1.GPIO13",
         "MK1.WS",
-        "MK2.WS",
-        "TP6.1"
+        "MK2.WS"
       ]
     },
     {
@@ -1968,8 +1730,7 @@
       "members": [
         "U1.GPIO14",
         "MK1.SD",
-        "MK2.SD",
-        "TP7.1"
+        "MK2.SD"
       ]
     },
     {
@@ -1999,8 +1760,7 @@
       "kind": "signal",
       "members": [
         "U1.GPIO10",
-        "J5.5",
-        "TP8.1"
+        "J5.5"
       ]
     },
     {
@@ -2009,8 +1769,7 @@
       "members": [
         "U1.GPIO11",
         "J5.3",
-        "R24.2",
-        "TP9.1"
+        "R24.2"
       ]
     },
     {
@@ -2019,8 +1778,7 @@
       "members": [
         "U1.GPIO9",
         "J5.7",
-        "R25.2",
-        "TP10.1"
+        "R25.2"
       ]
     },
     {
@@ -2029,8 +1787,7 @@
       "members": [
         "U1.GPIO8",
         "J5.2",
-        "R14.2",
-        "TP11.1"
+        "R14.2"
       ],
       "notes": [
         "microSD SPI chip select uses DAT3 in SPI mode."
@@ -2062,11 +1819,10 @@
       "members": [
         "U1.GPIO17",
         "SW4.1",
-        "R16.2",
-        "TP12.1"
+        "R16.2"
       ],
       "notes": [
-        "Physical mute state. Firmware must block microphone capture/audio writes when active."
+        "MCU-readable physical mute state; firmware must block audio capture/writes whenever mute is active."
       ]
     },
     {
@@ -2101,7 +1857,8 @@
       "members": [
         "U1.GPIO21",
         "U7.SDA",
-        "R20.2"
+        "R20.2",
+        "U8.SDA"
       ]
     },
     {
@@ -2110,7 +1867,206 @@
       "members": [
         "U1.GPIO5",
         "U7.SCL",
-        "R21.2"
+        "R21.2",
+        "U8.SCL"
+      ]
+    },
+    {
+      "name": "VSYS",
+      "kind": "power",
+      "members": [
+        "U3.OUT",
+        "U2.VIN",
+        "U2.EN",
+        "C1.1",
+        "R8.1"
+      ],
+      "notes": [
+        "Power-path system output feeding the Rev A 3.3 V bring-up regulator."
+      ]
+    },
+    {
+      "name": "MIC_PWR_EN",
+      "kind": "signal",
+      "members": [
+        "SW4.3",
+        "U9.ON"
+      ],
+      "notes": [
+        "Hardware mute control for microphone load switch; verify final switch polarity against enclosure MIC ON/OFF direction."
+      ]
+    },
+    {
+      "name": "SD_3V3",
+      "kind": "power",
+      "members": [
+        "U10.OUT",
+        "J5.VDD",
+        "C17.1",
+        "R14.1",
+        "R15.1",
+        "R24.1",
+        "R25.1"
+      ],
+      "notes": [
+        "Switchable microSD supply rail for low-power and fault recovery experiments."
+      ]
+    },
+    {
+      "name": "SD_PWR_EN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO16",
+        "U10.ON"
+      ],
+      "notes": [
+        "MCU-controlled microSD power enable. Default state must keep the card safe during boot."
+      ]
+    },
+    {
+      "name": "EPD_3V3",
+      "kind": "power",
+      "members": [
+        "J6.7"
+      ],
+      "notes": [
+        "E-paper connector 3.3 V rail. Rev A may link directly to SYS_3V3; reserve power-control option for lower sleep current."
+      ]
+    },
+    {
+      "name": "EPD_SCLK",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO33",
+        "J6.1"
+      ],
+      "notes": [
+        "E-paper SPI clock. Keep separate from microSD unless firmware timing and idle states are explicitly verified."
+      ]
+    },
+    {
+      "name": "EPD_MOSI",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO34",
+        "J6.2"
+      ],
+      "notes": [
+        "E-paper SPI MOSI."
+      ]
+    },
+    {
+      "name": "EPD_CS",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO35",
+        "J6.3"
+      ],
+      "notes": [
+        "Dedicated e-paper chip select."
+      ]
+    },
+    {
+      "name": "EPD_DC",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO36",
+        "J6.4"
+      ],
+      "notes": [
+        "E-paper data/command select."
+      ]
+    },
+    {
+      "name": "EPD_RST",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO37",
+        "J6.5"
+      ],
+      "notes": [
+        "E-paper reset."
+      ]
+    },
+    {
+      "name": "EPD_BUSY",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO38",
+        "J6.6"
+      ],
+      "notes": [
+        "E-paper busy input."
+      ]
+    },
+    {
+      "name": "EPD_PWR_EN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO15",
+        "J6.9"
+      ],
+      "notes": [
+        "Reserved e-paper power enable or adapter-board enable."
+      ]
+    },
+    {
+      "name": "REC_BTN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO39",
+        "SW5.1",
+        "R31.2"
+      ],
+      "notes": [
+        "Wake-capable REC user button."
+      ]
+    },
+    {
+      "name": "MODE_BTN",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO40",
+        "SW6.1",
+        "R32.2"
+      ],
+      "notes": [
+        "MODE user button."
+      ]
+    },
+    {
+      "name": "NFC_GPO",
+      "kind": "signal",
+      "members": [
+        "U1.GPIO41",
+        "U8.GPO"
+      ],
+      "notes": [
+        "NFC field-detect/GPO interrupt."
+      ]
+    },
+    {
+      "name": "NFC_ANT1",
+      "kind": "signal",
+      "members": [
+        "U8.AC0",
+        "J7.1",
+        "C20.1"
+      ],
+      "notes": [
+        "NFC antenna terminal and tuning node."
+      ]
+    },
+    {
+      "name": "NFC_ANT2",
+      "kind": "signal",
+      "members": [
+        "U8.AC1",
+        "J7.2",
+        "C21.1"
+      ],
+      "notes": [
+        "NFC antenna terminal and tuning node."
       ]
     }
   ],
@@ -2141,6 +2097,7 @@
         "CC1",
         "CC2",
         "BAT_P",
+        "VSYS",
         "CHG_STAT",
         "CHG_PROG",
         "GND"
@@ -2154,6 +2111,7 @@
         "USB_D_N_ESD",
         "USB_D_N",
         "BAT_P",
+        "VSYS",
         "CHG_STAT"
       ]
     },
@@ -2171,14 +2129,16 @@
         "BAT_P",
         "SYS_3V3",
         "VBAT_SENSE",
-        "GND"
+        "GND",
+        "SYS_3V3_REG"
       ],
       "inputs": [
         "BAT_P"
       ],
       "outputs": [
         "SYS_3V3",
-        "VBAT_SENSE"
+        "VBAT_SENSE",
+        "SYS_3V3_REG"
       ]
     },
     {
@@ -2204,52 +2164,26 @@
         "USB_D_N",
         "UART0_TX",
         "UART0_RX",
-        "VBAT_SENSE"
+        "VBAT_SENSE",
+        "I2C_SDA",
+        "I2C_SCL",
+        "REC_BTN",
+        "MODE_BTN",
+        "NFC_GPO",
+        "EPD_SCLK",
+        "EPD_MOSI",
+        "EPD_CS",
+        "EPD_DC",
+        "EPD_RST",
+        "EPD_BUSY",
+        "EPD_PWR_EN",
+        "SD_PWR_EN"
       ],
       "inputs": [
         "SYS_3V3",
         "USB_D_P",
         "USB_D_N",
         "VBAT_SENSE"
-      ]
-    },
-    {
-      "name": "04_memory",
-      "components": [
-        "U4",
-        "U5",
-        "C10",
-        "C11"
-      ],
-      "nets": [
-        "SYS_3V3",
-        "GND",
-        "FLASH_CS",
-        "FLASH_CLK",
-        "FLASH_D0",
-        "FLASH_D1",
-        "FLASH_D2",
-        "FLASH_D3",
-        "PSRAM_CS"
-      ]
-    },
-    {
-      "name": "05_clock_and_rf",
-      "components": [
-        "Y1",
-        "C8",
-        "C9",
-        "C12",
-        "C13",
-        "R10",
-        "J3"
-      ],
-      "nets": [
-        "GND",
-        "XTAL_P",
-        "XTAL_N",
-        "RF_IO",
-        "ANT_FEED"
       ]
     },
     {
@@ -2261,11 +2195,14 @@
         "R12",
         "R13",
         "C15",
-        "C16"
+        "C16",
+        "U9",
+        "R27"
       ],
       "nets": [
         "SYS_3V3",
         "MIC_3V3",
+        "MIC_PWR_EN",
         "GND",
         "I2S_BCLK",
         "I2S_LRCLK",
@@ -2290,10 +2227,14 @@
         "R15",
         "R24",
         "R25",
-        "C17"
+        "C17",
+        "U10",
+        "R28"
       ],
       "nets": [
         "SYS_3V3",
+        "SD_3V3",
+        "SD_PWR_EN",
         "GND",
         "SD_SCLK",
         "SD_MOSI",
@@ -2316,7 +2257,11 @@
         "R16",
         "R17",
         "R18",
-        "C19"
+        "C19",
+        "SW5",
+        "SW6",
+        "R31",
+        "R32"
       ],
       "nets": [
         "SYS_3V3",
@@ -2327,7 +2272,9 @@
         "SW_MUTE",
         "MOTOR_DRV",
         "MOTOR_GATE",
-        "MOTOR_LOW"
+        "MOTOR_LOW",
+        "REC_BTN",
+        "MODE_BTN"
       ]
     },
     {
@@ -2348,21 +2295,7 @@
     {
       "name": "10_test_and_bringup",
       "components": [
-        "J4",
-        "TP1",
-        "TP2",
-        "TP3",
-        "TP4",
-        "TP5",
-        "TP6",
-        "TP7",
-        "TP8",
-        "TP9",
-        "TP10",
-        "TP11",
-        "TP12",
-        "TP13",
-        "TP14"
+        "J4"
       ],
       "nets": [
         "USB_5V",
@@ -2380,16 +2313,85 @@
         "SD_CS",
         "SW_MUTE",
         "CHG_STAT",
-        "MIC_3V3"
+        "MIC_3V3",
+        "USB_D_P",
+        "USB_D_N",
+        "SD_CD",
+        "EPD_BUSY",
+        "EPD_CS",
+        "NFC_GPO",
+        "REC_BTN",
+        "MODE_BTN",
+        "EPD_3V3",
+        "MIC_PWR_EN",
+        "SD_3V3",
+        "BTN_MARK",
+        "I2C_SDA"
+      ]
+    },
+    {
+      "name": "04_display_epaper",
+      "components": [
+        "J6"
+      ],
+      "nets": [
+        "SYS_3V3",
+        "EPD_3V3",
+        "GND",
+        "EPD_SCLK",
+        "EPD_MOSI",
+        "EPD_CS",
+        "EPD_DC",
+        "EPD_RST",
+        "EPD_BUSY",
+        "EPD_PWR_EN"
+      ],
+      "inputs": [
+        "SYS_3V3",
+        "EPD_SCLK",
+        "EPD_MOSI",
+        "EPD_CS",
+        "EPD_DC",
+        "EPD_RST",
+        "EPD_PWR_EN"
+      ],
+      "outputs": [
+        "EPD_BUSY"
+      ]
+    },
+    {
+      "name": "05_nfc_dynamic_tag",
+      "components": [
+        "U8",
+        "J7",
+        "C20",
+        "C21"
+      ],
+      "nets": [
+        "SYS_3V3",
+        "GND",
+        "I2C_SDA",
+        "I2C_SCL",
+        "NFC_GPO",
+        "NFC_ANT1",
+        "NFC_ANT2"
+      ],
+      "inputs": [
+        "SYS_3V3",
+        "I2C_SDA",
+        "I2C_SCL"
+      ],
+      "outputs": [
+        "NFC_GPO"
       ]
     }
   ],
   "pcb_layout": {
     "regions": {
-      "usb_charge_edge": {
+      "usb_charge_bottom_edge": {
         "x": 10,
-        "y": 10,
-        "spacing": 14,
+        "y": 150,
+        "spacing": 12,
         "components": [
           "J1",
           "U3",
@@ -2403,9 +2405,9 @@
           "C14"
         ]
       },
-      "power_regulation": {
+      "battery_power_backside": {
         "x": 10,
-        "y": 45,
+        "y": 105,
         "spacing": 12,
         "components": [
           "J2",
@@ -2413,12 +2415,13 @@
           "C1",
           "C2",
           "R8",
-          "R9"
+          "R9",
+          "R26"
         ]
       },
-      "esp32s3_core": {
-        "x": 55,
-        "y": 35,
+      "wroom_top_edge_antenna_out": {
+        "x": 80,
+        "y": 10,
         "spacing": 10,
         "components": [
           "U1",
@@ -2433,116 +2436,103 @@
           "SW2"
         ]
       },
-      "memory_close_to_soc": {
-        "x": 95,
-        "y": 35,
+      "epaper_fpc_front_mid": {
+        "x": 65,
+        "y": 70,
         "spacing": 10,
         "components": [
-          "U4",
-          "U5",
-          "C10",
-          "C11"
+          "J6"
         ]
       },
-      "rf_corner": {
-        "x": 120,
-        "y": 10,
+      "nfc_backside_antenna_area": {
+        "x": 135,
+        "y": 105,
         "spacing": 8,
         "components": [
-          "J3",
-          "R10",
-          "C12",
-          "C13"
+          "U8",
+          "J7",
+          "C20",
+          "C21"
         ]
       },
-      "quiet_clock": {
-        "x": 55,
+      "audio_top_side_ports": {
+        "x": 20,
         "y": 10,
-        "spacing": 8,
-        "components": [
-          "Y1",
-          "C8",
-          "C9"
-        ]
-      },
-      "ui_debug": {
-        "x": 10,
-        "y": 85,
         "spacing": 12,
-        "components": [
-          "D1",
-          "D2",
-          "R6",
-          "R7",
-          "SW3",
-          "SW4",
-          "Q1",
-          "M1",
-          "R16",
-          "R17",
-          "R18",
-          "C19",
-          "J4",
-          "TP1",
-          "TP2",
-          "TP3",
-          "TP4"
-        ]
-      },
-      "audio_outward_edge": {
-        "x": 55,
-        "y": 85,
-        "spacing": 14,
         "components": [
           "MK1",
           "MK2",
+          "U9",
           "R11",
           "R12",
           "R13",
+          "R27",
           "C15",
-          "C16",
-          "TP14"
+          "C16"
         ]
       },
       "storage_access_edge": {
-        "x": 95,
-        "y": 85,
+        "x": 120,
+        "y": 150,
         "spacing": 10,
         "components": [
           "J5",
+          "U10",
           "R14",
           "R15",
           "R24",
           "R25",
+          "R28",
           "C17"
         ]
       },
-      "security_dnp": {
-        "x": 120,
+      "side_user_controls": {
+        "x": 10,
         "y": 65,
+        "spacing": 10,
+        "components": [
+          "SW3",
+          "SW4",
+          "SW5",
+          "SW6",
+          "R16",
+          "R31",
+          "R32",
+          "D1",
+          "D2",
+          "R6",
+          "R7"
+        ]
+      },
+      "haptic_bottom_far_from_mics": {
+        "x": 175,
+        "y": 150,
+        "spacing": 8,
+        "components": [
+          "Q1",
+          "M1",
+          "R17",
+          "R18",
+          "C19"
+        ]
+      },
+      "security_reserve": {
+        "x": 150,
+        "y": 70,
         "spacing": 8,
         "components": [
           "U7",
+          "C18",
           "R20",
-          "R21",
-          "C18"
+          "R21"
         ]
       },
-      "signal_test_points": {
+      "debug_test_points": {
         "x": 10,
-        "y": 120,
-        "spacing": 8,
+        "y": 198,
+        "spacing": 7,
         "components": [
-          "TP5",
-          "TP6",
-          "TP7",
-          "TP8",
-          "TP9",
-          "TP10",
-          "TP11",
-          "TP12",
-          "TP13",
-          "TP14"
+          "J4"
         ]
       }
     }
@@ -2552,89 +2542,94 @@
       "name": "USB_5V",
       "source_net": "USB_5V",
       "voltage": 5.0,
-      "notes": [
-        "USB-C VBUS input rail."
-      ]
+      "current_limit": 1.0,
+      "notes": "USB-C VBUS input with ESD/bulk and optional input protection footprint."
     },
     {
       "name": "BAT_P",
       "source_net": "BAT_P",
       "voltage": 3.7,
-      "parent": "USB_5V",
-      "notes": [
-        "Single-cell LiPo nominal rail after charger."
-      ]
+      "current_limit": 1.0,
+      "notes": "Protected single-cell Li-ion battery rail."
+    },
+    {
+      "name": "VSYS",
+      "source_net": "VSYS",
+      "voltage": 3.5,
+      "current_limit": 1.0,
+      "notes": "BQ24074 power-path system rail before Rev A LDO."
     },
     {
       "name": "SYS_3V3",
       "source_net": "SYS_3V3",
       "voltage": 3.3,
-      "parent": "BAT_P",
-      "notes": [
-        "Main system rail for ESP32-S3, memory and early UI."
-      ]
+      "current_limit": 0.6,
+      "notes": "Main 3.3 V rail after AP2112K and R26 current-measurement link."
+    },
+    {
+      "name": "MIC_3V3",
+      "source_net": "MIC_3V3",
+      "voltage": 3.3,
+      "current_limit": 0.05,
+      "notes": "Hard-muted microphone rail switched by U9."
+    },
+    {
+      "name": "SD_3V3",
+      "source_net": "SD_3V3",
+      "voltage": 3.3,
+      "current_limit": 0.2,
+      "notes": "Switchable microSD rail."
+    },
+    {
+      "name": "EPD_3V3",
+      "source_net": "EPD_3V3",
+      "voltage": 3.3,
+      "current_limit": 0.1,
+      "notes": "E-paper connector rail / adapter-board supply."
     }
   ],
   "calculations": [],
   "design_decisions": [
     {
-      "title": "Use ESP32-S3 bare chip for Rev A product path",
-      "rationale": "The wearable badge form factor needs control over antenna placement, memory selection and board area.",
-      "impact": "Rev A must include flash, PSRAM, crystal, RF matching and stricter PCB layout review."
+      "title": "Use ESP32-S3-WROOM-1 for Rev A Module",
+      "rationale": "The module integrates flash, PSRAM, crystal and RF, improving first-board success and reducing RF/debug risk.",
+      "impact": "External flash, PSRAM, crystal and bare-chip RF networks are removed from the assembled Rev A design."
     },
     {
-      "title": "Use U.FL/IPEX antenna connector for first bare-chip RF bring-up",
-      "rationale": "An external antenna path reduces RF uncertainty while the audio and power chain are still being validated.",
-      "impact": "PCB antenna can be added or selected in a later revision after mechanical constraints are better understood."
+      "title": "Use BQ24074-class charger with power-path",
+      "rationale": "The badge must support USB bring-up and charging behavior closer to the final product.",
+      "impact": "Power path is USB_5V -> U3 -> VSYS -> AP2112K -> SYS_3V3; charge current must be calculated from the selected protected battery."
     },
     {
-      "title": "Model the complete Rev A functional chain before locking parts",
-      "rationale": "USB, power, ESP32-S3 boot, memory, crystal, RF, audio, storage and privacy controls all affect the pin budget and board layout.",
-      "impact": "Exact LCSC parts remain unresolved until JLC search and footprint download can be verified."
+      "title": "Keep dual I2S MEMS microphones with hard mute power control",
+      "rationale": "Stereo/dual-mic capture is central to the badge, but privacy must not rely only on firmware.",
+      "impact": "MIC_3V3 is switched by U9 under physical mute control while SW_MUTE remains MCU-readable."
     },
     {
-      "title": "Use two I2S MEMS microphones on a shared stereo bus",
-      "rationale": "A shared I2S bus keeps the Rev A wiring simple while allowing left/right capture and single-mic fallback.",
-      "impact": "Microphone left/right select polarity must be verified after choosing the exact microphone."
+      "title": "Keep microSD over SPI for Rev A storage",
+      "rationale": "microSD simplifies bring-up, WAV/Opus export and field debugging.",
+      "impact": "SD has SPI pullups, card detect, bulk capacitance and optional switchable SD_3V3."
     },
     {
-      "title": "Use microSD over SPI for Rev A storage",
-      "rationale": "microSD makes long field tests and manual audio inspection easy before final storage architecture is chosen.",
-      "impact": "Firmware must handle card removal, full-card state and write failures."
+      "title": "Add 2.13 inch black-white e-paper interface",
+      "rationale": "Rev A should support a badge display without requiring final screen industrial design.",
+      "impact": "A dedicated SPI-style EPD connector is added; color display is deferred."
     },
     {
-      "title": "Make mute a physical hardware state",
-      "rationale": "A wearable recording device must expose an unambiguous privacy control.",
-      "impact": "Firmware must sample SW_MUTE on boot/wake and must not write audio while muted."
+      "title": "Add dynamic NFC tag, not NFC reader",
+      "rationale": "Phone-tap identity/configuration works at low power and avoids PN532-style reader complexity.",
+      "impact": "ST25DV04KC-class I2C NFC tag shares the I2C bus and needs antenna/metal-clip layout review."
     }
   ],
   "constraints": [
     {
-      "name": "rf_layout",
+      "name": "wroom_antenna_keepout",
       "type": "layout",
-      "scope": "05_clock_and_rf",
+      "scope": "03_esp32s3_core",
       "rules": [
-        "Keep RF trace short and impedance controlled.",
-        "Preserve antenna connector keep-out.",
-        "Retain pi-network footprints for RF tuning."
-      ]
-    },
-    {
-      "name": "crystal_layout",
-      "type": "layout",
-      "scope": "05_clock_and_rf",
-      "rules": [
-        "Place 40 MHz crystal close to ESP32-S3.",
-        "Keep crystal traces short and away from high-current or switching nodes."
-      ]
-    },
-    {
-      "name": "memory_layout",
-      "type": "layout",
-      "scope": "04_memory",
-      "rules": [
-        "Place flash and PSRAM close to ESP32-S3.",
-        "Verify exact ESP32-S3 memory pin mapping before PCB layout."
+        "Place ESP32-S3-WROOM at top board edge with antenna facing outward.",
+        "No copper under antenna keep-out.",
+        "Keep battery, NFC antenna, metal back clip, screws and e-paper FPC away from antenna front/under area."
       ]
     },
     {
@@ -2642,38 +2637,60 @@
       "type": "layout",
       "scope": "06_audio_front_end",
       "rules": [
-        "Place MEMS microphone acoustic ports on the outward-facing badge edge.",
-        "Keep acoustic ports clear of enclosure ribs, clip hardware, adhesive and fabric blockage.",
-        "Keep switching regulator, motor and RF high-current paths away from microphones."
+        "Place MEMS microphone acoustic ports on the outward-facing top/side badge edge.",
+        "Do not block ports with enclosure ribs, glue, clip, lanyard hole or screw bosses.",
+        "Keep motor, switching power paths and RF antenna away from microphones.",
+        "Align bottom acoustic ports to enclosure sound holes and add dust mesh without blocking the port."
       ]
     },
     {
-      "name": "storage_access",
-      "type": "mechanical",
-      "scope": "07_storage",
+      "name": "nfc_layout",
+      "type": "layout",
+      "scope": "05_nfc_dynamic_tag",
       "rules": [
-        "Place microSD socket where the card can be accessed during prototype testing.",
-        "Add ESD protection if the socket is externally accessible in the final mechanical design."
+        "Keep NFC antenna near the back side and away from large copper, battery protection PCB and metal clip.",
+        "Do not overlap NFC antenna with pogo/magnetic charging reserve.",
+        "Reserve matching/tuning component access near the antenna feed."
       ]
     },
     {
-      "name": "privacy_control",
-      "type": "firmware_hardware_contract",
+      "name": "usb_layout",
+      "type": "layout",
+      "scope": "01_usb_and_charging",
+      "rules": [
+        "Place USB ESD close to Type-C connector.",
+        "Route D+/D- as short paired traces with few vias.",
+        "Use the USB connector and nearby component pads when probing USB_5V, USB_D_P and USB_D_N."
+      ]
+    },
+    {
+      "name": "privacy_firmware_contract",
+      "type": "firmware",
       "scope": "08_user_interface",
       "rules": [
-        "Physical mute switch state must be readable at boot and wake.",
-        "Firmware must block microphone capture and audio file writes while muted.",
-        "Recording/privacy LED behavior must not be repurposed for unrelated decorative status."
+        "Mute active means no audio capture, no audio file writes and no recording-active state.",
+        "D2 is dedicated to recording/privacy indication only.",
+        "Firmware must read SW_MUTE immediately after boot and wake."
+      ]
+    },
+    {
+      "name": "bringup_test_points",
+      "type": "test",
+      "scope": "10_test_and_bringup",
+      "rules": [
+        "Use J4 UART debug access plus connector and component-pad probing for first-board bring-up."
       ]
     }
   ],
   "risks": [
-    "ESP32-S3 bare-chip symbol pin names are placeholders until exact variant and KiCad symbol are selected.",
-    "Flash/PSRAM interface nets must be verified against Espressif reference design before layout.",
-    "RF matching values are placeholders and require tuning.",
-    "LDO-based 3.3 V rail may not meet all-day efficiency goals.",
-    "I2S microphone left/right select polarity and data sharing must be verified after selecting the exact microphone.",
-    "microSD socket pinout and card-detect behavior are placeholders until the exact socket is selected.",
-    "Mute switch is GPIO-enforced in Rev A; a future revision may need hardware microphone power gating for stronger privacy."
+    "BQ24074 charge-current, thermal behavior and power-path details must be verified with the selected protected battery.",
+    "AP2112K Rev A LDO may limit battery life; Rev B should evaluate buck or buck-boost replacement.",
+    "MSM261S3526Z0CM L/R select polarity, bottom-port orientation, reflow limits and acoustic-hole alignment must be verified.",
+    "Generated KiCad schematic must be checked to ensure MIC_LR_SEL_R is not shorted to I2S_BCLK.",
+    "microSD socket pinout, card-detect behavior, ESD exposure and power-cycling behavior remain Rev A bring-up risks.",
+    "ESP32-S3-WROOM antenna can be detuned by enclosure, battery, NFC antenna or metal back clip.",
+    "NFC antenna tuning and phone-read reliability depend on enclosure, battery and clip geometry.",
+    "E-paper connector pinout and refresh compatibility are TBD until the exact 2.13 inch panel/adapter is selected.",
+    "Physical mute switch polarity and enclosure label direction must be verified before PCB release."
   ]
 }
