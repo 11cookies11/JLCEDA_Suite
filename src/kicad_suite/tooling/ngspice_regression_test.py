@@ -2,15 +2,11 @@
 from __future__ import annotations
 
 import json
-import sys
 from ..shared.env_utils import repo_root
 from dataclasses import asdict
-from pathlib import Path
 from typing import Any
 
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-
-from ..circuit_pipeline import (
+from ..orchestration.circuit_pipeline import (
     CircuitComponent,
     CircuitModel,
     CircuitNet,
