@@ -152,7 +152,7 @@ python scripts/hardware_semantic_gate.py --project .
 hwtool agent export-kicad --project .
 ```
 
-Future integration should move `hardware_semantic_gate.py` behind an `hwtool agent hardware-erc` or `hwtool agent semantic-gate` command and make `export-kicad` refuse to run when `build/export-gate.v1.json` says `block_export_kicad`.
+`hwtool agent export-kicad` runs this gate before the KiCad export step and refuses to continue when `build/export-gate.v1.json` says `block_export_kicad`. The standalone script remains useful for local diagnosis and CI-focused checks.
 
 ## Implementation roadmap
 

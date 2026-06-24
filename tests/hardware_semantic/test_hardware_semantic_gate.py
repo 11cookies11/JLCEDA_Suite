@@ -49,6 +49,27 @@ def test_tps22918_requires_vin_and_vout(tmp_path: Path) -> None:
     assert "LOAD_SWITCH_REQUIRED_PIN_UNRESOLVED" in codes
 
 
+def test_load_switch_vout_capacitor_only_is_not_real_load(tmp_path: Path) -> None:
+    project = write_project(tmp_path, {
+        "schema_version": "circuit-model.v1",
+        "project_id": "load-switch-cap-only",
+        "topology": "load_switch_cap_only",
+        "components": [
+            {"ref": "U9", "role": "mic_power_switch", "value": "TPS22918DBVR"},
+            {"ref": "C9", "role": "switched_rail_decoupling", "value": "1uF capacitor"}
+        ],
+        "nets": [
+            {"name": "GND", "kind": "ground", "members": ["U9.2", "C9.2"]},
+            {"name": "VBAT", "kind": "power", "members": ["U9.1"]},
+            {"name": "MIC_PWR_EN", "kind": "signal", "members": ["U9.3", "U1.10"]},
+            {"name": "MIC_VDD_SW", "kind": "power", "members": ["U9.6", "C9.1"]}
+        ]
+    })
+    report = run_gate(project)
+    codes = blocker_codes(report)
+    assert "LOAD_SWITCH_OUTPUT_WITHOUT_LOAD" in codes
+
+
 def test_usb_c_sink_requires_cc_rd(tmp_path: Path) -> None:
     project = write_project(tmp_path, {
         "schema_version": "circuit-model.v1",

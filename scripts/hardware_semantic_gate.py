@@ -145,6 +145,31 @@ def _is_resistor(comp: dict[str, Any]) -> bool:
     return ref.startswith("R") or "resistor" in t or "pull" in t or "5.1k" in t or "5k1" in t
 
 
+def _is_capacitor(comp: dict[str, Any]) -> bool:
+    t = _text(comp)
+    ref = str(comp.get("ref", ""))
+    return ref.startswith("C") or "capacitor" in t or "cap" in t or "decoupling" in t
+
+
+def _is_test_point(comp: dict[str, Any]) -> bool:
+    t = _text(comp)
+    ref = str(comp.get("ref", ""))
+    return ref.startswith("TP") or "test_point" in t or "test point" in t
+
+
+def _is_real_load_member(idx: ModelIndex, member: str, source_ref: str, source_pin: str) -> bool:
+    parsed = _member_parts(member)
+    if not parsed:
+        return False
+    ref, pin = parsed
+    if ref == source_ref and pin == source_pin:
+        return False
+    comp = idx.components.get(ref, {})
+    if _is_resistor(comp) or _is_capacitor(comp) or _is_test_point(comp):
+        return False
+    return True
+
+
 def _resistor_to_gnd(idx: ModelIndex, net_name: str) -> bool:
     for member in _net_members(idx, net_name):
         parsed = _member_parts(member)
@@ -210,7 +235,7 @@ def check_load_switch(idx: ModelIndex, comp: dict[str, Any], findings: list[Find
         add(findings, "BLOCKER", "LOAD_SWITCH_VIN_VOUT_SHORTED",
             f"{ref}.VIN and {ref}.VOUT are on the same net {vin}; this bypasses the load switch.", component=ref, net=vin)
     if vout:
-        external_loads = [m for m in _net_members(idx, vout) if not m.startswith(f"{ref}.6")]
+        external_loads = [m for m in _net_members(idx, vout) if _is_real_load_member(idx, m, ref, "6")]
         if not external_loads:
             add(findings, "BLOCKER", "LOAD_SWITCH_OUTPUT_WITHOUT_LOAD",
                 f"{ref}.VOUT net {vout} has no real downstream load.", component=ref, pin="6", net=vout)
