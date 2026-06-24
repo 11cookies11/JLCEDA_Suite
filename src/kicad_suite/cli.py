@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -759,6 +760,56 @@ def _agent_create_handler(args: argparse.Namespace) -> int:
     return 0 if result.get("success") else 1
 
 
+def _run_hardware_semantic_gate(project_path: Path) -> dict[str, Any]:
+    script = repo_root() / "scripts" / "hardware_semantic_gate.py"
+    export_gate_path = project_path / "build" / "export-gate.v1.json"
+    hardware_erc_path = project_path / "build" / "hardware-erc.v1.json"
+    if not script.is_file():
+        return {
+            "ok": False,
+            "stage": "hardware_semantic_gate",
+            "error": f"hardware semantic gate script not found: {script}",
+        }
+
+    result = subprocess.run(
+        [sys.executable, str(script), "--project", str(project_path)],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    export_gate = load_json(export_gate_path) if export_gate_path.is_file() else {}
+    hardware_erc = load_json(hardware_erc_path) if hardware_erc_path.is_file() else {}
+    decision = export_gate.get("decision") if isinstance(export_gate, dict) else None
+    if decision == "block_export_kicad":
+        return {
+            "ok": False,
+            "stage": "hardware_semantic_gate",
+            "decision": decision,
+            "export_gate": export_gate,
+            "hardware_erc": hardware_erc,
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+        }
+    if result.returncode != 0:
+        return {
+            "ok": False,
+            "stage": "hardware_semantic_gate",
+            "decision": decision,
+            "error": f"hardware semantic gate failed with exit code {result.returncode}",
+            "export_gate": export_gate,
+            "hardware_erc": hardware_erc,
+            "stdout": result.stdout,
+            "stderr": result.stderr,
+        }
+    return {
+        "ok": True,
+        "stage": "hardware_semantic_gate",
+        "decision": decision or "allow_export_kicad",
+        "export_gate": export_gate,
+        "hardware_erc": hardware_erc,
+    }
+
+
 def _agent_export_kicad_handler(args: argparse.Namespace) -> int:
     project_path = _agent_project_path(args)
     model_path = _agent_model_path(args)
@@ -772,6 +823,18 @@ def _agent_export_kicad_handler(args: argparse.Namespace) -> int:
             "model": str(model_path),
             "output_dir": str(output_dir),
         })
+
+    gate_result = _run_hardware_semantic_gate(project_path)
+    if not gate_result.get("ok"):
+        ProjectState(project_path).mark_build_failed({"errors": ["hardware semantic gate blocked export"]})
+        _print_json({
+            "ok": False,
+            "stage": "export_kicad",
+            "mode": "pipeline",
+            "reason": "hardware_semantic_gate_failed",
+            "gate": gate_result,
+        })
+        return 1
 
     try:
         summary = run_pipeline(str(model_path), str(output_dir))

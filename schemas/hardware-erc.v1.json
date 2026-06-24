@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schemas/hardware-erc.v1.json",
+  "title": "KiCad Agent Suite Hardware ERC v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "project_id", "ok", "summary", "blockers", "warnings", "infos"],
+  "properties": {
+    "schema_version": {"const": "hardware-erc.v1"},
+    "project_id": {"type": "string"},
+    "topology": {"type": "string"},
+    "ok": {"type": "boolean"},
+    "summary": {
+      "type": "object",
+      "properties": {
+        "blockers": {"type": "integer", "minimum": 0},
+        "warnings": {"type": "integer", "minimum": 0},
+        "infos": {"type": "integer", "minimum": 0}
+      }
+    },
+    "blockers": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "warnings": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "infos": {"type": "array", "items": {"$ref": "#/$defs/finding"}},
+    "unresolved": {"type": "array", "items": {"$ref": "#/$defs/finding"}}
+  },
+  "$defs": {
+    "finding": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["severity", "code", "message"],
+      "properties": {
+        "severity": {"enum": ["BLOCKER", "WARNING", "INFO"]},
+        "code": {"type": "string"},
+        "message": {"type": "string"},
+        "component": {"type": "string"},
+        "pin": {"type": "string"},
+        "net": {"type": "string"},
+        "suggestion": {"type": "string"}
+      }
+    }
+  }
+}

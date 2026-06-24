@@ -6,10 +6,10 @@ import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "src"))
 
-from kicad_suite.artifact_validator import validate_artifacts  # noqa: E402
+from kicad_suite.application_services.artifact_validator import validate_artifacts  # noqa: E402
 
 
 if __name__ == "__main__":
-    from kicad_suite.artifact_validator import main  # noqa: E402
+    from kicad_suite.application_services.artifact_validator import main  # noqa: E402
 
     raise SystemExit(main(sys.argv[1:]))

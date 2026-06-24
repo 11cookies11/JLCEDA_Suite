@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://kicad-agent-suite.local/schemas/export-gate.v1.json",
+  "title": "KiCad Agent Suite Export Gate v1",
+  "type": "object",
+  "additionalProperties": true,
+  "required": ["schema_version", "project_id", "inputs", "gate", "decision"],
+  "properties": {
+    "schema_version": {"const": "export-gate.v1"},
+    "project_id": {"type": "string"},
+    "topology": {"type": "string"},
+    "inputs": {
+      "type": "object",
+      "properties": {
+        "source_model": {"type": "string"},
+        "ir_validation": {"type": "string"},
+        "pin_contracts": {"type": "string"},
+        "net_intents": {"type": "string"},
+        "hardware_erc": {"type": "string"}
+      }
+    },
+    "gate": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "validate_ir": {"enum": ["pass", "fail", "not_run"]},
+        "pin_contracts_complete": {"type": "boolean"},
+        "net_intents_complete": {"type": "boolean"},
+        "hardware_erc_blockers": {"type": "integer", "minimum": 0},
+        "hardware_erc_warnings": {"type": "integer", "minimum": 0},
+        "unresolved_blockers": {"type": "integer", "minimum": 0}
+      }
+    },
+    "decision": {"enum": ["allow_export_kicad", "block_export_kicad"]},
+    "reasons": {"type": "array", "items": {"type": "string"}}
+  }
+}

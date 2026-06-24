@@ -294,15 +294,87 @@ class TestCliDispatch(unittest.TestCase):
                 encoding="utf-8",
             )
 
-            with patch("kicad_suite.cli.run_pipeline", return_value={"counts": {"symbols": 0, "nets": 0}}) as run:
+            with patch("kicad_suite.cli._run_hardware_semantic_gate", return_value={"ok": True}) as gate:
+                with patch("kicad_suite.cli.run_pipeline", return_value={"counts": {"symbols": 0, "nets": 0}}) as run:
+                    with patch("kicad_suite.cli.ProjectState") as state_cls:
+                        buffer = io.StringIO()
+                        with redirect_stdout(buffer):
+                            code = cli.main(["agent", "export-kicad", "--project", str(project_path)])
+
+        self.assertEqual(code, 0)
+        gate.assert_called_once_with(project_path.resolve())
+        run.assert_called_once_with(str(model_path), str(project_path / "output"))
+        state_cls.return_value.mark_built.assert_called_once()
+
+    def test_agent_export_kicad_stops_when_hardware_gate_blocks(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir) / "agent-board"
+            project_path.mkdir()
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "demo",
+                        "project_id": "agent-board",
+                        "topology": "agent_board",
+                        "components": [],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            gate_result = {
+                "ok": False,
+                "stage": "hardware_semantic_gate",
+                "decision": "block_export_kicad",
+                "hardware_erc": {"summary": {"blockers": 1}},
+            }
+            with patch("kicad_suite.cli._run_hardware_semantic_gate", return_value=gate_result):
+                with patch("kicad_suite.cli.run_pipeline") as run:
+                    with patch("kicad_suite.cli.ProjectState") as state_cls:
+                        buffer = io.StringIO()
+                        with redirect_stdout(buffer):
+                            code = cli.main(["agent", "export-kicad", "--project", str(project_path)])
+
+        self.assertEqual(code, 1)
+        payload = json.loads(buffer.getvalue())
+        self.assertFalse(payload["ok"])
+        self.assertEqual(payload["reason"], "hardware_semantic_gate_failed")
+        run.assert_not_called()
+        state_cls.return_value.mark_build_failed.assert_called_once()
+
+    def test_agent_export_kicad_dry_run_skips_hardware_gate(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir) / "agent-board"
+            project_path.mkdir()
+            model_path = project_path / "source/circuit-model.source.json"
+            model_path.parent.mkdir(parents=True, exist_ok=True)
+            model_path.write_text(
+                json.dumps(
+                    {
+                        "schema_version": "circuit-model.v1",
+                        "request_id": "demo",
+                        "project_id": "agent-board",
+                        "topology": "agent_board",
+                        "components": [],
+                        "nets": [],
+                    }
+                ),
+                encoding="utf-8",
+            )
+
+            with patch("kicad_suite.cli._run_hardware_semantic_gate") as gate:
                 with patch("kicad_suite.cli.ProjectState") as state_cls:
                     buffer = io.StringIO()
                     with redirect_stdout(buffer):
-                        code = cli.main(["agent", "export-kicad", "--project", str(project_path)])
+                        code = cli.main(["agent", "export-kicad", "--project", str(project_path), "--dry-run"])
 
         self.assertEqual(code, 0)
-        run.assert_called_once_with(str(model_path), str(project_path / "output"))
-        state_cls.return_value.mark_built.assert_called_once()
+        gate.assert_not_called()
+        state_cls.assert_not_called()
 
     def test_agent_build_ir_writes_structured_ir_file(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
