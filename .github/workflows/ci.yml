@@ -21,6 +21,7 @@ jobs:
           python-version: "3.11"
           cache: "pip"
       - run: npm ci
+      - run: pip install pytest
       - run: python -m py_compile src/kicad_suite/*.py scripts/*.py
       - run: mkdir -p .where
       - run: python -m pytest -vv > .where/pytest.log 2>&1
