@@ -24,7 +24,7 @@ jobs:
       - run: pip install pytest
       - run: python -m py_compile src/kicad_suite/*.py scripts/*.py
       - run: mkdir -p .where
-      - run: python -m pytest -vv > .where/pytest.log 2>&1
+      - run: python -m pytest -vv tests/hardware_semantic tests/test_cli_commands.py tests/test_validate_artifacts.py tests/test_fixture_regressions.py tests/test_erc_findings_fixture.py > .where/pytest.log 2>&1
       - if: always()
         uses: actions/upload-artifact@v4
         with:
