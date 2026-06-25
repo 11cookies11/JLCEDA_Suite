@@ -1,0 +1,64 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "semantic-gate.v1.json",
+  "title": "KiCad Agent Suite Semantic Gate",
+  "type": "object",
+  "additionalProperties": true,
+  "required": [
+    "schema_version",
+    "gate_id",
+    "title",
+    "status",
+    "severity",
+    "scope",
+    "rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "semantic-gate.v1"
+    },
+    "gate_id": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^[A-Za-z0-9_.-]+$"
+    },
+    "title": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": ["proposed", "accepted", "promoted", "rejected", "superseded"]
+    },
+    "severity": {
+      "enum": ["BLOCKER", "WARNING", "INFO"]
+    },
+    "scope": {
+      "type": "object"
+    },
+    "source_finding": {
+      "type": "object"
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["code", "description"],
+        "properties": {
+          "code": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": {
+            "type": "string",
+            "minLength": 1
+          },
+          "suggestion": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}

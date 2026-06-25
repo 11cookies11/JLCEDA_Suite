@@ -15,6 +15,7 @@ from .project_state import ProjectState
 from .erc_classification_service import ErcClassificationService
 from .design_intent_service import check_design_intent
 from .placement_planner import build_placement_plan, PLACEMENT_PLAN_SCHEMA_VERSION
+from .semantic_gate_registry import list_gate_specs
 from ..domain.core.circuit_model_io import load_dual_circuit_model, resolve_model_paths
 from ..domain.core.ir_compiler import build_ir
 from ..shared.schema_versions import IR_SCHEMA_VERSION
@@ -172,7 +173,14 @@ def build_report(
         placement_status = "warning" if placement.get("warnings") else "ok"
         sections.append(_section("placement", "PCB Placement Plan", placement_status, placement))
 
-    # 13. Operation history.
+    # 13. Semantic gate registry and review queue.
+    gate_section = _semantic_gate_details(root)
+    gate_status = "error" if gate_section["invalid"] or gate_section["load_errors"] else (
+        "warning" if gate_section["proposed"] else "ok"
+    )
+    sections.append(_section("semantic_gates", "Semantic Gates", gate_status, gate_section))
+
+    # 14. Operation history.
     history = ps.get_history(limit=history_limit)
     sections.append(_section("history", "Recent Operations", "info", {
         "count": len(history),
@@ -334,6 +342,49 @@ def _placement_details(root: Path, model: dict[str, Any]) -> dict[str, Any] | No
             for region in plan.get("regions", [])
             if isinstance(region, dict)
         ],
+    }
+
+
+def _semantic_gate_details(root: Path) -> dict[str, Any]:
+    registry = list_gate_specs(root, include_proposed=True)
+    gates = registry.get("gates", [])
+    valid_gates = [g for g in gates if isinstance(g, dict)]
+    proposed = [g for g in valid_gates if g.get("status") == "proposed"]
+    accepted = [g for g in valid_gates if g.get("status") in {"accepted", "promoted"}]
+    invalid = [g for g in valid_gates if not g.get("ok", False)]
+    items: list[dict[str, Any]] = []
+    for gate in proposed[:20]:
+        items.append({
+            "level": "warning",
+            "message": f"Proposed gate pending review: {gate.get('gate_id')} ({gate.get('severity')})",
+            "gate_id": gate.get("gate_id"),
+            "path": gate.get("path"),
+        })
+    for gate in invalid[:20]:
+        items.append({
+            "level": "error",
+            "message": f"Invalid semantic gate: {gate.get('gate_id') or gate.get('path')}",
+            "gate_id": gate.get("gate_id"),
+            "path": gate.get("path"),
+            "errors": gate.get("errors", []),
+        })
+    for error in registry.get("errors", [])[:20]:
+        if isinstance(error, dict):
+            items.append({
+                "level": "error",
+                "message": f"Could not load semantic gate: {error.get('path')}",
+                "path": error.get("path"),
+                "error": error.get("error"),
+            })
+    return {
+        "schema_version": registry.get("schema_version"),
+        "total": registry.get("count", 0),
+        "accepted": len(accepted),
+        "proposed": len(proposed),
+        "invalid": len(invalid),
+        "load_errors": len(registry.get("errors", [])),
+        "items": items,
+        "gates": valid_gates,
     }
 
 

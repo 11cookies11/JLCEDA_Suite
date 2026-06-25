@@ -181,6 +181,7 @@ class TestCliDispatch(unittest.TestCase):
         self.assertIn("self-test", payload["commands"])
         self.assertIn("build-kicad-plan", payload["commands"])
         self.assertIn("patch", payload["commands"])
+        self.assertIn("semantic-gates", payload["commands"])
 
     def test_agent_run_builds_model_api_request_from_project(self):
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -461,6 +462,51 @@ class TestCliDispatch(unittest.TestCase):
             self.assertEqual(payload["stage"], "report")
             self.assertTrue((project_path / "build" / "report.json").exists())
             self.assertTrue((project_path / "build" / "report.md").exists())
+
+    def test_agent_semantic_gates_propose_list_and_accept(self):
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_path = Path(tmp_dir)
+            build_dir = project_path / "build"
+            build_dir.mkdir(parents=True)
+            (build_dir / "hardware-erc.v1.json").write_text(
+                json.dumps({
+                    "schema_version": "hardware-erc.v1",
+                    "ok": False,
+                    "summary": {"blockers": 1, "warnings": 0, "infos": 0},
+                    "blockers": [{
+                        "severity": "BLOCKER",
+                        "code": "USB_C_CC_MISSING_RD",
+                        "message": "CC pin is missing Rd.",
+                    }],
+                    "warnings": [],
+                    "infos": [],
+                }),
+                encoding="utf-8",
+            )
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "semantic-gates", "propose", "--project", str(project_path)])
+            self.assertEqual(code, 0)
+            proposed = json.loads(buffer.getvalue())
+            gate_id = proposed["result"]["gates"][0]["gate_id"]
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "semantic-gates", "list", "--project", str(project_path)])
+            self.assertEqual(code, 0)
+            listed = json.loads(buffer.getvalue())
+            self.assertEqual(listed["stage"], "semantic_gates_list")
+            self.assertEqual(listed["registry"]["count"], 1)
+
+            buffer = io.StringIO()
+            with redirect_stdout(buffer):
+                code = cli.main(["agent", "semantic-gates", "accept", "--project", str(project_path), gate_id])
+            self.assertEqual(code, 0)
+            accepted = json.loads(buffer.getvalue())
+            self.assertTrue(accepted["result"]["accepted"])
+            self.assertTrue((project_path / "source" / "semantic-gates").exists())
+            self.assertFalse((project_path / "build" / "proposed-semantic-gates" / f"{gate_id}.gate.json").exists())
 
     def test_agent_doctor_returns_structured_checks(self):
         with tempfile.TemporaryDirectory() as tmp_dir:

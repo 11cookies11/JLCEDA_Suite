@@ -37,6 +37,13 @@ from .application_services.agent_diagnostics import build_agent_diagnostics
 from .application_services.footprint_resolution_service import FootprintResolutionService
 from .application_services.part_resolution_service import PartResolutionService
 from .application_services.report_system import build_report, format_report, FORMAT_JSON, FORMAT_MARKDOWN, FORMAT_TEXT
+from .application_services.semantic_gate_proposals import propose_gates_from_hardware_erc
+from .application_services.semantic_gate_registry import (
+    accept_proposed_gate,
+    list_gate_specs,
+    load_gate_file,
+    validate_gate_spec,
+)
 from .domain.core.simulation_planner import (
     build_simulation_plan,
     load_circuit_model,
@@ -281,6 +288,7 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "jlc": "LCSC component search, preview (info), and download (download).",
             "resolve-symbols": "Legacy helper for downloading selected LCSC parts (--timeout 120).",
             "workflow": "Run agent-assisted workflow templates and task routing.",
+            "semantic-gates": "List, validate, propose, and accept semantic gates.",
             "manifest": "Describe this agent-facing command surface.",
         },
         "project_files": {
@@ -293,6 +301,8 @@ def _agent_manifest_handler(args: argparse.Namespace) -> int:
             "rule_check": "build/rule-check.json",
             "agent_report": "build/report.json",
             "human_report": "build/report.md",
+            "semantic_gate_proposals": "build/proposed-semantic-gates/*.gate.json",
+            "semantic_gate_project_registry": "source/semantic-gates/*.gate.json",
             "default_output": "output/",
         },
         "request_schema": "dsl-api-request.v1",
@@ -709,6 +719,42 @@ def _agent_rule_check_handler(args: argparse.Namespace) -> int:
     output.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     _update_project_state_from_request(request, result, project_path)
     return _print_json(payload | {"output": str(output)})
+
+
+def _agent_semantic_gates_list_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    payload = list_gate_specs(project_path, include_proposed=not bool(getattr(args, "no_proposed", False)))
+    invalid = [gate for gate in payload.get("gates", []) if isinstance(gate, dict) and not gate.get("ok", False)]
+    return _print_json({
+        "ok": not payload.get("errors") and not invalid,
+        "stage": "semantic_gates_list",
+        "registry": payload,
+    })
+
+
+def _agent_semantic_gates_validate_handler(args: argparse.Namespace) -> int:
+    spec = load_gate_file(Path(args.file).resolve())
+    validation = validate_gate_spec(spec)
+    _print_json({
+        "ok": validation.ok,
+        "stage": "semantic_gates_validate",
+        "file": str(Path(args.file).resolve()),
+        "errors": validation.errors,
+        "warnings": validation.warnings,
+    })
+    return 0 if validation.ok else 1
+
+
+def _agent_semantic_gates_propose_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    result = propose_gates_from_hardware_erc(project_path, include_warnings=bool(getattr(args, "include_warnings", False)))
+    return _print_json({"ok": True, "stage": "semantic_gates_propose", "result": result})
+
+
+def _agent_semantic_gates_accept_handler(args: argparse.Namespace) -> int:
+    project_path = _agent_project_path(args)
+    result = accept_proposed_gate(project_path, args.gate_id)
+    return _print_json({"ok": True, "stage": "semantic_gates_accept", "result": result})
 
 
 def _agent_run_handler(args: argparse.Namespace) -> int:
@@ -1457,6 +1503,28 @@ def build_parser() -> argparse.ArgumentParser:
     agent_report.add_argument("--output-md", type=Path, default=None)
     agent_report.add_argument("--markdown", action="store_true")
     agent_report.set_defaults(handler=_agent_report_handler)
+
+    agent_semantic = agent_subs.add_parser("semantic-gates", help="Manage semantic gate proposals and registry.")
+    agent_semantic_subs = agent_semantic.add_subparsers(dest="semantic_gates_action")
+
+    semantic_list = agent_semantic_subs.add_parser("list", help="List registered and proposed semantic gates.")
+    semantic_list.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    semantic_list.add_argument("--no-proposed", action="store_true", help="Exclude build/proposed-semantic-gates.")
+    semantic_list.set_defaults(handler=_agent_semantic_gates_list_handler)
+
+    semantic_validate = agent_semantic_subs.add_parser("validate", help="Validate one semantic gate JSON file.")
+    semantic_validate.add_argument("--file", type=Path, required=True)
+    semantic_validate.set_defaults(handler=_agent_semantic_gates_validate_handler)
+
+    semantic_propose = agent_semantic_subs.add_parser("propose", help="Generate proposed gates from build/hardware-erc.v1.json.")
+    semantic_propose.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    semantic_propose.add_argument("--include-warnings", action="store_true", help="Also generate proposals from hardware ERC warnings.")
+    semantic_propose.set_defaults(handler=_agent_semantic_gates_propose_handler)
+
+    semantic_accept = agent_semantic_subs.add_parser("accept", help="Accept a proposed gate into source/semantic-gates.")
+    semantic_accept.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
+    semantic_accept.add_argument("gate_id", help="Gate id to accept, e.g. hardware.usb_c_cc_missing_rd.v1")
+    semantic_accept.set_defaults(handler=_agent_semantic_gates_accept_handler)
 
     agent_history = agent_subs.add_parser("history", help="Show recent project operations.")
     agent_history.add_argument("--project", dest="project_path", type=Path, default=Path.cwd())
