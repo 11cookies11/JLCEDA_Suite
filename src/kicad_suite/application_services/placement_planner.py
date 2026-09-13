@@ -265,6 +265,14 @@ def _bbox_overlaps(a: dict[str, Any], b: dict[str, Any]) -> bool:
     return not (ax2 <= bx1 or bx2 <= ax1 or ay2 <= by1 or by2 <= ay1)
 
 
+def _placement_size(component: dict[str, Any], placement: dict[str, Any]) -> PlacementSize:
+    """Use a source-model envelope when supplied, otherwise infer one."""
+    inferred = _estimate_component_size(component)
+    width = _parse_mm(placement.get("width_mm", inferred.width_mm), inferred.width_mm)
+    height = _parse_mm(placement.get("height_mm", inferred.height_mm), inferred.height_mm)
+    return PlacementSize(width_mm=max(width, 0.1), height_mm=max(height, 0.1))
+
+
 def build_placement_plan(model: dict[str, Any]) -> dict[str, Any]:
     components = [
         item for item in model.get("components", [])
@@ -288,7 +296,7 @@ def build_placement_plan(model: dict[str, Any]) -> dict[str, Any]:
                 warnings.append(f"manual placement references unknown component: {ref}")
                 continue
             component = component_by_ref[str(ref).strip()]
-            size = _estimate_component_size(component)
+            size = _placement_size(component, item)
             placements.append({
                 "ref": str(ref).strip(),
                 "role": str(component.get("role", "")),
@@ -298,6 +306,7 @@ def build_placement_plan(model: dict[str, Any]) -> dict[str, Any]:
                 "height_mm": round(size.height_mm, 2),
                 "rotation_deg": round(_parse_mm(item.get("rotation", 0.0), 0.0), 2),
                 "side": str(item.get("side", "F.Cu")),
+                "clearance_mm": round(_parse_mm(item.get("clearance_mm", 0.5), 0.5), 2),
                 "slot_index": len(placements),
             })
             placed_refs.add(str(ref).strip())
@@ -314,6 +323,26 @@ def build_placement_plan(model: dict[str, Any]) -> dict[str, Any]:
                 "bbox": {"x": 0.0, "y": 0.0, "width": board_width, "height": board_height},
                 "warnings": [],
             })
+            # Check actual component envelopes. Opposite-side components may
+            # share XY area, but same-side bodies require the declared margin.
+            for left_index, left in enumerate(placements):
+                for right in placements[left_index + 1:]:
+                    if str(left.get("side", "F.Cu")) != str(right.get("side", "F.Cu")):
+                        continue
+                    margin = max(float(left.get("clearance_mm", 0.5)), float(right.get("clearance_mm", 0.5)))
+                    # PCB coordinates are footprint anchors (centres for the
+                    # generated libraries), so convert the envelopes to
+                    # lower-left boxes before testing.
+                    left_box = {"x": float(left["x"]) - float(left["width_mm"]) / 2 - margin,
+                                "y": float(left["y"]) - float(left["height_mm"]) / 2 - margin,
+                                "width": float(left["width_mm"]) + 2 * margin,
+                                "height": float(left["height_mm"]) + 2 * margin}
+                    right_box = {"x": float(right["x"]) - float(right["width_mm"]) / 2 - margin,
+                                 "y": float(right["y"]) - float(right["height_mm"]) / 2 - margin,
+                                 "width": float(right["width_mm"]) + 2 * margin,
+                                 "height": float(right["height_mm"]) + 2 * margin}
+                    if _bbox_overlaps(left_box, right_box):
+                        warnings.append(f"component overlap on {left['side']}: {left['ref']} and {right['ref']}")
 
     for region_name, region in region_items:
         if not isinstance(region, dict):
