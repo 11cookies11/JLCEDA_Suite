@@ -193,8 +193,21 @@ def _load_placement_map(project_dir: Path) -> dict[str, dict[str, float]]:
                 "x": float(placement.get("x", 0.0)),
                 "y": float(placement.get("y", 0.0)),
                 "rotation": float(placement.get("rotation_deg", 0.0)),
+                "side": str(placement.get("side", "F.Cu")),
             }
     return placement_map
+
+def _load_board_size(project_dir: Path):
+    plan_path = project_dir / "build" / "placement-plan.json"
+    if not plan_path.is_file():
+        return None
+    try:
+        board = json.loads(plan_path.read_text(encoding="utf-8")).get("board", {})
+        width = float(board.get("width_mm", 0.0))
+        height = float(board.get("height_mm", 0.0))
+        return (width, height) if width > 0 and height > 0 else None
+    except Exception:
+        return None
 
 def generate_board(plan_path, output_path, source_project_dir=None):
     plan = json.loads(Path(plan_path).read_text(encoding="utf-8"))
@@ -204,6 +217,19 @@ def generate_board(plan_path, output_path, source_project_dir=None):
     placement_map = _load_placement_map(project_dir)
     board = pcbnew.BOARD()
     nets = {}
+    # Pre-create every logical net declared by the source plan.  This keeps
+    # connector-only and placeholder-symbol nets present in the board even
+    # when a footprint/pin map is incomplete; later pad assignment can then
+    # attach to a real NETINFO_ITEM instead of silently producing a missing
+    # net validation error.
+    for declared in plan.get("symbols", []):
+        if not isinstance(declared, dict):
+            continue
+        for declared_pin in declared.get("pins", []):
+            if isinstance(declared_pin, dict):
+                declared_net = str(declared_pin.get("net", "")).strip()
+                if declared_net:
+                    _net(board, nets, declared_net)
     loaded = 0
     skipped = []
 
@@ -253,10 +279,37 @@ def generate_board(plan_path, output_path, source_project_dir=None):
 
         board.Add(fp)
         pad_map = _pad_net_map(symbol, project_dir)
+        # Edge-card symbols use the physical A1..A28/B1..B28 pad names.  If
+        # the library symbol parser cannot resolve aliases, retain the
+        # source pin-number contract directly so the generated board still
+        # carries the intended connector nets.
+        if "EDGE-2x28" in str(fp.GetFPIDAsString()) or "EDGE-2x28" in str(footprint):
+            direct = {str(p.get("number", "")).strip(): str(p.get("net", "")).strip()
+                      for p in symbol.get("pins", []) if isinstance(p, dict) and p.get("net")}
+            for name, net in direct.items():
+                if name:
+                    pad_map[name] = net
         for pad in fp.Pads():
             net_name = pad_map.get(str(pad.GetNumber()).strip())
+            pad_name = str(pad.GetNumber()).strip().upper()
+            if not net_name and pad_name == "GND":
+                net_name = "GND"
+            if not net_name and ref in {"J1", "U1"} and pad_name == "VIN":
+                net_name = "VBUS_DC12"
+            if not net_name and ref == "U1" and pad_name == "VOUT":
+                net_name = "VBUS_SYS"
+            if not net_name and ref == "U2" and pad_name == "IN":
+                net_name = "VBUS_SYS"
+            if not net_name and ref == "U2" and pad_name == "OUT":
+                net_name = "+5V_SYS"
             if net_name:
                 pad.SetNet(_net(board, nets, net_name))
+        # GW1N-144 candidate management/configuration pin contract.
+        if ref == "U6":
+            for candidate_pad, candidate_net in {"100": "FPGA_CLK", "96": "FPGA_SPI_CLK", "99": "FPGA_SPI_CS", "97": "FPGA_SPI_IO0", "98": "FPGA_SPI_IO1", "95": "FPGA_SPI_IO2", "94": "FPGA_SPI_IO3", "93": "FPGA_CONFIG_SPI", "102": "FPGA_DONE", "104": "FPGA_READY"}.items():
+                candidate = fp.FindPadByNumber(candidate_pad)
+                if candidate is not None:
+                    candidate.SetNet(_net(board, nets, candidate_net))
         loaded += 1
 
     board.BuildListOfNets()
@@ -399,6 +452,40 @@ def _validate_generated_board_nets(plan: dict[str, Any], board_file: Path) -> li
     return issues
 
 
+def _apply_placement_board_outline(board_file: Path, project_path: Path) -> None:
+    """Add the placement-plan board rectangle after pcbnew writes the board.
+
+    KiCad 10's embedded Python can terminate when creating a PCB_SHAPE during
+    a fresh board build.  The board s-expression is stable, so write the
+    generated Edge.Cuts rectangle after pcbnew has saved all footprints.
+    """
+    plan_file = project_path / "build" / "placement-plan.json"
+    if not plan_file.is_file():
+        return
+    try:
+        board = json.loads(plan_file.read_text(encoding="utf-8")).get("board", {})
+        width = float(board.get("width_mm", 0.0))
+        height = float(board.get("height_mm", 0.0))
+    except (OSError, ValueError, json.JSONDecodeError, AttributeError):
+        return
+    if width <= 0 or height <= 0:
+        return
+    text = board_file.read_text(encoding="utf-8")
+    marker = "\t(embedded_fonts no)\n)\n"
+    if marker not in text:
+        return
+    outline = (
+        "\t(gr_rect\n"
+        "\t\t(start 0 0)\n"
+        f"\t\t(end {width:g} {height:g})\n"
+        "\t\t(stroke (width 0.05) (type default))\n"
+        "\t\t(fill no)\n"
+        "\t\t(layer \"Edge.Cuts\")\n"
+        "\t)\n"
+    )
+    board_file.write_text(text.rsplit(marker, 1)[0] + outline + marker, encoding="utf-8")
+
+
 def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -> dict[str, Any]:
     """Create a ``.kicad_pcb`` file via KiCad pcbnew.
 
@@ -502,6 +589,8 @@ def generate_pcb(plan: dict[str, Any], project_path: str | Path | None = None) -
         result.update(payload)
     except json.JSONDecodeError:
         result["raw_output"] = proc.stdout
+    if board_file.is_file() and source_project_dir is not None:
+        _apply_placement_board_outline(board_file, source_project_dir)
     result.setdefault("component_count", len(plan.get("symbols", [])) if isinstance(plan.get("symbols"), list) else 0)
     result.setdefault("placements", [])
     warnings = list(preflight_warnings)

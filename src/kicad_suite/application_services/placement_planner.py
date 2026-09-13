@@ -47,6 +47,14 @@ def _parse_mm(value: Any, fallback: float) -> float:
 
 
 def _extract_board_size(model: dict[str, Any], region_count: int) -> tuple[float, float, str]:
+    pcb_layout = model.get("pcb_layout", {})
+    if isinstance(pcb_layout, dict):
+        board = pcb_layout.get("board", {})
+        if isinstance(board, dict):
+            width = _parse_mm(board.get("width_mm", 0.0), 0.0)
+            height = _parse_mm(board.get("height_mm", 0.0), 0.0)
+            if width and height:
+                return width, height, "pcb_layout.board"
     constraints = model.get("constraints", [])
     if isinstance(constraints, list):
         for item in constraints:
@@ -68,7 +76,7 @@ def _extract_board_size(model: dict[str, Any], region_count: int) -> tuple[float
             if width and height:
                 return width, height, "constraints.board_size"
 
-    regions = model.get("pcb_layout", {}).get("regions", {})
+    regions = pcb_layout.get("regions", {}) if isinstance(pcb_layout, dict) else {}
     max_x = 0.0
     max_y = 0.0
     if isinstance(regions, dict):
@@ -271,6 +279,41 @@ def build_placement_plan(model: dict[str, Any]) -> dict[str, Any]:
     plan_regions: list[dict[str, Any]] = []
     placed_refs: set[str] = set()
     warnings: list[str] = []
+
+    manual_placements = pcb_layout.get("placements", {}) if isinstance(pcb_layout, dict) else {}
+    if isinstance(manual_placements, dict):
+        placements: list[dict[str, Any]] = []
+        for ref, item in manual_placements.items():
+            if not isinstance(item, dict) or str(ref).strip() not in component_by_ref:
+                warnings.append(f"manual placement references unknown component: {ref}")
+                continue
+            component = component_by_ref[str(ref).strip()]
+            size = _estimate_component_size(component)
+            placements.append({
+                "ref": str(ref).strip(),
+                "role": str(component.get("role", "")),
+                "x": round(_parse_mm(item.get("x", 0.0), 0.0), 2),
+                "y": round(_parse_mm(item.get("y", 0.0), 0.0), 2),
+                "width_mm": round(size.width_mm, 2),
+                "height_mm": round(size.height_mm, 2),
+                "rotation_deg": round(_parse_mm(item.get("rotation", 0.0), 0.0), 2),
+                "side": str(item.get("side", "F.Cu")),
+                "slot_index": len(placements),
+            })
+            placed_refs.add(str(ref).strip())
+        if placements:
+            plan_regions.append({
+                "name": "manual",
+                "source": "pcb_layout.placements",
+                "synthetic": False,
+                "anchor": {"x": 0.0, "y": 0.0},
+                "spacing_mm": 0.0,
+                "rotation_deg": 0.0,
+                "components": [item["ref"] for item in placements],
+                "placements": placements,
+                "bbox": {"x": 0.0, "y": 0.0, "width": board_width, "height": board_height},
+                "warnings": [],
+            })
 
     for region_name, region in region_items:
         if not isinstance(region, dict):

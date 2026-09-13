@@ -69,6 +69,10 @@ def build_ir(model: dict[str, Any]) -> dict[str, Any]:
 def _collect_pin_entries(model: dict[str, Any]) -> dict[str, list[dict[str, Any]]]:
     """Walk nets[].members and build {ref: [pin_entry, ...]}."""
     pin_by_ref: dict[str, list[dict[str, Any]]] = defaultdict(list)
+    edge_refs = {
+        str(c.get("ref", "")): c for c in model.get("components", [])
+        if isinstance(c, dict) and "EDGE-2x28" in str(c.get("package", ""))
+    }
     for net in model.get("nets", []):
         if not isinstance(net, dict):
             continue
@@ -87,6 +91,17 @@ def _collect_pin_entries(model: dict[str, Any]) -> dict[str, list[dict[str, Any]
                     "locked": False,
                     "source": "netlist",
                 })
+    # Keep the complete physical connector contract even when nets use
+    # signal aliases instead of physical A/B member names.
+    for ref, component in edge_refs.items():
+        existing = {str(p.get("number", "")) for p in pin_by_ref.get(ref, [])}
+        for pin in component.get("pins", []):
+            if not isinstance(pin, dict):
+                continue
+            number = str(pin.get("number", "")).strip()
+            net_name = str(pin.get("net", "")).strip()
+            if number and net_name and number not in existing:
+                pin_by_ref[ref].append({"number": number, "name": str(pin.get("name", "")), "net": net_name, "direction": "unspecified", "locked": False, "source": "contract"})
     return dict(pin_by_ref)
 
 
@@ -150,6 +165,9 @@ def _build_components(
                 "locked": bool(overrides.get("locked", False)),
                 "source": "pinmap",
             })
+
+        if "EDGE-2x28" in str(component.get("package", "")):
+            pins = [p for p in pins if str(p.get("number", "")).startswith(("A", "B"))]
 
         # Sort by pin number (numeric if possible).
         pins.sort(key=lambda p: _pin_sort_key(p["number"]))

@@ -69,6 +69,16 @@ class FootprintResolutionService:
             source = source_libraries / name
             target = target_libraries / name
             if source.exists():
+                # KiCad's bundled Python can preserve the read-only bit on
+                # copied library files.  Clear it before an idempotent sync
+                # so a second post-process pass can overwrite the file.
+                if target.exists():
+                    for existing in target.rglob("*"):
+                        if existing.is_file():
+                            try:
+                                existing.chmod(existing.stat().st_mode | 0o200)
+                            except OSError:
+                                pass
                 if name == "footprints":
                     shutil.copytree(
                         source,

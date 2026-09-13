@@ -333,3 +333,28 @@ def test_placement_planner_builds_plan_for_regions(tmp_path) -> None:
     assert (tmp_path / "build" / "placement-plan.json").exists()
     assert (tmp_path / "build" / "placement-plan.md").exists()
     assert result["plan"]["summary"]["placed_count"] == 3
+
+
+def test_placement_planner_preserves_manual_pcb_coordinates() -> None:
+    model = {
+        "project_id": "manual-layout",
+        "components": [
+            {"ref": "J1", "role": "connector", "value": "edge"},
+            {"ref": "U1", "role": "fpga", "value": "FPGA"},
+        ],
+        "pcb_layout": {
+            "board": {"width_mm": 120, "height_mm": 100},
+            "placements": {
+                "J1": {"x": 2.0, "y": 12.0, "rotation": 90},
+                "U1": {"x": 90.0, "y": 48.0, "side": "B.Cu"},
+            },
+        },
+    }
+
+    plan = build_placement_plan(model)
+    assert plan["board"]["width_mm"] == 120
+    assert plan["board"]["height_mm"] == 100
+    assert plan["summary"]["placed_count"] == 2
+    placements = {item["ref"]: item for item in plan["regions"][0]["placements"]}
+    assert placements["J1"]["rotation_deg"] == 90
+    assert placements["U1"]["side"] == "B.Cu"

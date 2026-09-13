@@ -534,7 +534,19 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
                 pin_alias_map = parse_symbol_pin_map(lib_id)
             except Exception:
                 pin_alias_map = {}
-        pins = [
+        # Card-edge contracts already carry physical A/B numbers in source;
+        # preserve them even when the generic connector symbol is unavailable
+        # to the global symbol parser.
+        if 'EDGE-2x28' in str(footprint):
+            pins = [
+                KiCadPin(number=str(pin.get('number', '')).strip(),
+                         name=str(pin.get('name', '')),
+                         net=str(pin.get('net', '')))
+                for pin in component.get('pins', [])
+                if isinstance(pin, dict) and str(pin.get('number', '')).strip()
+            ]
+        else:
+            pins = [
             KiCadPin(
                 number=str(
                     (
@@ -550,7 +562,7 @@ def compile_plan(model: dict[str, Any], netlist: dict[str, Any]) -> KiCadExecuti
             )
             for pin in net_component.get('pins', [])
             if isinstance(pin, dict)
-        ]
+            ]
         if not pins:
             diagnostics.warnings.append(f'{ref} has no net pins; symbol will be placed without connectivity labels.')
         if lib_id.startswith('AIAgent:'):

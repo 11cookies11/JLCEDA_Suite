@@ -32,6 +32,19 @@ def build_netlist(model: dict[str, Any]) -> dict[str, Any]:
         ref = str(component.get("ref", "")).strip()
         if not ref:
             continue
+        # Explicit component pin contracts are authoritative when present.
+        # This is required for power ICs and placeholder symbols whose pins
+        # are intentionally defined in the source model but do not yet have
+        # complete net-members entries.  Edge connectors also use this path
+        # for their physical A/B pad numbers.
+        for physical_pin in component.get("pins", []):
+            if isinstance(physical_pin, dict):
+                number = str(physical_pin.get("number", physical_pin.get("pin", ""))).strip()
+                net_name = str(physical_pin.get("net", "")).strip()
+                if number and net_name:
+                    item = {"pin": number, "pin_name": str(physical_pin.get("name", physical_pin.get("pin_name", ""))), "net": net_name}
+                    if item not in pin_by_ref[ref]:
+                        pin_by_ref[ref].append(item)
         selected_part = component.get("selected_part", {})
         part = selected_part if isinstance(selected_part, dict) else {}
         components.append(
